@@ -17,6 +17,7 @@ using namespace DirectX;
 #pragma comment(lib,"dxguid.lib")
 #include<DirectXTex.h>
 #include<wrl.h>
+#include "Util.h"
 
 using namespace Microsoft::WRL;
 
@@ -70,6 +71,7 @@ void DrawObject3d(Object3d* object, ID3D12GraphicsCommandList* commandList, D3D1
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+    Util::Math::Random<int>(0, 10);
 
 #pragma region WindowsAPI初期化
 
