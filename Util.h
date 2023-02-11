@@ -41,6 +41,11 @@ namespace Util {
     namespace Convert {
         inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::PI / 180.0f; }
         inline constexpr float ToDegree(float fRadians) { return fRadians * 180.0f / Math::PI; }
+
+        std::string ToString(const std::wstring& wStr);
+        std::string ToString(const char* cStr);
+        std::wstring ToWString(const std::string& str);
+        std::wstring ToWString(const char* cStr);
     }
 
     namespace Ease {
