@@ -174,4 +174,6 @@ Vector3 splinePosition(const std::vector<Vector3>& points, size_t startIndex, fl
         (p0 * 2 - p1 * 5 + p2 * 4 - p3) * std::powf(t, 2) +
         (-p0 + p1 * 3 - p2 * 3 + p3) * std::powf(t, 3)
         ) * 0.5f;
+
+    return position;
 }

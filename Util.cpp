@@ -1,9 +1,11 @@
 #include "Util.h"
 #include <chrono>
 #include <cmath>
-#include <debugapi.h>
+#include <Windows.h>
 #include <sstream>
 #include <fstream>
+#include <ctime>
+#include <iomanip>
 
 float Util::Ease::EaseInSine(float t, float start, float end)
 {
@@ -126,11 +128,14 @@ inline int32_t Util::Timer::GetNowCount(void)
 
 std::string Util::Timer::GetNowDateTime(void)
 {
-    std::time_t t = std::time(nullptr);
-    std::tm tm = *std::localtime(&t);
+    std::time_t now = std::time(nullptr);
+    std::tm tm{};
+    localtime_s(&tm,&now);
 
     std::stringstream ss;
-    ss << 1900 + tm.tm_year << "/" << 1 + tm.tm_mon << "/" << tm.tm_mday << " " << tm.tm_hour << ":" << tm.tm_min << ":" << tm.tm_sec;
+    ss << 1900 + tm.tm_year << ":" << std::setfill('0') << std::setw(2) << tm.tm_mon + 1 << ":" << tm.tm_mday << " "
+        << std::setfill('0') << std::setw(2) << tm.tm_hour << ":" << std::setfill('0') << std::setw(2) << tm.tm_min
+        << ":" << std::setfill('0') << std::setw(2) << tm.tm_sec;
     return ss.str();
 }
 
