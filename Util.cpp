@@ -147,9 +147,10 @@ void Util::Timer::Start(float endTime)
 
 void Util::Log::PrintOutputWindow(const std::string& str)
 {
-    std::wstring wStr{ str.begin(),str.end() };
+    std::string mergeStr{ "PrintLog : " + str + "\n"};
+    std::wstring toWStr{ mergeStr.begin(), mergeStr.end() };
 
-    OutputDebugStringW(wStr.c_str());
+    OutputDebugString(toWStr.c_str());
 }
 
 void Util::Log::PrintExternalText(const std::string& str, const std::experimental::filesystem::path& logTextPath)
