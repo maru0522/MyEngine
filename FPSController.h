@@ -3,17 +3,16 @@
 
 class FPSController
 {
-private:
-    // Ã“I•Ï”
-    static constexpr std::chrono::microseconds kMinTime_{ uint64_t(1000000.0f / 60.0f) }; // 1/60•b‚Ò‚Á‚½‚è‚ÌŠÔ
-    static constexpr std::chrono::microseconds kMiCheckTime_{ uint64_t(1000000.0f / 65.0f) }; // 1/60•b‚æ‚è‹Í‚©‚É’Z‚¢ŠÔ
-
 public:
     // ŠÖ”
     void Initialize(void);
     void Update(void);
 
+    inline void SetFPS(uint32_t fps) { fps_ = fps; }
+
 private:
     // •Ï”
+    uint32_t fps_{ 60 };
+
     std::chrono::steady_clock::time_point timeRef_; // ŠÔ‹L˜^iFPSŒÅ’è—pj
 };
