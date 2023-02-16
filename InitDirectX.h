@@ -4,6 +4,7 @@
 #include <memory>
 //#include "CtrlFPS.h"
 #include "WndAPI.h"
+#include "FPSController.h"
 #include <d3d12.h>
 #include <dxgi1_6.h>
 
@@ -99,7 +100,7 @@ private:
 #pragma endregion
 
     // Initialize() Ç≈égóp
-    //CtrlFPS fpsCtrller_; // FPSÇêßå‰
+    std::unique_ptr<FPSController> fpsController_{ std::make_unique<FPSController>() };
 
 private:
     // ä÷êî

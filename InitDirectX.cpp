@@ -5,7 +5,7 @@
 void InitDirectX::Initialize(WndAPI* p_wndapi)
 {
     // FPS固定化処理初期化
-    //fpsCtrller_.Initialize();
+    fpsController_->Initialize();
 
     DebugLayer();       // デバッグレイヤーをオン
 #ifdef _DEBUG
@@ -122,7 +122,7 @@ void InitDirectX::PostDraw(void)
     }
 
     // FPS固定
-    //fpsCtrller_.Update();
+    fpsController_->Update();
 
     // キューをクリア
     r = cmdAllocator_->Reset();
