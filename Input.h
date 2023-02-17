@@ -72,10 +72,10 @@ namespace Input {
         // 定義
         struct CustomDeadZone
         {
-            uint16_t xLeftValueX;
-            uint16_t xLeftValueY;
-            uint16_t xRightValueX;
-            uint16_t xRightValueY;
+            uint16_t xLeftValueX{};
+            uint16_t xLeftValueY{};
+            uint16_t xRightValueX{};
+            uint16_t xRightValueY{};
         };
 
     public:

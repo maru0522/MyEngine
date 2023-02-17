@@ -14,5 +14,5 @@ private:
     // 変数
     uint32_t fps_{ 60 };
 
-    std::chrono::steady_clock::time_point timeRef_; // 時間記録（FPS固定用）
+    std::chrono::steady_clock::time_point timeRef_{}; // 時間記録（FPS固定用）
 };

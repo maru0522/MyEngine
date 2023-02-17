@@ -54,7 +54,7 @@ public:
 
     // getter
     inline ID3D12Device* GetDevice(void) { return device_.Get(); }
-    inline ID3D12DescriptorHeap* GetSRVHeap(void) { return descHeap_->GetDescHeap(); }
+    inline DescriptorHeap_t* GetDescHeap(void) { return descHeap_.get(); }
     inline ID3D12GraphicsCommandList* GetCommandList(void) { return commandList_.Get(); }
     inline size_t GetBackBufferCount() const { return backBuffers_.size(); }
 

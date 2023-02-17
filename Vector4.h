@@ -11,9 +11,9 @@ public:
     float w{};	// w成分
 
     // 関数
-    Vector4(void); // 零ベクトルとする
-    Vector4(float x, float y, float z, float w); // x成分, y成分, z成分, w成分 を指定しての生成
-    Vector4(DirectX::XMFLOAT4 xmf4); // XMFLOAT4でそのまま生成できるように
+    Vector4(void) = default;
+    Vector4(const Vector4&) = default;
+    constexpr Vector4(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
     float length(void) const;                 // ノルム(長さ)を求める
     Vector4 normalize(void) const;            // 正規化する
@@ -26,7 +26,6 @@ public:
 
     // 代入オバロ
     Vector4& operator=(const Vector4& v);
-    Vector4& operator=(const DirectX::XMFLOAT4& xmf4);
     Vector4& operator+=(const Vector4& v);
     Vector4& operator-=(const Vector4& v);
     Vector4& operator*=(float s);
