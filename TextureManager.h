@@ -39,7 +39,7 @@ public:
     // 指定したフォルダの画像を全て読み込み(.png/.jpg/.jepgのみ)
     void LoadFolder(const fsPath& path);
 
-    // 
+    // 保管されてるImageを対応するpathで引き出す。
     const Image& GetImage(const fsPath& path) const;
 
 private:
