@@ -32,11 +32,25 @@ public:
     // 関数
     void Initialize(InitDirectX* p_idx);
 
-    void Register(const Image& img);
-    void Register(const Image& img, const std::string& nickname, bool isAddNickname = true);
+    // 指定した画像を読み込み
+    void Load(const fsPath& path);
+    void Load(const fsPath& path, const std::string& nickname);
+
+    // 指定したフォルダの画像を全て読み込み(.png/.jpg/.jepgのみ)
+    void LoadFolder(const fsPath& path);
+
+    // 
+    const Image& GetImage(const fsPath& path) const;
 
 private:
+    // 出来上がった情報体[Image]をmapコンテナに登録する
+    void RegisterImg(const Image& img);
+    void RegisterNickname(const fsPath& path, const std::string& nickname);
+
     void GenerateMissingImage(void); // エラー画像の生成と登録
+
+    bool CheckDuplicateTexture(const Image& img);
+    bool CheckDuplicateNickname(const std::string& nickname);
 
     // 変数
     std::map<std::string, fsPath> paths_{}; // ニックネームと所属を紐付け。
