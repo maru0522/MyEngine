@@ -4,17 +4,15 @@
 #include <DirectXTex.h>
 #include <cassert>
 
-
-
-void TextureManager::Initialize(InitDirectX* p_idx)
+void TextureManager::Initialize(void)
 {
-    p_idx_ = p_idx;
-
     GenerateMissingImage();
 }
 
 void TextureManager::Load(const fsPath& path)
 {
+    InitDirectX* p_idx{ InitDirectX::GetInstance() };
+
     Image tempImg{}; // てんぽらりん
 
     tempImg.path_ = path;
@@ -71,7 +69,7 @@ void TextureManager::Load(const fsPath& path)
 
 #pragma region テクスチャバッファ
     // テクスチャバッファの生成
-    r = p_idx_->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff_));
+    r = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff_));
     assert(SUCCEEDED(r));
 #pragma endregion
 
@@ -95,7 +93,7 @@ void TextureManager::Load(const fsPath& path)
 
     // InitDirectX内のDescriptorHeapに生成。
     // 返り値でgpuのアドレスを取得。
-    tempImg.srvGpuHandle_.ptr = p_idx_->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff_.Get());
+    tempImg.srvGpuHandle_.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff_.Get());
 
     // 登録
     RegisterImg(tempImg);
@@ -151,6 +149,8 @@ void TextureManager::RegisterNickname(const fsPath& path, const std::string& nic
 
 void TextureManager::GenerateMissingImage(void)
 {
+    InitDirectX* p_idx{ InitDirectX::GetInstance() };
+
 #pragma region missingTexture生成
     Image tempImg{}; // てんぽらりん
 
@@ -206,7 +206,7 @@ void TextureManager::GenerateMissingImage(void)
 
 #pragma region テクスチャバッファ
     // テクスチャバッファの生成
-    HRESULT r = p_idx_->GetDevice()->CreateCommittedResource(
+    HRESULT r = p_idx->GetDevice()->CreateCommittedResource(
         &texHeapProp,
         D3D12_HEAP_FLAG_NONE,
         &textureResourceDesc,
@@ -235,7 +235,7 @@ void TextureManager::GenerateMissingImage(void)
 
     // InitDirectX内のDescriptorHeapに生成。
     // 返り値でgpuのアドレスを取得。
-    tempImg.srvGpuHandle_.ptr = p_idx_->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff_.Get());
+    tempImg.srvGpuHandle_.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff_.Get());
 
     // 登録
     RegisterImg(tempImg);

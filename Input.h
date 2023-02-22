@@ -1,6 +1,5 @@
 ﻿#pragma once
 #define DIRECTINPUT_VERSION 0x0800
-#include "WndAPI.h"
 #include <array>
 #include <dinput.h>
 #include <Xinput.h>
@@ -8,6 +7,8 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib, "xinput.lib")
 #include <wrl.h>
+
+#include "WndAPI.h"
 #include "Vector2.h"
 
 namespace Input {

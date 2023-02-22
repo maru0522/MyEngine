@@ -1,6 +1,13 @@
-#include "InitDirectX.h"
 #include <cassert>
 #include <vector>
+
+#include "InitDirectX.h"
+
+InitDirectX* InitDirectX::GetInstance(void)
+{
+    static InitDirectX iDX;
+    return &iDX;
+}
 
 void InitDirectX::Initialize(WndAPI* p_wndapi)
 {

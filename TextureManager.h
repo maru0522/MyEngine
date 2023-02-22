@@ -7,6 +7,7 @@
 #include <map>
 #include <wrl.h>
 #include <d3d12.h>
+#pragma comment(lib,"d3d12.lib")
 
 #include "InitDirectX.h"
 
@@ -30,7 +31,7 @@ private:
 
 public:
     // 関数
-    void Initialize(InitDirectX* p_idx);
+    void Initialize(void);
 
     // 指定した画像を読み込み
     void Load(const fsPath& path);
@@ -55,7 +56,5 @@ private:
     // 変数
     std::map<std::string, fsPath> paths_{}; // ニックネームと所属を紐付け。
     std::map<fsPath, Image> textures_{}; // 所属とImageを紐付け。
-
-    InitDirectX* p_idx_{ nullptr };
 };
 

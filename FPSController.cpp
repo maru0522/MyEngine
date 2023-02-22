@@ -1,5 +1,6 @@
-#include "FPSController.h"
 #include <thread>
+
+#include "FPSController.h"
 
 void FPSController::Initialize(void)
 {

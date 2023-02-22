@@ -20,6 +20,7 @@ using namespace DirectX;
 #include "Input.h"
 #include "InitDirectX.h"
 #include "TextureManager.h"
+#include "ConstBuffer.h"
 
 using namespace Microsoft::WRL;
 
@@ -60,26 +61,25 @@ void DrawObject3d(Object3d* object, ID3D12GraphicsCommandList* commandList, D3D1
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-    // WindowsAPI初期化
+    // WndAPIの変数宣言
     std::unique_ptr<WndAPI> wnd_{ std::make_unique<WndAPI>() };
 
-    //DirectX初期化
+    // InitDirectXの変数宣言と初期化
     HRESULT result;
     std::unique_ptr<InitDirectX> iDX{ std::make_unique<InitDirectX>() };
     iDX->Initialize(wnd_.get());
 
-    // DirectInput初期化
+    // DirectInputに含まれるクラス全て初期化
     Input::InitializeAll(wnd_.get());
 
-    // textureManager初期化
+    // textureManagerの変数宣言と初期化
     std::unique_ptr<TextureManager> texM{ std::make_unique<TextureManager>() };
-    texM->Initialize(iDX.get());
-
+    texM->Initialize();
 
 #pragma region 描画初期化処理
 
-    // 頂点データ構造体
-    struct Vertex
+        // 頂点データ構造体
+        struct Vertex
     {
         XMFLOAT3 pos;       // xyz座標
         XMFLOAT3 normal;    // 法線ベクトル
@@ -579,7 +579,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         iDX->GetCommandList()->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
         // SRVヒープの設定コマンド
         // // デスクリプタヒープの配列
-        ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap()};
+        ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap() };
         iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
         //commandList->SetDescriptorHeaps(1, &srvHeap);
 

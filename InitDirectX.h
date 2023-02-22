@@ -2,14 +2,13 @@
 #include <vector>
 #include <wrl.h>
 #include <memory>
-//#include "CtrlFPS.h"
-#include "WndAPI.h"
-#include "FPSController.h"
 #include <d3d12.h>
 #include <dxgi1_6.h>
-
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
+
+#include "WndAPI.h"
+#include "FPSController.h"
 
 class InitDirectX
 {
@@ -47,6 +46,9 @@ private:
     };
 
 public:
+    // 静的関数
+    static InitDirectX* GetInstance(void);
+
     // 関数
     void Initialize(WndAPI* p_wndapi);
     void PreDraw(void);
@@ -117,4 +119,10 @@ private:
 
     void ClearRTV(void);        // RTVをクリア
     void ClearDepthBuff(void);  // 深度バッファをクリア
+
+    // シングルトン
+    InitDirectX(void) {};
+    ~InitDirectX(void);
+    InitDirectX(const InitDirectX&) = delete;
+    InitDirectX& operator=(const InitDirectX&) = delete;
 };
