@@ -46,6 +46,14 @@ namespace Util {
         std::string ToString(const char* cStr);
         std::wstring ToWString(const std::string& str);
         std::wstring ToWString(const char* cStr);
+
+        template<class T, size_t N> std::array<T, N> ToArray(const std::vector<T>& vec) {
+            return std::array<T, vec.size()>{vec.begin(),vec.end()};
+        }
+
+        template<class T, size_t N> std::vector<T> ToVector(const std::array<T, N>& arr) {
+            return std::vector<T>{arr.begin(), arr.end()};
+        }
     }
 
     namespace Ease {

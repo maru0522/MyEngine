@@ -25,25 +25,25 @@ bool Input::XPad::isConnect_{ false };
 
 void Input::Keyboard::Initialize(WndAPI* p_wndapi)
 {
-    HRESULT r = S_FALSE;
+    HRESULT hr = S_FALSE;
 
     if (directInput_ == nullptr) {
         // DirectInputの初期化
-        r = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
-        assert(SUCCEEDED(r));
+        hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
+        assert(SUCCEEDED(hr));
     }
 
     // キーボードデバイスの生成
-    r = directInput_->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
-    assert(SUCCEEDED(r));
+    hr = directInput_->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
+    assert(SUCCEEDED(hr));
 
     // 入力データ形式のセット
-    r = keyboard_->SetDataFormat(&c_dfDIKeyboard); // 標準形式
-    assert(SUCCEEDED(r));
+    hr = keyboard_->SetDataFormat(&c_dfDIKeyboard); // 標準形式
+    assert(SUCCEEDED(hr));
 
     // 排他制御レベルのセット
-    r = keyboard_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-    assert(SUCCEEDED(r));
+    hr = keyboard_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+    assert(SUCCEEDED(hr));
 }
 
 void Input::Keyboard::Update(void)
@@ -63,17 +63,17 @@ void Input::Keyboard::Update(void)
 
 void Input::DIPad::Initialize(WndAPI* p_wndapi)
 {
-    HRESULT r = S_FALSE;
+    HRESULT hr = S_FALSE;
 
     if (directInput_ == nullptr) {
         // DirectInputの初期化
-        r = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
-        assert(SUCCEEDED(r));
+        hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
+        assert(SUCCEEDED(hr));
     }
 
     // デバイスの列挙
-    r = directInput_->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, nullptr, DIEDFL_ATTACHEDONLY);
-    assert(SUCCEEDED(r));
+    hr = directInput_->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, nullptr, DIEDFL_ATTACHEDONLY);
+    assert(SUCCEEDED(hr));
 }
 
 void Input::DIPad::Update(void)

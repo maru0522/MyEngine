@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FPSController.cpp" />
+    <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="InitDirectX.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="WndAPI.cpp" />
+    <ClCompile Include="WorldCoordinate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicPS.hlsl">
@@ -115,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="ConstBuffer.h" />
     <ClInclude Include="FPSController.h" />
+    <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="InitDirectX.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Matrix4.h" />
@@ -122,10 +125,12 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WndAPI.h" />
+    <ClInclude Include="WorldCoordinate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

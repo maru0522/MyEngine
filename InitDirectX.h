@@ -122,7 +122,7 @@ private:
 
     // ƒVƒ“ƒOƒ‹ƒgƒ“
     InitDirectX(void) {};
-    ~InitDirectX(void);
+    ~InitDirectX(void) {};
     InitDirectX(const InitDirectX&) = delete;
     InitDirectX& operator=(const InitDirectX&) = delete;
 };

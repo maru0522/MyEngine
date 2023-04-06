@@ -42,9 +42,13 @@ const Vector3 operator-(const Vector3& v1, const Vector3& v2);
 const Vector3 operator*(const Vector3& v, float s);
 const Vector3 operator/(const Vector3& v, float s);
 
-// 補完関数
-const Vector3 lerp(const Vector3& start, const Vector3& end, const float t); // 線形補完（1次関数補完）
-const Vector3 bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t); // ベジエ（2次関数補完）
-const Vector3 bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t); // ベジエ（3次関数補完）
+namespace Util {
+    namespace Math {
+        // 補完関数
+        const Vector3 lerp(const Vector3& start, const Vector3& end, const float t); // 線形補完（1次関数補完）
+        const Vector3 bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t); // ベジエ（2次関数補完）
+        const Vector3 bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t); // ベジエ（3次関数補完）
 
-Vector3 splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t);
+        Vector3 splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t);
+    }
+}

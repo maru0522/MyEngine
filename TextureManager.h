@@ -57,4 +57,3 @@ private:
     std::map<std::string, fsPath> paths_{}; // ニックネームと所属を紐付け。
     std::map<fsPath, Image> textures_{}; // 所属とImageを紐付け。
 };
-

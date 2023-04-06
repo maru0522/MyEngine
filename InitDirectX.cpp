@@ -107,15 +107,15 @@ void InitDirectX::PostDraw(void)
 
 #pragma region コマンドリスト実行
     // 命令のクローズ
-    HRESULT r = commandList_->Close();
-    assert(SUCCEEDED(r));
+    HRESULT hr = commandList_->Close();
+    assert(SUCCEEDED(hr));
 
     // コマンドリストの実行
     ID3D12CommandList* commandLists[] = { commandList_.Get() };
     commandQueue_->ExecuteCommandLists(1, commandLists);
     // 画面に表示するバッファをフリップ（裏表の入替え）
-    r = swapChain_->Present(1, 0);
-    assert(SUCCEEDED(r));
+    hr = swapChain_->Present(1, 0);
+    assert(SUCCEEDED(hr));
 
     // コマンドの実行完了を待つ
     commandQueue_->Signal(fence_.Get(), ++fenceVal_);
@@ -132,13 +132,13 @@ void InitDirectX::PostDraw(void)
     fpsController_->Update();
 
     // キューをクリア
-    r = cmdAllocator_->Reset();
-    assert(SUCCEEDED(r));
+    hr = cmdAllocator_->Reset();
+    assert(SUCCEEDED(hr));
 
 
     // 再びコマンドリストを貯める準備
-    r = commandList_->Reset(cmdAllocator_.Get(), nullptr);
-    assert(SUCCEEDED(r));
+    hr = commandList_->Reset(cmdAllocator_.Get(), nullptr);
+    assert(SUCCEEDED(hr));
 #pragma endregion
 }
 
@@ -154,9 +154,9 @@ void InitDirectX::DXGIDevice(void)
 {
 #pragma region アダプタの列挙
     // DXGIファクトリーの生成
-    HRESULT r = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
+    HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
 
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 
     // アダプターの列挙用
     std::vector<ComPtr<IDXGIAdapter4>> adapters;
@@ -207,9 +207,9 @@ void InitDirectX::DXGIDevice(void)
     D3D_FEATURE_LEVEL featureLevel;
     for (size_t i = 0; i < levels.size(); i++) {
         // 採用したアダプターでデバイスを生成
-        r = D3D12CreateDevice(tmpAdapter.Get(), levels.at(i), IID_PPV_ARGS(&device_));
+        hr = D3D12CreateDevice(tmpAdapter.Get(), levels.at(i), IID_PPV_ARGS(&device_));
 
-        if (r == S_OK) {
+        if (hr == S_OK) {
             // デバイスを生成できた時点でループを抜ける
             featureLevel = levels.at(i);
             break;
@@ -245,16 +245,16 @@ void InitDirectX::Commands(void)
 {
 #pragma region コマンドアロケータ
     // コマンドアロケータを生成
-    HRESULT r = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdAllocator_));
+    HRESULT hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdAllocator_));
 
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 #pragma endregion
 
 #pragma region コマンドリストの生成
     // コマンドリストを生成
-    r = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAllocator_.Get(), nullptr, IID_PPV_ARGS(&commandList_));
+    hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAllocator_.Get(), nullptr, IID_PPV_ARGS(&commandList_));
 
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 #pragma endregion
 
 #pragma region コマンドキューの生成
@@ -262,9 +262,9 @@ void InitDirectX::Commands(void)
     D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 
     //コマンドキューを生成
-    r = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
+    hr = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
 
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 #pragma endregion
 }
 
@@ -285,8 +285,8 @@ void InitDirectX::SwapChain(WndAPI* p_wndapi)
     ComPtr<IDXGISwapChain1> swapChain1Tmp;
 
     // スワップチェーンの生成
-    HRESULT r = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), p_wndapi->GetHwnd(), &swapChainDesc, nullptr, nullptr, &swapChain1Tmp);
-    assert(SUCCEEDED(r));
+    HRESULT hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), p_wndapi->GetHwnd(), &swapChainDesc, nullptr, nullptr, &swapChain1Tmp);
+    assert(SUCCEEDED(hr));
 
     // 生成したIDXGISwapChain1のオブジェクトをIDXGISwapChain4に変換する
     swapChain1Tmp.As(&swapChain_);
@@ -298,8 +298,8 @@ void InitDirectX::RTVDescHeap(void)
     DXGI_SWAP_CHAIN_DESC swcd{};
 
     // コピーで取得
-    HRESULT r = swapChain_->GetDesc(&swcd);
-    assert(SUCCEEDED(r));
+    HRESULT hr = swapChain_->GetDesc(&swcd);
+    assert(SUCCEEDED(hr));
 
     // RTVDescHeap
     // デスクリプタヒープの設定
@@ -316,8 +316,8 @@ void InitDirectX::RTV(void)
     DXGI_SWAP_CHAIN_DESC swcd{};
 
     // コピーで取得
-    HRESULT r = swapChain_->GetDesc(&swcd);
-    assert(SUCCEEDED(r));
+    HRESULT hr = swapChain_->GetDesc(&swcd);
+    assert(SUCCEEDED(hr));
 
     // RTV
     backBuffers_.resize(swcd.BufferCount);
@@ -370,7 +370,7 @@ void InitDirectX::DepthBuffer(void)
 
     // 深度バッファの生成
     // リソース生成
-    HRESULT r = device_->CreateCommittedResource(
+    HRESULT hr = device_->CreateCommittedResource(
         &depthHeapProp,
         D3D12_HEAP_FLAG_NONE,
         &depthResourceDesc,
@@ -378,15 +378,15 @@ void InitDirectX::DepthBuffer(void)
         &depthClearValue,
         IID_PPV_ARGS(&depthBuff_)
     );
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 
     // 深度ビュー用デスクリプタヒープの設定
     D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
     dsvHeapDesc.NumDescriptors = 1;     // 深度ビューは1つ
     dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;      // デプスステンシルビュー
     // 設定を元に深度ビュー用デスクリプタヒープの生成
-    r = device_->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap_));
-    assert(SUCCEEDED(r));
+    hr = device_->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap_));
+    assert(SUCCEEDED(hr));
 
     // 深度ビュー作成
     D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
@@ -399,8 +399,8 @@ void InitDirectX::DepthBuffer(void)
 void InitDirectX::Fence(void)
 {
     // フェンスの生成
-    HRESULT r = device_->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
-    assert(SUCCEEDED(r));
+    HRESULT hr = device_->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+    assert(SUCCEEDED(hr));
 }
 
 void InitDirectX::ClearRTV(void)
@@ -437,8 +437,8 @@ InitDirectX::DescriptorHeap_t::DescriptorHeap_t(InitDirectX* p_idx)
     descHeapDesc.NumDescriptors = maxSRVDesc_ + maxCBVDesc_ + maxUAVDesc_;
 
     // 設定を元にSRV用デスクリプタヒープを作成
-    HRESULT r = p_idx_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
-    assert(SUCCEEDED(r));
+    HRESULT hr = p_idx_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
+    assert(SUCCEEDED(hr));
 }
 
 size_t InitDirectX::DescriptorHeap_t::CreateSRV(const D3D12_RESOURCE_DESC& rscDesc, ID3D12Resource* p_rsc)

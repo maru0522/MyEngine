@@ -7,28 +7,32 @@ struct Matrix4
 {
     Matrix4(void);
     Matrix4(float m00, float m01, float m02, float m03,
-            float m10, float m11, float m12, float m13,
-            float m20, float m21, float m22, float m23,
-            float m30, float m31, float m32, float m33);
+        float m10, float m11, float m12, float m13,
+        float m20, float m21, float m22, float m23,
+        float m30, float m31, float m32, float m33);
     float m[4][4]{};
 };
 
-// 単位行列
-Matrix4 Identity();
+namespace Util {
+    namespace Math {
+        // 単位行列
+        Matrix4 Identity();
 
-// 拡大縮小行列
-Matrix4 Scale(const Vector3& s);
+        // 拡大縮小行列
+        Matrix4 Scale(const Vector3& s);
 
-// 回転行列
-Matrix4 RotateX(float angle);
-Matrix4 RotateY(float angle);
-Matrix4 RotateZ(float angle);
+        // 回転行列
+        Matrix4 RotateX(float angle);
+        Matrix4 RotateY(float angle);
+        Matrix4 RotateZ(float angle);
 
-// 平行移動行列
-Matrix4 Translate(const Vector3& t);
+        // 平行移動行列
+        Matrix4 Translate(const Vector3& t);
 
-// 座標変換
-Vector3 Transform(const Vector3& v, const Matrix4& m);
+        // 座標変換
+        Vector3 Transform(const Vector3& v, const Matrix4& m);
+    }
+}
 
 // 代入演算子オーバーロード
 Matrix4& operator*=(Matrix4& m1, const Matrix4& m2);

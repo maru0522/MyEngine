@@ -1,0 +1,71 @@
+#pragma once
+#include "InitDirectX.h"
+#include <cassert>
+#include <d3d12.h>
+#include <vector>
+#include <wrl.h>
+
+template<class T> class VertexBuffer
+{
+public:
+    // 関数
+    VertexBuffer(void) {};
+    VertexBuffer(const std::vector<T>& vertices) {
+        // 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
+        unsigned int sizeVB = static_cast<unsigned int>(sizeof(vertices[0]) * vertices.size());
+
+        // 頂点バッファの設定
+        D3D12_HEAP_PROPERTIES heapProp{}; // ヒープ設定
+        heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUへの転送用
+
+        // リソース設定
+        D3D12_RESOURCE_DESC resDesc{};
+        resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+        resDesc.Width = sizeVB; // 頂点データ全体のサイズ
+        resDesc.Height = 1;
+        resDesc.DepthOrArraySize = 1;
+        resDesc.MipLevels = 1;
+        resDesc.SampleDesc.Count = 1;
+        resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+        // 頂点バッファの生成
+        HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateCommittedResource(
+            &heapProp, // ヒープ設定
+            D3D12_HEAP_FLAG_NONE,
+            &resDesc, // リソース設定
+            D3D12_RESOURCE_STATE_GENERIC_READ,
+            nullptr,
+            IID_PPV_ARGS(&buff_));
+        assert(SUCCEEDED(hr));
+
+        // GPU上のバッファに対応した仮想メモリ(メインメモリ上)を取得
+        hr = buff_->Map(0, nullptr, (void**)&vertMap_);
+        assert(SUCCEEDED(hr));
+
+        // 全頂点に対して
+        std::copy(vertices.begin(), vertices.end(), vertMap_);
+
+        // 頂点バッファビュー
+        // GPU仮想アドレス
+        vbView_.BufferLocation = buff_->GetGPUVirtualAddress();
+        // 頂点バッファのサイズ
+        vbView_.SizeInBytes = sizeVB;
+        // 頂点1つ分のデータサイズ
+        vbView_.StrideInBytes = sizeof(vertices[0]);
+    }
+
+    ~VertexBuffer(void) {
+        // 繋がりを解除
+        buff_->Unmap(0, nullptr);
+    }
+
+    inline ID3D12Resource* GetBuffer(void) { return buff_.Get(); }
+    inline const D3D12_VERTEX_BUFFER_VIEW& GetVbView(void) { return vbView_; }
+
+private:
+    // 変数
+    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{ nullptr }; // 頂点バッファ
+    D3D12_VERTEX_BUFFER_VIEW vbView_{}; // 頂点バッファビュー
+    T* vertMap_{ nullptr }; // GPUメモリのmap
+};
+

@@ -66,8 +66,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // InitDirectXの変数宣言と初期化
     HRESULT result;
-    std::unique_ptr<InitDirectX> iDX{ std::make_unique<InitDirectX>() };
-    iDX->Initialize(wnd_.get());
+    InitDirectX* p_IDX{ InitDirectX::GetInstance() };
+    p_IDX->Initialize(wnd_.get());
 
     // DirectInputに含まれるクラス全て初期化
     Input::InitializeAll(wnd_.get());
@@ -78,8 +78,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 描画初期化処理
 
-        // 頂点データ構造体
-        struct Vertex
+    // 頂点データ構造体
+    struct Vertex
     {
         XMFLOAT3 pos;       // xyz座標
         XMFLOAT3 normal;    // 法線ベクトル
@@ -184,7 +184,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // 頂点バッファの生成
     ComPtr<ID3D12Resource> vertBuff = nullptr;
-    result = iDX->GetDevice()->CreateCommittedResource(
+    result = p_IDX->GetDevice()->CreateCommittedResource(
         &heapProp, // ヒープ設定
         D3D12_HEAP_FLAG_NONE,
         &resDesc, // リソース設定
@@ -402,7 +402,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     result = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0,
         &rootSigBlob, &errorBlob);
     assert(SUCCEEDED(result));
-    result = iDX->GetDevice()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(),
+    result = p_IDX->GetDevice()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(),
         IID_PPV_ARGS(&rootSignature));
     assert(SUCCEEDED(result));
     rootSigBlob->Release();
@@ -419,7 +419,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region パイプラインステートの生成
     // パイプランステートの生成
     ComPtr<ID3D12PipelineState> pipelineState = nullptr;
-    result = iDX->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
+    result = p_IDX->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
     assert(SUCCEEDED(result));
 #pragma endregion
 
@@ -440,7 +440,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     // 定数バッファの生成準備
     ComPtr<ID3D12Resource> constBuffMaterial = nullptr;
     // 定数バッファの生成
-    result = iDX->GetDevice()->CreateCommittedResource(
+    result = p_IDX->GetDevice()->CreateCommittedResource(
         &cbHeapProp,	// ヒープ設定
         D3D12_HEAP_FLAG_NONE,
         &cbResourceDesc,	// リソース設定
@@ -465,7 +465,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     // 配列内の全オブジェクトに対して
     for (int i = 0; i < _countof(object3ds); i++) {
         // 初期化
-        InitializeObject3d(&object3ds[i], iDX->GetDevice());
+        InitializeObject3d(&object3ds[i], p_IDX->GetDevice());
 
         // ここからは親子構造のサンプル
         // 先頭以外なら
@@ -514,7 +514,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // インデックスバッファの生成
     ComPtr<ID3D12Resource> indexBuff = nullptr;
-    result = iDX->GetDevice()->CreateCommittedResource(
+    result = p_IDX->GetDevice()->CreateCommittedResource(
         &heapProp,	// ヒープ設定
         D3D12_HEAP_FLAG_NONE,
         &resDesc,	// リソース設定
@@ -560,34 +560,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
             UpdateObject3d(&object3ds[i], matView, matProjection);
         }
 
-        iDX->PreDraw();
+        p_IDX->PreDraw();
 
         // パイプラインステートとルートシグネチャの設定コマンド
-        iDX->GetCommandList()->SetPipelineState(pipelineState.Get());
-        iDX->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
+        p_IDX->GetCommandList()->SetPipelineState(pipelineState.Get());
+        p_IDX->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
 
         // プリミティブ形状の設定コマンド
-        iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 三角形リスト
+        p_IDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 三角形リスト
 
         // 頂点バッファビューの設定コマンド
-        iDX->GetCommandList()->IASetVertexBuffers(0, 1, &vbView);
+        p_IDX->GetCommandList()->IASetVertexBuffers(0, 1, &vbView);
 
         // インデックスバッファビューの設定コマンド
-        iDX->GetCommandList()->IASetIndexBuffer(&ibView);
+        p_IDX->GetCommandList()->IASetIndexBuffer(&ibView);
 
 
-        iDX->GetCommandList()->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
+        p_IDX->GetCommandList()->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
         // SRVヒープの設定コマンド
         // // デスクリプタヒープの配列
-        ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap() };
-        iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+        ID3D12DescriptorHeap* ppHeaps[] = { p_IDX->GetDescHeap_t()->GetDescHeap() };
+        p_IDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
         //commandList->SetDescriptorHeaps(1, &srvHeap);
 
-        iDX->GetCommandList()->SetGraphicsRootDescriptorTable(1, texM->GetImage("Resources/reimu.png").srvGpuHandle_);
+        p_IDX->GetCommandList()->SetGraphicsRootDescriptorTable(1, texM->GetImage("Resources/reimu.png").srvGpuHandle_);
 
         // 全オブジェクトについて処理
         for (int i = 0; i < _countof(object3ds); i++) {
-            DrawObject3d(&object3ds[i], iDX->GetCommandList(), vbView, ibView, _countof(indices));
+            DrawObject3d(&object3ds[i], p_IDX->GetCommandList(), vbView, ibView, _countof(indices));
         }
 
 #pragma region 構造化に伴いコメントアウト
@@ -604,7 +604,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         //commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0); // 全ての頂点を使って描画
 #pragma endregion
 
-        iDX->PostDraw();
+        p_IDX->PostDraw();
 #pragma endregion
 
     }

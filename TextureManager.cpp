@@ -31,16 +31,16 @@ void TextureManager::Load(const fsPath& path)
     const wchar_t* szFile{ wStrPath.c_str() };
 
     // WICテクスチャのロード
-    HRESULT r = LoadFromWICFile(szFile, DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
-    assert(SUCCEEDED(r));
+    HRESULT hr = LoadFromWICFile(szFile, DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
+    assert(SUCCEEDED(hr));
 #pragma endregion
 
 #pragma region ミップマップ
     DirectX::ScratchImage mipChain{};
 
     // ミップマップ生成
-    r = GenerateMipMaps(scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipChain);
-    if (SUCCEEDED(r)) {
+    hr = GenerateMipMaps(scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipChain);
+    if (SUCCEEDED(hr)) {
         scratchImg = std::move(mipChain);
         metadata = scratchImg.GetMetadata();
     }
@@ -69,8 +69,8 @@ void TextureManager::Load(const fsPath& path)
 
 #pragma region テクスチャバッファ
     // テクスチャバッファの生成
-    r = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff_));
-    assert(SUCCEEDED(r));
+    hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff_));
+    assert(SUCCEEDED(hr));
 #pragma endregion
 
 #pragma region バッファへのデータ転送
@@ -80,14 +80,14 @@ void TextureManager::Load(const fsPath& path)
         const DirectX::Image* img = scratchImg.GetImage(i, 0, 0);
 
         // テクスチャバッファにデータ転送
-        r = tempImg.buff_->WriteToSubresource(
+        hr = tempImg.buff_->WriteToSubresource(
             static_cast<UINT>(i),
             nullptr,		// 全領域へコピー
             img->pixels,	// 元データアドレス
             static_cast<UINT>(img->rowPitch),	// 1ラインサイズ
             static_cast<UINT>(img->slicePitch)	// 全サイズ
         );
-        assert(SUCCEEDED(r));
+        assert(SUCCEEDED(hr));
     }
 #pragma endregion
 
@@ -206,7 +206,7 @@ void TextureManager::GenerateMissingImage(void)
 
 #pragma region テクスチャバッファ
     // テクスチャバッファの生成
-    HRESULT r = p_idx->GetDevice()->CreateCommittedResource(
+    HRESULT hr = p_idx->GetDevice()->CreateCommittedResource(
         &texHeapProp,
         D3D12_HEAP_FLAG_NONE,
         &textureResourceDesc,
@@ -214,12 +214,12 @@ void TextureManager::GenerateMissingImage(void)
         nullptr,
         IID_PPV_ARGS(&tempImg.buff_));
 
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 #pragma endregion
 
 #pragma region バッファへのデータ転送
     // テクスチャバッファにデータ転送
-    r = tempImg.buff_->WriteToSubresource(
+    hr = tempImg.buff_->WriteToSubresource(
         0,
         nullptr,		// 全領域へコピー
         imageData,	// 元データアドレス
@@ -230,7 +230,7 @@ void TextureManager::GenerateMissingImage(void)
     //イメージデータ解放
     delete[] imageData;
 
-    assert(SUCCEEDED(r));
+    assert(SUCCEEDED(hr));
 #pragma endregion
 
     // InitDirectX内のDescriptorHeapに生成。
