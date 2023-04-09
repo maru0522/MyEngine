@@ -40,13 +40,18 @@ const Quaternion operator*(const Quaternion& q1, const Quaternion& q2);
 const Quaternion operator*(const Quaternion& q, float s);
 const Quaternion operator/(const Quaternion& q, float s);
 
-// 任意軸回転を表すクォータニオン
-Quaternion MakeAxisAngle(const Vector3& axis, float radian);
-// ベクトルをクォータニオンで回転させた結果のベクトルを求める
-Vector3 RotateVector(const Vector3& v, const Quaternion& q);
-// クォータニオンから回転行列を求める
-Matrix4 MakeRotateMatrix(const Quaternion& q);
-//球面線形補間
-Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
-// uからvへの回転を生成
-Quaternion DirectionToDirection(const Vector3& u, const Vector3& v);
+namespace Math {
+    // FuncのF
+    namespace QuaternionF {
+        // 任意軸回転を表すクォータニオン
+        Quaternion MakeAxisAngle(const Vector3& axis, float radian);
+        // ベクトルをクォータニオンで回転させた結果のベクトルを求める
+        Vector3 RotateVector(const Vector3& v, const Quaternion& q);
+        // クォータニオンから回転行列を求める
+        Matrix4 MakeRotateMatrix(const Quaternion& q);
+        //球面線形補間
+        Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
+        // uからvへの回転を生成
+        Quaternion DirectionToDirection(const Vector3& u, const Vector3& v);
+    }
+}

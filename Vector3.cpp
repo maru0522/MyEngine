@@ -138,17 +138,17 @@ const Vector3 operator/(const Vector3& v, float s)
     return temp /= s;
 }
 
-const Vector3 Util::Math::lerp(const Vector3& start, const Vector3& end, const float t)
+const Vector3 Math::Vector::lerp(const Vector3& start, const Vector3& end, const float t)
 {
     return start * (1.0f - t) + end * t;
 }
 
-const Vector3 Util::Math::bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t)
+const Vector3 Math::Vector::bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t)
 {
     return lerp(lerp(start, controlPoint, t), lerp(controlPoint, end, t), t);
 }
 
-const Vector3 Util::Math::bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t)
+const Vector3 Math::Vector::bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t)
 {
     return lerp(
         lerp(lerp(start, controlPoint1, t), lerp(controlPoint1, controlPoint2, t), t),	// start
@@ -156,7 +156,7 @@ const Vector3 Util::Math::bezier3(const Vector3& start, const Vector3& controlPo
         t);
 }
 
-Vector3 Util::Math::splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t)
+Vector3 Math::Vector::splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t)
 {
     size_t n = points.size() - 2;
 

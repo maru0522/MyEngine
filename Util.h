@@ -10,12 +10,10 @@
 static std::random_device seed_gen;
 static std::mt19937 engine(seed_gen());
 
-namespace Util {
+namespace Math {
+    constexpr float PI{ 3.14159265f };
 
-    namespace Math {
-
-        constexpr float PI{ 3.14159265f };
-
+    namespace Func {
         template<typename T>
         inline const T Random(const double min, const double max) {
 
@@ -37,6 +35,9 @@ namespace Util {
             }
         }
     }
+}
+
+namespace Util {
 
     namespace Convert {
         inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::PI / 180.0f; }

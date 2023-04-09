@@ -130,7 +130,7 @@ const Quaternion operator/(const Quaternion& q, float s)
     return tmp /= s;
 }
 
-Quaternion MakeAxisAngle(const Vector3& axis, float radian)
+Quaternion Math::QuaternionF::MakeAxisAngle(const Vector3& axis, float radian)
 {
     return Quaternion{ axis.x * sinf(radian / 2),
                        axis.y * sinf(radian / 2),
@@ -138,7 +138,7 @@ Quaternion MakeAxisAngle(const Vector3& axis, float radian)
                        cosf(radian / 2) };
 }
 
-Vector3 RotateVector(const Vector3& v, const Quaternion& q)
+Vector3 Math::QuaternionF::RotateVector(const Vector3& v, const Quaternion& q)
 {
     Quaternion tmp{ q.Multiply({v.x,v.y,v.z,0}) };
     Quaternion result = tmp.Multiply(q.Conjugate());
@@ -146,7 +146,7 @@ Vector3 RotateVector(const Vector3& v, const Quaternion& q)
     return Vector3(result.x, result.y, result.z);
 }
 
-Matrix4 MakeRotateMatrix(const Quaternion& q)
+Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)
 {
     return Matrix4{ q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w, 2 * (q.x * q.y + q.w * q.z),                   2 * (q.x * q.z - q.w * q.y),                   0,
                     2 * (q.x * q.y + q.w * q.z),                   q.x * q.x - q.y * q.y + q.z * q.z - q.w * q.w, 2 * (q.y * q.z + q.w * q.x),                   0,
@@ -154,7 +154,7 @@ Matrix4 MakeRotateMatrix(const Quaternion& q)
                     0,                                             0,                                             0,                                             1 };
 }
 
-Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
+Quaternion Math::QuaternionF::Slerp(const Quaternion& q0, const Quaternion& q1, float t)
 {
     float dot{ q0.Dot(q1) };
     Quaternion lq0{ q0 };
@@ -173,7 +173,7 @@ Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
     return lq0 * (std::sin((1.f - t) * theta) / std::sin(theta)) + q1 * (std::sin(t * theta) / std::sin(theta));
 }
 
-Quaternion DirectionToDirection(const Vector3& u, const Vector3& v)
+Quaternion Math::QuaternionF::DirectionToDirection(const Vector3& u, const Vector3& v)
 {
     Vector3 w{ u.cross(v)};
     Vector3 n = w.normalize();

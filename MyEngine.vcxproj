@@ -120,6 +120,7 @@
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="InitDirectX.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="MathUtil.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Sprite.h" />

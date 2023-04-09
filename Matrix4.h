@@ -1,20 +1,22 @@
 #pragma once
-
 #include "Vector3.h"
 
-// Matrix4 \‘¢‘Ì
-struct Matrix4
+class Matrix4
 {
-    Matrix4(void);
+public:
+    // ŠÖ”
+    Matrix4(void) {};
     Matrix4(float m00, float m01, float m02, float m03,
         float m10, float m11, float m12, float m13,
         float m20, float m21, float m22, float m23,
         float m30, float m31, float m32, float m33);
+
+    // •Ï”
     float m[4][4]{};
 };
 
-namespace Util {
-    namespace Math {
+namespace Math {
+    namespace Matrix {
         // ’PˆÊs—ñ
         Matrix4 Identity();
 
