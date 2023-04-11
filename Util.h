@@ -6,6 +6,7 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #endif
 #include <experimental/filesystem>
+#include <typeinfo>
 
 static std::random_device seed_gen;
 static std::mt19937 engine(seed_gen());
@@ -48,8 +49,23 @@ namespace Util {
         std::wstring ToWString(const std::string& str);
         std::wstring ToWString(const char* cStr);
 
+        // ƒNƒ‰ƒX–¼‚ðstring‚ÅŽæ“¾
+        template<class T> inline std::string NameOf(bool removePrefix = false) {
+            std::string str{ typeid(T).name() };
+
+            if (removePrefix) {
+                if (str.size() < 7)
+                    return str;
+
+                str[0] == 'c' ? str.erase(0, 6) : str.erase(0, 7);
+                return str;
+            }
+
+            return str;
+        }
+
         template<class T, size_t N> std::array<T, N> ToArray(const std::vector<T>& vec) {
-            return std::array<T, vec.size()>{vec.begin(),vec.end()};
+            return std::array<T, vec.size()>{vec.begin(), vec.end()};
         }
 
         template<class T, size_t N> std::vector<T> ToVector(const std::array<T, N>& arr) {
