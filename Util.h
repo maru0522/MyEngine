@@ -1,49 +1,15 @@
 #pragma once
 #include <string>
 #include <chrono>
-#include <random>
 #if _MSC_VER > 1922 && !defined(_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING)
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #endif
 #include <experimental/filesystem>
 #include <typeinfo>
 
-static std::random_device seed_gen;
-static std::mt19937 engine(seed_gen());
-
-namespace Math {
-    constexpr float PI{ 3.14159265f };
-
-    namespace Func {
-        template<typename T>
-        inline const T Random(const double min, const double max) {
-
-            std::uniform_real_distribution<> dist1(min, max);
-
-            return static_cast<T>(dist1(engine));
-        }
-
-        template<typename T>
-        inline const T& Clamp(const T& value, const T& min, const T& max) {
-            if (value < min) {
-                return min;
-            }
-            else if (value > max) {
-                return max;
-            }
-            else {
-                return value;
-            }
-        }
-    }
-}
-
 namespace Util {
 
     namespace Convert {
-        inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::PI / 180.0f; }
-        inline constexpr float ToDegree(float fRadians) { return fRadians * 180.0f / Math::PI; }
-
         std::string ToString(const std::wstring& wStr);
         std::string ToString(const char* cStr);
         std::wstring ToWString(const std::string& str);

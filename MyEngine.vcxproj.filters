@@ -30,6 +30,7 @@
     <ClCompile Include="Quaternion.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="CameraManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstBuffer.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Quaternion.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="CameraManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Basic.hlsli" />
