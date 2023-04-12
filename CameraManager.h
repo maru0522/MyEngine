@@ -3,12 +3,6 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 
-enum class CameraProjection
-{
-    ORTHOGRAPHIC, // •½s“Š‰e
-    PERSPECTIVE,  // “§‹“Š‰e
-};
-
 class Camera
 {
 public:
@@ -26,14 +20,11 @@ private:
     float nearZ_;
     float farZ_;
 
-    CameraProjection state_;
-    Matrix4 matProjection_;
-
+    Matrix4 matProj_OrthoGraphic_;
+    Matrix4 matProj_Perspectivee_;
 
 public:
     // getterEsetter
-    void SwitchState(void);
-
     inline void SetEye(const Vector3& eye) { eye_ = eye; }
     inline void SetTarget(const Vector3& target) { target_ = target; }
     inline void SetUp(const Vector3& up) { up_ = up; }

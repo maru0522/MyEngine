@@ -89,6 +89,18 @@ Matrix4 Math::Matrix::Translate(const Vector3& t)
     return result;
 }
 
+Matrix4 Math::Matrix::Transpose(const Matrix4& m)
+{
+    Matrix4 result
+    {
+        m.m[0][0],m.m[1][0],m.m[2][0],m.m[3][0],
+        m.m[0][1],m.m[1][1],m.m[2][1],m.m[3][1],
+        m.m[0][2],m.m[1][2],m.m[2][2],m.m[3][2],
+        m.m[0][3],m.m[1][3],m.m[2][3],m.m[3][3]
+    };
+    return result;
+}
+
 // 座標変換（ベクトル行列の掛け算）を行うTransform 関数を作成する。　（透視変換にも対応している）
 Vector3 Math::Matrix::Transform(const Vector3& v, const Matrix4& m)
 {
