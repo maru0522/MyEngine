@@ -11,11 +11,6 @@ Vector2::Vector2(float x, float y)
 {
 }
 
-Vector2::Vector2(DirectX::XMFLOAT2 xmf2)
-    : x(xmf2.x), y(xmf2.y)
-{
-}
-
 float Vector2::length(void) const
 {
     return std::sqrtf(x * x + y * y);
@@ -54,13 +49,6 @@ Vector2& Vector2::operator=(const Vector2& v)
 {
     x = v.x;
     y = v.y;
-    return *this;
-}
-
-Vector2& Vector2::operator=(const DirectX::XMFLOAT2& xmf2)
-{
-    x = xmf2.x;
-    y = xmf2.y;
     return *this;
 }
 

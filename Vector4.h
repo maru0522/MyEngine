@@ -1,4 +1,5 @@
 #pragma once
+#include <DirectXMath.h>
 
 class Vector4
 {
@@ -11,7 +12,6 @@ public:
 
     // ŠÖ”
     Vector4(void) = default;
-    Vector4(const Vector4&) = default;
     constexpr Vector4(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
     float length(void) const;                 // ƒmƒ‹ƒ€(’·‚³)‚ğ‹‚ß‚é

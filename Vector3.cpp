@@ -14,11 +14,6 @@ Vector3::Vector3(float x, float y, float z)
 {
 }
 
-Vector3::Vector3(DirectX::XMFLOAT3 xmf3)
-    : x(xmf3.x), y(xmf3.y), z(xmf3.z)
-{
-}
-
 // ÉxÉNÉgÉãÇÃí∑Ç≥ÇãÅÇﬂÇÈ
 float Vector3::length(void) const
 {
@@ -66,14 +61,6 @@ Vector3& Vector3::operator=(const Vector3& v)
     x = v.x;
     y = v.y;
     z = v.z;
-    return *this;
-}
-
-Vector3& Vector3::operator=(const DirectX::XMFLOAT3& xmf3)
-{
-    x = xmf3.x;
-    y = xmf3.y;
-    z = xmf3.z;
     return *this;
 }
 
@@ -136,6 +123,32 @@ const Vector3 operator/(const Vector3& v, float s)
 {
     Vector3 temp{ v };
     return temp /= s;
+}
+
+float Math::Vector::Length(const Vector3& v)
+{
+    return std::sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+Vector3 Math::Vector::Normalize(const Vector3& v)
+{
+    float len{ Length(v) };
+    if (len != 0) {
+        return v / len;
+    }
+    return v;
+}
+
+float Math::Vector::Dot(const Vector3& v1, const Vector3& v2)
+{
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+Vector3 Math::Vector::Cross(const Vector3& v1, const Vector3& v2)
+{
+    return Vector3{ v1.y * v2.z - v1.z * v2.y,
+                    v1.z * v2.x - v1.x * v2.z,
+                    v1.x * v2.y - v1.y * v2.x };
 }
 
 const Vector3 Math::Vector::lerp(const Vector3& start, const Vector3& end, const float t)

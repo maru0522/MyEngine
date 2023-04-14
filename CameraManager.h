@@ -21,7 +21,7 @@ private:
     float farZ_;
 
     Matrix4 matProj_OrthoGraphic_;
-    Matrix4 matProj_Perspectivee_;
+    Matrix4 matProj_Perspective_;
 
 public:
     // getterÅEsetter

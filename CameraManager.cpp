@@ -1,4 +1,5 @@
 #include "CameraManager.h"
+
 Camera* CameraManager::current_{ nullptr };
 
 Camera::Camera(void) :
