@@ -1,5 +1,6 @@
 #pragma once
 #include <random>
+#include <cmath>
 
 static std::random_device seed_gen;
 static std::mt19937 engine(seed_gen());
@@ -36,6 +37,11 @@ namespace Math {
         inline int Sign(const T arg_v) {
             if (arg_v == 0) return 0;
             return arg_v > 0 ? 1 : -1;
+        }
+
+        template<class T>
+        inline T Cotangent(T arg_v) {
+            return 1 / std::tan(arg_v);
         }
     }
 }

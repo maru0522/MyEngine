@@ -1,3 +1,4 @@
+#include "MathUtil.h"
 #include "Matrix4.h"
 #include "Vector3.h"
 #include <cmath> // sin cos
@@ -132,6 +133,48 @@ Matrix4 Math::Matrix::ViewLookToLH(const Vector3& eyePosition, const Vector3& ey
 Matrix4 Math::Matrix::ViewLookAtLH(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& upDirection)
 {
     return ViewLookToLH(eyePosition, targetPosition - eyePosition, upDirection);
+}
+
+Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float window_width, float window_height)
+{
+    return ProjectionOrthoGraphicLH(0, window_width, 0, window_height, 0.f, 1.f);
+}
+
+Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float window_width, float window_height, float nearZ, float farZ)
+{
+    return ProjectionOrthoGraphicLH(0, window_width, 0, window_height, nearZ, farZ);
+}
+
+Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float leftEdge, float rightEdge, float bottomEdge, float topEdge, float nearZ, float farZ)
+{
+    auto M00{ 2.f / (rightEdge - leftEdge) };
+    auto M11{ -2.f / (topEdge - bottomEdge) };
+    auto M22{ 2.f / (farZ - nearZ) };
+
+    return Matrix4{
+         M00, 0.f, 0.f, 0.f,
+         0.f, M11, 0.f, 0.f,
+         0.f, 0.f, M22, 0.f,
+        -1.f, 1.f, 0.f, 1.f
+    };
+}
+
+Matrix4 Math::Matrix::ProjectionPerspectiveFovLH(float fovY, float aspect, float nearZ, float farZ)
+{
+    auto scaleY = Math::Function::Cotangent(fovY / 2);
+    auto scaleX = scaleY / aspect;
+
+    return Matrix4{
+        scaleX,    0.f,                            0.f, 0.f,
+           0.f, scaleY,                            0.f, 0.f,
+           0.f,    0.f,          farZ / (farZ - nearZ), 1.f,
+           0.f,    0.f, -nearZ * farZ / (farZ / nearZ), 0.f
+    };
+}
+
+Matrix4 Math::Matrix::ProjectionPerspectiveFovLH(float fovY, float window_width, float window_height, float nearZ, float farZ)
+{
+    return ProjectionPerspectiveFovLH(fovY, window_width / window_height, nearZ, farZ);
 }
 
 Matrix4::Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)

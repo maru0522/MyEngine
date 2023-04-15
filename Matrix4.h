@@ -44,8 +44,16 @@ namespace Math {
         // 座標変換
         Vector3 Transform(const Vector3& v, const Matrix4& m);
 
-        // ビュー行列変換
+        // ビュー行列
         Matrix4 ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection);
         Matrix4 ViewLookAtLH(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& upDirection);
+
+        // 射影行列
+        Matrix4 ProjectionOrthoGraphicLH(float window_width, float window_height);
+        Matrix4 ProjectionOrthoGraphicLH(float window_width, float window_height, float nearZ, float farZ);
+        Matrix4 ProjectionOrthoGraphicLH(float leftEdge, float rightEdge, float bottomEdge, float topEdge, float nearZ, float farZ);
+
+        Matrix4 ProjectionPerspectiveFovLH(float fovY, float aspect, float nearZ, float farZ);
+        Matrix4 ProjectionPerspectiveFovLH(float fovY, float window_width, float window_height, float nearZ, float farZ);
     }
 }
