@@ -30,7 +30,7 @@ Matrix4 Math::Matrix::Scale(const Vector3& s)
 }
 
 // x é≤Ç‹ÇÌÇËÇÃâÒì]çsóÒÇãÅÇﬂÇÈ
-Matrix4 Math::Matrix::RotateX(float angle)
+Matrix4 Math::Matrix::RotationX(float angle)
 {
     float sin = std::sin(angle);
     float cos = std::cos(angle);
@@ -46,7 +46,7 @@ Matrix4 Math::Matrix::RotateX(float angle)
 }
 
 // y é≤Ç‹ÇÌÇËÇÃâÒì]çsóÒÇãÅÇﬂÇÈ
-Matrix4 Math::Matrix::RotateY(float angle)
+Matrix4 Math::Matrix::RotationY(float angle)
 {
     float sin = std::sin(angle);
     float cos = std::cos(angle);
@@ -62,7 +62,7 @@ Matrix4 Math::Matrix::RotateY(float angle)
 }
 
 // z é≤Ç‹ÇÌÇËÇÃâÒì]çsóÒÇãÅÇﬂÇÈ
-Matrix4 Math::Matrix::RotateZ(float angle)
+Matrix4 Math::Matrix::RotationZ(float angle)
 {
     float sin = std::sin(angle);
     float cos = std::cos(angle);
@@ -78,7 +78,7 @@ Matrix4 Math::Matrix::RotateZ(float angle)
 }
 
 // ïΩçsà⁄ìÆçsóÒÇãÅÇﬂÇÈ
-Matrix4 Math::Matrix::Translate(const Vector3& t)
+Matrix4 Math::Matrix::Translation(const Vector3& t)
 {
     Matrix4 result
     {
@@ -88,6 +88,16 @@ Matrix4 Math::Matrix::Translate(const Vector3& t)
          t.x,  t.y,  t.z, 1.0f,
     };
     return result;
+}
+
+Matrix4 Math::Matrix::Translate(const Matrix4& matWorld, const Vector3& t)
+{
+    return Matrix4{
+        matWorld.m[0][0], matWorld.m[0][1], matWorld.m[0][2], matWorld.m[0][3],
+        matWorld.m[1][0], matWorld.m[1][1], matWorld.m[1][2], matWorld.m[1][3],
+        matWorld.m[2][0], matWorld.m[2][1], matWorld.m[2][2], matWorld.m[2][3],
+                     t.x,              t.y,              t.z, matWorld.m[3][3]
+    };
 }
 
 Matrix4 Math::Matrix::Transpose(const Matrix4& m)
@@ -118,15 +128,15 @@ Vector3 Math::Matrix::Transform(const Vector3& v, const Matrix4& m)
 
 Matrix4 Math::Matrix::ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection)
 {
-    auto zAxis{ eyeDirection.normalize() };
-    auto xAxis{ Math::Vector::Normalize(upDirection.cross(eyeDirection)) };
-    auto yAxis{ Math::Vector::Normalize(zAxis.cross(xAxis)) };
+    auto axisZ{ eyeDirection.normalize() };
+    auto axisX{ Math::Vector::Normalize(upDirection.cross(eyeDirection)) };
+    auto axisY{ Math::Vector::Normalize(axisZ.cross(axisX)) };
 
     return Matrix4{
-                        xAxis.x,                 yAxis.x,                 zAxis.x, 0,
-                        xAxis.y,                 yAxis.y,                 zAxis.y, 0,
-                        xAxis.z,                 yAxis.z,                 zAxis.z, 0,
-        -xAxis.dot(eyePosition), -yAxis.dot(eyePosition), -zAxis.dot(eyePosition), 1
+                        axisX.x,                 axisY.x,                 axisZ.x, 0,
+                        axisX.y,                 axisY.y,                 axisZ.y, 0,
+                        axisX.z,                 axisY.z,                 axisZ.z, 0,
+        -axisX.dot(eyePosition), -axisY.dot(eyePosition), -axisZ.dot(eyePosition), 1
     };
 }
 

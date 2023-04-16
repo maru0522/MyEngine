@@ -31,12 +31,13 @@ namespace Math {
         Matrix4 Scale(const Vector3& s);
 
         // 回転行列
-        Matrix4 RotateX(float angle);
-        Matrix4 RotateY(float angle);
-        Matrix4 RotateZ(float angle);
+        Matrix4 RotationX(float angle);
+        Matrix4 RotationY(float angle);
+        Matrix4 RotationZ(float angle);
 
         // 平行移動行列
-        Matrix4 Translate(const Vector3& t);
+        Matrix4 Translation(const Vector3& t);
+        Matrix4 Translate(const Matrix4& matWorld, const Vector3& t); // 直接書き換えで高速化
 
         // 転置行列
         Matrix4 Transpose(const Matrix4& m);
