@@ -10,14 +10,16 @@
 #include <d3d12.h>
 #pragma comment(lib,"d3d12.lib")
 
-#include "ConstBuffer.h"
-#include "WndAPI.h"
 #include "GraphicsPipeline.h"
+#include "TextureManager.h"
+#include "CameraManager.h"
 #include "VertexBuffer.h"
+#include "ConstBuffer.h"
 #include "ConstBuffer.h"
 #include "Vector2.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+#include "WndAPI.h"
 
 class Sprite
 {
@@ -28,8 +30,8 @@ private:
 
     struct CBData_t // 定数バッファ用データ構造体
     {
-        DirectX::XMMATRIX mat_;  // 3D変換行列
-        DirectX::XMFLOAT4 color_; // 色（RGBA）
+        Matrix4 mat_;  // 3D変換行列
+        Vector4 color_; // 色（RGBA）
     };
 
     struct VertexPosUv_t
@@ -39,16 +41,22 @@ private:
     };
 
 public:
-    // 静的関数
+    // 関数
+    static void StaticInitialize(TextureManager* texMPtr,CameraManager* camMPtr);
     static void PreDraw(void);
 
-    // 関数
-    Sprite();
+    Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickNameが優先される。
     void Update(void);
     void Draw(void);
 
 private:
+    void TransferVertex(void);
+    void UpdateMatrix(void);
+
     // 変数
+    static TextureManager* texMPtr_;
+    static CameraManager* camMPtr_;
+
     Sprite* parent_;
 
     Vector2 position_;
@@ -56,19 +64,46 @@ private:
     Vector2 size_;
     float rotation_;
 
-    std::unique_ptr<ConstBuffer<CBData_t>> cb_; // 定数バッファ
+    Vector2 anchorPoint_;
+    Vector2 cutStartPoint_;
+    Vector2 cutLength_;
 
+    bool isFlipX_;
+    bool isFlipY_;
+    bool isInvisible_;
+
+    Matrix4 matWorld_;
+    std::unique_ptr<ConstBuffer<CBData_t>> cb_; // 定数バッファ
     std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_; // 頂点バッファ
 
-    D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandleCopy_;
+    TextureManager::Image image_;
 
 public:
     // setter・getter
     inline const Vector2& GetPosition(void) { return position_; }
+    inline const Vector2& GetScale(void) { return scale_; }
+    inline const Vector2& GetSize(void) { return size_; }
     inline float GetRotation(void) { return rotation_; }
+    inline const Vector2& GetAnchorPoint(void) { return anchorPoint_; }
+    inline const Vector2& GetCutStartPoint(void) { return cutStartPoint_; }
+    inline const Vector2& GetCutLength(void) { return cutLength_; }
+    inline bool  GetFlipX(void) { return isFlipX_; }
+    inline bool  GetFlipY(void) { return isFlipY_; }
+    inline bool  GetInvisible(void) { return isInvisible_; }
 
+    inline void SetParent(Sprite* spritePtr) { parent_ = spritePtr; }
     inline void SetPosition(const Vector2& posotion) { position_ = posotion; }
+    inline void SetScale(const Vector2& scale) { scale_ = scale; }
+    inline void SetSize(const Vector2& size) { size_ = size; }
     inline void SetRotation(float rotation) { rotation_ = rotation; }
+    inline void SetAnchorPoint(const Vector2& anchor) { anchorPoint_ = anchor; }
+    inline void SetCutStartPoint(const Vector2& cutStart) { cutStartPoint_ = cutStart; }
+    inline void SetCutLength(const Vector2& cutLength) { cutLength_ = cutLength; }
+    inline void SetFlipX(bool isFlipX) { isFlipX_ = isFlipX; }
+    inline void SetFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
+    inline void SetInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
 
+    void SetColor(Vector4& rgba);
+    void SetColor255(Vector4& rgba);
 };
 

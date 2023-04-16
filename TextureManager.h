@@ -18,6 +18,7 @@ private:
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
+public:
     struct Image
     {
         // 所属
@@ -29,7 +30,6 @@ private:
         D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle_{};
     };
 
-public:
     // 関数
     void Initialize(void);
 
@@ -42,6 +42,8 @@ public:
 
     // 保管されてるImageを対応するpathで引き出す。
     const Image& GetImage(const fsPath& path) const;
+    // 保管されてるImageを対応するnicknameで引き出す。
+    const Image& GetImageByNickname(const std::string& nickname);
 
 private:
     // 出来上がった情報体[Image]をmapコンテナに登録する
@@ -54,6 +56,6 @@ private:
     bool CheckDuplicateNickname(const std::string& nickname);
 
     // 変数
-    std::map<std::string, fsPath> paths_{}; // ニックネームと所属を紐付け。
-    std::map<fsPath, Image> textures_{}; // 所属とImageを紐付け。
+    std::map<std::string, fsPath> paths_{}; // ニックネームとkeyを紐付け。
+    std::map<fsPath, Image> textures_{}; // keyとImageを紐付け。
 };

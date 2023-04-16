@@ -62,6 +62,8 @@ private:
 
 public:
     // getterEsetter
-    inline void SetCamera(Camera* cameraPtr) { current_ = cameraPtr; }
+    inline void SetCurrentCamera(Camera* cameraPtr) { current_ = cameraPtr; }
+
+    inline Camera* GetCurrentCamera(void) { return current_; }
 };
 

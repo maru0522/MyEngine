@@ -135,6 +135,24 @@ const TextureManager::Image& TextureManager::GetImage(const fsPath& path) const
     }
 }
 
+const TextureManager::Image& TextureManager::GetImageByNickname(const std::string& nickname)
+{
+    fsPath path{};
+
+    try
+    {
+        path = paths_.at(nickname);
+    }
+    catch (const std::exception&)
+    {
+        // エラーログ出力
+        Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a path corresponding to the argument nickname(" + nickname + "), so replaced it with \"MISSING\". ");
+        path = "MISSING";
+    }
+
+    return GetImage(path);
+}
+
 void TextureManager::RegisterImg(const Image& img)
 {
     // Imageの要素構築
@@ -171,12 +189,12 @@ void TextureManager::GenerateMissingImage(void)
                 imageData[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
             }
             else if (i % 256 >= 128) {
-                imageData[i] = { 1.0f, 0.0f, 1.0f, 1.0f };
+                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
             }
         }
         else {
             if (i % 256 < 128) {
-                imageData[i] = { 1.0f, 0.0f, 1.0f, 1.0f };
+                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
             }
             else if (i % 256 >= 128) {
                 imageData[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
