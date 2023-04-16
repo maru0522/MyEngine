@@ -1,6 +1,6 @@
+#include "WorldCoordinate.h"
 #include "CameraManager.h"
 #include "MathUtil.h"
-#include "WorldCoordinate.h"
 #include "WndAPI.h"
 
 using namespace Math;

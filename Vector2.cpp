@@ -1,16 +1,6 @@
 #include "Vector2.h"
 #include <cmath>
 
-Vector2::Vector2(void)
-    : x(0), y(0)
-{
-}
-
-Vector2::Vector2(float x, float y)
-    : x(x), y(y)
-{
-}
-
 float Vector2::length(void) const
 {
     return std::sqrtf(x * x + y * y);

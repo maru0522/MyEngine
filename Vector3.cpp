@@ -1,19 +1,6 @@
 #include "Vector3.h"
 #include <cmath>
 
-// 引数なしコンストラクタ
-// 零ベクトルに初期化する
-Vector3::Vector3(void)
-    : x(0), y(0), z(0)
-{
-}
-
-// 引数3つのコンストラクタ
-Vector3::Vector3(float x, float y, float z)
-    : x(x), y(y), z(z)
-{
-}
-
 // ベクトルの長さを求める
 float Vector3::length(void) const
 {

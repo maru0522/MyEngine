@@ -1,4 +1,5 @@
 #include "Input.h"
+#include <cassert>
 
 // é¿ëÃÇÃê∂ê¨
 static Microsoft::WRL::ComPtr<IDirectInput8> directInput_{ nullptr }; // DirectInputê∂ê¨

@@ -31,6 +31,9 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="MathUtil.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstBuffer.h" />

@@ -39,29 +39,6 @@ namespace Util {
         }
     }
 
-    namespace Ease {
-        // In
-        float EaseInSine(float t, float start = 0.f, float end = 1.f);
-        float EaseInCubic(float t, float start = 0.f, float end = 1.f);
-        float EaseInQuint(float t, float start = 0.f, float end = 1.f);
-        float EaseInCirc(float t, float start = 0.f, float end = 1.f);
-        float EaseInElastic(float t, float start = 0.f, float end = 1.f);
-
-        // Out
-        float EaseOutSine(float t, float start = 0.f, float end = 1.f);
-        float EaseOutCubic(float t, float start = 0.f, float end = 1.f);
-        float EaseOutQuint(float t, float start = 0.f, float end = 1.f);
-        float EaseOutCirc(float t, float start = 0.f, float end = 1.f);
-        float EaseOutElastic(float t, float start = 0.f, float end = 1.f);
-
-        // InOut
-        float EaseInOutSine(float t, float start = 0.f, float end = 1.f);
-        float EaseInOutCubic(float t, float start = 0.f, float end = 1.f);
-        float EaseInOutQuint(float t, float start = 0.f, float end = 1.f);
-        float EaseInOutCirc(float t, float start = 0.f, float end = 1.f);
-        float EaseInOutElastic(float t, float start = 0.f, float end = 1.f);
-    }
-
     class Timer {
     public:
         // ’è‹`

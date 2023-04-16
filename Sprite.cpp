@@ -1,3 +1,4 @@
+#include <vector>
 #include "Sprite.h"
 #include "InitDirectX.h"
 #include "GraphicsPipeline.h"
@@ -19,4 +20,15 @@ void Sprite::PreDraw(void)
     // SRVヒープの設定コマンド
     iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 #pragma endregion
+}
+
+Sprite::Sprite()
+{
+    std::vector<VertexPosUv_t> vertices;
+    vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // 左下
+    vertices.emplace_back(VertexPosUv_t{ {   0.0f,   0.0f, 0.0f }, {0.0f, 0.0f} }); // 左上
+    vertices.emplace_back(VertexPosUv_t{ { 100.0f, 100.0f, 0.0f }, {1.0f, 1.0f} }); // 右下
+    vertices.emplace_back(VertexPosUv_t{ { 100.0f,   0.0f, 0.0f }, {1.0f, 0.0f} }); // 右上
+
+
 }

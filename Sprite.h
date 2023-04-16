@@ -47,25 +47,28 @@ public:
     void Update(void);
     void Draw(void);
 
+private:
+    // 変数
+    Sprite* parent_;
+
+    Vector2 position_;
+    Vector2 scale_;
+    Vector2 size_;
+    float rotation_;
+
+    std::unique_ptr<ConstBuffer<CBData_t>> cb_; // 定数バッファ
+
+    std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_; // 頂点バッファ
+
+    D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandleCopy_;
+
+public:
+    // setter・getter
     inline const Vector2& GetPosition(void) { return position_; }
     inline float GetRotation(void) { return rotation_; }
 
     inline void SetPosition(const Vector2& posotion) { position_ = posotion; }
     inline void SetRotation(float rotation) { rotation_ = rotation; }
 
-private:
-    // 変数
-    Sprite* parent_{ nullptr };
-
-    Vector2 position_{};
-    Vector2 scale_{};
-    Vector2 size_{};
-    float rotation_{};
-
-    std::unique_ptr<ConstBuffer<CBData_t>> cb_{}; // 定数バッファ
-
-    std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_{}; // 頂点バッファ
-
-    D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandleCopy_{};
 };
 
