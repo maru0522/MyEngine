@@ -38,15 +38,11 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
 {
     // 頂点レイアウト
     D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-        {   // xyz座標(1行で書いたほうが見やすい)
-            "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-            D3D12_APPEND_ALIGNED_ELEMENT,
-            D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+        {   // xyz座標
+            "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
         },
-        { // uv座標(1行で書いたほうが見やすい)
-            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
-            D3D12_APPEND_ALIGNED_ELEMENT,
-            D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+        { // uv座標
+            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
         },
     };
 
@@ -171,7 +167,7 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
 
 #pragma region ルートパラメータ
     // ルートパラメーターの設定
-    D3D12_ROOT_PARAMETER rootParams[3] = {};
+    D3D12_ROOT_PARAMETER rootParams[2] = {};
     // テクスチャレジスタ0番
     rootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	// 種類
     rootParams[0].DescriptorTable.pDescriptorRanges = &descriptorRange;
@@ -182,11 +178,6 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
     rootParams[1].Descriptor.ShaderRegister = 0;                    // 定数バッファ番号
     rootParams[1].Descriptor.RegisterSpace = 0;                     // デフォルト値
     rootParams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;   // 全てのシェーダから見える
-    // 定数バッファ1番
-    rootParams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;    // 種類
-    rootParams[2].Descriptor.ShaderRegister = 1;                    // 定数バッファ番号
-    rootParams[2].Descriptor.RegisterSpace = 0;                     // デフォルト値
-    rootParams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;   // 全てのシェーダから見える
 #pragma endregion
 
 #pragma region サンプラーの設定

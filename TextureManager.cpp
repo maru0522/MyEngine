@@ -121,21 +121,21 @@ void TextureManager::LoadFolder(const fsPath& path)
     }
 }
 
-const TextureManager::Image& TextureManager::GetImage(const fsPath& path) const
+const TextureManager::Image* TextureManager::GetImagePtr(const fsPath& path) const
 {
     try
     {
-        return textures_.at(path);
+        return &textures_.at(path);
     }
     catch (const std::out_of_range&)
     {
         // エラーログ出力
         Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a texture corresponding to the argument path(" + path.string() + "), so replaced it with \"Missing Texture\". ");
-        return textures_.at("MISSING");
+        return &textures_.at("MISSING");
     }
 }
 
-const TextureManager::Image& TextureManager::GetImageByNickname(const std::string& nickname)
+const TextureManager::Image* TextureManager::GetImagePtrByNickname(const std::string& nickname)
 {
     fsPath path{};
 
@@ -150,7 +150,7 @@ const TextureManager::Image& TextureManager::GetImageByNickname(const std::strin
         path = "MISSING";
     }
 
-    return GetImage(path);
+    return GetImagePtr(path);
 }
 
 void TextureManager::RegisterImg(const Image& img)

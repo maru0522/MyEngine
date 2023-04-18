@@ -37,11 +37,11 @@ void Sprite::PreDraw(void)
 Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     parent_(nullptr),
     position_(0.f, 0.f), scale_(1.f, 1.f), size_(0.f, 0.f), rotation_(0.f),
-    image_()
+    imagePtr_(nullptr)
 {
     nickname == "noAssign" ?
-        image_ = texMPtr_->GetImage(path) :
-        image_ = texMPtr_->GetImageByNickname(nickname);
+        imagePtr_ = texMPtr_->GetImagePtr(path) :
+        imagePtr_ = texMPtr_->GetImagePtrByNickname(nickname);
 
     std::vector<VertexPosUv_t> vertices;
     vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // 左下
@@ -68,11 +68,10 @@ void Sprite::Draw(void)
     iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_->GetVbView());
 
     // 定数バッファビュー(CBV)の設定コマンド
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cbMaterial_.GetBuffer()->GetGPUVirtualAddress());
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cbTransform_.GetBuffer()->GetGPUVirtualAddress());
+    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_->GetBuffer()->GetGPUVirtualAddress());
 
-    // SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
-    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, image_.srvGpuHandle_);
+    // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
+    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle_);
 
     // 描画コマンド
     iDXPtr->GetCommandList()->DrawInstanced(vertexBuffer_->GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画
@@ -105,10 +104,10 @@ void Sprite::TransferVertex(void)
     vertices.emplace_back(VertexPosUv_t{ {  right,    top, 0.0f }, {1.0f, 0.0f} }); // 右上
 
     // uv座標
-    float texLeft{ cutStartPoint_.x / image_.buff_->GetDesc().Width };
-    float texRight{ (cutStartPoint_.x + cutLength_.x) / image_.buff_->GetDesc().Width };
-    float texTop{ cutStartPoint_.y / image_.buff_->GetDesc().Height };
-    float texBottom{ (cutStartPoint_.y + cutLength_.y) / image_.buff_->GetDesc().Height };
+    float texLeft{ cutStartPoint_.x / imagePtr_->buff_->GetDesc().Width };
+    float texRight{ (cutStartPoint_.x + cutLength_.x) / imagePtr_->buff_->GetDesc().Width };
+    float texTop{ cutStartPoint_.y / imagePtr_->buff_->GetDesc().Height };
+    float texBottom{ (cutStartPoint_.y + cutLength_.y) / imagePtr_->buff_->GetDesc().Height };
 
     vertices[0].uv = { texLeft, texBottom };
     vertices[1].uv = { texLeft,    texTop };

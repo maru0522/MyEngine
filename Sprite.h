@@ -76,7 +76,7 @@ private:
     std::unique_ptr<ConstBuffer<CBData_t>> cb_; // 定数バッファ
     std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_; // 頂点バッファ
 
-    TextureManager::Image image_;
+    const TextureManager::Image* imagePtr_;
 
 public:
     // setter・getter

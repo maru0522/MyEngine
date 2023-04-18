@@ -41,9 +41,9 @@ public:
     void LoadFolder(const fsPath& path);
 
     // 保管されてるImageを対応するpathで引き出す。
-    const Image& GetImage(const fsPath& path) const;
+    const Image* GetImagePtr(const fsPath& path) const;
     // 保管されてるImageを対応するnicknameで引き出す。
-    const Image& GetImageByNickname(const std::string& nickname);
+    const Image* GetImagePtrByNickname(const std::string& nickname);
 
 private:
     // 出来上がった情報体[Image]をmapコンテナに登録する
