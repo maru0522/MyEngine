@@ -43,6 +43,8 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
         imagePtr_ = texMPtr_->GetImagePtr(path) :
         imagePtr_ = texMPtr_->GetImagePtrByNickname(nickname);
 
+    cb_ = std::make_unique<ConstBuffer<CBData_t>>();
+
     std::vector<VertexPosUv_t> vertices;
     vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // ç∂â∫
     vertices.emplace_back(VertexPosUv_t{ {   0.0f,   0.0f, 0.0f }, {0.0f, 0.0f} }); // ç∂è„
@@ -50,6 +52,8 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     vertices.emplace_back(VertexPosUv_t{ { 100.0f,   0.0f, 0.0f }, {1.0f, 0.0f} }); // âEè„
 
     vertexBuffer_ = std::make_unique<VertexBuffer<VertexPosUv_t>>(vertices);
+
+    //SetColor({ 1.f, 1.f, 1.f, 1.f });
 }
 
 void Sprite::Update(void)
@@ -133,7 +137,7 @@ void Sprite::UpdateMatrix(void)
     cb_->GetConstBuffMap()->mat_ = matWorld_ * camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
-void Sprite::SetColor(Vector4& rgba)
+void Sprite::SetColor(Vector4 rgba)
 {
     // ílÇ™0.0fÇÊÇËè¨Ç≥Ç¢éû0.0fÇ…Ç∑ÇÈ
     rgba.x = (std::max)(rgba.x, 0.0f);
@@ -151,7 +155,7 @@ void Sprite::SetColor(Vector4& rgba)
     cb_->GetConstBuffMap()->color_ = rgba;
 }
 
-void Sprite::SetColor255(Vector4& rgba)
+void Sprite::SetColor255(Vector4 rgba)
 {
     // ílÇ™0.0fÇÊÇËè¨Ç≥Ç¢éû0.0fÇ…Ç∑ÇÈ
     rgba.x = (std::max)(rgba.x, 0.0f);

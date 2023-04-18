@@ -51,7 +51,7 @@ protected:
     static void Pipeline3d(Pipeline_t& pipeline, BlendMode mode = BlendMode::NONE);
 
 private:
-    static void SetCompileShader(ID3DBlob* p_blob, const std::string& filename, const std::string& entryPoint, const std::string& target);
+    static void SetCompileShader(ID3DBlob** dp_blob, const std::string& filename, const std::string& entryPoint, const std::string& target);
 };
 
 class GraphicsPipeline : public HelperGraphicPipeline
@@ -62,16 +62,16 @@ public:
     static GraphicsPipeline* GetInstance(void);
 
     // ä÷êî
+    void Initialize(void);
     const Pipeline_t& GetPipeline2d(BlendMode mode) const;
 
 private:
-    void Initialize(void);
 
     std::array<Pipeline_t, static_cast<uint32_t>(BlendMode::MAX_ARRAY)> pipelineProducts2d_;
     std::array<Pipeline_t, static_cast<uint32_t>(BlendMode::MAX_ARRAY)> pipelineProducts3d_;
 
     // ÉVÉìÉOÉãÉgÉì
-    GraphicsPipeline(void) { Initialize(); };
+    GraphicsPipeline(void) {};
     ~GraphicsPipeline(void) {};
     GraphicsPipeline(const GraphicsPipeline&) = delete;
     GraphicsPipeline& operator=(const GraphicsPipeline&) = delete;

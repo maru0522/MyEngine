@@ -103,7 +103,7 @@ public:
     inline void SetFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
     inline void SetInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
 
-    void SetColor(Vector4& rgba);
-    void SetColor255(Vector4& rgba);
+    void SetColor(Vector4 rgba);
+    void SetColor255(Vector4 rgba);
 };
 

@@ -26,12 +26,12 @@ void GraphicsPipeline::Initialize(void)
         pipelineProducts2d_.at(i) = pipeline;
     }
 
-    for (size_t i = 0; i < pipelineProducts3d_.size(); i++) {
-        Pipeline_t pipeline{};
-        HelperGraphicPipeline::Pipeline3d(pipeline, static_cast<BlendMode>(i));
+    //for (size_t i = 0; i < pipelineProducts3d_.size(); i++) {
+    //    Pipeline_t pipeline{};
+    //    HelperGraphicPipeline::Pipeline3d(pipeline, static_cast<BlendMode>(i));
 
-        pipelineProducts3d_.at(i) = pipeline;
-    }
+    //    pipelineProducts3d_.at(i) = pipeline;
+    //}
 }
 
 void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
@@ -51,10 +51,10 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
     ComPtr<ID3DBlob> errorBlob{ nullptr }; // エラーオブジェクト
 
     // 頂点シェーダの読み込みとコンパイル
-    SetCompileShader(blobs->vsBlob.Get(), "Resources/Shaders/SpriteVS.hlsl", "main", "vs_5_0");
+    SetCompileShader(blobs->vsBlob.GetAddressOf(), "SpriteVS.hlsl", "main", "vs_5_0");
 
     // ピクセルシェーダの読み込みとコンパイル
-    SetCompileShader(blobs->psBlob.Get(), "Resources/Shaders/SpritePS.hlsl", "main", "ps_5_0");
+    SetCompileShader(blobs->psBlob.GetAddressOf(), "SpritePS.hlsl", "main", "ps_5_0");
 
 #pragma region パイプラインの設定
     // グラフィックスパイプライン設定
@@ -249,10 +249,10 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
     ComPtr<ID3DBlob> errorBlob{ nullptr }; // エラーオブジェクト
 
     // 頂点シェーダの読み込みとコンパイル
-    SetCompileShader(blobs->vsBlob.Get(), "Resources/Shaders/ModelVS.hlsl", "main", "vs_5_0");
+    SetCompileShader(blobs->vsBlob.GetAddressOf(), "Resources/Shaders/ModelVS.hlsl", "main", "vs_5_0");
 
     // ピクセルシェーダの読み込みとコンパイル
-    SetCompileShader(blobs->psBlob.Get(), "Resources/Shaders/ModelPS.hlsl", "main", "ps_5_0");
+    SetCompileShader(blobs->psBlob.GetAddressOf(), "Resources/Shaders/ModelPS.hlsl", "main", "ps_5_0");
 
 #pragma region パイプラインの設定
     // グラフィックスパイプライン設定
@@ -432,7 +432,7 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
 #pragma endregion
 }
 
-void HelperGraphicPipeline::SetCompileShader(ID3DBlob* p_blob, const std::string& filename, const std::string& entryPoint, const std::string& target)
+void HelperGraphicPipeline::SetCompileShader(ID3DBlob** dp_blob, const std::string& filename, const std::string& entryPoint, const std::string& target)
 {
     std::wstring wFilename{ Util::Convert::ToWString(filename) };
 
@@ -440,7 +440,7 @@ void HelperGraphicPipeline::SetCompileShader(ID3DBlob* p_blob, const std::string
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob{ nullptr };
 
     // 頂点シェーダの読み込みとコンパイル
-    HRESULT hr = D3DCompileFromFile(wFilename.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint.c_str(), target.c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &p_blob, &errorBlob);
+    HRESULT hr = D3DCompileFromFile(wFilename.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint.c_str(), target.c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, dp_blob, &errorBlob);
 
     // エラーなら
     if (FAILED(hr)) {

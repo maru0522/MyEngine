@@ -159,7 +159,7 @@ Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float leftEdge, float rightEdge, 
 {
     auto M00{ 2.f / (rightEdge - leftEdge) };
     auto M11{ -2.f / (topEdge - bottomEdge) };
-    auto M22{ 2.f / (farZ - nearZ) };
+    auto M22{ 1.f / (farZ - nearZ) };
 
     return Matrix4{
          M00, 0.f, 0.f, 0.f,
