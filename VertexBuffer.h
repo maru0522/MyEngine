@@ -67,7 +67,7 @@ public:
 
     inline ID3D12Resource* GetBuffer(void) { return buff_.Get(); }
     inline const D3D12_VERTEX_BUFFER_VIEW& GetVbView(void) { return vbView_; }
-    inline unsigned int GetVerticesNum(void) { return buff_->GetDesc().Width / sizeof(T); }
+    inline size_t GetVerticesNum(void) { return buff_->GetDesc().Width / sizeof(T); }
 
 private:
     // •Ï”

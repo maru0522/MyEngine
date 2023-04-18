@@ -21,6 +21,7 @@ using namespace DirectX;
 #include "InitDirectX.h"
 #include "TextureManager.h"
 #include "ConstBuffer.h"
+#include "CameraManager.h"
 
 using namespace Microsoft::WRL;
 
@@ -583,7 +584,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         p_IDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
         //commandList->SetDescriptorHeaps(1, &srvHeap);
 
-        p_IDX->GetCommandList()->SetGraphicsRootDescriptorTable(1, texM->GetImage("Resources/reimu.png").srvGpuHandle_);
+        p_IDX->GetCommandList()->SetGraphicsRootDescriptorTable(1, texM->GetImagePtr("Resources/reimu.png")->srvGpuHandle_);
 
         // 全オブジェクトについて処理
         for (int i = 0; i < _countof(object3ds); i++) {

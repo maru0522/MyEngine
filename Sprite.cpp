@@ -74,7 +74,7 @@ void Sprite::Draw(void)
     iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle_);
 
     // 描画コマンド
-    iDXPtr->GetCommandList()->DrawInstanced(vertexBuffer_->GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画
+    iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_->GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画
 }
 
 void Sprite::TransferVertex(void)
