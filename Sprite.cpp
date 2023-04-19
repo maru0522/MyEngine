@@ -53,7 +53,7 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
 
     vertexBuffer_ = std::make_unique<VertexBuffer<VertexPosUv_t>>(vertices);
 
-    //SetColor({ 1.f, 1.f, 1.f, 1.f });
+    SetColor({ 1.f, 1.f, 1.f, 1.f });
 }
 
 void Sprite::Update(void)

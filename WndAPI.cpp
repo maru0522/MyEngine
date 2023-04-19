@@ -1,6 +1,8 @@
 #include "WndAPI.h"
 #include <string>
 #include "Util.h"
+#include <timeapi.h>
+#pragma comment(lib,"winmm.lib")
 
 const wchar_t WndAPI::windowClassName_[] = L"maruyamaEngine";
 
@@ -21,6 +23,9 @@ LRESULT WndAPI::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 WndAPI::WndAPI(void)
 {
+    // システムタイマーの分解能を上げる	
+    timeBeginPeriod(1);
+
     // ウィンドウクラスの設定
     w_.cbSize = sizeof(WNDCLASSEX);
     w_.lpfnWndProc = static_cast<WNDPROC>(WindowProc);   // ウィンドウプロシージャを設定
@@ -57,6 +62,9 @@ WndAPI::WndAPI(void)
 
 WndAPI::WndAPI(const char* title)
 {
+    // システムタイマーの分解能を上げる	
+    timeBeginPeriod(1);
+
     // ウィンドウクラスの設定
     w_.cbSize = sizeof(WNDCLASSEX);
     w_.lpfnWndProc = static_cast<WNDPROC>(WindowProc);   // ウィンドウプロシージャを設定

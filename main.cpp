@@ -31,14 +31,14 @@ using namespace Microsoft::WRL;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // WndAPIの変数宣言
-    std::unique_ptr<WndAPI> wnd_{ std::make_unique<WndAPI>() };
+    std::unique_ptr<WndAPI> wnd{ std::make_unique<WndAPI>() };
 
     // InitDirectXの変数宣言と初期化
     InitDirectX* iDXPtr{ InitDirectX::GetInstance() };
-    iDXPtr->Initialize(wnd_.get());
+    iDXPtr->Initialize(wnd.get());
 
     // DirectInputに含まれるクラス全て初期化
-    Input::InitializeAll(wnd_.get());
+    Input::InitializeAll(wnd.get());
 
     // textureManagerの変数宣言と初期化
     std::unique_ptr<TextureManager> texMPtr{ std::make_unique<TextureManager>() };
@@ -68,7 +68,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region ウィンドウメッセージ処理
 
-        wnd_->GetKeepWindow();
+        if (!wnd->GetKeepWindow()) {
+            break;
+        }
 
 #pragma endregion
 
@@ -107,7 +109,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     }
 
     // ウィンドウクラスを登録解除
-    wnd_->Delete();
+    wnd->Delete();
 
     return 0;
 }
