@@ -43,6 +43,12 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
         imagePtr_ = texMPtr_->GetImagePtr(path) :
         imagePtr_ = texMPtr_->GetImagePtrByNickname(nickname);
 
+    size_.x = (float)imagePtr_->buff_->GetDesc().Width;
+    size_.y = (float)imagePtr_->buff_->GetDesc().Height;
+
+    cutLength_.x = (float)imagePtr_->buff_->GetDesc().Width;
+    cutLength_.y = (float)imagePtr_->buff_->GetDesc().Height;
+
     cb_ = std::make_unique<ConstBuffer<CBData_t>>();
 
     std::vector<VertexPosUv_t> vertices;

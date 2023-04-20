@@ -6,5 +6,8 @@ SamplerState smp : register(s0);
 
 float4 main(VSOutput input) : SV_TARGET
 {
+    if (color_.a <= 0.5f)
+        discard;
+    
     return float4(tex.Sample(smp, input.uv_)) * color_;
 }
