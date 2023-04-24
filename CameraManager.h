@@ -11,7 +11,9 @@ public:
     Camera(const Vector3& eye);
     void Update(void);
 
+    void UpdateOrthoGraphic(void);
 private:
+
     // •Ï”
     Vector3 eye_;
     Vector3 up_;

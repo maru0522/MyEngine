@@ -26,6 +26,7 @@ using namespace DirectX;
 #include "Sprite.h"
 
 using namespace Microsoft::WRL;
+using BlendMode = HelperGraphicPipeline::BlendMode;
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -49,7 +50,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     gplPtr->Initialize();
 
     // CameraManagerの変数宣言と初期化
-    std::unique_ptr<CameraManager> cameraMPtr{ std::make_unique<CameraManager>()};
+    std::unique_ptr<CameraManager> cameraMPtr{ std::make_unique<CameraManager>() };
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
     cameraMPtr->SetCurrentCamera(cameraPtr.get());
 

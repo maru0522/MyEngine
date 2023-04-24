@@ -178,6 +178,11 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
     rootParams[1].Descriptor.ShaderRegister = 0;                    // 定数バッファ番号
     rootParams[1].Descriptor.RegisterSpace = 0;                     // デフォルト値
     rootParams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;   // 全てのシェーダから見える
+    ////// 定数バッファ1番
+    //rootParams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;    // 定数バッファビュー
+    //rootParams[2].Descriptor.ShaderRegister = 1;                    // 定数バッファ番号
+    //rootParams[2].Descriptor.RegisterSpace = 0;                     // デフォルト値
+    //rootParams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;   // 全てのシェーダから見える
 #pragma endregion
 
 #pragma region サンプラーの設定

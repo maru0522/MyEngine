@@ -26,12 +26,18 @@ class Sprite
 private:
     // 定義
     using fsPath = std::experimental::filesystem::path;
+    using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-    struct CBData_t // 定数バッファ用データ構造体
+    struct CBData_t // Sprite用定数バッファのデータ構造体
     {
-        Matrix4 mat_;  // 3D変換行列
+        Matrix4 matWorld_;  // 3D変換行列
         Vector4 color_; // 色（RGBA）
+    };
+
+    struct CBMatOrthoGraphic_t // Sprite用定数バッファ
+    {
+        Matrix4 matOrthoGraphic_;
     };
 
     struct VertexPosUv_t
@@ -43,7 +49,8 @@ private:
 public:
     // 関数
     static void StaticInitialize(TextureManager* texMPtr,CameraManager* camMPtr);
-    static void PreDraw(void);
+    static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
+    static void SetDrawBlendMode(BlendMode blendmode);
 
     Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickNameが優先される。
     void Update(void);
@@ -73,8 +80,10 @@ private:
     bool isInvisible_;
 
     Matrix4 matWorld_;
-    std::unique_ptr<ConstBuffer<CBData_t>> cb_; // 定数バッファ
-    std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_; // 頂点バッファ
+    std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_;
+
+    std::unique_ptr<ConstBuffer<CBData_t>> cb_;
+    //std::unique_ptr<ConstBuffer<CBMatOrthoGraphic_t>> cbMatOrthoGraphic_;
 
     const TextureManager::Image* imagePtr_;
 

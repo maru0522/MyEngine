@@ -42,3 +42,10 @@ private:
     HWND hwnd_{};
 };
 
+//void SetWindowSize(int width, int height)
+//{
+//    // ‘ã“üˆ—
+//
+//    // CameraManager* -> current_ -> UpdateOrthoGraphic();
+//}
+

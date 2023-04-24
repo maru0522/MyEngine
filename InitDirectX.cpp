@@ -36,7 +36,7 @@ void InitDirectX::PreDraw(void)
 
     // １．リソースバリアで書き込み可能に変更
     D3D12_RESOURCE_BARRIER barrierDesc{};
-    barrierDesc.Transition.pResource = backBuffers_.at(bbIndex).Get(); // バックバッファを指定
+    barrierDesc.Transition.pResource = backBuffers_[bbIndex].Get(); // バックバッファを指定
     barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT; // 表示状態から
     barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態へ
     commandList_->ResourceBarrier(1, &barrierDesc);
@@ -99,7 +99,7 @@ void InitDirectX::PostDraw(void)
 #pragma region リソースバリアを元に戻す
     // ５．リソースバリアを戻す
     D3D12_RESOURCE_BARRIER barrierDesc{};
-    barrierDesc.Transition.pResource = backBuffers_.at(bbIndex).Get(); // バックバッファを指定
+    barrierDesc.Transition.pResource = backBuffers_[bbIndex].Get(); // バックバッファを指定
     barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態から
     barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT; // 表示状態へ
     commandList_->ResourceBarrier(1, &barrierDesc);

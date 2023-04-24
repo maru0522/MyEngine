@@ -10,6 +10,7 @@ Camera::Camera(void) :
     targetPtr_(nullptr), isFollow_(false),
     nearZ_(0.1f), farZ_(1000.f)
 {
+    UpdateOrthoGraphic();
 }
 
 Camera::Camera(const Vector3& eye) :
@@ -17,6 +18,7 @@ Camera::Camera(const Vector3& eye) :
     targetPtr_(nullptr), isFollow_(false),
     nearZ_(0.1f), farZ_(1000.f)
 {
+    UpdateOrthoGraphic();
 }
 
 void Camera::Update(void)
@@ -30,8 +32,12 @@ void Camera::Update(void)
         matView_ = Math::Matrix::ViewLookAtLH(eye_, *targetPtr_, up_) :
         matView_ = Math::Matrix::ViewLookToLH(coordinate.GetPosition(), coordinate.GetAxisZ(), coordinate.GetAxisY());
 
-    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::width_, WndAPI::height_);
     matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::width_, WndAPI::height_, nearZ_, farZ_);
+}
+
+void Camera::UpdateOrthoGraphic(void)
+{
+    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::width_, WndAPI::height_);
 }
 
 void CameraManager::Update(void)

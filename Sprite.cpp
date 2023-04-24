@@ -6,8 +6,6 @@
 #include "TextureManager.h"
 #include "GraphicsPipeline.h"
 
-using BlendMode = HelperGraphicPipeline::BlendMode;
-
 TextureManager* Sprite::texMPtr_{ nullptr };
 CameraManager* Sprite::camMPtr_{ nullptr };
 
@@ -17,21 +15,29 @@ void Sprite::StaticInitialize(TextureManager* texMPtr, CameraManager* camMPtr)
     camMPtr_ = camMPtr;
 }
 
-void Sprite::PreDraw(void)
+void Sprite::PreDraw(BlendMode blendmode)
 {
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-# pragma region 共通
-    // パイプラインステートとルートシグネチャの設定コマンド
-    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(BlendMode::NONE).pipelineState_.Get());
-    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(BlendMode::NONE).rootSignature_.Get());
     // プリミティブ形状の設定コマンド
     iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // 三角形リスト
 
-    ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap() };
     // SRVヒープの設定コマンド
+    ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap() };
     iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-#pragma endregion
+
+    // パイプラインステートとルートシグネチャの設定コマンド
+    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState_.Get());
+    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature_.Get());
+}
+
+void Sprite::SetDrawBlendMode(BlendMode blendmode)
+{
+    InitDirectX* iDXPtr = InitDirectX::GetInstance();
+
+    // パイプラインステートとルートシグネチャの設定コマンド
+    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState_.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature_.Get());
 }
 
 Sprite::Sprite(const fsPath& path, const std::string& nickname) :
@@ -50,6 +56,7 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     cutLength_.y = (float)imagePtr_->buff_->GetDesc().Height;
 
     cb_ = std::make_unique<ConstBuffer<CBData_t>>();
+    //cbMatOrthoGraphic_ = std::make_unique<ConstBuffer<Sprite::CBMatOrthoGraphic_t>>();
 
     std::vector<VertexPosUv_t> vertices;
     vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // 左下
@@ -140,7 +147,9 @@ void Sprite::UpdateMatrix(void)
     if (parent_) matWorld_ *= parent_->matWorld_;
 
     // 定数バッファに転送
-    cb_->GetConstBuffMap()->mat_ = matWorld_ * camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    //cbMatOrthoGraphic_->GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    //cb_->GetConstBuffMap()->matWorld_ = matWorld_;
+    cb_->GetConstBuffMap()->matWorld_ = matWorld_ * camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 void Sprite::SetColor(Vector4 rgba)
