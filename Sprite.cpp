@@ -56,7 +56,7 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     cutLength_.y = (float)imagePtr_->buff_->GetDesc().Height;
 
     cb_ = std::make_unique<ConstBuffer<CBData_t>>();
-    //cbMatOrthoGraphic_ = std::make_unique<ConstBuffer<Sprite::CBMatOrthoGraphic_t>>();
+    cbMatOrthoGraphic_ = std::make_unique<ConstBuffer<Sprite::CBMatOrthoGraphic_t>>();
 
     std::vector<VertexPosUv_t> vertices;
     vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // 左下
@@ -86,6 +86,7 @@ void Sprite::Draw(void)
 
     // 定数バッファビュー(CBV)の設定コマンド
     iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_->GetBuffer()->GetGPUVirtualAddress());
+    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cbMatOrthoGraphic_->GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
     iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle_);
@@ -147,9 +148,9 @@ void Sprite::UpdateMatrix(void)
     if (parent_) matWorld_ *= parent_->matWorld_;
 
     // 定数バッファに転送
-    //cbMatOrthoGraphic_->GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
-    //cb_->GetConstBuffMap()->matWorld_ = matWorld_;
-    cb_->GetConstBuffMap()->matWorld_ = matWorld_ * camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    cbMatOrthoGraphic_->GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    cb_->GetConstBuffMap()->matWorld_ = matWorld_;
+    //cb_->GetConstBuffMap()->matWorld_ = matWorld_ * camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 void Sprite::SetColor(Vector4 rgba)

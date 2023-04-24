@@ -83,7 +83,7 @@ private:
     std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_;
 
     std::unique_ptr<ConstBuffer<CBData_t>> cb_;
-    //std::unique_ptr<ConstBuffer<CBMatOrthoGraphic_t>> cbMatOrthoGraphic_;
+    std::unique_ptr<ConstBuffer<CBMatOrthoGraphic_t>> cbMatOrthoGraphic_;
 
     const TextureManager::Image* imagePtr_;
 
