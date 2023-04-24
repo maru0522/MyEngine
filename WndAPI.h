@@ -44,8 +44,9 @@ private:
 
 //void SetWindowSize(int width, int height)
 //{
-//    // 代入処理
+//    // ウィンドウサイズへの代入処理
 //
 //    // CameraManager* -> current_ -> UpdateOrthoGraphic();
+//    // Sprite::UpdateCBMatOrthoGraphic();
 //}
 

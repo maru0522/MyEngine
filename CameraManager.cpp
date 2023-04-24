@@ -44,3 +44,9 @@ void CameraManager::Update(void)
 {
     current_->Update();
 }
+
+void CameraManager::SetCurrentCamera(Camera* cameraPtr)
+{
+    current_ = cameraPtr;
+    current_->UpdateOrthoGraphic();
+}

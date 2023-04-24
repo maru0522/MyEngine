@@ -8,11 +8,14 @@
 
 TextureManager* Sprite::texMPtr_{ nullptr };
 CameraManager* Sprite::camMPtr_{ nullptr };
+std::unique_ptr<ConstBuffer<Sprite::CBMatOrthoGraphic_t>> Sprite::cbMatOrthoGraphic_{nullptr};
 
 void Sprite::StaticInitialize(TextureManager* texMPtr, CameraManager* camMPtr)
 {
     texMPtr_ = texMPtr;
     camMPtr_ = camMPtr;
+    cbMatOrthoGraphic_ = std::make_unique<ConstBuffer<Sprite::CBMatOrthoGraphic_t>>();
+    UpdateCBMatOrthoGraphic();
 }
 
 void Sprite::PreDraw(BlendMode blendmode)
@@ -56,7 +59,6 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     cutLength_.y = (float)imagePtr_->buff_->GetDesc().Height;
 
     cb_ = std::make_unique<ConstBuffer<CBData_t>>();
-    cbMatOrthoGraphic_ = std::make_unique<ConstBuffer<Sprite::CBMatOrthoGraphic_t>>();
 
     std::vector<VertexPosUv_t> vertices;
     vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // 左下
@@ -148,9 +150,7 @@ void Sprite::UpdateMatrix(void)
     if (parent_) matWorld_ *= parent_->matWorld_;
 
     // 定数バッファに転送
-    cbMatOrthoGraphic_->GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
     cb_->GetConstBuffMap()->matWorld_ = matWorld_;
-    //cb_->GetConstBuffMap()->matWorld_ = matWorld_ * camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 void Sprite::SetColor(Vector4 rgba)
