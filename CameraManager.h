@@ -7,7 +7,7 @@ class Camera
 {
 public:
     // ä÷êî
-    Camera(void);
+    Camera(void) : Camera(Vector3{ 0.f,0.f,0.f }) {}
     Camera(const Vector3& eye);
     void Update(void);
 

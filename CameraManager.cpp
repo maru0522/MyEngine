@@ -5,14 +5,6 @@
 
 using namespace Math;
 
-Camera::Camera(void) :
-    eye_(0.f, 0.f, 0.f), up_(0.f, 1.f, 0.f), rotation_(0.f, 0.f, 0.f),
-    targetPtr_(nullptr), isFollow_(false),
-    nearZ_(0.1f), farZ_(1000.f)
-{
-    UpdateOrthoGraphic();
-}
-
 Camera::Camera(const Vector3& eye) :
     eye_(eye), up_(0.f, 1.f, 0.f), rotation_(0.f, 0.f, 0.f),
     targetPtr_(nullptr), isFollow_(false),
