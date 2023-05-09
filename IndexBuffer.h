@@ -10,7 +10,10 @@ class IndexBuffer
 {
 public:
     // 関数
-    IndexBuffer(const std::vector<unsigned short>& indices) {
+    IndexBuffer(void) = default;
+    ~IndexBuffer(void) {}
+
+    void Create(const std::vector<unsigned short>& indices) {
         // インデックスデータ全体のサイズ
         unsigned int sizeIB = static_cast<unsigned int>(sizeof(unsigned short) * indices.size());
 
@@ -56,14 +59,14 @@ public:
         ibView_.SizeInBytes = sizeIB;
     }
 
-    ~IndexBuffer(void) {}
+private:
+    // 変数
+    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{}; // 頂点バッファ
+    D3D12_INDEX_BUFFER_VIEW ibView_{};              // 頂点バッファビュー
 
+public:
+    // getter
     inline ID3D12Resource* GetBuffer(void) { return buff_.Get(); }
     inline const D3D12_INDEX_BUFFER_VIEW& GetIbView(void) { return ibView_; }
     inline size_t GetIndicesNum(void) { return buff_->GetDesc().Width / sizeof(unsigned short); }
-
-private:
-    // 変数
-    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{ nullptr }; // 頂点バッファ
-    D3D12_INDEX_BUFFER_VIEW ibView_{}; // 頂点バッファビュー
 };

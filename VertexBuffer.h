@@ -10,8 +10,10 @@ template<class T> class VertexBuffer
 {
 public:
     // 関数
-    //VertexBuffer(void) {};
-    VertexBuffer(const std::vector<T>& vertices) {
+    VertexBuffer(void) = default;
+    ~VertexBuffer(void) { buff_->Unmap(0, nullptr); }
+
+    void Create(const std::vector<T>& vertices) {
         // 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
         unsigned int sizeVB = static_cast<unsigned int>(sizeof(vertices[0]) * vertices.size());
 
@@ -54,24 +56,20 @@ public:
         // 頂点1つ分のデータサイズ
         vbView_.StrideInBytes = sizeof(vertices[0]);
     }
-
-    ~VertexBuffer(void) {
-        // 繋がりを解除
-        buff_->Unmap(0, nullptr);
-    }
-
     void TransferVertexToBuffer(const std::vector<T>& vertices) {
         // buffer作成時より、大きいsizeのverticesを使用時に例外スローないし不具合が起きる可能性あり。
         std::copy(vertices.begin(), vertices.end(), vertMap_); // 全頂点に対して
     }
 
+private:
+    // 変数
+    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{}; // 頂点バッファ
+    D3D12_VERTEX_BUFFER_VIEW vbView_{};             // 頂点バッファビュー
+    T* vertMap_{};                                  // GPUメモリのmap
+
+public:
+    // getter
     inline ID3D12Resource* GetBuffer(void) { return buff_.Get(); }
     inline const D3D12_VERTEX_BUFFER_VIEW& GetVbView(void) { return vbView_; }
     inline size_t GetVerticesNum(void) { return buff_->GetDesc().Width / sizeof(T); }
-
-private:
-    // 変数
-    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{ nullptr }; // 頂点バッファ
-    D3D12_VERTEX_BUFFER_VIEW vbView_{}; // 頂点バッファビュー
-    T* vertMap_{ nullptr }; // GPUメモリのmap
 };
