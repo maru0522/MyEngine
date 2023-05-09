@@ -88,6 +88,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathUtil.cpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -132,12 +134,16 @@
   <ItemGroup>
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="ConstBuffer.h" />
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="FPSController.h" />
     <ClInclude Include="GraphicsPipeline.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InitDirectX.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MathUtil.h" />
     <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TextureManager.h" />

@@ -14,7 +14,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="Util.cpp" />
     <ClCompile Include="WndAPI.cpp" />
     <ClCompile Include="WorldCoordinate.cpp" />
     <ClCompile Include="Vector2.cpp">
@@ -36,17 +35,23 @@
     <ClCompile Include="MathUtil.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>3D</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConstBuffer.h" />
     <ClInclude Include="FPSController.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="InitDirectX.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Util.h" />
-    <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="WndAPI.h" />
     <ClInclude Include="WorldCoordinate.h" />
     <ClInclude Include="Vector4.h">
@@ -68,6 +73,27 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="ConstBuffer.h">
+      <Filter>TemplateBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>TemplateBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>TemplateBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Basic.hlsli" />
@@ -76,6 +102,15 @@
   <ItemGroup>
     <Filter Include="Math">
       <UniqueIdentifier>{774484b5-dca8-4b05-81ca-d5be47f0e677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TemplateBuffer">
+      <UniqueIdentifier>{efd245e0-e07e-4cfd-b24c-9a8d240a8a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3D">
+      <UniqueIdentifier>{b78fe4ab-857b-4c78-af56-549ee6359c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Other">
+      <UniqueIdentifier>{75d85f82-bb62-416c-8c8d-6bcd0a9289a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

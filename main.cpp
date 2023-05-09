@@ -24,6 +24,7 @@ using namespace DirectX;
 #include "GraphicsPipeline.h"
 #include "CameraManager.h"
 #include "Sprite.h"
+#include "ModelManager.h"
 
 using namespace Microsoft::WRL;
 using BlendMode = HelperGraphicPipeline::BlendMode;
@@ -56,6 +57,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // Spriteの初期化
     Sprite::StaticInitialize(texMPtr.get(), cameraMPtr.get());
+
+    // ModelManagerの変数宣言
+    std::unique_ptr<ModelManager> modelMPtr{ std::make_unique<ModelManager>(texMPtr.get()) };
 
     // テクスチャマッピング
     texMPtr->LoadFolder("Resources");
