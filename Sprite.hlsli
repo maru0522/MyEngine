@@ -1,7 +1,7 @@
 // ’Êí‚Ì2D•`‰æ
-cbuffer CBData_t : register(b0)
+cbuffer CBData2d_t : register(b0)
 {
-    matrix mat_;   // 3D•ÏŠ·s—ñ
+    matrix matWorld_;   // 3D•ÏŠ·s—ñ
     float4 color_; // F(RGBA)
 }
 

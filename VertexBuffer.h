@@ -11,7 +11,7 @@ template<class T> class VertexBuffer
 public:
     // 関数
     VertexBuffer(void) = default;
-    ~VertexBuffer(void) { buff_->Unmap(0, nullptr); }
+    ~VertexBuffer(void) {/* buff_->Unmap(0, nullptr); */}
 
     void Create(const std::vector<T>& vertices) {
         // 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数

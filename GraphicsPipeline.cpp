@@ -26,12 +26,12 @@ void GraphicsPipeline::Initialize(void)
         pipelineProducts2d_.at(i) = pipeline;
     }
 
-    //for (size_t i = 0; i < pipelineProducts3d_.size(); i++) {
-    //    Pipeline_t pipeline{};
-    //    HelperGraphicPipeline::Pipeline3d(pipeline, static_cast<BlendMode>(i));
+    for (size_t i = 0; i < pipelineProducts3d_.size(); i++) {
+        Pipeline_t pipeline{};
+        HelperGraphicPipeline::Pipeline3d(pipeline, static_cast<BlendMode>(i));
 
-    //    pipelineProducts3d_.at(i) = pipeline;
-    //}
+        pipelineProducts3d_.at(i) = pipeline;
+    }
 }
 
 void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
@@ -254,10 +254,10 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
     ComPtr<ID3DBlob> errorBlob{ nullptr }; // エラーオブジェクト
 
     // 頂点シェーダの読み込みとコンパイル
-    SetCompileShader(blobs->vsBlob.GetAddressOf(), "Resources/Shaders/ModelVS.hlsl", "main", "vs_5_0");
+    SetCompileShader(blobs->vsBlob.GetAddressOf(), "ModelVS.hlsl", "main", "vs_5_0");
 
     // ピクセルシェーダの読み込みとコンパイル
-    SetCompileShader(blobs->psBlob.GetAddressOf(), "Resources/Shaders/ModelPS.hlsl", "main", "ps_5_0");
+    SetCompileShader(blobs->psBlob.GetAddressOf(), "ModelPS.hlsl", "main", "ps_5_0");
 
 #pragma region パイプラインの設定
     // グラフィックスパイプライン設定
@@ -369,22 +369,27 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
 
 #pragma region ルートパラメータ
     // ルートパラメーターの設定
-    D3D12_ROOT_PARAMETER rootParams[3] = {};
+    D3D12_ROOT_PARAMETER rootParams[4] = {};
+    // テクスチャレジスタ0番
+    rootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	// 種類
+    rootParams[0].DescriptorTable.pDescriptorRanges = &descriptorRange;
+    rootParams[0].DescriptorTable.NumDescriptorRanges = 1;
+    rootParams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
     // 定数バッファ0番
-    rootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	// 定数バッファビュー
-    rootParams[0].Descriptor.ShaderRegister = 0;					// 定数バッファ番号
-    rootParams[0].Descriptor.RegisterSpace = 0;						// デフォルト値
-    rootParams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	// 全てのシェーダから見える
-    // 定数バッファ1番
-    rootParams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	// 種類
-    rootParams[1].Descriptor.ShaderRegister = 1;					// 定数バッファ番号
+    rootParams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	// 定数バッファビュー
+    rootParams[1].Descriptor.ShaderRegister = 0;					// 定数バッファ番号
     rootParams[1].Descriptor.RegisterSpace = 0;						// デフォルト値
     rootParams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	// 全てのシェーダから見える
-    // テクスチャレジスタ0番
-    rootParams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	// 種類
-    rootParams[2].DescriptorTable.pDescriptorRanges = &descriptorRange;
-    rootParams[2].DescriptorTable.NumDescriptorRanges = 1;
-    rootParams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+    // 定数バッファ1番
+    rootParams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	// 種類
+    rootParams[2].Descriptor.ShaderRegister = 1;					// 定数バッファ番号
+    rootParams[2].Descriptor.RegisterSpace = 0;						// デフォルト値
+    rootParams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	// 全てのシェーダから見える
+    // 定数バッファ2番
+    rootParams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	// 種類
+    rootParams[3].Descriptor.ShaderRegister = 2;					// 定数バッファ番号
+    rootParams[3].Descriptor.RegisterSpace = 0;						// デフォルト値
+    rootParams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	// 全てのシェーダから見える
 #pragma endregion
 
 #pragma region サンプラーの設定

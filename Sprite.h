@@ -26,9 +26,9 @@ private:
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-    struct CBData_t // Sprite用定数バッファのデータ構造体
+    struct CBData2d_t // Sprite用定数バッファのデータ構造体
     {
-        Matrix4 matWorld_;  // 3D変換行列
+        Matrix4 matWorld_; // 3D変換行列
         Vector4 color_; // 色（RGBA）
     };
 
@@ -81,7 +81,7 @@ private:
 
     Matrix4 matWorld_;
 
-    ConstBuffer<CBData_t> cb_;
+    ConstBuffer<CBData2d_t> cb_;
     VertexBuffer<VertexPosUv_t> vertexBuffer_;
 
     const TextureManager::Image* imagePtr_;

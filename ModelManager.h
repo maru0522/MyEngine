@@ -13,6 +13,7 @@
 #include "FileSystem.h"
 #include "IndexBuffer.h"
 #include "ConstBuffer.h"
+#include "Matrix4.h"
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Mesh.h"
@@ -44,9 +45,9 @@ public:
     struct CBMaterial_t // 定数バッファ用構造体
     {
         DirectX::XMFLOAT3 ambient;  // ambient
-        float_t pad1;               // padding
+        float_t pad1; // padding
         DirectX::XMFLOAT3 diffuse;  // diffuse
-        float_t pad2;               // padding
+        float_t pad2; // padding
         DirectX::XMFLOAT3 specular; // specular
         float_t alpha;              // alpha
     };
@@ -66,6 +67,17 @@ private:
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
+    struct CBData3d_t // Model用定数バッファのデータ構造体
+    {
+        Matrix4 matWorld_; // 3D行列変換
+    };
+
+    //struct CBMatViewPerse_t
+    //{
+    //    Matrix4 matView_;
+    //    Matrix4 matPerspective_;
+    //};
+
 public:
     // 関数
     ModelManager(TextureManager* texMPtr) : texMPtr_(texMPtr) {}
@@ -75,7 +87,6 @@ private:
     void LoadMaterial(Model_t& model, const fsPath& path);
 
     // 変数
-    // メンバのモデルに、unique_ptrがあるので代入は不可（コピー禁止）
     std::map<fsPath, Model_t> models_;
 
     TextureManager* texMPtr_;

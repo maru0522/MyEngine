@@ -124,9 +124,9 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
     // ファイルストリーム
     std::ifstream file;
     // マテリアルファイルを開く
-    file.open(path.string() + mtlname);
+    file.open(path.parent_path().string() + "/" + mtlname);
     // ファイルオープン失敗をチェック
-    if (file.fail()) assert(0);
+    assert(!file.fail());
 
     // 1行ずつ読み込む
     std::string line;
