@@ -59,7 +59,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     Sprite::StaticInitialize(texMPtr.get(), cameraMPtr.get());
 
     // ModelManagerの変数宣言
-    std::unique_ptr<ModelManager> modelMPtr{ std::make_unique<ModelManager>(texMPtr.get()) };
+    //std::unique_ptr<ModelManager> modelMPtr{ std::make_unique<ModelManager>(texMPtr.get()) };
 
     // テクスチャマッピング
     texMPtr->LoadFolder("Resources");

@@ -23,21 +23,20 @@ public:
     Mesh(void) = default;
     Mesh(const fsPath& path) : path_(path) {}
 
-    inline void CreateIB(const std::vector<unsigned short>& indices) { indexBuffer_ = std::make_unique<IndexBuffer>(indices); }
-    inline void CreateVB(const std::vector<VertexPosNormalUv_t>& vertices) { vertexBuffer_ = std::make_unique<VertexBuffer<VertexPosNormalUv_t>>(vertices); }
+    inline void CreateIB(const std::vector<unsigned short>& indices) { indexBuffer_.Create(indices); }
+    inline void CreateVB(const std::vector<VertexPosNormalUv_t>& vertices) { vertexBuffer_.Create(vertices); }
 
     // setterÅEgetter
     inline void SetPath(const fsPath& path) { path_ = path; }
 
     inline const fsPath& GetPath(void) { return path_; }
-    inline const IndexBuffer* GetIBPtr(void) { return indexBuffer_.get(); }
-    inline const VertexBuffer<VertexPosNormalUv_t>* GetVBPtr(void) { return vertexBuffer_.get(); }
+    inline const IndexBuffer* GetIBPtr(void) { return &indexBuffer_; }
+    inline const VertexBuffer<VertexPosNormalUv_t>* GetVBPtr(void) { return &vertexBuffer_; }
 
 private:
     // ïœêî
     fsPath path_{}; // KEY
 
-    std::unique_ptr<IndexBuffer> indexBuffer_{};
-    std::unique_ptr<VertexBuffer<VertexPosNormalUv_t>> vertexBuffer_{};
+    IndexBuffer indexBuffer_{};
+    VertexBuffer<VertexPosNormalUv_t> vertexBuffer_{};
 };
-

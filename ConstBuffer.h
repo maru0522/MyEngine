@@ -66,7 +66,7 @@ private:
 public:
     // getter
     // private変数: cBTypeMap_ を取得
-    CBType* GetConstBuffMap(void) { return cbTypeMap_; } // 値書き換え用取得（マテリアルカラーのセッティングとか）
+    T* GetConstBuffMap(void) { return cbTypeMap_; } // 値書き換え用取得（マテリアルカラーのセッティングとか）
     // private変数: cBMaterial を取得
     ID3D12Resource* GetBuffer(void) { return buffer_.Get(); }
 };

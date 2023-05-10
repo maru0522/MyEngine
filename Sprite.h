@@ -49,7 +49,7 @@ public:
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
     static void SetDrawBlendMode(BlendMode blendmode);
 
-    static inline void UpdateCBMatOrthoGraphic(void) { cbMatOrthoGraphic_->GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic(); }
+    static inline void UpdateCBMatOrthoGraphic(void) { cbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic(); }
 
     Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickName‚ª—Dæ‚³‚ê‚éB
     void Update(void);
@@ -62,7 +62,7 @@ private:
     // •Ï”
     static TextureManager* texMPtr_;
     static CameraManager* camMPtr_;
-    static std::unique_ptr<ConstBuffer<CBMatOrthoGraphic_t>> cbMatOrthoGraphic_;
+    static ConstBuffer<CBMatOrthoGraphic_t> cbMatOrthoGraphic_;
 
     Sprite* parent_;
 
@@ -81,8 +81,8 @@ private:
 
     Matrix4 matWorld_;
 
-    std::unique_ptr<ConstBuffer<CBData_t>> cb_;
-    std::unique_ptr<VertexBuffer<VertexPosUv_t>> vertexBuffer_;
+    ConstBuffer<CBData_t> cb_;
+    VertexBuffer<VertexPosUv_t> vertexBuffer_;
 
     const TextureManager::Image* imagePtr_;
 

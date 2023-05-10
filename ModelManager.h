@@ -55,7 +55,7 @@ public:
     Mesh mesh_;
     Material_t material_;
 
-    std::unique_ptr<ConstBuffer<CBMaterial_t>> cbMaterial_;
+    ConstBuffer<CBMaterial_t> cbMaterial_;
 };
 
 

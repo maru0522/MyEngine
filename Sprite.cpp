@@ -8,13 +8,13 @@
 
 TextureManager* Sprite::texMPtr_{ nullptr };
 CameraManager* Sprite::camMPtr_{ nullptr };
-std::unique_ptr<ConstBuffer<Sprite::CBMatOrthoGraphic_t>> Sprite::cbMatOrthoGraphic_{nullptr};
+ConstBuffer<Sprite::CBMatOrthoGraphic_t> Sprite::cbMatOrthoGraphic_{};
 
 void Sprite::StaticInitialize(TextureManager* texMPtr, CameraManager* camMPtr)
 {
     texMPtr_ = texMPtr;
     camMPtr_ = camMPtr;
-    cbMatOrthoGraphic_ = std::make_unique<ConstBuffer<Sprite::CBMatOrthoGraphic_t>>();
+    cbMatOrthoGraphic_.Create();
     UpdateCBMatOrthoGraphic();
 }
 
@@ -58,7 +58,8 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     cutLength_.x = (float)imagePtr_->buff_->GetDesc().Width;
     cutLength_.y = (float)imagePtr_->buff_->GetDesc().Height;
 
-    cb_ = std::make_unique<ConstBuffer<CBData_t>>();
+    // 定数バッファ生成
+    cb_.Create();
 
     std::vector<VertexPosUv_t> vertices;
     vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // 左下
@@ -66,7 +67,7 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     vertices.emplace_back(VertexPosUv_t{ { 100.0f, 100.0f, 0.0f }, {1.0f, 1.0f} }); // 右下
     vertices.emplace_back(VertexPosUv_t{ { 100.0f,   0.0f, 0.0f }, {1.0f, 0.0f} }); // 右上
 
-    vertexBuffer_ = std::make_unique<VertexBuffer<VertexPosUv_t>>(vertices);
+    vertexBuffer_.Create(vertices);
 
     SetColor({ 1.f, 1.f, 1.f, 1.f });
 }
@@ -84,17 +85,17 @@ void Sprite::Draw(void)
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // 頂点バッファビューの設定コマンド
-    iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_->GetVbView());
+    iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_.GetVbView());
 
     // 定数バッファビュー(CBV)の設定コマンド
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_->GetBuffer()->GetGPUVirtualAddress());
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cbMatOrthoGraphic_->GetBuffer()->GetGPUVirtualAddress());
+    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
+    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cbMatOrthoGraphic_.GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
     iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle_);
 
     // 描画コマンド
-    iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_->GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画
+    iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_.GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画
 }
 
 void Sprite::TransferVertex(void)
@@ -134,7 +135,7 @@ void Sprite::TransferVertex(void)
     vertices[2].uv = { texRight, texBottom };
     vertices[3].uv = { texRight,    texTop };
 
-    vertexBuffer_->TransferVertexToBuffer(vertices);
+    vertexBuffer_.TransferVertexToBuffer(vertices);
 }
 
 void Sprite::UpdateMatrix(void)
@@ -150,7 +151,7 @@ void Sprite::UpdateMatrix(void)
     if (parent_) matWorld_ *= parent_->matWorld_;
 
     // 定数バッファに転送
-    cb_->GetConstBuffMap()->matWorld_ = matWorld_;
+    cb_.GetConstBuffMap()->matWorld_ = matWorld_;
 }
 
 void Sprite::SetColor(Vector4 rgba)
@@ -168,7 +169,7 @@ void Sprite::SetColor(Vector4 rgba)
     rgba.w = (std::min)(1.0f, rgba.w);
 
     // 値を書き込むと自動的に転送される
-    cb_->GetConstBuffMap()->color_ = rgba;
+    cb_.GetConstBuffMap()->color_ = rgba;
 }
 
 void Sprite::SetColor255(Vector4 rgba)
@@ -189,7 +190,7 @@ void Sprite::SetColor255(Vector4 rgba)
     rgba = { rgba.x / 255.f, rgba.y / 255.f, rgba.z / 255.f, rgba.w / 255.f };
 
     // 値を書き込むと自動的に転送される
-    cb_->GetConstBuffMap()->color_ = rgba;
+    cb_.GetConstBuffMap()->color_ = rgba;
 }
 
 
