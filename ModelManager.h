@@ -52,6 +52,9 @@ public:
         float_t alpha;              // alpha
     };
 
+    // 関数
+    void UpdateCB(void);
+
     // 変数
     Mesh mesh_;
     Material_t material_;
@@ -67,17 +70,6 @@ private:
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
-    struct CBData3d_t // Model用定数バッファのデータ構造体
-    {
-        Matrix4 matWorld_; // 3D行列変換
-    };
-
-    //struct CBMatViewPerse_t
-    //{
-    //    Matrix4 matView_;
-    //    Matrix4 matPerspective_;
-    //};
-
 public:
     // 関数
     ModelManager(TextureManager* texMPtr) : texMPtr_(texMPtr) {}
@@ -90,5 +82,10 @@ private:
     std::map<fsPath, Model_t> models_;
 
     TextureManager* texMPtr_;
-};
 
+public:
+    // setter・getter
+    Model_t GetModel(const fsPath& path) const;
+    const Model_t* GetModelPtr(const fsPath& path) const;
+    //const Model_t* GetModelPtrByNickname(const std::string nickname);
+};

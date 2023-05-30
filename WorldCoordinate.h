@@ -10,6 +10,7 @@ public:
     WorldCoordinate(const Vector3& pos, const Vector3& scale, const Vector3& rot);
 
     void Update(void);
+    void Reset(void);
 
 private:
     // •Ï”

@@ -25,6 +25,7 @@ using namespace DirectX;
 #include "CameraManager.h"
 #include "Sprite.h"
 #include "ModelManager.h"
+#include "Object3D.h"
 
 using namespace Microsoft::WRL;
 using BlendMode = HelperGraphicPipeline::BlendMode;
@@ -65,9 +66,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     // テクスチャマッピング
     texMPtr->LoadFolder("Resources");
 
+    // Object3D
+    Object3D::StaticInitialize(modelMPtr.get(), texMPtr.get(), cameraMPtr.get());
+
 #pragma endregion
 
     Sprite sprite("Resources/namida.png");
+    Object3D obj3d("Resources/cube/cube.obj");
 
     // ゲームループ
     while (true) {
@@ -86,28 +91,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         cameraMPtr->Update();
 
         sprite.Update();
+        Object3D::UpdateCBMatViewPerse();
+        obj3d.Update();
 
         iDXPtr->PreDraw();
-
         Sprite::PreDraw();
-
         sprite.Draw();
 
-        //commandList->SetDescriptorHeaps(1, &srvHeap);
-
-#pragma region 構造化に伴いコメントアウト
-        //// 0番定数バッファビュー(CBV)の設定コマンド
-        //commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform0->GetGPUVirtualAddress());
-
-        //// 描画コマンド
-        //commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0); // 全ての頂点を使って描画
-
-        //// 1番定数バッファビュー(CBV)の設定コマンド
-        //commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform1->GetGPUVirtualAddress());
-
-        //// 描画コマンド
-        //commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0); // 全ての頂点を使って描画
-#pragma endregion
+        Object3D::PreDraw();
+        obj3d.Draw("Resources/namida.png");
 
         iDXPtr->PostDraw();
 #pragma endregion

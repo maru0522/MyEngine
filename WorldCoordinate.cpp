@@ -28,3 +28,17 @@ void WorldCoordinate::Update(void)
     matWorld_ *= matRotate;
     matWorld_ = Matrix::Translate(matWorld_, position_);
 }
+
+void WorldCoordinate::Reset(void)
+{
+    scale_ = { 1.f, 1.f, 1.f };
+    position_ = { 0.f, 0.f, 0.f };
+    rotation_ = { 0.f, 0.f, 0.f };
+
+    matWorld_ = {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f,
+    };
+}

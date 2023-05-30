@@ -64,6 +64,7 @@ public:
     // ä÷êî
     void Initialize(void);
     const Pipeline_t& GetPipeline2d(BlendMode mode) const;
+    const Pipeline_t& GetPipeline3d(BlendMode mode) const;
 
 private:
 

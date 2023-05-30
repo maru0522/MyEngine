@@ -17,6 +17,11 @@ const GraphicsPipeline::Pipeline_t& GraphicsPipeline::GetPipeline2d(BlendMode mo
     return pipelineProducts2d_.at(static_cast<int32_t>(mode));
 }
 
+const GraphicsPipeline::Pipeline_t& GraphicsPipeline::GetPipeline3d(BlendMode mode) const
+{
+    return pipelineProducts3d_.at(static_cast<int32_t>(mode));
+}
+
 void GraphicsPipeline::Initialize(void)
 {
     for (size_t i = 0; i < pipelineProducts2d_.size(); i++) {

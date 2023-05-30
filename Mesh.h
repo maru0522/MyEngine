@@ -12,7 +12,7 @@ private:
     using fsPath = std::experimental::filesystem::path;
 
 public:
-    struct VertexPosNormalUv_t // 頂点バッファ用構造体
+    struct VertexPosNormalUv_t // 頂点バッファ用"データ"構造体
     {
         Vector3 pos_;    // xyz座標
         Vector3 normal_; // 法線ベクトル
@@ -29,9 +29,9 @@ public:
     // setter・getter
     inline void SetPath(const fsPath& path) { path_ = path; }
 
-    inline const fsPath& GetPath(void) { return path_; }
-    inline const IndexBuffer* GetIBPtr(void) { return &indexBuffer_; }
-    inline const VertexBuffer<VertexPosNormalUv_t>* GetVBPtr(void) { return &vertexBuffer_; }
+    inline fsPath& GetPath(void) { return path_; }
+    inline IndexBuffer* GetIBPtr(void) { return &indexBuffer_; }
+    inline VertexBuffer<VertexPosNormalUv_t>* GetVBPtr(void) { return &vertexBuffer_; }
 
 private:
     // 変数

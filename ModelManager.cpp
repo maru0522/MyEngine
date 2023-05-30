@@ -182,4 +182,27 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
             texMPtr_->Load(model.material_.texKey_);
         }
     }
+
+    // マテリアルの定数バッファ生成
+    model.cbMaterial_.Create();
+}
+
+Model_t ModelManager::GetModel(const fsPath& path) const
+{
+    return models_.at(path);
+}
+
+const Model_t* ModelManager::GetModelPtr(const fsPath& path) const
+{
+    // 読み込まれて無かったらcube返す位したほうがいいかな？
+    return &models_.at(path);
+}
+
+void Model_t::UpdateCB(void)
+{
+    // 定数バッファのマテリアルの値を更新する
+    cbMaterial_.GetConstBuffMap()->ambient = material_.ambient_;
+    cbMaterial_.GetConstBuffMap()->diffuse = material_.diffuse_;
+    cbMaterial_.GetConstBuffMap()->specular = material_.specular_;
+    cbMaterial_.GetConstBuffMap()->alpha = material_.alpha_;
 }

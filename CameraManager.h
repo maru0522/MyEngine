@@ -44,6 +44,7 @@ public:
 
     inline const Matrix4& GetMatProjOrthoGraphic(void) { return matProj_OrthoGraphic_; }
     inline const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }
+    inline const Matrix4& GetMatView(void) { return matView_; }
 
     inline void Follow(Vector3* p_target) { isFollow_ = true, targetPtr_ = p_target; }
     inline void UnFollow(void) { isFollow_ = false; }

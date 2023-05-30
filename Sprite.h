@@ -26,18 +26,18 @@ private:
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-    struct CBData2d_t // Sprite用定数バッファのデータ構造体
+    struct CBData2d_t // 定数バッファ用"データ"構造体
     {
         Matrix4 matWorld_; // 3D変換行列
         Vector4 color_; // 色（RGBA）
     };
 
-    struct CBMatOrthoGraphic_t // Sprite用定数バッファ
+    struct CBMatOrthoGraphic_t // 定数バッファ用"射影行列"構造体
     {
         Matrix4 matOrthoGraphic_;
     };
 
-    struct VertexPosUv_t
+    struct VertexPosUv_t // 頂点バッファ用"データ"構造体
     {
         Vector3 pos; // xyz座標
         Vector2 uv; // uv座標
@@ -70,6 +70,7 @@ private:
     Vector2 scale_;
     Vector2 size_;
     float rotation_;
+    Matrix4 matWorld_;
 
     Vector2 anchorPoint_;
     Vector2 cutStartPoint_;
@@ -78,8 +79,6 @@ private:
     bool isFlipX_;
     bool isFlipY_;
     bool isInvisible_;
-
-    Matrix4 matWorld_;
 
     ConstBuffer<CBData2d_t> cb_;
     VertexBuffer<VertexPosUv_t> vertexBuffer_;

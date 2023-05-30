@@ -1,22 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="BasicPS.hlsl" />
-    <FxCompile Include="BasicVS.hlsl" />
-    <FxCompile Include="SpriteVS.hlsl" />
-    <FxCompile Include="SpritePS.hlsl" />
-    <FxCompile Include="ModelPS.hlsl" />
-    <FxCompile Include="ModelVS.hlsl" />
+    <FxCompile Include="ModelVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="ModelPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="SpriteVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="SpritePS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="BasicVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="BasicPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FPSController.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
-    <ClCompile Include="InitDirectX.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="WndAPI.cpp" />
     <ClCompile Include="WorldCoordinate.cpp" />
     <ClCompile Include="Vector2.cpp">
       <Filter>Math</Filter>
@@ -33,28 +40,43 @@
     <ClCompile Include="Quaternion.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="MathUtil.cpp">
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>3D</Filter>
+      <Filter>Entity\3D</Filter>
     </ClCompile>
     <ClCompile Include="ModelManager.cpp">
-      <Filter>3D</Filter>
+      <Filter>Entity\3D</Filter>
     </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Entity\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Entity\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3D.cpp">
+      <Filter>Entity\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="WndAPI.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSController.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="InitDirectX.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Entity\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FPSController.h" />
     <ClInclude Include="GraphicsPipeline.h" />
-    <ClInclude Include="InitDirectX.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="WndAPI.h" />
     <ClInclude Include="WorldCoordinate.h" />
     <ClInclude Include="Vector4.h">
       <Filter>Math</Filter>
@@ -74,7 +96,6 @@
     <ClInclude Include="Quaternion.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="ConstBuffer.h">
       <Filter>TemplateBuffer</Filter>
     </ClInclude>
@@ -85,10 +106,10 @@
       <Filter>TemplateBuffer</Filter>
     </ClInclude>
     <ClInclude Include="ModelManager.h">
-      <Filter>3D</Filter>
+      <Filter>Entity\3D</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>3D</Filter>
+      <Filter>Entity\3D</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Other</Filter>
@@ -96,11 +117,38 @@
     <ClInclude Include="FileSystem.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Entity\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Entity\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3D.h">
+      <Filter>Entity\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="WndAPI.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSController.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="InitDirectX.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Entity\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Basic.hlsli" />
-    <None Include="Sprite.hlsli" />
-    <None Include="Model.hlsli" />
+    <None Include="Model.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Sprite.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Basic.hlsli">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -109,11 +157,26 @@
     <Filter Include="TemplateBuffer">
       <UniqueIdentifier>{efd245e0-e07e-4cfd-b24c-9a8d240a8a2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D">
-      <UniqueIdentifier>{b78fe4ab-857b-4c78-af56-549ee6359c19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Other">
       <UniqueIdentifier>{75d85f82-bb62-416c-8c8d-6bcd0a9289a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{ca4a1446-c7b5-417d-b4d1-1f6f577fe0f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\2D">
+      <UniqueIdentifier>{a545c0e6-6ed5-4e5a-a3ae-882b4873c018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\3D">
+      <UniqueIdentifier>{b78fe4ab-857b-4c78-af56-549ee6359c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{37bb682d-8767-445a-91a0-f411897673c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{19e23be3-d65b-4916-a988-e5f95368eee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\Other">
+      <UniqueIdentifier>{be80ca21-6e4e-4a5a-ba10-9d145748f897}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
