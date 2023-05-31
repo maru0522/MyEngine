@@ -95,11 +95,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         obj3d.Update();
 
         iDXPtr->PreDraw();
-        //Sprite::PreDraw();
-        //sprite.Draw();
+        Sprite::PreDraw();
+        sprite.Draw();
 
         Object3D::PreDraw();
-        obj3d.Draw("Resources/namida.png");
+        obj3d.Draw();
+        // cubeの画像にスプライトで表示しているものを起用
+        //obj3d.Draw("Resources/namida.png");
 
         iDXPtr->PostDraw();
 #pragma endregion
