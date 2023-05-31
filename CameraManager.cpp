@@ -2,6 +2,7 @@
 #include "CameraManager.h"
 #include "MathUtil.h"
 #include "WndAPI.h"
+#include "Input.h"
 
 using namespace Math;
 
@@ -15,6 +16,10 @@ Camera::Camera(const Vector3& eye) :
 
 void Camera::Update(void)
 {
+    if (KEYS::IsDown(DIK_UP)) eye_.z += 10;
+    if (KEYS::IsDown(DIK_DOWN)) eye_.z -= 10;
+    if (KEYS::IsDown(DIK_LEFT)) eye_.x -= 10;
+    if (KEYS::IsDown(DIK_RIGHT)) eye_.x += 10;
     WorldCoordinate coordinate;
     coordinate.SetPosition(eye_);
     coordinate.SetRotation(rotation_);

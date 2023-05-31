@@ -54,6 +54,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     // CameraManagerの変数宣言と初期化
     std::unique_ptr<CameraManager> cameraMPtr{ std::make_unique<CameraManager>() };
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
+    cameraPtr->SetPosition({ 0,0,-20 });
     cameraMPtr->SetCurrentCamera(cameraPtr.get());
 
     // Spriteの初期化
