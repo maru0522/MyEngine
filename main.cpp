@@ -90,13 +90,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         Input::UpdateAll();
         cameraMPtr->Update();
 
-        sprite.Update();
+        //sprite.Update();
         Object3D::UpdateCBMatViewPerse();
         obj3d.Update();
 
         iDXPtr->PreDraw();
-        Sprite::PreDraw();
-        sprite.Draw();
+        //Sprite::PreDraw();
+        //sprite.Draw();
 
         Object3D::PreDraw();
         obj3d.Draw("Resources/namida.png");
