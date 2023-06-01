@@ -26,16 +26,25 @@ void Object3D::PreDraw(BlendMode blendmode)
     // インスタンス取得
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-    // パイプラインステートとルートシグネチャの設定コマンド
-    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState_.Get());
-    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature_.Get());
-
     // プリミティブ形状の設定コマンド
     iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 三角形リスト
 
     ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap() };
     // SRVヒープの設定コマンド
     iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
+    // パイプラインステートとルートシグネチャの設定コマンド
+    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState_.Get());
+    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature_.Get());
+}
+
+void Object3D::SetDrawBlendMode(BlendMode blendmode)
+{
+    InitDirectX* iDXPtr = InitDirectX::GetInstance();
+
+    // パイプラインステートとルートシグネチャの設定コマンド
+    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState_.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature_.Get());
 }
 
 Object3D::Object3D(const fsPath& path) :
@@ -45,13 +54,13 @@ Object3D::Object3D(const fsPath& path) :
     model_ = modelMPtr_->GetModel(path);
     // 定数バッファ生成
     cb_.Create();
+
+    // マテリアルを定数バッファへ転送
+    model_.UpdateCB();
 }
 
 void Object3D::Update(void)
 {
-    // マテリアルを定数バッファへ転送
-    model_.UpdateCB();
-
     // 座標計算と転送
     coordinate_.Update();
     cb_.GetConstBuffMap()->matWorld_ = coordinate_.GetMatWorld();

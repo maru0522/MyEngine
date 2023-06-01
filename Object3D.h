@@ -38,6 +38,7 @@ public:
     static void StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr, CameraManager* camMPtr);
     static void UpdateCBMatViewPerse(void);
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
+    static void SetDrawBlendMode(BlendMode blendmode);
 
     Object3D(const fsPath& path/*,Type type*/);
     void Update(void);
