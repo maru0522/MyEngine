@@ -43,8 +43,8 @@ namespace Input {
     {
     public:
         // 関数
-        static void Initialize(WndAPI* p_wndapi);
-        static void Update(void);
+        //static void Initialize(WndAPI* p_wndapi);
+        //static void Update(void);
 
         // 押した瞬間
         static inline bool IsTrigger(uint8_t button) { return !diStatePre_.rgbButtons[button] && diState_.rgbButtons[button]; }
@@ -57,7 +57,7 @@ namespace Input {
 
     private:
         // 関数
-        static BOOL __stdcall DeviceFindCallBack(const DIDEVICEINSTANCE* pdidInstance, void* pContext);
+        //static BOOL __stdcall DeviceFindCallBack(const DIDEVICEINSTANCE* pdidInstance, void* pContext);
 
     private:
         // 変数
@@ -107,7 +107,7 @@ namespace Input {
         static inline bool IsTriggerRT(void) { return xState_.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD; }
         static inline uint8_t GetRT(void) { return xState_.Gamepad.bRightTrigger; }
 
-        static void Vibrate(int32_t lPower = 0, int32_t rPower = 0); // �����Ȃ��ŐU����~
+        static void Vibrate(int32_t lPower = 0, int32_t rPower = 0); // 引数なしで振動停止
 
         //setter
         static void SetDeadZone(const Vector2& leftValueXY, const Vector2& rightValueXY);
@@ -121,6 +121,54 @@ namespace Input {
         static bool isConnect_;
     };
 
+    class Mouse
+    {
+    public:
+        // 定義
+        struct MouseState
+        {
+            DIMOUSESTATE mState_;
+            // 2D画面上の座標
+            Vector2 cursorPos2d_;
+            // スクロール量
+            float scroll_;
+
+            // 初期化関数
+            void Initialize(void) {
+                for (size_t i = 0; i < 4; i++) { mState_.rgbButtons[i] = 0; } // ボタン
+                mState_.lX = mState_.lY = mState_.lZ = 0;                     // 各軸の移動量
+                cursorPos2d_ = { 0.f,0.f };                                   // 位置
+                scroll_ = 0.f;                                                // スクロール
+            }
+        };
+
+        enum class Click
+        {
+            LEFT,
+            RIGHT,
+            CENTER,
+        };
+        
+        // 関数
+        static void Initialize(WndAPI* p_wndapi);
+        static void Update(void);
+        
+        // 押した瞬間
+        static inline bool IsTrigger(Click click) { return !mouseStatePre_.mState_.rgbButtons[static_cast<size_t>(click)] && mouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
+        // 押されている時
+        static inline bool IsDown(Click click) { return mouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
+        // 離された瞬間
+        static inline bool IsReleased(Click click) { return mouseStatePre_.mState_.rgbButtons[static_cast<size_t>(click)] && !mouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
+
+        static inline const Vector2& GetCursorPos2D(void) { return mouseState_.cursorPos2d_; }
+        static inline float GetScroll(void) { return mouseState_.scroll_; }
+    private:
+        // 変数
+        static Microsoft::WRL::ComPtr<IDirectInputDevice8> mouse_;
+        static MouseState mouseStatePre_;
+        static MouseState mouseState_;
+        static WndAPI* wndApiPtr_;
+    };
 }
 
 #ifndef NON_NAMESPACE_Input // 定義でusing解除

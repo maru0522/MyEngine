@@ -24,6 +24,13 @@ XINPUT_STATE Input::XPad::xState_{ 0 };
 bool Input::XPad::isConnect_{ false };
 #pragma endregion
 
+#pragma region mouse
+Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::Mouse::mouse_{nullptr};
+Input::Mouse::MouseState Input::Mouse::mouseStatePre_{};
+Input::Mouse::MouseState Input::Mouse::mouseState_{};
+WndAPI* Input::Mouse::wndApiPtr_;
+#pragma endregion
+
 void Input::Keyboard::Initialize(WndAPI* p_wndapi)
 {
     HRESULT hr = S_FALSE;
@@ -62,50 +69,50 @@ void Input::Keyboard::Update(void)
     keyboard_->GetDeviceState((DWORD)size(keys_), keys_.data());
 }
 
-void Input::DIPad::Initialize(WndAPI* p_wndapi)
-{
-    HRESULT hr = S_FALSE;
+//void Input::DIPad::Initialize(WndAPI* p_wndapi)
+//{
+//    HRESULT hr = S_FALSE;
+//
+//    if (directInput_ == nullptr) {
+//        // DirectInputの初期化
+//        hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
+//        assert(SUCCEEDED(hr));
+//    }
+//
+//    // デバイスの列挙
+//    hr = directInput_->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, nullptr, DIEDFL_ATTACHEDONLY);
+//    assert(SUCCEEDED(hr));
+//}
 
-    if (directInput_ == nullptr) {
-        // DirectInputの初期化
-        hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
-        assert(SUCCEEDED(hr));
-    }
+//void Input::DIPad::Update(void)
+//{
+//    if (!isConnect_) {
+//        return;
+//    }
+//
+//    // preKeysへ情報保存
+//    memcpy(&diStatePre_, &diState_, sizeof(diState_));
+//
+//    diPad_->Acquire();
+//
+//    std::fill(std::begin(diState_.rgbButtons), std::end(diState_.rgbButtons), 0);
+//
+//    //DIJOYSTATE pad;
+//
+//    //joyPad_->GetDeviceState(sizeof(pad), &pad);
+//    diPad_->GetDeviceState(sizeof(diState_), &diState_);
+//
+//    //std::copy(std::begin(pad.rgbButtons), std::end(pad.rgbButtons), pad_.rgbButtons);
+//}
 
-    // デバイスの列挙
-    hr = directInput_->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, nullptr, DIEDFL_ATTACHEDONLY);
-    assert(SUCCEEDED(hr));
-}
-
-void Input::DIPad::Update(void)
-{
-    if (!isConnect_) {
-        return;
-    }
-
-    // preKeysへ情報保存
-    memcpy(&diStatePre_, &diState_, sizeof(diState_));
-
-    diPad_->Acquire();
-
-    std::fill(std::begin(diState_.rgbButtons), std::end(diState_.rgbButtons), 0);
-
-    //DIJOYSTATE pad;
-
-    //joyPad_->GetDeviceState(sizeof(pad), &pad);
-    diPad_->GetDeviceState(sizeof(diState_), &diState_);
-
-    //std::copy(std::begin(pad.rgbButtons), std::end(pad.rgbButtons), pad_.rgbButtons);
-}
-
-BOOL __stdcall Input::DIPad::DeviceFindCallBack(const DIDEVICEINSTANCE* pdidInstance, void* pContext)
-{
-    directInput_->CreateDevice(pdidInstance->guidInstance, &diPad_, NULL);
-
-    diPad_->SetDataFormat(&c_dfDIJoystick);
-
-    return DIENUM_STOP;
-}
+//BOOL __stdcall Input::DIPad::DeviceFindCallBack(const DIDEVICEINSTANCE* pdidInstance, void* pContext)
+//{
+//    directInput_->CreateDevice(pdidInstance->guidInstance, &diPad_, NULL);
+//
+//    diPad_->SetDataFormat(&c_dfDIJoystick);
+//
+//    return DIENUM_STOP;
+//}
 
 void Input::XPad::Initialize(void)
 {
@@ -206,8 +213,8 @@ void Input::XPad::Vibrate(int32_t lPower, int32_t rPower)
 
     ZeroMemory(&v, sizeof(XINPUT_VIBRATION));
 
-    v.wLeftMotorSpeed = lPower;
-    v.wRightMotorSpeed = rPower;
+    v.wLeftMotorSpeed = (unsigned short)lPower;
+    v.wRightMotorSpeed = (unsigned short)rPower;
 
     XInputSetState(0, &v);
 }
@@ -223,13 +230,62 @@ void Input::XPad::SetDeadZone(const Vector2& leftValueXY, const Vector2& rightVa
 void Input::InitializeAll(WndAPI* p_wndapi)
 {
     KEYS::Initialize(p_wndapi);
-    DPAD::Initialize(p_wndapi);
+    //DPAD::Initialize(p_wndapi);
     XPAD::Initialize(); // dinput.hとは関係ないため不要
+    Mouse::Initialize(p_wndapi);
 }
 
 void Input::UpdateAll(void)
 {
     KEYS::Update();
-    DPAD::Update();
+    //DPAD::Update();
     XPAD::Update();
+    Mouse::Update();
+}
+
+void Input::Mouse::Initialize(WndAPI* p_wndapi)
+{
+    HRESULT hr = S_FALSE;
+
+    if (directInput_ == nullptr) {
+        // DirectInputの初期化
+        hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
+        assert(SUCCEEDED(hr));
+    }
+
+    // マウスデバイスの生成
+    hr = directInput_->CreateDevice(GUID_SysMouse, &mouse_, NULL);
+    assert(SUCCEEDED(hr));
+
+    // 入力データ形式のセット
+    hr = mouse_->SetDataFormat(&c_dfDIMouse);
+    assert(SUCCEEDED(hr));
+
+    // 排他制御レベルのセット
+    hr = mouse_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+    assert(SUCCEEDED(hr));
+
+    // ポインタ貰う
+    wndApiPtr_ = p_wndapi;
+}
+
+void Input::Mouse::Update(void)
+{
+    // 最新の情報を取得
+    mouse_->Acquire();
+    mouse_->Poll();
+
+    // 1F前の情報
+    mouseStatePre_ = mouseState_;
+
+    // 入力状態を取得
+    mouse_->GetDeviceState(sizeof(mouseState_), &mouseState_);
+
+    // 位置を取得
+    POINT pos;
+    GetCursorPos(&pos);
+    ScreenToClient(wndApiPtr_->GetHwnd(), &pos);
+
+    mouseState_.cursorPos2d_ = { (float)pos.x,(float)pos.y };
+    mouseState_.scroll_ = (float)mouseState_.mState_.lZ;
 }

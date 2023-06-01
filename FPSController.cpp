@@ -28,8 +28,6 @@ void FPSController::Update(void)
         }
     }
 
-
-
     // Œ»İ‚ÌŠÔ‚ğ‹L˜^
     timeRef_ = std::chrono::steady_clock::now();
 }

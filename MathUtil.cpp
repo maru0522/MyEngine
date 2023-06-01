@@ -38,7 +38,6 @@ float Math::Ease::EaseOutSine(float t, float start, float end)
 
 float Math::Ease::EaseOutCubic(float t, float start, float end)
 {
-    float value{ 1.f - t };
     float time{ 1.f - t * t * t };
     return start * (1.f - time) + end * time;
 }
@@ -78,8 +77,14 @@ float Math::Ease::EaseInOutSine(float t, float start, float end)
 
 float Math::Ease::EaseInOutCubic(float t, float start, float end)
 {
-    float value{ -2.f * t + 2.f };
-    return t < 0.5f ? 4.f * t * t * t : 1.f - value * value * value / 2.f;
+    float time;
+    if (t < 0.5f) {
+        time = 4.f * t * t * t;
+    }
+    else {
+        time = 1.f - powf(-2.f * t + 2.f, 3.f) / 2.f;
+    }
+    return start * (1.f - time) + end * time;
 }
 
 float Math::Ease::EaseInOutQuint(float t, float start, float end)
