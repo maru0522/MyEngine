@@ -8,14 +8,17 @@ using VertexPosNormalUv_t = Mesh::VertexPosNormalUv_t;
 
 void ModelManager::LoadOBJ(const fsPath& path)
 {
-    // 既に読み込んだモデルデータとの重複確認。
+    // 既に読み込んだmodelデータとの重複確認。
     if (models_.count(path)) {
         Util::Log::PrintOutputWindow("A .obj file with the same name was loaded. Some models may not have been loaded.");
         return;
     }
 
+    // 配列用の一時Model
     Model_t tempModel;
-    tempModel.mesh_.SetPath(path);
+    // 配列用の一時Mesh
+    Mesh tempMesh;
+    tempMesh.SetPath(path);
 
     // 頂点とインデックス情報
     std::ifstream ifs;
@@ -107,13 +110,17 @@ void ModelManager::LoadOBJ(const fsPath& path)
             }
         }
     }
-
     // 頂点バッファ
-    tempModel.mesh_.CreateVB(vertices);
-
+    tempMesh.CreateVB(vertices);
     // インデックスバッファ
-    tempModel.mesh_.CreateIB(indices);
+    tempMesh.CreateIB(indices);
 
+    // 配列に追加
+    meshes_.emplace(path, tempMesh);
+
+    // 頂点データmeshの保管アドレスを持たせる。
+    tempModel.meshPtr_ = &meshes_[path];
+    // 配列に追加 ※定数バッファ生成はObject3Dのコンストラクタで行う。
     models_.emplace(path, tempModel);
 }
 
@@ -182,20 +189,21 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
             texMPtr_->Load(model.material_.texKey_);
         }
     }
-
-    // マテリアルの定数バッファ生成
-    model.cbMaterial_.Create();
 }
 
-Model_t ModelManager::GetModel(const fsPath& path) const
+Model_t ModelManager::GetModel(const fsPath& path)
 {
-    return models_.at(path);
-}
-
-const Model_t* ModelManager::GetModelPtr(const fsPath& path) const
-{
-    // 読み込まれて無かったらcube返す位したほうがいいかな？
-    return &models_.at(path);
+    try
+    {
+        return models_[path];
+    }
+    catch (const std::exception&)
+    {
+        // エラーログ
+        Util::Log::PrintOutputWindow("[ModelManager] : Couldn't find a 3Dmodel corresponding to the argument path(" + path.string() + "), so replaced it with \"cube\". ");
+        // 指定されたモデルが見つからなかった場合cubeに置き換えて返却する
+        return models_["Resources/cube/cube.obj"];
+    }
 }
 
 void Model_t::UpdateCB(void)

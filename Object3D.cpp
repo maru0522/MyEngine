@@ -50,13 +50,16 @@ void Object3D::SetDrawBlendMode(BlendMode blendmode)
 Object3D::Object3D(const fsPath& path) :
     parent_(nullptr)
 {
-    // モデル読み込み（値渡し）※出来れば、ptr渡しがいいんだけど、マテリアル変更しちゃうと大元が変わっちゃうからメッシュだけptr渡しして、マテリアルを別途持たせる構造にしたいんだけど現状メッシュとマテリアルは完全に癒着してるイメージだからやり方考えるべし
+    // モデル読み込み
     model_ = modelMPtr_->GetModel(path);
-    // 定数バッファ生成
-    cb_.Create();
-
+    // モデルのマテリアル用定数バッファを生成
+    model_.cbMaterial_.Create();
     // マテリアルを定数バッファへ転送
     model_.UpdateCB();
+
+
+    // 定数バッファ生成
+    cb_.Create();
 }
 
 void Object3D::Update(void)
@@ -76,9 +79,9 @@ void Object3D::Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture)
     InitDirectX* iDX = InitDirectX::GetInstance();
 
     // 頂点バッファ
-    iDX->GetCommandList()->IASetVertexBuffers(0, 1, &model_.mesh_.GetVBPtr()->GetVbView());
+    iDX->GetCommandList()->IASetVertexBuffers(0, 1, &model_.meshPtr_->GetVBPtr()->GetVbView());
     // インデックスバッファ
-    iDX->GetCommandList()->IASetIndexBuffer(&model_.mesh_.GetIBPtr()->GetIbView());
+    iDX->GetCommandList()->IASetIndexBuffer(&model_.meshPtr_->GetIBPtr()->GetIbView());
 
     // 定数バッファビュー（CBV）の設定コマンド
     iDX->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
@@ -89,7 +92,7 @@ void Object3D::Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture)
     iDX->GetCommandList()->SetGraphicsRootDescriptorTable(0, texture);
 
     // 描画コマンドリスト
-    iDX->GetCommandList()->DrawIndexedInstanced((uint32_t)model_.mesh_.GetIBPtr()->GetIndicesNum(), 1, 0, 0, 0);
+    iDX->GetCommandList()->DrawIndexedInstanced((uint32_t)model_.meshPtr_->GetIBPtr()->GetIndicesNum(), 1, 0, 0, 0);
 }
 
 void Object3D::Draw(const fsPath& path)

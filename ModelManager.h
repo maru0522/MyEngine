@@ -56,7 +56,7 @@ public:
     void UpdateCB(void);
 
     // 変数
-    Mesh mesh_;
+    Mesh* meshPtr_;
     Material_t material_;
 
     ConstBuffer<CBMaterial_t> cbMaterial_;
@@ -69,6 +69,7 @@ private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
+    using Material_t = Model_t::Material_t;
 
 public:
     // 関数
@@ -76,16 +77,18 @@ public:
     void LoadOBJ(const fsPath& path);
 
 private:
-    void LoadMaterial(Model_t& model, const fsPath& path);
+    void LoadMaterial(Model_t& model,const fsPath& path);
 
     // 変数
+    // << モデルの頂点データ保管コンテナ >>
+    // << モデルの保管コンテナ >>
+    std::map<fsPath, Mesh> meshes_;
     std::map<fsPath, Model_t> models_;
 
     TextureManager* texMPtr_;
 
 public:
     // setter・getter
-    Model_t GetModel(const fsPath& path) const;
-    const Model_t* GetModelPtr(const fsPath& path) const;
+    Model_t GetModel(const fsPath& path);
     //const Model_t* GetModelPtrByNickname(const std::string nickname);
 };
