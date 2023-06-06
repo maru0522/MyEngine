@@ -26,6 +26,7 @@ using namespace DirectX;
 #include "Sprite.h"
 #include "ModelManager.h"
 #include "Object3D.h"
+#include "SceneManager.h"
 
 using namespace Microsoft::WRL;
 using BlendMode = HelperGraphicPipeline::BlendMode;
@@ -70,10 +71,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     // Object3D
     Object3D::StaticInitialize(modelMPtr.get(), texMPtr.get(), cameraMPtr.get());
 
-#pragma endregion
+    // sceneManager
+    std::unique_ptr<SceneManager> sceneM{ std::make_unique<SceneManager>() };
+    sceneM->Initialize(SceneFactory::Usage::DEMO);
 
-    Sprite sprite("Resources/namida.png");
-    Object3D obj3d("Resources/cube/cube.obj");
+#pragma endregion
 
     // ゲームループ
     while (true) {
@@ -91,18 +93,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         Input::UpdateAll();
         cameraMPtr->Update();
 
-        //sprite.Update();
         Object3D::UpdateCBMatViewPerse();
-        obj3d.Update();
+        sceneM->Update();
 
         iDXPtr->PreDraw();
         Sprite::PreDraw();
-        sprite.Draw();
+        sceneM->Draw2d();
 
         Object3D::PreDraw();
-        obj3d.Draw();
-        // cubeの画像にスプライトで表示しているものを起用
-        //obj3d.Draw("Resources/namida.png");
+        sceneM->Draw3d();
 
         iDXPtr->PostDraw();
 #pragma endregion

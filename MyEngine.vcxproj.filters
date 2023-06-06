@@ -73,6 +73,21 @@
     <ClCompile Include="CameraManager.cpp">
       <Filter>Entity\Other</Filter>
     </ClCompile>
+    <ClCompile Include="IScene.cpp">
+      <Filter>Scene\common</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneFactory.cpp">
+      <Filter>Scene\common</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene\common</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scene\unique</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoScene.cpp">
+      <Filter>Scene\unique</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -138,6 +153,21 @@
     <ClInclude Include="CameraManager.h">
       <Filter>Entity\Other</Filter>
     </ClInclude>
+    <ClInclude Include="IScene.h">
+      <Filter>Scene\common</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneFactory.h">
+      <Filter>Scene\common</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene\common</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene\unique</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoScene.h">
+      <Filter>Scene\unique</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
@@ -177,6 +207,15 @@
     </Filter>
     <Filter Include="Entity\Other">
       <UniqueIdentifier>{be80ca21-6e4e-4a5a-ba10-9d145748f897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{6e20c086-ad8c-4ac7-814b-8f6102275be7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\common">
+      <UniqueIdentifier>{b773e0b0-4941-4e6e-9774-650579d32417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\unique">
+      <UniqueIdentifier>{dad46b77-8dcb-4733-b06d-74576f0825af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
