@@ -35,7 +35,7 @@ using namespace Microsoft::WRL;
 using BlendMode = HelperGraphicPipeline::BlendMode;
 
 // Windowsアプリでのエントリーポイント(main関数)
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+int32_t WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int32_t) {
 
     std::unique_ptr<FrameWork> game = std::make_unique<GameSystem>();
     game->Run();
