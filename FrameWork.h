@@ -7,6 +7,7 @@
 #include "ModelManager.h"
 #include "SceneManager.h"
 #include <memory>
+#include "ImguiController.h"
 
 class FrameWork
 {
@@ -32,5 +33,6 @@ protected:
     std::unique_ptr<TextureManager> texM_{ std::make_unique<TextureManager>() };                // textureManager
     std::unique_ptr<ModelManager> modelM_{ std::make_unique<ModelManager>(texM_.get()) };       // ModelManager
     std::unique_ptr<SceneManager> sceneM_{ std::make_unique<SceneManager>() };                  // sceneManager
+    std::unique_ptr<ImGuiController> imguiController_{ std::make_unique<ImGuiController>() };   // imguiController
 };
 

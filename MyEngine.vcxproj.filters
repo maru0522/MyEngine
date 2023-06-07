@@ -23,7 +23,6 @@
   <ItemGroup>
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="WorldCoordinate.cpp" />
     <ClCompile Include="Vector2.cpp">
       <Filter>Math</Filter>
@@ -92,6 +91,10 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="GameSystem.cpp" />
+    <ClCompile Include="main.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ImguiController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -176,6 +179,7 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="ImguiController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

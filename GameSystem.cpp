@@ -29,6 +29,8 @@ void GameSystem::Draw(void)
 
     // -----3Dオブジェクトの描画----- //
 
+    imguiController_->Draw();
+
     iDXPtr_->PostDraw();
 }
 

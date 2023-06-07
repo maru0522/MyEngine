@@ -1,7 +1,7 @@
 #include "FrameWork.h"
-#include "Input.h"
-#include "Sprite.h"
 #include "Object3D.h"
+#include "Sprite.h"
+#include "Input.h"
 
 void FrameWork::Run(void)
 {
@@ -43,6 +43,8 @@ void FrameWork::Initialize()
 
     // SceneManager初期化
     sceneM_->Initialize(SceneFactory::Usage::DEMO);
+    // ImguiController初期化
+    imguiController_->Initialize(wnd_.get());
 }
 
 void FrameWork::Update(void)
@@ -50,8 +52,14 @@ void FrameWork::Update(void)
     // 入力系クラス全て更新
     Input::UpdateAll();
 
+    // ImguiController更新開始
+    imguiController_->Begin();
+
     // SceneManager更新
     sceneM_->Update();
+
+    // ImguiController更新終了
+    imguiController_->End();
 
     // CameraManager更新
     CameraManager::GetInstance()->Update();
