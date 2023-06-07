@@ -107,7 +107,7 @@ void WndAPI::Delete(void)
     UnregisterClass(w_.lpszClassName, w_.hInstance);
 }
 
-void WndAPI::SetDisplay(int nCmdShow)
+void WndAPI::SetDisplay(int32_t nCmdShow)
 {
     ShowWindow(hwnd_, nCmdShow);
 }

@@ -34,7 +34,7 @@ namespace Math {
         }
 
         template<class T> // ³ = 1, 0 = 0, •‰ = -1
-        inline int Sign(const T arg_v) {
+        inline int32_t Sign(const T arg_v) {
             if (arg_v == 0) return 0;
             return arg_v > 0 ? 1 : -1;
         }

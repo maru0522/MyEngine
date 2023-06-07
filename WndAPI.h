@@ -24,7 +24,7 @@ public:
 
     // ウィンドウの表示状態を変更する関数
     // デフォルト:nCmdShow = SW_SHOW
-    void SetDisplay(int nCmdShow);
+    void SetDisplay(int32_t nCmdShow);
 
     // ウィンドウ固定用のメッセージループ処理
     // WM_QUITならFALSEを返す

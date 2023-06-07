@@ -19,7 +19,7 @@ public:
 
 private:
     // •Ï”
-    int waitFrame_{};
+    int32_t waitFrame_{};
     std::unique_ptr<IScene> currentScene_{ nullptr };
     std::unique_ptr<IScene> nextScene_{ nullptr };
 

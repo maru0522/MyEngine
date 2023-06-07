@@ -22,7 +22,7 @@ void ImGuiController::Initialize(WndAPI* wndPtr)
     CreateSRVHeap();
     ImGui_ImplDX12_Init(
         iDX->GetDevice(),
-        static_cast<int>(iDX->GetBackBufferCount()),
+        static_cast<int32_t>(iDX->GetBackBufferCount()),
         DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
         srvHeap_.Get(),
         srvHeap_->GetCPUDescriptorHandleForHeapStart(),

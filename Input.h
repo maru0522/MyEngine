@@ -23,13 +23,13 @@ namespace Input {
         static void Update(void);
 
         // 押した瞬間
-        static inline bool IsTrigger(UINT8 key) { return !keysPre_[key] && keys_[key]; }
+        static inline bool IsTrigger(uint8_t key) { return !keysPre_[key] && keys_[key]; }
 
         // 押されている時
-        static inline bool IsDown(UINT8 key) { return keys_[key]; }
+        static inline bool IsDown(uint8_t key) { return keys_[key]; }
 
         // 離された瞬間
-        static inline bool IsReleased(UINT8 key) { return keysPre_[key] && !keys_[key]; }
+        static inline bool IsReleased(uint8_t key) { return keysPre_[key] && !keys_[key]; }
 
     private:
         // 変数

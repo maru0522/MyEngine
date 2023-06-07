@@ -23,7 +23,7 @@ public:
     Mesh(void) = default;
     Mesh(const fsPath& path) : path_(path) {}
 
-    inline void CreateIB(const std::vector<unsigned short>& indices) { indexBuffer_.Create(indices); }
+    inline void CreateIB(const std::vector<uint16_t>& indices) { indexBuffer_.Create(indices); }
     inline void CreateVB(const std::vector<VertexPosNormalUv_t>& vertices) { vertexBuffer_.Create(vertices); }
 
     // setterEgetter
