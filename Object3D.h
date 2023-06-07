@@ -28,15 +28,11 @@ private:
     };
 
 public:
-    //enum class Type
-    //{
-    //    MUTABLE, // 可変 - 外観変更があるもの（例：自機とか敵とかのモデル）
-    //    IMMUTABLE, // 不変 - 外観変更がないもの（例：建物とか天球とか装飾系のモデル）
-    //};
-
     // 関数
-    static void StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr, CameraManager* camMPtr);
+    static void StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr);
+    // 透視投影行列を任意のタイミングで更新するための関数
     static void UpdateCBMatViewPerse(void);
+
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
     static void SetDrawBlendMode(BlendMode blendmode);
 
@@ -57,7 +53,6 @@ private:
 
     static ModelManager* modelMPtr_;
     static TextureManager* texMPtr_;
-    static CameraManager* camMPtr_;
     static ConstBuffer<CBMatViewPerse_t> cbMatViewPerse_;
 };
 

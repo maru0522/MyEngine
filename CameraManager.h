@@ -2,6 +2,8 @@
 #include <memory>
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "Sprite.h"
+#include "Object3D.h"
 
 class Camera
 {
@@ -56,7 +58,9 @@ class CameraManager
 {
 public:
     // ŠÖ”
-    CameraManager(void) : current_(nullptr) {};
+    static CameraManager* GetInstance(void);
+
+    
     void Update(void);
 
 private:
@@ -68,5 +72,12 @@ public:
     void SetCurrentCamera(Camera* cameraPtr);
 
     inline Camera* GetCurrentCamera(void) { return current_; }
+
+private:
+    // Singleton
+    CameraManager(void) : current_(nullptr) {};
+    ~CameraManager(void) {};
+    CameraManager(const CameraManager&) = delete;
+    CameraManager& operator=(const CameraManager&) = delete;
 };
 

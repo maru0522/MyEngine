@@ -45,11 +45,12 @@ private:
 
 public:
     // 関数
-    static void StaticInitialize(TextureManager* texMPtr, CameraManager* camMPtr);
+    static void StaticInitialize(TextureManager* texMPtr);
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
     static void SetDrawBlendMode(BlendMode blendmode);
 
-    static inline void UpdateCBMatOrthoGraphic(void) { cbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic_ = camMPtr_->GetCurrentCamera()->GetMatProjOrthoGraphic(); }
+    // 平行投影行列を任意のタイミングで更新するための関数
+    static void UpdateCBMatOrthoGraphic(void);
 
     Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickNameが優先される。
     void Update(void);
@@ -61,7 +62,6 @@ private:
 
     // 変数
     static TextureManager* texMPtr_;
-    static CameraManager* camMPtr_;
     static ConstBuffer<CBMatOrthoGraphic_t> cbMatOrthoGraphic_;
 
     Sprite* parent_;

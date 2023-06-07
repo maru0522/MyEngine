@@ -3,22 +3,22 @@
 
 ModelManager* Object3D::modelMPtr_{ nullptr };
 TextureManager* Object3D::texMPtr_{ nullptr };
-CameraManager* Object3D::camMPtr_{ nullptr };
 ConstBuffer<Object3D::CBMatViewPerse_t> Object3D::cbMatViewPerse_{};
 
-void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr, CameraManager* camMPtr)
+void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr)
 {
     modelMPtr_ = modelMPtr;
     texMPtr_ = texMPtr;
-    camMPtr_ = camMPtr;
     cbMatViewPerse_.Create();
-    UpdateCBMatViewPerse();
+
+    // ‰Šú‰»Žž‚ÍƒJƒƒ‰‚ª‘¶Ý‚µ‚È‚¢‚½‚ßCameraManager‚ÌSetCurrentCamera()Žž‚ÉŽÀs‚·‚é‚æ‚¤‚É‚·‚é
+    //UpdateCBMatViewPerse();
 }
 
 void Object3D::UpdateCBMatViewPerse(void)
 {
-    cbMatViewPerse_.GetConstBuffMap()->matView_ = camMPtr_->GetCurrentCamera()->GetMatView();
-    cbMatViewPerse_.GetConstBuffMap()->matPerspective_ = camMPtr_->GetCurrentCamera()->GetMatProjPerspective();
+    cbMatViewPerse_.GetConstBuffMap()->matView_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
+    cbMatViewPerse_.GetConstBuffMap()->matPerspective_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
 }
 
 void Object3D::PreDraw(BlendMode blendmode)

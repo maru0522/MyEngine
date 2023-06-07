@@ -2,6 +2,10 @@
 
 void DemoScene::Initialize(void)
 {
+    // カメラの座標設定
+    cameraPtr->SetPosition({ 0,0,-20 });
+    // カメラをマネージャーにセット
+    CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
 }
 
 void DemoScene::Update(void)

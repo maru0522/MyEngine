@@ -22,5 +22,6 @@ public:
     // •Ï”
     std::unique_ptr<Sprite> sprite_{ std::make_unique<Sprite>("Resources/namida.png") };
     std::unique_ptr<Object3D> obj3d_{ std::make_unique<Object3D>("Resources/cube/cube.obj") };
+    std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
 };
 

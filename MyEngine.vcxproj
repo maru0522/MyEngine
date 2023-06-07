@@ -85,6 +85,8 @@
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="FPSController.cpp" />
+    <ClCompile Include="FrameWork.cpp" />
+    <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="InitDirectX.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -158,6 +160,8 @@
     <ClInclude Include="DemoScene.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="FPSController.h" />
+    <ClInclude Include="FrameWork.h" />
+    <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InitDirectX.h" />

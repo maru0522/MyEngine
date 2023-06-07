@@ -37,13 +37,23 @@ void Camera::UpdateOrthoGraphic(void)
     matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::width_, WndAPI::height_);
 }
 
+CameraManager* CameraManager::GetInstance(void)
+{
+    static CameraManager cameraM;
+    return &cameraM;
+}
+
 void CameraManager::Update(void)
 {
+    if (!current_) return;
     current_->Update();
 }
 
 void CameraManager::SetCurrentCamera(Camera* cameraPtr)
 {
     current_ = cameraPtr;
+    current_->Update();
     current_->UpdateOrthoGraphic();
+    Sprite::UpdateCBMatOrthoGraphic();
+    Object3D::UpdateCBMatViewPerse();
 }

@@ -7,15 +7,15 @@
 #include "GraphicsPipeline.h"
 
 TextureManager* Sprite::texMPtr_{ nullptr };
-CameraManager* Sprite::camMPtr_{ nullptr };
 ConstBuffer<Sprite::CBMatOrthoGraphic_t> Sprite::cbMatOrthoGraphic_{};
 
-void Sprite::StaticInitialize(TextureManager* texMPtr, CameraManager* camMPtr)
+void Sprite::StaticInitialize(TextureManager* texMPtr)
 {
     texMPtr_ = texMPtr;
-    camMPtr_ = camMPtr;
     cbMatOrthoGraphic_.Create();
-    UpdateCBMatOrthoGraphic();
+
+    // 初期化時はカメラが存在しないためCameraManagerのSetCurrentCamera()時に実行するようにする
+    //UpdateCBMatOrthoGraphic();
 }
 
 void Sprite::PreDraw(BlendMode blendmode)
@@ -41,6 +41,14 @@ void Sprite::SetDrawBlendMode(BlendMode blendmode)
     // パイプラインステートとルートシグネチャの設定コマンド
     iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState_.Get());
     iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature_.Get());
+}
+
+void Sprite::UpdateCBMatOrthoGraphic(void)
+{
+    // cameraManagerのptr取得
+    CameraManager* cameraMPtr = CameraManager::GetInstance();
+    // 平行投影行列にカメラの保持する平行投影行列を代入
+    cbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic_ = cameraMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 Sprite::Sprite(const fsPath& path, const std::string& nickname) :

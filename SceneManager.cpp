@@ -23,6 +23,7 @@ void SceneManager::Initialize(SceneFactory::Usage firstScene)
 {
     // Å‰‚ÌƒV[ƒ“‚ð¶¬
     currentScene_ = sceneFactory_->CreateScene(firstScene);
+    currentScene_->Initialize();
 }
 
 void SceneManager::Update(void)

@@ -88,6 +88,10 @@
     <ClCompile Include="DemoScene.cpp">
       <Filter>Scene\unique</Filter>
     </ClCompile>
+    <ClCompile Include="FrameWork.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -168,6 +172,10 @@
     <ClInclude Include="DemoScene.h">
       <Filter>Scene\unique</Filter>
     </ClInclude>
+    <ClInclude Include="FrameWork.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
