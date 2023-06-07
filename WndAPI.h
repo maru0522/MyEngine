@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <cstdint>
 
 class WndAPI
 {
@@ -24,6 +25,7 @@ public:
 
     // ウィンドウの表示状態を変更する関数
     // デフォルト:nCmdShow = SW_SHOW
+    // https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
     void SetDisplay(int32_t nCmdShow);
 
     // ウィンドウ固定用のメッセージループ処理

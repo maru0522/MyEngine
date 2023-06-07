@@ -109,7 +109,7 @@ void WndAPI::Delete(void)
 
 void WndAPI::SetDisplay(int32_t nCmdShow)
 {
-    ShowWindow(hwnd_, nCmdShow);
+    ShowWindow(hwnd_, static_cast<int>(nCmdShow));
 }
 
 bool WndAPI::GetKeepWindow()
