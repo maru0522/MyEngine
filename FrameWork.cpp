@@ -29,15 +29,15 @@ void FrameWork::Initialize()
     Input::InitializeAll(wnd_.get());
     // TextureManager初期化
     texM_->Initialize();
+    // TextureManager - テクスチャ読み込み
+    texM_->LoadFolder("Resources");
+    // ModelManager - 3Dモデル読み込み
+    modelM_->LoadOBJ("Resources/cube/cube.obj");
     // GraphicsPipeline初期化
     gplPtr_->Initialize();
 
     // Sprite初期化
     Sprite::StaticInitialize(texM_.get());
-    // ModelManager - 3Dモデル読み込み
-    modelM_->LoadOBJ("Resources/cube/cube.obj");
-    // TextureManager - テクスチャ読み込み
-    texM_->LoadFolder("Resources");
     // Object3D初期化
     Object3D::StaticInitialize(modelM_.get(), texM_.get());
 
@@ -63,6 +63,9 @@ void FrameWork::Update(void)
 
     // CameraManager更新
     CameraManager::GetInstance()->Update();
+
+    // カメラの透視投影行列をObject3D用の定数に送る
+    Object3D::UpdateCBMatViewPerse();
 }
 
 void FrameWork::Finalize(void)
