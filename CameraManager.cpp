@@ -16,10 +16,10 @@ Camera::Camera(const Vector3& eye) :
 
 void Camera::Update(void)
 {
-    if (KEYS::IsDown(DIK_UP)) eye_.z += 10;
-    if (KEYS::IsDown(DIK_DOWN)) eye_.z -= 10;
-    if (KEYS::IsDown(DIK_LEFT)) eye_.x -= 10;
-    if (KEYS::IsDown(DIK_RIGHT)) eye_.x += 10;
+    if (KEYS::IsDown(DIK_UP)) eye_.z += 1;
+    if (KEYS::IsDown(DIK_DOWN)) eye_.z -= 1;
+    if (KEYS::IsDown(DIK_LEFT)) eye_.x -= 1;
+    if (KEYS::IsDown(DIK_RIGHT)) eye_.x += 1;
     WorldCoordinate coordinate;
     coordinate.SetPosition(eye_);
     coordinate.SetRotation(rotation_);
@@ -29,18 +29,18 @@ void Camera::Update(void)
         matView_ = Math::Matrix::ViewLookAtLH(eye_, *targetPtr_, up_) :
         matView_ = Math::Matrix::ViewLookToLH(coordinate.GetPosition(), coordinate.GetAxisZ(), coordinate.GetAxisY());
 
-    matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::width_, WndAPI::height_, nearZ_, farZ_);
+    matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::sWidth_, WndAPI::sHeight_, nearZ_, farZ_);
 }
 
 void Camera::UpdateOrthoGraphic(void)
 {
-    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::width_, WndAPI::height_);
+    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::sWidth_, WndAPI::sHeight_);
 }
 
 CameraManager* CameraManager::GetInstance(void)
 {
-    static CameraManager cameraM;
-    return &cameraM;
+    static CameraManager sCameraM;
+    return &sCameraM;
 }
 
 void CameraManager::Update(void)

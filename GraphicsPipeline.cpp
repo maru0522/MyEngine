@@ -7,9 +7,9 @@
 
 GraphicsPipeline* GraphicsPipeline::GetInstance(void)
 {
-    static GraphicsPipeline instance{};
+    static GraphicsPipeline sInstance{};
 
-    return &instance;
+    return &sInstance;
 }
 
 const GraphicsPipeline::Pipeline_t& GraphicsPipeline::GetPipeline2d(BlendMode mode) const

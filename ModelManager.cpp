@@ -209,8 +209,8 @@ Model_t ModelManager::GetModel(const fsPath& path)
 void Model_t::UpdateCB(void)
 {
     // 定数バッファのマテリアルの値を更新する
-    cbMaterial_.GetConstBuffMap()->ambient = material_.ambient_;
-    cbMaterial_.GetConstBuffMap()->diffuse = material_.diffuse_;
-    cbMaterial_.GetConstBuffMap()->specular = material_.specular_;
-    cbMaterial_.GetConstBuffMap()->alpha = material_.alpha_;
+    cbMaterial_.GetConstBuffMap()->ambient_ = material_.ambient_;
+    cbMaterial_.GetConstBuffMap()->diffuse_ = material_.diffuse_;
+    cbMaterial_.GetConstBuffMap()->specular_ = material_.specular_;
+    cbMaterial_.GetConstBuffMap()->alpha_ = material_.alpha_;
 }

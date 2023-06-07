@@ -59,7 +59,7 @@ void ImGuiController::CreateSRVHeap(void)
 {
     D3D12_DESCRIPTOR_HEAP_DESC desc{};
     desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    desc.NumDescriptors = MAX_SRV_COUNT_FOR_IMGUI;
+    desc.NumDescriptors = sMAX_SRV_COUNT_FOR_IMGUI;
     desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
     HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));

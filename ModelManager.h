@@ -44,12 +44,12 @@ public:
 
     struct CBMaterial_t // 定数バッファ用構造体
     {
-        DirectX::XMFLOAT3 ambient;  // ambient
+        DirectX::XMFLOAT3 ambient_;  // ambient
         float_t pad1; // padding
-        DirectX::XMFLOAT3 diffuse;  // diffuse
+        DirectX::XMFLOAT3 diffuse_;  // diffuse
         float_t pad2; // padding
-        DirectX::XMFLOAT3 specular; // specular
-        float_t alpha;              // alpha
+        DirectX::XMFLOAT3 specular_; // specular
+        float_t alpha_;              // alpha
     };
 
     // 関数

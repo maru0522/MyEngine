@@ -6,13 +6,13 @@
 #include "TextureManager.h"
 #include "GraphicsPipeline.h"
 
-TextureManager* Sprite::texMPtr_{ nullptr };
-ConstBuffer<Sprite::CBMatOrthoGraphic_t> Sprite::cbMatOrthoGraphic_{};
+TextureManager* Sprite::sTexMPtr_{ nullptr };
+ConstBuffer<Sprite::CBMatOrthoGraphic_t> Sprite::sCbMatOrthoGraphic_{};
 
 void Sprite::StaticInitialize(TextureManager* texMPtr)
 {
-    texMPtr_ = texMPtr;
-    cbMatOrthoGraphic_.Create();
+    sTexMPtr_ = texMPtr;
+    sCbMatOrthoGraphic_.Create();
 
     // 初期化時はカメラが存在しないためCameraManagerのSetCurrentCamera()時に実行するようにする
     //UpdateCBMatOrthoGraphic();
@@ -48,7 +48,7 @@ void Sprite::UpdateCBMatOrthoGraphic(void)
     // cameraManagerのptr取得
     CameraManager* cameraMPtr = CameraManager::GetInstance();
     // 平行投影行列にカメラの保持する平行投影行列を代入
-    cbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic_ = cameraMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    sCbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic_ = cameraMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 Sprite::Sprite(const fsPath& path, const std::string& nickname) :
@@ -57,8 +57,8 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     imagePtr_(nullptr)
 {
     nickname == "noAssign" ?
-        imagePtr_ = texMPtr_->GetImagePtr(path) :
-        imagePtr_ = texMPtr_->GetImagePtrByNickname(nickname);
+        imagePtr_ = sTexMPtr_->GetImagePtr(path) :
+        imagePtr_ = sTexMPtr_->GetImagePtrByNickname(nickname);
 
     size_.x = (float)imagePtr_->buff_->GetDesc().Width;
     size_.y = (float)imagePtr_->buff_->GetDesc().Height;
@@ -97,7 +97,7 @@ void Sprite::Draw(void)
 
     // 定数バッファビュー(CBV)の設定コマンド
     iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cbMatOrthoGraphic_.GetBuffer()->GetGPUVirtualAddress());
+    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, sCbMatOrthoGraphic_.GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
     iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle_);
@@ -138,10 +138,10 @@ void Sprite::TransferVertex(void)
     float texTop{ cutStartPoint_.y / imagePtr_->buff_->GetDesc().Height };
     float texBottom{ (cutStartPoint_.y + cutLength_.y) / imagePtr_->buff_->GetDesc().Height };
 
-    vertices[0].uv = { texLeft, texBottom };
-    vertices[1].uv = { texLeft,    texTop };
-    vertices[2].uv = { texRight, texBottom };
-    vertices[3].uv = { texRight,    texTop };
+    vertices[0].uv_ = { texLeft, texBottom };
+    vertices[1].uv_ = { texLeft,    texTop };
+    vertices[2].uv_ = { texRight, texBottom };
+    vertices[3].uv_ = { texRight,    texTop };
 
     vertexBuffer_.TransferVertexToBuffer(vertices);
 }

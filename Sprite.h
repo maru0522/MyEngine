@@ -39,8 +39,8 @@ private:
 
     struct VertexPosUv_t // 頂点バッファ用"データ"構造体
     {
-        Vector3 pos; // xyz座標
-        Vector2 uv; // uv座標
+        Vector3 pos_; // xyz座標
+        Vector2 uv_; // uv座標
     };
 
 public:
@@ -61,8 +61,8 @@ private:
     void UpdateMatrix(void);
 
     // 変数
-    static TextureManager* texMPtr_;
-    static ConstBuffer<CBMatOrthoGraphic_t> cbMatOrthoGraphic_;
+    static TextureManager* sTexMPtr_;
+    static ConstBuffer<CBMatOrthoGraphic_t> sCbMatOrthoGraphic_;
 
     Sprite* parent_;
 

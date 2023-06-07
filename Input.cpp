@@ -5,30 +5,30 @@
 static Microsoft::WRL::ComPtr<IDirectInput8> directInput_{ nullptr }; // DirectInput生成
 
 #pragma region keyboard
-Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::Keyboard::keyboard_{ nullptr };
-std::array<BYTE, 256> Input::Keyboard::keysPre_{ 0 };
-std::array<BYTE, 256> Input::Keyboard::keys_{ 0 };
+Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::Keyboard::sKeyboard_{ nullptr };
+std::array<BYTE, 256> Input::Keyboard::sKeysPre_{ 0 };
+std::array<BYTE, 256> Input::Keyboard::sKeys_{ 0 };
 #pragma endregion
 
 #pragma region diPad
-Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::DIPad::diPad_{ nullptr };
-DIJOYSTATE Input::DIPad::diStatePre_{ 0 };
-DIJOYSTATE Input::DIPad::diState_{ 0 };
-bool Input::DIPad::isConnect_{ false };
+Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::DIPad::sDiPad_{ nullptr };
+DIJOYSTATE Input::DIPad::sDiStatePre_{ 0 };
+DIJOYSTATE Input::DIPad::sDiState_{ 0 };
+bool Input::DIPad::sIsConnect_{ false };
 #pragma endregion
 
 #pragma region xPad
-Input::XPad::CustomDeadZone Input::XPad::deadZone_{ 0 };
-XINPUT_STATE Input::XPad::xStatePre_{ 0 };
-XINPUT_STATE Input::XPad::xState_{ 0 };
+Input::XPad::CustomDeadZone Input::XPad::sDeadZone_{ 0 };
+XINPUT_STATE Input::XPad::sXStatePre_{ 0 };
+XINPUT_STATE Input::XPad::sXState_{ 0 };
 bool Input::XPad::isConnect_{ false };
 #pragma endregion
 
 #pragma region mouse
-Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::Mouse::mouse_{nullptr};
-Input::Mouse::MouseState Input::Mouse::mouseStatePre_{};
-Input::Mouse::MouseState Input::Mouse::mouseState_{};
-WndAPI* Input::Mouse::wndApiPtr_;
+Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::Mouse::sMouse_{nullptr};
+Input::Mouse::MouseState Input::Mouse::sMouseStatePre_{};
+Input::Mouse::MouseState Input::Mouse::sMouseState_{};
+WndAPI* Input::Mouse::sWndApiPtr_;
 #pragma endregion
 
 void Input::Keyboard::Initialize(WndAPI* p_wndapi)
@@ -42,31 +42,31 @@ void Input::Keyboard::Initialize(WndAPI* p_wndapi)
     }
 
     // キーボードデバイスの生成
-    hr = directInput_->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
+    hr = directInput_->CreateDevice(GUID_SysKeyboard, &sKeyboard_, NULL);
     assert(SUCCEEDED(hr));
 
     // 入力データ形式のセット
-    hr = keyboard_->SetDataFormat(&c_dfDIKeyboard); // 標準形式
+    hr = sKeyboard_->SetDataFormat(&c_dfDIKeyboard); // 標準形式
     assert(SUCCEEDED(hr));
 
     // 排他制御レベルのセット
-    hr = keyboard_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+    hr = sKeyboard_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
     assert(SUCCEEDED(hr));
 }
 
 void Input::Keyboard::Update(void)
 {
     // preKeysへ情報保存
-    memcpy(keysPre_.data(), keys_.data(), sizeof(keys_));
+    memcpy(sKeysPre_.data(), sKeys_.data(), sizeof(sKeys_));
 
     // キーボード情報の取得
-    keyboard_->Acquire();
+    sKeyboard_->Acquire();
 
     // キーの入力状態の初期化
-    keys_.fill(0);
+    sKeys_.fill(0);
 
     // キー全ての入力状態の取得
-    keyboard_->GetDeviceState((DWORD)size(keys_), keys_.data());
+    sKeyboard_->GetDeviceState((DWORD)size(sKeys_), sKeys_.data());
 }
 
 //void Input::DIPad::Initialize(WndAPI* p_wndapi)
@@ -116,16 +116,16 @@ void Input::Keyboard::Update(void)
 
 void Input::XPad::Initialize(void)
 {
-    XInputGetState(0, &xState_);
+    XInputGetState(0, &sXState_);
 }
 
 void Input::XPad::Update(void)
 {
-    xStatePre_ = xState_;
+    sXStatePre_ = sXState_;
 
-    ZeroMemory(&xState_, sizeof(XINPUT_STATE));
+    ZeroMemory(&sXState_, sizeof(XINPUT_STATE));
 
-    if (XInputGetState(0, &xState_) == ERROR_SUCCESS) {
+    if (XInputGetState(0, &sXState_) == ERROR_SUCCESS) {
         isConnect_ = true;
     }
     else {
@@ -137,11 +137,11 @@ const Vector2 Input::XPad::GetLStick(void)
 {
     Vector2 tmp;
 
-    tmp.x = xState_.Gamepad.sThumbLX;
-    tmp.y = xState_.Gamepad.sThumbLY;
+    tmp.x = sXState_.Gamepad.sThumbLX;
+    tmp.y = sXState_.Gamepad.sThumbLY;
 
-    if ((xState_.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && xState_.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
-        (xState_.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && xState_.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
+    if ((sXState_.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && sXState_.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
+        (sXState_.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && sXState_.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
         tmp.x = 0;
         tmp.y = 0;
     }
@@ -151,18 +151,18 @@ const Vector2 Input::XPad::GetLStick(void)
 
 const Vector2 Input::XPad::GetLStickRaw(void)
 {
-    return { (float)xState_.Gamepad.sThumbLX, (float)xState_.Gamepad.sThumbLY };
+    return { (float)sXState_.Gamepad.sThumbLX, (float)sXState_.Gamepad.sThumbLY };
 }
 
 const Vector2 Input::XPad::GetLStickCustom(void)
 {
     Vector2 tmp;
 
-    tmp.x = xState_.Gamepad.sThumbLX;
-    tmp.y = xState_.Gamepad.sThumbLY;
+    tmp.x = sXState_.Gamepad.sThumbLX;
+    tmp.y = sXState_.Gamepad.sThumbLY;
 
-    if ((xState_.Gamepad.sThumbLX < deadZone_.xLeftValueX && xState_.Gamepad.sThumbLX > -deadZone_.xLeftValueX) &&
-        (xState_.Gamepad.sThumbLY < deadZone_.xLeftValueY && xState_.Gamepad.sThumbLY > -deadZone_.xLeftValueY)) {
+    if ((sXState_.Gamepad.sThumbLX < sDeadZone_.xLeftValueX_ && sXState_.Gamepad.sThumbLX > -sDeadZone_.xLeftValueX_) &&
+        (sXState_.Gamepad.sThumbLY < sDeadZone_.xLeftValueY_ && sXState_.Gamepad.sThumbLY > -sDeadZone_.xLeftValueY_)) {
         tmp.x = 0;
         tmp.y = 0;
     }
@@ -174,11 +174,11 @@ const Vector2 Input::XPad::GetRStick(void)
 {
     Vector2 tmp;
 
-    tmp.x = xState_.Gamepad.sThumbRX;
-    tmp.y = xState_.Gamepad.sThumbRY;
+    tmp.x = sXState_.Gamepad.sThumbRX;
+    tmp.y = sXState_.Gamepad.sThumbRY;
 
-    if ((xState_.Gamepad.sThumbRX <  XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && xState_.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
-        (xState_.Gamepad.sThumbRY <  XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && xState_.Gamepad.sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+    if ((sXState_.Gamepad.sThumbRX <  XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && sXState_.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
+        (sXState_.Gamepad.sThumbRY <  XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && sXState_.Gamepad.sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
         tmp.x = 0;
         tmp.y = 0;
     }
@@ -188,18 +188,18 @@ const Vector2 Input::XPad::GetRStick(void)
 
 const Vector2 Input::XPad::GetRStickRaw(void)
 {
-    return { (float)xState_.Gamepad.sThumbRX, (float)xState_.Gamepad.sThumbRY };
+    return { (float)sXState_.Gamepad.sThumbRX, (float)sXState_.Gamepad.sThumbRY };
 }
 
 const Vector2 Input::XPad::GetRStickCustom(void)
 {
     Vector2 tmp;
 
-    tmp.x = xState_.Gamepad.sThumbRX;
-    tmp.y = xState_.Gamepad.sThumbRY;
+    tmp.x = sXState_.Gamepad.sThumbRX;
+    tmp.y = sXState_.Gamepad.sThumbRY;
 
-    if ((xState_.Gamepad.sThumbRX < deadZone_.xRightValueX && xState_.Gamepad.sThumbRX > -deadZone_.xRightValueX) &&
-        (xState_.Gamepad.sThumbRY <  deadZone_.xRightValueY && xState_.Gamepad.sThumbRY > -deadZone_.xRightValueY)) {
+    if ((sXState_.Gamepad.sThumbRX < sDeadZone_.xRightValueX_ && sXState_.Gamepad.sThumbRX > -sDeadZone_.xRightValueX_) &&
+        (sXState_.Gamepad.sThumbRY < sDeadZone_.xRightValueY_ && sXState_.Gamepad.sThumbRY > -sDeadZone_.xRightValueY_)) {
         tmp.x = 0;
         tmp.y = 0;
     }
@@ -221,10 +221,10 @@ void Input::XPad::Vibrate(int32_t lPower, int32_t rPower)
 
 void Input::XPad::SetDeadZone(const Vector2& leftValueXY, const Vector2& rightValueXY)
 {
-    deadZone_.xLeftValueX = (uint16_t)leftValueXY.x;
-    deadZone_.xLeftValueY = (uint16_t)leftValueXY.y;
-    deadZone_.xRightValueX = (uint16_t)rightValueXY.x;
-    deadZone_.xRightValueY = (uint16_t)rightValueXY.y;
+    sDeadZone_.xLeftValueX_ = (uint16_t)leftValueXY.x;
+    sDeadZone_.xLeftValueY_ = (uint16_t)leftValueXY.y;
+    sDeadZone_.xRightValueX_ = (uint16_t)rightValueXY.x;
+    sDeadZone_.xRightValueY_ = (uint16_t)rightValueXY.y;
 }
 
 void Input::InitializeAll(WndAPI* p_wndapi)
@@ -254,38 +254,38 @@ void Input::Mouse::Initialize(WndAPI* p_wndapi)
     }
 
     // マウスデバイスの生成
-    hr = directInput_->CreateDevice(GUID_SysMouse, &mouse_, NULL);
+    hr = directInput_->CreateDevice(GUID_SysMouse, &sMouse_, NULL);
     assert(SUCCEEDED(hr));
 
     // 入力データ形式のセット
-    hr = mouse_->SetDataFormat(&c_dfDIMouse);
+    hr = sMouse_->SetDataFormat(&c_dfDIMouse);
     assert(SUCCEEDED(hr));
 
     // 排他制御レベルのセット
-    hr = mouse_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+    hr = sMouse_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
     assert(SUCCEEDED(hr));
 
     // ポインタ貰う
-    wndApiPtr_ = p_wndapi;
+    sWndApiPtr_ = p_wndapi;
 }
 
 void Input::Mouse::Update(void)
 {
     // 最新の情報を取得
-    mouse_->Acquire();
-    mouse_->Poll();
+    sMouse_->Acquire();
+    sMouse_->Poll();
 
     // 1F前の情報
-    mouseStatePre_ = mouseState_;
+    sMouseStatePre_ = sMouseState_;
 
     // 入力状態を取得
-    mouse_->GetDeviceState(sizeof(mouseState_), &mouseState_);
+    sMouse_->GetDeviceState(sizeof(sMouseState_), &sMouseState_);
 
     // 位置を取得
     POINT pos;
     GetCursorPos(&pos);
-    ScreenToClient(wndApiPtr_->GetHwnd(), &pos);
+    ScreenToClient(sWndApiPtr_->GetHwnd(), &pos);
 
-    mouseState_.cursorPos2d_ = { (float)pos.x,(float)pos.y };
-    mouseState_.scroll_ = (float)mouseState_.mState_.lZ;
+    sMouseState_.cursorPos2d_ = { (float)pos.x,(float)pos.y };
+    sMouseState_.scroll_ = (float)sMouseState_.mState_.lZ;
 }

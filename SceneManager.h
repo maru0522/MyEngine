@@ -10,7 +10,7 @@ public:
     SceneManager(void);
     ~SceneManager(void);
 
-    void RequestChangeScene(std::unique_ptr<IScene>& nextScene, int waitFrame = 0);
+    void RequestChangeScene(std::unique_ptr<IScene>& nextScene, int32_t waitFrame = 0);
 
     void Initialize(SceneFactory::Usage firstScene = SceneFactory::Usage::DEMO);
     void Update(void);

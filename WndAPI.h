@@ -10,12 +10,12 @@ public:
 
     // 静的変数
     // ウィンドウサイズ
-    static constexpr size_t width_{ 1280 };
-    static constexpr size_t height_{ 720 };
+    static constexpr size_t sWidth_{ 1280 };
+    static constexpr size_t sHeight_{ 720 };
 
 private:
     // ウィンドウクラス名
-    static const wchar_t windowClassName_[];
+    static const wchar_t sWindowClassName_[];
 
 public:
     // 関数

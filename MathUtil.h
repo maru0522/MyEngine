@@ -2,8 +2,8 @@
 #include <random>
 #include <cmath>
 
-static std::random_device seed_gen;
-static std::mt19937 engine(seed_gen());
+static std::random_device sSeed_gen;
+static std::mt19937 sEngine(sSeed_gen());
 
 namespace Math {
     constexpr float PI{ 3.14159265f };
@@ -17,7 +17,7 @@ namespace Math {
 
             std::uniform_real_distribution<> dist1(min, max);
 
-            return static_cast<T>(dist1(engine));
+            return static_cast<T>(dist1(sEngine));
         }
 
         template<typename T> // プリミティブ型なら参照は無い方が早い？？
