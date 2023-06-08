@@ -413,9 +413,14 @@ void InitDirectX::ClearRTV(void)
     rtvHandle.ptr += bbIndex * device_->GetDescriptorHandleIncrementSize(rtvDescHeapDesc_.Type);
 
     // 何色でクリアするのか設定
-    FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
+    std::vector<FLOAT> clearColor;
+    clearColor.emplace_back(0.1f);
+    clearColor.emplace_back(0.25f);
+    clearColor.emplace_back(0.5f);
+    clearColor.emplace_back(0.f);
+    //FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
     // RTVをクリアする関数をコマンドリストに積む
-    commandList_->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+    commandList_->ClearRenderTargetView(rtvHandle, clearColor.data(), 0, nullptr);
 }
 
 void InitDirectX::ClearDepthBuff(void)
