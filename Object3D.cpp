@@ -29,9 +29,9 @@ void Object3D::PreDraw(BlendMode blendmode)
     // プリミティブ形状の設定コマンド
     iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 三角形リスト
 
-    ID3D12DescriptorHeap* ppHeaps[] = { iDX->GetDescHeap_t()->GetDescHeap() };
+    std::vector<ID3D12DescriptorHeap*> ppHeaps = { iDX->GetDescHeap_t()->GetDescHeap() };
     // SRVヒープの設定コマンド
-    iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+    iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     // パイプラインステートとルートシグネチャの設定コマンド
     iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState_.Get());

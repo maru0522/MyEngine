@@ -180,24 +180,24 @@ void TextureManager::GenerateMissingImage(void)
     constexpr size_t imageDataCount{ imageLength * imageLength };
 
     // イメージデータ配列
-    Vector4* imageData{ new Vector4[imageDataCount] };
+    std::vector<Vector4> imageData;
 
     // 生成
     for (size_t i = 0; i < imageDataCount; i++) {
         if (i < 32513) {
             if (i % 256 < 128) {
-                imageData[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
+                imageData.emplace_back(Vector4{ 0.0f, 0.0f, 0.0f, 1.0f });
             }
             else if (i % 256 >= 128) {
-                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
+                imageData.emplace_back(Vector4{ 0.5f, 0.5f, 0.5f, 1.0f });
             }
         }
         else {
             if (i % 256 < 128) {
-                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
+                imageData.emplace_back(Vector4{ 0.5f, 0.5f, 0.5f, 1.0f });
             }
             else if (i % 256 >= 128) {
-                imageData[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
+                imageData.emplace_back(Vector4{ 0.0f, 0.0f, 0.0f, 1.0f });
             }
         }
     }
@@ -240,13 +240,10 @@ void TextureManager::GenerateMissingImage(void)
     hr = tempImg.buff_->WriteToSubresource(
         0,
         nullptr,		// 全領域へコピー
-        imageData,	// 元データアドレス
+        imageData.data(),	// 元データアドレス
         sizeof(DirectX::XMFLOAT4) * imageLength,    // 1ラインサイズ
         sizeof(DirectX::XMFLOAT4) * imageDataCount  // 全サイズ
     );
-
-    //イメージデータ解放
-    delete[] imageData;
 
     assert(SUCCEEDED(hr));
 #pragma endregion

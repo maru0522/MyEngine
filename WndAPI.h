@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <cstdint>
+#include <string>
 
 class WndAPI
 {
@@ -15,7 +16,7 @@ public:
 
 private:
     // ウィンドウクラス名
-    static const wchar_t sWindowClassName_[];
+    static const std::wstring sWindowClassName_;
 
 public:
     // 関数

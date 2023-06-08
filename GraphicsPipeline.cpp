@@ -42,14 +42,11 @@ void GraphicsPipeline::Initialize(void)
 void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
 {
     // 頂点レイアウト
-    D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-        {   // xyz座標
-            "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-        },
-        { // uv座標
-            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-        },
-    };
+    std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout;
+    // xyz座標
+    inputLayout.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    // uv座標
+    inputLayout.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
 
     // blob宣言
     std::unique_ptr<Blob_t> blobs{ std::make_unique<Blob_t>() };
@@ -149,8 +146,8 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
 #pragma endregion
 
     // 頂点レイアウトの設定
-    pipelineDesc.InputLayout.pInputElementDescs = inputLayout;
-    pipelineDesc.InputLayout.NumElements = _countof(inputLayout);
+    pipelineDesc.InputLayout.pInputElementDescs = inputLayout.data();
+    pipelineDesc.InputLayout.NumElements = (UINT)inputLayout.size();
 
     // 図形の形状設定
     pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -236,23 +233,13 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
 void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
 {
     // 頂点レイアウト
-    D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-        { // xyz座標(1行で書いたほうが見やすい)
-            "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-            D3D12_APPEND_ALIGNED_ELEMENT,
-            D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-        },
-        { // 法線ベクトル（1行書いたほうがわかりやすい)
-            "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,0,
-            D3D12_APPEND_ALIGNED_ELEMENT,
-            D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
-        },
-        { // uv座標(1行で書いたほうが見やすい)
-            "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
-            D3D12_APPEND_ALIGNED_ELEMENT,
-            D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-        },
-    };
+    std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout;
+    // xyz座標
+    inputLayout.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    // 法線ベクトル
+    inputLayout.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 });
+    // uv座標
+    inputLayout.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
 
     // blob宣言
     std::unique_ptr<Blob_t> blobs{ std::make_unique<Blob_t>() };
@@ -352,8 +339,8 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
 #pragma endregion
 
     // 頂点レイアウトの設定
-    pipelineDesc.InputLayout.pInputElementDescs = inputLayout;
-    pipelineDesc.InputLayout.NumElements = _countof(inputLayout);
+    pipelineDesc.InputLayout.pInputElementDescs = inputLayout.data();
+    pipelineDesc.InputLayout.NumElements = (UINT)inputLayout.size();
 
     // 図形の形状設定
     pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;

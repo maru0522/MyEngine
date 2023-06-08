@@ -49,8 +49,8 @@ void ImGuiController::Draw(void)
 {
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-    ID3D12DescriptorHeap* ppHeaps[] = { srvHeap_.Get() };
-    iDX->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+    std::vector<ID3D12DescriptorHeap*> ppHeaps = { srvHeap_.Get() };
+    iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), iDX->GetCommandList());
 }

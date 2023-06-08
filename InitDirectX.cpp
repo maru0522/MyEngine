@@ -111,8 +111,8 @@ void InitDirectX::PostDraw(void)
     assert(SUCCEEDED(hr));
 
     // コマンドリストの実行
-    ID3D12CommandList* commandLists[] = { commandList_.Get() };
-    commandQueue_->ExecuteCommandLists(1, commandLists);
+    std::vector<ID3D12CommandList*> commandLists = { commandList_.Get() };
+    commandQueue_->ExecuteCommandLists(1, commandLists.data());
     // 画面に表示するバッファをフリップ（裏表の入替え）
     hr = swapChain_->Present(1, 0);
     assert(SUCCEEDED(hr));
@@ -226,17 +226,17 @@ void InitDirectX::SuppressErrors(void)
     }
 
     //抑制するエラー 
-    D3D12_MESSAGE_ID denyIds[] = {
+    std::vector<D3D12_MESSAGE_ID> denyIds = {
         D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
     };
 
     //抑制される表示レベル
-    D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+    std::vector<D3D12_MESSAGE_SEVERITY> severities = { D3D12_MESSAGE_SEVERITY_INFO };
     D3D12_INFO_QUEUE_FILTER filter{};
-    filter.DenyList.NumIDs = _countof(denyIds);
-    filter.DenyList.pIDList = denyIds;
-    filter.DenyList.NumSeverities = _countof(severities);
-    filter.DenyList.pSeverityList = severities;
+    filter.DenyList.NumIDs = (UINT)denyIds.size();
+    filter.DenyList.pIDList = denyIds.data();
+    filter.DenyList.NumSeverities = (UINT)severities.size();
+    filter.DenyList.pSeverityList = severities.data();
     //指定したエラーの表示を抑制する
     infoQueue_->PushStorageFilter(&filter);
 }
