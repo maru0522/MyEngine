@@ -15,7 +15,7 @@ public:
 
     void Create(const std::vector<T>& vertices) {
         // 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
-        unsigned int sizeVB = static_cast<unsigned int>(sizeof(vertices[0]) * vertices.size());
+        unsigned int sizeVB = static_cast<uint32_t>(sizeof(vertices[0]) * vertices.size());
 
         // 頂点バッファの設定
         D3D12_HEAP_PROPERTIES heapProp{}; // ヒープ設定
