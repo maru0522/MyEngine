@@ -413,12 +413,7 @@ void InitDirectX::ClearRTV(void)
     rtvHandle.ptr += bbIndex * device_->GetDescriptorHandleIncrementSize(rtvDescHeapDesc_.Type);
 
     // 何色でクリアするのか設定
-    std::vector<FLOAT> clearColor;
-    clearColor.emplace_back(0.1f);
-    clearColor.emplace_back(0.25f);
-    clearColor.emplace_back(0.5f);
-    clearColor.emplace_back(0.f);
-    //FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
+    std::vector<FLOAT> clearColor = { 0.1f,0.25f,0.5f,0.f };
     // RTVをクリアする関数をコマンドリストに積む
     commandList_->ClearRenderTargetView(rtvHandle, clearColor.data(), 0, nullptr);
 }
@@ -472,7 +467,7 @@ size_t InitDirectX::DescriptorHeap_t::CreateSRV(const D3D12_RESOURCE_DESC& rscDe
     srvDesc.Texture2D.MipLevels = rscDesc.MipLevels;
 
     // ハンドルのさす位置にシェーダーリソースビューの作成
-    p_idx_->GetDevice()->CreateShaderResourceView(p_rsc, &srvDesc, srvCpuHandle_ );
+    p_idx_->GetDevice()->CreateShaderResourceView(p_rsc, &srvDesc, srvCpuHandle_);
 
     // SRVを生成した数を記録
     SRVCount_++;
