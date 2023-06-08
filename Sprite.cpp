@@ -162,43 +162,47 @@ void Sprite::UpdateMatrix(void)
     cb_.GetConstBuffMap()->matWorld_ = matWorld_;
 }
 
-void Sprite::SetColor(Vector4 rgba)
+void Sprite::SetColor(const Vector4& rgba)
 {
+    Vector4 lrgba = rgba;
+
     // 値が0.0fより小さい時0.0fにする
-    rgba.x = (std::max)(rgba.x, 0.0f);
-    rgba.y = (std::max)(rgba.y, 0.0f);
-    rgba.z = (std::max)(rgba.z, 0.0f);
-    rgba.w = (std::max)(rgba.w, 0.0f);
+    lrgba.x = (std::max)(rgba.x, 0.0f);
+    lrgba.y = (std::max)(rgba.y, 0.0f);
+    lrgba.z = (std::max)(rgba.z, 0.0f);
+    lrgba.w = (std::max)(rgba.w, 0.0f);
 
     // 値が1.0fより大きい時1.0fにする
-    rgba.x = (std::min)(1.0f, rgba.x);
-    rgba.y = (std::min)(1.0f, rgba.y);
-    rgba.z = (std::min)(1.0f, rgba.z);
-    rgba.w = (std::min)(1.0f, rgba.w);
+    lrgba.x = (std::min)(1.0f, rgba.x);
+    lrgba.y = (std::min)(1.0f, rgba.y);
+    lrgba.z = (std::min)(1.0f, rgba.z);
+    lrgba.w = (std::min)(1.0f, rgba.w);
 
     // 値を書き込むと自動的に転送される
-    cb_.GetConstBuffMap()->color_ = rgba;
+    cb_.GetConstBuffMap()->color_ = lrgba;
 }
 
-void Sprite::SetColor255(Vector4 rgba)
+void Sprite::SetColor255(const Vector4& rgba)
 {
+    Vector4 lrgba = rgba;
+
     // 値が0.0fより小さい時0.0fにする
-    rgba.x = (std::max)(rgba.x, 0.0f);
-    rgba.y = (std::max)(rgba.y, 0.0f);
-    rgba.z = (std::max)(rgba.z, 0.0f);
-    rgba.w = (std::max)(rgba.w, 0.0f);
+    lrgba.x = (std::max)(rgba.x, 0.0f);
+    lrgba.y = (std::max)(rgba.y, 0.0f);
+    lrgba.z = (std::max)(rgba.z, 0.0f);
+    lrgba.w = (std::max)(rgba.w, 0.0f);
 
     // 値が255.0fより大きい時255.0fにする
-    rgba.x = (std::min)(255.0f, rgba.x);
-    rgba.y = (std::min)(255.0f, rgba.y);
-    rgba.z = (std::min)(255.0f, rgba.z);
-    rgba.w = (std::min)(255.0f, rgba.w);
+    lrgba.x = (std::min)(255.0f, rgba.x);
+    lrgba.y = (std::min)(255.0f, rgba.y);
+    lrgba.z = (std::min)(255.0f, rgba.z);
+    lrgba.w = (std::min)(255.0f, rgba.w);
 
     // 正規化
-    rgba = { rgba.x / 255.f, rgba.y / 255.f, rgba.z / 255.f, rgba.w / 255.f };
+    lrgba = { lrgba.x / 255.f, lrgba.y / 255.f, lrgba.z / 255.f, lrgba.w / 255.f };
 
     // 値を書き込むと自動的に転送される
-    cb_.GetConstBuffMap()->color_ = rgba;
+    cb_.GetConstBuffMap()->color_ = lrgba;
 }
 
 
