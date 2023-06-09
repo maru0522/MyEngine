@@ -15,14 +15,14 @@ AudioManager::~AudioManager(void)
 {
     xAudio2_.Reset();
 
-    for (auto& sound : soundDatum_)
-    {
-        delete[] sound.second.pBuffer;
+    //for (auto& sound : soundDatum_)
+    //{
+    //    delete[] sound.second.pBuffer;
 
-        sound.second.wfex = {};
-        sound.second.pBuffer = 0;
-        sound.second.bufferSize = 0;
-    }
+    //    sound.second.wfex = {};
+    //    sound.second.pBuffer = 0;
+    //    sound.second.bufferSize = 0;
+    //}
 
     //masterVoice_->DestroyVoice();
 }
@@ -78,12 +78,10 @@ void AudioManager::LoadWave(const fsPath& path)
     SkipHeader(file, data, "bext");             // チャンクが "bext" だった時スキップ
 
     if (std::strncmp(data.id, "data", 4) != 0) assert(0);           // チャンク："data"以外の時エラー
-    char* pBuffer = new char[data.size];
-    file.read(pBuffer, data.size);
-
-    SoundData_t tempSound{ format.fmt, reinterpret_cast<uint8_t*>(pBuffer), (uint32_t)data.size };
+    std::vector<char> pBuffer(data.size);
+    file.read(pBuffer.data(), data.size);
+    SoundData_t tempSound{ format.fmt,  (uint32_t)data.size, pBuffer };
     soundDatum_.insert({ path, tempSound });
-
 
     // ソースボイスの生成
     HRESULT hr = xAudio2_->CreateSourceVoice(&soundDatum_[path].pSourceVoice, &soundDatum_[path].wfex);

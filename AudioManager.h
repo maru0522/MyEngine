@@ -35,10 +35,10 @@ private:
 public:
     struct SoundData_t
     {
-        WAVEFORMATEX wfex;
-        uint8_t* pBuffer;
-        uint32_t bufferSize;
-        IXAudio2SourceVoice* pSourceVoice;
+        WAVEFORMATEX wfex{};
+        uint32_t bufferSize{};
+        std::vector<char> pBuffer{};
+        IXAudio2SourceVoice* pSourceVoice{};
     };
 
 public:
