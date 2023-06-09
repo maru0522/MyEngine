@@ -14,17 +14,6 @@ AudioManager::AudioManager(void)
 AudioManager::~AudioManager(void)
 {
     xAudio2_.Reset();
-
-    //for (auto& sound : soundDatum_)
-    //{
-    //    delete[] sound.second.pBuffer;
-
-    //    sound.second.wfex = {};
-    //    sound.second.pBuffer = 0;
-    //    sound.second.bufferSize = 0;
-    //}
-
-    //masterVoice_->DestroyVoice();
 }
 
 void AudioManager::Load(const fsPath& path)
