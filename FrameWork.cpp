@@ -35,9 +35,7 @@ void FrameWork::Initialize()
     // ModelManager - 3Dƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
     modelM_->LoadOBJ("Resources/cube/cube.obj");
     // AudioManager - ‰¹Šy&SE“Ç‚Ýž‚Ý
-    audioM_->Load("Resources/sound/Windows User Account Control.wav");
-    audioM_->Load("Resources/sound/champion.wav");
-    audioM_->Load("Resources/sound/edm.wav");
+    audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline‰Šú‰»
     gplPtr_->Initialize();
 

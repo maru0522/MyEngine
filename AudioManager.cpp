@@ -38,6 +38,17 @@ void AudioManager::Load(const fsPath& path)
     if (path.extension() == ".wav") LoadWave(path);
 }
 
+void AudioManager::LoadFolder(const fsPath& path)
+{
+    for (const std::experimental::filesystem::directory_entry& file : std::experimental::filesystem::directory_iterator(path)) {
+        std::experimental::filesystem::path fileName{ file.path().filename().string() };
+
+        if (file.path().extension() == ".wav") {
+            Load(path / fileName);
+        }
+    }
+}
+
 void AudioManager::LoadWave(const fsPath& path)
 {
     std::ifstream file{ path, std::ios_base::binary };

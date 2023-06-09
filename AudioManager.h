@@ -47,6 +47,7 @@ public:
     ~AudioManager(void);
 
     void Load(const fsPath& path);
+    void LoadFolder(const fsPath& path);
     inline SoundData_t* GetSoundPtr(const fsPath& path) { return &soundDatum_[path]; }
 
 private:
