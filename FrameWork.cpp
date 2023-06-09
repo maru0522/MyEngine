@@ -37,7 +37,6 @@ void FrameWork::Initialize()
     // AudioManager - ‰¹Šy&SE“Ç‚Ýž‚Ý
     audioM_->Load("Resources/sound/Windows User Account Control.wav");
     audioM_->Load("Resources/sound/champion.wav");
-    audioM_->Load("Resources/sound/lovesong.wav");
     audioM_->Load("Resources/sound/edm.wav");
     // GraphicsPipeline‰Šú‰»
     gplPtr_->Initialize();
