@@ -1,4 +1,5 @@
 #include "DemoScene.h"
+#include "Input.h"
 
 void DemoScene::Initialize(void)
 {
@@ -12,6 +13,11 @@ void DemoScene::Update(void)
 {
     sprite_->Update();
     obj3d_->Update();
+
+    if (KEYS::IsTrigger(DIK_P)) sound_->Play(1);
+    if (KEYS::IsTrigger(DIK_O)) music_->Play();
+    if (KEYS::IsTrigger(DIK_I)) music_->Stop();
+    if (KEYS::IsTrigger(DIK_U)) music_->SetPitch(2.f);
 }
 
 void DemoScene::Draw3d(void)

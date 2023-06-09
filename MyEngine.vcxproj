@@ -104,6 +104,7 @@
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="WndAPI.cpp" />
     <ClCompile Include="WorldCoordinate.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicPS.hlsl">
@@ -183,6 +185,7 @@
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TitleScene.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WndAPI.h" />
     <ClInclude Include="WorldCoordinate.h" />
+    <ClInclude Include="AudioManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

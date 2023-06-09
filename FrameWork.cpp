@@ -1,6 +1,7 @@
 #include "FrameWork.h"
 #include "Object3D.h"
 #include "Sprite.h"
+#include "Sound.h"
 #include "Input.h"
 
 void FrameWork::Run(void)
@@ -33,6 +34,11 @@ void FrameWork::Initialize()
     texM_->LoadFolder("Resources");
     // ModelManager - 3Dƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
     modelM_->LoadOBJ("Resources/cube/cube.obj");
+    // AudioManager - ‰¹Šy&SE“Ç‚Ýž‚Ý
+    audioM_->Load("Resources/sound/Windows User Account Control.wav");
+    audioM_->Load("Resources/sound/champion.wav");
+    audioM_->Load("Resources/sound/lovesong.wav");
+    audioM_->Load("Resources/sound/edm.wav");
     // GraphicsPipeline‰Šú‰»
     gplPtr_->Initialize();
 
@@ -40,6 +46,8 @@ void FrameWork::Initialize()
     Sprite::StaticInitialize(texM_.get());
     // Object3D‰Šú‰»
     Object3D::StaticInitialize(modelM_.get(), texM_.get());
+    // Sound‰Šú‰»
+    Sound::StaticInitalize(audioM_.get());
 
     // SceneManager‰Šú‰»
     sceneM_->Initialize(SceneFactory::Usage::DEMO);

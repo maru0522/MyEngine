@@ -95,6 +95,8 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="ImguiController.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -180,6 +182,8 @@
     </ClInclude>
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="ImguiController.h" />
+    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
