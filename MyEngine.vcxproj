@@ -85,6 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BillBoard.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="FPSController.cpp" />
@@ -164,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BillBoard.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="ConstBuffer.h" />
     <ClInclude Include="DemoScene.h" />

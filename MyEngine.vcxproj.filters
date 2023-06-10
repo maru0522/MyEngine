@@ -97,6 +97,9 @@
     <ClCompile Include="ImguiController.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="BillBoard.cpp">
+      <Filter>Entity\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -184,6 +187,9 @@
     <ClInclude Include="ImguiController.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="BillBoard.h">
+      <Filter>Entity\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
