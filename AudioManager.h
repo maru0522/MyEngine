@@ -69,7 +69,9 @@ private:
 
     // MediaFoundation
     ComPtr<IMFSourceReader> mFSourceReader_;
+    ComPtr<IMFMediaBuffer> mFMediaBuffer_;
     ComPtr<IMFMediaType> mFMediaType_;
+    ComPtr<IMFSample> mFSample_;
 
     std::map<fsPath, SoundData_t> soundDatum_;
 };

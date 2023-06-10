@@ -67,26 +67,24 @@ void AudioManager::LoadMp3(const fsPath& path)
     std::vector<BYTE> mediaData;
     while (true)
     {
-        IMFSample* pMFSample{};
         DWORD dwStreamFlags{};
-        mFSourceReader_->ReadSample((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, nullptr, &dwStreamFlags, nullptr, &pMFSample);
+        mFSourceReader_->ReadSample((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, nullptr, &dwStreamFlags, nullptr, mFSample_.GetAddressOf());
 
         if (dwStreamFlags & MF_SOURCE_READERF_ENDOFSTREAM) break;
 
-        IMFMediaBuffer* pMFMediaBuffer{};
-        pMFSample->ConvertToContiguousBuffer(&pMFMediaBuffer);
+        mFSample_->ConvertToContiguousBuffer(mFMediaBuffer_.GetAddressOf());
 
         BYTE* pBuffer{};
         DWORD cbCurrentLength{};
-        pMFMediaBuffer->Lock(&pBuffer, nullptr, &cbCurrentLength);
+        mFMediaBuffer_->Lock(&pBuffer, nullptr, &cbCurrentLength);
 
         mediaData.resize(mediaData.size() + cbCurrentLength);
         memcpy(mediaData.data() + mediaData.size() - cbCurrentLength, pBuffer, cbCurrentLength);
 
-        pMFMediaBuffer->Unlock();
+        mFMediaBuffer_->Unlock();
 
-        pMFMediaBuffer->Release();
-        pMFSample->Release();
+        mFMediaBuffer_.Reset();
+        mFSample_.Reset();
     }
     SoundData_t tempSound{ *wfex, sizeof(BYTE) * static_cast<uint32_t>(mediaData.size()), mediaData };
     soundDatum_.insert({ path,tempSound });
