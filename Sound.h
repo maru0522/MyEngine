@@ -38,4 +38,3 @@ private:
     float volume_;
     float pitch_;
 };
-

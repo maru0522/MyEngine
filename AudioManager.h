@@ -4,8 +4,15 @@
 #include <fstream>
 #include "FileSystem.h"
 #include <xaudio2.h>
-
 #pragma comment(lib,"xaudio2.lib")
+
+#include <mfapi.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+#pragma comment(lib, "Mf.lib")
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "Mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
 
 class AudioManager
 {
@@ -37,7 +44,7 @@ public:
     {
         WAVEFORMATEX wfex{};
         uint32_t bufferSize{};
-        std::vector<char> pBuffer{};
+        std::vector<BYTE> pBuffer{};
         IXAudio2SourceVoice* pSourceVoice{};
     };
 
@@ -51,12 +58,19 @@ public:
     inline SoundData_t* GetSoundPtr(const fsPath& path) { return &soundDatum_[path]; }
 
 private:
+    void LoadMp3(const fsPath& path);
     void LoadWave(const fsPath& path);
     void SkipHeader(std::ifstream& file, ChunkHeader_t& chunkHead, const char* chunkId, size_t cmpNum = 4);
 
     // ïœêî
+    // XAudio2
     ComPtr<IXAudio2> xAudio2_;
     IXAudio2MasteringVoice* masterVoice_;
+
+    // MediaFoundation
+    ComPtr<IMFSourceReader> mFSourceReader_;
+    ComPtr<IMFMediaType> mFMediaType_;
+
     std::map<fsPath, SoundData_t> soundDatum_;
 };
 

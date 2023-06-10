@@ -20,7 +20,7 @@ Sound::Sound(const fsPath& path) : soundPtr_(nullptr), volume_(1), pitch_(1)
 void Sound::Play(uint32_t count, Loop type)
 {
     XAUDIO2_BUFFER buf{};
-    buf.pAudioData = reinterpret_cast<BYTE*>(soundPtr_->pBuffer.data());
+    buf.pAudioData = soundPtr_->pBuffer.data();
     buf.AudioBytes = soundPtr_->bufferSize;
     buf.Flags = XAUDIO2_END_OF_STREAM;
 

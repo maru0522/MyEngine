@@ -7,13 +7,18 @@
 
 AudioManager::AudioManager(void)
 {
+    // XAudio2初期化
     HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
     hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
+
+    // Media Foundation初期化
+    hr = MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 }
 
 AudioManager::~AudioManager(void)
 {
     xAudio2_.Reset();
+    MFShutdown();
 }
 
 void AudioManager::Load(const fsPath& path)
@@ -25,17 +30,74 @@ void AudioManager::Load(const fsPath& path)
     }
 
     if (path.extension() == ".wav") LoadWave(path);
+    if (path.extension() == ".mp3") LoadMp3(path);
 }
 
 void AudioManager::LoadFolder(const fsPath& path)
 {
     for (const std::experimental::filesystem::directory_entry& file : std::experimental::filesystem::directory_iterator(path)) {
+        // ファイル名取得
         std::experimental::filesystem::path fileName{ file.path().filename().string() };
-
-        if (file.path().extension() == ".wav") {
-            Load(path / fileName);
-        }
+        Load(path / fileName);
     }
+}
+
+void AudioManager::LoadMp3(const fsPath& path)
+{
+    std::wstring wPath{ path.c_str() };
+
+    // ソースリーダーの生成
+    HRESULT hr = MFCreateSourceReaderFromURL(path.c_str(), NULL, mFSourceReader_.GetAddressOf());
+    assert(SUCCEEDED(hr));
+
+    // メディアタイプの取得
+    MFCreateMediaType(mFMediaType_.GetAddressOf());
+    mFMediaType_->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+    mFMediaType_->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+    mFSourceReader_->SetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, nullptr, mFMediaType_.Get());
+
+    mFMediaType_.Reset();
+    mFSourceReader_->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, mFMediaType_.GetAddressOf());
+
+    // オーディオデータ形式の作成
+    WAVEFORMATEX* wfex{};
+    MFCreateWaveFormatExFromMFMediaType(mFMediaType_.Get(), &wfex, nullptr);
+
+    // データの読み込み
+    std::vector<BYTE> mediaData;
+    while (true)
+    {
+        IMFSample* pMFSample{};
+        DWORD dwStreamFlags{};
+        mFSourceReader_->ReadSample((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, nullptr, &dwStreamFlags, nullptr, &pMFSample);
+
+        if (dwStreamFlags & MF_SOURCE_READERF_ENDOFSTREAM) break;
+
+        IMFMediaBuffer* pMFMediaBuffer{};
+        pMFSample->ConvertToContiguousBuffer(&pMFMediaBuffer);
+
+        BYTE* pBuffer{};
+        DWORD cbCurrentLength{};
+        pMFMediaBuffer->Lock(&pBuffer, nullptr, &cbCurrentLength);
+
+        mediaData.resize(mediaData.size() + cbCurrentLength);
+        memcpy(mediaData.data() + mediaData.size() - cbCurrentLength, pBuffer, cbCurrentLength);
+
+        pMFMediaBuffer->Unlock();
+
+        pMFMediaBuffer->Release();
+        pMFSample->Release();
+    }
+    SoundData_t tempSound{ *wfex, sizeof(BYTE) * static_cast<uint32_t>(mediaData.size()), mediaData };
+    soundDatum_.insert({ path,tempSound });
+
+    CoTaskMemFree(wfex);
+    mFSourceReader_.Reset();
+    mFMediaType_.Reset();
+
+    // ソースボイスの生成
+    hr = xAudio2_->CreateSourceVoice(&soundDatum_[path].pSourceVoice, &soundDatum_[path].wfex);
+    assert(SUCCEEDED(hr));
 }
 
 void AudioManager::LoadWave(const fsPath& path)
@@ -66,10 +128,11 @@ void AudioManager::LoadWave(const fsPath& path)
     SkipHeader(file, data, "JUNK");             // チャンクが "JUNK" だった時スキップ
     SkipHeader(file, data, "bext");             // チャンクが "bext" だった時スキップ
 
+    if (std::strncmp(data.id, "REAPER", 6) == 0) assert(0);         // REAPER(DAW)を使って作られている場合,読み込めないのでエラー
     if (std::strncmp(data.id, "data", 4) != 0) assert(0);           // チャンク："data"以外の時エラー
     std::vector<char> pBuffer(data.size);
     file.read(pBuffer.data(), data.size);
-    SoundData_t tempSound{ format.fmt,  (uint32_t)data.size, pBuffer };
+    SoundData_t tempSound{ format.fmt,  (uint32_t)data.size, std::vector<BYTE>(pBuffer.begin(),pBuffer.end()) };
     soundDatum_.insert({ path, tempSound });
 
     // ソースボイスの生成
