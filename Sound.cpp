@@ -32,9 +32,15 @@ void Sound::Play(uint32_t count, Loop type)
     assert(SUCCEEDED(hr));
 }
 
+void Sound::Pause(void)
+{
+    soundPtr_->pSourceVoice->Stop();
+}
+
 void Sound::Stop(void)
 {
     soundPtr_->pSourceVoice->Stop();
+    soundPtr_->pSourceVoice->FlushSourceBuffers();
 }
 
 bool Sound::GetPlaying(void)

@@ -25,6 +25,7 @@ public:
     Sound(const fsPath& path);
 
     void Play(uint32_t count = 0u, Loop type = Loop::LIMIT);
+    void Pause(void);
     void Stop(void);
     bool GetPlaying(void);
     void SetVolume(float volume);
