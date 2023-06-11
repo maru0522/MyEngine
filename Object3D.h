@@ -51,8 +51,8 @@ private:
 
     ConstBuffer<CBData3d_t> cb_;
 
-    static ModelManager* modelMPtr_;
-    static TextureManager* texMPtr_;
-    static ConstBuffer<CBMatViewPerse_t> cbMatViewPerse_;
+    static ModelManager* sModelMPtr_;
+    static TextureManager* sTexMPtr_;
+    static ConstBuffer<CBMatViewPerse_t> sCbMatViewPerse_;
 };
 

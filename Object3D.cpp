@@ -1,15 +1,15 @@
 #include "Object3D.h"
 #include "InitDirectX.h"
 
-ModelManager* Object3D::modelMPtr_{ nullptr };
-TextureManager* Object3D::texMPtr_{ nullptr };
-ConstBuffer<Object3D::CBMatViewPerse_t> Object3D::cbMatViewPerse_{};
+ModelManager* Object3D::sModelMPtr_{ nullptr };
+TextureManager* Object3D::sTexMPtr_{ nullptr };
+ConstBuffer<Object3D::CBMatViewPerse_t> Object3D::sCbMatViewPerse_{};
 
 void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr)
 {
-    modelMPtr_ = modelMPtr;
-    texMPtr_ = texMPtr;
-    cbMatViewPerse_.Create();
+    sModelMPtr_ = modelMPtr;
+    sTexMPtr_ = texMPtr;
+    sCbMatViewPerse_.Create();
 
     // 初期化時はカメラが存在しないためCameraManagerのSetCurrentCamera()時に実行するようにする
     //UpdateCBMatViewPerse();
@@ -17,8 +17,8 @@ void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr
 
 void Object3D::UpdateCBMatViewPerse(void)
 {
-    cbMatViewPerse_.GetConstBuffMap()->matView_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
-    cbMatViewPerse_.GetConstBuffMap()->matPerspective_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
+    sCbMatViewPerse_.GetConstBuffMap()->matView_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
+    sCbMatViewPerse_.GetConstBuffMap()->matPerspective_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
 }
 
 void Object3D::PreDraw(BlendMode blendmode)
@@ -51,7 +51,7 @@ Object3D::Object3D(const fsPath& path) :
     parent_(nullptr)
 {
     // モデル読み込み
-    model_ = modelMPtr_->GetModel(path);
+    model_ = sModelMPtr_->GetModel(path);
     // モデルのマテリアル用定数バッファを生成
     model_.cbMaterial_.Create();
     // マテリアルを定数バッファへ転送
@@ -71,7 +71,7 @@ void Object3D::Update(void)
 
 void Object3D::Draw(void)
 {
-    Draw(texMPtr_->GetImagePtr(model_.material_.texKey_)->srvGpuHandle_);
+    Draw(sTexMPtr_->GetImagePtr(model_.material_.texKey_)->srvGpuHandle_);
 }
 
 void Object3D::Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture)
@@ -85,7 +85,7 @@ void Object3D::Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture)
 
     // 定数バッファビュー（CBV）の設定コマンド
     iDX->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
-    iDX->GetCommandList()->SetGraphicsRootConstantBufferView(2, cbMatViewPerse_.GetBuffer()->GetGPUVirtualAddress());
+    iDX->GetCommandList()->SetGraphicsRootConstantBufferView(2, sCbMatViewPerse_.GetBuffer()->GetGPUVirtualAddress());
     iDX->GetCommandList()->SetGraphicsRootConstantBufferView(3, model_.cbMaterial_.GetBuffer()->GetGPUVirtualAddress());
 
     //指定のヒープにあるSRVをルートパラメータ0番に設定
@@ -97,5 +97,5 @@ void Object3D::Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture)
 
 void Object3D::Draw(const fsPath& path)
 {
-    Draw(texMPtr_->GetImagePtr(path)->srvGpuHandle_);
+    Draw(sTexMPtr_->GetImagePtr(path)->srvGpuHandle_);
 }
