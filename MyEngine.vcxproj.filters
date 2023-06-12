@@ -13,9 +13,6 @@
     <FxCompile Include="SpritePS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="ModelGS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsPipeline.cpp" />

@@ -34,6 +34,7 @@ struct VSOutput
 //struct GSOutput
 //{
 //    float4 svpos_ : SV_POSITION;
-//    float3 normal_ : NORMAL;
+//    //float3 normal_ : NORMAL;
+//    float4 color_ : COLOR;     // êF
 //    float2 uv_ : TEXCOORD;
 //};
