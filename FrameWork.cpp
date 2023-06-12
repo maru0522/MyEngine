@@ -33,8 +33,8 @@ void FrameWork::Initialize()
     // TextureManager - テクスチャ読み込み
     texM_->LoadFolder("Resources");
     // ModelManager - 3Dモデル読み込み
-    modelM_->LoadOBJ("Resources/model/cube/cube.obj");
-    modelM_->LoadOBJ("Resources/model/sphere/sphere.obj");
+    modelM_->LoadOBJ("Resources/model/cube/cube.obj",false);
+    modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj",false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化

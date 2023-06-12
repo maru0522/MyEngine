@@ -1,5 +1,6 @@
 #pragma once
 #include "VertexBuffer.h"
+#include <unordered_map>
 #include "IndexBuffer.h"
 #include "FileSystem.h"
 #include "Vector3.h"
@@ -26,6 +27,9 @@ public:
     inline void CreateIB(const std::vector<uint16_t>& indices) { indexBuffer_.Create(indices); }
     inline void CreateVB(const std::vector<VertexPosNormalUv_t>& vertices) { vertexBuffer_.Create(vertices); }
 
+    void CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices);
+    inline void AddSmoothData(uint16_t indexPos, uint16_t indexVert) { smoothData_[indexPos].emplace_back(indexVert); }
+
     // setterÅEgetter
     inline void SetPath(const fsPath& path) { path_ = path; }
 
@@ -39,4 +43,5 @@ private:
 
     IndexBuffer indexBuffer_{};
     VertexBuffer<VertexPosNormalUv_t> vertexBuffer_{};
+    std::unordered_map<uint16_t, std::vector<uint16_t>> smoothData_{};
 };

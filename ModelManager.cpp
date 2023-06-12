@@ -6,7 +6,7 @@
 using namespace Util;
 using VertexPosNormalUv_t = Mesh::VertexPosNormalUv_t;
 
-void ModelManager::LoadOBJ(const fsPath& path)
+void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
 {
     // 既に読み込んだmodelデータとの重複確認。
     if (models_.count(path)) {
@@ -104,12 +104,18 @@ void ModelManager::LoadOBJ(const fsPath& path)
                 vertex.uv_ = texcoords[indexTexcoord - 1];
                 // 頂点データの追加
                 vertices.emplace_back(vertex);
+                // エッジ平滑化用データの追加
+                if (smoothing) tempMesh.AddSmoothData(indexPos, (uint16_t)vertices.size() - 1);
                 // 頂点インデックスデータの追加
                 indices.emplace_back((uint16_t)indices.size());
                 //-> indices.size()をemplace_back()することによって、追加された頂点データの要素数に合わせたインデックスが追加されていく
             }
         }
     }
+
+    ifs.close();
+    if (smoothing)tempMesh.CalcSmoothedVertNormals(vertices);
+
     // 頂点バッファ
     tempMesh.CreateVB(vertices);
     // インデックスバッファ
@@ -122,6 +128,7 @@ void ModelManager::LoadOBJ(const fsPath& path)
     tempModel.meshPtr_ = &meshes_[path];
     // 配列に追加 ※定数バッファ生成はObject3Dのコンストラクタで行う。
     models_.emplace(path, tempModel);
+
 }
 
 void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)

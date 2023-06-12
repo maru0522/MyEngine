@@ -56,6 +56,8 @@ public:
     void UpdateCB(void);
 
     // ïœêî
+    bool isSmoothing_;
+
     Mesh* meshPtr_;
     Material_t material_;
 
@@ -74,7 +76,7 @@ private:
 public:
     // ä÷êî
     ModelManager(TextureManager* texMPtr) : texMPtr_(texMPtr) {}
-    void LoadOBJ(const fsPath& path);
+    void LoadOBJ(const fsPath& path, bool smoothing);
 
 private:
     void LoadMaterial(Model_t& model,const fsPath& path);

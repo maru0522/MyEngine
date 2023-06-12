@@ -23,7 +23,7 @@ public:
     // ïœêî
     std::unique_ptr<Sprite> sprite_{ std::make_unique<Sprite>("Resources/namida.png") };
     std::unique_ptr<Object3D> obj3d_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
-    std::unique_ptr<Object3D> obj3d2_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };
+    std::unique_ptr<Object3D> obj3d2_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
     std::unique_ptr<Sound> sound_{ std::make_unique<Sound>("Resources/sound/Windows User Account Control.wav") };
     std::unique_ptr<Sound> music_{ std::make_unique<Sound>("Resources/sound/champion.wav") };
     std::unique_ptr<Sound> music3_{ std::make_unique<Sound>("Resources/sound/championM.mp3") };

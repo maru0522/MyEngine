@@ -1,1 +1,19 @@
 #include "Mesh.h"
+
+void Mesh::CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices)
+{
+    for (auto& it : smoothData_) {
+        // 各面用の共通頂点コレクション
+        std::vector<uint16_t>& v = it.second;
+        // 全頂点の法線を平均する
+        Vector3 normal{};
+        for (uint16_t idx : v) {
+            normal += {vertices[idx].normal_.x, vertices[idx].normal_.y, vertices[idx].normal_.z };
+        }
+        normal = (normal / (float)v.size()).normalize();
+        // 共通法線を使用するすべての
+        for (uint16_t idx : v) {
+            vertices[idx].normal_ = { normal.x,normal.y,normal.z };
+        }
+    }
+}
