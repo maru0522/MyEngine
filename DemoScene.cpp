@@ -13,6 +13,7 @@ void DemoScene::Update(void)
 {
     sprite_->Update();
     obj3d_->Update();
+    obj3d2_->Update();
 
     if (KEYS::IsTrigger(DIK_P)) sound_->Play(1);
     if (KEYS::IsTrigger(DIK_O)) music_->Play();
@@ -23,7 +24,8 @@ void DemoScene::Update(void)
 
 void DemoScene::Draw3d(void)
 {
-    obj3d_->Draw();
+    //obj3d_->Draw();
+    obj3d2_->Draw();
     // cubeの画像にスプライトで表示しているものを起用
     //obj3d_->Draw("Resources/namida.png");
 }

@@ -25,14 +25,15 @@ cbuffer CBMaterial_t : register(b2)
 struct VSOutput
 {
     float4 svpos_ : SV_POSITION; // システム用頂点座標
-    float3 normal_ : NORMAL; // 法線ベクトル
-    float2 uv_ : TEXCOORD; // uv値
+    //float3 normal_ : NORMAL;    // 法線ベクトル
+    float4 color_ : COLOR;     // 色
+    float2 uv_ : TEXCOORD;    // uv値
 };
 
 // ジオメトリシェーダからピクセルシェーダへの出力
-struct GSOutput
-{
-    float4 svpos_ : SV_POSITION;
-    float3 normal_ : NORMAL;
-    float2 uv_ : TEXCOORD;
-};
+//struct GSOutput
+//{
+//    float4 svpos_ : SV_POSITION;
+//    float3 normal_ : NORMAL;
+//    float2 uv_ : TEXCOORD;
+//};

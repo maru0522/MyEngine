@@ -248,7 +248,7 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
     // 頂点シェーダの読み込みとコンパイル
     SetCompileShader(blobs->vsBlob.GetAddressOf(), "ModelVS.hlsl", "main", "vs_5_0");
     // ジオメトリシェーダの読み込みとコンパイル
-    SetCompileShader(blobs->gsBlob.GetAddressOf(), "ModelGs.hlsl", "main", "gs_5_0");
+    //SetCompileShader(blobs->gsBlob.GetAddressOf(), "ModelGs.hlsl", "main", "gs_5_0");
     // ピクセルシェーダの読み込みとコンパイル
     SetCompileShader(blobs->psBlob.GetAddressOf(), "ModelPS.hlsl", "main", "ps_5_0");
 
@@ -259,8 +259,8 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
     // シェーダーの設定
     pipelineDesc.VS.pShaderBytecode = blobs->vsBlob->GetBufferPointer();
     pipelineDesc.VS.BytecodeLength = blobs->vsBlob->GetBufferSize();
-    pipelineDesc.GS.pShaderBytecode = blobs->gsBlob->GetBufferPointer();
-    pipelineDesc.GS.BytecodeLength = blobs->gsBlob->GetBufferSize();
+    //pipelineDesc.GS.pShaderBytecode = blobs->gsBlob->GetBufferPointer();
+    //pipelineDesc.GS.BytecodeLength = blobs->gsBlob->GetBufferSize();
     pipelineDesc.PS.pShaderBytecode = blobs->psBlob->GetBufferPointer();
     pipelineDesc.PS.BytecodeLength = blobs->psBlob->GetBufferSize();
 
