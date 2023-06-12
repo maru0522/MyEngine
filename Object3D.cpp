@@ -67,6 +67,7 @@ void Object3D::Update(void)
     // À•WŒvŽZ‚Æ“]‘—
     coordinate_.Update();
     cb_.GetConstBuffMap()->matWorld_ = coordinate_.GetMatWorld();
+    model_.UpdateCB();
 }
 
 void Object3D::Draw(void)

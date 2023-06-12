@@ -56,12 +56,13 @@ public:
     void UpdateCB(void);
 
     // •Ï”
-    bool isSmoothing_;
-
     Mesh* meshPtr_;
     Material_t material_;
 
     ConstBuffer<CBMaterial_t> cbMaterial_;
+
+private:
+    bool isSmoothing_;
 };
 
 

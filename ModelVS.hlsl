@@ -14,7 +14,7 @@ VSOutput main(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOOR
     const float shininess = 4.0f;
     float3 eyedir = normalize(eye - pos.xyz);
     float3 reflect = normalize(lightdir + 2 * dot(-lightdir, normal) * normal);
-    float3 specular = pow(saturate(dot(reflect, eyedir)), shininess);
+    float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * mSpecular;
     // ---
     
     VSOutput output; // ピクセルシェーダーに渡す値

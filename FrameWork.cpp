@@ -34,7 +34,7 @@ void FrameWork::Initialize()
     texM_->LoadFolder("Resources");
     // ModelManager - 3Dƒ‚ƒfƒ‹“Ç‚İ‚İ
     modelM_->LoadOBJ("Resources/model/cube/cube.obj",false);
-    modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj",true);
+    modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj",false);
     // AudioManager - ‰¹Šy&SE“Ç‚İ‚İ
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline‰Šú‰»

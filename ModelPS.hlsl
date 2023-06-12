@@ -15,5 +15,5 @@ float4 main(VSOutput input) : SV_TARGET
     
     // テクスチャマッピング
     float4 texcolor = tex.Sample(smp, input.uv_);
-    return input.color_;
+    return input.color_ * texcolor;
 }
