@@ -35,6 +35,8 @@ protected:
     {
         // 頂点シェーダオブジェクト
         ComPtr<ID3DBlob> vsBlob{ nullptr };
+        // ジオメトリシェーダオブジェクト
+        ComPtr<ID3DBlob> gsBlob{ nullptr };
         // ピクセルシェーダオブジェクト
         ComPtr<ID3DBlob> psBlob{ nullptr };
     };

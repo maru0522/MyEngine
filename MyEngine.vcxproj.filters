@@ -13,10 +13,7 @@
     <FxCompile Include="SpritePS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="BasicVS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="BasicPS.hlsl">
+    <FxCompile Include="ModelGS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -196,9 +193,6 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Sprite.hlsli">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="Basic.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
