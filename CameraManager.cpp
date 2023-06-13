@@ -20,6 +20,8 @@ void Camera::Update(void)
     if (KEYS::IsDown(DIK_DOWN)) eye_.z -= 1;
     if (KEYS::IsDown(DIK_LEFT)) eye_.x -= 1;
     if (KEYS::IsDown(DIK_RIGHT)) eye_.x += 1;
+    if (KEYS::IsDown(DIK_SPACE)) eye_.y += 1;
+    if (KEYS::IsDown(DIK_LSHIFT)) eye_.y -= 1;
     WorldCoordinate coordinate;
     coordinate.SetPosition(eye_);
     coordinate.SetRotation(rotation_);

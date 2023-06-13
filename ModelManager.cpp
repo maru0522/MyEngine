@@ -16,6 +16,7 @@ void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
 
     // 配列用の一時Model
     Model_t tempModel;
+    tempModel.isSmoothing_ = smoothing;
     // 配列用の一時Mesh
     Mesh tempMesh;
     tempMesh.SetPath(path);
@@ -171,7 +172,7 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
         }
 
         // 先頭文字列ならKdならディフューズ色
-        if (key == "kd") {
+        if (key == "Kd") {
             line_iss >> model.material_.diffuse_.x;
             line_iss >> model.material_.diffuse_.y;
             line_iss >> model.material_.diffuse_.z;

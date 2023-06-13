@@ -33,6 +33,8 @@ public:
     inline const Vector3& GetRotation(void) { return rotation_; }
     inline const Vector3& GetScale(void) { return scale_; }
 
+    inline Vector3* GetPosPtr(void) { return &position_; }
+
     inline Vector3 GetAxisX(void) const { return { matWorld_.m[0][0],matWorld_.m[0][1],matWorld_.m[0][2] }; }
     inline Vector3 GetAxisY(void) const { return { matWorld_.m[1][0],matWorld_.m[1][1],matWorld_.m[1][2] }; }
     inline Vector3 GetAxisZ(void) const { return { matWorld_.m[2][0],matWorld_.m[2][1],matWorld_.m[2][2] }; }
