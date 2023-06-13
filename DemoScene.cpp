@@ -14,6 +14,9 @@ void DemoScene::Update(void)
     sprite_->Update();
     //obj3d_->Update();
     obj3d2_->Update();
+    Vector3 rot = obj3d2_->coordinate_.GetRotation();
+    rot.y += 0.05f;
+    obj3d2_->coordinate_.SetRotation(rot);
 }
 
 void DemoScene::Draw3d(void)
