@@ -1,14 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
 
-Quaternion::Quaternion(float x, float y, float z, float w) :
-    x(x),
-    y(y),
-    z(z),
-    w(w)
-{
-}
-
 Quaternion Quaternion::Multiply(const Quaternion& rhs) const
 {
     return Quaternion { x * rhs.w + w * rhs.x - z * rhs.y + y * rhs.z,
