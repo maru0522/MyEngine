@@ -118,7 +118,7 @@ namespace Input {
         static CustomDeadZone sDeadZone_;
         static XINPUT_STATE sXStatePre_;
         static XINPUT_STATE sXState_;
-        static bool isConnect_;
+        static bool sIsConnect_;
     };
 
     class Mouse

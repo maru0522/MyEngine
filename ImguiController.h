@@ -8,7 +8,7 @@ class ImGuiController
 {
     public:
         // íËã`
-        static constexpr uint32_t sMAX_SRV_COUNT_FOR_IMGUI{ 1 };
+        static constexpr uint32_t kMAX_SRV_COUNT_FOR_IMGUI{ 1 };
 
         // ä÷êî
         ImGuiController(void) {};
