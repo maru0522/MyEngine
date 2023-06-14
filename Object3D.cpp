@@ -78,7 +78,7 @@ void Object3D::Draw(void)
     Draw(sTexMPtr_->GetImagePtr(model_.material_.texKey_)->srvGpuHandle_);
 }
 
-void Object3D::Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture)
+void Object3D::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture)
 {
     InitDirectX* iDX = InitDirectX::GetInstance();
 

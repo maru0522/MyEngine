@@ -41,7 +41,7 @@ public:
     Object3D(const fsPath& path/*,Type type*/);
     void Update(void);
     void Draw(void);
-    void Draw(D3D12_GPU_DESCRIPTOR_HANDLE texture);
+    void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
     void Draw(const fsPath& path);
 
     WorldCoordinate coordinate_;
