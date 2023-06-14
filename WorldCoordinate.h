@@ -39,7 +39,7 @@ public:
     inline Vector3 GetAxisY(void) const { return { matWorld_.m[1][0],matWorld_.m[1][1],matWorld_.m[1][2] }; }
     inline Vector3 GetAxisZ(void) const { return { matWorld_.m[2][0],matWorld_.m[2][1],matWorld_.m[2][2] }; }
 
-    inline const Vector3& GetForwardVec(void) { return GetAxisZ(); }
-    inline const Vector3& GetRightVec(void) { return GetAxisX(); }
-    inline const Vector3& GetUpVec(void) { return GetAxisY(); }
+    //inline const Vector3& GetForwardVec(void) { return GetAxisZ(); }
+    //inline const Vector3& GetRightVec(void) { return GetAxisX(); }
+    //inline const Vector3& GetUpVec(void) { return GetAxisY(); }
 };
