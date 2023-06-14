@@ -1,14 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
 
-Quaternion Quaternion::Multiply(const Quaternion& rhs) const
-{
-    return Quaternion { x * rhs.w + w * rhs.x - z * rhs.y + y * rhs.z,
-                        y * rhs.w + z * rhs.x + w * rhs.y - x * rhs.z,
-                        z * rhs.w - y * rhs.x + x * rhs.y + w * rhs.z,
-                        w * rhs.w - x * rhs.x - y * rhs.y - z * rhs.z };
-}
-
 Quaternion Quaternion::Identity(void) const
 {
     return Quaternion{ 0,0,0,1 };
@@ -29,7 +21,7 @@ Quaternion Quaternion::Normalize(void) const
     Quaternion tmp{ *this };
     float len{ Norm() };
     if (len != 0) {
-        return tmp / len ;
+        return tmp / len;
     }
     return tmp;
 }
@@ -104,10 +96,12 @@ const Quaternion operator-(const Quaternion& q1, const Quaternion& q2)
 
 const Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
 {
-    return Quaternion{ q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
-                       q1.y * q2.z - q1.z * q2.y + q2.w * q1.x + q1.w * q2.x,
-                       q1.z * q2.x - q1.x * q2.z + q2.w * q1.y + q1.w * q2.y,
-                       q1.x * q2.y - q1.y * q2.x + q2.w * q1.z + q1.w * q2.z };
+    Quaternion q{};
+    q.x = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
+    q.y = q1.y * q2.z - q1.z * q2.y + q2.w * q1.x + q1.w * q2.x;
+    q.z = q1.z * q2.x - q1.x * q2.z + q2.w * q1.y + q1.w * q2.y;
+    q.w = q1.x * q2.y - q1.y * q2.x + q2.w * q1.z + q1.w * q2.z;
+    return q;
 }
 
 const Quaternion operator*(const Quaternion& q, float s)
@@ -132,18 +126,37 @@ Quaternion Math::QuaternionF::MakeAxisAngle(const Vector3& axis, float radian)
 
 Vector3 Math::QuaternionF::RotateVector(const Vector3& v, const Quaternion& q)
 {
-    Quaternion tmp{ q.Multiply({v.x,v.y,v.z,0}) };
-    Quaternion result = tmp.Multiply(q.Conjugate());
+    Quaternion tmp = q * Quaternion{v.x,v.y,v.z,0};
+    Quaternion result = tmp * q.Conjugate();
 
     return Vector3(result.x, result.y, result.z);
 }
 
 Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)
 {
-    return Matrix4{ q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w, 2 * (q.x * q.y + q.w * q.z),                   2 * (q.x * q.z - q.w * q.y),                   0,
-                    2 * (q.x * q.y + q.w * q.z),                   q.x * q.x - q.y * q.y + q.z * q.z - q.w * q.w, 2 * (q.y * q.z + q.w * q.x),                   0,
-                    2 * (q.x * q.z + q.w * q.y),                   2 * (q.y * q.z - q.w * q.x),                   q.x * q.x - q.y * q.y - q.z * q.z + q.w * q.w, 0,
-                    0,                                             0,                                             0,                                             1 };
+    Matrix4 mat{};
+
+    mat.m[0][0] = q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w;
+    mat.m[0][1] = 2 * (q.x * q.y + q.w * q.z);
+    mat.m[0][2] = 2 * (q.x * q.z - q.w * q.y);
+    mat.m[0][3] = 0;
+
+    mat.m[1][0] = 2 * (q.x * q.y + q.w * q.z);
+    mat.m[1][1] = q.x * q.x - q.y * q.y + q.z * q.z - q.w * q.w;
+    mat.m[1][2] = 2 * (q.y * q.z + q.w * q.x);
+    mat.m[1][3] = 0;
+
+    mat.m[2][0] = 2 * (q.x * q.z + q.w * q.y);
+    mat.m[2][1] = 2 * (q.y * q.z - q.w * q.x);
+    mat.m[2][2] = q.x * q.x - q.y * q.y - q.z * q.z + q.w * q.w;
+    mat.m[2][3] = 0;
+
+    mat.m[3][0] = 0;
+    mat.m[3][1] = 0;
+    mat.m[3][2] = 0;
+    mat.m[3][3] = 1;
+
+    return mat;
 }
 
 Quaternion Math::QuaternionF::Slerp(const Quaternion& q0, const Quaternion& q1, float t)
@@ -167,7 +180,7 @@ Quaternion Math::QuaternionF::Slerp(const Quaternion& q0, const Quaternion& q1, 
 
 Quaternion Math::QuaternionF::DirectionToDirection(const Vector3& u, const Vector3& v)
 {
-    Vector3 w{ u.cross(v)};
+    Vector3 w{ u.cross(v) };
     Vector3 n = w.normalize();
 
     Vector3 uCopy{ u }, vCopy{ v };

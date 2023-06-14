@@ -14,7 +14,6 @@ public: // •Ï”
     Quaternion(void) = default;
     constexpr Quaternion(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
-    Quaternion Multiply(const Quaternion& rhs) const;
     Quaternion Identity(void) const;
     Quaternion Conjugate(void) const;
     float Norm(void) const;
