@@ -364,7 +364,7 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
 
 #pragma region ルートパラメータ
     // ルートパラメーターの設定
-    D3D12_ROOT_PARAMETER rootParams[4] = {};
+    D3D12_ROOT_PARAMETER rootParams[5] = {};
     // テクスチャレジスタ0番
     rootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	// 種類
     rootParams[0].DescriptorTable.pDescriptorRanges = &descriptorRange;
@@ -385,6 +385,11 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
     rootParams[3].Descriptor.ShaderRegister = 2;					// 定数バッファ番号
     rootParams[3].Descriptor.RegisterSpace = 0;						// デフォルト値
     rootParams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	// 全てのシェーダから見える
+        // 定数バッファ3番
+    rootParams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	// 種類
+    rootParams[4].Descriptor.ShaderRegister = 3;					// 定数バッファ番号
+    rootParams[4].Descriptor.RegisterSpace = 0;						// デフォルト値
+    rootParams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	// 全てのシェーダから見える
 #pragma endregion
 
 #pragma region サンプラーの設定

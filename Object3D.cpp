@@ -1,6 +1,7 @@
 #include "Object3D.h"
 #include "InitDirectX.h"
 
+Light* Object3D::sLightPtr_{ nullptr };
 ModelManager* Object3D::sModelMPtr_{ nullptr };
 TextureManager* Object3D::sTexMPtr_{ nullptr };
 ConstBuffer<Object3D::CBMatViewPerse_t> Object3D::sCbMatViewPerse_{};
@@ -19,6 +20,8 @@ void Object3D::UpdateCBMatViewPerse(void)
 {
     sCbMatViewPerse_.GetConstBuffMap()->matView_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
     sCbMatViewPerse_.GetConstBuffMap()->matPerspective_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
+
+    sCbMatViewPerse_.GetConstBuffMap()->cameraPos_ = CameraManager::GetInstance()->GetCurrentCamera()->GetPosition();
 }
 
 void Object3D::PreDraw(BlendMode blendmode)

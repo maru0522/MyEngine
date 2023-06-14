@@ -7,6 +7,7 @@
 #include "ConstBuffer.h"
 #include "FileSystem.h"
 #include "Matrix4.h"
+#include "Light.h"
 
 class Object3D
 {
@@ -25,6 +26,7 @@ private:
     {
         Matrix4 matView_;
         Matrix4 matPerspective_;
+        Vector3 cameraPos_;
     };
 
 public:
@@ -51,8 +53,13 @@ private:
 
     ConstBuffer<CBData3d_t> cb_;
 
+    static Light* sLightPtr_;
     static ModelManager* sModelMPtr_;
     static TextureManager* sTexMPtr_;
     static ConstBuffer<CBMatViewPerse_t> sCbMatViewPerse_;
+
+public:
+    // setterÅEgetter
+    static inline void SetLight(Light* lightptr) { sLightPtr_ = lightptr; }
 };
 

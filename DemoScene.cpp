@@ -7,10 +7,16 @@ void DemoScene::Initialize(void)
     cameraPtr->SetPosition({ 0,0,-20 });
     // カメラをマネージャーにセット
     CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
+
+    light_->SetLightColor({ 1,1,1 });
+    light_->SetLightDir({ 0,1,5 });
+    Object3D::SetLight(light_.get());
 }
 
 void DemoScene::Update(void)
 {
+    light_->Update();
+
     sprite_->Update();
     //obj3d_->Update();
     obj3d2_->Update();
@@ -21,6 +27,7 @@ void DemoScene::Update(void)
 
 void DemoScene::Draw3d(void)
 {
+    light_->Draw();
     //obj3d_->Draw();
     obj3d2_->Draw();
     // cubeの画像にスプライトで表示しているものを起用

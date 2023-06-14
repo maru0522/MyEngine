@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "Object3D.h"
 #include "Sound.h"
+#include "Light.h"
 
 class DemoScene :
     public IScene
@@ -25,6 +26,8 @@ public:
     //std::unique_ptr<Object3D> obj3d_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
     std::unique_ptr<Object3D> obj3d2_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
     //std::unique_ptr<Sound> music2_{ std::make_unique<Sound>("Resources/sound/edm.wav") };
+
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
+    std::unique_ptr<Light> light_{ std::make_unique<Light>() };
 };
 

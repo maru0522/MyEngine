@@ -94,6 +94,7 @@
     <ClCompile Include="BillBoard.cpp">
       <Filter>Entity\3D</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="BillBoard.h">
       <Filter>Entity\3D</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

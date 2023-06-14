@@ -12,6 +12,7 @@ public:
     struct CBLight_t
     {
         Vector3 lightv_;
+        float pad1;
         Vector3 lightcolor_;
     };
 

@@ -9,6 +9,7 @@ cbuffer CBMatViewPerse_t : register(b1)
 {
     matrix matView_;
     matrix matPerspective_;
+    float3 cameraPos_;
 }
 
 // マテリアル
@@ -18,6 +19,12 @@ cbuffer CBMaterial_t : register(b2)
 	float3 mDiffuse  : packoffset(c1);   // ディフューズ係数
 	float3 mSpecular : packoffset(c2);   // スペキュラー係数
 	float  mAlpha    : packoffset(c2.w); // アルファ
+}
+
+cbuffer CBLight_t : register(b3)
+{
+    float3 lightv;
+    float3 lightcolor;
 }
 
 // 頂点シェーダの出力構造体

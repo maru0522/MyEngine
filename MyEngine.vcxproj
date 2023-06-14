@@ -96,6 +96,7 @@
     <ClCompile Include="InitDirectX.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="IScene.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathUtil.cpp" />
     <ClCompile Include="Matrix4.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="InitDirectX.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IScene.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="MathUtil.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mesh.h" />

@@ -17,7 +17,8 @@ void Light::Update(void)
 
 void Light::Draw(void)
 {
-    InitDirectX::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cbLight_.GetBuffer()->GetGPUVirtualAddress());
+    InitDirectX::GetInstance()->GetCommandList()->
+        SetGraphicsRootConstantBufferView(4, cbLight_.GetBuffer()->GetGPUVirtualAddress());
 }
 
 void Light::TransferCB(void)
