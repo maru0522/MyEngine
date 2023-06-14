@@ -17,7 +17,6 @@ public:
     float length(void) const;                 // ノルム(長さ)を求める
     Vector4 normalize(void) const;            // 正規化する
     float dot(const Vector4& v) const;        // 内積を求める
-    Vector4 cross(const Vector4& v) const;    // 外積を求める ※定義されてないためわからんち
 
     // 単項オバロ
     Vector4 operator+() const;

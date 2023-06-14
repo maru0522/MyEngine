@@ -20,14 +20,6 @@ float Vector4::dot(const Vector4& v) const
     return x * v.x + y * v.y + z * v.z + w * v.w;
 }
 
-Vector4 Vector4::cross(const Vector4& v) const
-{
-    return Vector4{ y * v.w - w * v.y,
-                    z * v.x - x * v.z,
-                    w * v.y - y * v.w,
-                    x * v.z - z * v.x };
-}
-
 Vector4 Vector4::operator+() const
 {
     return *this;
