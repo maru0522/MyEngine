@@ -18,12 +18,5 @@ class ImGuiController
         void Begin(void);
         void End(void);
         void Draw(void);
-
-    private:
-        void CreateSRVHeap(void);
-
-    private:
-        // ïœêî
-        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 };
 

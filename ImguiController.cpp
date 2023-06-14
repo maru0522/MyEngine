@@ -19,14 +19,13 @@ void ImGuiController::Initialize(WndAPI* wndPtr)
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(wndPtr->GetHwnd());
 
-    CreateSRVHeap();
     ImGui_ImplDX12_Init(
         iDX->GetDevice(),
         static_cast<int32_t>(iDX->GetBackBufferCount()),
         DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-        srvHeap_.Get(),
-        srvHeap_->GetCPUDescriptorHandleForHeapStart(),
-        srvHeap_->GetGPUDescriptorHandleForHeapStart()
+        iDX->GetDescHeap_t()->GetDescHeap(),
+        iDX->GetDescHeap_t()->GetDescHeap()->GetCPUDescriptorHandleForHeapStart(),
+        iDX->GetDescHeap_t()->GetDescHeap()->GetGPUDescriptorHandleForHeapStart()
     );
 
     ImGuiIO& io = ImGui::GetIO();
@@ -49,19 +48,8 @@ void ImGuiController::Draw(void)
 {
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-    std::vector<ID3D12DescriptorHeap*> ppHeaps = { srvHeap_.Get() };
+    std::vector<ID3D12DescriptorHeap*> ppHeaps = { iDX->GetDescHeap_t()->GetDescHeap() };
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), iDX->GetCommandList());
-}
-
-void ImGuiController::CreateSRVHeap(void)
-{
-    D3D12_DESCRIPTOR_HEAP_DESC desc{};
-    desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    desc.NumDescriptors = kMAX_SRV_COUNT_FOR_IMGUI;
-    desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-
-    HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));
-    assert(SUCCEEDED(hr));
 }
