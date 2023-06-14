@@ -67,8 +67,8 @@ void InitDirectX::PreDraw(void)
     // ４．描画コマンドここから
     // ビューポート設定コマンド
     D3D12_VIEWPORT viewport{};
-    viewport.Width = WndAPI::sWidth_;
-    viewport.Height = WndAPI::sHeight_;
+    viewport.Width = WndAPI::kWidth_;
+    viewport.Height = WndAPI::kHeight_;
     viewport.TopLeftX = 0;
     viewport.TopLeftY = 0;
     viewport.MinDepth = 0.0f;
@@ -79,9 +79,9 @@ void InitDirectX::PreDraw(void)
     // シザー矩形
     D3D12_RECT scissorRect{};
     scissorRect.left = 0; // 切り抜き座標左
-    scissorRect.right = scissorRect.left + WndAPI::sWidth_; // 切り抜き座標右
+    scissorRect.right = scissorRect.left + WndAPI::kWidth_; // 切り抜き座標右
     scissorRect.top = 0; // 切り抜き座標上
-    scissorRect.bottom = scissorRect.top + WndAPI::sHeight_; // 切り抜き座標下
+    scissorRect.bottom = scissorRect.top + WndAPI::kHeight_; // 切り抜き座標下
     // シザー矩形設定コマンドを、コマンドリストに積む
     commandList_->RSSetScissorRects(1, &scissorRect);
 #pragma endregion
@@ -352,8 +352,8 @@ void InitDirectX::DepthBuffer(void)
     // リソース設定
     D3D12_RESOURCE_DESC depthResourceDesc{};
     depthResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-    depthResourceDesc.Width = WndAPI::sWidth_;     // レンダーターゲットに合わせる
-    depthResourceDesc.Height = WndAPI::sHeight_;   // レンダーターゲットに合わせる
+    depthResourceDesc.Width = WndAPI::kWidth_;     // レンダーターゲットに合わせる
+    depthResourceDesc.Height = WndAPI::kHeight_;   // レンダーターゲットに合わせる
     depthResourceDesc.DepthOrArraySize = 1;
     depthResourceDesc.Format = DXGI_FORMAT_D32_FLOAT;   // 深度値フォーマット
     depthResourceDesc.SampleDesc.Count = 1;

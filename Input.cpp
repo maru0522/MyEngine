@@ -21,7 +21,7 @@ bool Input::DIPad::sIsConnect_{ false };
 Input::XPad::CustomDeadZone Input::XPad::sDeadZone_{ 0 };
 XINPUT_STATE Input::XPad::sXStatePre_{ 0 };
 XINPUT_STATE Input::XPad::sXState_{ 0 };
-bool Input::XPad::isConnect_{ false };
+bool Input::XPad::sIsConnect_{ false };
 #pragma endregion
 
 #pragma region mouse
@@ -126,10 +126,10 @@ void Input::XPad::Update(void)
     ZeroMemory(&sXState_, sizeof(XINPUT_STATE));
 
     if (XInputGetState(0, &sXState_) == ERROR_SUCCESS) {
-        isConnect_ = true;
+        sIsConnect_ = true;
     }
     else {
-        isConnect_ = false;
+        sIsConnect_ = false;
     }
 }
 

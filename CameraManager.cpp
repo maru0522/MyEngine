@@ -31,12 +31,12 @@ void Camera::Update(void)
         matView_ = Math::Matrix::ViewLookAtLH(eye_, *targetPtr_, up_) :
         matView_ = Math::Matrix::ViewLookToLH(coordinate.GetPosition(), coordinate.GetAxisZ(), coordinate.GetAxisY());
 
-    matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::sWidth_, WndAPI::sHeight_, nearZ_, farZ_);
+    matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }
 
 void Camera::UpdateOrthoGraphic(void)
 {
-    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::sWidth_, WndAPI::sHeight_);
+    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::kWidth_, WndAPI::kHeight_);
 }
 
 CameraManager* CameraManager::GetInstance(void)

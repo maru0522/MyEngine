@@ -4,7 +4,7 @@
 #include <timeapi.h>
 #pragma comment(lib,"winmm.lib")
 
-const std::wstring WndAPI::sWindowClassName_ = L"maruyamaEngine";
+const std::wstring WndAPI::kWindowClassName_ = L"maruyamaEngine";
 
 LRESULT WndAPI::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -29,7 +29,7 @@ WndAPI::WndAPI(void)
     // ウィンドウクラスの設定
     w_.cbSize = sizeof(WNDCLASSEX);
     w_.lpfnWndProc = static_cast<WNDPROC>(WindowProc);   // ウィンドウプロシージャを設定
-    w_.lpszClassName = sWindowClassName_.c_str();        // ウィンドウクラス名
+    w_.lpszClassName = kWindowClassName_.c_str();        // ウィンドウクラス名
     w_.hInstance = GetModuleHandle(nullptr);             // ウィンドウハンドル
     w_.hCursor = LoadCursor(NULL, IDC_ARROW);            // カーソル指定
 
@@ -37,14 +37,14 @@ WndAPI::WndAPI(void)
     RegisterClassEx(&w_);
 
     // ウィンドウサイズ{ X座標 Y座標 横幅 縦幅 }
-    RECT wrc = { 0, 0, sWidth_, sHeight_ };
+    RECT wrc = { 0, 0, kWidth_, kHeight_ };
     // 自動でサイズを補正する
     AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
     // ウィンドウオブジェクトの生成
     hwnd_ = CreateWindow(
         w_.lpszClassName,     // クラス名
-        sWindowClassName_.c_str(),     // タイトルバーの文字
+        kWindowClassName_.c_str(),     // タイトルバーの文字
         WS_OVERLAPPEDWINDOW,  // 標準的なウィンドウスタイル
         CW_USEDEFAULT,        // 表示X座標（OSに任せる）
         CW_USEDEFAULT,        // 表示Y座標（OSに任せる）
@@ -68,7 +68,7 @@ WndAPI::WndAPI(const char* title)
     // ウィンドウクラスの設定
     w_.cbSize = sizeof(WNDCLASSEX);
     w_.lpfnWndProc = static_cast<WNDPROC>(WindowProc);   // ウィンドウプロシージャを設定
-    w_.lpszClassName = sWindowClassName_.c_str();        // ウィンドウクラス名
+    w_.lpszClassName = kWindowClassName_.c_str();        // ウィンドウクラス名
     w_.hInstance = GetModuleHandle(nullptr);             // ウィンドウハンドル
     w_.hCursor = LoadCursor(NULL, IDC_ARROW);            // カーソル指定
 
@@ -76,7 +76,7 @@ WndAPI::WndAPI(const char* title)
     RegisterClassEx(&w_);
 
     // ウィンドウサイズ{ X座標 Y座標 横幅 縦幅 }
-    RECT wrc = { 0, 0, sWidth_, sHeight_ };
+    RECT wrc = { 0, 0, kWidth_, kHeight_ };
     // 自動でサイズを補正する
     AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
