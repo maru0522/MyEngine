@@ -1,6 +1,7 @@
 #include <vector>
 #include "Sprite.h"
 #include "Matrix4.h"
+#include "MathUtil.h"
 #include "InitDirectX.h"
 #include "CameraManager.h"
 #include "TextureManager.h"
@@ -166,17 +167,11 @@ void Sprite::SetColor(const Vector4& rgba)
 {
     Vector4 lrgba = rgba;
 
-    // 値が0.0fより小さい時0.0fにする
-    lrgba.x = (std::max)(rgba.x, 0.0f);
-    lrgba.y = (std::max)(rgba.y, 0.0f);
-    lrgba.z = (std::max)(rgba.z, 0.0f);
-    lrgba.w = (std::max)(rgba.w, 0.0f);
-
-    // 値が1.0fより大きい時1.0fにする
-    lrgba.x = (std::min)(1.0f, rgba.x);
-    lrgba.y = (std::min)(1.0f, rgba.y);
-    lrgba.z = (std::min)(1.0f, rgba.z);
-    lrgba.w = (std::min)(1.0f, rgba.w);
+    // 値を0.f~1.f内に収める
+    lrgba.x = Math::Function::Clamp(rgba.x, 0.f, 1.f);
+    lrgba.y = Math::Function::Clamp(rgba.y, 0.f, 1.f);
+    lrgba.z = Math::Function::Clamp(rgba.z, 0.f, 1.f);
+    lrgba.w = Math::Function::Clamp(rgba.w, 0.f, 1.f);
 
     // 値を書き込むと自動的に転送される
     cb_.GetConstBuffMap()->color_ = lrgba;
@@ -186,17 +181,11 @@ void Sprite::SetColor255(const Vector4& rgba)
 {
     Vector4 lrgba = rgba;
 
-    // 値が0.0fより小さい時0.0fにする
-    lrgba.x = (std::max)(rgba.x, 0.0f);
-    lrgba.y = (std::max)(rgba.y, 0.0f);
-    lrgba.z = (std::max)(rgba.z, 0.0f);
-    lrgba.w = (std::max)(rgba.w, 0.0f);
-
-    // 値が255.0fより大きい時255.0fにする
-    lrgba.x = (std::min)(255.0f, rgba.x);
-    lrgba.y = (std::min)(255.0f, rgba.y);
-    lrgba.z = (std::min)(255.0f, rgba.z);
-    lrgba.w = (std::min)(255.0f, rgba.w);
+    // 値を0.f~255.f内に収める
+    lrgba.x = Math::Function::Clamp(rgba.x, 0.f, 255.f);
+    lrgba.y = Math::Function::Clamp(rgba.y, 0.f, 255.f);
+    lrgba.z = Math::Function::Clamp(rgba.z, 0.f, 255.f);
+    lrgba.w = Math::Function::Clamp(rgba.w, 0.f, 255.f);
 
     // 正規化
     lrgba = { lrgba.x / 255.f, lrgba.y / 255.f, lrgba.z / 255.f, lrgba.w / 255.f };
