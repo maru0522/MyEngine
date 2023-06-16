@@ -32,8 +32,8 @@ cbuffer CBLight_t : register(b3)
 struct VSOutput
 {
     float4 svpos_ : SV_POSITION; // システム用頂点座標
-    //float3 normal_ : NORMAL;    // 法線ベクトル
-    float4 color_ : COLOR;     // 色
+    float4 wpos_ : POSITION;
+    float3 normal_ : NORMAL; // 法線ベクトル
     float2 uv_ : TEXCOORD;    // uv値
 };
 
