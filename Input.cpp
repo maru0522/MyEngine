@@ -279,7 +279,7 @@ void Input::Mouse::Update(void)
     sMouseStatePre_ = sMouseState_;
 
     // “ü—Íó‘Ô‚ðŽæ“¾
-    sMouse_->GetDeviceState(sizeof(sMouseState_), &sMouseState_);
+    sMouse_->GetDeviceState(sizeof(sMouseState_.mState_), &sMouseState_.mState_);
 
     // ˆÊ’u‚ðŽæ“¾
     POINT pos;

@@ -6,17 +6,14 @@
 
 class ImGuiController
 {
-    public:
-        // íËã`
-        static constexpr uint32_t kMAX_SRV_COUNT_FOR_IMGUI{ 1 };
+public:
+    // ä÷êî
+    ImGuiController(void) {};
+    ~ImGuiController(void);
 
-        // ä÷êî
-        ImGuiController(void) {};
-        ~ImGuiController(void);
-
-        void Initialize(WndAPI* wndPtr);
-        void Begin(void);
-        void End(void);
-        void Draw(void);
+    void Initialize(WndAPI* wndPtr);
+    void Begin(void);
+    void End(void);
+    void Draw(void);
 };
 

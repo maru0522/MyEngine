@@ -13,14 +13,15 @@ public:
     Camera(const Vector3& eye);
     void Update(void);
 
+    //** cameraManageróp
     void UpdateOrthoGraphic(void);
-private:
 
     // ïœêî
     Vector3 eye_;
     Vector3 up_;
     Vector3 rotation_;
 
+private:
     Vector3* targetPtr_;
     bool isFollow_;
 
@@ -31,27 +32,19 @@ private:
     Matrix4 matProj_Perspective_;
     Matrix4 matView_;
 
+    bool isDebugMode_{};
 
 public:
     // getterÅEsetter
-    inline void SetPosition(const Vector3& eye) { eye_ = eye; }
-    inline void SetUp(const Vector3& up) { up_ = up; }
-    inline void SetNearZ(float nearZ) { nearZ_ = nearZ; }
-    inline void SetFarZ(float farZ) { farZ_ = farZ; }
-
-    inline const Vector3& GetPosition(void) { return eye_; }
-    inline const Vector3& GetUp(void) { return up_; }
-    inline float GetNearZ(void) { return nearZ_; }
-    inline float GetFarZ(void) { return farZ_; }
-
     inline const Matrix4& GetMatProjOrthoGraphic(void) { return matProj_OrthoGraphic_; }
     inline const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }
     inline const Matrix4& GetMatView(void) { return matView_; }
 
-    inline void Follow(Vector3* p_target) { isFollow_ = true, targetPtr_ = p_target; }
-    inline void UnFollow(void) { isFollow_ = false; }
+    void Follow(Vector3* p_target);
+    void UnFollow(void);
     inline bool GetIsFollow(void) { return isFollow_; }
-    inline Vector3* GetFollowPosPtr(void) { return targetPtr_; }
+
+    inline void SetIsDebugMode(bool isDebug) { isDebugMode_ = isDebug; }
 };
 
 class CameraManager
@@ -59,7 +52,6 @@ class CameraManager
 public:
     // ä÷êî
     static CameraManager* GetInstance(void);
-
     
     void Update(void);
 
@@ -70,7 +62,6 @@ private:
 public:
     // getterÅEsetter
     void SetCurrentCamera(Camera* cameraPtr);
-
     inline Camera* GetCurrentCamera(void) { return current_; }
 
 private:

@@ -2,7 +2,7 @@
 
 float Math::Ease::EaseInSine(float t, float start, float end)
 {
-    return start + (end - start) * (1.f - std::cosf(t * (Math::PI / 2.f)));
+    return start + (end - start) * (1.f - std::cosf(t * (Math::kPI / 2.f)));
 }
 
 float Math::Ease::EaseInCubic(float t, float start, float end)
@@ -23,7 +23,7 @@ float Math::Ease::EaseInCirc(float t, float start, float end)
 
 float Math::Ease::EaseInElastic(float t, float start, float end)
 {
-    const float c4{ (2.f * Math::PI) / 3.f };
+    const float c4{ (2.f * Math::kPI) / 3.f };
     if (t == 0.f) return start;
     else if (t == 1.f) return end;
     else return -std::powf(2.f, 10.f * t - 10.f) * std::sinf((t * 10.f - 10.75f) * c4);
@@ -32,7 +32,7 @@ float Math::Ease::EaseInElastic(float t, float start, float end)
 
 float Math::Ease::EaseOutSine(float t, float start, float end)
 {
-    float time{ std::sinf((t * Math::PI) / 2.f) };
+    float time{ std::sinf((t * Math::kPI) / 2.f) };
     return start + (end - start) * time;
 }
 
@@ -56,7 +56,7 @@ float Math::Ease::EaseOutCirc(float t, float start, float end)
 
 float Math::Ease::EaseOutElastic(float t, float start, float end)
 {
-    const float c4 = (2.f * Math::PI) / 3.f;
+    const float c4 = (2.f * Math::kPI) / 3.f;
 
     if (t == 0) {
         return start;
@@ -71,7 +71,7 @@ float Math::Ease::EaseOutElastic(float t, float start, float end)
 
 float Math::Ease::EaseInOutSine(float t, float start, float end)
 {
-    float time{ -(std::cosf(Math::PI * t) - 1.f) / 2.f };
+    float time{ -(std::cosf(Math::kPI * t) - 1.f) / 2.f };
     return start * (1.f - time) + end * time;
 }
 
@@ -102,7 +102,7 @@ float Math::Ease::EaseInOutCirc(float t, float start, float end)
 
 float Math::Ease::EaseInOutElastic(float t, float start, float end)
 {
-    const float c5 = (2.f * Math::PI) / 4.5f;
+    const float c5 = (2.f * Math::kPI) / 4.5f;
 
     return start + (t == 0.f
         ? 0.f

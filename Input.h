@@ -160,6 +160,7 @@ namespace Input {
         // 離された瞬間
         static inline bool IsReleased(Click click) { return sMouseStatePre_.mState_.rgbButtons[static_cast<size_t>(click)] && !sMouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
 
+        static inline const Vector2 GetCursorVec(void) { return sMouseState_.cursorPos2d_ - sMouseStatePre_.cursorPos2d_; }
         static inline const Vector2& GetCursorPos2D(void) { return sMouseState_.cursorPos2d_; }
         static inline float GetScroll(void) { return sMouseState_.scroll_; }
     private:

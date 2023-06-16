@@ -21,7 +21,7 @@ void Object3D::UpdateCBMatViewPerse(void)
     sCbMatViewPerse_.GetConstBuffMap()->matView_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
     sCbMatViewPerse_.GetConstBuffMap()->matPerspective_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
 
-    sCbMatViewPerse_.GetConstBuffMap()->cameraPos_ = CameraManager::GetInstance()->GetCurrentCamera()->GetPosition();
+    sCbMatViewPerse_.GetConstBuffMap()->cameraPos_ = CameraManager::GetInstance()->GetCurrentCamera()->eye_;
 }
 
 void Object3D::PreDraw(BlendMode blendmode)

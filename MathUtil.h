@@ -6,11 +6,11 @@ static std::random_device sSeed_gen;
 static std::mt19937 sEngine(sSeed_gen());
 
 namespace Math {
-    constexpr float PI{ 3.14159265f };
+    constexpr float kPI{ 3.14159265f };
 
     namespace Function {
-        inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::PI / 180.0f; }
-        inline constexpr float ToDegree(float fRadians) { return fRadians * 180.0f / Math::PI; }
+        inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::kPI / 180.0f; }
+        inline constexpr float ToDegree(float fRadians) { return fRadians * 180.0f / Math::kPI; }
 
         template<typename T> // Žw’è‚µ‚½Œ^‚Ìƒ‰ƒ“ƒ_ƒ€‚È’l‚ð•Ô‹p
         inline const T Random(const double min, const double max) {

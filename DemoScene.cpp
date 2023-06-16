@@ -4,7 +4,7 @@
 void DemoScene::Initialize(void)
 {
     // カメラの座標設定
-    cameraPtr->SetPosition({ 0,0,-20 });
+    cameraPtr->eye_.z = -20;
     // カメラをマネージャーにセット
     CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
 
