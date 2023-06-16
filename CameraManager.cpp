@@ -92,9 +92,13 @@ void CameraManager::Update(void)
 
 void CameraManager::SetCurrentCamera(Camera* cameraPtr)
 {
-    // 使用の有無に関係なくデバッグカメラモードはOFF
-    current_->SetIsDebugMode(false);
+    // nullチェック
+    if (current_) {
+        // 使用の有無に関係なくデバッグカメラモードはOFF
+        current_->SetIsDebugMode(false);
+    }
 
+    // 新規カメラをセット
     current_ = cameraPtr;
     current_->Update();
     current_->UpdateOrthoGraphic();

@@ -5,6 +5,8 @@ void DemoScene::Initialize(void)
 {
     // カメラの座標設定
     cameraPtr->eye_.z = -20;
+    // カメラのデバッグカメラモードをON
+    cameraPtr->SetIsDebugMode(true);
     // カメラをマネージャーにセット
     CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
 
