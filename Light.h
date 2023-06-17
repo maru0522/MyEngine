@@ -9,7 +9,7 @@ private:
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
-    struct CBLight_t
+    struct CBDirLight_t
     {
         Vector3 lightv_;
         float pad1;
@@ -26,7 +26,7 @@ private:
     void TransferCB(void);
 
     // ïœêî
-    ConstBuffer<CBLight_t> cbLight_;
+    ConstBuffer<CBDirLight_t> cbLight_;
 
     bool isDirty_{};
     Vector3 lightDir_{ 1,0,0 };

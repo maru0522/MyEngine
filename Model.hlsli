@@ -22,6 +22,7 @@ cbuffer CBMaterial_t : register(b2)
 }
 
 static const uint kDirLightNum = 3;
+static const uint kPointLightNum = 3;
 
 struct DirLight
 {
@@ -30,10 +31,19 @@ struct DirLight
     uint isActive;
 };
 
+struct PointLight
+{
+    float3 lightpos;
+    float3 lightcolor;
+    float3 lightatten; // ライト距離減衰係数
+    uint isActive;
+};
+
 cbuffer CBLight_t : register(b3)
 {
     float3 ambientColor;
     DirLight dirLights[kDirLightNum];
+    PointLight pointLights[kPointLightNum];
 }
 
 // 頂点シェーダの出力構造体
