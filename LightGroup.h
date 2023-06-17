@@ -3,6 +3,7 @@
 #include "Light.h"
 #include "Vector3.h"
 #include "ConstBuffer.h"
+#include "ImguiController.h"
 
 class LightGroup
 {
@@ -29,6 +30,7 @@ public:
 private:
     void TransferCB(void);
     void DefaultLightSetting(void);
+    void DebugImGui(void);
 
     // ïœêî
     ConstBuffer<CBLightGroup_t> cbLightGroup_;
