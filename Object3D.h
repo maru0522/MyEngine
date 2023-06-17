@@ -7,7 +7,7 @@
 #include "ConstBuffer.h"
 #include "FileSystem.h"
 #include "Matrix4.h"
-#include "Light.h"
+#include "LightGroup.h"
 
 class Object3D
 {
@@ -53,13 +53,13 @@ private:
 
     ConstBuffer<CBData3d_t> cb_;
 
-    static Light* sLightPtr_;
+    static LightGroup* sLightGroupPtr_;
     static ModelManager* sModelMPtr_;
     static TextureManager* sTexMPtr_;
     static ConstBuffer<CBMatViewPerse_t> sCbMatViewPerse_;
 
 public:
     // setterÅEgetter
-    static inline void SetLight(Light* lightptr) { sLightPtr_ = lightptr; }
+    static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 };
 

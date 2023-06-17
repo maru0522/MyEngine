@@ -4,7 +4,7 @@
 #include "Sprite.h"
 #include "Object3D.h"
 #include "Sound.h"
-#include "Light.h"
+#include "LightGroup.h"
 
 class DemoScene :
     public IScene
@@ -28,6 +28,6 @@ public:
     //std::unique_ptr<Sound> music2_{ std::make_unique<Sound>("Resources/sound/edm.wav") };
 
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
-    std::unique_ptr<Light> light_{ std::make_unique<Light>() };
+    std::unique_ptr<LightGroup> lightGroup_{ std::make_unique<LightGroup>() };
 };
 

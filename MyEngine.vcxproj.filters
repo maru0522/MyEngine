@@ -95,6 +95,7 @@
       <Filter>Entity\3D</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -186,6 +187,7 @@
       <Filter>Entity\3D</Filter>
     </ClInclude>
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

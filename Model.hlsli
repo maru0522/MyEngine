@@ -21,10 +21,19 @@ cbuffer CBMaterial_t : register(b2)
 	float  mAlpha    : packoffset(c2.w); // アルファ
 }
 
-cbuffer CBLight_t : register(b3)
+static const uint kDirLightNum = 3;
+
+struct DirLight
 {
     float3 lightv;
     float3 lightcolor;
+    uint isActive;
+};
+
+cbuffer CBLight_t : register(b3)
+{
+    float3 ambientColor;
+    DirLight dirLights[kDirLightNum];
 }
 
 // 頂点シェーダの出力構造体
