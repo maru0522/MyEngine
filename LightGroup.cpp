@@ -47,15 +47,15 @@ void LightGroup::TransferCB(void)
 void LightGroup::DefaultLightSetting(void)
 {
     dirLights_[0].SetIsActive(true);
-    dirLights_[0].SetLightColor({ 1.f,1.f,1.f });
+    dirLights_[0].SetLightColor({ 1.f,0.f,0.f });
     dirLights_[0].SetLightDir({ 0.f,-1.f,0.f });
 
     dirLights_[1].SetIsActive(true);
-    dirLights_[1].SetLightColor({ 1.f,1.f,1.f });
+    dirLights_[1].SetLightColor({ 0.f,1.f,0.f });
     dirLights_[1].SetLightDir({ +0.5f,+0.1f,+0.2f });
 
     dirLights_[2].SetIsActive(true);
-    dirLights_[2].SetLightColor({ 1.f,1.f,1.f });
+    dirLights_[2].SetLightColor({ 0.f,0.f,1.f });
     dirLights_[2].SetLightDir({ -0.5f,+0.1f,-0.2f });
 }
 
