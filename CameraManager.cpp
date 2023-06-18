@@ -43,8 +43,8 @@ void Camera::Update(void)
         // 平行移動
         if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してる
             const float moveSpeed = 0.05f;
-            eye_ += coordinate.GetAxisX().normalize() * mouseVelocity.x * moveSpeed;
-            eye_ += coordinate.GetAxisY().normalize() * -mouseVelocity.y * moveSpeed;
+            eye_ += coordinate.GetAxisX().normalize() * -mouseVelocity.x * moveSpeed;
+            eye_ += coordinate.GetAxisY().normalize() * mouseVelocity.y * moveSpeed;
         }
 
         // 前後移動
