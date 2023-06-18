@@ -60,6 +60,24 @@ void LightGroup::TransferCB(void)
             cbLightGroup_.GetConstBuffMap()->pointLights_[i].isActive = 0;
         }
     }
+
+    // スポットライト
+    for (size_t i = 0; i < kSpotLightNum_; i++)
+    {
+        // ライトが有効なら設定を転送
+        if (spotLights_[i].GetIsActive()) {
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].isActive = 1;
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].lightv = -spotLights_[i].GetLightDir();
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].lightPos = spotLights_[i].GetLightPos();
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].lightColor = spotLights_[i].GetLightColor();
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].lightAtten = spotLights_[i].GetLightAtten();
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].lightFactorAnglecos = spotLights_[i].GetLightFactorAngleCos();
+        }
+        // ライトが無効なら転送しない。
+        else {
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].isActive = 0;
+        }
+    }
 }
 
 void LightGroup::DefaultLightSetting(void)
@@ -76,10 +94,17 @@ void LightGroup::DefaultLightSetting(void)
     //dirLights_[2].SetLightColor({ 0.f,0.f,1.f });
     //dirLights_[2].SetLightDir({ -0.5f,+0.1f,-0.2f });
 
-    pointLights_[0].SetIsActive(true);
-    pointLights_[0].SetLightPos({ 0.0f, 1.f, -2.f });
-    pointLights_[0].SetLightColor({ 1.f,1.f,1.f });
-    pointLights_[0].SetLightAtten({ 0.3f,0.1f,0.1f });
+    //pointLights_[0].SetIsActive(true);
+    //pointLights_[0].SetLightPos({ 2.0f, 2.f, -2.f });
+    //pointLights_[0].SetLightColor({ 1.f,1.f,1.f });
+    //pointLights_[0].SetLightAtten({ 0.3f,0.1f,0.1f });
+
+    spotLights_[0].SetIsActive(true);
+    spotLights_[0].SetLightDir({ 0.0f, -1.f, 0.f });
+    spotLights_[0].SetLightPos({ 0.0f, 5.f, 0.f });
+    spotLights_[0].SetLightColor({ 1.f,1.f,1.f });
+    spotLights_[0].SetLightAtten({ 0.f,0.f,0.f });
+    spotLights_[0].SetLightFactorAngle({ 20.f,30.f });
 }
 
 void LightGroup::DebugImGui(void)
@@ -127,6 +152,36 @@ void LightGroup::SetPointLightColor(size_t index, const Vector3& lightColor)
 void LightGroup::SetPointLightAtten(size_t index, const Vector3& lightAtten)
 {
     pointLights_[index].SetLightAtten(lightAtten);
+    isDirty_ = true;
+}
+
+void LightGroup::SetSpotLightDir(size_t index, const Vector3& lightDir)
+{
+    spotLights_[index].SetLightDir(lightDir);
+    isDirty_ = true;
+}
+
+void LightGroup::SetSpotLightPos(size_t index, const Vector3& lightPos)
+{
+    spotLights_[index].SetLightPos(lightPos);
+    isDirty_ = true;
+}
+
+void LightGroup::SetSpotLightColor(size_t index, const Vector3& lightColor)
+{
+    spotLights_[index].SetLightColor(lightColor);
+    isDirty_ = true;
+}
+
+void LightGroup::SetSpotLightAtten(size_t index, const Vector3& lightAtten)
+{
+    spotLights_[index].SetLightAtten(lightAtten);
+    isDirty_ = true;
+}
+
+void LightGroup::SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle)
+{
+    spotLights_[index].SetLightFactorAngle(lightFactorAngle);
     isDirty_ = true;
 }
 

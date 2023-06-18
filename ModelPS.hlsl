@@ -64,6 +64,39 @@ float4 main(VSOutput input) : SV_TARGET
         }
     }
     
+    // スポットライト
+    for (uint k = 0; k < kPointLightNum; k++)
+    {
+        if (spotLights[k].isActive)
+        {
+            // ライトへのベクトル
+            float3 lightv = spotLights[k].lightpos - input.wpos_.xyz;
+            // ベクトルの長さ
+            float d = length(lightv);
+            // 正規化
+            lightv = normalize(lightv);
+            // 距離減衰係数
+            float atten = saturate(1.0f / (spotLights[k].lightatten.x + spotLights[k].lightatten.y * d + spotLights[k].lightatten.z * d * d));
+            // 角度減衰
+            float cos = dot(lightv, spotLights[k].lightv);
+            // 開始角度(内側:1倍輝度) ~ 終了角度(内側:0倍輝度)にかけて減衰
+            float angleatten = smoothstep(spotLights[k].lightfactoranglecos.y, spotLights[k].lightfactoranglecos.x, cos);
+            // 角度減衰を乗算
+            atten *= angleatten;
+            // ライトに向かうベクトルと法線の内積
+            float3 dotlightnormal = dot(lightv, input.normal_);
+            // 反射光ベクトル
+            float3 reflect = normalize(-lightv + 2 * dotlightnormal * input.normal_);
+            // 拡散反射光
+            float3 diffuse = dotlightnormal * mDiffuse;
+            // 鏡面反射光
+            float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * mSpecular;
+            
+            // 全て加算する
+            shadecolor.rgb += atten * (diffuse + specular) * spotLights[k].lightcolor;
+        }
+    }
+    
     // シェーディングによる色で描画
     return shadecolor * texcolor;
 }

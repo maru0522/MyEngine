@@ -190,6 +190,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightGroup.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="SpotLight.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

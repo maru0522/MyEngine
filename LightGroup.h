@@ -2,6 +2,7 @@
 #include <cstdint>
 #include "Light.h"
 #include "Vector3.h"
+#include "SpotLight.h"
 #include "PointLight.h"
 #include "ConstBuffer.h"
 #include "ImguiController.h"
@@ -16,6 +17,7 @@ public:
     // 定数
     static constexpr uint32_t kDirLightNum_ = 3;
     static constexpr uint32_t kPointLightNum_ = 3;
+    static constexpr uint32_t kSpotLightNum_ = 3;
 
     struct CBLightGroup_t
     {
@@ -23,6 +25,7 @@ public:
         float pad;
         DirectionalLight::CBDirLight_t dirLights_[kDirLightNum_]; // 平行光源用
         PointLight::CBPointLight_t pointLights_[kPointLightNum_]; // 点光源用
+        SpotLight::CBSpotLight_t spotLights_[kSpotLightNum_];     // スポットライト用
     };
 
     // 関数
@@ -40,6 +43,7 @@ private:
     Vector3 ambientColor_{ 1,1,1 };
     DirectionalLight dirLights_[kDirLightNum_];
     PointLight pointLights_[kPointLightNum_];
+    SpotLight spotLights_[kSpotLightNum_];
     bool isDirty_{};
 
 public:
@@ -54,5 +58,12 @@ public:
     void SetPointLightColor(size_t index, const Vector3& lightColor);
     void SetPointLightAtten(size_t index, const Vector3& lightAtten);
     inline void SetPointLightActive(size_t index, bool isActive) { pointLights_[index].SetIsActive(isActive); }
+
+    void SetSpotLightDir(size_t index, const Vector3& lightDir);
+    void SetSpotLightPos(size_t index, const Vector3& lightPos);
+    void SetSpotLightColor(size_t index, const Vector3& lightColor);
+    void SetSpotLightAtten(size_t index, const Vector3& lightAtten);
+    void SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle);
+    inline void SetSpotLightActive(size_t index, bool isActive) { spotLights_[index].SetIsActive(isActive); }
 };
 

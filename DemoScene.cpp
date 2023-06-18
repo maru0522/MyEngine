@@ -13,6 +13,9 @@ void DemoScene::Initialize(void)
     //lightGroup_->SetDirLightColor({ 1,1,1 });
     //lightGroup_->SetLightDir({ 0,1,5 });
     Object3D::SetLightGroup(lightGroup_.get());
+
+    obj3d_->coordinate_.SetScale({ 20.f,0.5f,20.f });
+    obj3d_->coordinate_.SetPosition({ 0.f,-5.f,0.f });
 }
 
 void DemoScene::Update(void)
@@ -20,7 +23,7 @@ void DemoScene::Update(void)
     lightGroup_->Update();
 
     sprite_->Update();
-    //obj3d_->Update();
+    obj3d_->Update();
     obj3d2_->Update();
     Vector3 rot = obj3d2_->coordinate_.GetRotation();
     rot.y += 0.05f;
@@ -30,7 +33,7 @@ void DemoScene::Update(void)
 void DemoScene::Draw3d(void)
 {
     lightGroup_->Draw();
-    //obj3d_->Draw();
+    obj3d_->Draw();
     obj3d2_->Draw();
     // cubeの画像にスプライトで表示しているものを起用
     //obj3d_->Draw("Resources/namida.png");
