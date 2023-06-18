@@ -35,13 +35,13 @@ void LightGroup::TransferCB(void)
     {
         // ライトが有効なら設定を転送
         if (dirLights_[i].GetIsActive()) {
-            cbLightGroup_.GetConstBuffMap()->dirLights_[i].isActive_ = 1;
-            cbLightGroup_.GetConstBuffMap()->dirLights_[i].lightv_ = -dirLights_[i].GetLightDir();
-            cbLightGroup_.GetConstBuffMap()->dirLights_[i].lightcolor_ = dirLights_[i].GetLightColor();
+            cbLightGroup_.GetConstBuffMap()->dirLights_[i].isActive = 1;
+            cbLightGroup_.GetConstBuffMap()->dirLights_[i].lightv = -dirLights_[i].GetLightDir();
+            cbLightGroup_.GetConstBuffMap()->dirLights_[i].lightcolor = dirLights_[i].GetLightColor();
         }
         // ライトが無効なら転送しない。
         else {
-            cbLightGroup_.GetConstBuffMap()->dirLights_[i].isActive_ = 0;
+            cbLightGroup_.GetConstBuffMap()->dirLights_[i].isActive = 0;
         }
     }
 
