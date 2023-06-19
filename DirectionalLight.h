@@ -17,18 +17,8 @@ public:
         uint32_t isActive;
     };
 
-    // ä÷êî
-    //DirectionalLight(void);
-    //void Update(void);
-    //void Draw(void);
-
 private:
-    //void TransferCB(void);
-
     // ïœêî
-    //ConstBuffer<CBDirLight_t> cbLight_;
-
-    //bool isDirty_{};
     Vector3 lightDir_{ 1,0,0 };
     Vector3 lightColor_{ 1,1,1 };
 
