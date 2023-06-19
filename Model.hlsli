@@ -28,36 +28,36 @@ static const uint kCircleShadowNum = 3;
 
 struct DirLight
 {
-    float3 lightv;
-    float3 lightcolor;
+    float3 lightV;
+    float3 lightColor;
     uint isActive;
 };
 
 struct PointLight
 {
-    float3 lightpos;
-    float3 lightcolor;
-    float3 lightatten; // ライト距離減衰係数
+    float3 lightPos;
+    float3 lightColor;
+    float3 lightAtten; // ライト距離減衰係数
     uint isActive;
 };
 
 struct SpotLight
 {
-    float3 lightv;
-    float3 lightpos;
-    float3 lightcolor;
-    float3 lightatten;
-    float2 lightfactoranglecos; // ライト減衰角度のcos
+    float3 lightV;
+    float3 lightPos;
+    float3 lightColor;
+    float3 lightAtten;
+    float2 lightFactorAngleCos; // ライト減衰角度のcos
     uint isActive;
 };
 
 struct CircleShadow
 {
     float3 dir;
-    float3 casterpos;
+    float3 casterPos;
     float distanceCasterLight;
     float3 atten;
-    float2 factoranglecos;
+    float2 factorAngleCos;
     uint isActive;
 };
 
