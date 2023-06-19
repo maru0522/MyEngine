@@ -11,9 +11,9 @@ private:
 public:
     struct CBDirLight_t
     {
-        Vector3 lightv;
+        Vector3 lightV;
         float pad1;
-        Vector3 lightcolor;
+        Vector3 lightColor;
         uint32_t isActive;
     };
 

@@ -24,8 +24,8 @@ void DirectionalLight::Draw(void)
 void DirectionalLight::TransferCB(void)
 {
     // ライトの定数バッファに代入（転送）
-    cbLight_.GetConstBuffMap()->lightv = -lightDir_;
-    cbLight_.GetConstBuffMap()->lightcolor = lightColor_;
+    cbLight_.GetConstBuffMap()->lightV = -lightDir_;
+    cbLight_.GetConstBuffMap()->lightColor = lightColor_;
 }
 
 void DirectionalLight::SetLightDir(const Vector3& lightDir)

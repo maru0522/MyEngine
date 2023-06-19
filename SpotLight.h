@@ -14,7 +14,7 @@ private:
 public:
     struct CBSpotLight_t
     {
-        Vector3 lightv;
+        Vector3 lightV;
         float pad1;
         Vector3 lightPos;
         float pad2;
@@ -22,7 +22,7 @@ public:
         float pad3;
         Vector3 lightAtten;
         float pad4;
-        Vector2 lightFactorAnglecos;
+        Vector2 lightFactorAngleCos;
         uint32_t isActive;
         float pad5;
     };

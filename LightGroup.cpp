@@ -36,8 +36,8 @@ void LightGroup::TransferCB(void)
         // ライトが有効なら設定を転送
         if (dirLights_[i].GetIsActive()) {
             cbLightGroup_.GetConstBuffMap()->dirLights[i].isActive = 1;
-            cbLightGroup_.GetConstBuffMap()->dirLights[i].lightv = -dirLights_[i].GetLightDir();
-            cbLightGroup_.GetConstBuffMap()->dirLights[i].lightcolor = dirLights_[i].GetLightColor();
+            cbLightGroup_.GetConstBuffMap()->dirLights[i].lightV = -dirLights_[i].GetLightDir();
+            cbLightGroup_.GetConstBuffMap()->dirLights[i].lightColor = dirLights_[i].GetLightColor();
         }
         // ライトが無効なら転送しない。
         else {
@@ -67,11 +67,11 @@ void LightGroup::TransferCB(void)
         // ライトが有効なら設定を転送
         if (spotLights_[i].GetIsActive()) {
             cbLightGroup_.GetConstBuffMap()->spotLights[i].isActive = 1;
-            cbLightGroup_.GetConstBuffMap()->spotLights[i].lightv = -spotLights_[i].GetLightDir();
+            cbLightGroup_.GetConstBuffMap()->spotLights[i].lightV = -spotLights_[i].GetLightDir();
             cbLightGroup_.GetConstBuffMap()->spotLights[i].lightPos = spotLights_[i].GetLightPos();
             cbLightGroup_.GetConstBuffMap()->spotLights[i].lightColor = spotLights_[i].GetLightColor();
             cbLightGroup_.GetConstBuffMap()->spotLights[i].lightAtten = spotLights_[i].GetLightAtten();
-            cbLightGroup_.GetConstBuffMap()->spotLights[i].lightFactorAnglecos = spotLights_[i].GetLightFactorAngleCos();
+            cbLightGroup_.GetConstBuffMap()->spotLights[i].lightFactorAngleCos = spotLights_[i].GetLightFactorAngleCos();
         }
         // ライトが無効なら転送しない。
         else {
