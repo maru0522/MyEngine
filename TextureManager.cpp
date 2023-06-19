@@ -241,8 +241,8 @@ void TextureManager::GenerateMissingImage(void)
         0,
         nullptr,		// 全領域へコピー
         imageData.data(),	// 元データアドレス
-        sizeof(DirectX::XMFLOAT4) * imageLength,    // 1ラインサイズ
-        sizeof(DirectX::XMFLOAT4) * imageDataCount  // 全サイズ
+        sizeof(Vector4) * imageLength,    // 1ラインサイズ
+        sizeof(Vector4) * imageDataCount  // 全サイズ
     );
 
     assert(SUCCEEDED(hr));

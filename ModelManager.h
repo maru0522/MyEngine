@@ -29,9 +29,9 @@ public:
     struct Material_t
     {
         std::string name{};           // マテリアルの名前
-        DirectX::XMFLOAT3 ambient{};  // ambient（環境）影響度
-        DirectX::XMFLOAT3 diffuse{};  // diffuse（広汎）影響度
-        DirectX::XMFLOAT3 specular{}; // specular（鏡面反射）影響度
+        Vector3 ambient{};            // ambient（環境）影響度
+        Vector3 diffuse{};            // diffuse（広汎）影響度
+        Vector3 specular{};           // specular（鏡面反射）影響度
         float_t alpha{};              // アルファ
         fsPath texKey{};              // テクスチャファイル名
 
@@ -44,12 +44,12 @@ public:
 
     struct CBMaterial_t // 定数バッファ用構造体
     {
-        DirectX::XMFLOAT3 ambient;  // ambient
-        float_t pad1; // padding
-        DirectX::XMFLOAT3 diffuse;  // diffuse
-        float_t pad2; // padding
-        DirectX::XMFLOAT3 specular; // specular
-        float_t alpha;              // alpha
+        Vector3 ambient;    // ambient
+        float_t pad1;
+        Vector3 diffuse;    // diffuse
+        float_t pad2;
+        Vector3 specular;   // specular
+        float_t alpha;      // alpha
     };
 
     // 関数
