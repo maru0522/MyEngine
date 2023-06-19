@@ -100,6 +100,7 @@
     <ClCompile Include="LightGroup.cpp">
       <Filter>Entity\Light</Filter>
     </ClCompile>
+    <ClCompile Include="PostEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="PointLight.h">
       <Filter>Entity\Light</Filter>
     </ClInclude>
+    <ClInclude Include="PostEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

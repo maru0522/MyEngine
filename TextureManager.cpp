@@ -32,6 +32,7 @@ void TextureManager::Load(const fsPath& path)
 
     // WICテクスチャのロード
     HRESULT hr = LoadFromWICFile(szFile, DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
+    //if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) return;
     assert(SUCCEEDED(hr));
 #pragma endregion
 
@@ -180,24 +181,24 @@ void TextureManager::GenerateMissingImage(void)
     constexpr size_t imageDataCount{ imageLength * imageLength };
 
     // イメージデータ配列
-    std::vector<Vector4> imageData;
+    std::vector<Vector4> imageData{imageDataCount};
 
     // 生成
     for (size_t i = 0; i < imageDataCount; i++) {
         if (i < 32513) {
             if (i % 256 < 128) {
-                imageData.emplace_back(Vector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+                imageData[i] = {0.0f, 0.0f, 0.0f, 1.0f};
             }
             else if (i % 256 >= 128) {
-                imageData.emplace_back(Vector4{ 0.5f, 0.5f, 0.5f, 1.0f });
+                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
             }
         }
         else {
             if (i % 256 < 128) {
-                imageData.emplace_back(Vector4{ 0.5f, 0.5f, 0.5f, 1.0f });
+                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
             }
             else if (i % 256 >= 128) {
-                imageData.emplace_back(Vector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+                imageData[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
             }
         }
     }
@@ -251,6 +252,7 @@ void TextureManager::GenerateMissingImage(void)
     // InitDirectX内のDescriptorHeapに生成。
     // 返り値でgpuのアドレスを取得。
     tempImg.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff.Get());
+
 
     // 登録
     RegisterImg(tempImg);

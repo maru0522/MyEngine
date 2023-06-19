@@ -10,8 +10,7 @@ void DemoScene::Initialize(void)
     // カメラをマネージャーにセット
     CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
 
-    //lightGroup_->SetDirLightColor({ 1,1,1 });
-    //lightGroup_->SetLightDir({ 0,1,5 });
+    sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
     obj3d_->coordinate_.SetScale({ 20.f,0.5f,20.f });
@@ -33,7 +32,7 @@ void DemoScene::Update(void)
 void DemoScene::Draw3d(void)
 {
     lightGroup_->Draw();
-    obj3d_->Draw();
+    obj3d_->Draw("");
     obj3d2_->Draw();
     // cubeの画像にスプライトで表示しているものを起用
     //obj3d_->Draw("Resources/namida.png");
