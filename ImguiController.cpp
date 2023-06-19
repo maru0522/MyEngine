@@ -14,7 +14,7 @@ ImGuiController::~ImGuiController(void)
 void ImGuiController::Initialize(WndAPI* wndPtr)
 {
     //InitDirectX* iDX = InitDirectX::GetInstance();
-    wndPtr->kHeight_;
+    wndPtr->kHeight_; // ©Œx‰ñ”ð‚·‚é‚½‚ß‚¾‚¯‚Ì‚à‚Ì‚È‚Ì‚ÅŠÖŒW‚ ‚è‚Ü‚¹‚ñB
     //ImGui::CreateContext();
     //ImGui::StyleColorsDark();
     //ImGui_ImplWin32_Init(wndPtr->GetHwnd());
