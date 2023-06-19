@@ -28,7 +28,7 @@ void LightGroup::Draw(void)
 void LightGroup::TransferCB(void)
 {
     // ŠÂ‹«Œõ
-    cbLightGroup_.GetConstBuffMap()->ambientColor_ = ambientColor_;
+    cbLightGroup_.GetConstBuffMap()->ambientColor = ambientColor_;
 
     // •½sŒõŒ¹
     for (size_t i = 0; i < kDirLightNum_; i++)
