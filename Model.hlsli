@@ -24,6 +24,7 @@ cbuffer CBMaterial_t : register(b2)
 static const uint kDirLightNum = 3;
 static const uint kPointLightNum = 3;
 static const uint kSpotLightNum = 3;
+static const uint kCircleShadowNum = 3;
 
 struct DirLight
 {
@@ -50,12 +51,23 @@ struct SpotLight
     uint isActive;
 };
 
+struct CircleShadow
+{
+    float3 dir;
+    float3 casterpos;
+    float distanceCasterLight;
+    float3 atten;
+    float2 factoranglecos;
+    uint isActive;
+};
+
 cbuffer CBLight_t : register(b3)
 {
     float3 ambientColor;
     DirLight dirLights[kDirLightNum];
     PointLight pointLights[kPointLightNum];
     SpotLight spotLights[kSpotLightNum];
+    CircleShadow circleShadows[kCircleShadowNum];
 }
 
 // 頂点シェーダの出力構造体

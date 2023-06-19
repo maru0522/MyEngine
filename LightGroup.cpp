@@ -78,13 +78,31 @@ void LightGroup::TransferCB(void)
             cbLightGroup_.GetConstBuffMap()->spotLights_[i].isActive = 0;
         }
     }
+
+    // ŠÛ‰e
+    for (size_t i = 0; i < kCircleShadowNum_; i++)
+    {
+        // —LŒø‚È‚çÝ’è‚ð“]‘—
+        if (circleShadows_[i].GetIsActive()) {
+            cbLightGroup_.GetConstBuffMap()->circleShadows_[i].isActive = 1;
+            cbLightGroup_.GetConstBuffMap()->circleShadows_[i].dir = -circleShadows_[i].GetDir();
+            cbLightGroup_.GetConstBuffMap()->circleShadows_[i].casterPos = circleShadows_[i].GetCasterPos();
+            cbLightGroup_.GetConstBuffMap()->circleShadows_[i].distanceCasterLight = circleShadows_[i].GetDistanceCasterLight();
+            cbLightGroup_.GetConstBuffMap()->circleShadows_[i].atten = circleShadows_[i].GetAtten();
+            cbLightGroup_.GetConstBuffMap()->circleShadows_[i].factorAngleCos = circleShadows_[i].GetFactorAngleCos();
+        }
+        // ƒ‰ƒCƒg‚ª–³Œø‚È‚ç“]‘—‚µ‚È‚¢B
+        else {
+            cbLightGroup_.GetConstBuffMap()->spotLights_[i].isActive = 0;
+        }
+    }
 }
 
 void LightGroup::DefaultLightSetting(void)
 {
-    //dirLights_[0].SetIsActive(true);
-    //dirLights_[0].SetLightColor({ 1.f,0.f,0.f });
-    //dirLights_[0].SetLightDir({ 0.f,-1.f,0.f });
+    dirLights_[0].SetIsActive(true);
+    dirLights_[0].SetLightColor({ 1.f,1.f,1.f });
+    dirLights_[0].SetLightDir({ 0.f,-1.f,0.f });
 
     //dirLights_[1].SetIsActive(true);
     //dirLights_[1].SetLightColor({ 0.f,1.f,0.f });
@@ -99,12 +117,17 @@ void LightGroup::DefaultLightSetting(void)
     //pointLights_[0].SetLightColor({ 1.f,1.f,1.f });
     //pointLights_[0].SetLightAtten({ 0.3f,0.1f,0.1f });
 
-    spotLights_[0].SetIsActive(true);
-    spotLights_[0].SetLightDir({ 0.0f, -1.f, 0.f });
-    spotLights_[0].SetLightPos({ 0.0f, 5.f, 0.f });
-    spotLights_[0].SetLightColor({ 1.f,1.f,1.f });
-    spotLights_[0].SetLightAtten({ 0.f,0.f,0.f });
-    spotLights_[0].SetLightFactorAngle({ 20.f,30.f });
+    //spotLights_[0].SetIsActive(true);
+    //spotLights_[0].SetLightDir({ 0.0f, -1.f, 0.f });
+    //spotLights_[0].SetLightPos({ 0.0f, 5.f, 0.f });
+    //spotLights_[0].SetLightColor({ 1.f,1.f,1.f });
+    //spotLights_[0].SetLightAtten({ 0.f,0.f,0.f });
+    //spotLights_[0].SetLightFactorAngle({ 20.f,30.f });
+
+    circleShadows_[0].SetIsActive(true);
+    circleShadows_[0].SetDir({ 0,-1,0 });
+    circleShadows_[0].SetAtten({0.5f,0.6f,0.f});
+    circleShadows_[0].SetFactorAngle({0.f,0.5f});
 }
 
 void LightGroup::DebugImGui(void)
@@ -182,6 +205,30 @@ void LightGroup::SetSpotLightAtten(size_t index, const Vector3& lightAtten)
 void LightGroup::SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle)
 {
     spotLights_[index].SetLightFactorAngle(lightFactorAngle);
+    isDirty_ = true;
+}
+
+void LightGroup::SetCircleShadowDir(size_t index, const Vector3& dir)
+{
+    circleShadows_[index].SetDir(dir);
+    isDirty_ = true;
+}
+
+void LightGroup::SetCircleShadowAtten(size_t index, const Vector3& atten)
+{
+    circleShadows_[index].SetAtten(atten);
+    isDirty_ = true;
+}
+
+void LightGroup::SetCircleShadowCasterPos(size_t index, const Vector3& casterPos)
+{
+    circleShadows_[index].SetCasterPos(casterPos);
+    isDirty_ = true;
+}
+
+void LightGroup::SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight)
+{
+    circleShadows_[index].SetDisctanceCasterLight(distanceCasterLight);
     isDirty_ = true;
 }
 

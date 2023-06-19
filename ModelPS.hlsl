@@ -97,6 +97,35 @@ float4 main(VSOutput input) : SV_TARGET
         }
     }
     
+    // 丸影
+    for (uint l = 0; l < kPointLightNum; l++)
+    {
+        if (circleShadows[l].isActive)
+        {
+            // キャスターへのベクトル
+            float3 casterv = circleShadows[l].casterpos - input.wpos_.xyz;
+            // 投影方向での距離
+            float d = dot(casterv, circleShadows[l].dir);
+            // 距離減衰係数
+            float atten = saturate(1.0f / (circleShadows[l].atten.x + circleShadows[l].atten.y * d + circleShadows[l].atten.z * d * d));
+            // 距離がマイナスなら0
+            atten *= step(0, d);
+            // 仮想ライトの座標
+            float3 lightpos = circleShadows[l].casterpos + circleShadows[l].dir * circleShadows[l].distanceCasterLight;
+            // オブジェクト表面からライトへのベクトル
+            float3 lightv = normalize(lightpos - input.wpos_.xyz);
+            // 角度減衰
+            float cos = dot(lightv, circleShadows[l].dir);
+            // 開始角度(内側:1倍輝度) ~ 終了角度(内側:0倍輝度)にかけて減衰
+            float angleatten = smoothstep(circleShadows[l].factoranglecos.y, circleShadows[l].factoranglecos.x, cos);
+            // 角度減衰を乗算
+            atten *= angleatten;
+
+            // 全て減算する
+            shadecolor.rgb -=atten;
+        }
+    }
+    
     // シェーディングによる色で描画
     return shadecolor * texcolor;
 }
