@@ -18,17 +18,17 @@ public:
     };
 
     // ä÷êî
-    DirectionalLight(void);
-    void Update(void);
-    void Draw(void);
+    //DirectionalLight(void);
+    //void Update(void);
+    //void Draw(void);
 
 private:
-    void TransferCB(void);
+    //void TransferCB(void);
 
     // ïœêî
-    ConstBuffer<CBDirLight_t> cbLight_;
+    //ConstBuffer<CBDirLight_t> cbLight_;
 
-    bool isDirty_{};
+    //bool isDirty_{};
     Vector3 lightDir_{ 1,0,0 };
     Vector3 lightColor_{ 1,1,1 };
 
@@ -36,8 +36,8 @@ private:
 
 public:
     // setterÅEgetter
-    void SetLightDir(const Vector3& lightDir);
-    void SetLightColor(const Vector3& lightColor);
+    inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.normalize(); }
+    inline void SetLightColor(const Vector3& lightColor) { lightColor_ = lightColor; }
     inline void SetIsActive(bool isActive) { isActive_ = isActive; }
 
     inline const Vector3& GetLightDir(void) { return lightDir_; }
