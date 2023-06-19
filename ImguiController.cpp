@@ -6,50 +6,50 @@
 
 ImGuiController::~ImGuiController(void)
 {
-    ImGui_ImplDX12_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    ImGui::DestroyContext();
+    //ImGui_ImplDX12_Shutdown();
+    //ImGui_ImplWin32_Shutdown();
+    //ImGui::DestroyContext();
 }
 
 void ImGuiController::Initialize(WndAPI* wndPtr)
 {
-    InitDirectX* iDX = InitDirectX::GetInstance();
+    //InitDirectX* iDX = InitDirectX::GetInstance();
+    wndPtr->kHeight_;
+    //ImGui::CreateContext();
+    //ImGui::StyleColorsDark();
+    //ImGui_ImplWin32_Init(wndPtr->GetHwnd());
 
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    ImGui_ImplWin32_Init(wndPtr->GetHwnd());
+    //ImGui_ImplDX12_Init(
+    //    iDX->GetDevice(),
+    //    static_cast<int32_t>(iDX->GetBackBufferCount()),
+    //    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+    //    iDX->GetDescHeap_t()->GetDescHeap(),
+    //    iDX->GetDescHeap_t()->GetDescHeap()->GetCPUDescriptorHandleForHeapStart(),
+    //    iDX->GetDescHeap_t()->GetDescHeap()->GetGPUDescriptorHandleForHeapStart()
+    //);
 
-    ImGui_ImplDX12_Init(
-        iDX->GetDevice(),
-        static_cast<int32_t>(iDX->GetBackBufferCount()),
-        DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-        iDX->GetDescHeap_t()->GetDescHeap(),
-        iDX->GetDescHeap_t()->GetDescHeap()->GetCPUDescriptorHandleForHeapStart(),
-        iDX->GetDescHeap_t()->GetDescHeap()->GetGPUDescriptorHandleForHeapStart()
-    );
-
-    ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontDefault();
+    //ImGuiIO& io = ImGui::GetIO();
+    //io.Fonts->AddFontDefault();
 }
 
 void ImGuiController::Begin(void)
 {
-    ImGui_ImplWin32_NewFrame();
-    ImGui_ImplDX12_NewFrame();
-    ImGui::NewFrame();
+    //ImGui_ImplWin32_NewFrame();
+    //ImGui_ImplDX12_NewFrame();
+    //ImGui::NewFrame();
 }
 
 void ImGuiController::End(void)
 {
-    ImGui::Render();
+    //ImGui::Render();
 }
 
 void ImGuiController::Draw(void)
 {
-    InitDirectX* iDX = InitDirectX::GetInstance();
+    //InitDirectX* iDX = InitDirectX::GetInstance();
 
-    std::vector<ID3D12DescriptorHeap*> ppHeaps = { iDX->GetDescHeap_t()->GetDescHeap() };
-    iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
+    //std::vector<ID3D12DescriptorHeap*> ppHeaps = { iDX->GetDescHeap_t()->GetDescHeap() };
+    //iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
-    ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), iDX->GetCommandList());
+    //ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), iDX->GetCommandList());
 }

@@ -16,7 +16,7 @@ void LightGroup::Update(void)
         isDirty_ = false;
     }
     //ImGui::ShowDemoWindow();
-    DebugImGui();
+    //DebugImGui();
 }
 
 void LightGroup::Draw(void)
