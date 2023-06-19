@@ -94,9 +94,12 @@
     <ClCompile Include="BillBoard.cpp">
       <Filter>Entity\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="LightGroup.cpp" />
-    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Light.cpp">
+      <Filter>Entity\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="LightGroup.cpp">
+      <Filter>Entity\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -187,11 +190,21 @@
     <ClInclude Include="BillBoard.h">
       <Filter>Entity\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="LightGroup.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="CircleShadow.h" />
+    <ClInclude Include="LightGroup.h">
+      <Filter>Entity\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Entity\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Entity\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleShadow.h">
+      <Filter>Entity\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Entity\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
@@ -237,6 +250,9 @@
     </Filter>
     <Filter Include="Scene\unique">
       <UniqueIdentifier>{dad46b77-8dcb-4733-b06d-74576f0825af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\Light">
+      <UniqueIdentifier>{7ec3f73d-fe90-4793-a5fc-a1d4b09ce796}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
