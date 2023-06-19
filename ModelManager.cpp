@@ -100,9 +100,9 @@ void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
                 index_iss >> indexNormal;
 
                 VertexPosNormalUv_t vertex{};
-                vertex.pos_ = positions[indexPos - 1];
-                vertex.normal_ = normals[indexNormal - 1];
-                vertex.uv_ = texcoords[indexTexcoord - 1];
+                vertex.pos = positions[indexPos - 1];
+                vertex.normal = normals[indexNormal - 1];
+                vertex.uv = texcoords[indexTexcoord - 1];
                 // 頂点データの追加
                 vertices.emplace_back(vertex);
                 // エッジ平滑化用データの追加
@@ -161,28 +161,28 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
         // 先頭文字列がnewmtlならマテリアル名
         if (key == "newmtl") {
             // マテリアル名読み込み
-            line_iss >> model.material_.name_;
+            line_iss >> model.material_.name;
         }
 
         // 先頭文字列がKaならアンビエント色
         if (key == "Ka") {
-            line_iss >> model.material_.ambient_.x;
-            line_iss >> model.material_.ambient_.y;
-            line_iss >> model.material_.ambient_.z;
+            line_iss >> model.material_.ambient.x;
+            line_iss >> model.material_.ambient.y;
+            line_iss >> model.material_.ambient.z;
         }
 
         // 先頭文字列ならKdならディフューズ色
         if (key == "Kd") {
-            line_iss >> model.material_.diffuse_.x;
-            line_iss >> model.material_.diffuse_.y;
-            line_iss >> model.material_.diffuse_.z;
+            line_iss >> model.material_.diffuse.x;
+            line_iss >> model.material_.diffuse.y;
+            line_iss >> model.material_.diffuse.z;
         }
 
         // 先頭文字列がKsならスペキュラー色
         if (key == "Ks") {
-            line_iss >> model.material_.specular_.x;
-            line_iss >> model.material_.specular_.y;
-            line_iss >> model.material_.specular_.z;
+            line_iss >> model.material_.specular.x;
+            line_iss >> model.material_.specular.y;
+            line_iss >> model.material_.specular.z;
         }
 
         // 先頭文字列がmap_Kdならテクスチャファイル名
@@ -191,10 +191,10 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
 
             // テクスチャのファイル名読み込み
             line_iss >> tmpName;
-            model.material_.texKey_ = path.parent_path() / tmpName;
+            model.material_.texKey = path.parent_path() / tmpName;
 
             // テクスチャ読み込み
-            texMPtr_->Load(model.material_.texKey_);
+            texMPtr_->Load(model.material_.texKey);
         }
     }
 }
@@ -217,8 +217,8 @@ Model_t ModelManager::GetModel(const fsPath& path)
 void Model_t::UpdateCB(void)
 {
     // 定数バッファのマテリアルの値を更新する
-    cbMaterial_.GetConstBuffMap()->ambient_ = material_.ambient_;
-    cbMaterial_.GetConstBuffMap()->diffuse_ = material_.diffuse_;
-    cbMaterial_.GetConstBuffMap()->specular_ = material_.specular_;
-    cbMaterial_.GetConstBuffMap()->alpha_ = material_.alpha_;
+    cbMaterial_.GetConstBuffMap()->ambient = material_.ambient;
+    cbMaterial_.GetConstBuffMap()->diffuse = material_.diffuse;
+    cbMaterial_.GetConstBuffMap()->specular = material_.specular;
+    cbMaterial_.GetConstBuffMap()->alpha = material_.alpha;
 }

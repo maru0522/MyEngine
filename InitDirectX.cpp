@@ -428,35 +428,35 @@ void InitDirectX::ClearDepthBuff(void)
 }
 
 InitDirectX::DescriptorHeap_t::DescriptorHeap_t(InitDirectX* p_idx)
-    : p_idx_(p_idx)
+    : iDXPtr(p_idx)
 {
     // デスクリプタヒープの設定
     D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
     descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
     descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;	// シェーダから見えるように
-    descHeapDesc.NumDescriptors = maxSRVDesc_ + maxCBVDesc_ + maxUAVDesc_;
+    descHeapDesc.NumDescriptors = maxSRVDesc + maxCBVDesc + maxUAVDesc;
 
     // 設定を元にSRV用デスクリプタヒープを作成
-    HRESULT hr = p_idx_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
+    HRESULT hr = iDXPtr->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
     assert(SUCCEEDED(hr));
 }
 
 size_t InitDirectX::DescriptorHeap_t::CreateSRV(const D3D12_RESOURCE_DESC& rscDesc, ID3D12Resource* p_rsc)
 {
-    assert(SRVCount_ < maxSRVDesc_);
+    assert(SRVCount < maxSRVDesc);
 
     // デスクリプタのサイズ
-    size_t incrementSize = p_idx_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    size_t incrementSize = iDXPtr->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
     // cpuのdescriptorのヒープのスタート位置
     D3D12_CPU_DESCRIPTOR_HANDLE srvCpuHandle_{ descriptorHeap_.Get()->GetCPUDescriptorHandleForHeapStart() };
     // ハンドルを進める
-    srvCpuHandle_.ptr += incrementSize * SRVCount_;
+    srvCpuHandle_.ptr += incrementSize * SRVCount;
 
     // gpuのdescriptorのヒープのスタート位置
     D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle_{ descriptorHeap_.Get()->GetGPUDescriptorHandleForHeapStart() };
     // ハンドルを進める
-    srvGpuHandle_.ptr += incrementSize * SRVCount_;
+    srvGpuHandle_.ptr += incrementSize * SRVCount;
 
 
     // シェーダリソースビュー設定
@@ -467,10 +467,10 @@ size_t InitDirectX::DescriptorHeap_t::CreateSRV(const D3D12_RESOURCE_DESC& rscDe
     srvDesc.Texture2D.MipLevels = rscDesc.MipLevels;
 
     // ハンドルのさす位置にシェーダーリソースビューの作成
-    p_idx_->GetDevice()->CreateShaderResourceView(p_rsc, &srvDesc, srvCpuHandle_);
+    iDXPtr->GetDevice()->CreateShaderResourceView(p_rsc, &srvDesc, srvCpuHandle_);
 
     // SRVを生成した数を記録
-    SRVCount_++;
+    SRVCount++;
 
     return srvGpuHandle_.ptr;
 }

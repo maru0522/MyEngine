@@ -8,12 +8,12 @@ void Mesh::CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices)
         // 全頂点の法線を平均する
         Vector3 normal{};
         for (uint16_t idx : v) {
-            normal += {vertices[idx].normal_.x, vertices[idx].normal_.y, vertices[idx].normal_.z };
+            normal += {vertices[idx].normal.x, vertices[idx].normal.y, vertices[idx].normal.z };
         }
         normal = (normal / (float)v.size()).normalize();
         // 共通法線を使用するすべての
         for (uint16_t idx : v) {
-            vertices[idx].normal_ = { normal.x,normal.y,normal.z };
+            vertices[idx].normal = { normal.x,normal.y,normal.z };
         }
     }
 }

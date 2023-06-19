@@ -31,8 +31,8 @@ void Sprite::PreDraw(BlendMode blendmode)
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState_.Get());
-    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature_.Get());
+    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState.Get());
+    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature.Get());
 }
 
 void Sprite::SetDrawBlendMode(BlendMode blendmode)
@@ -40,8 +40,8 @@ void Sprite::SetDrawBlendMode(BlendMode blendmode)
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState_.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature_.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(blendmode).rootSignature.Get());
 }
 
 void Sprite::UpdateCBMatOrthoGraphic(void)
@@ -49,7 +49,7 @@ void Sprite::UpdateCBMatOrthoGraphic(void)
     // cameraManagerのptr取得
     CameraManager* cameraMPtr = CameraManager::GetInstance();
     // 平行投影行列にカメラの保持する平行投影行列を代入
-    sCbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic_ = cameraMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    sCbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic = cameraMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 Sprite::Sprite(const fsPath& path, const std::string& nickname) :
@@ -61,11 +61,11 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
         imagePtr_ = sTexMPtr_->GetImagePtr(path) :
         imagePtr_ = sTexMPtr_->GetImagePtrByNickname(nickname);
 
-    size_.x = (float)imagePtr_->buff_->GetDesc().Width;
-    size_.y = (float)imagePtr_->buff_->GetDesc().Height;
+    size_.x = (float)imagePtr_->buff->GetDesc().Width;
+    size_.y = (float)imagePtr_->buff->GetDesc().Height;
 
-    cutLength_.x = (float)imagePtr_->buff_->GetDesc().Width;
-    cutLength_.y = (float)imagePtr_->buff_->GetDesc().Height;
+    cutLength_.x = (float)imagePtr_->buff->GetDesc().Width;
+    cutLength_.y = (float)imagePtr_->buff->GetDesc().Height;
 
     // 定数バッファ生成
     cb_.Create();
@@ -101,7 +101,7 @@ void Sprite::Draw(void)
     iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, sCbMatOrthoGraphic_.GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
-    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle_);
+    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle);
 
     // 描画コマンド
     iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_.GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画
@@ -134,15 +134,15 @@ void Sprite::TransferVertex(void)
     vertices.emplace_back(VertexPosUv_t{ {  right,    top, 0.0f }, {1.0f, 0.0f} }); // 右上
 
     // uv座標
-    float texLeft{ cutStartPoint_.x / imagePtr_->buff_->GetDesc().Width };
-    float texRight{ (cutStartPoint_.x + cutLength_.x) / imagePtr_->buff_->GetDesc().Width };
-    float texTop{ cutStartPoint_.y / imagePtr_->buff_->GetDesc().Height };
-    float texBottom{ (cutStartPoint_.y + cutLength_.y) / imagePtr_->buff_->GetDesc().Height };
+    float texLeft{ cutStartPoint_.x / imagePtr_->buff->GetDesc().Width };
+    float texRight{ (cutStartPoint_.x + cutLength_.x) / imagePtr_->buff->GetDesc().Width };
+    float texTop{ cutStartPoint_.y / imagePtr_->buff->GetDesc().Height };
+    float texBottom{ (cutStartPoint_.y + cutLength_.y) / imagePtr_->buff->GetDesc().Height };
 
-    vertices[0].uv_ = { texLeft, texBottom };
-    vertices[1].uv_ = { texLeft,    texTop };
-    vertices[2].uv_ = { texRight, texBottom };
-    vertices[3].uv_ = { texRight,    texTop };
+    vertices[0].uv = { texLeft, texBottom };
+    vertices[1].uv = { texLeft,    texTop };
+    vertices[2].uv = { texRight, texBottom };
+    vertices[3].uv = { texRight,    texTop };
 
     vertexBuffer_.TransferVertexToBuffer(vertices);
 }
@@ -160,7 +160,7 @@ void Sprite::UpdateMatrix(void)
     if (parent_) matWorld_ *= parent_->matWorld_;
 
     // 定数バッファに転送
-    cb_.GetConstBuffMap()->matWorld_ = matWorld_;
+    cb_.GetConstBuffMap()->matWorld = matWorld_;
 }
 
 void Sprite::SetColor(const Vector4& rgba)
@@ -174,7 +174,7 @@ void Sprite::SetColor(const Vector4& rgba)
     lrgba.w = Math::Function::Clamp(rgba.w, 0.f, 1.f);
 
     // 値を書き込むと自動的に転送される
-    cb_.GetConstBuffMap()->color_ = lrgba;
+    cb_.GetConstBuffMap()->color = lrgba;
 }
 
 void Sprite::SetColor255(const Vector4& rgba)
@@ -191,7 +191,7 @@ void Sprite::SetColor255(const Vector4& rgba)
     lrgba = { lrgba.x / 255.f, lrgba.y / 255.f, lrgba.z / 255.f, lrgba.w / 255.f };
 
     // 値を書き込むと自動的に転送される
-    cb_.GetConstBuffMap()->color_ = lrgba;
+    cb_.GetConstBuffMap()->color = lrgba;
 }
 
 

@@ -15,9 +15,9 @@ private:
 public:
     struct VertexPosNormalUv_t // 頂点バッファ用"データ"構造体
     {
-        Vector3 pos_;    // xyz座標
-        Vector3 normal_; // 法線ベクトル
-        Vector2 uv_;     // uv座標
+        Vector3 pos;    // xyz座標
+        Vector3 normal; // 法線ベクトル
+        Vector2 uv;     // uv座標
     };
 
     // 関数

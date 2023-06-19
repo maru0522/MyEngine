@@ -18,10 +18,10 @@ void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr
 
 void Object3D::UpdateCBMatViewPerse(void)
 {
-    sCbMatViewPerse_.GetConstBuffMap()->matView_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
-    sCbMatViewPerse_.GetConstBuffMap()->matPerspective_ = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
+    sCbMatViewPerse_.GetConstBuffMap()->matView = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
+    sCbMatViewPerse_.GetConstBuffMap()->matPerspective = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
 
-    sCbMatViewPerse_.GetConstBuffMap()->cameraPos_ = CameraManager::GetInstance()->GetCurrentCamera()->eye_;
+    sCbMatViewPerse_.GetConstBuffMap()->cameraPos = CameraManager::GetInstance()->GetCurrentCamera()->eye_;
 }
 
 void Object3D::PreDraw(BlendMode blendmode)
@@ -37,8 +37,8 @@ void Object3D::PreDraw(BlendMode blendmode)
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState_.Get());
-    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature_.Get());
+    iDX->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState.Get());
+    iDX->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature.Get());
 }
 
 void Object3D::SetDrawBlendMode(BlendMode blendmode)
@@ -46,8 +46,8 @@ void Object3D::SetDrawBlendMode(BlendMode blendmode)
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState_.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature_.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline3d(blendmode).rootSignature.Get());
 }
 
 Object3D::Object3D(const fsPath& path) :
@@ -69,13 +69,13 @@ void Object3D::Update(void)
 {
     // 座標計算と転送
     coordinate_.Update();
-    cb_.GetConstBuffMap()->matWorld_ = coordinate_.GetMatWorld();
+    cb_.GetConstBuffMap()->matWorld = coordinate_.GetMatWorld();
     model_.UpdateCB();
 }
 
 void Object3D::Draw(void)
 {
-    Draw(sTexMPtr_->GetImagePtr(model_.material_.texKey_)->srvGpuHandle_);
+    Draw(sTexMPtr_->GetImagePtr(model_.material_.texKey)->srvGpuHandle);
 }
 
 void Object3D::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture)
@@ -101,5 +101,5 @@ void Object3D::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture)
 
 void Object3D::Draw(const fsPath& path)
 {
-    Draw(sTexMPtr_->GetImagePtr(path)->srvGpuHandle_);
+    Draw(sTexMPtr_->GetImagePtr(path)->srvGpuHandle);
 }

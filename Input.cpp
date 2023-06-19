@@ -161,8 +161,8 @@ const Vector2 Input::XPad::GetLStickCustom(void)
     tmp.x = sXState_.Gamepad.sThumbLX;
     tmp.y = sXState_.Gamepad.sThumbLY;
 
-    if ((sXState_.Gamepad.sThumbLX < sDeadZone_.xLeftValueX_ && sXState_.Gamepad.sThumbLX > -sDeadZone_.xLeftValueX_) &&
-        (sXState_.Gamepad.sThumbLY < sDeadZone_.xLeftValueY_ && sXState_.Gamepad.sThumbLY > -sDeadZone_.xLeftValueY_)) {
+    if ((sXState_.Gamepad.sThumbLX < sDeadZone_.xLeftValueX && sXState_.Gamepad.sThumbLX > -sDeadZone_.xLeftValueX) &&
+        (sXState_.Gamepad.sThumbLY < sDeadZone_.xLeftValueY && sXState_.Gamepad.sThumbLY > -sDeadZone_.xLeftValueY)) {
         tmp.x = 0;
         tmp.y = 0;
     }
@@ -198,8 +198,8 @@ const Vector2 Input::XPad::GetRStickCustom(void)
     tmp.x = sXState_.Gamepad.sThumbRX;
     tmp.y = sXState_.Gamepad.sThumbRY;
 
-    if ((sXState_.Gamepad.sThumbRX < sDeadZone_.xRightValueX_ && sXState_.Gamepad.sThumbRX > -sDeadZone_.xRightValueX_) &&
-        (sXState_.Gamepad.sThumbRY < sDeadZone_.xRightValueY_ && sXState_.Gamepad.sThumbRY > -sDeadZone_.xRightValueY_)) {
+    if ((sXState_.Gamepad.sThumbRX < sDeadZone_.xRightValueX && sXState_.Gamepad.sThumbRX > -sDeadZone_.xRightValueX) &&
+        (sXState_.Gamepad.sThumbRY < sDeadZone_.xRightValueY && sXState_.Gamepad.sThumbRY > -sDeadZone_.xRightValueY)) {
         tmp.x = 0;
         tmp.y = 0;
     }
@@ -221,10 +221,10 @@ void Input::XPad::Vibrate(int32_t lPower, int32_t rPower)
 
 void Input::XPad::SetDeadZone(const Vector2& leftValueXY, const Vector2& rightValueXY)
 {
-    sDeadZone_.xLeftValueX_ = (uint16_t)leftValueXY.x;
-    sDeadZone_.xLeftValueY_ = (uint16_t)leftValueXY.y;
-    sDeadZone_.xRightValueX_ = (uint16_t)rightValueXY.x;
-    sDeadZone_.xRightValueY_ = (uint16_t)rightValueXY.y;
+    sDeadZone_.xLeftValueX = (uint16_t)leftValueXY.x;
+    sDeadZone_.xLeftValueY = (uint16_t)leftValueXY.y;
+    sDeadZone_.xRightValueX = (uint16_t)rightValueXY.x;
+    sDeadZone_.xRightValueY = (uint16_t)rightValueXY.y;
 }
 
 void Input::InitializeAll(WndAPI* p_wndapi)
@@ -279,13 +279,13 @@ void Input::Mouse::Update(void)
     sMouseStatePre_ = sMouseState_;
 
     // “ü—Íó‘Ô‚ðŽæ“¾
-    sMouse_->GetDeviceState(sizeof(sMouseState_.mState_), &sMouseState_.mState_);
+    sMouse_->GetDeviceState(sizeof(sMouseState_.mState), &sMouseState_.mState);
 
     // ˆÊ’u‚ðŽæ“¾
     POINT pos;
     GetCursorPos(&pos);
     ScreenToClient(sWndApiPtr_->GetHwnd(), &pos);
 
-    sMouseState_.cursorPos2d_ = { (float)pos.x,(float)pos.y };
-    sMouseState_.scroll_ = (float)sMouseState_.mState_.lZ;
+    sMouseState_.cursorPos2d = { (float)pos.x,(float)pos.y };
+    sMouseState_.scroll = (float)sMouseState_.mState.lZ;
 }

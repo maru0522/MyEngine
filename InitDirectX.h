@@ -26,7 +26,7 @@ private:
         size_t CreateSRV(const D3D12_RESOURCE_DESC& rscDesc, ID3D12Resource* p_rsc);
 
         // setter
-        inline void SetMaxSrvDesc(uint32_t maxSrv) { maxSRVDesc_ = maxSrv; }
+        inline void SetMaxSrvDesc(uint32_t maxSrv) { maxSRVDesc = maxSrv; }
 
         // getter
         inline ID3D12DescriptorHeap* GetDescHeap(void) { return descriptorHeap_.Get(); }
@@ -35,14 +35,14 @@ private:
         // 変数
         // DescriptorHeapコンストラクタ で初期化
         ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
-        uint32_t maxSRVDesc_{ 256 };
-        uint32_t maxCBVDesc_{ 256 };
-        uint32_t maxUAVDesc_{ 256 };
-        uint32_t SRVCount_{};
-        uint32_t CBVCount_{};
-        uint32_t UAVCount_{};
+        uint32_t maxSRVDesc{ 256 };
+        uint32_t maxCBVDesc{ 256 };
+        uint32_t maxUAVDesc{ 256 };
+        uint32_t SRVCount{};
+        uint32_t CBVCount{};
+        uint32_t UAVCount{};
 
-        InitDirectX* p_idx_{ nullptr };
+        InitDirectX* iDXPtr{ nullptr };
     };
 
 public:

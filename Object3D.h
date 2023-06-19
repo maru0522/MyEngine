@@ -19,14 +19,14 @@ private:
 
     struct CBData3d_t // 定数バッファ用"データ"構造体
     {
-        Matrix4 matWorld_; // 3D行列変換
+        Matrix4 matWorld; // 3D行列変換
     };
 
     struct CBMatViewPerse_t // 定数バッファ用"射影行列"構造体
     {
-        Matrix4 matView_;
-        Matrix4 matPerspective_;
-        Vector3 cameraPos_;
+        Matrix4 matView;
+        Matrix4 matPerspective;
+        Vector3 cameraPos;
     };
 
 public:

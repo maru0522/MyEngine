@@ -19,12 +19,12 @@ public:
     struct Image
     {
         // 所属
-        fsPath path_{};
+        fsPath path{};
 
         // バッファ
-        ComPtr<ID3D12Resource> buff_{ nullptr };
+        ComPtr<ID3D12Resource> buff{ nullptr };
         // srvのgpuハンドル
-        D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle_{};
+        D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle{};
     };
 
     // 関数

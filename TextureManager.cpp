@@ -15,7 +15,7 @@ void TextureManager::Load(const fsPath& path)
 
     Image tempImg{}; // てんぽらりん
 
-    tempImg.path_ = path;
+    tempImg.path = path;
 
     // Image重複確認
     if (CheckDuplicateTexture(tempImg)) return;
@@ -26,7 +26,7 @@ void TextureManager::Load(const fsPath& path)
     DirectX::ScratchImage scratchImg{};
 
     // WICテクスチャのロードに使う pathを文字列変換
-    std::string strPath{ tempImg.path_.string() };
+    std::string strPath{ tempImg.path.string() };
     std::wstring wStrPath{ strPath.begin(), strPath.end() };
     const wchar_t* szFile{ wStrPath.c_str() };
 
@@ -69,7 +69,7 @@ void TextureManager::Load(const fsPath& path)
 
 #pragma region テクスチャバッファ
     // テクスチャバッファの生成
-    hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff_));
+    hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff));
     assert(SUCCEEDED(hr));
 #pragma endregion
 
@@ -80,7 +80,7 @@ void TextureManager::Load(const fsPath& path)
         const DirectX::Image* img = scratchImg.GetImage(i, 0, 0);
 
         // テクスチャバッファにデータ転送
-        hr = tempImg.buff_->WriteToSubresource(
+        hr = tempImg.buff->WriteToSubresource(
             static_cast<UINT>(i),
             nullptr,		// 全領域へコピー
             img->pixels,	// 元データアドレス
@@ -93,7 +93,7 @@ void TextureManager::Load(const fsPath& path)
 
     // InitDirectX内のDescriptorHeapに生成。
     // 返り値でgpuのアドレスを取得。
-    tempImg.srvGpuHandle_.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff_.Get());
+    tempImg.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff.Get());
 
     // 登録
     RegisterImg(tempImg);
@@ -156,7 +156,7 @@ const TextureManager::Image* TextureManager::GetImagePtrByNickname(const std::st
 void TextureManager::RegisterImg(const Image& img)
 {
     // Imageの要素構築
-    textures_.emplace(img.path_, img);
+    textures_.emplace(img.path, img);
 }
 
 void TextureManager::RegisterNickname(const fsPath& path, const std::string& nickname)
@@ -172,7 +172,7 @@ void TextureManager::GenerateMissingImage(void)
 #pragma region missingTexture生成
     Image tempImg{}; // てんぽらりん
 
-    tempImg.path_ = "MISSING";
+    tempImg.path = "MISSING";
 
     // 一辺のピクセル数
     constexpr size_t imageLength{ 256 };
@@ -230,14 +230,14 @@ void TextureManager::GenerateMissingImage(void)
         &textureResourceDesc,
         D3D12_RESOURCE_STATE_GENERIC_READ,
         nullptr,
-        IID_PPV_ARGS(&tempImg.buff_));
+        IID_PPV_ARGS(&tempImg.buff));
 
     assert(SUCCEEDED(hr));
 #pragma endregion
 
 #pragma region バッファへのデータ転送
     // テクスチャバッファにデータ転送
-    hr = tempImg.buff_->WriteToSubresource(
+    hr = tempImg.buff->WriteToSubresource(
         0,
         nullptr,		// 全領域へコピー
         imageData.data(),	// 元データアドレス
@@ -250,7 +250,7 @@ void TextureManager::GenerateMissingImage(void)
 
     // InitDirectX内のDescriptorHeapに生成。
     // 返り値でgpuのアドレスを取得。
-    tempImg.srvGpuHandle_.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff_.Get());
+    tempImg.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff.Get());
 
     // 登録
     RegisterImg(tempImg);
@@ -259,9 +259,9 @@ void TextureManager::GenerateMissingImage(void)
 bool TextureManager::CheckDuplicateTexture(const Image& img)
 {
     // Imageが登録済みかチェック
-    if (textures_.count(img.path_)) {
+    if (textures_.count(img.path)) {
         // 登録済みの場合ログ出力
-        Util::Log::PrintOutputWindow("[TextureManager] : This image is already loaded. (" + img.path_.string() + ")");
+        Util::Log::PrintOutputWindow("[TextureManager] : This image is already loaded. (" + img.path.string() + ")");
 
         return true;
     }

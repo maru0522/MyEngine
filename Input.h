@@ -73,10 +73,10 @@ namespace Input {
         // 定義
         struct CustomDeadZone
         {
-            uint16_t xLeftValueX_{};
-            uint16_t xLeftValueY_{};
-            uint16_t xRightValueX_{};
-            uint16_t xRightValueY_{};
+            uint16_t xLeftValueX{};
+            uint16_t xLeftValueY{};
+            uint16_t xRightValueX{};
+            uint16_t xRightValueY{};
         };
 
     public:
@@ -127,18 +127,18 @@ namespace Input {
         // 定義
         struct MouseState
         {
-            DIMOUSESTATE mState_;
+            DIMOUSESTATE mState;
             // 2D画面上の座標
-            Vector2 cursorPos2d_;
+            Vector2 cursorPos2d;
             // スクロール量
-            float scroll_;
+            float scroll;
 
             // 初期化関数
             void Initialize(void) {
-                for (size_t i = 0; i < 4; i++) { mState_.rgbButtons[i] = 0; } // ボタン
-                mState_.lX = mState_.lY = mState_.lZ = 0;                     // 各軸の移動量
-                cursorPos2d_ = { 0.f,0.f };                                   // 位置
-                scroll_ = 0.f;                                                // スクロール
+                for (size_t i = 0; i < 4; i++) { mState.rgbButtons[i] = 0; } // ボタン
+                mState.lX = mState.lY = mState.lZ = 0;                     // 各軸の移動量
+                cursorPos2d = { 0.f,0.f };                                   // 位置
+                scroll = 0.f;                                                // スクロール
             }
         };
 
@@ -154,15 +154,15 @@ namespace Input {
         static void Update(void);
         
         // 押した瞬間
-        static inline bool IsTrigger(Click click) { return !sMouseStatePre_.mState_.rgbButtons[static_cast<size_t>(click)] && sMouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
+        static inline bool IsTrigger(Click click) { return !sMouseStatePre_.mState.rgbButtons[static_cast<size_t>(click)] && sMouseState_.mState.rgbButtons[static_cast<size_t>(click)]; }
         // 押されている時
-        static inline bool IsDown(Click click) { return sMouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
+        static inline bool IsDown(Click click) { return sMouseState_.mState.rgbButtons[static_cast<size_t>(click)]; }
         // 離された瞬間
-        static inline bool IsReleased(Click click) { return sMouseStatePre_.mState_.rgbButtons[static_cast<size_t>(click)] && !sMouseState_.mState_.rgbButtons[static_cast<size_t>(click)]; }
+        static inline bool IsReleased(Click click) { return sMouseStatePre_.mState.rgbButtons[static_cast<size_t>(click)] && !sMouseState_.mState.rgbButtons[static_cast<size_t>(click)]; }
 
-        static inline const Vector2 GetCursorVec(void) { return sMouseState_.cursorPos2d_ - sMouseStatePre_.cursorPos2d_; }
-        static inline const Vector2& GetCursorPos2D(void) { return sMouseState_.cursorPos2d_; }
-        static inline float GetScroll(void) { return sMouseState_.scroll_; }
+        static inline const Vector2 GetCursorVec(void) { return sMouseState_.cursorPos2d - sMouseStatePre_.cursorPos2d; }
+        static inline const Vector2& GetCursorPos2D(void) { return sMouseState_.cursorPos2d; }
+        static inline float GetScroll(void) { return sMouseState_.scroll; }
     private:
         // 変数
         static Microsoft::WRL::ComPtr<IDirectInputDevice8> sMouse_;

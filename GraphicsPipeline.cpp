@@ -217,16 +217,16 @@ void HelperGraphicPipeline::Pipeline2d(Pipeline_t& pipeline, BlendMode mode)
     HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
     assert(SUCCEEDED(hr));
 
-    hr = InitDirectX::GetInstance()->GetDevice()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&pipeline.rootSignature_));
+    hr = InitDirectX::GetInstance()->GetDevice()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&pipeline.rootSignature));
     assert(SUCCEEDED(hr));
 #pragma endregion
 
     // パイプラインにルートシグネチャをセット
-    pipelineDesc.pRootSignature = pipeline.rootSignature_.Get();
+    pipelineDesc.pRootSignature = pipeline.rootSignature.Get();
 #pragma endregion パイプラインの設定
 
     // パイプライン設定を保存
-    hr = InitDirectX::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipeline.pipelineState_));
+    hr = InitDirectX::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipeline.pipelineState));
     assert(SUCCEEDED(hr));
 }
 
@@ -419,12 +419,12 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
     HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
     assert(SUCCEEDED(hr));
 
-    hr = InitDirectX::GetInstance()->GetDevice()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&pipeline.rootSignature_));
+    hr = InitDirectX::GetInstance()->GetDevice()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&pipeline.rootSignature));
     assert(SUCCEEDED(hr));
 #pragma endregion
 
     // パイプラインにルートシグネチャをセット
-    pipelineDesc.pRootSignature = pipeline.rootSignature_.Get();
+    pipelineDesc.pRootSignature = pipeline.rootSignature.Get();
 
 #pragma region 深度設定
     // デプスステンシルステートの設定
@@ -437,7 +437,7 @@ void HelperGraphicPipeline::Pipeline3d(Pipeline_t& pipeline, BlendMode mode)
 
 #pragma region パイプラインステートの生成
     // パイプライン設定の保存
-    hr = InitDirectX::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipeline.pipelineState_));
+    hr = InitDirectX::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipeline.pipelineState));
     assert(SUCCEEDED(hr));
 #pragma endregion
 }

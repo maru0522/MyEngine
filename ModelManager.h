@@ -28,28 +28,28 @@ private:
 public:
     struct Material_t
     {
-        std::string name_{};           // マテリアルの名前
-        DirectX::XMFLOAT3 ambient_{};  // ambient（環境）影響度
-        DirectX::XMFLOAT3 diffuse_{};  // diffuse（広汎）影響度
-        DirectX::XMFLOAT3 specular_{}; // specular（鏡面反射）影響度
-        float_t alpha_{};              // アルファ
-        fsPath texKey_{};              // テクスチャファイル名
+        std::string name{};           // マテリアルの名前
+        DirectX::XMFLOAT3 ambient{};  // ambient（環境）影響度
+        DirectX::XMFLOAT3 diffuse{};  // diffuse（広汎）影響度
+        DirectX::XMFLOAT3 specular{}; // specular（鏡面反射）影響度
+        float_t alpha{};              // アルファ
+        fsPath texKey{};              // テクスチャファイル名
 
         Material_t() :
-            ambient_(0.3f, 0.3f, 0.3f),
-            diffuse_(0.0f, 0.0f, 0.0f),
-            specular_(0.0f, 0.0f, 0.0f),
-            alpha_(1.0f) {}
+            ambient(0.3f, 0.3f, 0.3f),
+            diffuse(0.0f, 0.0f, 0.0f),
+            specular(0.0f, 0.0f, 0.0f),
+            alpha(1.0f) {}
     };
 
     struct CBMaterial_t // 定数バッファ用構造体
     {
-        DirectX::XMFLOAT3 ambient_;  // ambient
+        DirectX::XMFLOAT3 ambient;  // ambient
         float_t pad1; // padding
-        DirectX::XMFLOAT3 diffuse_;  // diffuse
+        DirectX::XMFLOAT3 diffuse;  // diffuse
         float_t pad2; // padding
-        DirectX::XMFLOAT3 specular_; // specular
-        float_t alpha_;              // alpha
+        DirectX::XMFLOAT3 specular; // specular
+        float_t alpha;              // alpha
     };
 
     // 関数

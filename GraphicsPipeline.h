@@ -44,9 +44,9 @@ protected:
     struct Pipeline_t
     {
         // ルートシグネチャ
-        ComPtr<ID3D12RootSignature> rootSignature_{};
+        ComPtr<ID3D12RootSignature> rootSignature{};
         // パイプランステートの生成
-        ComPtr<ID3D12PipelineState> pipelineState_{};
+        ComPtr<ID3D12PipelineState> pipelineState{};
     };
 
     static void Pipeline2d(Pipeline_t& pipeline, BlendMode mode = BlendMode::NONE);
