@@ -94,7 +94,7 @@
     <ClCompile Include="BillBoard.cpp">
       <Filter>Entity\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
+    <ClCompile Include="DirectionalLight.cpp">
       <Filter>Entity\Light</Filter>
     </ClCompile>
     <ClCompile Include="LightGroup.cpp">
@@ -193,7 +193,7 @@
     <ClInclude Include="LightGroup.h">
       <Filter>Entity\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
+    <ClInclude Include="DirectionalLight.h">
       <Filter>Entity\Light</Filter>
     </ClInclude>
     <ClInclude Include="SpotLight.h">

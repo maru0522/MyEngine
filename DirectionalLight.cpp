@@ -1,4 +1,4 @@
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "InitDirectX.h"
 
 DirectionalLight::DirectionalLight(void)

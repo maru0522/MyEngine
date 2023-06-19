@@ -1,12 +1,12 @@
 #pragma once
 #include <cstdint>
-#include "Light.h"
 #include "Vector3.h"
 #include "SpotLight.h"
 #include "PointLight.h"
 #include "ConstBuffer.h"
 #include "CircleShadow.h"
 #include "ImguiController.h"
+#include "DirectionalLight.h"
 
 class LightGroup
 {
