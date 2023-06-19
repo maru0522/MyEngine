@@ -59,7 +59,7 @@ public:
     Mesh* meshPtr_;
     Material_t material_;
 
-    bool isSmoothing_;
+    bool isSmoothing_{};
     ConstBuffer<CBMaterial_t> cbMaterial_;
 };
 
