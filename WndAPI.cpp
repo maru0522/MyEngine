@@ -1,13 +1,19 @@
-#include "WndAPI.h"
-#include <string>
 #include "Util.h"
+#include <string>
+#include "WndAPI.h"
 #include <timeapi.h>
+#include <imgui_impl_win32.h>
 #pragma comment(lib,"winmm.lib")
 
 const std::wstring WndAPI::kWindowClassName_ = L"maruyamaEngine";
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT WndAPI::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+    // ImGUi用ウィンドウプロシージャ呼び出し
+    if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) return true;
+
     // メッセージに応じてゲーム固有の処理を行う
     switch (msg) {
         // ウィンドウが破棄された

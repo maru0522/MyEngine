@@ -97,7 +97,9 @@
     <ClCompile Include="LightGroup.cpp">
       <Filter>Entity\Light</Filter>
     </ClCompile>
-    <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>Entity\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPipeline.h" />
@@ -203,7 +205,9 @@
     <ClInclude Include="PointLight.h">
       <Filter>Entity\Light</Filter>
     </ClInclude>
-    <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="PostEffect.h">
+      <Filter>Entity\2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

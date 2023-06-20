@@ -60,6 +60,7 @@ private:
     void TransferVertex(void);
     void UpdateMatrix(void);
 
+protected:
     // •Ï”
     static TextureManager* sTexMPtr_;
     static ConstBuffer<CBMatOrthoGraphic_t> sCbMatOrthoGraphic_;
