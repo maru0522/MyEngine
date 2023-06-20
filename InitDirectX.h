@@ -38,7 +38,7 @@ private:
         uint32_t maxSRVDesc{ 256 };
         uint32_t maxCBVDesc{ 256 };
         uint32_t maxUAVDesc{ 256 };
-        uint32_t SRVCount{};
+        uint32_t SRVCount{ 1 }; // ImGui用のデスクリプタ生成のため1つ分あける。
         uint32_t CBVCount{};
         uint32_t UAVCount{};
 
