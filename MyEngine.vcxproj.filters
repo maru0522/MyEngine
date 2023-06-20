@@ -94,9 +94,6 @@
     <ClCompile Include="BillBoard.cpp">
       <Filter>Entity\3D</Filter>
     </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>Entity\Light</Filter>
-    </ClCompile>
     <ClCompile Include="LightGroup.cpp">
       <Filter>Entity\Light</Filter>
     </ClCompile>
