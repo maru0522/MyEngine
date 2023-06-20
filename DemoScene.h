@@ -22,7 +22,7 @@ public:
     void Finalize(void) override;
 
     // ïœêî
-    std::unique_ptr<Sprite> sprite_{ std::make_unique<Sprite>("Resources/namid.png") };
+    std::unique_ptr<Sprite> sprite_{ std::make_unique<Sprite>("Resources/namida.png") };
     std::unique_ptr<Object3D> obj3d_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
     std::unique_ptr<Object3D> obj3d2_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
     //std::unique_ptr<Sound> music2_{ std::make_unique<Sound>("Resources/sound/edm.wav") };

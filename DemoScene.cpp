@@ -32,7 +32,7 @@ void DemoScene::Update(void)
 void DemoScene::Draw3d(void)
 {
     lightGroup_->Draw();
-    obj3d_->Draw("");
+    obj3d_->Draw();
     obj3d2_->Draw();
     // cubeの画像にスプライトで表示しているものを起用
     //obj3d_->Draw("Resources/namida.png");

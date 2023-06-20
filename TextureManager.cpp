@@ -32,7 +32,7 @@ void TextureManager::Load(const fsPath& path)
 
     // WICテクスチャのロード
     HRESULT hr = LoadFromWICFile(szFile, DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
-    //if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) return;
+    if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) return;
     assert(SUCCEEDED(hr));
 #pragma endregion
 
