@@ -6,6 +6,7 @@ void GameSystem::Initialize()
 {
     FrameWork::Initialize();
     postEffect_ = std::make_unique<PostEffect>();
+    postEffect_->Initialize();
 }
 
 void GameSystem::Update(void)
