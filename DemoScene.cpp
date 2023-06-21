@@ -10,7 +10,7 @@ void DemoScene::Initialize(void)
     // カメラをマネージャーにセット
     CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
 
-    sprite_->SetSize({500,500});
+    //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
     obj3d_->coordinate_.SetScale({ 20.f,0.5f,20.f });

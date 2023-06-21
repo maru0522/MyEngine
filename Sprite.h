@@ -56,7 +56,7 @@ public:
     void Update(void);
     void Draw(void);
 
-private:
+protected:
     void TransferVertex(void);
     void UpdateMatrix(void);
 

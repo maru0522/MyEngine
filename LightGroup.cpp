@@ -15,7 +15,7 @@ void LightGroup::Update(void)
         TransferCB();
         isDirty_ = false;
     }
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
     DebugImGui();
 }
 

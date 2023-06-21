@@ -8,6 +8,9 @@ PostEffect::PostEffect(void) : Sprite("")
 
 void PostEffect::Draw(void)
 {
+    TransferVertex();
+    UpdateMatrix();
+
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // プリミティブ形状の設定コマンド
