@@ -16,24 +16,29 @@ void GameSystem::Update(void)
 
 void GameSystem::Draw(void)
 {
-    iDXPtr_->PreDraw();
-
-    // ---------2DUIの描画--------- //
+    // -----レンダーテクスチャへ書き込み----- //
+    postEffect_->PreDrawScene();
+    // --2DUIの描画-- //
     Sprite::PreDraw();
-    //sceneM_->Draw2d();
-    // ---------2DUIの描画--------- //
+    sceneM_->Draw2d();
+    // --2DUIの描画-- //
 
-
-    // -----3Dオブジェクトの描画----- //
+    // --3Dオブジェクトの描画-- //
     Object3D::PreDraw();
-    //sceneM_->Draw3d();
+    sceneM_->Draw3d();
+    // --3Dオブジェクトの描画-- //
+    postEffect_->PostDrawScene();
+    // -----レンダーテクスチャへ書き込み----- //
 
-    // -----3Dオブジェクトの描画----- //
+
+    // -----ポストエフェクトの描画----- //
+    iDXPtr_->PreDraw();
 
     postEffect_->Draw();
     imguiController_->Draw();
 
     iDXPtr_->PostDraw();
+    // -----ポストエフェクトの描画----- //
 }
 
 void GameSystem::Finalize(void)
