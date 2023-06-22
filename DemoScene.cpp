@@ -38,7 +38,12 @@ void DemoScene::Draw3d(void)
     //obj3d_->Draw("Resources/namida.png");
 }
 
-void DemoScene::Draw2d(void)
+
+void DemoScene::Draw2dFore(void)
+{
+}
+
+void DemoScene::Draw2dBack(void)
 {
     sprite_->Draw();
 }

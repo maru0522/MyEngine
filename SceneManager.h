@@ -15,7 +15,8 @@ public:
     void Initialize(SceneFactory::Usage firstScene = SceneFactory::Usage::DEMO);
     void Update(void);
     void Draw3d(void);
-    void Draw2d(void);
+    void Draw2dFore(void);
+    void Draw2dBack(void);
 
 private:
     // ïœêî

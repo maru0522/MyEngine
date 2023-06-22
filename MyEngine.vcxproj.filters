@@ -13,6 +13,12 @@
     <FxCompile Include="SpritePS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="PostEffectVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PostEffectPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSOManager.cpp" />
@@ -214,6 +220,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Sprite.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="PostEffect.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

@@ -5,7 +5,7 @@
 #include<d3dcompiler.h>
 #pragma comment(lib,"d3dcompiler.lib")
 
-void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, BlendMode mode)
+void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, size_t patternNum, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, BlendMode mode)
 {
     // デスクリプタレンジ
     CD3DX12_DESCRIPTOR_RANGE cDescRange{};
@@ -25,7 +25,7 @@ void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& input
     //テクスチャサンプラーの変数宣言
     D3D12_STATIC_SAMPLER_DESC samplerDesc{};
     // ルートシグネチャデスク
-    D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = CreateRootSignatureDesc(samplerDesc, rootParams);
+    D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = CreateRootSignatureDesc(samplerDesc, patternNum, rootParams);
     // シリアライズルートシグネチャオブジェクト
     ComPtr<ID3DBlob> rootSigBlob{ nullptr };
     // シリアライズルートシグネチャ
@@ -34,23 +34,15 @@ void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& input
     VCreateRootSignature(rootSigBlob.Get(), pipelineStateObject_.rootSignature.GetAddressOf());
 
     // パイプラインデスク
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc = CreatePipelineDesc(blobsPtr, inputLayoutRef, pipelineStateObject_,cullmode, mode);
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc = CreatePipelineDesc(blobsPtr, inputLayoutRef, pipelineStateObject_, cullmode, mode);
     // パイプラインステートオブジェクト生成
     VCreatePSO(&pipelineDesc, pipelineStateObject_.pipelineState.GetAddressOf());
 }
 
-D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef)
+D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, size_t patternNum, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef)
 {
     //テクスチャサンプラーの設定
-    samplerDescRef.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//横繰り返し(タイリング)
-    samplerDescRef.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//縦繰り返し（タイリング）
-    samplerDescRef.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
-    samplerDescRef.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
-    samplerDescRef.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//全てシニア補間
-    samplerDescRef.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
-    samplerDescRef.MinLOD = 0.0f;//ミップマップ最小値
-    samplerDescRef.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-    samplerDescRef.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+    SetSamplerDesc(samplerDescRef, patternNum);
 
     // ルートシグネチャデスクの変数宣言
     D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
@@ -136,6 +128,49 @@ void HelperGraphicPipeline::VCreatePSO(D3D12_GRAPHICS_PIPELINE_STATE_DESC* pipel
     // パイプライン設定を保存
     HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateGraphicsPipelineState(pipelineDescPtr, IID_PPV_ARGS(psoDPtr));
     assert(SUCCEEDED(hr));
+}
+
+void HelperGraphicPipeline::SetSamplerDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, size_t patternNum)
+{
+    switch (patternNum)
+    {
+    case 1:
+        //テクスチャサンプラーの設定
+        samplerDescRef.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//横繰り返し(タイリング)
+        samplerDescRef.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//縦繰り返し（タイリング）
+        samplerDescRef.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
+        samplerDescRef.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
+        samplerDescRef.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//全てシニア補間
+        samplerDescRef.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
+        samplerDescRef.MinLOD = 0.0f;//ミップマップ最小値
+        samplerDescRef.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        samplerDescRef.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+        break;
+    case 2:
+        //テクスチャサンプラーの設定
+        samplerDescRef.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;//横繰り返し(タイリング)
+        samplerDescRef.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;//縦繰り返し（タイリング）
+        samplerDescRef.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
+        samplerDescRef.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
+        samplerDescRef.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+        samplerDescRef.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
+        samplerDescRef.MinLOD = 0.0f;//ミップマップ最小値
+        samplerDescRef.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        samplerDescRef.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+        break;
+    default:
+        //テクスチャサンプラーの設定
+        samplerDescRef.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//横繰り返し(タイリング)
+        samplerDescRef.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//縦繰り返し（タイリング）
+        samplerDescRef.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
+        samplerDescRef.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
+        samplerDescRef.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//全てシニア補間
+        samplerDescRef.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
+        samplerDescRef.MinLOD = 0.0f;//ミップマップ最小値
+        samplerDescRef.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        samplerDescRef.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+        break;
+    }
 }
 
 void HelperGraphicPipeline::SetCompileShader(ID3DBlob** dp_blob, const std::string& filename, const std::string& entryPoint, const std::string& target)
@@ -248,7 +283,7 @@ void PSOManager::Create()
     std::unique_ptr<Blob_t> blobs1{ std::make_unique<Blob_t>() };
     VCompileShaderVS(blobs1.get(), "SpriteVS.hlsl", "main");
     VCompileShaderPS(blobs1.get(), "SpritePS.hlsl", "main");
-    CreateAllBlendType(inputLayout1, blobs1.get(), 2, D3D12_CULL_MODE::D3D12_CULL_MODE_NONE, "PSO_SPRITE");
+    CreateAllBlendType(inputLayout1, 1, blobs1.get(), 2, D3D12_CULL_MODE::D3D12_CULL_MODE_NONE, "PSO_SPRITE");
 
     // object3D
     std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout2; // xyz座標,法線ベクトル,uv座標
@@ -258,15 +293,24 @@ void PSOManager::Create()
     std::unique_ptr<Blob_t> blobs2{ std::make_unique<Blob_t>() };
     VCompileShaderVS(blobs2.get(), "ModelVS.hlsl", "main");
     VCompileShaderPS(blobs2.get(), "ModelPS.hlsl", "main");
-    CreateAllBlendType(inputLayout2, blobs2.get(), 4, D3D12_CULL_MODE::D3D12_CULL_MODE_BACK, "PSO_OBJECT3D");
+    CreateAllBlendType(inputLayout2, 1, blobs2.get(), 4, D3D12_CULL_MODE::D3D12_CULL_MODE_BACK, "PSO_OBJECT3D");
+
+    // postEffect
+    std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout3; // xyz座標,uv座標
+    inputLayout3.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    inputLayout3.emplace_back(D3D12_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    std::unique_ptr<Blob_t> blobs3{ std::make_unique<Blob_t>() };
+    VCompileShaderVS(blobs3.get(), "PostEffectVS.hlsl", "main");
+    VCompileShaderPS(blobs3.get(), "PostEffectPS.hlsl", "main");
+    CreateAllBlendType(inputLayout3, 2, blobs3.get(), 1, D3D12_CULL_MODE::D3D12_CULL_MODE_NONE, "PSO_POSTEFFECT");
 }
 
-void PSOManager::CreateAllBlendType(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, const std::string& mapKey)
+void PSOManager::CreateAllBlendType(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, size_t patternNum, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, const std::string& mapKey)
 {
     std::array<GraphicsPipeline, static_cast<size_t>(HelperGraphicPipeline::BlendMode::MAX_ARRAY)> psoBlock;
     for (size_t i = 0; i < psoBlock.size(); i++)
     {
-        psoBlock[i].Create(inputLayoutRef, blobsPtr, rootParamsCBNum, cullmode, static_cast<BlendMode>(i));
+        psoBlock[i].Create(inputLayoutRef, patternNum, blobsPtr, rootParamsCBNum, cullmode, static_cast<BlendMode>(i));
     }
 
     pipelineStateObjects_.insert({ mapKey,psoBlock });

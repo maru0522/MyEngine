@@ -26,15 +26,16 @@ private:
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
+public:
+    struct CBMatOrthoGraphic_t // 定数バッファ用"射影行列"構造体
+    {
+        Matrix4 matOrthoGraphic;
+    };
+
     struct CBData2d_t // 定数バッファ用"データ"構造体
     {
         Matrix4 matWorld; // 3D変換行列
         Vector4 color; // 色（RGBA）
-    };
-
-    struct CBMatOrthoGraphic_t // 定数バッファ用"射影行列"構造体
-    {
-        Matrix4 matOrthoGraphic;
     };
 
     struct VertexPosUv_t // 頂点バッファ用"データ"構造体
@@ -43,7 +44,6 @@ private:
         Vector2 uv; // uv座標
     };
 
-public:
     // 関数
     static void StaticInitialize(TextureManager* texMPtr);
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);

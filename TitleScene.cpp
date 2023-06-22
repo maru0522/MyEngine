@@ -12,7 +12,11 @@ void TitleScene::Draw3d(void)
 {
 }
 
-void TitleScene::Draw2d(void)
+void TitleScene::Draw2dFore(void)
+{
+}
+
+void TitleScene::Draw2dBack(void)
 {
 }
 

@@ -18,10 +18,10 @@ void GameSystem::Draw(void)
 {
     // -----ƒŒƒ“ƒ_[ƒeƒNƒXƒ`ƒƒ‚Ö‘‚«ž‚Ý----- //
     postEffect_->PreDrawScene();
-    // --2DUI‚Ì•`‰æ-- //
+    // --”wŒi2DUI‚Ì•`‰æ-- //
     Sprite::PreDraw();
-    sceneM_->Draw2d();
-    // --2DUI‚Ì•`‰æ-- //
+    sceneM_->Draw2dBack();
+    // --”wŒi2DUI‚Ì•`‰æ-- //
 
     // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
     Object3D::PreDraw();
@@ -35,6 +35,12 @@ void GameSystem::Draw(void)
     iDXPtr_->PreDraw();
 
     postEffect_->Draw();
+
+    // --‘OŒi2DUI‚Ì•`‰æ-- //
+    Sprite::PreDraw();
+    sceneM_->Draw2dFore();
+    // --‘OŒi2DUI‚Ì•`‰æ-- //
+
     imguiController_->Draw();
 
     iDXPtr_->PostDraw();

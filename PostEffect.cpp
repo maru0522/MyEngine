@@ -3,11 +3,22 @@
 #include "PostEffect.h"
 #include "InitDirectX.h"
 
-const float  PostEffect::kClearColor[4]{ 0.25f, 0.5f, 0.1f, 0.f };
+const float  PostEffect::kClearColor[4]{ 0.25f, 0.5f, 0.1f, 0.f }; // 黄緑みたいな
 
-PostEffect::PostEffect(void) : Sprite("")
+PostEffect::PostEffect(void) 
 {
-    this->SetSize({ 500.f,500.f });
+    // 頂点バッファ
+    std::vector<Sprite::VertexPosUv_t> vertices;
+    vertices.emplace_back(Sprite::VertexPosUv_t{{ -1.f, -1.f, 0.0f }, {0.0f, 1.0f} }); // 左下
+    vertices.emplace_back(Sprite::VertexPosUv_t{{ -1.f, +1.f, 0.0f }, {0.0f, 0.0f} }); // 左上
+    vertices.emplace_back(Sprite::VertexPosUv_t{{ +1.f, -1.f, 0.0f }, {1.0f, 1.0f} }); // 右下
+    vertices.emplace_back(Sprite::VertexPosUv_t{{ +1.f, +1.f, 0.0f }, {1.0f, 0.0f} }); // 右上
+    vertexBuffer_.Create(vertices);
+
+    // 定数バッファ
+    cb_.Create();
+    cb_.GetConstBuffMap()->matWorld = Math::Matrix::Identity();
+    cb_.GetConstBuffMap()->color = { 1.f,1.f,1.f,1.f };
 }
 
 void PostEffect::Initialize(void)
@@ -138,9 +149,6 @@ void PostEffect::PreDrawScene(void)
 
 void PostEffect::Draw(void)
 {
-    TransferVertex();
-    UpdateMatrix();
-
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // プリミティブ形状の設定コマンド
@@ -153,15 +161,14 @@ void PostEffect::Draw(void)
 
     // パイプラインステートとルートシグネチャの設定コマンド
     //ID3D12PipelineState* plsPtr{ GraphicsPipeline::GetInstance()->GetPipeline2d(GraphicsPipeline::BlendMode::NONE).pipelineState.Get() };
-    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", GraphicsPipeline::BlendMode::NONE)->pipelineState.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", GraphicsPipeline::BlendMode::NONE)->rootSignature.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_POSTEFFECT", GraphicsPipeline::BlendMode::NONE)->pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_POSTEFFECT", GraphicsPipeline::BlendMode::NONE)->rootSignature.Get());
 
     // 頂点バッファビューの設定コマンド
     iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_.GetVbView());
 
     // 定数バッファビュー(CBV)の設定コマンド
     iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, sCbMatOrthoGraphic_.GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
     //iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle);

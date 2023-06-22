@@ -57,7 +57,12 @@ void SceneManager::Draw3d(void)
     currentScene_->Draw3d();
 }
 
-void SceneManager::Draw2d(void)
+void SceneManager::Draw2dFore(void)
 {
-    currentScene_->Draw2d();
+    currentScene_->Draw2dFore();
+}
+
+void SceneManager::Draw2dBack(void)
+{
+    currentScene_->Draw2dBack();
 }

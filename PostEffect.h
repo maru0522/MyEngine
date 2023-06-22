@@ -2,8 +2,7 @@
 #include "Sprite.h"
 #include "Vector4.h"
 
-class PostEffect :
-    public Sprite
+class PostEffect
 {
 private:
     // 定義
@@ -21,6 +20,11 @@ public:
     void PostDrawScene(void);
 
     // 変数
+    Matrix4 matWorld_;
+
+    ConstBuffer<Sprite::CBData2d_t> cb_;
+    VertexBuffer<Sprite::VertexPosUv_t> vertexBuffer_;
+
     ComPtr<ID3D12Resource> texBuff_;   // texバッファ
     ComPtr<ID3D12Resource> depthBuff_; // 深度バッファ
     ComPtr<ID3D12DescriptorHeap> srvHeap_; // srv用デスクヒープ
