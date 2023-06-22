@@ -153,8 +153,8 @@ void PostEffect::Draw(void)
 
     // パイプラインステートとルートシグネチャの設定コマンド
     //ID3D12PipelineState* plsPtr{ GraphicsPipeline::GetInstance()->GetPipeline2d(GraphicsPipeline::BlendMode::NONE).pipelineState.Get() };
-    iDXPtr->GetCommandList()->SetPipelineState(GraphicsPipeline::GetInstance()->GetPipeline2d(GraphicsPipeline::BlendMode::NONE).pipelineState.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(GraphicsPipeline::GetInstance()->GetPipeline2d(GraphicsPipeline::BlendMode::NONE).rootSignature.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", GraphicsPipeline::BlendMode::NONE)->pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", GraphicsPipeline::BlendMode::NONE)->rootSignature.Get());
 
     // 頂点バッファビューの設定コマンド
     iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_.GetVbView());

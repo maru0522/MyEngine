@@ -91,7 +91,7 @@
     <ClCompile Include="FPSController.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="GameSystem.cpp" />
-    <ClCompile Include="GraphicsPipeline.cpp" />
+    <ClCompile Include="PSOManager.cpp" />
     <ClCompile Include="ImguiController.cpp" />
     <ClCompile Include="InitDirectX.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -167,7 +167,7 @@
     <ClInclude Include="FPSController.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="GameSystem.h" />
-    <ClInclude Include="GraphicsPipeline.h" />
+    <ClInclude Include="PSOManager.h" />
     <ClInclude Include="ImguiController.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InitDirectX.h" />

@@ -15,7 +15,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GraphicsPipeline.cpp" />
+    <ClCompile Include="PSOManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="WorldCoordinate.cpp" />
     <ClCompile Include="Vector2.cpp">
@@ -102,7 +102,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GraphicsPipeline.h" />
+    <ClInclude Include="PSOManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="WorldCoordinate.h" />
     <ClInclude Include="Vector4.h">

@@ -1,10 +1,10 @@
 #pragma once
-#include "GraphicsPipeline.h"
 #include "WorldCoordinate.h"
 #include "TextureManager.h"
 #include "CameraManager.h"
 #include "ModelManager.h"
 #include "ConstBuffer.h"
+#include "PSOManager.h"
 #include "FileSystem.h"
 #include "Matrix4.h"
 #include "LightGroup.h"

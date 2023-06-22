@@ -38,7 +38,7 @@ void FrameWork::Initialize()
     // AudioManager - ‰¹Šy&SE“Ç‚İ‚İ
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline‰Šú‰»
-    gplPtr_->Initialize();
+    psoMPtr_->Create();
 
     // Sprite‰Šú‰»
     Sprite::StaticInitialize(texM_.get());

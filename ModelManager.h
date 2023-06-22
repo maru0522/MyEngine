@@ -7,12 +7,12 @@
 #include <d3d12.h>
 #pragma comment(lib,"d3d12.lib")
 
-#include "GraphicsPipeline.h"
 #include "TextureManager.h"
 #include "VertexBuffer.h"
 #include "FileSystem.h"
 #include "IndexBuffer.h"
 #include "ConstBuffer.h"
+#include "PSOManager.h"
 #include "Matrix4.h"
 #include "Vector3.h"
 #include "Vector2.h"

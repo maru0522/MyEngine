@@ -21,7 +21,7 @@ using namespace DirectX;
 #include "InitDirectX.h"
 #include "TextureManager.h"
 #include "ConstBuffer.h"
-#include "GraphicsPipeline.h"
+#include "PSOManager.h"
 #include "CameraManager.h"
 #include "Sprite.h"
 #include "ModelManager.h"

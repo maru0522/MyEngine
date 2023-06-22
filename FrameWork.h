@@ -2,7 +2,7 @@
 #include "WndAPI.h"
 #include "InitDirectX.h"
 #include "TextureManager.h"
-#include "GraphicsPipeline.h"
+#include "PSOManager.h"
 #include "CameraManager.h"
 #include "ModelManager.h"
 #include "SceneManager.h"
@@ -28,7 +28,7 @@ public:
 protected:
     // ïœêî
     InitDirectX* iDXPtr_{ InitDirectX::GetInstance() };                                         // ptr_InitDirectX
-    GraphicsPipeline* gplPtr_{ GraphicsPipeline::GetInstance() };                               // ptr_GraphicsPipeline
+    PSOManager* psoMPtr_{ PSOManager::GetInstance() };                                          // ptr_GraphicsPipeline
 
     std::unique_ptr<WndAPI> wnd_{ std::make_unique<WndAPI>() };                                 // WndAPI
     std::unique_ptr<TextureManager> texM_{ std::make_unique<TextureManager>() };                // textureManager
