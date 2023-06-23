@@ -92,6 +92,7 @@ private:
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 protected:
+    // pipelineStateObject_‚ğ¶¬‚·‚éÛ‚Ìİ’è
     struct IGraphicsPipelineStructure_t
     {
         SamplerType samplerType{};
