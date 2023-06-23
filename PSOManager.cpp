@@ -7,8 +7,29 @@
 
 void IGraphicsPipeline::Create(IGraphicsPipelineStructure_t* igpsPtr, BlendMode blendMode)
 {
+    // ルートパラメータコンテナ
+    std::vector<D3D12_ROOT_PARAMETER> rootParams{};
+
+    for (size_t i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
+    {
+        // デスクリプタレンジ
+        CD3DX12_DESCRIPTOR_RANGE cDescRangeSRV{};
+        cDescRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+        // ルートパラメータ生成と追加 - DescTable
+        CD3DX12_ROOT_PARAMETER cRootParamDT{};
+        cRootParamDT.InitAsDescriptorTable(1, &cDescRangeSRV, D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
+        rootParams.emplace_back(cRootParamDT);
+    }
+    for (size_t i = 0; i < igpsPtr->rps.rootParamsCBNum; i++)
+    {
+        // ルートパラメータ生成と追加 - ConstantBufferView
+        CD3DX12_ROOT_PARAMETER cRootParamCBV{};
+        cRootParamCBV.InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
+        rootParams.emplace_back(cRootParamCBV);
+    }
+
     // ルートパラメータ
-    std::vector<D3D12_ROOT_PARAMETER> rootParams = CreateRootParameter(igpsPtr->rps);
+    //std::vector<D3D12_ROOT_PARAMETER> rootParams = CreateRootParameter(igpsPtr->rps);
     //テクスチャサンプラー
     D3D12_STATIC_SAMPLER_DESC samplerDesc = CreateSamplerDesc(igpsPtr->samplerType); //SamplerType type
     // ルートシグネチャデスク
