@@ -49,9 +49,9 @@ void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& input
     //CreateRootParameter(rootParams,{ 1,rootParamsCBNum });
 
     //テクスチャサンプラーの変数宣言
-    D3D12_STATIC_SAMPLER_DESC samplerDesc{};
+    D3D12_STATIC_SAMPLER_DESC samplerDesc = CreateSamplerDesc(static_cast<SamplerType>(patternNum)); //SamplerType type
     // ルートシグネチャデスク
-    D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = CreateRootSignatureDesc(samplerDesc, patternNum, rootParams);
+    D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = CreateRootSignatureDesc(samplerDesc, rootParams);
     // シリアライズルートシグネチャオブジェクト
     ComPtr<ID3DBlob> rootSigBlob{ nullptr };
     // シリアライズルートシグネチャ
@@ -86,11 +86,56 @@ void HelperGraphicPipeline::CreateRootParameter(std::vector<D3D12_ROOT_PARAMETER
     }
 }
 
-D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, size_t patternNum, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef)
+D3D12_STATIC_SAMPLER_DESC HelperGraphicPipeline::CreateSamplerDesc(SamplerType type)
 {
-    //テクスチャサンプラーの設定
-    SetSamplerDesc(samplerDescRef, patternNum);
+    //テクスチャサンプラーの変数宣言
+    D3D12_STATIC_SAMPLER_DESC samplerDesc{};
 
+    switch (static_cast<int>(type))
+    {
+    case 0:
+        //テクスチャサンプラーの設定
+        samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//横繰り返し(タイリング)
+        samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//縦繰り返し（タイリング）
+        samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
+        samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
+        samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//全てシニア補間
+        samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
+        samplerDesc.MinLOD = 0.0f;//ミップマップ最小値
+        samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+        break;
+    case 1:
+        //テクスチャサンプラーの設定
+        samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;//横繰り返し(タイリング)
+        samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;//縦繰り返し（タイリング）
+        samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
+        samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
+        samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+        samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
+        samplerDesc.MinLOD = 0.0f;//ミップマップ最小値
+        samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+        break;
+    default:
+        //テクスチャサンプラーの設定
+        samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//横繰り返し(タイリング)
+        samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//縦繰り返し（タイリング）
+        samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//奥行繰り返し（タイリング）
+        samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;//ボーダーの時は黒
+        samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//全てシニア補間
+        samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;//ミップマップ最大値
+        samplerDesc.MinLOD = 0.0f;//ミップマップ最小値
+        samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//ピクセルシェーダからのみ使用可能
+        break;
+    }
+
+    return samplerDesc;
+}
+
+D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef)
+{
     // ルートシグネチャデスクの変数宣言
     D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
     // ルートシグネチャデスクの設定

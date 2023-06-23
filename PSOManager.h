@@ -75,7 +75,8 @@ protected:
     static inline void VCompileShaderPS(Blob_t* blobPtr, const std::string& filename, const std::string& entryPoint) { SetCompileShader(blobPtr->psBlob.GetAddressOf(), filename, entryPoint, "ps_5_0"); }
 
     static void CreateRootParameter(std::vector<D3D12_ROOT_PARAMETER>& rootParams ,RootParameterStructure_t rootParameterStructure);
-    static D3D12_ROOT_SIGNATURE_DESC CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, size_t patternNum, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef);
+    static D3D12_STATIC_SAMPLER_DESC CreateSamplerDesc(SamplerType type);
+    static D3D12_ROOT_SIGNATURE_DESC CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef,const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef);
     static void VSerializeRootSignature(ID3DBlob** rootSigBlobDPtr, D3D12_ROOT_SIGNATURE_DESC* rootSignatureDescPtr);
     static void VCreateRootSignature(ID3DBlob* rootSigBlobPtr, ID3D12RootSignature** rootSignatureDPtr);
 
