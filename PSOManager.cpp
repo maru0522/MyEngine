@@ -7,21 +7,47 @@
 
 void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, size_t patternNum, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, BlendMode mode)
 {
-    // デスクリプタレンジ
-    CD3DX12_DESCRIPTOR_RANGE cDescRange{};
-    cDescRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
-    // ルートパラメータ
-    std::vector<D3D12_ROOT_PARAMETER> rootParams{};
-    CD3DX12_ROOT_PARAMETER cRootParam1{};
-    cRootParam1.InitAsDescriptorTable(1, &cDescRange); // テクスチャレジスタ0番
-    rootParams.emplace_back(cRootParam1);
+    //// デスクリプタレンジ
+    //CD3DX12_DESCRIPTOR_RANGE cDescRange{};
+    //cDescRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+    //// ルートパラメータ
+    //std::vector<D3D12_ROOT_PARAMETER> rootParams{};
+    //CD3DX12_ROOT_PARAMETER cRootParam1{};
+    //cRootParam1.InitAsDescriptorTable(1, &cDescRange); // テクスチャレジスタ0番
+    //rootParams.emplace_back(cRootParam1);
 
+    //for (size_t i = 0; i < rootParamsCBNum; i++)
+    //{
+    //    CD3DX12_ROOT_PARAMETER cRootParamOfi{};
+    //    cRootParamOfi.InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
+    //    rootParams.emplace_back(cRootParamOfi);
+    //}
+
+    // ルートパラメータコンテナ
+    std::vector<D3D12_ROOT_PARAMETER> rootParams{};
+
+    for (size_t i = 0; i < 1; i++)
+    {
+        // デスクリプタレンジ
+        CD3DX12_DESCRIPTOR_RANGE cDescRangeSRV{};
+        cDescRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+        // ルートパラメータ生成と追加 - DescTable
+        CD3DX12_ROOT_PARAMETER cRootParamDT{};
+        cRootParamDT.InitAsDescriptorTable(1, &cDescRangeSRV, D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
+        rootParams.emplace_back(cRootParamDT);
+    }
     for (size_t i = 0; i < rootParamsCBNum; i++)
     {
-        CD3DX12_ROOT_PARAMETER cRootParamOfi{};
-        cRootParamOfi.InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
-        rootParams.emplace_back(cRootParamOfi);
+        // ルートパラメータ生成と追加 - ConstantBufferView
+        CD3DX12_ROOT_PARAMETER cRootParamCBV{};
+        cRootParamCBV.InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
+        rootParams.emplace_back(cRootParamCBV);
     }
+
+    //// ルートパラメータコンテナ
+    //std::vector<D3D12_ROOT_PARAMETER> rootParams{}; 
+    //CreateRootParameter(rootParams,{ 1,rootParamsCBNum });
+
     //テクスチャサンプラーの変数宣言
     D3D12_STATIC_SAMPLER_DESC samplerDesc{};
     // ルートシグネチャデスク
@@ -37,6 +63,27 @@ void GraphicsPipeline::Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& input
     D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc = CreatePipelineDesc(blobsPtr, inputLayoutRef, pipelineStateObject_, cullmode, mode);
     // パイプラインステートオブジェクト生成
     VCreatePSO(&pipelineDesc, pipelineStateObject_.pipelineState.GetAddressOf());
+}
+
+void HelperGraphicPipeline::CreateRootParameter(std::vector<D3D12_ROOT_PARAMETER>& rootParams, RootParameterStructure_t rootParameterStructure)
+{
+    for (size_t i = 0; i < rootParameterStructure.descriptorRangeNum; i++)
+    {
+        // デスクリプタレンジ
+        CD3DX12_DESCRIPTOR_RANGE cDescRangeSRV{};
+        cDescRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+        // ルートパラメータ生成と追加 - DescTable
+        CD3DX12_ROOT_PARAMETER cRootParamDT{};
+        cRootParamDT.InitAsDescriptorTable(1, &cDescRangeSRV, D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
+        rootParams.emplace_back(cRootParamDT);
+    }
+    for (size_t i = 0; i < rootParameterStructure.rootParamsCBNum; i++)
+    {
+        // ルートパラメータ生成と追加 - ConstantBufferView
+        CD3DX12_ROOT_PARAMETER cRootParamCBV{};
+        cRootParamCBV.InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
+        rootParams.emplace_back(cRootParamCBV);
+    }
 }
 
 D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, size_t patternNum, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef)
