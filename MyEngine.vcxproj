@@ -105,6 +105,7 @@
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Sound.h" />

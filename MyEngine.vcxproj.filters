@@ -106,6 +106,7 @@
     <ClCompile Include="PostEffect.cpp">
       <Filter>Entity\2D</Filter>
     </ClCompile>
+    <ClCompile Include="RenderTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="PostEffect.h">
       <Filter>Entity\2D</Filter>
     </ClInclude>
+    <ClInclude Include="RenderTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

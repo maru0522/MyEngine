@@ -1,6 +1,8 @@
 #pragma once
-#include "Sprite.h"
+#include <wrl.h>
+#include <d3d12.h>
 #include "Vector4.h"
+#include "RenderTexture.h"
 
 class PostEffect
 {
@@ -25,8 +27,8 @@ public:
     ConstBuffer<Sprite::CBData2d_t> cb_;
     VertexBuffer<Sprite::VertexPosUv_t> vertexBuffer_;
 
+    RenderTexture renderTexture_[2];
     ComPtr<ID3D12Resource> depthBuff_;  // 深度バッファ
-    ComPtr<ID3D12Resource> texBuff_[2];   // texバッファ
     ComPtr<ID3D12DescriptorHeap> srvHeap_; // srv用デスクヒープ
     ComPtr<ID3D12DescriptorHeap> rtvHeap_; // rtv用デスクヒープ
     ComPtr<ID3D12DescriptorHeap> dsvHeap_; // dsv用デスクヒープ

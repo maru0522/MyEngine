@@ -1,5 +1,6 @@
 #include "Input.h"
 #include <d3dx12.h>
+#include "Sprite.h"
 #include "WndAPI.h"
 #include "PostEffect.h"
 #include "InitDirectX.h"
@@ -27,33 +28,10 @@ void PostEffect::Initialize(void)
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
     HRESULT hr = S_FALSE;
 
-    // テクスチャヒープ設定
-    CD3DX12_HEAP_PROPERTIES textureHeapProp{ D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0 };
-    // テクスチャリソース設定
-    CD3DX12_RESOURCE_DESC textureDesc =
-        CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, WndAPI::kWidth_, (UINT)WndAPI::kHeight_, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
-    // テクスチャクリア設定
-    CD3DX12_CLEAR_VALUE texClearValue{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kClearColor };
     for (size_t i = 0; i < 2; i++)
     {
-        // テクスチャバッファの生成
-        hr = iDXPtr->GetDevice()->
-            CreateCommittedResource(&textureHeapProp, D3D12_HEAP_FLAG_NONE, &textureDesc, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, &texClearValue, IID_PPV_ARGS(&texBuff_[i]));
-        assert(SUCCEEDED(hr));
-
-        // テクスチャを赤クリア
-        constexpr uint32_t pixelCount = WndAPI::kWidth_ * WndAPI::kHeight_; // 画素数
-        constexpr uint32_t rowPitch = sizeof(uint32_t) * WndAPI::kWidth_;   // 1行分のデータサイズ
-        constexpr uint32_t deothPitch = rowPitch * WndAPI::kHeight_;        // 全体のデータサイズ
-        // イメージ
-        std::vector<uint32_t> img(pixelCount);
-        for (size_t j = 0; j < pixelCount; j++) { img[j] = 0xff0000ff; }
-
-        // テクスチャバッファにデータ転送
-        hr = texBuff_[i]->WriteToSubresource(0, nullptr, img.data(), rowPitch, deothPitch);
-        assert(SUCCEEDED(hr));
+        renderTexture_[i].Create();
     }
-
 
     // srv用descHeap設定
     D3D12_DESCRIPTOR_HEAP_DESC srvDescHeapDesc{};
@@ -71,7 +49,7 @@ void PostEffect::Initialize(void)
     srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MipLevels = 1;
     // descHeapにsrv生成
-    iDXPtr->GetDevice()->CreateShaderResourceView(texBuff_[0].Get(), &srvDesc, srvHeap_->GetCPUDescriptorHandleForHeapStart());
+    iDXPtr->GetDevice()->CreateShaderResourceView(renderTexture_[0].GetTexBuffPtr(), &srvDesc, srvHeap_->GetCPUDescriptorHandleForHeapStart());
     //iDXPtr->GetDescHeap_t()->CreateSRV(textureDesc, texBuff_.Get());
 
 
@@ -88,7 +66,7 @@ void PostEffect::Initialize(void)
         // rtv設定
         CD3DX12_CPU_DESCRIPTOR_HANDLE cRtvDesc{ rtvHeap_->GetCPUDescriptorHandleForHeapStart(),(INT)i,iDXPtr->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV) };
         // デスクヒープにrtv生成
-        iDXPtr->GetDevice()->CreateRenderTargetView(texBuff_[i].Get(), nullptr, cRtvDesc);
+        iDXPtr->GetDevice()->CreateRenderTargetView(renderTexture_[i].GetTexBuffPtr(), nullptr, cRtvDesc);
     }
 
 
@@ -131,8 +109,7 @@ void PostEffect::PreDrawScene(void)
     for (size_t i = 0; i < 2; i++)
     {
         // リソースバリア変更（シェーダーリソース->描画可能）
-        CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(texBuff_[i].Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
-        iDXPtr->GetCommandList()->ResourceBarrier(1, &resBarrier);
+        renderTexture_[i].TransitionResourceBarrier(D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
     // rtv用デスクヒープのハンドルを取得
@@ -180,7 +157,7 @@ void PostEffect::Draw(void)
         srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
         srvDesc.Texture2D.MipLevels = 1;
 
-        iDXPtr->GetDevice()->CreateShaderResourceView(texBuff_[tex].Get(), &srvDesc, srvHeap_->GetCPUDescriptorHandleForHeapStart());
+        iDXPtr->GetDevice()->CreateShaderResourceView(renderTexture_[tex].GetTexBuffPtr(), &srvDesc, srvHeap_->GetCPUDescriptorHandleForHeapStart());
     }
 
     // プリミティブ形状の設定コマンド
@@ -214,8 +191,7 @@ void PostEffect::PostDrawScene(void)
 {
     for (size_t i = 0; i < 2; i++)
     {
-        // リソースバリア変更（描画可能->シェーダーリソース）
-        CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(texBuff_[i].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-        InitDirectX::GetInstance()->GetCommandList()->ResourceBarrier(1, &resBarrier);
+        // リソースバリア変更（シェーダーリソース->描画可能）
+        renderTexture_[i].TransitionResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
     }
 }
