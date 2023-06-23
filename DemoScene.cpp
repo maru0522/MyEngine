@@ -45,7 +45,7 @@ void DemoScene::Draw2dFore(void)
 
 void DemoScene::Draw2dBack(void)
 {
-    sprite_->Draw();
+    //sprite_->Draw();
 }
 
 void DemoScene::Finalize(void)

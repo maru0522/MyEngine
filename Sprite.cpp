@@ -31,8 +31,8 @@ void Sprite::PreDraw(BlendMode blendmode)
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDX->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", blendmode)->pipelineState.Get());
-    iDX->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", blendmode)->rootSignature.Get());
+    iDX->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->pipelineState.Get());
+    iDX->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->rootSignature.Get());
 }
 
 void Sprite::SetDrawBlendMode(BlendMode blendmode)
@@ -40,8 +40,8 @@ void Sprite::SetDrawBlendMode(BlendMode blendmode)
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", blendmode)->pipelineState.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_SPRITE", blendmode)->rootSignature.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->rootSignature.Get());
 }
 
 void Sprite::UpdateCBMatOrthoGraphic(void)

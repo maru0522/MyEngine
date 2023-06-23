@@ -3,9 +3,12 @@
 #include "Sprite.h"
 #include "WndAPI.h"
 #include "PostEffect.h"
+#include "PSOManager.h"
 #include "InitDirectX.h"
 
 const float  PostEffect::kClearColor[4]{ 0.25f, 0.5f, 0.1f, 0.f }; // 黄緑みたいな
+
+using BlendMode = HelperGraphicPipeline::BlendMode;
 
 PostEffect::PostEffect(void)
 {
@@ -37,7 +40,7 @@ void PostEffect::Initialize(void)
     D3D12_DESCRIPTOR_HEAP_DESC srvDescHeapDesc{};
     srvDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
     srvDescHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-    srvDescHeapDesc.NumDescriptors = 1;
+    srvDescHeapDesc.NumDescriptors = 2;
     // srv用descHeap生成
     hr = iDXPtr->GetDevice()->CreateDescriptorHeap(&srvDescHeapDesc, IID_PPV_ARGS(&srvHeap_));
     assert(SUCCEEDED(hr));
@@ -49,9 +52,14 @@ void PostEffect::Initialize(void)
     srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MipLevels = 1;
     // descHeapにsrv生成
-    iDXPtr->GetDevice()->CreateShaderResourceView(renderTexture_[0].GetTexBuffPtr(), &srvDesc, srvHeap_->GetCPUDescriptorHandleForHeapStart());
-    //iDXPtr->GetDescHeap_t()->CreateSRV(textureDesc, texBuff_.Get());
-
+    for (size_t i = 0; i < 2; i++)
+    {
+        iDXPtr->GetDevice()->CreateShaderResourceView(
+            renderTexture_[i].GetTexBuffPtr(),
+            &srvDesc,
+            CD3DX12_CPU_DESCRIPTOR_HANDLE(srvHeap_->GetCPUDescriptorHandleForHeapStart(), (INT)i, iDXPtr->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
+        );
+    }
 
     // rtv用デスクヒープ設定
     D3D12_DESCRIPTOR_HEAP_DESC rtvDescHeapDesc{};
@@ -147,18 +155,6 @@ void PostEffect::PreDrawScene(void)
 void PostEffect::Draw(void)
 {
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
-    if (KEYS::IsTrigger(DIK_0)) {
-        static int tex = 0;
-        tex = (tex + 1) % 2;
-
-        D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-        srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-        srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-        srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MipLevels = 1;
-
-        iDXPtr->GetDevice()->CreateShaderResourceView(renderTexture_[tex].GetTexBuffPtr(), &srvDesc, srvHeap_->GetCPUDescriptorHandleForHeapStart());
-    }
 
     // プリミティブ形状の設定コマンド
     iDXPtr->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // 三角形リスト
@@ -170,18 +166,19 @@ void PostEffect::Draw(void)
 
     // パイプラインステートとルートシグネチャの設定コマンド
     //ID3D12PipelineState* plsPtr{ GraphicsPipeline::GetInstance()->GetPipeline2d(GraphicsPipeline::BlendMode::NONE).pipelineState.Get() };
-    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_POSTEFFECT", GraphicsPipeline::BlendMode::NONE)->pipelineState.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_POSTEFFECT", GraphicsPipeline::BlendMode::NONE)->rootSignature.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_POSTEFFECT", BlendMode::NONE)->pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_POSTEFFECT", BlendMode::NONE)->rootSignature.Get());
 
     // 頂点バッファビューの設定コマンド
     iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_.GetVbView());
 
     // 定数バッファビュー(CBV)の設定コマンド
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
+    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cb_.GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
     //iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle);
-    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHeap_->GetGPUDescriptorHandleForHeapStart());
+    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, CD3DX12_GPU_DESCRIPTOR_HANDLE(srvHeap_->GetGPUDescriptorHandleForHeapStart(), 0, iDXPtr->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+    iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(srvHeap_->GetGPUDescriptorHandleForHeapStart(), 1, iDXPtr->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
     // 描画コマンド
     iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_.GetVerticesNum(), 1, 0, 0); // 全ての頂点を使って描画

@@ -37,8 +37,8 @@ void Object3D::PreDraw(BlendMode blendmode)
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDX->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_OBJECT3D",blendmode)->pipelineState.Get());
-    iDX->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_OBJECT3D", blendmode)->rootSignature.Get());
+    iDX->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D",blendmode)->pipelineState.Get());
+    iDX->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->rootSignature.Get());
 }
 
 void Object3D::SetDrawBlendMode(BlendMode blendmode)
@@ -46,8 +46,8 @@ void Object3D::SetDrawBlendMode(BlendMode blendmode)
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
     // パイプラインステートとルートシグネチャの設定コマンド
-    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSO("PSO_OBJECT3D", blendmode)->pipelineState.Get());
-    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSO("PSO_OBJECT3D", blendmode)->rootSignature.Get());
+    iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->pipelineState.Get());
+    iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->rootSignature.Get());
 }
 
 Object3D::Object3D(const fsPath& path) :

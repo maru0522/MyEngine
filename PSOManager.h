@@ -32,6 +32,19 @@ public:
         MAX_ARRAY,
     };
 
+    enum class ShaderType
+    {
+        VS,
+        GS,
+        PS,
+    };
+
+    enum class SamplerType
+    {
+        NORMAL,
+        POSTEFFECT,
+    };
+
 protected:
     struct PSO_t
     {
@@ -51,31 +64,52 @@ protected:
         ComPtr<ID3DBlob> psBlob{ nullptr };
     };
 
-    static inline void VCompileShaderVS(Blob_t* blobPtr, const std::string& filename, const std::string& entryPoint) { SetCompileShader(blobPtr->vsBlob.GetAddressOf(), filename, entryPoint, "vs_5_0"); }
-    static inline void VCompileShaderGS(Blob_t* blobPtr, const std::string& filename, const std::string& entryPoint) { SetCompileShader(blobPtr->gsBlob.GetAddressOf(), filename, entryPoint, "gs_5_0"); }
-    static inline void VCompileShaderPS(Blob_t* blobPtr, const std::string& filename, const std::string& entryPoint) { SetCompileShader(blobPtr->psBlob.GetAddressOf(), filename, entryPoint, "ps_5_0"); }
+    struct RootParameterStructure_t
+    {
+        size_t descriptorRangeNum{};
+        size_t rootParamsCBNum{};
+    };
 
-    static D3D12_ROOT_SIGNATURE_DESC CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, size_t patternNum, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef);
+    static void VSetCompileShader(ID3DBlob** dp_blob, const std::string& filename, const std::string& entryPoint, const std::string& target);
+
+    static std::vector<D3D12_ROOT_PARAMETER> CreateRootParameter(RootParameterStructure_t rootParameterStructure);
+    static D3D12_STATIC_SAMPLER_DESC CreateSamplerDesc(SamplerType type);
+    static D3D12_ROOT_SIGNATURE_DESC CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef);
     static void VSerializeRootSignature(ID3DBlob** rootSigBlobDPtr, D3D12_ROOT_SIGNATURE_DESC* rootSignatureDescPtr);
     static void VCreateRootSignature(ID3DBlob* rootSigBlobPtr, ID3D12RootSignature** rootSignatureDPtr);
 
-    static D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineDesc(Blob_t* blobsPtr, const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, const PSO_t& psoRef, D3D12_CULL_MODE cullmode, BlendMode mode = BlendMode::NONE);
+    static D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineDesc(Blob_t* blobsPtr, const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, const PSO_t& psoRef, D3D12_CULL_MODE cullMode, BlendMode blendMode);
     static void VCreatePSO(D3D12_GRAPHICS_PIPELINE_STATE_DESC* pipelineDescPtr, ID3D12PipelineState** psoDPtr);
 private:
     static void SetSamplerDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef,size_t patternNum);
-    static void SetCompileShader(ID3DBlob** dp_blob, const std::string& filename, const std::string& entryPoint, const std::string& target);
     static void SetBlend(D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipelineDesc,BlendMode mode = BlendMode::NONE);
 };
 
-class GraphicsPipeline : public HelperGraphicPipeline
+class IGraphicsPipeline : public HelperGraphicPipeline
 {
 private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
+protected:
+    struct IGraphicsPipelineStructure_t
+    {
+        SamplerType samplerType{};
+        D3D12_CULL_MODE cullMode{};
+        RootParameterStructure_t rps{};
+        std::unique_ptr<Blob_t> blobs{};
+        std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayouts{};
+
+        IGraphicsPipelineStructure_t(void)
+        {
+            blobs = std::make_unique<Blob_t>();
+        }
+    };
+
 public:
     // 関数
-    void Create(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, size_t patternNum, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, BlendMode mode = BlendMode::NONE);
+    IGraphicsPipeline(void) = default;
+    void Create(IGraphicsPipelineStructure_t* igpsPtr, BlendMode blendMode);
 
 private:
     // 変数
@@ -85,18 +119,24 @@ public:
     // setter・getter
     inline ID3D12RootSignature* GetRootSignaturePtr(void) { pipelineStateObject_.rootSignature.Get(); }
     inline ID3D12PipelineState* GetPipelineStatePtr(void) { pipelineStateObject_.pipelineState.Get(); }
-    inline PSO_t* GetAddresOf(void) { return &pipelineStateObject_; }
+    inline PSO_t* GetPipelineStateObjectPtr(void) { return &pipelineStateObject_; }
 };
 
-class PSOManager : public GraphicsPipeline
+class PSOManager : public IGraphicsPipeline
 {
 private:
     // 定義
-    enum class Shader // どこまでかの目安
+    struct GraphicsPipelineBlend_t
     {
-        VS,
-        GS,
-        PS,
+        std::array<IGraphicsPipeline, static_cast<size_t>(HelperGraphicPipeline::BlendMode::MAX_ARRAY)> blends;
+        IGraphicsPipelineStructure_t igps{};
+
+        void Create(void);
+        inline void SetCullMode(D3D12_CULL_MODE cullmode) { igps.cullMode = cullmode; }
+        inline void SetSamplerType(SamplerType samplerType) { igps.samplerType = samplerType; }
+        inline void AddInputLayout(D3D12_INPUT_ELEMENT_DESC inputLayout) { igps.inputLayouts.emplace_back(inputLayout); }
+        void CompileShader(ShaderType shaderType, const std::string& filename, const std::string& entryPoint);
+        void SetRootParameterStructure(size_t descriptorRangeNum, size_t rootParamsCBNum);
     };
 
 public:
@@ -106,15 +146,17 @@ public:
     void Create();
 
 private:
-    void CreateAllBlendType(const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, size_t patternNum, Blob_t* blobsPtr, size_t  rootParamsCBNum, D3D12_CULL_MODE cullmode, const std::string& mapKey);
+    inline void AddPipeline(const std::string& key) { pipelineStateObjects_.emplace(key, GraphicsPipelineBlend_t()); }
+    inline void SetComplete(const std::string& key) { pipelineStateObjects_[key].Create(); }
 
     // 変数
-    std::map<std::string, std::array<GraphicsPipeline, static_cast<size_t>(HelperGraphicPipeline::BlendMode::MAX_ARRAY)>> pipelineStateObjects_{};
+    std::map<std::string, GraphicsPipelineBlend_t> pipelineStateObjects_{};
 
 public:
     // setter・getter
-    inline std::map<std::string, std::array<GraphicsPipeline, static_cast<size_t>(HelperGraphicPipeline::BlendMode::MAX_ARRAY)>>* GetPipelineStateObjectsMap(void) { return &pipelineStateObjects_; }
-    inline GraphicsPipeline::PSO_t* GetPSO(const std::string key, HelperGraphicPipeline::BlendMode mode = HelperGraphicPipeline::BlendMode::NONE) { return pipelineStateObjects_[key][static_cast<size_t>(mode)].GetAddresOf(); }
+    inline std::map<std::string, GraphicsPipelineBlend_t>* GetPSOsMap(void) { return &pipelineStateObjects_; }
+    inline GraphicsPipelineBlend_t* GetPSOBlendPtr(const std::string key) { return &pipelineStateObjects_[key]; }
+    inline IGraphicsPipeline::PSO_t* GetPSOPtr(const std::string key, HelperGraphicPipeline::BlendMode blendMode = HelperGraphicPipeline::BlendMode::NONE) { return pipelineStateObjects_[key].blends[static_cast<size_t>(blendMode)].GetPipelineStateObjectPtr(); }
 
 private:
     // シングルトン
