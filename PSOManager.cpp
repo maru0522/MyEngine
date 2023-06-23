@@ -113,8 +113,9 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC HelperGraphicPipeline::CreatePipelineDesc(Blo
     pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
     // その他の設定
-    pipelineDesc.NumRenderTargets = 1; // 描画対象は1つ
+    pipelineDesc.NumRenderTargets = 2; // 描画対象は1つ
     pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0~255指定のRGBA
+    pipelineDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0~255指定のRGBA
     pipelineDesc.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
     // パイプラインにルートシグネチャをセット
@@ -266,6 +267,8 @@ void HelperGraphicPipeline::SetBlend(D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipelin
         blendDesc.BlendEnable = false;
         break;
     }
+
+    pipelineDesc.BlendState.RenderTarget[1] = blendDesc;
 }
 
 PSOManager* PSOManager::GetInstance(void)

@@ -80,6 +80,12 @@ struct VSOutput
     float2 uv_ : TEXCOORD;    // uv値
 };
 
+struct PSOutput
+{
+    float4 target0 : SV_TARGET0;
+    float4 target1 : SV_TARGET1;
+};
+
 // ジオメトリシェーダからピクセルシェーダへの出力
 //struct GSOutput
 //{
