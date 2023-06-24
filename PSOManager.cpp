@@ -7,33 +7,49 @@
 
 void IGraphicsPipeline::Create(IGraphicsPipelineStructure_t* igpsPtr, BlendMode blendMode)
 {
-    // ルートパラメータコンテナ
-    std::vector<D3D12_ROOT_PARAMETER> rootParams{};
-
-    for (size_t i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
-    {
-        // デスクリプタレンジ
-        CD3DX12_DESCRIPTOR_RANGE cDescRangeSRV{};
-        cDescRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
-        // ルートパラメータ生成と追加 - DescTable
-        CD3DX12_ROOT_PARAMETER cRootParamDT{};
-        cRootParamDT.InitAsDescriptorTable(1, &cDescRangeSRV, D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
-        rootParams.emplace_back(cRootParamDT);
-    }
-    for (size_t i = 0; i < igpsPtr->rps.rootParamsCBNum; i++)
-    {
-        // ルートパラメータ生成と追加 - ConstantBufferView
-        CD3DX12_ROOT_PARAMETER cRootParamCBV{};
-        cRootParamCBV.InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
-        rootParams.emplace_back(cRootParamCBV);
-    }
+    //// ルートパラメータコンテナ
+    //std::vector<CD3DX12_ROOT_PARAMETER> cRootParams{};
+    //std::vector<CD3DX12_DESCRIPTOR_RANGE> cDescRangeSRVs{};
+    //for (size_t i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
+    //{
+    //    // デスクリプタレンジ
+    //    cDescRangeSRVs.emplace_back();
+    //    cDescRangeSRVs.back().Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+    //    // ルートパラメータ生成と追加 - DescTable
+    //    cRootParams.emplace_back();
+    //    cRootParams.back().InitAsDescriptorTable(1, &cDescRangeSRVs.back(), D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
+    //}
+    //for (size_t i = 0; i < igpsPtr->rps.rootParamsCBNum; i++)
+    //{
+    //    // ルートパラメータ生成と追加 - ConstantBufferView
+    //    cRootParams.emplace_back();
+    //    cRootParams.back().InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
+    //}
 
     // ルートパラメータ
-    //std::vector<D3D12_ROOT_PARAMETER> rootParams = CreateRootParameter(igpsPtr->rps);
+    size_t elemCRP = igpsPtr->rps.descriptorRangeNum + igpsPtr->rps.rootParamsCBNum;
+    std::vector<CD3DX12_ROOT_PARAMETER> cRootParams(elemCRP);
+    // デスクリプタレンジ
+    size_t elemCDR = igpsPtr->rps.descriptorRangeNum;
+    std::vector<CD3DX12_DESCRIPTOR_RANGE> cDescRangeSRVs(elemCDR);
+    for (UINT i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
+    {
+        // デスクリプタレンジ
+        cDescRangeSRVs[i].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+        // ルートパラメータ生成と追加 - DescTable
+        cRootParams[i].InitAsDescriptorTable(1, &cDescRangeSRVs[i], D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ 0~i 番
+    }
+    for (UINT i = (UINT)igpsPtr->rps.descriptorRangeNum; i < igpsPtr->rps.rootParamsCBNum; i++)
+    {
+        // ルートパラメータ生成と追加 - ConstantBufferView
+        UINT shaderRegister = i - (UINT)igpsPtr->rps.descriptorRangeNum;
+        cRootParams[i].InitAsConstantBufferView(shaderRegister, 0, D3D12_SHADER_VISIBILITY_ALL); // 定数バッファ 0~i 番
+    }
+
     //テクスチャサンプラー
     D3D12_STATIC_SAMPLER_DESC samplerDesc = CreateSamplerDesc(igpsPtr->samplerType); //SamplerType type
     // ルートシグネチャデスク
-    D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = CreateRootSignatureDesc(samplerDesc, rootParams);
+    D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = CreateRootSignatureDesc(samplerDesc, cRootParams);
     // シリアライズルートシグネチャ
     ComPtr<ID3DBlob> rootSigBlob{ nullptr };
     VSerializeRootSignature(rootSigBlob.GetAddressOf(), &rootSignatureDesc);
@@ -119,14 +135,14 @@ D3D12_STATIC_SAMPLER_DESC HelperGraphicPipeline::CreateSamplerDesc(SamplerType t
     return samplerDesc;
 }
 
-D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, const std::vector<D3D12_ROOT_PARAMETER>& rootParamsRef)
+D3D12_ROOT_SIGNATURE_DESC HelperGraphicPipeline::CreateRootSignatureDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef, const std::vector<CD3DX12_ROOT_PARAMETER>& cRootParamsRef)
 {
     // ルートシグネチャデスクの変数宣言
     D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
     // ルートシグネチャデスクの設定
     rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-    rootSignatureDesc.pParameters = rootParamsRef.data(); // ルートパラメータの先頭アドレス
-    rootSignatureDesc.NumParameters = static_cast<uint32_t>(rootParamsRef.size());
+    rootSignatureDesc.pParameters = cRootParamsRef.data(); // ルートパラメータの先頭アドレス
+    rootSignatureDesc.NumParameters = static_cast<uint32_t>(cRootParamsRef.size());
     rootSignatureDesc.pStaticSamplers = &samplerDescRef;
     rootSignatureDesc.NumStaticSamplers = 1;
 
