@@ -7,43 +7,26 @@
 
 void IGraphicsPipeline::Create(IGraphicsPipelineStructure_t* igpsPtr, BlendMode blendMode)
 {
-    //// ルートパラメータコンテナ
-    //std::vector<CD3DX12_ROOT_PARAMETER> cRootParams{};
-    //std::vector<CD3DX12_DESCRIPTOR_RANGE> cDescRangeSRVs{};
-    //for (size_t i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
-    //{
-    //    // デスクリプタレンジ
-    //    cDescRangeSRVs.emplace_back();
-    //    cDescRangeSRVs.back().Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
-    //    // ルートパラメータ生成と追加 - DescTable
-    //    cRootParams.emplace_back();
-    //    cRootParams.back().InitAsDescriptorTable(1, &cDescRangeSRVs.back(), D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
-    //}
-    //for (size_t i = 0; i < igpsPtr->rps.rootParamsCBNum; i++)
-    //{
-    //    // ルートパラメータ生成と追加 - ConstantBufferView
-    //    cRootParams.emplace_back();
-    //    cRootParams.back().InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
-    //}
+    // ルートパラメータコンテナ
+    std::vector<CD3DX12_ROOT_PARAMETER> cRootParams{};
+    cRootParams.reserve(igpsPtr->rps.descriptorRangeNum + igpsPtr->rps.rootParamsCBNum);
 
-    // ルートパラメータ
-    size_t elemCRP = igpsPtr->rps.descriptorRangeNum + igpsPtr->rps.rootParamsCBNum;
-    std::vector<CD3DX12_ROOT_PARAMETER> cRootParams(elemCRP);
-    // デスクリプタレンジ
-    size_t elemCDR = igpsPtr->rps.descriptorRangeNum;
-    std::vector<CD3DX12_DESCRIPTOR_RANGE> cDescRangeSRVs(elemCDR);
-    for (UINT i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
+    std::vector<CD3DX12_DESCRIPTOR_RANGE> cDescRangeSRVs{};
+    cDescRangeSRVs.reserve(igpsPtr->rps.descriptorRangeNum);
+    for (size_t i = 0; i < igpsPtr->rps.descriptorRangeNum; i++)
     {
         // デスクリプタレンジ
-        cDescRangeSRVs[i].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
+        cDescRangeSRVs.emplace_back();
+        cDescRangeSRVs.back().Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, (UINT)i, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
         // ルートパラメータ生成と追加 - DescTable
-        cRootParams[i].InitAsDescriptorTable(1, &cDescRangeSRVs[i], D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ 0~i 番
+        cRootParams.emplace_back();
+        cRootParams.back().InitAsDescriptorTable(1, &cDescRangeSRVs.back(), D3D12_SHADER_VISIBILITY_ALL); // テクスチャレジスタ0番
     }
-    for (UINT i = (UINT)igpsPtr->rps.descriptorRangeNum; i < igpsPtr->rps.rootParamsCBNum; i++)
+    for (size_t i = 0; i < igpsPtr->rps.rootParamsCBNum; i++)
     {
         // ルートパラメータ生成と追加 - ConstantBufferView
-        UINT shaderRegister = i - (UINT)igpsPtr->rps.descriptorRangeNum;
-        cRootParams[i].InitAsConstantBufferView(shaderRegister, 0, D3D12_SHADER_VISIBILITY_ALL); // 定数バッファ 0~i 番
+        cRootParams.emplace_back();
+        cRootParams.back().InitAsConstantBufferView((UINT)i); // 定数バッファ 0~i 番
     }
 
     //テクスチャサンプラー
