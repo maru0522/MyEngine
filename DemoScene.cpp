@@ -16,7 +16,7 @@ void DemoScene::Initialize(void)
     obj3d_->coordinate_.SetScale({ 20.f,0.5f,20.f });
     obj3d_->coordinate_.SetPosition({ 0.f,-5.f,0.f });
 
-    lvdPtr_ = LevelData::Load("Resources/e4.json");
+    lvdPtr_ = LevelData::Load("Resources/untitled.json");
     DeployObj(lvdPtr_.get());
 }
 
