@@ -50,7 +50,7 @@ private:
     Object3D* parent_;
 
     Model_t model_;
-
+    bool isInvisible_{};
     ConstBuffer<CBData3d_t> cb_;
 
     static LightGroup* sLightGroupPtr_;
@@ -61,5 +61,7 @@ private:
 public:
     // setterÅEgetter
     static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
+
+    inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
 };
 

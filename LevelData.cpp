@@ -1,8 +1,9 @@
 #include "LevelData.h"
+#include "MathUtil.h"
 #include <fstream>
 #include <cassert>
 
-LevelData* LevelData::Load(const std::string& path)
+std::unique_ptr<LevelData> LevelData::Load(const std::string& path)
 {
     std::ifstream ifs;
     ifs.open(path);
@@ -25,20 +26,20 @@ LevelData* LevelData::Load(const std::string& path)
     assert(name.compare("scene") == 0);
 
     // レベルデータ格納用インスタンス生成
-    LevelData* levelData = new LevelData();
+    std::unique_ptr<LevelData> levelData = std::make_unique<LevelData>();
 
     // objectsの全オブジェクトを走査
     for (nlohmann::json& object : deserialized["objects"]) {
-        ScanRecursive(object, levelData);
+        ScanRecursive(object, levelData.get());
 
         // 再起呼出で枝を走査する
         for (nlohmann::json& child : object["children"])
         {
-            ScanRecursive(child, levelData);
+            ScanRecursive(child, levelData.get());
         }
     }
 
-    return levelData;
+    return std::move(levelData);
 }
 
 void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPtr)
@@ -58,26 +59,31 @@ void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPt
 
         if (jsonObject.contains("file_name")) {
             // ファイル名
-            objectData.name = jsonObject["file_name"];
+            objectData.file_name = jsonObject["file_name"];
         }
+
+        objectData.name = jsonObject["name"].get<std::string>();
 
         // トランスフォームのパラメータ読み込み
         nlohmann::json& transform = jsonObject["transform"];
 
         // 平行移動
-        objectData.trans.x = (float)transform["translation"][1];
+        objectData.trans.x = (float)transform["translation"][0];
         objectData.trans.y = (float)transform["translation"][2];
-        objectData.trans.z = -(float)transform["translation"][0];
+        objectData.trans.z = (float)transform["translation"][1];
 
         // 回転角
-        objectData.rot.x = -(float)transform["rotation"][1];
-        objectData.rot.y = -(float)transform["rotation"][2];
-        objectData.rot.z = (float)transform["rotation"][0];
+        objectData.rot.x = Math::Function::ToRadian(-(float)transform["rotation"][0]);
+        objectData.rot.y = Math::Function::ToRadian(-(float)transform["rotation"][2]);
+        objectData.rot.z = Math::Function::ToRadian((float)transform["rotation"][1]);
 
         // スケーリング
-        objectData.scale.x = (float)transform["scaling"][1];
+        objectData.scale.x = (float)transform["scaling"][0];
         objectData.scale.y = (float)transform["scaling"][2];
-        objectData.scale.z = (float)transform["scaling"][0];
+        objectData.scale.z = (float)transform["scaling"][1];
+
+        if (jsonObject.contains("invisible_flag")) objectData.isInvisible = jsonObject["invisible_flag"].get<uint32_t>();
+        else objectData.isInvisible = false;
     }
 
     // LIGHT
@@ -90,29 +96,34 @@ void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPt
 
         if (jsonObject.contains("file_name")) {
             // ファイル名
-            objectData.name = jsonObject["file_name"];
+            objectData.file_name = jsonObject["file_name"];
         }
+
+        objectData.name = jsonObject["name"].get<std::string>();
 
         // トランスフォームのパラメータ読み込み
         nlohmann::json& transform = jsonObject["transform"];
 
         // 平行移動
-        objectData.trans.x = (float)transform["translation"][1];
+        objectData.trans.x = (float)transform["translation"][0];
         objectData.trans.y = (float)transform["translation"][2];
-        objectData.trans.z = -(float)transform["translation"][0];
+        objectData.trans.z = (float)transform["translation"][1];
 
         // 回転角
-        objectData.rot.x = -(float)transform["rotation"][1];
-        objectData.rot.y = -(float)transform["rotation"][2];
-        objectData.rot.z = (float)transform["rotation"][0];
+        objectData.rot.x = Math::Function::ToRadian(-(float)transform["rotation"][0]);
+        objectData.rot.y = Math::Function::ToRadian(-(float)transform["rotation"][2]);
+        objectData.rot.z = Math::Function::ToRadian((float)transform["rotation"][1]);
 
         // スケーリング
-        objectData.scale.x = (float)transform["scaling"][1];
+        objectData.scale.x = (float)transform["scaling"][0];
         objectData.scale.y = (float)transform["scaling"][2];
-        objectData.scale.z = (float)transform["scaling"][0];
+        objectData.scale.z = (float)transform["scaling"][1];
+
+        if (jsonObject.contains("invisible_flag")) objectData.isInvisible = jsonObject["invisible_flag"].get<uint32_t>();
+        else objectData.isInvisible = false;
     }
 
-    // LIGHT
+    // CAMERA
     if (type.compare("CAMERA") == 0) {
         // 要素追加
         levelDataPtr->objects_.emplace_back(LevelData::ObjectData_t{});
@@ -122,25 +133,27 @@ void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPt
 
         if (jsonObject.contains("file_name")) {
             // ファイル名
-            objectData.name = jsonObject["file_name"];
+            objectData.file_name = jsonObject["file_name"];
         }
+
+        objectData.name = jsonObject["name"].get<std::string>();
 
         // トランスフォームのパラメータ読み込み
         nlohmann::json& transform = jsonObject["transform"];
 
         // 平行移動
-        objectData.trans.x = (float)transform["translation"][1];
+        objectData.trans.x = (float)transform["translation"][0];
         objectData.trans.y = (float)transform["translation"][2];
-        objectData.trans.z = -(float)transform["translation"][0];
+        objectData.trans.z = (float)transform["translation"][1];
 
         // 回転角
-        objectData.rot.x = -(float)transform["rotation"][1];
-        objectData.rot.y = (float)transform["rotation"][0];
-        objectData.rot.z = -(float)transform["rotation"][2];
+        objectData.rot.x = Math::Function::ToRadian(-(float)transform["rotation"][0]) + Math::Function::ToRadian(90.f);
+        objectData.rot.y = Math::Function::ToRadian(-(float)transform["rotation"][2]);
+        objectData.rot.z = Math::Function::ToRadian((float)transform["rotation"][1]);
 
         // スケーリング
-        objectData.scale.x = (float)transform["scaling"][1];
+        objectData.scale.x = (float)transform["scaling"][0];
         objectData.scale.y = (float)transform["scaling"][2];
-        objectData.scale.z = (float)transform["scaling"][0];
+        objectData.scale.z = (float)transform["scaling"][1];
     }
 }

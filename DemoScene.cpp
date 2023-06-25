@@ -16,8 +16,8 @@ void DemoScene::Initialize(void)
     obj3d_->coordinate_.SetScale({ 20.f,0.5f,20.f });
     obj3d_->coordinate_.SetPosition({ 0.f,-5.f,0.f });
 
-    lvdPtr_ = LevelData::Load("Resources/e3.json");
-    DeployObj(lvdPtr_);
+    lvdPtr_ = LevelData::Load("Resources/e4.json");
+    DeployObj(lvdPtr_.get());
 }
 
 void DemoScene::Update(void)
@@ -32,7 +32,12 @@ void DemoScene::Update(void)
     //obj3d2_->coordinate_.SetRotation(rot);
 
     for (auto& object : objects_) {
-        object->Update();
+        object.second->Update();
+    }
+
+    if(KEYS::IsTrigger(DIK_R)) {
+        lvdPtr_ = LevelData::Load("Resources/e4.json");
+        HotReload(lvdPtr_.get());
     }
 }
 
@@ -44,7 +49,7 @@ void DemoScene::Draw3d(void)
     //// cubeの画像にスプライトで表示しているものを起用
     ////obj3d_->Draw("Resources/namida.png");
     for (auto& object : objects_) {
-        object->Draw();
+        object.second->Draw();
     }
 }
 
@@ -66,13 +71,14 @@ void DemoScene::DeployObj(LevelData* lvdPtr)
 {
     for (auto& objectData : lvdPtr->objects_) {
         if (objectData.type == "MESH") {
-            objects_.emplace_back(new Object3D{ "Resources/model/cube/cube.obj" });
-            objects_.back()->coordinate_.SetPosition(objectData.trans);
-            objects_.back()->coordinate_.SetRotation(objectData.rot);
-            objects_.back()->coordinate_.SetScale(objectData.scale);
+            objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
+            objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
+            objects_[objectData.name]->coordinate_.SetRotation(objectData.rot);
+            objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
+            objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
         }
         if (objectData.type == "LIGHT") {
-            lightGroup_->SetPointLightActive(0, true);
+            if (!objectData.isInvisible) lightGroup_->SetPointLightActive(0, true);
             lightGroup_->SetPointLightColor(0, { 1,1,1 });
             lightGroup_->SetPointLightPos(0, objectData.trans);
             lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
@@ -81,6 +87,29 @@ void DemoScene::DeployObj(LevelData* lvdPtr)
             cameraPtr->eye_ = objectData.trans;
             cameraPtr->rotation_ = objectData.rot;
         }
+    }
+}
 
+void DemoScene::HotReload(LevelData* lvdPtr)
+{
+    for (auto& objectData : lvdPtr->objects_) {
+        if (objectData.type == "MESH") {
+            objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
+            objects_[objectData.name]->coordinate_.SetRotation(objectData.rot);
+            objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
+            objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
+        }
+        if (objectData.type == "LIGHT") {
+            objectData.isInvisible ?
+                lightGroup_->SetPointLightActive(0, false) :
+                lightGroup_->SetPointLightActive(0, true);
+            lightGroup_->SetPointLightColor(0, { 1,1,1 });
+            lightGroup_->SetPointLightPos(0, objectData.trans);
+            lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
+        }
+        if (objectData.type == "CAMERA") {
+            cameraPtr->eye_ = objectData.trans;
+            cameraPtr->rotation_ = objectData.rot;
+        }
     }
 }

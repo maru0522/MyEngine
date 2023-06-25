@@ -80,6 +80,8 @@ void Object3D::Draw(void)
 
 void Object3D::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture)
 {
+    if (isInvisible_) return;
+
     InitDirectX* iDX = InitDirectX::GetInstance();
 
     // 頂点バッファ

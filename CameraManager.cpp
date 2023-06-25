@@ -35,7 +35,7 @@ void Camera::Update(void)
 
         // ‰ñ“]
         if (Mouse::IsDown(Mouse::Click::RIGHT)) { // ‰EƒNƒŠ‰Ÿ‚µ‚Ä‚é
-            const float rotSpeed = 0.001f;
+            const float rotSpeed = 0.0025f;
             rotation_.x += Mouse::GetCursorVec().y * rotSpeed;
             rotation_.y += Mouse::GetCursorVec().x * rotSpeed;
         }

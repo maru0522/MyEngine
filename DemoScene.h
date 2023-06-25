@@ -24,6 +24,7 @@ public:
     void Finalize(void) override;
 
     void DeployObj(LevelData* lvdPtr);
+    void HotReload(LevelData* lvdPtr);
 
     // ïœêî
     std::unique_ptr<Sprite> sprite_{ std::make_unique<Sprite>("Resources/namida.png") };
@@ -31,8 +32,8 @@ public:
     std::unique_ptr<Object3D> obj3d2_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
     //std::unique_ptr<Sound> music2_{ std::make_unique<Sound>("Resources/sound/edm.wav") };
 
-    std::vector<std::unique_ptr<Object3D>> objects_;
-    LevelData* lvdPtr_;
+    std::map<std::string,std::unique_ptr<Object3D>> objects_;
+    std::unique_ptr<LevelData> lvdPtr_;
 
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
     std::unique_ptr<LightGroup> lightGroup_{ std::make_unique<LightGroup>() };
