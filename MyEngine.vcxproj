@@ -91,6 +91,7 @@
     <ClCompile Include="FPSController.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="GameSystem.cpp" />
+    <ClCompile Include="LevelData.cpp" />
     <ClCompile Include="PSOManager.cpp" />
     <ClCompile Include="ImguiController.cpp" />
     <ClCompile Include="InitDirectX.cpp" />
@@ -181,6 +182,8 @@
     <ClInclude Include="FPSController.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="LevelData.h" />
     <ClInclude Include="PSOManager.h" />
     <ClInclude Include="ImguiController.h" />
     <ClInclude Include="IndexBuffer.h" />
