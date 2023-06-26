@@ -36,7 +36,7 @@ void DemoScene::Update(void)
     }
 
     if(KEYS::IsTrigger(DIK_R)) {
-        lvdPtr_ = LevelData::Load("Resources/e4.json");
+        lvdPtr_ = LevelData::Load("Resources/untitled.json");
         HotReload(lvdPtr_.get());
     }
 }

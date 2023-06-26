@@ -16,9 +16,11 @@ void InitDirectX::Initialize(WndAPI* p_wndapi)
 
 #ifdef _DEBUG
     DebugLayer();       // デバッグレイヤーをオン
-    SuppressErrors();   // 一部のエラーを抑制
 #endif
     DXGIDevice();
+#ifdef _DEBUG
+    SuppressErrors();   // 一部のエラーを抑制
+#endif
     Commands();
     SwapChain(p_wndapi);
     RTVDescHeap();
