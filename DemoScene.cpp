@@ -94,6 +94,13 @@ void DemoScene::HotReload(LevelData* lvdPtr)
 {
     for (auto& objectData : lvdPtr->objects_) {
         if (objectData.type == "MESH") {
+            if (objects_.find(objectData.name) == objects_.end()) {
+                objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
+                objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
+                objects_[objectData.name]->coordinate_.SetRotation(objectData.rot);
+                objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
+                objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
+            }
             objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
             objects_[objectData.name]->coordinate_.SetRotation(objectData.rot);
             objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
