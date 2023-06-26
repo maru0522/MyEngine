@@ -14,11 +14,11 @@ void InitDirectX::Initialize(WndAPI* p_wndapi)
     // FPS固定化処理初期化
     fpsController_->Initialize();
 
-    DebugLayer();       // デバッグレイヤーをオン
 #ifdef _DEBUG
-    DXGIDevice();
+    DebugLayer();       // デバッグレイヤーをオン
     SuppressErrors();   // 一部のエラーを抑制
 #endif
+    DXGIDevice();
     Commands();
     SwapChain(p_wndapi);
     RTVDescHeap();
