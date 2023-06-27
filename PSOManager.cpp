@@ -346,6 +346,17 @@ void PSOManager::Create()
     GetPSOBlendPtr("PSO_POSTEFFECT")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("PSO_POSTEFFECT")->SetSamplerType(SamplerType::POSTEFFECT);
     SetComplete("PSO_POSTEFFECT");
+
+    // gaussianblur
+    AddPipeline("GAUSSIAN");
+    GetPSOBlendPtr("GAUSSIAN")->AddInputLayout({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    GetPSOBlendPtr("GAUSSIAN")->AddInputLayout({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    GetPSOBlendPtr("GAUSSIAN")->CompileShader(ShaderType::VS, "GaussianBlurVS.hlsl", "main");
+    GetPSOBlendPtr("GAUSSIAN")->CompileShader(ShaderType::PS, "GaussianBlurPS.hlsl", "main");
+    GetPSOBlendPtr("GAUSSIAN")->SetRootParameterStructure(2, 1);
+    GetPSOBlendPtr("GAUSSIAN")->SetCullMode(D3D12_CULL_MODE_NONE);
+    GetPSOBlendPtr("GAUSSIAN")->SetSamplerType(SamplerType::POSTEFFECT);
+    SetComplete("GAUSSIAN");
 }
 
 void PSOManager::GraphicsPipelineBlend_t::Create(void)
