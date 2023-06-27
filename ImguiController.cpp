@@ -42,7 +42,7 @@ void ImGuiController::Begin(void)
     ImGui_ImplWin32_NewFrame();
     ImGui_ImplDX12_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 }
 
 void ImGuiController::End(void)
