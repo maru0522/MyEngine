@@ -5,7 +5,7 @@
 void GameSystem::Initialize()
 {
     FrameWork::Initialize();
-    postEffect_ = std::make_unique<PostEffect>();
+    postEffect_ = std::make_unique<GaussianBlur>();
     postEffect_->Initialize();
 }
 

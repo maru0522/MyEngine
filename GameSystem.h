@@ -1,6 +1,7 @@
 #pragma once
 #include "FrameWork.h"
 #include "PostEffect.h"
+#include "GaussianBlur.h"
 
 class GameSystem :
     public FrameWork

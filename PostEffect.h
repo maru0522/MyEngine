@@ -1,7 +1,12 @@
 #pragma once
 #include <wrl.h>
+#include <string>
 #include <d3d12.h>
+#include "Sprite.h"
 #include "Vector4.h"
+#include "Matrix4.h"
+#include "ConstBuffer.h"
+#include "VertexBuffer.h"
 #include "RenderTexture.h"
 
 class PostEffect
@@ -16,11 +21,17 @@ private:
 public:
     // 関数
     PostEffect(void);
-    void Initialize(void);
-    void PreDrawScene(void);
-    void Draw(void);
-    void PostDrawScene(void);
+    virtual ~PostEffect() = default;
 
+    virtual void Initialize(void);
+    virtual void PreDrawScene(void);
+    virtual void PostDrawScene(void);
+    virtual void Draw();
+
+protected:
+    inline void SetPSOName(const std::string psoName) { psoName_ = psoName; }
+
+private:
     // 変数
     Matrix4 matWorld_;
 
@@ -32,5 +43,7 @@ public:
     ComPtr<ID3D12DescriptorHeap> srvHeap_; // srv用デスクヒープ
     ComPtr<ID3D12DescriptorHeap> rtvHeap_; // rtv用デスクヒープ
     ComPtr<ID3D12DescriptorHeap> dsvHeap_; // dsv用デスクヒープ
+
+    std::string psoName_;
 };
 

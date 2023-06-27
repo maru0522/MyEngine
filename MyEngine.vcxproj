@@ -92,6 +92,7 @@
     <ClCompile Include="FPSController.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="GameSystem.cpp" />
+    <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="LevelData.cpp" />
     <ClCompile Include="PSOManager.cpp" />
     <ClCompile Include="ImguiController.cpp" />
@@ -123,8 +124,18 @@
     <ClCompile Include="AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="GaussianBlurPS.hlsl" />
-    <FxCompile Include="GaussianBlurVS.hlsl" />
+    <FxCompile Include="GaussianBlurPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="GaussianBlurVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="ModelPS.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
@@ -186,6 +197,7 @@
     <ClInclude Include="FPSController.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="PSOManager.h" />
