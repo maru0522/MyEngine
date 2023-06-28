@@ -357,6 +357,28 @@ void PSOManager::Create()
     GetPSOBlendPtr("GAUSSIAN")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("GAUSSIAN")->SetSamplerType(SamplerType::POSTEFFECT);
     SetComplete("GAUSSIAN");
+
+    // extractHiLumi
+    AddPipeline("HIGHLUMI");
+    GetPSOBlendPtr("HIGHLUMI")->AddInputLayout({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    GetPSOBlendPtr("HIGHLUMI")->AddInputLayout({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    GetPSOBlendPtr("HIGHLUMI")->CompileShader(ShaderType::VS, "HighLumiVS.hlsl", "main");
+    GetPSOBlendPtr("HIGHLUMI")->CompileShader(ShaderType::PS, "HighLumiPS.hlsl", "main");
+    GetPSOBlendPtr("HIGHLUMI")->SetRootParameterStructure(2, 1);
+    GetPSOBlendPtr("HIGHLUMI")->SetCullMode(D3D12_CULL_MODE_NONE);
+    GetPSOBlendPtr("HIGHLUMI")->SetSamplerType(SamplerType::POSTEFFECT);
+    SetComplete("HIGHLUMI");
+
+    // bloom
+    AddPipeline("BLOOM");
+    GetPSOBlendPtr("BLOOM")->AddInputLayout({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    GetPSOBlendPtr("BLOOM")->AddInputLayout({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+    GetPSOBlendPtr("BLOOM")->CompileShader(ShaderType::VS, "BloomVS.hlsl", "main");
+    GetPSOBlendPtr("BLOOM")->CompileShader(ShaderType::PS, "BloomPS.hlsl", "main");
+    GetPSOBlendPtr("BLOOM")->SetRootParameterStructure(2, 1);
+    GetPSOBlendPtr("BLOOM")->SetCullMode(D3D12_CULL_MODE_NONE);
+    GetPSOBlendPtr("BLOOM")->SetSamplerType(SamplerType::POSTEFFECT);
+    SetComplete("BLOOM");
 }
 
 void PSOManager::GraphicsPipelineBlend_t::Create(void)

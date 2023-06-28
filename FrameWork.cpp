@@ -1,7 +1,10 @@
 #include "SimplifyImGui.h"
+#include "GaussianBlur.h"
 #include "FrameWork.h"
+#include "HighLumi.h"
 #include "Object3D.h"
 #include "Sprite.h"
+#include "Bloom.h"
 #include "Sound.h"
 #include "Input.h"
 
@@ -90,10 +93,12 @@ bool FrameWork::EndRequest(void)
 void FrameWork::DebugGui(void)
 {
     Gui::Begin("postEffect Settings", { 200,100 });
-    static int effectnum = 0;
-    if (Gui::ButtonTrg("switch effect")) {
-        Math::Function::LoopIncrement(effectnum, 0, 1);
-        ResetPostEffect(effectnum);
+
+    static int current = 0;
+    const char* shaders[] = { "Integral", "Gaussian", "HighLuminance", "Bloom"};
+    if (Gui::DropDownTrg("Shader", &current, shaders, IM_ARRAYSIZE(shaders)))
+    {
+        ResetPostEffect(current);
     }
     Gui::End();
 }
@@ -107,6 +112,12 @@ void FrameWork::ResetPostEffect(int num)
         break;
     case 1:
         postEffect_ = std::make_unique<GaussianBlur>();
+        break;
+    case 2:
+        postEffect_ = std::make_unique<HighLumi>();
+        break;
+    case 3:
+        postEffect_ = std::make_unique<Bloom>();
         break;
     default:
         postEffect_ = std::make_unique<PostEffect>();

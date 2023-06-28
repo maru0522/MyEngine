@@ -25,6 +25,18 @@
     <FxCompile Include="GaussianBlurPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="BloomVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="BloomPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="HighLumiVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="HighLumiPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSOManager.cpp" />
@@ -116,6 +128,12 @@
       <Filter>Entity\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="GaussianBlur.cpp">
+      <Filter>Entity\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Bloom.cpp">
+      <Filter>Entity\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="HighLumi.cpp">
       <Filter>Entity\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
@@ -233,6 +251,12 @@
     <ClInclude Include="GaussianBlur.h">
       <Filter>Entity\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>Entity\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="HighLumi.h">
+      <Filter>Entity\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
@@ -245,6 +269,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="GaussianBlur.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Bloom.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="HighLumi.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

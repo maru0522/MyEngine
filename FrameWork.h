@@ -10,7 +10,6 @@
 #include "ImguiController.h"
 #include "AudioManager.h"
 #include "PostEffect.h"
-#include "GaussianBlur.h"
 
 class FrameWork
 {
