@@ -1,5 +1,6 @@
 #include "SimplifyImGui.h"
 #include "GaussianBlur.h"
+#include "RadialBlur.h"
 #include "FrameWork.h"
 #include "HighLumi.h"
 #include "Object3D.h"
@@ -95,7 +96,7 @@ void FrameWork::DebugGui(void)
     Gui::Begin("postEffect Settings", { 200,100 });
 
     static int current = 0;
-    const char* shaders[] = { "Integral", "Gaussian", "HighLuminance", "Bloom"};
+    const char* shaders[] = { "Integral", "GaussianBlur", "HighLuminance", "Bloom", "RadialBlur"};
     if (Gui::DropDownTrg("Shader", &current, shaders, IM_ARRAYSIZE(shaders)))
     {
         ResetPostEffect(current);
@@ -118,6 +119,9 @@ void FrameWork::ResetPostEffect(int num)
         break;
     case 3:
         postEffect_ = std::make_unique<Bloom>();
+        break;
+    case 4:
+        postEffect_ = std::make_unique<RadialBlur>();
         break;
     default:
         postEffect_ = std::make_unique<PostEffect>();

@@ -37,6 +37,12 @@
     <FxCompile Include="HighLumiPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="RadialBlurVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="RadialBlurPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSOManager.cpp" />
@@ -134,6 +140,9 @@
       <Filter>Entity\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="HighLumi.cpp">
+      <Filter>Entity\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialBlur.cpp">
       <Filter>Entity\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,6 +266,9 @@
     <ClInclude Include="HighLumi.h">
       <Filter>Entity\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="RadialBlur.h">
+      <Filter>Entity\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
@@ -275,6 +287,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="HighLumi.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="RadialBlur.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
