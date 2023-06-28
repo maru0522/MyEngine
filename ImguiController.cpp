@@ -7,7 +7,7 @@
 #include <array>
 
 ImGuiController::ImGuiController(void)
-    : style_(UIStyle::CUSTOM_ENEMYMOUSE)
+    : style_(UIStyle::DARK)
 {
 }
 
