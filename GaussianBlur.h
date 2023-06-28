@@ -11,4 +11,3 @@ public:
     void PostDrawScene(void) override;
     void Draw(void) override;
 };
-
