@@ -11,6 +11,7 @@ const float  PostEffect::kClearColor[4]{ 0.25f, 0.5f, 0.1f, 0.f }; // 黄緑みたい
 using BlendMode = HelperGraphicPipeline::BlendMode;
 
 PostEffect::PostEffect(void)
+    : psoName_("PSO_POSTEFFECT")
 {
     // 頂点バッファ
     std::vector<Sprite::VertexPosUv_t> vertices;

@@ -1,3 +1,4 @@
+#include "SimplifyImGui.h"
 #include "FrameWork.h"
 #include "Object3D.h"
 #include "Sprite.h"
@@ -33,8 +34,8 @@ void FrameWork::Initialize()
     // TextureManager - テクスチャ読み込み
     texM_->LoadFolder("Resources");
     // ModelManager - 3Dモデル読み込み
-    modelM_->LoadOBJ("Resources/model/cube/cube.obj",false);
-    modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj",false);
+    modelM_->LoadOBJ("Resources/model/cube/cube.obj", false);
+    modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj", false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化
@@ -63,6 +64,7 @@ void FrameWork::Update(void)
 
     // SceneManager更新
     sceneM_->Update();
+    DebugGui();
 
     // ImguiController更新終了
     imguiController_->End();
@@ -83,4 +85,32 @@ void FrameWork::Finalize(void)
 bool FrameWork::EndRequest(void)
 {
     return !wnd_->GetKeepWindow();
+}
+
+void FrameWork::DebugGui(void)
+{
+    Gui::Begin("postEffect Settings", { 200,100 });
+    static int effectnum = 0;
+    if (Gui::ButtonTrg("switch effect")) {
+        Math::Function::LoopIncrement(effectnum, 0, 1);
+        ResetPostEffect(effectnum);
+    }
+    Gui::End();
+}
+
+void FrameWork::ResetPostEffect(int num)
+{
+    switch (num)
+    {
+    case 0:
+        postEffect_ = std::make_unique<PostEffect>();
+        break;
+    case 1:
+        postEffect_ = std::make_unique<GaussianBlur>();
+        break;
+    default:
+        postEffect_ = std::make_unique<PostEffect>();
+        break;
+    }
+    postEffect_->Initialize();
 }

@@ -12,16 +12,28 @@ namespace Math {
         inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::kPI / 180.0f; }
         inline constexpr float ToDegree(float fRadians) { return fRadians * 180.0f / Math::kPI; }
 
+        template<typename T>
+        inline void LoopIncrement(T& value, T min, T max) {
+            value++;
+            if (value > max) value = min;
+        }
+
+        template<typename T>
+        inline void LoopDecrement(T& value, T min, T max) {
+            value--;
+            if (value < min) value = max;
+        }
+
         template<typename T> // 指定した型のランダムな値を返却
-        inline const T Random(const double min, const double max) {
+        inline T Random(double min, double max) {
 
             std::uniform_real_distribution<> dist1(min, max);
 
             return static_cast<T>(dist1(sEngine));
         }
 
-        template<typename T> // プリミティブ型なら参照は無い方が早い？？
-        inline const T& Clamp(const T& value, const T& min, const T& max) {
+        template<typename T>
+        inline T Clamp(T value, T min, T max) {
             if (value < min) {
                 return min;
             }
@@ -34,7 +46,7 @@ namespace Math {
         }
 
         template<class T> // 正 = 1, 0 = 0, 負 = -1
-        inline int32_t Sgn(const T arg_v) {
+        inline int32_t Sgn(T arg_v) {
             if (arg_v == 0) return 0;
             return arg_v > 0 ? 1 : -1;
         }

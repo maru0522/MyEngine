@@ -1,11 +1,12 @@
+#include "SimplifyImGui.h"
 #include "GameSystem.h"
-#include "Sprite.h"
 #include "Object3D.h"
+#include "Sprite.h"
 
 void GameSystem::Initialize()
 {
     FrameWork::Initialize();
-    postEffect_ = std::make_unique<GaussianBlur>();
+    postEffect_ = std::make_unique<PostEffect>();
     postEffect_->Initialize();
 }
 
