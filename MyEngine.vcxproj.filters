@@ -19,8 +19,12 @@
     <FxCompile Include="PostEffectPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="GaussianBlurPS.hlsl" />
-    <FxCompile Include="GaussianBlurVS.hlsl" />
+    <FxCompile Include="GaussianBlurVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="GaussianBlurPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSOManager.cpp" />
@@ -236,7 +240,9 @@
     <None Include="PostEffect.hlsli">
       <Filter>Shader</Filter>
     </None>
-    <None Include="GaussianBlur.hlsli" />
+    <None Include="GaussianBlur.hlsli">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
