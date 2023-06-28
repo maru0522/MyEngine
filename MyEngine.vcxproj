@@ -111,6 +111,7 @@
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SimplifyImGui.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SimplifyImGui.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Sprite.h" />

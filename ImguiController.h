@@ -28,6 +28,8 @@ public:
     void Draw(void);
 
 private:
+    void Settings(void);
+
     void SetColorScheme(void);
     void CustomSonicRiders(void);
     void CustomCherry(void);
@@ -40,6 +42,5 @@ private:
 public:
     // setterÅEgetter
     inline void SetStyle(UIStyle style) { style_ = style; }
-
 };
 

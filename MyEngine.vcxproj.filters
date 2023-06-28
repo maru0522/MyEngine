@@ -111,6 +111,7 @@
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="LevelData.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
+    <ClCompile Include="SimplifyImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -223,6 +224,7 @@
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="GaussianBlur.h" />
+    <ClInclude Include="SimplifyImGui.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx12.h>
+#include "SimplifyImGui.h"
+#include <array>
 
 ImGuiController::ImGuiController(void)
     : style_(UIStyle::CUSTOM_ENEMYMOUSE)
@@ -42,11 +44,11 @@ void ImGuiController::Begin(void)
     ImGui_ImplWin32_NewFrame();
     ImGui_ImplDX12_NewFrame();
     ImGui::NewFrame();
-    //ImGui::ShowDemoWindow();
 }
 
 void ImGuiController::End(void)
 {
+    Settings();
     ImGui::Render();
 }
 
@@ -58,6 +60,19 @@ void ImGuiController::Draw(void)
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), iDX->GetCommandList());
+}
+
+void ImGuiController::Settings(void)
+{
+    Gui::Begin("ImGuiSetting", ImVec2(300,100));
+    static int current = (int)style_;
+    const char* styles[] = { "CLASSIC", "DARK", "CUSTOM_SONICRIDERS", "CUSTOM_CHERRY", "CUSTOM_CRYSTALDEVIL", "CUSTOM_ENEMYMOUSE" };
+    if (Gui::DropDownTrg("Gui Style", &current, styles, IM_ARRAYSIZE(styles)))
+    {
+        style_ = (UIStyle)current;
+        SetColorScheme();
+    }
+    Gui::End();
 }
 
 void ImGuiController::SetColorScheme(void)
