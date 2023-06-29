@@ -96,7 +96,7 @@ void FrameWork::DebugGui(void)
     Gui::Begin("postEffect Settings", { 200,100 });
 
     static int current = 0;
-    const char* shaders[] = { "Integral", "GaussianBlur", "HighLuminance", "Bloom", "RadialBlur"};
+    const char* shaders[] = { "NONE", "GaussianBlur", "HighLuminance", "Bloom", "RadialBlur" };
     if (Gui::DropDownTrg("Shader", &current, shaders, IM_ARRAYSIZE(shaders)))
     {
         ResetPostEffect(current);
@@ -109,7 +109,7 @@ void FrameWork::ResetPostEffect(int num)
     switch (num)
     {
     case 0:
-        postEffect_ = std::make_unique<PostEffect>();
+        postEffect_.reset();
         break;
     case 1:
         postEffect_ = std::make_unique<GaussianBlur>();
@@ -127,5 +127,6 @@ void FrameWork::ResetPostEffect(int num)
         postEffect_ = std::make_unique<PostEffect>();
         break;
     }
-    postEffect_->Initialize();
+    if (postEffect_.get())
+        postEffect_->Initialize();
 }
