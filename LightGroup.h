@@ -25,9 +25,9 @@ public:
     {
         Vector3 ambientColor; // 環境光の色
         float pad;
-        DirectionalLight::CBDirLight_t dirLights[kDirLightNum_];        // 平行光源用
-        PointLight::CBPointLight_t pointLights[kPointLightNum_];        // 点光源用
-        SpotLight::CBSpotLight_t spotLights[kSpotLightNum_];            // スポットライト用
+        DirectionalLight::CBDirLight_t dirLights[kDirLightNum_];         // 平行光源用
+        PointLight::CBPointLight_t pointLights[kPointLightNum_];         // 点光源用
+        SpotLight::CBSpotLight_t spotLights[kSpotLightNum_];             // スポットライト用
         CircleShadow::CBCircleShadow_t circleShadows[kCircleShadowNum_]; // 丸影用
     };
 

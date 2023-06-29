@@ -96,6 +96,7 @@
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="HighLumi.cpp" />
     <ClCompile Include="LevelData.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PSOManager.cpp" />
     <ClCompile Include="ImguiController.cpp" />
     <ClCompile Include="InitDirectX.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="HighLumi.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="LevelData.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PSOManager.h" />
     <ClInclude Include="ImguiController.h" />
     <ClInclude Include="IndexBuffer.h" />

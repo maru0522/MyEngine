@@ -6,6 +6,7 @@
 #include "Sound.h"
 #include "LightGroup.h"
 #include "LevelData.h"
+#include "Player.h"
 
 class DemoScene :
     public IScene
@@ -27,6 +28,8 @@ public:
     void HotReload(LevelData* lvdPtr);
 
     // ïœêî
+    std::unique_ptr<Player> player_{ std::make_unique<Player>() };
+    std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     // jsonì«Ç›çûÇ›&îzíuóp
     std::map<std::string,std::unique_ptr<Object3D>> objects_;

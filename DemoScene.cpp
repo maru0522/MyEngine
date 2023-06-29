@@ -13,6 +13,14 @@ void DemoScene::Initialize(void)
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
+    // Žg‚¤
+    lightGroup_->SetDirLightActive(0, true);
+    lightGroup_->SetDirLightColor(0, { 1,1,1 });
+    lightGroup_->SetLightDir(0, { 0,-1,0 });
+
+    planet_->coordinate_.SetPosition({ 0,0,0 });
+    planet_->coordinate_.SetScale({ 5,5,5 });
+
     // json“Ç‚Ýž‚Ý&”z’u
     //lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //DeployObj(lvdPtr_.get());
@@ -21,6 +29,9 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     lightGroup_->Update();
+
+    player_->Update();
+    planet_->Update();
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -34,6 +45,9 @@ void DemoScene::Update(void)
 void DemoScene::Draw3d(void)
 {
     lightGroup_->Draw();
+
+    player_->Draw();
+    planet_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
