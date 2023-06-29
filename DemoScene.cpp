@@ -13,44 +13,31 @@ void DemoScene::Initialize(void)
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
-    obj3d_->coordinate_.SetScale({ 20.f,0.5f,20.f });
-    obj3d_->coordinate_.SetPosition({ 0.f,-5.f,0.f });
-
-    lvdPtr_ = LevelData::Load("Resources/untitled.json");
-    DeployObj(lvdPtr_.get());
+    // json読み込み&配置
+    //lvdPtr_ = LevelData::Load("Resources/untitled.json");
+    //DeployObj(lvdPtr_.get());
 }
 
 void DemoScene::Update(void)
 {
     lightGroup_->Update();
 
-    sprite_->Update();
-    //obj3d_->Update();
-    //obj3d2_->Update();
-    //Vector3 rot = obj3d2_->coordinate_.GetRotation();
-    //rot.y += 0.05f;
-    //obj3d2_->coordinate_.SetRotation(rot);
-
-    for (auto& object : objects_) {
-        object.second->Update();
-    }
-
-    if(KEYS::IsTrigger(DIK_R)) {
-        lvdPtr_ = LevelData::Load("Resources/untitled.json");
-        HotReload(lvdPtr_.get());
-    }
+    //for (auto& object : objects_) {
+    //    object.second->Update();
+    //}
+    //if(KEYS::IsTrigger(DIK_R)) {
+    //    lvdPtr_ = LevelData::Load("Resources/untitled.json");
+    //    HotReload(lvdPtr_.get());
+    //}
 }
 
 void DemoScene::Draw3d(void)
 {
     lightGroup_->Draw();
-    //obj3d_->Draw();
-    //obj3d2_->Draw();
-    //// cubeの画像にスプライトで表示しているものを起用
-    ////obj3d_->Draw("Resources/namida.png");
-    for (auto& object : objects_) {
-        object.second->Draw();
-    }
+
+    //for (auto& object : objects_) {
+    //    object.second->Draw();
+    //}
 }
 
 
