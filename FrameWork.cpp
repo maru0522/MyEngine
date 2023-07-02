@@ -93,15 +93,15 @@ bool FrameWork::EndRequest(void)
 
 void FrameWork::DebugGui(void)
 {
-    Gui::Begin("postEffect Settings", { 200,100 });
+    GUI::Begin("postEffect Settings", { 200,100 });
 
     static int current = 0;
     const char* shaders[] = { "NONE", "GaussianBlur", "HighLuminance", "Bloom", "RadialBlur" };
-    if (Gui::DropDownTrg("Shader", &current, shaders, IM_ARRAYSIZE(shaders)))
+    if (GUI::DropDownTrg("Shader", &current, shaders, IM_ARRAYSIZE(shaders)))
     {
         ResetPostEffect(current);
     }
-    Gui::End();
+    GUI::End();
 }
 
 void FrameWork::ResetPostEffect(int num)

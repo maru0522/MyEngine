@@ -1,6 +1,7 @@
 #pragma once
 #include <random>
 #include <cmath>
+#include "Vector3.h"
 
 static std::random_device sSeed_gen;
 static std::mt19937 sEngine(sSeed_gen());
@@ -51,10 +52,19 @@ namespace Math {
             return arg_v > 0 ? 1 : -1;
         }
 
+        template<class T> // ³ = 0 ~ 1, •‰ = -1
+        inline int32_t SgnA(T arg_v) {
+            return arg_v >= 0 ? 1 : -1;
+        }
+
         template<class T>
         inline T Cotangent(T arg_v) {
             return 1 / std::tan(arg_v);
         }
+
+        // x:“®Œar, y:ˆÜ“xƒÆ, z:Œo“xƒÓ
+        Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante); 
+        Vector3 ToRectAngularCoordinate(const Vector3& sphericalCoordinate);
     }
 
     namespace Ease {

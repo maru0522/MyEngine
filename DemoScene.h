@@ -31,13 +31,17 @@ public:
 
     void DemoCollision(Player* player, Planet* planet);
 
+    void DebudGui(void);
+    bool debugCamFollow_;
+    bool debugPlanetDraw_{ true };
+
     // ïœêî
     std::unique_ptr<Player> player_{ std::make_unique<Player>() };
     std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     // jsonì«Ç›çûÇ›&îzíuóp
-    std::map<std::string,std::unique_ptr<Object3D>> objects_;
+    std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
 
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };

@@ -2,7 +2,7 @@
 #include <string>
 #include <imgui.h>
 
-namespace Gui
+namespace GUI
 {
     using namespace std;
 

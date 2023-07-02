@@ -112,3 +112,29 @@ float Math::Ease::EaseInOutElastic(float t, float start, float end)
         ? -(std::powf(2.f, 20.f * t - 10.f) * std::sinf((20.f * t - 11.125f) * c5)) / 2.f
         : (std::powf(2.f, -20.f * t + 10.f) * std::sinf((20.f * t - 11.125f) * c5)) / 2.f + 1.f) * (end - start);
 }
+
+Vector3 Math::Function::ToSphericalCoordinate(const Vector3& rectAngularCoordiante)
+{
+    const Vector3& rac = rectAngularCoordiante;
+
+    // result = x:動径r, y:緯度θ, z:経度φ
+    Vector3 result;
+    result.x = std::sqrtf(rac.x * rac.x + rac.y * rac.y + rac.z * rac.z);
+    result.y = std::acosf(rac.z / result.x);
+    result.z = Function::SgnA<float>(rac.y) * std::acosf(rac.x / std::sqrtf(rac.x * rac.x + rac.y * rac.y));
+
+    return result;
+}
+
+Vector3 Math::Function::ToRectAngularCoordinate(const Vector3& sphericalCoordinate)
+{
+    // sc = x:動径r, y:緯度θ, z:経度φ
+    const Vector3& sc = sphericalCoordinate;
+
+    Vector3 result;
+    result.x = sc.x * std::sinf(sc.y) * std::cosf(sc.z);
+    result.y = sc.x * std::sinf(sc.y) * std::sinf(sc.z);
+    result.z = sc.x * std::cosf(sc.y);
+
+    return Vector3();
+}

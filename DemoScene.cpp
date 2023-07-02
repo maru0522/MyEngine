@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "DemoScene.h"
 #include "Collision.h"
+#include "SimplifyImGui.h"
 
 void DemoScene::Initialize(void)
 {
@@ -29,14 +30,15 @@ void DemoScene::Update(void)
     lightGroup_->Update();
 
     Vector3 currentPos = player_->body_->coordinate_.GetPosition();
-    Vector3 forwardVec = cameraPtr->GetForwardVec();
-    Vector3 camDistance = forwardVec.normalize() * 5.f;
-    cameraPtr->eye_ = currentPos - camDistance;
+    Vector3 pForwardVec = player_->body_->coordinate_.GetAxisZ();
+    Vector3 camDistance = -pForwardVec.normalize() * 5.f;
+    if(debugCamFollow_) cameraPtr->eye_ = currentPos + camDistance;
 
+    Vector3 cForwardVec = cameraPtr->GetForwardVec();
     Vector3 rightVec = cameraPtr->GetRightVec();
 
-    if (KEYS::IsDown(DIK_W)) currentPos += forwardVec;
-    if (KEYS::IsDown(DIK_S)) currentPos -= forwardVec;
+    if (KEYS::IsDown(DIK_W)) currentPos += cForwardVec;
+    if (KEYS::IsDown(DIK_S)) currentPos -= cForwardVec;
     if (KEYS::IsDown(DIK_A)) currentPos -= rightVec;
     if (KEYS::IsDown(DIK_D)) currentPos += rightVec;
 
@@ -54,6 +56,8 @@ void DemoScene::Update(void)
     //    lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //    HotReload(lvdPtr_.get());
     //}
+
+    DebudGui();
 }
 
 void DemoScene::Draw3d(void)
@@ -61,7 +65,7 @@ void DemoScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw();
-    planet_->Draw();
+    if(debugPlanetDraw_) planet_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
@@ -140,6 +144,12 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
     Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
     player->upVec_ = center2PlayerVec.normalize();
 
+    Vector3 rotate;
+    rotate.x = -std::atan2f(player->upVec_.y, player_->upVec_.x);
+    rotate.y = -std::atan2f(std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y), player->upVec_.z);
+    rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
+    player->body_->coordinate_.SetRotation(rotate);
+
     if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
     {
         Vector3 currentPos = player->body_->coordinate_.GetPosition();
@@ -147,4 +157,42 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
 
         player->body_->coordinate_.SetPosition(currentPos);
     }
+}
+
+void DemoScene::DebudGui(void)
+{
+    GUI::Begin("demoInfo", { 200,400 });
+    GUI::ChildFrameBegin("player", { 300,200 });
+    const Vector3& pPos = player_->body_->coordinate_.GetPosition();
+    const Vector3& pRot = player_->body_->coordinate_.GetRotation();
+    const Vector3& pSca = player_->body_->coordinate_.GetScale();
+    ImGui::Text("player");
+    ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
+    ImGui::Text("rot: (%f,%f,%f)", pRot.x, pRot.y, pRot.z);
+    ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
+    GUI::ChildFrameEnd();
+    GUI::ChildFrameBegin("camera", { 300,200 });
+    const Vector3& cPos = cameraPtr->eye_;
+    const Vector3& cRot = cameraPtr->rotation_;
+    const Vector3& cUp = cameraPtr->up_;
+    ImGui::Text("camera");
+    ImGui::Text("pos: (%f,%f,%f)", cPos.x, cPos.y, cPos.z);
+    ImGui::Text("rot: (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
+    ImGui::Text("up : (%f,%f,%f)", cUp.x, cUp.y, cUp.z);
+    if (GUI::ButtonTrg("camera"))
+        debugCamFollow_ ?
+        debugCamFollow_ = false :
+        debugCamFollow_ = true;
+    ImGui::Text(debugCamFollow_ ? "debugCamFollow : true" : "debugCanFollow : false");
+    GUI::ChildFrameEnd();
+
+    GUI::ChildFrameBegin("other", { 300,200 });
+    ImGui::Text("other");
+    if (GUI::ButtonTrg("drawPlanet"))
+        debugPlanetDraw_ ?
+        debugPlanetDraw_ = false :
+        debugPlanetDraw_ = true;
+    ImGui::Text(debugPlanetDraw_ ? "debugPlanetDraw : true" : "debugPlanetDraw : false");
+    GUI::ChildFrameEnd();
+    GUI::End();
 }

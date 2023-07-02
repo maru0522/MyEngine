@@ -64,15 +64,15 @@ void ImGuiController::Draw(void)
 
 void ImGuiController::Settings(void)
 {
-    Gui::Begin("ImGuiSetting", ImVec2(300,100));
+    GUI::Begin("ImGuiSetting", ImVec2(300,100));
     static int current = (int)style_;
     const char* styles[] = { "CLASSIC", "DARK", "CUSTOM_SONICRIDERS", "CUSTOM_CHERRY", "CUSTOM_CRYSTALDEVIL", "CUSTOM_ENEMYMOUSE" };
-    if (Gui::DropDownTrg("Gui Style", &current, styles, IM_ARRAYSIZE(styles)))
+    if (GUI::DropDownTrg("Gui Style", &current, styles, IM_ARRAYSIZE(styles)))
     {
         style_ = (UIStyle)current;
         SetColorScheme();
     }
-    Gui::End();
+    GUI::End();
 }
 
 void ImGuiController::SetColorScheme(void)
