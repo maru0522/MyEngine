@@ -7,6 +7,8 @@
 #include "LightGroup.h"
 #include "LevelData.h"
 #include "Player.h"
+#include "Planet.h"
+#include "Collision.h"
 
 class DemoScene :
     public IScene
@@ -27,9 +29,12 @@ public:
     void DeployObj(LevelData* lvdPtr);
     void HotReload(LevelData* lvdPtr);
 
+    void DemoCollision(Player* player, Planet* planet);
+
     // ïœêî
     std::unique_ptr<Player> player_{ std::make_unique<Player>() };
-    std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
+    std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
+    //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     // jsonì«Ç›çûÇ›&îzíuóp
     std::map<std::string,std::unique_ptr<Object3D>> objects_;

@@ -28,6 +28,7 @@ private:
     float nearZ_;
     float farZ_;
 
+    WorldCoordinate coordinate_;
     Matrix4 matProj_OrthoGraphic_;
     Matrix4 matProj_Perspective_;
     Matrix4 matView_;
@@ -38,6 +39,8 @@ public:
     // getterÅEsetter
     inline const Matrix4& GetMatProjOrthoGraphic(void) { return matProj_OrthoGraphic_; }
     inline const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }
+    inline Vector3 GetForwardVec(void) { return coordinate_.GetAxisZ(); }
+    inline Vector3 GetRightVec(void) { return coordinate_.GetAxisX(); }
     inline const Matrix4& GetMatView(void) { return matView_; }
 
     void Follow(Vector3* p_target);

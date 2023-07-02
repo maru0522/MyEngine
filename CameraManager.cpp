@@ -24,10 +24,10 @@ void Camera::Update(void)
     if (KEYS::IsDown(DIK_SPACE)) eye_.y += 1;
     if (KEYS::IsDown(DIK_LSHIFT)) eye_.y -= 1;
 
-    WorldCoordinate coordinate;
-    coordinate.SetPosition(eye_);
-    coordinate.SetRotation(rotation_);
-    coordinate.Update();
+    coordinate_.Reset();
+    coordinate_.SetPosition(eye_);
+    coordinate_.SetRotation(rotation_);
+    coordinate_.Update();
 
     // debugCamera
     if (isDebugMode_) {
@@ -43,20 +43,20 @@ void Camera::Update(void)
         // 平行移動
         if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してる
             const float moveSpeed = 0.05f;
-            eye_ += coordinate.GetAxisX().normalize() * -mouseVelocity.x * moveSpeed;
-            eye_ += coordinate.GetAxisY().normalize() * mouseVelocity.y * moveSpeed;
+            eye_ += coordinate_.GetAxisX().normalize() * -mouseVelocity.x * moveSpeed;
+            eye_ += coordinate_.GetAxisY().normalize() * mouseVelocity.y * moveSpeed;
         }
 
         // 前後移動
         if (!Mouse::IsDown(Mouse::Click::RIGHT) && !Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してない
             const float moveSpeed = 0.01f;
-            eye_ += coordinate.GetAxisZ().normalize() * Mouse::GetScroll() * moveSpeed;
+            eye_ += coordinate_.GetAxisZ().normalize() * Mouse::GetScroll() * moveSpeed;
         }
     }
 
     isFollow_ ?
         matView_ = Math::Matrix::ViewLookAtLH(eye_, *targetPtr_, up_) :
-        matView_ = Math::Matrix::ViewLookToLH(coordinate.GetPosition(), coordinate.GetAxisZ(), coordinate.GetAxisY());
+        matView_ = Math::Matrix::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetAxisZ(), coordinate_.GetAxisY());
 
     matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }

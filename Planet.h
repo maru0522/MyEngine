@@ -3,19 +3,19 @@
 #include "Object3D.h"
 #include "CollisionPrimitive.h"
 
-class Player
+class Planet
 {
 public:
     // ŠÖ”
-    Player(void);
+    Planet(void);
 
     void Update(void);
     void Draw(void);
 
-    // •Ï”
-    Vector3 upVec_;
-
     CollisionPrimitive::Sphere sphereCollider_;
+
+private:
+    // •Ï”
     std::unique_ptr<Object3D> body_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 };
 

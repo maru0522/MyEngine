@@ -148,6 +148,19 @@
     <ClCompile Include="Player.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionPrimitive.cpp">
+      <Filter>Entity\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Entity\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Entity\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="ICollider.cpp">
+      <Filter>Entity\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Planet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -275,6 +288,19 @@
     <ClInclude Include="Player.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionPrimitive.h">
+      <Filter>Entity\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Entity\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Entity\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollider.h">
+      <Filter>Entity\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">
@@ -344,6 +370,9 @@
     </Filter>
     <Filter Include="Application">
       <UniqueIdentifier>{240f5423-9337-4fc9-9efd-f993283aae89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\Collision">
+      <UniqueIdentifier>{dfc9859d-6f1c-427d-a70a-943798f2cdb4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

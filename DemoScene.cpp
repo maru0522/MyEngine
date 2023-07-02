@@ -1,5 +1,6 @@
-#include "DemoScene.h"
 #include "Input.h"
+#include "DemoScene.h"
+#include "Collision.h"
 
 void DemoScene::Initialize(void)
 {
@@ -18,9 +19,6 @@ void DemoScene::Initialize(void)
     lightGroup_->SetDirLightColor(0, { 1,1,1 });
     lightGroup_->SetLightDir(0, { 0,-1,0 });
 
-    planet_->coordinate_.SetPosition({ 0,0,0 });
-    planet_->coordinate_.SetScale({ 5,5,5 });
-
     // json“Ç‚Ýž‚Ý&”z’u
     //lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //DeployObj(lvdPtr_.get());
@@ -30,8 +28,24 @@ void DemoScene::Update(void)
 {
     lightGroup_->Update();
 
+    Vector3 currentPos = player_->body_->coordinate_.GetPosition();
+    Vector3 forwardVec = cameraPtr->GetForwardVec();
+    Vector3 camDistance = forwardVec.normalize() * 5.f;
+    cameraPtr->eye_ = currentPos - camDistance;
+
+    Vector3 rightVec = cameraPtr->GetRightVec();
+
+    if (KEYS::IsDown(DIK_W)) currentPos += forwardVec;
+    if (KEYS::IsDown(DIK_S)) currentPos -= forwardVec;
+    if (KEYS::IsDown(DIK_A)) currentPos -= rightVec;
+    if (KEYS::IsDown(DIK_D)) currentPos += rightVec;
+
+    player_->body_->coordinate_.SetPosition(currentPos);
+
     player_->Update();
     planet_->Update();
+
+    DemoCollision(player_.get(), planet_.get());
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -118,5 +132,19 @@ void DemoScene::HotReload(LevelData* lvdPtr)
             cameraPtr->eye_ = objectData.trans;
             cameraPtr->rotation_ = objectData.rot;
         }
+    }
+}
+
+void DemoScene::DemoCollision(Player* player, Planet* planet)
+{
+    Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
+    player->upVec_ = center2PlayerVec.normalize();
+
+    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    {
+        Vector3 currentPos = player->body_->coordinate_.GetPosition();
+        currentPos += player->upVec_ * 0.1f;
+
+        player->body_->coordinate_.SetPosition(currentPos);
     }
 }

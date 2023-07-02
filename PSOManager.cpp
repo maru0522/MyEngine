@@ -177,6 +177,10 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC HelperGraphicPipeline::CreatePipelineDesc(Blo
     }
     pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID; // ポリゴン内塗りつぶし
     pipelineDesc.RasterizerState.DepthClipEnable = true; // 深度クリッピングを有効に
+    pipelineDesc.DepthStencilState.DepthEnable = true;
+    pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+    pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+    pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
     // ブレンドモード設定
     SetBlend(pipelineDesc, blendMode);
