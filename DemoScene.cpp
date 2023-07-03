@@ -145,9 +145,10 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
     player->upVec_ = center2PlayerVec.normalize();
 
     Vector3 rotate;
-    rotate.x = -std::atan2f(player->upVec_.y, player_->upVec_.x);
-    rotate.y = -std::atan2f(std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y), player->upVec_.z);
-    rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
+    rotate.x = std::atan2f(-player->upVec_.y, -player_->upVec_.z);
+    rotate.y = -std::atan2f(player->upVec_.x, std::sqrtf(player->upVec_.y * player->upVec_.y + player->upVec_.z * player->upVec_.z));
+    rotate.z = -std::asinf(player->upVec_.y / player->upVec_.z);
+    //rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
     player->body_->coordinate_.SetRotation(rotate);
 
     if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
@@ -161,24 +162,27 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
 
 void DemoScene::DebudGui(void)
 {
+    using namespace Math::Function;
     GUI::Begin("demoInfo", { 200,400 });
-    GUI::ChildFrameBegin("player", { 300,200 });
+    GUI::ChildFrameBegin("player", { 400,100 });
     const Vector3& pPos = player_->body_->coordinate_.GetPosition();
     const Vector3& pRot = player_->body_->coordinate_.GetRotation();
     const Vector3& pSca = player_->body_->coordinate_.GetScale();
     ImGui::Text("player");
     ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
-    ImGui::Text("rot: (%f,%f,%f)", pRot.x, pRot.y, pRot.z);
     ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
+    ImGui::Text("rot(rad): (%f,%f,%f)", pRot.x, pRot.y, pRot.z);
+    ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(pRot.x), ToDegree(pRot.y), ToDegree(pRot.z));
     GUI::ChildFrameEnd();
-    GUI::ChildFrameBegin("camera", { 300,200 });
+    GUI::ChildFrameBegin("camera", { 400,140 });
     const Vector3& cPos = cameraPtr->eye_;
     const Vector3& cRot = cameraPtr->rotation_;
     const Vector3& cUp = cameraPtr->up_;
     ImGui::Text("camera");
     ImGui::Text("pos: (%f,%f,%f)", cPos.x, cPos.y, cPos.z);
-    ImGui::Text("rot: (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
     ImGui::Text("up : (%f,%f,%f)", cUp.x, cUp.y, cUp.z);
+    ImGui::Text("rot(rad): (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
+    ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(cRot.x), ToDegree(cRot.y), ToDegree(cRot.z));
     if (GUI::ButtonTrg("camera"))
         debugCamFollow_ ?
         debugCamFollow_ = false :
@@ -186,7 +190,7 @@ void DemoScene::DebudGui(void)
     ImGui::Text(debugCamFollow_ ? "debugCamFollow : true" : "debugCanFollow : false");
     GUI::ChildFrameEnd();
 
-    GUI::ChildFrameBegin("other", { 300,200 });
+    GUI::ChildFrameBegin("other", { 400,200 });
     ImGui::Text("other");
     if (GUI::ButtonTrg("drawPlanet"))
         debugPlanetDraw_ ?
