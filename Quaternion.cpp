@@ -1,11 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
 
-Quaternion Quaternion::Identity(void) const
-{
-    return Quaternion{ 0,0,0,1 };
-}
-
 Quaternion Quaternion::Conjugate() const
 {
     return Quaternion{ -x,-y,-z,w };

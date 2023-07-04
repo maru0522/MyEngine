@@ -15,7 +15,6 @@ public: // 変数
     constexpr Quaternion(const Vector3& v) noexcept : x(v.x), y(v.y), z(v.z), w(0) {}
     constexpr Quaternion(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
-    Quaternion Identity(void) const;
     Quaternion Conjugate(void) const;
     float Norm(void) const;
     Quaternion Normalize(void) const;
@@ -43,6 +42,8 @@ const Quaternion operator/(const Quaternion& q, float s);
 namespace Math {
     // FuncのF
     namespace QuaternionF {
+        inline Quaternion Identity(void) { return Quaternion(0, 0, 0, 1); }
+
         // 任意軸回転を表すクォータニオン
         Quaternion MakeAxisAngle(const Vector3& axis, float radian);
         // オイラー角からクォータニオン

@@ -3,12 +3,15 @@
 using namespace Math;
 
 WorldCoordinate::WorldCoordinate(void) :
-    scale_(1.f, 1.f, 1.f), position_(0.f, 0.f, 0.f), rotation_(Rotate{ false })
+    scale_(1.f, 1.f, 1.f), position_(0.f, 0.f, 0.f), eular_(0.f, 0.f, 0.f), quaternions_(Axis3Q())
 {
+    quaternions_.forward = { 1,0,0,0 };
+    quaternions_.right = { 0,1,0,0 };
+    quaternions_.up = { 0,0,1,0 };
 }
 
 WorldCoordinate::WorldCoordinate(const Vector3& pos, const Vector3& scale, const Vector3& rot) :
-    scale_(scale), position_(pos), rotation_(Rotate{ rot })
+    scale_(scale), position_(pos), eular_(rot)
 {
 }
 
@@ -19,13 +22,13 @@ void WorldCoordinate::Update(void)
 
     matScale = Matrix::Scale(scale_);
 
-    if (rotation_.eular.x || rotation_.eular.y || rotation_.eular.z) {
-        matRotate *= Matrix::RotationZ(rotation_.eular.z);
-        matRotate *= Matrix::RotationX(rotation_.eular.x);
-        matRotate *= Matrix::RotationY(rotation_.eular.y);
+    if (eular_.x || eular_.y || eular_.z) {
+        matRotate *= Matrix::RotationZ(eular_.z);
+        matRotate *= Matrix::RotationX(eular_.x);
+        matRotate *= Matrix::RotationY(eular_.y);
     }
     else {
-        matRotate *= Math::QuaternionF::MakeRotateMatrix3(rotation_.axisQ.forward, rotation_.axisQ.right, rotation_.axisQ.up);
+        matRotate *= Math::QuaternionF::MakeRotateMatrix3(quaternions_.forward, quaternions_.right, quaternions_.up);
     }
 
     matWorld_ = Matrix::Identity();
@@ -38,12 +41,8 @@ void WorldCoordinate::Reset(void)
 {
     scale_ = { 1.f, 1.f, 1.f };
     position_ = { 0.f, 0.f, 0.f };
-    if (rotation_.eular.x || rotation_.eular.y || rotation_.eular.z) {
-        rotation_.eular = { 0.f,0.f,0.f };
-    }
-    else {
-        rotation_.axisQ = Axis3Q();
-    }
+    eular_ = { 0.f,0.f,0.f };
+    quaternions_ = Axis3Q();
 
     matWorld_ = {
         1.0f, 0.0f, 0.0f, 0.0f,
@@ -51,14 +50,4 @@ void WorldCoordinate::Reset(void)
         0.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 1.0f,
     };
-}
-
-WorldCoordinate::Rotate::Rotate(bool isEular)
-{
-    if (isEular) {
-        eular = Vector3(0.f, 0.f, 0.f);
-    }
-    else {
-        axisQ = Axis3Q();
-    }
 }
