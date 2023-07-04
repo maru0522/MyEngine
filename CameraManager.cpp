@@ -12,6 +12,7 @@ Camera::Camera(const Vector3& eye) :
     targetPtr_(nullptr), isFollow_(false),
     nearZ_(0.1f), farZ_(1000.f)
 {
+    coordinate_.is_ = true;
     UpdateOrthoGraphic();
 }
 

@@ -18,8 +18,15 @@ void Player::Update(void)
     Vector3 gravity = -upVec_;
     gravity *= 0.1f;
 
+    Vector3 velocity{};
+    if (KEYS::IsDown(DIK_A)) velocity.x -= 1;
+    if (KEYS::IsDown(DIK_D)) velocity.x += 1;
+    if (KEYS::IsDown(DIK_W)) velocity.y += 1;
+    if (KEYS::IsDown(DIK_S)) velocity.y -= 1;
+
     Vector3 currentPos = body_->coordinate_.GetPosition();
     currentPos += gravity;
+    currentPos += velocity;
 
     body_->coordinate_.SetPosition(currentPos);
 }

@@ -22,7 +22,7 @@ void WorldCoordinate::Update(void)
 
     matScale = Matrix::Scale(scale_);
 
-    if (eular_.x || eular_.y || eular_.z) {
+    if (is_) {
         matRotate *= Matrix::RotationZ(eular_.z);
         matRotate *= Matrix::RotationX(eular_.x);
         matRotate *= Matrix::RotationY(eular_.y);

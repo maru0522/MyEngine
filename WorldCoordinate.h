@@ -28,6 +28,7 @@ public:
     void Update(void);
     void Reset(void);
 
+    bool is_{};
 private:
     // •Ï”
     Vector3 eular_;
