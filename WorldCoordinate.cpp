@@ -1,4 +1,5 @@
 #include "WorldCoordinate.h"
+#include "Input.h"
 
 using namespace Math;
 
@@ -21,6 +22,17 @@ void WorldCoordinate::Update(void)
     Matrix4 matRotate{ Matrix::Identity() };
 
     matScale = Matrix::Scale(scale_);
+
+    static float radx = 0;
+    static float rady = 0;
+    static float radz = 0;
+    if (KEYS::IsDown(DIK_NUMPAD9)) radz += 0.01f;
+    if (KEYS::IsDown(DIK_NUMPAD6)) radx += 0.01f;
+    if (KEYS::IsDown(DIK_NUMPAD3)) rady += 0.01f;
+
+    quaternions_.forward = Math::QuaternionF::MakeAxisAngle({ 1,0,0 }, radz);
+    quaternions_.right = Math::QuaternionF::MakeAxisAngle({ 0,1,0 }, radx);
+    quaternions_.up = Math::QuaternionF::MakeAxisAngle({ 0,0,1 }, rady);
 
     if (is_) {
         matRotate *= Matrix::RotationZ(eular_.z);

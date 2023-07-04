@@ -15,8 +15,8 @@ void Player::Update(void)
     sphereCollider_.center = body_->coordinate_.GetPosition();
 
     // À•WŒvŽZ
-    Vector3 gravity = -upVec_;
-    gravity *= 0.1f;
+    //Vector3 gravity = -upVec_;
+    //gravity *= 0.1f;
 
     Vector3 velocity{};
     if (KEYS::IsDown(DIK_A)) velocity.x -= 1;
@@ -25,7 +25,7 @@ void Player::Update(void)
     if (KEYS::IsDown(DIK_S)) velocity.y -= 1;
 
     Vector3 currentPos = body_->coordinate_.GetPosition();
-    currentPos += gravity;
+    //currentPos += gravity;
     currentPos += velocity;
 
     body_->coordinate_.SetPosition(currentPos);
