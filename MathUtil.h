@@ -1,7 +1,11 @@
 #pragma once
 #include <random>
 #include <cmath>
+#include "Vector2.h"
 #include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix4.h"
+#include "Quaternion.h"
 
 static std::random_device sSeed_gen;
 static std::mt19937 sEngine(sSeed_gen());

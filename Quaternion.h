@@ -12,6 +12,7 @@ public: // 変数
 
     // 関数
     Quaternion(void) = default;
+    constexpr Quaternion(const Vector3& v) noexcept : x(v.x), y(v.y), z(v.z), w(0) {}
     constexpr Quaternion(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
     Quaternion Identity(void) const;
@@ -44,10 +45,17 @@ namespace Math {
     namespace QuaternionF {
         // 任意軸回転を表すクォータニオン
         Quaternion MakeAxisAngle(const Vector3& axis, float radian);
+        // オイラー角からクォータニオン
+        Quaternion EulerToQuaternion(const Vector3& eular);
+
         // ベクトルをクォータニオンで回転させた結果のベクトルを求める
         Vector3 RotateVector(const Vector3& v, const Quaternion& q);
+
         // クォータニオンから回転行列を求める
         Matrix4 MakeRotateMatrix(const Quaternion& q);
+        // 3つのクォータニオンから回転行列を求める
+        Matrix4 MakeRotateMatrix3(const Quaternion& q1, const Quaternion& q2, const Quaternion& q3);
+
         //球面線形補間
         Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
         // uからvへの回転を生成

@@ -124,9 +124,18 @@ Quaternion Math::QuaternionF::MakeAxisAngle(const Vector3& axis, float radian)
                        cosf(radian / 2) };
 }
 
+Quaternion Math::QuaternionF::EulerToQuaternion(const Vector3& eular)
+{
+    Quaternion qx = Math::QuaternionF::MakeAxisAngle({ 1,0,0 }, eular.x);
+    Quaternion qy = Math::QuaternionF::MakeAxisAngle({ 0,1,0 }, eular.y);
+    Quaternion qz = Math::QuaternionF::MakeAxisAngle({ 0,0,1 }, eular.z);
+
+    return qx * qy * qz;
+}
+
 Vector3 Math::QuaternionF::RotateVector(const Vector3& v, const Quaternion& q)
 {
-    Quaternion tmp = q * Quaternion{v.x,v.y,v.z,0};
+    Quaternion tmp = q * Quaternion{ v.x,v.y,v.z,0 };
     Quaternion result = tmp * q.Conjugate();
 
     return Vector3(result.x, result.y, result.z);
@@ -134,6 +143,34 @@ Vector3 Math::QuaternionF::RotateVector(const Vector3& v, const Quaternion& q)
 
 Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)
 {
+    Matrix4 mat{};
+
+    mat.m[0][0] = q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w;
+    mat.m[0][1] = 2 * (q.x * q.y + q.w * q.z);
+    mat.m[0][2] = 2 * (q.x * q.z - q.w * q.y);
+    mat.m[0][3] = 0;
+
+    mat.m[1][0] = 2 * (q.x * q.y + q.w * q.z);
+    mat.m[1][1] = q.x * q.x - q.y * q.y + q.z * q.z - q.w * q.w;
+    mat.m[1][2] = 2 * (q.y * q.z + q.w * q.x);
+    mat.m[1][3] = 0;
+
+    mat.m[2][0] = 2 * (q.x * q.z + q.w * q.y);
+    mat.m[2][1] = 2 * (q.y * q.z - q.w * q.x);
+    mat.m[2][2] = q.x * q.x - q.y * q.y - q.z * q.z + q.w * q.w;
+    mat.m[2][3] = 0;
+
+    mat.m[3][0] = 0;
+    mat.m[3][1] = 0;
+    mat.m[3][2] = 0;
+    mat.m[3][3] = 1;
+
+    return mat;
+}
+
+Matrix4 Math::QuaternionF::MakeRotateMatrix3(const Quaternion& q1, const Quaternion& q2, const Quaternion& q3)
+{
+    Quaternion q = q1 * q2 * q3;
     Matrix4 mat{};
 
     mat.m[0][0] = q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w;
