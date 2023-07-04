@@ -5,9 +5,9 @@ using namespace Math;
 WorldCoordinate::WorldCoordinate(void) :
     scale_(1.f, 1.f, 1.f), position_(0.f, 0.f, 0.f), eular_(0.f, 0.f, 0.f), quaternions_(Axis3Q())
 {
-    quaternions_.forward = { 1,0,0,0 };
-    quaternions_.right = { 0,1,0,0 };
-    quaternions_.up = { 0,0,1,0 };
+    quaternions_.forward = Math::QuaternionF::MakeAxisAngle({ 1,0,0 },0);
+    quaternions_.right = Math::QuaternionF::MakeAxisAngle({ 0,1,0 }, 0);
+    quaternions_.up = Math::QuaternionF::MakeAxisAngle({ 0,0,1 }, 0);
 }
 
 WorldCoordinate::WorldCoordinate(const Vector3& pos, const Vector3& scale, const Vector3& rot) :
