@@ -21,6 +21,7 @@ public:
     Vector3 up_;
     Vector3 rotation_;
 
+    Vector3 eyeDirection_;
 private:
     Vector3* targetPtr_;
     bool isFollow_;

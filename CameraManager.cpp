@@ -10,7 +10,8 @@ using namespace Input;
 Camera::Camera(const Vector3& eye) :
     eye_(eye), up_(0.f, 1.f, 0.f), rotation_(0.f, 0.f, 0.f),
     targetPtr_(nullptr), isFollow_(false),
-    nearZ_(0.1f), farZ_(1000.f)
+    nearZ_(0.1f), farZ_(1000.f),
+    eyeDirection_(0.f, 0.f, 0.f)
 {
     UpdateOrthoGraphic();
 }
@@ -54,9 +55,17 @@ void Camera::Update(void)
         }
     }
 
-    isFollow_ ?
-        matView_ = Math::Matrix::ViewLookAtLH(eye_, *targetPtr_, up_) :
-        matView_ = Math::Matrix::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetAxisZ(), coordinate_.GetAxisY());
+    if (isFollow_) {
+        matView_ = Math::Matrix::ViewLookAtLH(eye_, *targetPtr_, up_);
+    }
+    else {
+        if (eyeDirection_.x || eyeDirection_.y || eyeDirection_.z) {
+            matView_ = Math::Matrix::ViewLookToLH(coordinate_.GetPosition(), eyeDirection_.normalize(), up_);
+        }
+        else {
+            matView_ = Math::Matrix::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetAxisZ(), up_);
+        }
+    }
 
     matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }

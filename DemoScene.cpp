@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "DemoScene.h"
 #include "Collision.h"
+#include "SimplifyImGui.h"
 
 void DemoScene::Initialize(void)
 {
@@ -28,24 +29,30 @@ void DemoScene::Update(void)
 {
     lightGroup_->Update();
 
-    Vector3 currentPos = player_->body_->coordinate_.GetPosition();
-    Vector3 forwardVec = cameraPtr->GetForwardVec();
-    Vector3 camDistance = forwardVec.normalize() * 5.f;
-    cameraPtr->eye_ = currentPos - camDistance;
+    //Vector3 currentPos = player_->body_->coordinate_.GetPosition();
+    //Vector3 forwardVec = cameraPtr->GetForwardVec();
+    //Vector3 camDistance = forwardVec.normalize() * 5.f;
+    ////cameraPtr->eye_ = currentPos - camDistance;
 
-    Vector3 rightVec = cameraPtr->GetRightVec();
+    //Vector3 rightVec = cameraPtr->GetRightVec();
 
-    if (KEYS::IsDown(DIK_W)) currentPos += forwardVec;
-    if (KEYS::IsDown(DIK_S)) currentPos -= forwardVec;
-    if (KEYS::IsDown(DIK_A)) currentPos -= rightVec;
-    if (KEYS::IsDown(DIK_D)) currentPos += rightVec;
+    //if (KEYS::IsDown(DIK_W)) currentPos += forwardVec;
+    //if (KEYS::IsDown(DIK_S)) currentPos -= forwardVec;
+    //if (KEYS::IsDown(DIK_A)) currentPos -= rightVec;
+    //if (KEYS::IsDown(DIK_D)) currentPos += rightVec;
 
-    player_->body_->coordinate_.SetPosition(currentPos);
+    //player_->body_->coordinate_.SetPosition(currentPos);
 
     player_->Update();
     planet_->Update();
 
     DemoCollision(player_.get(), planet_.get());
+
+    if (camFollowDev_) {
+        cameraPtr->eye_ = player_->body_->coordinate_.GetPosition() - player_->forwardVec_.normalize() * 8.f;
+        cameraPtr->up_ = player_->upVec_;
+        cameraPtr->eyeDirection_ = player_->forwardVec_;
+    }
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -140,11 +147,24 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
     Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
     player->upVec_ = center2PlayerVec.normalize();
 
-    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
-    {
+    //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    //{
+        // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+        float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+
         Vector3 currentPos = player->body_->coordinate_.GetPosition();
-        currentPos += player->upVec_ * 0.1f;
+        //currentPos += player->upVec_ * 0.1f;
+
+        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+        currentPos += center2PlayerVec.normalize() * -diff;// ここをマイナス符号で値反転
 
         player->body_->coordinate_.SetPosition(currentPos);
-    }
+    //}
+}
+
+void DemoScene::DebugGui(void)
+{
+    Gui::Begin("Debug", { 300,500 });
+    //if(Gui::)
+    Gui::End();
 }
