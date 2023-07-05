@@ -6,7 +6,7 @@
 void DemoScene::Initialize(void)
 {
     // カメラの座標設定
-    cameraPtr->eye_.z = -20;
+    cameraPtr->GetCoordinatePtr()->SetPosition({ 0,0,-20 });
     // カメラのデバッグカメラモードをON
     cameraPtr->SetIsDebugMode(true);
     // カメラをマネージャーにセット
@@ -65,7 +65,7 @@ void DemoScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw();
-    if(debugPlanetDraw_) planet_->Draw();
+    if (debugPlanetDraw_) planet_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
@@ -103,10 +103,10 @@ void DemoScene::DeployObj(LevelData* lvdPtr)
             lightGroup_->SetPointLightPos(0, objectData.trans);
             lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
         }
-        if (objectData.type == "CAMERA") {
-            cameraPtr->eye_ = objectData.trans;
-            cameraPtr->rotation_ = objectData.rot;
-        }
+        //if (objectData.type == "CAMERA") {
+        //    cameraPtr->eye_ = objectData.trans;
+        //    cameraPtr->rotation_ = objectData.rot;
+        //}
     }
 }
 
@@ -136,10 +136,10 @@ void DemoScene::HotReload(LevelData* lvdPtr)
             lightGroup_->SetPointLightPos(0, objectData.trans);
             lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
         }
-        if (objectData.type == "CAMERA") {
-            cameraPtr->eye_ = objectData.trans;
-            cameraPtr->rotation_ = objectData.rot;
-        }
+        //if (objectData.type == "CAMERA") {
+        //    cameraPtr->eye_ = objectData.trans;
+        //    cameraPtr->rotation_ = objectData.rot;
+        //}
     }
 }
 
@@ -177,9 +177,9 @@ void DemoScene::DebudGui(void)
     //ImGui::Text("rot(qua): (%f,%f,%f,%f)", pRot.x, pRot.y, pRot.z, pRot.w);
     GUI::ChildFrameEnd();
     GUI::ChildFrameBegin("camera", { 400,140 });
-    const Vector3& cPos = cameraPtr->eye_;
-    const Vector3& cRot = cameraPtr->rotation_;
-    const Vector3& cUp = cameraPtr->up_;
+    const Vector3& cPos = cameraPtr->GetCoordinatePtr()->GetPosition();
+    const Vector3& cRot = cameraPtr->GetCoordinatePtr()->GetRotation();
+    const Vector3& cUp = cameraPtr->GetCoordinatePtr()->GetMatAxisY();
     ImGui::Text("camera");
     ImGui::Text("pos: (%f,%f,%f)", cPos.x, cPos.y, cPos.z);
     ImGui::Text("up : (%f,%f,%f)", cUp.x, cUp.y, cUp.z);
