@@ -7,13 +7,13 @@ class WorldCoordinate
 {
 public:
     // íËã`
-    struct Axis3Q
+    struct Axis3
     {
         Quaternion forward;
         Quaternion right;
         Quaternion up;
 
-        Axis3Q(void)
+        Axis3(void)
         {
             forward = Math::QuaternionF::Identity();
             right = Math::QuaternionF::Identity();
@@ -27,25 +27,26 @@ public:
 
     void Update(void);
     void Reset(void);
-
-    bool is_{};
 private:
     // ïœêî
-    Vector3 eular_;
-    Vector3 scale_;
     Vector3 position_;
-    Axis3Q quaternions_;
+    Vector3 scale_;
+    Vector3 eular_;
+    Axis3 axis_;
 
     Matrix4 matWorld_;
 
 public:
     // setterÅEgetter
-
     inline void SetMatWorld(const Matrix4& matWorld) { matWorld_ = matWorld; }
-    inline void SetRotation(const Axis3Q& rotQ) { quaternions_ = rotQ; }
-    inline void SetRotation(const Vector3& rotVec) { eular_ = rotVec; }
+    inline void SetRotation(const Vector3& eular) { eular_ = eular; }
     inline void SetPosition(const Vector3& pos) { position_ = pos; }
     inline void SetScale(const Vector3& scale) { scale_ = scale; }
+
+    inline void SetAxisForward(const Quaternion& forward) { axis_.forward = forward; }
+    inline void SetAxisRight(const Quaternion& right) { axis_.right = right; }
+    inline void SetAxisUp(const Quaternion& up) { axis_.up = up; }
+    inline void SetAxis(const Axis3& axis3) { axis_ = axis3; }
 
     inline const Matrix4& GetMatWorld(void) { return matWorld_; }
     inline const Vector3& GetPosition(void) { return position_; }

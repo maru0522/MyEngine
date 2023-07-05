@@ -4,7 +4,7 @@
 using namespace Math;
 
 WorldCoordinate::WorldCoordinate(void) :
-    scale_(1.f, 1.f, 1.f), position_(0.f, 0.f, 0.f), eular_(0.f, 0.f, 0.f), quaternions_(Axis3Q())
+    scale_(1.f, 1.f, 1.f), position_(0.f, 0.f, 0.f), eular_(0.f, 0.f, 0.f), axis_(Axis3())
 {
 }
 
@@ -40,8 +40,8 @@ void WorldCoordinate::Update(void)
         //if (KEYS::IsDown(DIK_K))
         //    quaternions_.forward = Math::QuaternionF::DirectionToDirection({ 0,0,1 }, Vector3(1,0,0).normalize());
         //matRotate *= Math::QuaternionF::MakeRotateMatrix3(quaternions_.forward, quaternions_.right, quaternions_.up);
-        quaternions_.up = Math::QuaternionF::MakeAxisAngle(Vector3(0,1,0).normalize(), rady);
-        matRotate = Math::QuaternionF::MakeRotateMatrix(quaternions_.up);
+        axis_.up = Math::QuaternionF::MakeAxisAngle(Vector3(0,1,0).normalize(), rady);
+        matRotate = Math::QuaternionF::MakeRotateMatrix(axis_.up);
     }
 
     matWorld_ = Matrix::Identity();
@@ -55,7 +55,7 @@ void WorldCoordinate::Reset(void)
     scale_ = { 1.f, 1.f, 1.f };
     position_ = { 0.f, 0.f, 0.f };
     eular_ = { 0.f,0.f,0.f };
-    quaternions_ = Axis3Q();
+    axis_ = Axis3();
 
     matWorld_ = {
         1.0f, 0.0f, 0.0f, 0.0f,
