@@ -165,7 +165,7 @@ Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)
 
 Matrix4 Math::QuaternionF::MakeRotateMatrix3(const Quaternion& q1, const Quaternion& q2, const Quaternion& q3)
 {
-    Quaternion q = q1 * q2 * q3;
+    Quaternion q = q2 * q1 * q3;
     Matrix4 mat{};
 
     mat.m[0][0] = q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w;
@@ -212,12 +212,10 @@ Quaternion Math::QuaternionF::Slerp(const Quaternion& q0, const Quaternion& q1, 
 
 Quaternion Math::QuaternionF::DirectionToDirection(const Vector3& u, const Vector3& v)
 {
-    Vector3 w{ u.cross(v) };
-    Vector3 n = w.normalize();
+    float dot = Math::Vector::Dot(u.normalize(), v.normalize());
+    Vector3 w = Math::Vector::Cross(u.normalize(), v.normalize());
+    Vector3 axis = w.normalize();
 
-    Vector3 uCopy{ u }, vCopy{ v };
-
-    float theta{ std::acosf(Vector3{ uCopy.normalize() }.dot(vCopy.normalize())) };
-
-    return { n.x * std::sinf(theta / 2.f), n.y * std::sinf(theta / 2.f), n.z * std::sinf(theta / 2.f), std::cosf(theta / 2.f) };
+    float theta = std::acosf(dot);
+    return Math::QuaternionF::MakeAxisAngle(axis, theta);
 }

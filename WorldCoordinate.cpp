@@ -6,9 +6,6 @@ using namespace Math;
 WorldCoordinate::WorldCoordinate(void) :
     scale_(1.f, 1.f, 1.f), position_(0.f, 0.f, 0.f), eular_(0.f, 0.f, 0.f), quaternions_(Axis3Q())
 {
-    quaternions_.forward = Math::QuaternionF::MakeAxisAngle({ 1,0,0 },0);
-    quaternions_.right = Math::QuaternionF::MakeAxisAngle({ 0,1,0 }, 0);
-    quaternions_.up = Math::QuaternionF::MakeAxisAngle({ 0,0,1 }, 0);
 }
 
 WorldCoordinate::WorldCoordinate(const Vector3& pos, const Vector3& scale, const Vector3& rot) :
@@ -30,9 +27,9 @@ void WorldCoordinate::Update(void)
     if (KEYS::IsDown(DIK_NUMPAD6)) radx += 0.01f;
     if (KEYS::IsDown(DIK_NUMPAD3)) rady += 0.01f;
 
-    quaternions_.forward = Math::QuaternionF::MakeAxisAngle({ 1,0,0 }, radz);
-    quaternions_.right = Math::QuaternionF::MakeAxisAngle({ 0,1,0 }, radx);
-    quaternions_.up = Math::QuaternionF::MakeAxisAngle({ 0,0,1 }, rady);
+    //quaternions_.forward = Math::QuaternionF::MakeAxisAngle({ 0,0,1 }, radz);
+    //quaternions_.right = Math::QuaternionF::MakeAxisAngle({ 1,0,0 }, radx);
+    //quaternions_.up = Math::QuaternionF::MakeAxisAngle({ 0,1,0 }, rady);
 
     if (is_) {
         matRotate *= Matrix::RotationZ(eular_.z);
@@ -40,7 +37,11 @@ void WorldCoordinate::Update(void)
         matRotate *= Matrix::RotationY(eular_.y);
     }
     else {
-        matRotate *= Math::QuaternionF::MakeRotateMatrix3(quaternions_.forward, quaternions_.right, quaternions_.up);
+        //if (KEYS::IsDown(DIK_K))
+        //    quaternions_.forward = Math::QuaternionF::DirectionToDirection({ 0,0,1 }, Vector3(1,0,0).normalize());
+        //matRotate *= Math::QuaternionF::MakeRotateMatrix3(quaternions_.forward, quaternions_.right, quaternions_.up);
+        quaternions_.up = Math::QuaternionF::MakeAxisAngle(Vector3(0,1,0).normalize(), rady);
+        matRotate = Math::QuaternionF::MakeRotateMatrix(quaternions_.up);
     }
 
     matWorld_ = Matrix::Identity();

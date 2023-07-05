@@ -1,8 +1,8 @@
 #include "SimplifyImGui.h"
 
-void GUI::Begin(const string& windowName, const ImVec2& size)
+void GUI::Begin(const string& windowName, const ImVec2& firstSize)
 {
-    ImGui::SetNextWindowSize(size, ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(firstSize, ImGuiCond_FirstUseEver);
     ImGui::Begin(windowName.c_str());
 }
 

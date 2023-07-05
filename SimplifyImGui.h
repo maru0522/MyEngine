@@ -7,7 +7,7 @@ namespace GUI
     using namespace std;
 
     // begin - end
-    void Begin(const string& windowName, const ImVec2& size = { 100,100 });
+    void Begin(const string& windowName, const ImVec2& firstSize = { 100,100 });
     inline void End(void) { ImGui::End(); }
     void ChildFrameBegin(const string& windowName, const ImVec2& size = { 100,100 });
     inline void ChildFrameEnd(void) { ImGui::EndChildFrame(); }
