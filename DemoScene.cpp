@@ -202,10 +202,10 @@ void DemoScene::DebudGui(void)
     GUI::ChildFrameEnd();
     GUI::End();
 
-    //GUI::Begin("checkQuater", { 400,300 });
-    //static Vector3 dir1{ 1.f,0.f,1.f };
-    //static Vector3 dir2{ 1.f,1.f,0.f };
-    //static Quaternion qua1 = Math::QuaternionF::DirectionToDirection(dir1, dir2);
-    //ImGui::Text("%f,%f,%f,%f", qua1.x, qua1.y, qua1.z, qua1.w);
-    //GUI::End();
+    GUI::Begin("checkQuater", { 400,300 });
+    static Vector3 dir1{ 1.f,0.f,1.f };
+    static Vector3 dir2{ 1.f,1.f,0.f };
+    static Quaternion qua1 = Math::QuaternionF::DirectionToDirection(dir1, dir2);
+    ImGui::Text("%f,%f,%f,%f", qua1.x, qua1.y, qua1.z, qua1.w);
+    GUI::End();
 }
