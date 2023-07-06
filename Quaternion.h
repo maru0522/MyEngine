@@ -55,7 +55,7 @@ namespace Math {
         // クォータニオンから回転行列を求める
         Matrix4 MakeRotateMatrix(const Quaternion& q);
         // 3つのクォータニオンから回転行列を求める
-        Matrix4 MakeRotateMatrix3(const Quaternion& qx, const Quaternion& qy, const Quaternion& qz);
+        Matrix4 MakeRotateMatrix3(const Quaternion& forward, const Quaternion& right, const Quaternion& up);
 
         //球面線形補間
         Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);

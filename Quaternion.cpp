@@ -163,9 +163,9 @@ Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)
     return mat;
 }
 
-Matrix4 Math::QuaternionF::MakeRotateMatrix3(const Quaternion& qx, const Quaternion& qy, const Quaternion& qz)
+Matrix4 Math::QuaternionF::MakeRotateMatrix3(const Quaternion& forward, const Quaternion& right, const Quaternion& up)
 {
-    Quaternion q = qy * qx * qz;
+    Quaternion q = up * right * forward;
     Matrix4 mat{};
 
     mat.m[0][0] = q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z;

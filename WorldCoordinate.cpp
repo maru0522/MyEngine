@@ -22,27 +22,13 @@ void WorldCoordinate::Update(void)
 
     matScale = Mat4::Scale(scale_);
 
-    static float radx = 0;
-    static float rady = 0;
-    static float radz = 0;
-    if (KEYS::IsDown(DIK_NUMPAD9)) radz += 0.01f;
-    if (KEYS::IsDown(DIK_NUMPAD6)) radx += 0.01f;
-    if (KEYS::IsDown(DIK_NUMPAD3)) rady += 0.01f;
-
     if (isPriorityEular_) {
         matRotate *= Mat4::RotationZ(eular_.z);
         matRotate *= Mat4::RotationX(eular_.x);
         matRotate *= Mat4::RotationY(eular_.y);
     }
     else {
-        //if (KEYS::IsDown(DIK_K))
-        //    quaternions_.forward = Math::QuaternionF::DirectionToDirection({ 0,0,1 }, Vector3(1,0,0).normalize());
-        //matRotate *= Math::QuaternionF::MakeRotateMatrix3(quaternions_.forward, quaternions_.right, quaternions_.up);
-        axes_.forward = Math::QuaternionF::MakeAxisAngle(Vector3(0, 0, 1).Normalize(), radz);
-        axes_.right = Math::QuaternionF::MakeAxisAngle(Vector3(1, 0, 0).Normalize(), radx);
-        axes_.up = Math::QuaternionF::MakeAxisAngle(Vector3(0, 1, 0).Normalize(), rady);
         matRotate = Math::QuaternionF::MakeRotateMatrix3(axes_.right, axes_.up, axes_.forward);
-        //matRotate = Math::QuaternionF::MakeRotateMatrix(axes_.forward);
     }
 
     matWorld_ = Mat4::Identity();
