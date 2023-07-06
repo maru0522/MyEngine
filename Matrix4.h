@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector3.h"
 
-class Matrix4
+struct Matrix4
 {
 public:
     // ŠÖ”
@@ -23,7 +23,7 @@ const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2);
 const Vector3 operator*(const Vector3& v, const Matrix4& m);
 
 namespace Math {
-    namespace Matrix {
+    namespace Mat4 {
         // ’PˆÊs—ñ
         Matrix4 Identity();
 

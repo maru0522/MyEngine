@@ -23,7 +23,7 @@ PostEffect::PostEffect(void)
 
     // 定数バッファ
     cb_.Create();
-    cb_.GetConstBuffMap()->matWorld = Math::Matrix::Identity();
+    cb_.GetConstBuffMap()->matWorld = Math::Mat4::Identity();
     cb_.GetConstBuffMap()->color = { 1.f,1.f,1.f,1.f };
 }
 

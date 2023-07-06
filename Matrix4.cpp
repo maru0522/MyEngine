@@ -4,7 +4,7 @@
 #include <cmath> // sin cos
 
 // 単位行列を求める
-Matrix4 Math::Matrix::Identity()
+Matrix4 Math::Mat4::Identity()
 {
     static const Matrix4 result
     {
@@ -17,7 +17,7 @@ Matrix4 Math::Matrix::Identity()
 }
 
 // 拡大縮小行列を求める
-Matrix4 Math::Matrix::Scale(const Vector3& s)
+Matrix4 Math::Mat4::Scale(const Vector3& s)
 {
     Matrix4 result
     {
@@ -30,7 +30,7 @@ Matrix4 Math::Matrix::Scale(const Vector3& s)
 }
 
 // x 軸まわりの回転行列を求める
-Matrix4 Math::Matrix::RotationX(float angle)
+Matrix4 Math::Mat4::RotationX(float angle)
 {
     float sin = std::sin(angle);
     float cos = std::cos(angle);
@@ -46,7 +46,7 @@ Matrix4 Math::Matrix::RotationX(float angle)
 }
 
 // y 軸まわりの回転行列を求める
-Matrix4 Math::Matrix::RotationY(float angle)
+Matrix4 Math::Mat4::RotationY(float angle)
 {
     float sin = std::sin(angle);
     float cos = std::cos(angle);
@@ -62,7 +62,7 @@ Matrix4 Math::Matrix::RotationY(float angle)
 }
 
 // z 軸まわりの回転行列を求める
-Matrix4 Math::Matrix::RotationZ(float angle)
+Matrix4 Math::Mat4::RotationZ(float angle)
 {
     float sin = std::sin(angle);
     float cos = std::cos(angle);
@@ -78,7 +78,7 @@ Matrix4 Math::Matrix::RotationZ(float angle)
 }
 
 // 平行移動行列を求める
-Matrix4 Math::Matrix::Translation(const Vector3& t)
+Matrix4 Math::Mat4::Translation(const Vector3& t)
 {
     Matrix4 result
     {
@@ -90,7 +90,7 @@ Matrix4 Math::Matrix::Translation(const Vector3& t)
     return result;
 }
 
-Matrix4 Math::Matrix::Translate(const Matrix4& matWorld, const Vector3& t)
+Matrix4 Math::Mat4::Translate(const Matrix4& matWorld, const Vector3& t)
 {
     return Matrix4{
         matWorld.m[0][0], matWorld.m[0][1], matWorld.m[0][2], matWorld.m[0][3],
@@ -100,7 +100,7 @@ Matrix4 Math::Matrix::Translate(const Matrix4& matWorld, const Vector3& t)
     };
 }
 
-Matrix4 Math::Matrix::Transpose(const Matrix4& m)
+Matrix4 Math::Mat4::Transpose(const Matrix4& m)
 {
     Matrix4 result
     {
@@ -113,7 +113,7 @@ Matrix4 Math::Matrix::Transpose(const Matrix4& m)
 }
 
 // 座標変換（ベクトル行列の掛け算）を行うTransform 関数を作成する。　（透視変換にも対応している）
-Vector3 Math::Matrix::Transform(const Vector3& v, const Matrix4& m)
+Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 {
     float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
 
@@ -126,7 +126,7 @@ Vector3 Math::Matrix::Transform(const Vector3& v, const Matrix4& m)
     return result;
 }
 
-Matrix4 Math::Matrix::ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection)
+Matrix4 Math::Mat4::ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection)
 {
     auto axisZ{ eyeDirection.normalize() };
     auto axisX{ Math::Vector::Normalize(upDirection.cross(eyeDirection)) };
@@ -140,22 +140,22 @@ Matrix4 Math::Matrix::ViewLookToLH(const Vector3& eyePosition, const Vector3& ey
     };
 }
 
-Matrix4 Math::Matrix::ViewLookAtLH(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& upDirection)
+Matrix4 Math::Mat4::ViewLookAtLH(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& upDirection)
 {
     return ViewLookToLH(eyePosition, targetPosition - eyePosition, upDirection);
 }
 
-Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float window_width, float window_height)
+Matrix4 Math::Mat4::ProjectionOrthoGraphicLH(float window_width, float window_height)
 {
     return ProjectionOrthoGraphicLH(0, window_width, 0, window_height, 0.f, 1.f);
 }
 
-Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float window_width, float window_height, float nearZ, float farZ)
+Matrix4 Math::Mat4::ProjectionOrthoGraphicLH(float window_width, float window_height, float nearZ, float farZ)
 {
     return ProjectionOrthoGraphicLH(0, window_width, 0, window_height, nearZ, farZ);
 }
 
-Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float leftEdge, float rightEdge, float bottomEdge, float topEdge, float nearZ, float farZ)
+Matrix4 Math::Mat4::ProjectionOrthoGraphicLH(float leftEdge, float rightEdge, float bottomEdge, float topEdge, float nearZ, float farZ)
 {
     auto M00{ 2.f / (rightEdge - leftEdge) };
     auto M11{ -2.f / (topEdge - bottomEdge) };
@@ -169,7 +169,7 @@ Matrix4 Math::Matrix::ProjectionOrthoGraphicLH(float leftEdge, float rightEdge, 
     };
 }
 
-Matrix4 Math::Matrix::ProjectionPerspectiveFovLH(float fovY, float aspect, float nearZ, float farZ)
+Matrix4 Math::Mat4::ProjectionPerspectiveFovLH(float fovY, float aspect, float nearZ, float farZ)
 {
     auto scaleY = Math::Function::Cotangent(fovY / 2);
     auto scaleX = scaleY / aspect;
@@ -182,7 +182,7 @@ Matrix4 Math::Matrix::ProjectionPerspectiveFovLH(float fovY, float aspect, float
     };
 }
 
-Matrix4 Math::Matrix::ProjectionPerspectiveFovLH(float fovY, float window_width, float window_height, float nearZ, float farZ)
+Matrix4 Math::Mat4::ProjectionPerspectiveFovLH(float fovY, float window_width, float window_height, float nearZ, float farZ)
 {
     return ProjectionPerspectiveFovLH(fovY, window_width / window_height, nearZ, farZ);
 }
@@ -235,6 +235,6 @@ const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2)
 // 2項演算子 * の　オーバロード関数（ベクトルと行列の積）
 const Vector3 operator*(const Vector3& v, const Matrix4& m)
 {
-    return Math::Matrix::Transform(v, m);
+    return Math::Mat4::Transform(v, m);
 }
 

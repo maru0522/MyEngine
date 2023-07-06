@@ -149,13 +149,13 @@ void Sprite::TransferVertex(void)
 
 void Sprite::UpdateMatrix(void)
 {
-    matWorld_ = Math::Matrix::Identity();
-    Matrix4 matRotation{ Math::Matrix::Identity() };
+    matWorld_ = Math::Mat4::Identity();
+    Matrix4 matRotation{ Math::Mat4::Identity() };
 
-    matRotation *= Math::Matrix::RotationZ(rotation_);
+    matRotation *= Math::Mat4::RotationZ(rotation_);
     matWorld_ *= matRotation;
 
-    matWorld_ = Math::Matrix::Translate(matWorld_, { position_.x,position_.y,0.f });
+    matWorld_ = Math::Mat4::Translate(matWorld_, { position_.x,position_.y,0.f });
 
     if (parent_) matWorld_ *= parent_->matWorld_;
 

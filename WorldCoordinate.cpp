@@ -17,10 +17,10 @@ WorldCoordinate::WorldCoordinate(const Vector3& pos, const Vector3& scale, const
 
 void WorldCoordinate::Update(void)
 {
-    Matrix4 matScale{ Matrix::Identity() };
-    Matrix4 matRotate{ Matrix::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
 
-    matScale = Matrix::Scale(scale_);
+    matScale = Mat4::Scale(scale_);
 
     static float radx = 0;
     static float rady = 0;
@@ -30,9 +30,9 @@ void WorldCoordinate::Update(void)
     if (KEYS::IsDown(DIK_NUMPAD3)) rady += 0.01f;
 
     if (isPriorityEular_) {
-        matRotate *= Matrix::RotationZ(eular_.z);
-        matRotate *= Matrix::RotationX(eular_.x);
-        matRotate *= Matrix::RotationY(eular_.y);
+        matRotate *= Mat4::RotationZ(eular_.z);
+        matRotate *= Mat4::RotationX(eular_.x);
+        matRotate *= Mat4::RotationY(eular_.y);
     }
     else {
         //if (KEYS::IsDown(DIK_K))
@@ -45,10 +45,10 @@ void WorldCoordinate::Update(void)
         //matRotate = Math::QuaternionF::MakeRotateMatrix(axes_.forward);
     }
 
-    matWorld_ = Matrix::Identity();
+    matWorld_ = Mat4::Identity();
     matWorld_ *= matScale;
     matWorld_ *= matRotate;
-    matWorld_ = Matrix::Translate(matWorld_, position_);
+    matWorld_ = Mat4::Translate(matWorld_, position_);
 }
 
 void WorldCoordinate::Reset(void)

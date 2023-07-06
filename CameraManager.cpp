@@ -53,22 +53,22 @@ void Camera::Update(void)
 
     // ビュー行列
     if (isFollow_) {
-        matView_ = Math::Matrix::ViewLookAtLH(coordinate_.GetPosition(), *targetPtr_, coordinate_.GetMatAxisY());
+        matView_ = Math::Mat4::ViewLookAtLH(coordinate_.GetPosition(), *targetPtr_, coordinate_.GetMatAxisY());
     }
     else if (coordinate_.GetIsPriority()) {
-        matView_ = Math::Matrix::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
     }
     else { // 正面ベクトルと上ベクトルをクオータニオンから変換した奴にしといてくれ。
-        matView_ = Math::Matrix::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
     }
 
     // 射影行列
-    matProj_Perspective_ = Matrix::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
+    matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }
 
 void Camera::UpdateOrthoGraphic(void)
 {
-    matProj_OrthoGraphic_ = Matrix::ProjectionOrthoGraphicLH(WndAPI::kWidth_, WndAPI::kHeight_);
+    matProj_OrthoGraphic_ = Mat4::ProjectionOrthoGraphicLH(WndAPI::kWidth_, WndAPI::kHeight_);
 }
 
 Vector3 Camera::Move(void)
