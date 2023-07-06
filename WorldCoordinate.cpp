@@ -38,8 +38,11 @@ void WorldCoordinate::Update(void)
         //if (KEYS::IsDown(DIK_K))
         //    quaternions_.forward = Math::QuaternionF::DirectionToDirection({ 0,0,1 }, Vector3(1,0,0).normalize());
         //matRotate *= Math::QuaternionF::MakeRotateMatrix3(quaternions_.forward, quaternions_.right, quaternions_.up);
+        axes_.forward = Math::QuaternionF::MakeAxisAngle(Vector3(0, 0, 1).normalize(), radz);
+        axes_.right = Math::QuaternionF::MakeAxisAngle(Vector3(1, 0, 0).normalize(), radx);
         axes_.up = Math::QuaternionF::MakeAxisAngle(Vector3(0, 1, 0).normalize(), rady);
-        matRotate = Math::QuaternionF::MakeRotateMatrix(axes_.up);
+        matRotate = Math::QuaternionF::MakeRotateMatrix3(axes_.right, axes_.up, axes_.forward);
+        //matRotate = Math::QuaternionF::MakeRotateMatrix(axes_.forward);
     }
 
     matWorld_ = Matrix::Identity();

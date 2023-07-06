@@ -163,24 +163,24 @@ Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)
     return mat;
 }
 
-Matrix4 Math::QuaternionF::MakeRotateMatrix3(const Quaternion& q1, const Quaternion& q2, const Quaternion& q3)
+Matrix4 Math::QuaternionF::MakeRotateMatrix3(const Quaternion& qx, const Quaternion& qy, const Quaternion& qz)
 {
-    Quaternion q = q2 * q1 * q3;
+    Quaternion q = qy * qx * qz;
     Matrix4 mat{};
 
-    mat.m[0][0] = q.x * q.x + q.y * q.y - q.z * q.z - q.w * q.w;
+    mat.m[0][0] = q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z;
     mat.m[0][1] = 2 * (q.x * q.y + q.w * q.z);
     mat.m[0][2] = 2 * (q.x * q.z - q.w * q.y);
     mat.m[0][3] = 0;
 
-    mat.m[1][0] = 2 * (q.x * q.y + q.w * q.z);
-    mat.m[1][1] = q.x * q.x - q.y * q.y + q.z * q.z - q.w * q.w;
+    mat.m[1][0] = 2 * (q.x * q.y - q.w * q.z);
+    mat.m[1][1] = q.w * q.w - q.x * q.x + q.y * q.y - q.z * q.z;
     mat.m[1][2] = 2 * (q.y * q.z + q.w * q.x);
     mat.m[1][3] = 0;
 
     mat.m[2][0] = 2 * (q.x * q.z + q.w * q.y);
     mat.m[2][1] = 2 * (q.y * q.z - q.w * q.x);
-    mat.m[2][2] = q.x * q.x - q.y * q.y - q.z * q.z + q.w * q.w;
+    mat.m[2][2] = q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z;
     mat.m[2][3] = 0;
 
     mat.m[3][0] = 0;
