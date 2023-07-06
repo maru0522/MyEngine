@@ -49,10 +49,16 @@ void DemoScene::Update(void)
 
     DemoCollision(player_.get(), planet_.get());
 
+    //if (debugCamFollow_) {
+    //    cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
+    //    cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec());
+    //    cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec());
+    //}
+
     if (debugCamFollow_) {
         cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
         cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec());
-        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec());
+        cameraPtr->eyeDirection_ = player_->forwardVec_;
     }
 
     //for (auto& object : objects_) {
@@ -151,21 +157,43 @@ void DemoScene::HotReload(LevelData* lvdPtr)
 
 void DemoScene::DemoCollision(Player* player, Planet* planet)
 {
-    Vector3 toPlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
-    player->body_->coordinate_.SetAxisUp(toPlayerVec);
+    //Vector3 toPlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
+    //player->body_->coordinate_.SetAxisUp(toPlayerVec);
 
-    float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+    //float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
 
-    Vector3 currentPos = player->body_->coordinate_.GetPosition();
-    currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3() * 0.1f;
-    currentPos += toPlayerVec.Normalize() * -diff;
-    //rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
-    //player->body_->coordinate_.SetRotation(rotate);
+    //Vector3 currentPos = player->body_->coordinate_.GetPosition();
+    //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3() * 0.1f;
+    //currentPos += toPlayerVec.Normalize() * -diff;
+    ////rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
+    ////player->body_->coordinate_.SetRotation(rotate);
 
-    //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
-    //{
+    ////if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    ////{
 
-    player->body_->coordinate_.SetPosition(currentPos);
+    //player->body_->coordinate_.SetPosition(currentPos);
+    ////}
+
+
+    Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
+    player->upVec_ = center2PlayerVec.Normalize();
+
+    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    {
+        //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+        //{
+            // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+        float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+
+        Vector3 currentPos = player->body_->coordinate_.GetPosition();
+        currentPos += player->upVec_ * 0.1f;
+        //currentPos += player->upVec_ * 0.1f;
+
+        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+        currentPos += center2PlayerVec.Normalize() * -diff;// ここをマイナス符号で値反転
+
+        player->body_->coordinate_.SetPosition(currentPos);
+    }
     //}
 }
 

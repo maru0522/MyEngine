@@ -59,7 +59,8 @@ void Camera::Update(void)
         matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
     }
     else {
-        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().ExtractVector3(), coordinate_.GetUpVec().ExtractVector3());
+        //matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3());
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), eyeDirection_.Normalize(), coordinate_.GetUpVec().ExtractVector3());
     }
 
     // éÀâeçsóÒ
