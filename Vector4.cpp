@@ -6,6 +6,11 @@ float Vector4::length(void) const
     return std::sqrtf(x * x + y * y + z * z + w * w);
 }
 
+bool Vector4::isNonZero(void) const
+{
+    return x || y || z || w;
+}
+
 Vector4 Vector4::normalize(void) const
 {
     float len{ length() };

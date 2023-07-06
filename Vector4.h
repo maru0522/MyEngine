@@ -1,7 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 
-class Vector4
+struct Vector4
 {
 public:
     // 変数
@@ -14,9 +14,10 @@ public:
     Vector4(void) = default;
     constexpr Vector4(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
-    float length(void) const;                 // ノルム(長さ)を求める
     Vector4 normalize(void) const;            // 正規化する
     float dot(const Vector4& v) const;        // 内積を求める
+    float length(void) const;                 // ノルム(長さ)を求める
+    bool isNonZero(void) const;               // xyzwのどれか1つでも値が入っているか
 
     // 単項オバロ
     Vector4 operator+() const;
