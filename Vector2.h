@@ -1,6 +1,6 @@
 #pragma once
 
-class Vector2
+struct Vector2
 {
 public:
     // 変数
@@ -11,10 +11,11 @@ public:
     Vector2(void) = default;
     constexpr Vector2(float x, float y) noexcept : x(x), y(y) {}
 
-    float length(void) const;                 // ノルム(長さ)を求める
     Vector2 normalize(void) const;            // 正規化する
-    float dot(const Vector2& v) const;        // 内積を求める
     float cross(const Vector2& v) const;      // 外積を求める
+    float dot(const Vector2& v) const;        // 内積を求める
+    float length(void) const;                 // ノルム(長さ)を求める
+    bool IsNonZero(void) const;               // xyのどれか1つでも値が入っているか
 
     // 単項オバロ
     Vector2 operator+() const;
@@ -36,3 +37,12 @@ const Vector2 operator+(const Vector2& v1, const Vector2& v2);
 const Vector2 operator-(const Vector2& v1, const Vector2& v2);
 const Vector2 operator*(const Vector2& v, float s);
 const Vector2 operator/(const Vector2& v, float s);
+
+namespace Math {
+    namespace Vec2 {
+        Vector2 Normalize(const Vector2& v);
+        float Cross(const Vector2& v1, const Vector2& v2);
+        float Dot(const Vector2& v1, const Vector2& v2);
+        float Length(const Vector2& v);
+    }
+}
