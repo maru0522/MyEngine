@@ -61,6 +61,8 @@ void DemoScene::Update(void)
     //    lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //    HotReload(lvdPtr_.get());
     //}
+
+    DebugGui();
 }
 
 void DemoScene::Draw3d(void)
@@ -165,6 +167,7 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
 void DemoScene::DebugGui(void)
 {
     Gui::Begin("Debug", { 300,500 });
-    //if(Gui::)
+    ImGui::Text("camPos : (%f,%f,%f)", cameraPtr->eye_.x, cameraPtr->eye_.y, cameraPtr->eye_.z);
+    ImGui::Text("forwardV : (%f,%f,%f)", cameraPtr->eyeDirection_.x, cameraPtr->eyeDirection_.y, cameraPtr->eyeDirection_.z);
     Gui::End();
 }
