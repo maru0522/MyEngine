@@ -28,7 +28,7 @@ void WorldCoordinate::Update(void)
         matRotate *= Mat4::RotationY(eular_.y);
     }
     else {
-        matRotate = Math::QuaternionF::MakeRotateMatrix3(axes_.right, axes_.up, axes_.forward);
+        matRotate = Math::QuaternionF::MakeRotateMatrix3(axes_.forward,axes_.right, axes_.up);
     }
 
     matWorld_ = Mat4::Identity();
