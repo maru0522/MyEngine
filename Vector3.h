@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-class Vector3
+struct Vector3
 {
 public:
     // 変数
@@ -13,10 +13,11 @@ public:
     Vector3(void) = default;
     constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
 
-    float length(void) const;                 // ノルム(長さ)を求める
     Vector3 normalize(void) const;            // 正規化する
-    float dot(const Vector3& v) const;        // 内積を求める
     Vector3 cross(const Vector3& v) const;    // 外積を求める
+    float dot(const Vector3& v) const;        // 内積を求める
+    float length(void) const;                 // ノルム(長さ)を求める
+    bool IsNonZero(void) const;               // xyzのどれか1つでも値が入っているか
 
     // 単項オバロ
     Vector3 operator+() const;
@@ -40,11 +41,11 @@ const Vector3 operator*(const Vector3& v, float s);
 const Vector3 operator/(const Vector3& v, float s);
 
 namespace Math {
-    namespace Vector {
-        float Length(const Vector3& v);
+    namespace Vec3 {
         Vector3 Normalize(const Vector3& v);
-        float Dot(const Vector3& v1, const Vector3& v2);
         Vector3 Cross(const Vector3& v1, const Vector3& v2);
+        float Dot(const Vector3& v1, const Vector3& v2);
+        float Length(const Vector3& v);
 
         // 補完関数
         const Vector3 lerp(const Vector3& start, const Vector3& end, const float t); // 線形補完（1次関数補完）

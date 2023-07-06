@@ -7,6 +7,11 @@ float Vector3::length(void) const
     return std::sqrtf(x * x + y * y + z * z);
 }
 
+bool Vector3::IsNonZero(void) const
+{
+    return x || y || z;
+}
+
 // ベクトルを正規化する(単位ベクトルに)する
 Vector3 Vector3::normalize(void) const
 {
@@ -112,12 +117,12 @@ const Vector3 operator/(const Vector3& v, float s)
     return temp /= s;
 }
 
-float Math::Vector::Length(const Vector3& v)
+float Math::Vec3::Length(const Vector3& v)
 {
     return std::sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-Vector3 Math::Vector::Normalize(const Vector3& v)
+Vector3 Math::Vec3::Normalize(const Vector3& v)
 {
     float len{ Length(v) };
     if (len != 0) {
@@ -126,29 +131,29 @@ Vector3 Math::Vector::Normalize(const Vector3& v)
     return v;
 }
 
-float Math::Vector::Dot(const Vector3& v1, const Vector3& v2)
+float Math::Vec3::Dot(const Vector3& v1, const Vector3& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-Vector3 Math::Vector::Cross(const Vector3& v1, const Vector3& v2)
+Vector3 Math::Vec3::Cross(const Vector3& v1, const Vector3& v2)
 {
     return Vector3{ v1.y * v2.z - v1.z * v2.y,
                     v1.z * v2.x - v1.x * v2.z,
                     v1.x * v2.y - v1.y * v2.x };
 }
 
-const Vector3 Math::Vector::lerp(const Vector3& start, const Vector3& end, const float t)
+const Vector3 Math::Vec3::lerp(const Vector3& start, const Vector3& end, const float t)
 {
     return start * (1.0f - t) + end * t;
 }
 
-const Vector3 Math::Vector::bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t)
+const Vector3 Math::Vec3::bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t)
 {
     return lerp(lerp(start, controlPoint, t), lerp(controlPoint, end, t), t);
 }
 
-const Vector3 Math::Vector::bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t)
+const Vector3 Math::Vec3::bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t)
 {
     return lerp(
         lerp(lerp(start, controlPoint1, t), lerp(controlPoint1, controlPoint2, t), t),	// start
@@ -156,7 +161,7 @@ const Vector3 Math::Vector::bezier3(const Vector3& start, const Vector3& control
         t);
 }
 
-Vector3 Math::Vector::splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t)
+Vector3 Math::Vec3::splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t)
 {
     size_t n = points.size() - 2;
 

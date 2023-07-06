@@ -129,8 +129,8 @@ Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 Matrix4 Math::Mat4::ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection)
 {
     auto axisZ{ eyeDirection.normalize() };
-    auto axisX{ Math::Vector::Normalize(upDirection.cross(eyeDirection)) };
-    auto axisY{ Math::Vector::Normalize(axisZ.cross(axisX)) };
+    auto axisX{ Math::Vec3::Normalize(upDirection.cross(eyeDirection)) };
+    auto axisY{ Math::Vec3::Normalize(axisZ.cross(axisX)) };
 
     return Matrix4{
                         axisX.x,                 axisY.x,                 axisZ.x, 0,
