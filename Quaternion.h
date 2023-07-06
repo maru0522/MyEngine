@@ -13,13 +13,16 @@ public: // 変数
     // 関数
     Quaternion(void) = default;
     constexpr Quaternion(const Vector3& v) noexcept : x(v.x), y(v.y), z(v.z), w(0) {}
+    constexpr Quaternion(const Vector3& v, float w) noexcept : x(v.x), y(v.y), z(v.z), w(w) {}
     constexpr Quaternion(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
-    Quaternion Conjugate(void) const;
-    float Norm(void) const;
     Quaternion Normalize(void) const;
-    float Dot(const Quaternion& q) const;
+    Quaternion Conjugate(void) const;
     Quaternion Inverse(void) const;
+    float Dot(const Quaternion& q) const;
+    float Length(void) const;
+
+    Vector3 ExtractVector3(void) const;
 
     // 単項演算子オーバーロード
     Quaternion operator+() const;
@@ -48,9 +51,13 @@ namespace Math {
         Quaternion MakeAxisAngle(const Vector3& axis, float radian);
         // オイラー角からクォータニオン
         Quaternion EulerToQuaternion(const Vector3& eular);
+        // ベクトル成分だけで外積
+        Quaternion CrossVector3Part(const Quaternion& q1, const Quaternion& q2, float theta = 0.f);
 
         // ベクトルをクォータニオンで回転させた結果のベクトルを求める
         Vector3 RotateVector(const Vector3& v, const Quaternion& q);
+        // ベクトルをクォータニオンから取り出す
+        Vector3 ExtractVector3(const Quaternion& q);
 
         // クォータニオンから回転行列を求める
         Matrix4 MakeRotateMatrix(const Quaternion& q);

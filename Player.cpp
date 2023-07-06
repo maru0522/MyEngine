@@ -3,9 +3,10 @@
 
 Player::Player(void)
 {
-    body_->coordinate_.SetPosition({ 0,20,0 });
     sphereCollider_.radius = 1.f;
-    upVec_ = { 0,1,0 };
+    body_->coordinate_.SetPosition({ 0,20,0 });
+    body_->coordinate_.SetAxisForward({ 0,0,1,0 });
+    body_->coordinate_.SetAxisUp({ 0,1,0,0 });
 }
 
 void Player::Update(void)
@@ -14,19 +15,25 @@ void Player::Update(void)
 
     sphereCollider_.center = body_->coordinate_.GetPosition();
 
+    Quaternion right = Math::QuaternionF::CrossVector3Part(body_->coordinate_.GetUpVec(), body_->coordinate_.GetForwardVec(), body_->coordinate_.GetRightVec().w);
+    body_->coordinate_.SetAxisRight(right.Normalize());
+    Quaternion forward = Math::QuaternionF::CrossVector3Part(right.Normalize(), body_->coordinate_.GetUpVec());
+    body_->coordinate_.SetAxisForward(forward.Normalize());
+    body_->coordinate_.SetAxisUp(body_->coordinate_.GetUpVec().Normalize());
+
     // À•WŒvŽZ
     //Vector3 gravity = -upVec_;
     //gravity *= 0.1f;
 
-    Vector3 velocity{};
-    if (KEYS::IsDown(DIK_A)) velocity.x -= 1;
-    if (KEYS::IsDown(DIK_D)) velocity.x += 1;
-    if (KEYS::IsDown(DIK_W)) velocity.y += 1;
-    if (KEYS::IsDown(DIK_S)) velocity.y -= 1;
+    velocity_ = { 0,0,0 };
+    if (KEYS::IsDown(DIK_W)) velocity_ += forward.ExtractVector3();
+    if (KEYS::IsDown(DIK_S)) velocity_ -= forward.ExtractVector3();
+    if (KEYS::IsDown(DIK_A)) velocity_ -= right.ExtractVector3();
+    if (KEYS::IsDown(DIK_D)) velocity_ += right.ExtractVector3();
 
     Vector3 currentPos = body_->coordinate_.GetPosition();
     //currentPos += gravity;
-    currentPos += velocity;
+    currentPos += velocity_;
 
     body_->coordinate_.SetPosition(currentPos);
 }

@@ -6,15 +6,20 @@ Quaternion Quaternion::Conjugate() const
     return Quaternion{ -x,-y,-z,w };
 }
 
-float Quaternion::Norm() const
+float Quaternion::Length() const
 {
     return std::sqrtf(w * w + x * x + y * y + z * z);
+}
+
+Vector3 Quaternion::ExtractVector3(void) const
+{
+    return Vector3(x, y, z);
 }
 
 Quaternion Quaternion::Normalize(void) const
 {
     Quaternion tmp{ *this };
-    float len{ Norm() };
+    float len{ Length() };
     if (len != 0) {
         return tmp / len;
     }
@@ -28,7 +33,7 @@ float Quaternion::Dot(const Quaternion& q) const
 
 Quaternion Quaternion::Inverse(void) const
 {
-    return Quaternion{ this->Conjugate() / (this->Norm() * this->Norm()) };
+    return Quaternion{ this->Conjugate() / (this->Length() * this->Length()) };
 }
 
 Quaternion Quaternion::operator+() const
@@ -128,12 +133,26 @@ Quaternion Math::QuaternionF::EulerToQuaternion(const Vector3& eular)
     return qx * qy * qz;
 }
 
+Quaternion Math::QuaternionF::CrossVector3Part(const Quaternion& q1, const Quaternion& q2, float theta)
+{
+    Vector3 v{ q1.y * q2.z - q1.z * q2.y,
+               q1.z * q2.x - q1.x * q2.z,
+               q1.x * q2.y - q1.y * q2.x };
+
+    return Quaternion(v, theta);
+}
+
 Vector3 Math::QuaternionF::RotateVector(const Vector3& v, const Quaternion& q)
 {
     Quaternion tmp = q * Quaternion{ v.x,v.y,v.z,0 };
     Quaternion result = tmp * q.Conjugate();
 
     return Vector3(result.x, result.y, result.z);
+}
+
+Vector3 Math::QuaternionF::ExtractVector3(const Quaternion& q)
+{
+    return Vector3(q.x, q.y, q.w);
 }
 
 Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)

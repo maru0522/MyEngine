@@ -58,8 +58,8 @@ void Camera::Update(void)
     else if (coordinate_.GetIsPriority()) {
         matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
     }
-    else { // 正面ベクトルと上ベクトルをクオータニオンから変換した奴にしといてくれ。
-        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetMatAxisZ(), coordinate_.GetMatAxisY());
+    else {
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().ExtractVector3(), coordinate_.GetUpVec().ExtractVector3());
     }
 
     // 射影行列

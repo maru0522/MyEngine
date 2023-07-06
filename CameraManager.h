@@ -21,6 +21,7 @@ private:
 
     // •Ï”
     WorldCoordinate coordinate_;
+
     Matrix4 matProj_OrthoGraphic_;
     Matrix4 matProj_Perspective_;
     Matrix4 matView_;

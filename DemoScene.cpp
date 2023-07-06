@@ -47,7 +47,13 @@ void DemoScene::Update(void)
     player_->Update();
     planet_->Update();
 
-    //DemoCollision(player_.get(), planet_.get());
+    DemoCollision(player_.get(), planet_.get());
+
+    if (debugCamFollow_) {
+        cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
+        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec());
+        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec());
+    }
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -143,25 +149,25 @@ void DemoScene::HotReload(LevelData* lvdPtr)
     }
 }
 
-//void DemoScene::DemoCollision(Player* player, Planet* planet)
-//{
-//    Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
-//    player->upVec_ = center2PlayerVec.normalize();
-//
-//    Quaternion upVec(center2PlayerVec.normalize());
-//    player->body_->coordinate_.SetRotation(upVec);
-//
-//    //rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
-//    //player->body_->coordinate_.SetRotation(rotate);
-//
-//    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
-//    {
-//        Vector3 currentPos = player->body_->coordinate_.GetPosition();
-//        currentPos += player->upVec_ * 0.1f;
-//
-//        player->body_->coordinate_.SetPosition(currentPos);
-//    }
-//}
+void DemoScene::DemoCollision(Player* player, Planet* planet)
+{
+    Vector3 toPlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
+    player->body_->coordinate_.SetAxisUp(toPlayerVec);
+
+    float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+
+    Vector3 currentPos = player->body_->coordinate_.GetPosition();
+    currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3() * 0.1f;
+    currentPos += toPlayerVec.Normalize() * -diff;
+    //rotate.z = -std::asinf(player->upVec_.z / std::sqrtf(player->upVec_.x * player->upVec_.x + player->upVec_.y * player->upVec_.y) + player->upVec_.z * player->upVec_.z);
+    //player->body_->coordinate_.SetRotation(rotate);
+
+    //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    //{
+
+    player->body_->coordinate_.SetPosition(currentPos);
+    //}
+}
 
 void DemoScene::DebudGui(void)
 {
@@ -194,6 +200,12 @@ void DemoScene::DebudGui(void)
 
     GUI::ChildFrameBegin("other", { 400,200 });
     ImGui::Text("other");
+    if (GUI::ButtonTrg("camFollow"))
+        debugCamFollow_ ?
+        debugCamFollow_ = false :
+        debugCamFollow_ = true;
+    ImGui::Text(debugCamFollow_ ? "debugCamFollow : true" : "debugCamFollow : false");
+
     if (GUI::ButtonTrg("drawPlanet"))
         debugPlanetDraw_ ?
         debugPlanetDraw_ = false :
