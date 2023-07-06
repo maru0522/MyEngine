@@ -9,6 +9,9 @@ Player::Player(void)
     body_->coordinate_.SetAxisRight({ 1,0,0,0 });
     body_->coordinate_.SetAxisUp({ 0,1,0,0 });
     body_->coordinate_.SetIsPriority(true);
+    //forwardVec_ = { 0,0,1 };
+    //rightVec_ = { 1,0,0 };
+    //upVec_ = { 0,1,0 };
 }
 
 void Player::Update(void)
@@ -23,14 +26,20 @@ void Player::Update(void)
     //body_->coordinate_.SetAxisForward(forward.Normalize());
     //body_->coordinate_.SetAxisUp(body_->coordinate_.GetUpVec().Normalize());
 
-    rightVec_ = Math::Vec3::Cross(upVec_, forwardVec_);
-    rightVec_ = rightVec_.Normalize();
-    forwardVec_ = Math::Vec3::Cross(rightVec_, upVec_);
-    forwardVec_ = forwardVec_.Normalize();
-    upVec_ = upVec_.Normalize();
+    //rightVec_ = Math::Vec3::Cross(upVec_, forwardVec_);
+    //rightVec_ = rightVec_.Normalize();
+    //forwardVec_ = Math::Vec3::Cross(rightVec_, upVec_);
+    //forwardVec_ = forwardVec_.Normalize();
+    //upVec_ = upVec_.Normalize();
+
+    Quaternion right = Math::QuaternionF::CrossVector3Part(body_->coordinate_.GetUpVec(), body_->coordinate_.GetForwardVec()).Normalize();
+    body_->coordinate_.SetAxisRight(right);
+    Quaternion forward = Math::QuaternionF::CrossVector3Part(body_->coordinate_.GetRightVec(), body_->coordinate_.GetUpVec()).Normalize();
+    body_->coordinate_.SetAxisForward(forward);
+    body_->coordinate_.SetAxisUp(body_->coordinate_.GetUpVec().ExtractVector3().Normalize());
 
     // À•WŒvŽZ
-    Vector3 gravity = -upVec_;
+    Vector3 gravity = -body_->coordinate_.GetUpVec().ExtractVector3();
     gravity *= 0.1f;
 
     //velocity_ = { 0,0,0 };
@@ -40,13 +49,13 @@ void Player::Update(void)
     //if (KEYS::IsDown(DIK_D)) velocity_ += right.ExtractVector3();
 
     velocity_ = { 0.f,0.f,0.f };
-    if (KEYS::IsDown(DIK_W)) velocity_ += forwardVec_;
-    if (KEYS::IsDown(DIK_S)) velocity_ -= forwardVec_;
-    if (KEYS::IsDown(DIK_A)) velocity_ -= rightVec_;
-    if (KEYS::IsDown(DIK_D)) velocity_ += rightVec_;
+    velocity_ += gravity;
+    if (KEYS::IsDown(DIK_W)) velocity_ += forward.ExtractVector3();
+    if (KEYS::IsDown(DIK_S)) velocity_ -= forward.ExtractVector3();
+    if (KEYS::IsDown(DIK_A)) velocity_ -= right.ExtractVector3();
+    if (KEYS::IsDown(DIK_D)) velocity_ += right.ExtractVector3();
 
     Vector3 currentPos = body_->coordinate_.GetPosition();
-    currentPos += gravity;
     currentPos += velocity_;
 
     body_->coordinate_.SetPosition(currentPos);

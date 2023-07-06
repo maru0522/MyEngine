@@ -20,6 +20,7 @@ void Camera::Update(void)
     Vector3 currentPos = coordinate_.GetPosition();
     Vector3 velocity = Move();
     Vector3 rotation{};
+    Quaternion eyeDir = coordinate_.GetForwardVec();
 
     // debugCamera
     if (isDebugMode_) {
@@ -49,6 +50,7 @@ void Camera::Update(void)
     coordinate_.Reset();
     coordinate_.SetPosition(currentPos + velocity);
     coordinate_.SetRotation(rotation);
+    coordinate_.SetAxisForward(eyeDir);
     coordinate_.Update();
 
     // ビュー行列
@@ -60,7 +62,7 @@ void Camera::Update(void)
     }
     else {
         //matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3());
-        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), eyeDirection_.Normalize(), coordinate_.GetUpVec().ExtractVector3());
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3());
     }
 
     // 射影行列

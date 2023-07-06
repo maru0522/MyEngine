@@ -57,8 +57,8 @@ void DemoScene::Update(void)
 
     if (debugCamFollow_) {
         cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
-        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec());
-        cameraPtr->eyeDirection_ = player_->forwardVec_;
+        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec().ExtractVector3().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize());
     }
 
     //for (auto& object : objects_) {
@@ -176,24 +176,20 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
 
 
     Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
-    player->upVec_ = center2PlayerVec.Normalize();
+    player->body_->coordinate_.SetAxisUp(center2PlayerVec.Normalize());
 
-    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
-    {
-        //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
-        //{
-            // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+    //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    //{
+        // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+    float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
 
-        Vector3 currentPos = player->body_->coordinate_.GetPosition();
-        currentPos += player->upVec_ * 0.1f;
-        //currentPos += player->upVec_ * 0.1f;
+    Vector3 currentPos = player->body_->coordinate_.GetPosition();
+    //currentPos += player->upVec_ * 0.1f;
 
-        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-        currentPos += center2PlayerVec.Normalize() * -diff;// ここをマイナス符号で値反転
+    // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+    currentPos += center2PlayerVec.Normalize() * -diff;// ここをマイナス符号で値反転
 
-        player->body_->coordinate_.SetPosition(currentPos);
-    }
+    player->body_->coordinate_.SetPosition(currentPos);
     //}
 }
 
@@ -219,6 +215,8 @@ void DemoScene::DebudGui(void)
     ImGui::Text("up : (%f,%f,%f)", cUp.x, cUp.y, cUp.z);
     ImGui::Text("rot(rad): (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
     ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(cRot.x), ToDegree(cRot.y), ToDegree(cRot.z));
+    Vector3 f = cameraPtr->GetCoordinatePtr()->GetForwardVec().ExtractVector3();
+    ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y,f.z);
     if (GUI::ButtonTrg("camera"))
         debugCamFollow_ ?
         debugCamFollow_ = false :
@@ -240,12 +238,5 @@ void DemoScene::DebudGui(void)
         debugPlanetDraw_ = true;
     ImGui::Text(debugPlanetDraw_ ? "debugPlanetDraw : true" : "debugPlanetDraw : false");
     GUI::ChildFrameEnd();
-    GUI::End();
-
-    GUI::Begin("checkQuater", { 400,300 });
-    static Vector3 dir1{ 1.f,0.f,1.f };
-    static Vector3 dir2{ 1.f,1.f,0.f };
-    static Quaternion qua1 = Math::QuaternionF::DirectionToDirection(dir1, dir2);
-    ImGui::Text("%f,%f,%f,%f", qua1.x, qua1.y, qua1.z, qua1.w);
     GUI::End();
 }
