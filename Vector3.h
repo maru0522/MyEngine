@@ -13,10 +13,10 @@ public:
     Vector3(void) = default;
     constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
 
-    Vector3 normalize(void) const;            // 正規化する
-    Vector3 cross(const Vector3& v) const;    // 外積を求める
-    float dot(const Vector3& v) const;        // 内積を求める
-    float length(void) const;                 // ノルム(長さ)を求める
+    Vector3 Normalize(void) const;            // 正規化する
+    Vector3 Cross(const Vector3& v) const;    // 外積を求める
+    float Dot(const Vector3& v) const;        // 内積を求める
+    float Length(void) const;                 // ノルム(長さ)を求める
     bool IsNonZero(void) const;               // xyzのどれか1つでも値が入っているか
 
     // 単項オバロ

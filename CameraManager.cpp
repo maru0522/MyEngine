@@ -35,14 +35,14 @@ void Camera::Update(void)
         // 平行移動
         if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してる
             const float moveSpeed = 0.05f;
-            velocity += coordinate_.GetMatAxisX().normalize() * -mouseVelocity.x * moveSpeed;
-            velocity += coordinate_.GetMatAxisY().normalize() * mouseVelocity.y * moveSpeed;
+            velocity += coordinate_.GetMatAxisX().Normalize() * -mouseVelocity.x * moveSpeed;
+            velocity += coordinate_.GetMatAxisY().Normalize() * mouseVelocity.y * moveSpeed;
         }
 
         // 前後移動
         if (!Mouse::IsDown(Mouse::Click::RIGHT) && !Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してない
             const float moveSpeed = 0.01f;
-            velocity += coordinate_.GetMatAxisZ().normalize() * Mouse::GetScroll() * moveSpeed;
+            velocity += coordinate_.GetMatAxisZ().Normalize() * Mouse::GetScroll() * moveSpeed;
         }
     }
 

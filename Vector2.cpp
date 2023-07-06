@@ -1,7 +1,7 @@
 #include "Vector2.h"
 #include <cmath>
 
-float Vector2::length(void) const
+float Vector2::Length(void) const
 {
     return std::sqrtf(x * x + y * y);
 }
@@ -11,21 +11,21 @@ bool Vector2::IsNonZero(void) const
     return x || y;
 }
 
-Vector2 Vector2::normalize(void) const
+Vector2 Vector2::Normalize(void) const
 {
-    float len{ length() };
+    float len{ Length() };
     if (len != 0) {
         return *this / len;
     }
     return *this;
 }
 
-float Vector2::dot(const Vector2& v) const
+float Vector2::Dot(const Vector2& v) const
 {
     return x * v.x + y * v.y;
 }
 
-float Vector2::cross(const Vector2& v) const
+float Vector2::Cross(const Vector2& v) const
 {
     return x * v.y - y * v.x;
 }

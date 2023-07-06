@@ -39,7 +39,7 @@ private:
 
 public:
     // setterÅEgetter
-    inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.normalize(); }
+    inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.Normalize(); }
     inline void SetLightPos(const Vector3& lightPos) { lightPos_ = lightPos; }
     inline void SetLightColor(const Vector3& lightcolor) { lightColor_ = lightcolor; }
     inline void SetLightAtten(const Vector3& lightAtten) { lightAtten_ = lightAtten; }

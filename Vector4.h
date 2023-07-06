@@ -14,9 +14,9 @@ public:
     Vector4(void) = default;
     constexpr Vector4(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
-    Vector4 normalize(void) const;            // ³‹K‰»‚·‚é
-    float dot(const Vector4& v) const;        // “àÏ‚ğ‹‚ß‚é
-    float length(void) const;                 // ƒmƒ‹ƒ€(’·‚³)‚ğ‹‚ß‚é
+    Vector4 Normalize(void) const;            // ³‹K‰»‚·‚é
+    float Dot(const Vector4& v) const;        // “àÏ‚ğ‹‚ß‚é
+    float Length(void) const;                 // ƒmƒ‹ƒ€(’·‚³)‚ğ‹‚ß‚é
     bool isNonZero(void) const;               // xyzw‚Ì‚Ç‚ê‚©1‚Â‚Å‚à’l‚ª“ü‚Á‚Ä‚¢‚é‚©
 
     // ’P€ƒIƒoƒ

@@ -2,7 +2,7 @@
 #include <cmath>
 
 // ベクトルの長さを求める
-float Vector3::length(void) const
+float Vector3::Length(void) const
 {
     return std::sqrtf(x * x + y * y + z * z);
 }
@@ -13,9 +13,9 @@ bool Vector3::IsNonZero(void) const
 }
 
 // ベクトルを正規化する(単位ベクトルに)する
-Vector3 Vector3::normalize(void) const
+Vector3 Vector3::Normalize(void) const
 {
-    float len{ length() };
+    float len{ Length() };
     if (len != 0) {
         return *this / len;
     }
@@ -23,13 +23,13 @@ Vector3 Vector3::normalize(void) const
 }
 
 // 内積を求める
-float Vector3::dot(const Vector3& v) const
+float Vector3::Dot(const Vector3& v) const
 {
     return x * v.x + y * v.y + z * v.z;
 }
 
 // 外積を求める
-Vector3 Vector3::cross(const Vector3& v) const
+Vector3 Vector3::Cross(const Vector3& v) const
 {
     return Vector3{ y * v.z - z * v.y,
                     z * v.x - x * v.z,

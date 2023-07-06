@@ -212,9 +212,9 @@ Quaternion Math::QuaternionF::Slerp(const Quaternion& q0, const Quaternion& q1, 
 
 Quaternion Math::QuaternionF::DirectionToDirection(const Vector3& u, const Vector3& v)
 {
-    float dot = Math::Vec3::Dot(u.normalize(), v.normalize());
-    Vector3 w = Math::Vec3::Cross(u.normalize(), v.normalize());
-    Vector3 axis = w.normalize();
+    float dot = Math::Vec3::Dot(u.Normalize(), v.Normalize());
+    Vector3 w = Math::Vec3::Cross(u.Normalize(), v.Normalize());
+    Vector3 axis = w.Normalize();
 
     float theta = std::acosf(dot);
     return Math::QuaternionF::MakeAxisAngle(axis, theta);

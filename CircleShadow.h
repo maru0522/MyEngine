@@ -37,7 +37,7 @@ public:
     // setterÅEgetter
     inline void SetAtten(const Vector3& atten) { atten_ = atten; }
     inline void SetIsActive(bool isActive) { isActive_ = isActive; }
-    inline void SetDir(const Vector3& dir) { dir_ = dir.normalize(); }
+    inline void SetDir(const Vector3& dir) { dir_ = dir.Normalize(); }
     inline void SetCasterPos(const Vector3& casterPos) { casterPos_ = casterPos; }
     inline void SetDisctanceCasterLight(float distanceCasterLight) { distanceCasterLight_ = distanceCasterLight; }
     inline void SetFactorAngle(const Vector2& factorAngle) { factorAngleCos_ = { std::cosf(toRad(factorAngle.x)), std::cosf(toRad(factorAngle.y)) }; }

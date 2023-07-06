@@ -10,7 +10,7 @@ void Mesh::CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices)
         for (uint16_t idx : v) {
             normal += {vertices[idx].normal.x, vertices[idx].normal.y, vertices[idx].normal.z };
         }
-        normal = (normal / (float)v.size()).normalize();
+        normal = (normal / (float)v.size()).Normalize();
         // ã§í ñ@ê¸ÇégópÇ∑ÇÈÇ∑Ç◊ÇƒÇÃ
         for (uint16_t idx : v) {
             vertices[idx].normal = { normal.x,normal.y,normal.z };

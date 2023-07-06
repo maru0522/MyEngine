@@ -1,7 +1,7 @@
 #include "Vector4.h"
 #include <cmath>
 
-float Vector4::length(void) const
+float Vector4::Length(void) const
 {
     return std::sqrtf(x * x + y * y + z * z + w * w);
 }
@@ -11,16 +11,16 @@ bool Vector4::isNonZero(void) const
     return x || y || z || w;
 }
 
-Vector4 Vector4::normalize(void) const
+Vector4 Vector4::Normalize(void) const
 {
-    float len{ length() };
+    float len{ Length() };
     if (len != 0) {
         return *this / len;
     }
     return *this;
 }
 
-float Vector4::dot(const Vector4& v) const
+float Vector4::Dot(const Vector4& v) const
 {
     return x * v.x + y * v.y + z * v.z + w * v.w;
 }
