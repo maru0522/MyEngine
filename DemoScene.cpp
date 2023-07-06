@@ -216,7 +216,9 @@ void DemoScene::DebudGui(void)
     ImGui::Text("rot(rad): (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
     ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(cRot.x), ToDegree(cRot.y), ToDegree(cRot.z));
     Vector3 f = cameraPtr->GetCoordinatePtr()->GetForwardVec().ExtractVector3();
+    Vector3 u = cameraPtr->GetCoordinatePtr()->GetUpVec().ExtractVector3();
     ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y,f.z);
+    ImGui::Text("upV: (%f,%f,%f)", u.x, u.y,u.z);
     if (GUI::ButtonTrg("camera"))
         debugCamFollow_ ?
         debugCamFollow_ = false :
