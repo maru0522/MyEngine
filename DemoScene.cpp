@@ -9,6 +9,8 @@ void DemoScene::Initialize(void)
     cameraPtr->GetCoordinatePtr()->SetPosition({ 0,0,-20 });
     // カメラのデバッグカメラモードをON
     cameraPtr->SetIsDebugMode(true);
+    // 座標計算法をクォータニオン優先
+    //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
     // カメラをマネージャーにセット
     CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
 
@@ -56,7 +58,7 @@ void DemoScene::Update(void)
     //}
 
     if (debugCamFollow_) {
-        cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
+        cameraPtr->GetCoordinatePtr()->SetPosition(player_->body_->coordinate_.GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
         cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec().ExtractVector3().Normalize());
         cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize());
     }

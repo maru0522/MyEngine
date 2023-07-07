@@ -16,7 +16,6 @@ public:
     //** cameraManageróp
     void UpdateOrthoGraphic(void);
 
-    //Vector3 eyeDirection_;
 private:
     Vector3 Move(void);
 
@@ -69,7 +68,7 @@ private:
 public:
     // ä÷êî
     static CameraManager* GetInstance(void);
-    
+
     void Update(void);
 
     // setter

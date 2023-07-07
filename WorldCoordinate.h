@@ -61,10 +61,12 @@ public:
 
     inline Vector3* GetPosPtr(void) { return &position_; }
 
+    // 行列から結果的な軸ベクトルを抜き出す。
     inline Vector3 GetMatAxisX(void) const { return { matWorld_.m[0][0],matWorld_.m[0][1],matWorld_.m[0][2] }; }
     inline Vector3 GetMatAxisY(void) const { return { matWorld_.m[1][0],matWorld_.m[1][1],matWorld_.m[1][2] }; }
     inline Vector3 GetMatAxisZ(void) const { return { matWorld_.m[2][0],matWorld_.m[2][1],matWorld_.m[2][2] }; }
 
+    // 自分で設定したベクトルを抜き出す。
     inline const Quaternion& GetForwardVec(void) { return axes_.forward; }
     inline const Quaternion& GetRightVec(void) { return axes_.right; }
     inline const Quaternion& GetUpVec(void) { return axes_.up; }
