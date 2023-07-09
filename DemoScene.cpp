@@ -58,9 +58,9 @@ void DemoScene::Update(void)
     //}
 
     if (debugCamFollow_) {
-        cameraPtr->GetCoordinatePtr()->SetPosition(player_->body_->coordinate_.GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
-        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec().ExtractVector3().Normalize());
-        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().ExtractVector3().Normalize() * 8.f);
+        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().ExtractVector3().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().ExtractVector3().Normalize());
     }
 
     //for (auto& object : objects_) {
@@ -106,9 +106,9 @@ void DemoScene::DeployObj(LevelData* lvdPtr)
     for (auto& objectData : lvdPtr->objects_) {
         if (objectData.type == "MESH") {
             objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
-            objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
+            objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
             //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
-            objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
+            objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
             objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
         }
         if (objectData.type == "LIGHT") {
@@ -132,14 +132,14 @@ void DemoScene::HotReload(LevelData* lvdPtr)
         if (objectData.type == "MESH") {
             if (objects_.find(objectData.name) == objects_.end()) {
                 objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
-                objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
+                objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
                 //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
-                objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
+                objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
                 objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
             }
-            objects_[objectData.name]->coordinate_.SetPosition(objectData.trans);
+            objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
             //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
-            objects_[objectData.name]->coordinate_.SetScale(objectData.scale);
+            objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
             objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
         }
         if (objectData.type == "LIGHT") {
@@ -177,21 +177,21 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
     ////}
 
 
-    Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
-    player->body_->coordinate_.SetAxisUp(center2PlayerVec.Normalize());
+    Vector3 center2PlayerVec = player->GetSphereCollider().center - planet->sphereCollider_.center;
+    player->GetCoordinatePtr()->SetAxisUp(center2PlayerVec.Normalize());
 
-    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    if (Collision::SphereToSphere(player->GetSphereCollider(), planet->sphereCollider_))
     {
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+        float diff = Vector3(player->GetSphereCollider().center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->GetSphereCollider().radius;
 
-        Vector3 currentPos = player->body_->coordinate_.GetPosition();
+        Vector3 currentPos = player->GetCoordinatePtr()->GetPosition();
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
         currentPos += center2PlayerVec.Normalize() * -diff; // ここをマイナス符号で値反転
 
-        player->body_->coordinate_.SetPosition(currentPos);
+        player->GetCoordinatePtr()->SetPosition(currentPos);
     }
 }
 
@@ -200,9 +200,9 @@ void DemoScene::DebudGui(void)
     using namespace Math::Function;
     GUI::Begin("demoInfo", { 200,400 });
     GUI::ChildFrameBegin("player", { 400,100 });
-    const Vector3& pPos = player_->body_->coordinate_.GetPosition();
+    const Vector3& pPos = player_->GetCoordinatePtr()->GetPosition();
     //const Quaternion& pRot = player_->body_->coordinate_.GetRotation();
-    const Vector3& pSca = player_->body_->coordinate_.GetScale();
+    const Vector3& pSca = player_->GetCoordinatePtr()->GetScale();
     ImGui::Text("player");
     ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
     ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);

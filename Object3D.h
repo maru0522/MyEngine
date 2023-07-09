@@ -44,13 +44,13 @@ public:
     void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
     void Draw(const fsPath& path);
 
-    WorldCoordinate coordinate_;
 private:
     // ïœêî
     Object3D* parent_;
 
     Model_t model_;
     bool isInvisible_{};
+    WorldCoordinate coordinate_;
     ConstBuffer<CBData3d_t> cb_;
 
     static LightGroup* sLightGroupPtr_;
@@ -63,5 +63,9 @@ public:
     static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
     inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
+    inline void SetCoordinate(const WorldCoordinate& coordinate) { coordinate_ = coordinate; }
+
+    inline const WorldCoordinate& GetCoordinate(void) { return coordinate_; }
+    inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
 };
 
