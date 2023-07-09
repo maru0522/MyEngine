@@ -40,7 +40,7 @@ void Player::Update(void)
 
     // À•WŒvŽZ
     Vector3 gravity = -body_->coordinate_.GetUpVec().ExtractVector3();
-    gravity *= 0.1f;
+    gravity *= 0.4f;
 
     //velocity_ = { 0,0,0 };
     //if (KEYS::IsDown(DIK_W)) velocity_ += forward.ExtractVector3();
@@ -54,6 +54,7 @@ void Player::Update(void)
     if (KEYS::IsDown(DIK_S)) velocity_ -= forward.ExtractVector3();
     if (KEYS::IsDown(DIK_A)) velocity_ -= right.ExtractVector3();
     if (KEYS::IsDown(DIK_D)) velocity_ += right.ExtractVector3();
+    if (KEYS::IsDown(DIK_SPACE)) velocity_ += body_->coordinate_.GetUpVec().ExtractVector3();
 
     Vector3 currentPos = body_->coordinate_.GetPosition();
     currentPos += velocity_;

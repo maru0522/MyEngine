@@ -180,19 +180,19 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
     Vector3 center2PlayerVec = player->sphereCollider_.center - planet->sphereCollider_.center;
     player->body_->coordinate_.SetAxisUp(center2PlayerVec.Normalize());
 
-    //if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
-    //{
+    if (Collision::SphereToSphere(player->sphereCollider_, planet->sphereCollider_))
+    {
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-    float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
+        float diff = Vector3(player->sphereCollider_.center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->sphereCollider_.radius;
 
-    Vector3 currentPos = player->body_->coordinate_.GetPosition();
-    //currentPos += player->upVec_ * 0.1f;
+        Vector3 currentPos = player->body_->coordinate_.GetPosition();
+        //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
-    // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-    currentPos += center2PlayerVec.Normalize() * -diff;// ここをマイナス符号で値反転
+        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+        currentPos += center2PlayerVec.Normalize() * -diff; // ここをマイナス符号で値反転
 
-    player->body_->coordinate_.SetPosition(currentPos);
-    //}
+        player->body_->coordinate_.SetPosition(currentPos);
+    }
 }
 
 void DemoScene::DebudGui(void)
@@ -219,8 +219,8 @@ void DemoScene::DebudGui(void)
     ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(cRot.x), ToDegree(cRot.y), ToDegree(cRot.z));
     Vector3 f = cameraPtr->GetCoordinatePtr()->GetForwardVec().ExtractVector3();
     Vector3 u = cameraPtr->GetCoordinatePtr()->GetUpVec().ExtractVector3();
-    ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y,f.z);
-    ImGui::Text("upV: (%f,%f,%f)", u.x, u.y,u.z);
+    ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y, f.z);
+    ImGui::Text("upV: (%f,%f,%f)", u.x, u.y, u.z);
     if (GUI::ButtonTrg("camera"))
         debugCamFollow_ ?
         debugCamFollow_ = false :

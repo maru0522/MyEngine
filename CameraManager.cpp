@@ -80,8 +80,8 @@ Vector3 Camera::Move(void)
     if (KEYS::IsDown(DIK_DOWN)) velocity.z -= 1;
     if (KEYS::IsDown(DIK_LEFT)) velocity.x -= 1;
     if (KEYS::IsDown(DIK_RIGHT)) velocity.x += 1;
-    if (KEYS::IsDown(DIK_SPACE)) velocity.y += 1;
-    if (KEYS::IsDown(DIK_LSHIFT)) velocity.y -= 1;
+    //if (KEYS::IsDown(DIK_SPACE)) velocity.y += 1;
+    //if (KEYS::IsDown(DIK_LSHIFT)) velocity.y -= 1;
 
     return velocity;
 }

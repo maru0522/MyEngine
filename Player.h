@@ -13,9 +13,6 @@ public:
     void Draw(void);
 
     // ïœêî
-    //Vector3 forwardVec_; 
-    //Vector3 rightVec_;
-    //Vector3 upVec_;
 
     Vector3 velocity_;
     CollisionPrimitive::Sphere sphereCollider_;
