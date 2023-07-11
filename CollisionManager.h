@@ -18,7 +18,7 @@ private:
 
     // 変数
     ColliderFactory colFactory_;
-    std::forward_list<ICollider*> collidersPtrList_; // いったん途中。コライダームズすんぎ。
+    std::forward_list<ICollider*> collidersPtrList_;
 
 public:
     // 関数
