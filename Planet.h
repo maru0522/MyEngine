@@ -12,7 +12,7 @@ public:
     void Update(void);
     void Draw(void);
 
-    CollisionPrimitive::Sphere sphereCollider_;
+    CollisionPrimitive::SphereCollider sphereCollider_;
 
 private:
     // •Ï”

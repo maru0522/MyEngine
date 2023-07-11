@@ -1,5 +1,5 @@
 #include "CollisionManager.h"
-#include "Collision.h"
+#include "CollisionChecker.h"
 
 CollisionManager* CollisionManager::GetInstance(void)
 {
@@ -9,8 +9,26 @@ CollisionManager* CollisionManager::GetInstance(void)
 
 void CollisionManager::Update(void)
 {
-    //for (auto& sphere : sphColPtrList_)
+    //auto it1 = collidersPtrList_.begin();
+    //for (; it1 != collidersPtrList_.end(); ++it1)
     //{
-    //    sphere->isHit = Collision::SphereToSphere(sphere)
+    //    // it1 ‚ÌŽŸ
+    //    auto it2 = it1;
+    //    it2++;
+
+    //    for (; it2 != collidersPtrList_.end(); ++it2)
+    //    {
+    //        it1->
+    //        it1->Dispatch(&(*it2));
+    //    }
+    //}
+    //for (auto& col1 : collidersPtrList_)
+    //{
+    //    for (auto& col2 : collidersPtrList_)
+    //    {
+    //        if (col1 == col2) continue;
+
+
+    //    }
     //}
 }

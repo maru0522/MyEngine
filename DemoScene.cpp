@@ -1,7 +1,7 @@
 #include "Input.h"
 #include "DemoScene.h"
-#include "Collision.h"
 #include "SimplifyImGui.h"
+#include "CollisionChecker.h"
 
 void DemoScene::Initialize(void)
 {
@@ -180,7 +180,7 @@ void DemoScene::DemoCollision(Player* player, Planet* planet)
     Vector3 center2PlayerVec = player->GetSphereCollider().center - planet->sphereCollider_.center;
     player->GetCoordinatePtr()->SetAxisUp(center2PlayerVec.Normalize());
 
-    if (Collision::SphereToSphere(player->GetSphereCollider(), planet->sphereCollider_))
+    if (CollisionChecker::SphereToSphere(player->GetSphereCollider(), planet->sphereCollider_))
     {
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(player->GetSphereCollider().center - planet->sphereCollider_.center).Length() - planet->sphereCollider_.radius - player->GetSphereCollider().radius;

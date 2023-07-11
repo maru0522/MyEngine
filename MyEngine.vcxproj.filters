@@ -151,7 +151,7 @@
     <ClCompile Include="CollisionPrimitive.cpp">
       <Filter>Entity\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
+    <ClCompile Include="CollisionChecker.cpp">
       <Filter>Entity\Collision</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
@@ -161,6 +161,9 @@
       <Filter>Entity\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="ColliderFactory.cpp">
+      <Filter>Entity\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -291,7 +294,7 @@
     <ClInclude Include="CollisionPrimitive.h">
       <Filter>Entity\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
+    <ClInclude Include="CollisionChecker.h">
       <Filter>Entity\Collision</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
@@ -301,6 +304,9 @@
       <Filter>Entity\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Planet.h" />
+    <ClInclude Include="ColliderFactory.h">
+      <Filter>Entity\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

@@ -8,7 +8,6 @@
 #include "LevelData.h"
 #include "Player.h"
 #include "Planet.h"
-#include "Collision.h"
 
 class DemoScene :
     public IScene

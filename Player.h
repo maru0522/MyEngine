@@ -8,6 +8,8 @@ class Player
 public:
     // ’è”
     const float kRadius_{ 1.f };
+    const float kJumpPower_{ 1.f };
+    const float kMoveSpeed_{ 1.f };
 
     // ŠÖ”
     Player(void);
@@ -18,7 +20,7 @@ public:
 private:
     // •Ï”
     WorldCoordinate coordinate_;
-    CollisionPrimitive::Sphere sphereCollider_;
+    CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
 public:
@@ -26,7 +28,7 @@ public:
 
     // getter
     inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
-    inline const CollisionPrimitive::Sphere& GetSphereCollider(void) { return sphereCollider_; }
+    inline const CollisionPrimitive::SphereCollider GetSphereCollider(void) { return sphereCollider_; }
 
 };
 
