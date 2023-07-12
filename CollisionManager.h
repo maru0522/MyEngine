@@ -27,6 +27,9 @@ public:
     void Update(void);
 
     // setter
+    inline void Register(ICollider* colliderPtr) { collidersPtrList_.push_front(colliderPtr); }
+    inline void Remove(ICollider* colliderPtr) { collidersPtrList_.remove(colliderPtr); }
+
     //inline void AddColList(Shape shape) { collidersList_.emplace_back(std::move(colFactory_.CreateCollider(shape))); }
 
     // getter

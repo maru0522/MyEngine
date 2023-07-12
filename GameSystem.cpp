@@ -1,3 +1,4 @@
+#include "CollisionManager.h"
 #include "SimplifyImGui.h"
 #include "GameSystem.h"
 #include "Object3D.h"
@@ -11,6 +12,7 @@ void GameSystem::Initialize()
 void GameSystem::Update(void)
 {
     FrameWork::Update();
+    CollisionManager::GetInstance()->Update();
 }
 
 void GameSystem::Draw(void)

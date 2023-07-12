@@ -49,7 +49,7 @@ void DemoScene::Update(void)
     player_->Update();
     planet_->Update();
 
-    DemoCollision(player_.get(), planet_.get());
+    //DemoCollision(player_.get(), planet_.get());
 
     //if (debugCamFollow_) {
     //    cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
@@ -206,6 +206,7 @@ void DemoScene::DebudGui(void)
     ImGui::Text("player");
     ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
     ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
+    ImGui::Text("isHit:(%d)", player_->GetIsHit());
     //ImGui::Text("rot(qua): (%f,%f,%f,%f)", pRot.x, pRot.y, pRot.z, pRot.w);
     GUI::ChildFrameEnd();
     GUI::ChildFrameBegin("camera", { 400,140 });

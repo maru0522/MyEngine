@@ -43,6 +43,9 @@ protected:
 public:
     // setter
     inline void SetIsHit(bool isHit) { isHit_ = isHit; }
+
+    // getter
     inline bool GetIsHit(void) { return isHit_; }
+    inline const CollisionInfo& GetColInfo(void) { return colInfo_; }
 
 };
