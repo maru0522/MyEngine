@@ -32,8 +32,8 @@ public:
     virtual ~ICollider(void) = default;
     virtual bool Dispatch(ICollider* other) = 0;
 
-    virtual bool Col(const CollisionPrimitive::SphereCollider* arg_Shpere) = 0;
-    virtual bool Col(const CollisionPrimitive::PlaneCollider* arg_Plane) = 0;
+    virtual bool Col(CollisionPrimitive::SphereCollider* arg_Shpere) = 0;
+    virtual bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) = 0;
 
 protected:
     // ïœêî
@@ -43,6 +43,7 @@ protected:
 public:
     // setter
     inline void SetIsHit(bool isHit) { isHit_ = isHit; }
+    inline void SetColInfo(const CollisionInfo& colInfo) { colInfo_ = colInfo; }
 
     // getter
     inline bool GetIsHit(void) { return isHit_; }

@@ -16,8 +16,8 @@ namespace CollisionPrimitive
         float radius{ 0.f };
 
     private:
-        bool Col(const CollisionPrimitive::SphereCollider* arg_Shpere) override;
-        bool Col(const CollisionPrimitive::PlaneCollider* arg_Plane) override;
+        bool Col(CollisionPrimitive::SphereCollider* arg_Shpere) override;
+        bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) override;
     };
 
     struct PlaneCollider final : public ICollider
@@ -31,7 +31,7 @@ namespace CollisionPrimitive
         Vector3 normal{ 0, 1, 0 };
         float distance{ 0.f };
     private:
-        bool Col(const CollisionPrimitive::PlaneCollider* arg_Plane) override;
-        bool Col(const CollisionPrimitive::SphereCollider* arg_Shpere) override;
+        bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) override;
+        bool Col(CollisionPrimitive::SphereCollider* arg_Shpere) override;
     };
 }
