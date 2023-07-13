@@ -2,6 +2,7 @@
 #include <string>
 #include "Vector2.h"
 #include "Vector3.h"
+#include <functional>
 
 namespace CollisionPrimitive
 {
@@ -12,14 +13,16 @@ namespace CollisionPrimitive
 struct CollisionInfo
 {
     CollisionInfo(void) noexcept = default;
-    CollisionInfo(const Vector3 v, float f) noexcept : v(v), f(f) {}
+    CollisionInfo(const Vector3 v, float f,const std::string& id) noexcept : v(v), f(f), id(id) {}
 
     void Reset(void)
     {
         v = { 0.f,0.f,0.f };
         f = 0.f;
+        id.assign("Reseted");
     }
 
+    std::string id{};
     Vector3 v{};
     float f{};
 };
@@ -28,7 +31,7 @@ class ICollider
 {
 public:
     // ä÷êî
-    ICollider(void) : isHit_(false) {}
+    ICollider(void) = default;
     virtual ~ICollider(void) = default;
     virtual bool Dispatch(ICollider* other) = 0;
 
@@ -37,16 +40,19 @@ public:
 
 protected:
     // ïœêî
-    bool isHit_;
-    CollisionInfo colInfo_;
+    std::string id_{};
+    CollisionInfo colInfo_{};
+    std::function<void(void)> onCollision_{};
 
 public:
     // setter
-    inline void SetIsHit(bool isHit) { isHit_ = isHit; }
+    inline void SetID(const std::string& id) { id_ = id; }
     inline void SetColInfo(const CollisionInfo& colInfo) { colInfo_ = colInfo; }
+    inline void SetOnCollision(const std::function<void(void)> callback_onCollision) { onCollision_ = callback_onCollision; }
 
     // getter
-    inline bool GetIsHit(void) { return isHit_; }
+    inline const std::string& GetID(void) { return id_; }
     inline const CollisionInfo& GetColInfo(void) { return colInfo_; }
+    inline const std::function<void(void)>& GetOnCollision(void) { return onCollision_; }
 
 };

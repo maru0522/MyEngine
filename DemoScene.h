@@ -28,8 +28,6 @@ public:
     void DeployObj(LevelData* lvdPtr);
     void HotReload(LevelData* lvdPtr);
 
-    void DemoCollision(Player* player, Planet* planet);
-
     void DebudGui(void);
     bool debugCamFollow_;
     bool debugPlanetDraw_{ true };

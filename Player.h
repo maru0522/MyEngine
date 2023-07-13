@@ -31,7 +31,5 @@ public:
     // getter
     inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
-    inline bool GetIsHit(void) { return sphereCollider_.GetIsHit(); }
-
 };
 

@@ -7,6 +7,8 @@
 Player::Player(void)
 {
     CollisionManager::GetInstance()->Register(&sphereCollider_);
+    sphereCollider_.SetID("player");
+    sphereCollider_.SetOnCollision(std::bind(&Player::OnCollision, this));
 
     sphereCollider_.radius = kRadius_;
     coordinate_.SetPosition({ 0,20,0 }); // 初期位置
@@ -25,7 +27,7 @@ Player::Player(void)
 void Player::Update(void)
 {
     // --- 1Frame遅い ---
-    OnCollision();
+    //OnCollision();
     appearance_->SetCoordinate(coordinate_);
     appearance_->Update();
     // ------------------
@@ -69,26 +71,26 @@ void Player::Draw(void)
 
 void Player::OnCollision(void)
 {
-    if (sphereCollider_.GetIsHit())
+    // 本来は球状重力エリア内に入ってる場合に行う処理。
+    Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
+    coordinate_.SetAxisUp(center2PlayerVec.Normalize());
+
+    // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+    float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - sphereCollider_.GetColInfo().f - sphereCollider_.radius;
+
+    Vector3 currentPos = coordinate_.GetPosition();
+    //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
+
+    // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+    currentPos += coordinate_.GetUpVec().ExtractVector3().Normalize() * -diff; // ここをマイナス符号で値反転
+
+    coordinate_.SetPosition(currentPos);
+    if (sphereCollider_.GetID() == "gravityArea")
     {
-        GUI::Begin("phit");
-        ImGui::Text("Hit!");
-        GUI::End();
-        sphereCollider_.SetIsHit(false);
-
-        // 本来は球状重力エリア内に入ってる場合に行う処理。
-        Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
-        coordinate_.SetAxisUp(center2PlayerVec.Normalize());
-
-        // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - sphereCollider_.GetColInfo().f - sphereCollider_.radius;
-
-        Vector3 currentPos = coordinate_.GetPosition();
-        //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
-
-        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-        currentPos += center2PlayerVec.Normalize() * -diff; // ここをマイナス符号で値反転
-
-        coordinate_.SetPosition(currentPos);
+        currentPos.x = 1;
+    }
+    if (sphereCollider_.GetID() == "terrainSurface")
+    {
+        currentPos.x = 1;
     }
 }
