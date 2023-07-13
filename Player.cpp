@@ -27,7 +27,6 @@ Player::Player(void)
 void Player::Update(void)
 {
     // --- 1Frame’x‚¢ ---
-    //OnCollision();
     appearance_->SetCoordinate(coordinate_);
     appearance_->Update();
     // ------------------
