@@ -70,26 +70,23 @@ void Player::Draw(void)
 
 void Player::OnCollision(void)
 {
-    // 本来は球状重力エリア内に入ってる場合に行う処理。
-    Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
-    coordinate_.SetAxisUp(center2PlayerVec.Normalize());
-
-    // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-    float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - sphereCollider_.GetColInfo().f - sphereCollider_.radius;
-
-    Vector3 currentPos = coordinate_.GetPosition();
-    //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
-
-    // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-    currentPos += coordinate_.GetUpVec().ExtractVector3().Normalize() * -diff; // ここをマイナス符号で値反転
-
-    coordinate_.SetPosition(currentPos);
-    if (sphereCollider_.GetID() == "gravityArea")
+    if (sphereCollider_.GetColInfo().id == "gravityArea")
     {
-        currentPos.x = 1;
+        // 本来は球状重力エリア内に入ってる場合に行う処理。
+        Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
+        coordinate_.SetAxisUp(center2PlayerVec.Normalize());
     }
-    if (sphereCollider_.GetID() == "terrainSurface")
+    if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {
-        currentPos.x = 1;
+        // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+        float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - sphereCollider_.GetColInfo().f - sphereCollider_.radius;
+
+        Vector3 currentPos = coordinate_.GetPosition();
+        //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
+
+        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+        currentPos += coordinate_.GetUpVec().ExtractVector3().Normalize() * -diff; // ここをマイナス符号で値反転
+
+        coordinate_.SetPosition(currentPos);
     }
 }

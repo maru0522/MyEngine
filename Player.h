@@ -31,5 +31,6 @@ public:
     // getter
     inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
+    inline const std::string& GetPartnerId(void) { return sphereCollider_.GetColInfo().id; }
 };
 

@@ -14,6 +14,7 @@ Planet::Planet(void)
     body_->GetCoordinatePtr()->SetPosition({ 0,0,0 });
     body_->GetCoordinatePtr()->SetScale({ 5,5,5 });
     surface_.radius = 1.f * 5;
+    gravityArea_.radius = 1.f * 50;
 }
 
 void Planet::Update(void)

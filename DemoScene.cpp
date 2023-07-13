@@ -168,6 +168,7 @@ void DemoScene::DebudGui(void)
     ImGui::Text("player");
     ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
     ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
+    ImGui::Text("%s", player_->GetPartnerId().c_str());
     //ImGui::Text("isHit:(%d)", player_->GetIsHit());
     //ImGui::Text("rot(qua): (%f,%f,%f,%f)", pRot.x, pRot.y, pRot.z, pRot.w);
     GUI::ChildFrameEnd();
