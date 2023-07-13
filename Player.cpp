@@ -31,8 +31,6 @@ void Player::Update(void)
     appearance_->Update();
     // ------------------
 
-    sphereCollider_.center = coordinate_.GetPosition();
-
     Quaternion right = Math::QuaternionF::CrossVector3Part(coordinate_.GetUpVec(), coordinate_.GetForwardVec()).Normalize();
     coordinate_.SetAxisRight(right);
     Quaternion forward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
@@ -41,7 +39,7 @@ void Player::Update(void)
 
     // 座標計算
     Vector3 gravity = -coordinate_.GetUpVec().ExtractVector3();
-    gravity *= 0.4f;
+    gravity *= kGravity_;
 
     Vector3 moveVec = { 0.f,0.f,0.f };
     if (KEYS::IsDown(DIK_W)) moveVec += forward.ExtractVector3();
@@ -61,6 +59,8 @@ void Player::Update(void)
     Vector3 currentPos = coordinate_.GetPosition();
     currentPos += velocity;
     coordinate_.SetPosition(currentPos);
+
+    sphereCollider_.center = coordinate_.GetPosition();
 }
 
 void Player::Draw(void)
@@ -79,7 +79,7 @@ void Player::OnCollision(void)
     if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - sphereCollider_.GetColInfo().f - sphereCollider_.radius;
+        float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
 
         Vector3 currentPos = coordinate_.GetPosition();
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
