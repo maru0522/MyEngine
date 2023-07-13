@@ -4,7 +4,7 @@
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
-Player::Player(void)
+Player::Player(void)/* : isGrounded_(false)*/
 {
     CollisionManager::GetInstance()->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
@@ -37,29 +37,37 @@ void Player::Update(void)
     coordinate_.SetAxisForward(forward);
     coordinate_.SetAxisUp(coordinate_.GetUpVec().ExtractVector3().Normalize());
 
-    // 座標計算
-    Vector3 gravity = -coordinate_.GetUpVec().ExtractVector3();
-    gravity *= kGravity_;
-
+    // 移動ベクトル
     Vector3 moveVec = { 0.f,0.f,0.f };
     if (KEYS::IsDown(DIK_W)) moveVec += forward.ExtractVector3();
     if (KEYS::IsDown(DIK_S)) moveVec -= forward.ExtractVector3();
     if (KEYS::IsDown(DIK_A)) moveVec -= right.ExtractVector3();
     if (KEYS::IsDown(DIK_D)) moveVec += right.ExtractVector3();
 
-    Vector3 velocity = { 0.f,0.f,0.f };
-    if (KEYS::IsDown(DIK_SPACE))
+    // 重力
+    Vector3 gravity = -coordinate_.GetUpVec().ExtractVector3().Normalize();
+    gravity *= kGravity_;
+
+    // ジャンプベクトル
+    if (KEYS::IsTrigger(DIK_SPACE))
     {
         //  じゃんぷ
-        velocity += coordinate_.GetUpVec().ExtractVector3().Normalize() * kJumpPower_;
+        jumpVec_ += coordinate_.GetUpVec().ExtractVector3().Normalize() * kJumpPower_;
+        //isGrounded_ = false;
     }
-    velocity += moveVec.Normalize() * kMoveSpeed_;
-    velocity += gravity;
+    jumpVec_ += gravity;
 
+    // 移動量
+    Vector3 velocity = { 0.f,0.f,0.f };
+    velocity += moveVec.Normalize() * kMoveSpeed_;
+    velocity += jumpVec_;
+
+    // 座標更新
     Vector3 currentPos = coordinate_.GetPosition();
     currentPos += velocity;
     coordinate_.SetPosition(currentPos);
 
+    // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
 }
 
@@ -78,6 +86,9 @@ void Player::OnCollision(void)
     }
     if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {
+        //isGrounded_ = true;
+        jumpVec_ = { 0,0,0 };
+
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
 
@@ -88,5 +99,9 @@ void Player::OnCollision(void)
         currentPos += coordinate_.GetUpVec().ExtractVector3().Normalize() * -diff; // ここをマイナス符号で値反転
 
         coordinate_.SetPosition(currentPos);
+    }
+    else
+    {
+        //isGrounded_ = false;
     }
 }
