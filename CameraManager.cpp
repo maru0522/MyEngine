@@ -21,8 +21,8 @@ void Camera::Update(void)
 {
     Vector3 currentPos = coordinate_.GetPosition();
     Vector3 velocity = Move();
-    Vector3 rotation{};
-    Quaternion eyeDir = coordinate_.GetForwardVec();
+    Vector3 rotation = coordinate_.GetRotation();
+    Quaternion eyeDir = coordinate_.GetMatAxisZ();
     Quaternion up = coordinate_.GetUpVec();
 
     // debugCamera
