@@ -6,6 +6,10 @@
 class Planet
 {
 public:
+    // ’è”
+    const float kScale_{ 20.f };
+    const float kGravityArea_{ 50.f };
+
     // ŠÖ”
     Planet(void);
 

@@ -12,9 +12,9 @@ Planet::Planet(void)
     gravityArea_.SetOnCollision(std::bind(&Planet::OnCollision, this));
 
     body_->GetCoordinatePtr()->SetPosition({ 0,0,0 });
-    body_->GetCoordinatePtr()->SetScale({ 20,20,20 });
-    surface_.radius = 1.f * 20;
-    gravityArea_.radius = 1.f * 50;
+    body_->GetCoordinatePtr()->SetScale({ kScale_,kScale_,kScale_ });
+    surface_.radius = 1.f * kScale_;
+    gravityArea_.radius = 1.f * kGravityArea_;
 }
 
 void Planet::Update(void)
