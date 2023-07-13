@@ -6,7 +6,7 @@
 void DemoScene::Initialize(void)
 {
     // カメラの座標設定
-    cameraPtr->GetCoordinatePtr()->SetPosition({ 0,0,-20 });
+    cameraPtr->GetCoordinatePtr()->SetPosition({ 0,0,-70 });
     // カメラのデバッグカメラモードをON
     cameraPtr->SetIsDebugMode(true);
     // 座標計算法をクォータニオン優先
@@ -31,31 +31,8 @@ void DemoScene::Update(void)
 {
     lightGroup_->Update();
 
-    //Vector3 currentPos = player_->body_->coordinate_.GetPosition();
-    //Vector3 pForwardVec = player_->body_->coordinate_.GetAxisZ();
-    //Vector3 camDistance = -pForwardVec.normalize() * 5.f;
-    //if(debugCamFollow_) cameraPtr->eye_ = currentPos + camDistance;
-
-    //Vector3 cForwardVec = cameraPtr->GetForwardVec();
-    //Vector3 rightVec = cameraPtr->GetRightVec();
-
-    //if (KEYS::IsDown(DIK_W)) currentPos += cForwardVec;
-    //if (KEYS::IsDown(DIK_S)) currentPos -= cForwardVec;
-    //if (KEYS::IsDown(DIK_A)) currentPos -= rightVec;
-    //if (KEYS::IsDown(DIK_D)) currentPos += rightVec;
-
-    //player_->body_->coordinate_.SetPosition(currentPos);
-
     player_->Update();
     planet_->Update();
-
-    //DemoCollision(player_.get(), planet_.get());
-
-    //if (debugCamFollow_) {
-    //    cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - player_->body_->coordinate_.GetForwardVec().ExtractVector3().Normalize() * 8.f);
-    //    cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->body_->coordinate_.GetUpVec());
-    //    cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->body_->coordinate_.GetForwardVec());
-    //}
 
     if (debugCamFollow_) {
         cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().ExtractVector3().Normalize() * 8.f);
