@@ -161,9 +161,6 @@
       <Filter>Entity\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Planet.cpp" />
-    <ClCompile Include="ColliderFactory.cpp">
-      <Filter>Entity\Collision</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -304,9 +301,6 @@
       <Filter>Entity\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Planet.h" />
-    <ClInclude Include="ColliderFactory.h">
-      <Filter>Entity\Collision</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

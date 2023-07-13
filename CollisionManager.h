@@ -1,7 +1,6 @@
 #pragma once
 #include <forward_list>
 #include <memory>
-#include "ColliderFactory.h"
 #include "CollisionPrimitive.h"
 
 class CollisionManager
@@ -14,10 +13,6 @@ private:
     CollisionManager& operator=(const CollisionManager&) = delete;
 
     // ’è‹`
-    using Shape = ColliderFactory::Shape;
-
-    // •Ï”
-    ColliderFactory colFactory_;
     std::forward_list<ICollider*> collidersPtrList_;
 
 public:
