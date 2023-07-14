@@ -139,12 +139,12 @@ void DemoScene::DebudGui(void)
     using namespace Math::Function;
     GUI::Begin("demoInfo", { 200,400 });
     GUI::ChildFrameBegin("player", { 400,100 });
-    const Vector3& pPos = player_->GetCoordinatePtr()->GetPosition();
+    //const Vector3& pPos = player_->GetCoordinatePtr()->GetPosition();
     //const Quaternion& pRot = player_->body_->coordinate_.GetRotation();
-    const Vector3& pSca = player_->GetCoordinatePtr()->GetScale();
+    //const Vector3& pSca = player_->GetCoordinatePtr()->GetScale();
     ImGui::Text("player");
-    ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
-    ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
+    //ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
+    //ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
     ImGui::Text("%s", player_->GetPartnerId().c_str());
     //ImGui::Text("isHit:(%d)", player_->GetIsHit());
     //ImGui::Text("rot(qua): (%f,%f,%f,%f)", pRot.x, pRot.y, pRot.z, pRot.w);

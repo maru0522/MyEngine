@@ -8,11 +8,9 @@ class Player
 public:
     // íËêî
     const float kRadius_{ 1.f };
-    const float kJumpPower_{ 5.f };
-    //const float kJumpPower_{ 7.f };
+    const float kJumpPower_{ 7.f };
     const float kMoveSpeed_{ 1.f };
-    const float kGravity_{ 0.4f };
-    //const float kGravity_{ 0.98f };
+    const float kGravity_{ 0.98f };
 
     // ä÷êî
     Player(void);
@@ -29,7 +27,7 @@ private:
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
-    Vector3 jumpVec_;
+    float jumpVecNorm_{};
 public:
     // setter
 

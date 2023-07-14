@@ -29,38 +29,35 @@ void Player::Update(void)
     // --- 1Frame遅い ---
     appearance_->SetCoordinate(coordinate_);
     appearance_->Update();
-    // ------------------
+#ifdef _DEBUG
+    GUI::Begin("player", ImVec2{ 300,500 });
+    GUI::Text("pos(1frame late):     [%f,%f,%f]", coordinate_.GetPosition().x, coordinate_.GetPosition().y, coordinate_.GetPosition().z);
+    GUI::End();
+#endif // _DEBUG
 
-    Quaternion right = Math::QuaternionF::CrossVector3Part(coordinate_.GetUpVec(), coordinate_.GetForwardVec()).Normalize();
-    coordinate_.SetAxisRight(right);
-    Quaternion forward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
-    coordinate_.SetAxisForward(forward);
-    coordinate_.SetAxisUp(coordinate_.GetUpVec().ExtractVector3().Normalize());
+    // ------------------
+    Quaternion forward = coordinate_.GetForwardVec();
+    Quaternion right = coordinate_.GetRightVec();
 
     // 移動ベクトル
-    Vector3 moveVec = { 0.f,0.f,0.f };
-    if (KEYS::IsDown(DIK_W)) moveVec += forward.ExtractVector3();
-    if (KEYS::IsDown(DIK_S)) moveVec -= forward.ExtractVector3();
-    if (KEYS::IsDown(DIK_A)) moveVec -= right.ExtractVector3();
-    if (KEYS::IsDown(DIK_D)) moveVec += right.ExtractVector3();
+    Vector3 moveVec{};
+    if (KEYS::IsDown(DIK_W)) moveVec += forward.ExtractVector3().Normalize();
+    if (KEYS::IsDown(DIK_S)) moveVec -= forward.ExtractVector3().Normalize();
+    if (KEYS::IsDown(DIK_A)) moveVec -= right.ExtractVector3().Normalize();
+    if (KEYS::IsDown(DIK_D)) moveVec += right.ExtractVector3().Normalize();
 
     // 重力
-    Vector3 gravity = -coordinate_.GetUpVec().ExtractVector3().Normalize();
-    gravity *= kGravity_;
+    jumpVecNorm_ -= kGravity_;
 
     // ジャンプベクトル
-    if (KEYS::IsTrigger(DIK_SPACE))
-    {
-        //  じゃんぷ
-        jumpVec_ += coordinate_.GetUpVec().ExtractVector3().Normalize() * kJumpPower_;
-        //isGrounded_ = false;
-    }
-    jumpVec_ += gravity;
+    Vector3 jumpVec{};
+    if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
+    jumpVec += coordinate_.GetUpVec().ExtractVector3().Normalize() * jumpVecNorm_;
 
     // 移動量
     Vector3 velocity = { 0.f,0.f,0.f };
     velocity += moveVec.Normalize() * kMoveSpeed_;
-    velocity += jumpVec_;
+    velocity += jumpVec;
 
     // 座標更新
     Vector3 currentPos = coordinate_.GetPosition();
@@ -69,6 +66,31 @@ void Player::Update(void)
 
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
+
+    // 更新された座標から3方向の軸を再計算
+    Quaternion newRight = Math::QuaternionF::CrossVector3Part(coordinate_.GetUpVec(), coordinate_.GetForwardVec()).Normalize();
+    coordinate_.SetAxisRight(newRight);
+    Quaternion newForward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
+    coordinate_.SetAxisForward(newForward);
+    coordinate_.SetAxisUp(coordinate_.GetUpVec().ExtractVector3().Normalize());
+
+#ifdef _DEBUG
+    GUI::Begin("player");
+    GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
+    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    GUI::Text("moveVec:              [%f,%f,%f]", moveVec.x, moveVec.y, moveVec.z);
+    GUI::Text("jumpVec:              [%f,%f,%f]", jumpVec.x, jumpVec.y, jumpVec.z);
+    GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
+    GUI::Text("kGravity:             [%f]", kGravity_);
+    GUI::Space();
+    GUI::Space();
+    GUI::Text("forward(1frame late): [%f,%f,%f]", forward.x, forward.y, forward.z);
+    GUI::Text("forward(current):     [%f,%f,%f]", newForward.x, newForward.y, newForward.z);
+    GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
+    GUI::Text("right(current):       [%f,%f,%f]", newRight.x, newRight.y, newRight.z);
+    GUI::End();
+#endif // _DEBUG
+
 }
 
 void Player::Draw(void)
@@ -87,7 +109,8 @@ void Player::OnCollision(void)
     if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {
         //isGrounded_ = true;
-        jumpVec_ = { 0,0,0 };
+        //jumpVec_ = { 0,0,0 };
+        jumpVecNorm_ = 0.f;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
@@ -99,9 +122,5 @@ void Player::OnCollision(void)
         currentPos += coordinate_.GetUpVec().ExtractVector3().Normalize() * -diff; // ここをマイナス符号で値反転
 
         coordinate_.SetPosition(currentPos);
-    }
-    else
-    {
-        //isGrounded_ = false;
     }
 }
