@@ -26,6 +26,12 @@ Quaternion Quaternion::Normalize(void) const
     return tmp;
 }
 
+Quaternion Quaternion::Vec3Normalize(void) const
+{
+    Vector3 nv = Vector3(x, y, z).Normalize();
+    return Quaternion(nv, w);
+}
+
 float Quaternion::Dot(const Quaternion& q) const
 {
     return x * q.x + y * q.y + z * q.z + w * q.w;

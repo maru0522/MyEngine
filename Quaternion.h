@@ -17,6 +17,7 @@ public: // ïœêî
     constexpr Quaternion(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 
     Quaternion Normalize(void) const;
+    Quaternion Vec3Normalize(void) const;
     Quaternion Conjugate(void) const;
     Quaternion Inverse(void) const;
     float Dot(const Quaternion& q) const;
