@@ -35,6 +35,7 @@ public:
     // •Ï”
     std::unique_ptr<Player> player_{ std::make_unique<Player>() };
     std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
+    std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     // json“Ç‚İ‚İ&”z’u—p

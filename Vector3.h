@@ -48,6 +48,8 @@ namespace Math {
         float Dot(const Vector3& v1, const Vector3& v2);
         float Length(const Vector3& v);
 
+        Vector3 Resolution(const Vector3& v, const Vector3& axis4Proj);
+
         // 補完関数
         const Vector3 lerp(const Vector3& start, const Vector3& end, const float t); // 線形補完（1次関数補完）
         const Vector3 bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t); // ベジエ（2次関数補完）

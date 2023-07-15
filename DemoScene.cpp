@@ -33,6 +33,7 @@ void DemoScene::Update(void)
 
     player_->Update();
     planet_->Update();
+    //testP_->Update();
 
     if (debugCamFollow_) {
         cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().ExtractVector3().Normalize() * 8.f);
@@ -57,6 +58,7 @@ void DemoScene::Draw3d(void)
 
     player_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
+    //testP_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

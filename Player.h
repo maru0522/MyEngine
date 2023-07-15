@@ -19,13 +19,14 @@ public:
     void Draw(void);
 
 private:
-    void OnCollision(void);
+    Quaternion Move(void); // get velocity
+    void OnCollision(void); // callback
 
     // ïœêî
     //bool isGrounded_{};
     WorldCoordinate coordinate_;
     CollisionPrimitive::SphereCollider sphereCollider_;
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
 
     float jumpVecNorm_{};
 public:

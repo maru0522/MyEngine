@@ -26,25 +26,99 @@ Player::Player(void)/* : isGrounded_(false)*/
 
 void Player::Update(void)
 {
+    static Quaternion oldForward = coordinate_.GetForwardVec();
+    static Quaternion oldRight = coordinate_.GetRightVec();
+    static Quaternion oldUp = coordinate_.GetUpVec();
+
     // --- 1Frame遅い ---
-    appearance_->SetCoordinate(coordinate_);
+
+    // 1frame前と現在frameの右ベクトルでの角度を求める
+    float theta4Forward = std::acosf(Math::Vec3::Dot(oldRight.ExtractVector3().Normalize(), coordinate_.GetRightVec().ExtractVector3().Normalize()));
+    // 今の正面ベクトルと角度から、正面ベクトル(roll)の任意軸回転クォータニオンを作る。
+    Quaternion forward4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetForwardVec().ExtractVector3().Normalize(), theta4Forward);
+
+    // 1frame前と現在frameの上ベクトルでの角度を求める
+    float theta4Right = std::acosf(Math::Vec3::Dot(oldUp.ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3().Normalize()));
+    // 今の右ベクトルと角度から、右ベクトル(pitch)の任意軸回転クォータニオンを作る。
+    Quaternion right4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetRightVec().ExtractVector3().Normalize(), theta4Right);
+
+    // 1frame前と現在frameの正面ベクトルで角度を求める
+    float theta4Up = std::acosf(Math::Vec3::Dot(oldForward.ExtractVector3().Normalize(), coordinate_.GetForwardVec().ExtractVector3().Normalize()));
+    // 今の上ベクトルと角度から、上ベクトル(yaw)の任意軸回転クォータニオンを作る。
+    Quaternion up4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().ExtractVector3().Normalize(), theta4Up);
+
+    // 三軸のクォータニオンをセット
+    appearance_->GetCoordinatePtr()->SetAxis({ forward4Appearance, right4Appearance, up4Appearance });
+    // 更新された座標をセット（1frame遅れ)
+    appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->Update();
+
 #ifdef _DEBUG
     GUI::Begin("player", ImVec2{ 300,500 });
     GUI::Text("pos(1frame late):     [%f,%f,%f]", coordinate_.GetPosition().x, coordinate_.GetPosition().y, coordinate_.GetPosition().z);
     GUI::End();
 #endif // _DEBUG
-
     // ------------------
+
+    // 移動量
+    Quaternion velocity = Move();
+
+    // 座標更新
+    Quaternion currentPos = coordinate_.GetPosition();
+    currentPos += velocity;
+    coordinate_.SetPosition(currentPos.ExtractVector3());
+
+    // コライダー更新
+    sphereCollider_.center = coordinate_.GetPosition();
+
+    // 更新直前の各軸ベクトルの保存
+    oldForward = coordinate_.GetForwardVec();
+    oldRight = coordinate_.GetRightVec();
+    oldUp = coordinate_.GetUpVec();
+
+    // 更新された座標から3方向の軸を再計算
+    Quaternion newRight = Math::QuaternionF::CrossVector3Part(coordinate_.GetUpVec(), coordinate_.GetForwardVec()).Normalize();
+    coordinate_.SetAxisRight(newRight);
+    Quaternion newForward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
+    coordinate_.SetAxisForward(newForward);
+    Quaternion newUp = coordinate_.GetUpVec().Vec3Normalize();
+
+    coordinate_.SetAxisUp(newUp);
+
+#ifdef _DEBUG
+    GUI::Begin("player");
+    GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
+    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    //GUI::Text("moveVec:              [%f,%f,%f]", moveVec.x, moveVec.y, moveVec.z);
+    //GUI::Text("jumpVec:              [%f,%f,%f]", jumpVec.x, jumpVec.y, jumpVec.z);
+    GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
+    GUI::Text("kGravity:             [%f]", kGravity_);
+    GUI::Space();
+    GUI::Space();
+    //GUI::Text("forward(1frame late): [%f,%f,%f]", forward.x, forward.y, forward.z);
+    GUI::Text("forward(current):     [%f,%f,%f]", newForward.x, newForward.y, newForward.z);
+    //GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
+    GUI::Text("right(current):       [%f,%f,%f]", newRight.x, newRight.y, newRight.z);
+    GUI::Text("up:                   [%f,%f,%f]", newUp.x, newUp.y, newUp.z);
+    GUI::Text("up:                   [%f]", newUp.w);
+    GUI::End();
+#endif // _DEBUG
+}
+
+void Player::Draw(void)
+{
+    // 赤色のテクスチャを適用。（クソ見辛い）
+    appearance_->Draw("Resources/red1x1.png");
+    // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
+    //appearance_->Draw(/*"Resources/red1x1.png"*/);
+}
+
+Quaternion Player::Move(void)
+{
     Quaternion forward = coordinate_.GetForwardVec();
     Quaternion right = coordinate_.GetRightVec();
 
     // 移動ベクトル
-    //Vector3 moveVec{};
-    //if (KEYS::IsDown(DIK_W)) moveVec += forward.ExtractVector3().Normalize();
-    //if (KEYS::IsDown(DIK_S)) moveVec -= forward.ExtractVector3().Normalize();
-    //if (KEYS::IsDown(DIK_A)) moveVec -= right.ExtractVector3().Normalize();
-    //if (KEYS::IsDown(DIK_D)) moveVec += right.ExtractVector3().Normalize();
     Quaternion moveVec{};
     if (KEYS::IsDown(DIK_W)) moveVec += forward.Vec3Normalize();
     if (KEYS::IsDown(DIK_S)) moveVec -= forward.Vec3Normalize();
@@ -55,9 +129,6 @@ void Player::Update(void)
     jumpVecNorm_ -= kGravity_;
 
     // ジャンプベクトル
-    //Vector3 jumpVec{};
-    //if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
-    //jumpVec += coordinate_.GetUpVec().ExtractVector3().Normalize() * jumpVecNorm_;
     Quaternion jumpVec{};
     if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
     jumpVec += coordinate_.GetUpVec().ExtractVector3().Normalize() * jumpVecNorm_;
@@ -67,49 +138,7 @@ void Player::Update(void)
     velocity += moveVec.Normalize() * kMoveSpeed_;
     velocity += jumpVec;
 
-    // 座標更新
-    Quaternion currentPos = coordinate_.GetPosition();
-    currentPos += velocity;
-    coordinate_.SetPosition(currentPos.ExtractVector3());
-
-    // コライダー更新
-    sphereCollider_.center = coordinate_.GetPosition();
-
-    // 更新された座標から3方向の軸を再計算
-    Quaternion newRight = Math::QuaternionF::CrossVector3Part(coordinate_.GetUpVec(), coordinate_.GetForwardVec()).Normalize();
-    coordinate_.SetAxisRight(newRight);
-    Quaternion newForward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
-    coordinate_.SetAxisForward(newForward);
-    Quaternion newUp = coordinate_.GetUpVec().Vec3Normalize();
-    if (KEYS::IsDown(DIK_RIGHT))
-    {
-        newUp.w += 0.1f;
-    }
-    coordinate_.SetAxisUp(newUp);
-
-#ifdef _DEBUG
-    GUI::Begin("player");
-    GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
-    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-    GUI::Text("moveVec:              [%f,%f,%f]", moveVec.x, moveVec.y, moveVec.z);
-    GUI::Text("jumpVec:              [%f,%f,%f]", jumpVec.x, jumpVec.y, jumpVec.z);
-    GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
-    GUI::Text("kGravity:             [%f]", kGravity_);
-    GUI::Space();
-    GUI::Space();
-    GUI::Text("forward(1frame late): [%f,%f,%f]", forward.x, forward.y, forward.z);
-    GUI::Text("forward(current):     [%f,%f,%f]", newForward.x, newForward.y, newForward.z);
-    GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
-    GUI::Text("right(current):       [%f,%f,%f]", newRight.x, newRight.y, newRight.z);
-    GUI::Text("up:                   [%f,%f,%f]", newUp.x, newUp.y, newUp.z);
-    GUI::Text("up:                   [%f]", newUp.w);
-    GUI::End();
-#endif // _DEBUG
-}
-
-void Player::Draw(void)
-{
-    appearance_->Draw("Resources/red1x1.png");
+    return velocity;
 }
 
 void Player::OnCollision(void)
@@ -118,7 +147,7 @@ void Player::OnCollision(void)
     {
         // 本来は球状重力エリア内に入ってる場合に行う処理。
         Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
-        coordinate_.SetAxisUp({ center2PlayerVec.Normalize(), coordinate_.GetUpVec().w});
+        coordinate_.SetAxisUp({ center2PlayerVec.Normalize(), coordinate_.GetUpVec().w });
     }
     if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {

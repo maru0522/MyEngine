@@ -127,6 +127,11 @@ float Math::Vec3::Length(const Vector3& v)
     return std::sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
+Vector3 Math::Vec3::Resolution(const Vector3& v, const Vector3& axis4Proj)
+{
+    return Math::Vec3::Dot(v, axis4Proj.Normalize()) * axis4Proj.Normalize();
+}
+
 Vector3 Math::Vec3::Normalize(const Vector3& v)
 {
     float len{ Length(v) };

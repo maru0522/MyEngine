@@ -3,25 +3,24 @@
 #include "Matrix4.h"
 #include "Quaternion.h"
 
+struct Axis3
+{
+    Quaternion forward;
+    Quaternion right;
+    Quaternion up;
+
+    Axis3(void) : Axis3(Math::QuaternionF::Identity(), Math::QuaternionF::Identity(), Math::QuaternionF::Identity()) {}
+    Axis3(const Quaternion& f, const Quaternion& r, const Quaternion& u)
+    {
+        forward = f;
+        right = r;
+        up = u;
+    }
+};
+
 class WorldCoordinate
 {
 private:
-    // サブクラス
-    struct Axis3
-    {
-        Quaternion forward;
-        Quaternion right;
-        Quaternion up;
-
-        Axis3(void) : Axis3(Math::QuaternionF::Identity(), Math::QuaternionF::Identity(), Math::QuaternionF::Identity()) {}
-        Axis3(const Quaternion& f, const Quaternion& r, const Quaternion& u)
-        {
-            forward = f;
-            right = r;
-            up = u;
-        }
-    };
-
     // 変数
     Vector3 position_;
     Vector3 scale_;

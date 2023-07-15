@@ -40,6 +40,7 @@ void FrameWork::Initialize()
     // ModelManager - 3Dƒ‚ƒfƒ‹“Ç‚İ‚İ
     modelM_->LoadOBJ("Resources/model/cube/cube.obj", false);
     modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj", false);
+    modelM_->LoadOBJ("Resources/model/lolP/lolP.obj", false);
     // AudioManager - ‰¹Šy&SE“Ç‚İ‚İ
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline‰Šú‰»
