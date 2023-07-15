@@ -11,7 +11,7 @@ WorldCoordinate::WorldCoordinate(const Vector3& pos, const Vector3& scale, const
 
 WorldCoordinate::WorldCoordinate(const Vector3& pos, const Vector3& scale, const Quaternion& forward, const Quaternion& right, const Quaternion& up) :
     position_(pos), scale_(scale), eular_(Vector3{ 0.f,0.f,0.f }), isPriorityEular_(false),
-    axes_(forward,right,up)
+    axes_(forward, right, up)
 {
 }
 
@@ -28,10 +28,10 @@ void WorldCoordinate::Update(void)
         matRotate *= Mat4::RotationY(eular_.y);
     }
     else {
-        axes_.forward = axes_.forward.Normalize();
-        axes_.right = axes_.right.Normalize();
-        axes_.up = axes_.up.Normalize();
-        matRotate = Math::QuaternionF::MakeRotateMatrix3(axes_.forward, axes_.right, axes_.up);
+        Quaternion forward = Math::QuaternionF::MakeAxisAngle(axes_.forward.ExtractVector3().Normalize(), axes_.forward.w);
+        Quaternion right = Math::QuaternionF::MakeAxisAngle(axes_.right.ExtractVector3().Normalize(), axes_.right.w);
+        Quaternion up = Math::QuaternionF::MakeAxisAngle(axes_.up.ExtractVector3().Normalize(), axes_.up.w);
+        matRotate = Math::QuaternionF::MakeRotateMatrix3(forward, right, up);
     }
 
     matWorld_ = Mat4::Identity();

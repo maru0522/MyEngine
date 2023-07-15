@@ -15,13 +15,13 @@ Player::Player(void)/* : isGrounded_(false)*/
     coordinate_.SetAxisForward({ 0,0,1,0 });
     coordinate_.SetAxisRight({ 1,0,0,0 });
     coordinate_.SetAxisUp({ 0,1,0,0 });
-    coordinate_.SetIsPriority(true);
+    coordinate_.SetIsPriority(false);
 
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec());
     appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec());
     appearance_->GetCoordinatePtr()->SetAxisUp(coordinate_.GetUpVec());
-    appearance_->GetCoordinatePtr()->SetIsPriority(true);
+    appearance_->GetCoordinatePtr()->SetIsPriority(false);
 }
 
 void Player::Update(void)
@@ -81,6 +81,10 @@ void Player::Update(void)
     Quaternion newForward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
     coordinate_.SetAxisForward(newForward);
     Quaternion newUp = coordinate_.GetUpVec().Vec3Normalize();
+    if (KEYS::IsDown(DIK_RIGHT))
+    {
+        newUp.w += 0.1f;
+    }
     coordinate_.SetAxisUp(newUp);
 
 #ifdef _DEBUG
