@@ -23,8 +23,6 @@ public: // 変数
     float Dot(const Quaternion& q) const;
     float Length(void) const;
 
-    Vector3 ExtractVector3(void) const;
-
     // 単項演算子オーバーロード
     Quaternion operator+() const;
     Quaternion operator-() const;
@@ -57,8 +55,6 @@ namespace Math {
 
         // ベクトルをクォータニオンで回転させた結果のベクトルを求める
         Vector3 RotateVector(const Vector3& v, const Quaternion& q);
-        // ベクトルをクォータニオンから取り出す
-        Vector3 ExtractVector3(const Quaternion& q);
 
         // クォータニオンから回転行列を求める
         Matrix4 MakeRotateMatrix(const Quaternion& q);

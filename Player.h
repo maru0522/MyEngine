@@ -19,7 +19,7 @@ public:
     void Draw(void);
 
 private:
-    Quaternion Move(void); // get velocity
+    Vector3 Move(void); // get velocity
     void OnCollision(void); // callback
 
     // ïœêî

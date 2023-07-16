@@ -36,9 +36,9 @@ void DemoScene::Update(void)
     testP_->Update();
 
     if (debugCamFollow_) {
-        cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().ExtractVector3().Normalize() * 8.f);
-        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().ExtractVector3().Normalize());
-        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().ExtractVector3().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * 8.f);
+        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
     }
 
     //for (auto& object : objects_) {
@@ -160,10 +160,10 @@ void DemoScene::DebudGui(void)
     ImGui::Text("up : (%f,%f,%f)", cUp.x, cUp.y, cUp.z);
     ImGui::Text("rot(rad): (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
     ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(cRot.x), ToDegree(cRot.y), ToDegree(cRot.z));
-    Vector3 f = cameraPtr->GetCoordinatePtr()->GetForwardVec().ExtractVector3();
-    Vector3 u = cameraPtr->GetCoordinatePtr()->GetUpVec().ExtractVector3();
-    ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y, f.z);
-    ImGui::Text("upV: (%f,%f,%f)", u.x, u.y, u.z);
+    //Vector3 f = cameraPtr->GetCoordinatePtr()->GetForwardVec().ExtractVector3();
+    //Vector3 u = cameraPtr->GetCoordinatePtr()->GetUpVec().ExtractVector3();
+    //ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y, f.z);
+    //ImGui::Text("upV: (%f,%f,%f)", u.x, u.y, u.z);
     if (GUI::ButtonTrg("camera"))
         debugCamFollow_ ?
         debugCamFollow_ = false :

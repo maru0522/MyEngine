@@ -3,18 +3,31 @@
 #include "Matrix4.h"
 #include "Quaternion.h"
 
+struct AxisRot
+{
+    Vector3 axis;
+    float rad;
+
+    AxisRot(void) : AxisRot(Vector3{}, 0.f) {}
+    AxisRot(const Vector3& axis, float rad)
+    {
+        this->axis = axis;
+        this->rad = rad;
+    }
+};
+
 struct Axis3
 {
-    Quaternion forward;
-    Quaternion right;
-    Quaternion up;
+    Vector3 forward;
+    Vector3 right;
+    Vector3 up;
 
-    Axis3(void) : Axis3(Math::QuaternionF::Identity(), Math::QuaternionF::Identity(), Math::QuaternionF::Identity()) {}
-    Axis3(const Quaternion& f, const Quaternion& r, const Quaternion& u)
+    Axis3(void) : Axis3(Vector3{}, Vector3{}, Vector3{}) {}
+    Axis3(const Vector3& forward, const Vector3& right, const Vector3& up)
     {
-        forward = f;
-        right = r;
-        up = u;
+        this->forward = forward;
+        this->right = right;
+        this->up = up;
     }
 };
 
@@ -34,7 +47,7 @@ public:
     // 関数
     WorldCoordinate(void) : WorldCoordinate(Vector3{ 0,0,0 }, Vector3{ 1,1,1 }, Vector3{ 0,0,1 }, Vector3{ 1,0,0 }, Vector3{ 0,1,0 }) {}
     WorldCoordinate(const Vector3& pos, const Vector3& scale, const Vector3& rot);
-    WorldCoordinate(const Vector3& pos, const Vector3& scale, const Quaternion& forward, const Quaternion& right, const Quaternion& up);
+    WorldCoordinate(const Vector3& pos, const Vector3& scale, const Vector3& forward, const Vector3& right, const Vector3& up);
 
     void Update(void);
     void Reset(void);
@@ -46,9 +59,9 @@ public:
     inline void SetPosition(const Vector3& pos) { position_ = pos; }
     inline void SetScale(const Vector3& scale) { scale_ = scale; }
 
-    inline void SetAxisForward(const Quaternion& forward) { axes_.forward = forward; }
-    inline void SetAxisRight(const Quaternion& right) { axes_.right = right; }
-    inline void SetAxisUp(const Quaternion& up) { axes_.up = up; }
+    inline void SetAxisForward(const Vector3& forward) { axes_.forward = forward; }
+    inline void SetAxisRight(const Vector3& right) { axes_.right = right; }
+    inline void SetAxisUp(const Vector3& up) { axes_.up = up; }
     inline void SetAxis(const Axis3& axis3) { axes_ = axis3; }
 
     // getter
@@ -65,8 +78,8 @@ public:
     inline Vector3 GetMatAxisY(void) const { return { matWorld_.m[1][0],matWorld_.m[1][1],matWorld_.m[1][2] }; }
     inline Vector3 GetMatAxisZ(void) const { return { matWorld_.m[2][0],matWorld_.m[2][1],matWorld_.m[2][2] }; }
 
-    // 自分で設定したベクトルを抜き出す。
-    inline const Quaternion& GetForwardVec(void) { return axes_.forward; }
-    inline const Quaternion& GetRightVec(void) { return axes_.right; }
-    inline const Quaternion& GetUpVec(void) { return axes_.up; }
+    // 自分で設定したベクトルを取得する。
+    inline const Vector3& GetForwardVec(void) { return axes_.forward; }
+    inline const Vector3& GetRightVec(void) { return axes_.right; }
+    inline const Vector3& GetUpVec(void) { return axes_.up; }
 };

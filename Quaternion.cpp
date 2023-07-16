@@ -11,11 +11,6 @@ float Quaternion::Length() const
     return std::sqrtf(w * w + x * x + y * y + z * z);
 }
 
-Vector3 Quaternion::ExtractVector3(void) const
-{
-    return Vector3(x, y, z);
-}
-
 Quaternion Quaternion::Normalize(void) const
 {
     Quaternion tmp{ *this };
@@ -157,11 +152,6 @@ Vector3 Math::QuaternionF::RotateVector(const Vector3& v, const Quaternion& q)
     Quaternion result = tmp * q.Conjugate();
 
     return Vector3(result.x, result.y, result.z);
-}
-
-Vector3 Math::QuaternionF::ExtractVector3(const Quaternion& q)
-{
-    return Vector3(q.x, q.y, q.w);
 }
 
 Matrix4 Math::QuaternionF::MakeRotateMatrix(const Quaternion& q)

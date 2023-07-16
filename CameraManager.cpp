@@ -12,8 +12,8 @@ Camera::Camera(const Vector3& pos) :
     nearZ_(0.1f), farZ_(1000.f),
     targetPtr_(nullptr), isFollow_(false)
 {
-    coordinate_.SetAxisUp({ 0,1,0,0 });
-    coordinate_.SetAxisForward({ 0,0,1,0 });
+    coordinate_.SetAxisUp({ 0,1,0 });
+    coordinate_.SetAxisForward({ 0,0,1 });
     UpdateOrthoGraphic();
 }
 
@@ -22,8 +22,8 @@ void Camera::Update(void)
     Vector3 currentPos = coordinate_.GetPosition();
     Vector3 velocity = Move();
     Vector3 rotation = coordinate_.GetRotation();
-    Quaternion eyeDir = coordinate_.GetMatAxisZ();
-    Quaternion up = coordinate_.GetUpVec();
+    Vector3 eyeDir = coordinate_.GetMatAxisZ();
+    Vector3 up = coordinate_.GetUpVec();
 
     // debugCamera
     if (isDebugMode_) {
@@ -61,7 +61,7 @@ void Camera::Update(void)
     // ビュー行列
     isFollow_ ?
         matView_ = Math::Mat4::ViewLookAtLH(coordinate_.GetPosition(), *targetPtr_, coordinate_.GetMatAxisY()):
-        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3().Normalize());
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().Normalize(), coordinate_.GetUpVec().Normalize());
 
     // 射影行列
     matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);

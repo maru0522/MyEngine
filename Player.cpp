@@ -12,9 +12,9 @@ Player::Player(void)/* : isGrounded_(false)*/
 
     sphereCollider_.radius = kRadius_;
     coordinate_.SetPosition({ 0,60,0 }); // 初期位置
-    coordinate_.SetAxisForward({ 0,0,1,0 });
-    coordinate_.SetAxisRight({ 1,0,0,0 });
-    coordinate_.SetAxisUp({ 0,1,0,0 });
+    coordinate_.SetAxisForward({ 0,0,1 });
+    coordinate_.SetAxisRight({ 1,0,0 });
+    coordinate_.SetAxisUp({ 0,1,0 });
     coordinate_.SetIsPriority(false);
 
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
@@ -50,6 +50,18 @@ void Player::Update(void)
     // 三軸のクォータニオンをセット
     //appearance_->GetCoordinatePtr()->SetAxis({ forward4Appearance, right4Appearance, up4Appearance });
     // 更新された座標をセット（1frame遅れ)
+    if (KEYS::IsTrigger(DIK_K))
+    {
+        appearance_->GetCoordinatePtr()->SetAxisUp({ 0,1,0 });
+        appearance_->GetCoordinatePtr()->SetAxisForward({ 0,0,1 });
+        appearance_->GetCoordinatePtr()->SetAxisRight({ 1,0,0 });
+    }
+    if (KEYS::IsTrigger(DIK_O))
+    {
+        appearance_->GetCoordinatePtr()->SetAxisUp({ 1,0,0 });
+        appearance_->GetCoordinatePtr()->SetAxisForward({ 0,0,1 });
+        appearance_->GetCoordinatePtr()->SetAxisRight({ 0,-1,0 });
+    }
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->Update();
 
@@ -61,12 +73,12 @@ void Player::Update(void)
     // ------------------
 
     // 移動量
-    Quaternion velocity = Move();
+    Vector3 velocity = Move();
 
     // 座標更新
-    Quaternion currentPos = coordinate_.GetPosition();
+    Vector3 currentPos = coordinate_.GetPosition();
     currentPos += velocity;
-    coordinate_.SetPosition(currentPos.ExtractVector3());
+    coordinate_.SetPosition(currentPos);
 
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
@@ -77,11 +89,11 @@ void Player::Update(void)
     oldUp = coordinate_.GetUpVec();
 
     // 更新された座標から3方向の軸を再計算
-    Quaternion newRight = Math::QuaternionF::CrossVector3Part(coordinate_.GetUpVec(), coordinate_.GetForwardVec()).Normalize();
+    Vector3 newRight = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()).Normalize();
     coordinate_.SetAxisRight(newRight);
-    Quaternion newForward = Math::QuaternionF::CrossVector3Part(coordinate_.GetRightVec(), coordinate_.GetUpVec()).Normalize();
+    Vector3 newForward = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize());
     coordinate_.SetAxisForward(newForward);
-    Quaternion newUp = coordinate_.GetUpVec().Vec3Normalize();
+    Vector3 newUp = coordinate_.GetUpVec().Normalize();
 
     coordinate_.SetAxisUp(newUp);
 
@@ -100,7 +112,6 @@ void Player::Update(void)
     //GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
     GUI::Text("right(current):       [%f,%f,%f]", newRight.x, newRight.y, newRight.z);
     GUI::Text("up:                   [%f,%f,%f]", newUp.x, newUp.y, newUp.z);
-    GUI::Text("up:                   [%f]", newUp.w);
     GUI::End();
 #endif // _DEBUG
 }
@@ -113,28 +124,28 @@ void Player::Draw(void)
     appearance_->Draw(/*"Resources/red1x1.png"*/);
 }
 
-Quaternion Player::Move(void)
+Vector3 Player::Move(void)
 {
-    Quaternion forward = coordinate_.GetForwardVec();
-    Quaternion right = coordinate_.GetRightVec();
+    Vector3 forward = coordinate_.GetForwardVec().Normalize();
+    Vector3 right = coordinate_.GetRightVec().Normalize();
 
     // 移動ベクトル
-    Quaternion moveVec{};
-    if (KEYS::IsDown(DIK_W)) moveVec += forward.Vec3Normalize();
-    if (KEYS::IsDown(DIK_S)) moveVec -= forward.Vec3Normalize();
-    if (KEYS::IsDown(DIK_A)) moveVec -= right.Vec3Normalize();
-    if (KEYS::IsDown(DIK_D)) moveVec += right.Vec3Normalize();
+    Vector3 moveVec{};
+    if (KEYS::IsDown(DIK_W)) moveVec += forward;
+    if (KEYS::IsDown(DIK_S)) moveVec -= forward;
+    if (KEYS::IsDown(DIK_A)) moveVec -= right;
+    if (KEYS::IsDown(DIK_D)) moveVec += right;
 
     // 重力
     jumpVecNorm_ -= kGravity_;
 
     // ジャンプベクトル
-    Quaternion jumpVec{};
+    Vector3 jumpVec{};
     if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
-    jumpVec += coordinate_.GetUpVec().ExtractVector3().Normalize() * jumpVecNorm_;
+    jumpVec += coordinate_.GetUpVec().Normalize() * jumpVecNorm_;
 
     // 移動量
-    Quaternion velocity{};
+    Vector3 velocity{};
     velocity += moveVec.Normalize() * kMoveSpeed_;
     velocity += jumpVec;
 
@@ -147,7 +158,7 @@ void Player::OnCollision(void)
     {
         // 本来は球状重力エリア内に入ってる場合に行う処理。
         Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
-        coordinate_.SetAxisUp({ center2PlayerVec.Normalize(), coordinate_.GetUpVec().w });
+        coordinate_.SetAxisUp(center2PlayerVec.Normalize());
     }
     if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {
@@ -162,7 +173,7 @@ void Player::OnCollision(void)
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-        currentPos += coordinate_.GetUpVec().ExtractVector3().Normalize() * -diff; // ここをマイナス符号で値反転
+        currentPos += coordinate_.GetUpVec().Normalize() * -diff; // ここをマイナス符号で値反転
 
         coordinate_.SetPosition(currentPos);
     }
