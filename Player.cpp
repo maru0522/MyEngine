@@ -11,7 +11,7 @@ Player::Player(void)/* : isGrounded_(false)*/
     sphereCollider_.SetOnCollision(std::bind(&Player::OnCollision, this));
 
     sphereCollider_.radius = kRadius_;
-    coordinate_.SetPosition({ 0,20,0 }); // 初期位置
+    coordinate_.SetPosition({ 0,60,0 }); // 初期位置
     coordinate_.SetAxisForward({ 0,0,1,0 });
     coordinate_.SetAxisRight({ 1,0,0,0 });
     coordinate_.SetAxisUp({ 0,1,0,0 });
@@ -32,23 +32,23 @@ void Player::Update(void)
 
     // --- 1Frame遅い ---
 
-    // 1frame前と現在frameの右ベクトルでの角度を求める
-    float theta4Forward = std::acosf(Math::Vec3::Dot(oldRight.ExtractVector3().Normalize(), coordinate_.GetRightVec().ExtractVector3().Normalize()));
-    // 今の正面ベクトルと角度から、正面ベクトル(roll)の任意軸回転クォータニオンを作る。
-    Quaternion forward4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetForwardVec().ExtractVector3().Normalize(), theta4Forward);
+    //// 1frame前と現在frameの右ベクトルでの角度を求める
+    //float theta4Forward = std::acosf(Math::Vec3::Dot(oldRight.ExtractVector3().Normalize(), coordinate_.GetRightVec().ExtractVector3().Normalize()));
+    //// 今の正面ベクトルと角度から、正面ベクトル(roll)の任意軸回転クォータニオンを作る。
+    //Quaternion forward4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetForwardVec().ExtractVector3().Normalize(), theta4Forward);
 
-    // 1frame前と現在frameの上ベクトルでの角度を求める
-    float theta4Right = std::acosf(Math::Vec3::Dot(oldUp.ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3().Normalize()));
-    // 今の右ベクトルと角度から、右ベクトル(pitch)の任意軸回転クォータニオンを作る。
-    Quaternion right4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetRightVec().ExtractVector3().Normalize(), theta4Right);
+    //// 1frame前と現在frameの上ベクトルでの角度を求める
+    //float theta4Right = std::acosf(Math::Vec3::Dot(oldUp.ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3().Normalize()));
+    //// 今の右ベクトルと角度から、右ベクトル(pitch)の任意軸回転クォータニオンを作る。
+    //Quaternion right4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetRightVec().ExtractVector3().Normalize(), theta4Right);
 
-    // 1frame前と現在frameの正面ベクトルで角度を求める
-    float theta4Up = std::acosf(Math::Vec3::Dot(oldForward.ExtractVector3().Normalize(), coordinate_.GetForwardVec().ExtractVector3().Normalize()));
-    // 今の上ベクトルと角度から、上ベクトル(yaw)の任意軸回転クォータニオンを作る。
-    Quaternion up4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().ExtractVector3().Normalize(), theta4Up);
+    //// 1frame前と現在frameの正面ベクトルで角度を求める
+    //float theta4Up = std::acosf(Math::Vec3::Dot(oldForward.ExtractVector3().Normalize(), coordinate_.GetForwardVec().ExtractVector3().Normalize()));
+    //// 今の上ベクトルと角度から、上ベクトル(yaw)の任意軸回転クォータニオンを作る。
+    //Quaternion up4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().ExtractVector3().Normalize(), theta4Up);
 
     // 三軸のクォータニオンをセット
-    appearance_->GetCoordinatePtr()->SetAxis({ forward4Appearance, right4Appearance, up4Appearance });
+    //appearance_->GetCoordinatePtr()->SetAxis({ forward4Appearance, right4Appearance, up4Appearance });
     // 更新された座標をセット（1frame遅れ)
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->Update();
@@ -108,9 +108,9 @@ void Player::Update(void)
 void Player::Draw(void)
 {
     // 赤色のテクスチャを適用。（クソ見辛い）
-    appearance_->Draw("Resources/red1x1.png");
+    //appearance_->Draw("Resources/red1x1.png");
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
-    //appearance_->Draw(/*"Resources/red1x1.png"*/);
+    appearance_->Draw(/*"Resources/red1x1.png"*/);
 }
 
 Quaternion Player::Move(void)

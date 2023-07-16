@@ -124,10 +124,13 @@ const Quaternion operator/(const Quaternion& q, float s)
 
 Quaternion Math::QuaternionF::MakeAxisAngle(const Vector3& axis, float radian)
 {
-    return Quaternion{ axis.x * sinf(radian / 2),
-                       axis.y * sinf(radian / 2),
-                       axis.z * sinf(radian / 2),
-                       cosf(radian / 2) };
+    Vector3 nAxis = axis.Normalize();
+    float sinf = std::sinf(radian / 2);
+
+    return Quaternion{ nAxis.x * sinf,
+                       nAxis.y * sinf,
+                       nAxis.z * sinf,
+                       std::cosf(radian / 2) };
 }
 
 Quaternion Math::QuaternionF::EulerToQuaternion(const Vector3& eular)

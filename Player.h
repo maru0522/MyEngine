@@ -10,7 +10,7 @@ public:
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 7.f };
     const float kMoveSpeed_{ 1.f };
-    const float kGravity_{ 0.98f };
+    const float kGravity_{ 0.f };
 
     // ä÷êî
     Player(void);
