@@ -50,8 +50,6 @@ namespace Math {
         Quaternion MakeAxisAngle(const Vector3& axis, float radian);
         // オイラー角からクォータニオン
         Quaternion EulerToQuaternion(const Vector3& eular);
-        // ベクトル成分だけで外積
-        Quaternion CrossVector3Part(const Quaternion& q1, const Quaternion& q2, float theta = 0.f);
 
         // ベクトルをクォータニオンで回転させた結果のベクトルを求める
         Vector3 RotateVector(const Vector3& v, const Quaternion& q);
