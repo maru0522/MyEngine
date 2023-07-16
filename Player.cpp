@@ -58,9 +58,10 @@ void Player::Update(void)
     }
     if (KEYS::IsTrigger(DIK_O))
     {
-        appearance_->GetCoordinatePtr()->SetAxisUp({ 1,0,0 });
-        appearance_->GetCoordinatePtr()->SetAxisForward({ 0,0,1 });
-        appearance_->GetCoordinatePtr()->SetAxisRight({ 0,-1,0 });
+        // （正面ベクトル)rollを軸に-90度回転した状態になると思うんだけどなー
+        appearance_->GetCoordinatePtr()->SetAxisUp({ 1,1,0 });
+        appearance_->GetCoordinatePtr()->SetAxisForward({ 1,0,1 });
+        appearance_->GetCoordinatePtr()->SetAxisRight({ 0,-1,1 });
     }
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->Update();
