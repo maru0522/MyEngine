@@ -51,14 +51,40 @@ void Player::Update(void)
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
 
-    // 更新された座標から3方向の軸を再計算
+
+    // 更新された各軸から3方向の軸を再計算
     Vector3 newRight = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()).Normalize();
     coordinate_.SetAxisRight(newRight);
     Vector3 newForward = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize());
     coordinate_.SetAxisForward(newForward);
     Vector3 newUp = coordinate_.GetUpVec().Normalize();
-
     coordinate_.SetAxisUp(newUp);
+
+    // 入力ベクトル **これ移動ベクトルと両方やってんのめっちゃ冗長に感じる。
+    Vector2 inputVec{};
+    inputVec.x += KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
+    inputVec.y += KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    // 入力されたベクトルとの角度を算出
+    //** 角度算出は入力があった時のみ。
+    float rad{};
+    if (inputVec.IsNonZero())
+    {
+        rad = std::acosf(Math::Vec2::Dot(Vector2{ 0,1 }.Normalize(), inputVec.Normalize())); // {0,1}とinputVecの角度
+        constexpr float pi = Math::Function::ToRadian(180.f);
+        if (inputVec.x < 0) rad = pi + (pi - rad); // 180度を超えた場合の処理。
+
+        constexpr float epsilon = 0.00001f;
+        // 角度が0度および180度以外の場合
+        if (Math::Function::FixEpsilon(rad, 0.f, epsilon) != 0.f && Math::Function::FixEpsilon(rad, 3.141592f, epsilon) != 3.141592f)
+        {
+            // 正面ベクトルと右ベクトルを上ベクトルを軸に角度分回転
+            Quaternion rotAxisUp = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().Normalize(), -rad); // 上ベクトルを軸に回転させた状態を表すクォータニオン ** -radなのは左手系の回転方向は左ねじなのに対し、角度を右ねじ想定で算出したため。
+            Vector3 rotedForward = Math::QuaternionF::RotateVector(coordinate_.GetForwardVec().Normalize(), rotAxisUp);
+            Vector3 rotedRight = Math::QuaternionF::RotateVector(coordinate_.GetRightVec().Normalize(), rotAxisUp);
+            coordinate_.SetAxisForward(rotedForward);
+            coordinate_.SetAxisRight(rotedRight);
+        }
+    }
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -75,6 +101,8 @@ void Player::Update(void)
     //GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
     GUI::Text("right(current):       [%f,%f,%f]", newRight.x, newRight.y, newRight.z);
     GUI::Text("up:                   [%f,%f,%f]", newUp.x, newUp.y, newUp.z);
+    GUI::Text("rad:                  [%f]", rad);
+    GUI::Text("inputVec:             [%f,%f]", inputVec.x, inputVec.y);
     GUI::End();
 #endif // _DEBUG
 }
@@ -106,6 +134,9 @@ Vector3 Player::Move(void)
     Vector3 jumpVec{};
     if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
     jumpVec += coordinate_.GetUpVec().Normalize() * jumpVecNorm_;
+
+    // 正面ベクトル更新
+    //coordinate_.SetAxisForward(moveVec.Normalize());
 
     // 移動量
     Vector3 velocity{};

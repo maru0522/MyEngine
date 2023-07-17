@@ -50,6 +50,19 @@ namespace Math {
             }
         }
 
+        template<typename T>
+        inline bool InRange(T value, T min, T max) {
+            return min < value && value < max;
+        }
+
+        // 引数: 実値,理想値,極小数
+        // 実値が理想値から±極小数の範囲内である時、理想値が返される。
+        template<typename T>
+        inline T FixEpsilon(T fixValue, T idealValue, T epsilon) {
+            if (idealValue - epsilon < fixValue && fixValue < idealValue + epsilon) fixValue = idealValue;
+            return fixValue;
+        }
+
         template<class T> // 正 = 1, 0 = 0, 負 = -1
         inline int32_t Sgn(T arg_v) {
             if (arg_v == 0) return 0;
@@ -67,7 +80,7 @@ namespace Math {
         }
 
         // x:動径r, y:緯度θ, z:経度φ
-        Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante); 
+        Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
         Vector3 ToRectAngularCoordinate(const Vector3& sphericalCoordinate);
     }
 
