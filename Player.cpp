@@ -26,46 +26,7 @@ Player::Player(void)/* : isGrounded_(false)*/
 
 void Player::Update(void)
 {
-    static Quaternion oldForward = coordinate_.GetForwardVec();
-    static Quaternion oldRight = coordinate_.GetRightVec();
-    static Quaternion oldUp = coordinate_.GetUpVec();
-
     // --- 1Frame遅い ---
-
-    //// 1frame前と現在frameの右ベクトルでの角度を求める
-    //float theta4Forward = std::acosf(Math::Vec3::Dot(oldRight.ExtractVector3().Normalize(), coordinate_.GetRightVec().ExtractVector3().Normalize()));
-    //// 今の正面ベクトルと角度から、正面ベクトル(roll)の任意軸回転クォータニオンを作る。
-    //Quaternion forward4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetForwardVec().ExtractVector3().Normalize(), theta4Forward);
-
-    //// 1frame前と現在frameの上ベクトルでの角度を求める
-    //float theta4Right = std::acosf(Math::Vec3::Dot(oldUp.ExtractVector3().Normalize(), coordinate_.GetUpVec().ExtractVector3().Normalize()));
-    //// 今の右ベクトルと角度から、右ベクトル(pitch)の任意軸回転クォータニオンを作る。
-    //Quaternion right4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetRightVec().ExtractVector3().Normalize(), theta4Right);
-
-    //// 1frame前と現在frameの正面ベクトルで角度を求める
-    //float theta4Up = std::acosf(Math::Vec3::Dot(oldForward.ExtractVector3().Normalize(), coordinate_.GetForwardVec().ExtractVector3().Normalize()));
-    //// 今の上ベクトルと角度から、上ベクトル(yaw)の任意軸回転クォータニオンを作る。
-    //Quaternion up4Appearance = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().ExtractVector3().Normalize(), theta4Up);
-
-    // 三軸のクォータニオンをセット
-    //appearance_->GetCoordinatePtr()->SetAxis({ forward4Appearance, right4Appearance, up4Appearance });
-    // 更新された座標をセット（1frame遅れ)
-    if (KEYS::IsTrigger(DIK_K))
-    {
-        appearance_->GetCoordinatePtr()->SetAxisUp({ 0,1,0 });
-        appearance_->GetCoordinatePtr()->SetAxisForward({ 0,0,1 });
-        appearance_->GetCoordinatePtr()->SetAxisRight({ 1,0,0 });
-    }
-    if (KEYS::IsTrigger(DIK_O))
-    {
-        // （正面ベクトル)rollを軸に-90度回転した状態になると思うんだけどなー
-        //appearance_->GetCoordinatePtr()->SetAxisUp(Vector3{ 1,4,1 }.Normalize());
-        //appearance_->GetCoordinatePtr()->SetAxisForward(Vector3{ 3,0,1 }.Normalize());
-        //appearance_->GetCoordinatePtr()->SetAxisRight(Vector3{ 0,-1,5 }.Normalize());
-        appearance_->GetCoordinatePtr()->SetAxisUp(Vector3{ 1,0,0 }.Normalize());
-        appearance_->GetCoordinatePtr()->SetAxisForward(Vector3{ 0,0,1 }.Normalize());
-        appearance_->GetCoordinatePtr()->SetAxisRight(Vector3{ 0,-1,0 }.Normalize());
-    }
     appearance_->GetCoordinatePtr()->SetAxisUp(coordinate_.GetUpVec().Normalize());
     appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec().Normalize());
     appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec().Normalize());
@@ -89,11 +50,6 @@ void Player::Update(void)
 
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
-
-    // 更新直前の各軸ベクトルの保存
-    oldForward = coordinate_.GetForwardVec();
-    oldRight = coordinate_.GetRightVec();
-    oldUp = coordinate_.GetUpVec();
 
     // 更新された座標から3方向の軸を再計算
     Vector3 newRight = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()).Normalize();

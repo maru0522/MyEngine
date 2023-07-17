@@ -28,23 +28,10 @@ void WorldCoordinate::Update(void)
         matRotate *= Mat4::RotationY(eular_.y);
     }
     else {
-        //Quaternion forward = Math::QuaternionF::MakeAxisAngle(axes_.forward.ExtractVector3().Normalize(), axes_.forward.w);
-        //Quaternion right = Math::QuaternionF::MakeAxisAngle(axes_.right.ExtractVector3().Normalize(), axes_.right.w);
-        //Quaternion up = Math::QuaternionF::MakeAxisAngle(axes_.up.ExtractVector3().Normalize(), axes_.up.w);
-        //matRotate = Math::QuaternionF::MakeRotateMatrix3(forward, right, up);
-
-        //Quaternion forward = Math::QuaternionF::MakeAxisAngle(axes_.forward.Normalize(), 0);
-        //Quaternion right = Math::QuaternionF::MakeAxisAngle(axes_.right.Normalize(), 0);
-        //Quaternion up = Math::QuaternionF::MakeAxisAngle(axes_.up.Normalize(), 0);
-        //matRotate = Math::QuaternionF::MakeRotateMatrix3(forward, right, up);
-
         Vector3 forward = axes_.forward.Normalize();
         Vector3 right = axes_.right.Normalize();
         Vector3 up = axes_.up.Normalize();
         matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
-
-        //Quaternion up = Math::QuaternionF::MakeAxisAngle(axes_.up, 0);
-        //matRotate = Math::QuaternionF::MakeRotateMatrix(up);
     }
 
     matWorld_ = Mat4::Identity();
