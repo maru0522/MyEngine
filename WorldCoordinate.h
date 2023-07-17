@@ -62,7 +62,7 @@ public:
     inline void SetAxisForward(const Vector3& forward) { axes_.forward = forward; }
     inline void SetAxisRight(const Vector3& right) { axes_.right = right; }
     inline void SetAxisUp(const Vector3& up) { axes_.up = up; }
-    inline void SetAxis(const Axis3& axis3) { axes_ = axis3; }
+    inline void SetAxes(const Axis3& axis3) { axes_ = axis3; }
 
     // getter
     inline bool GetIsPriority(void) { return isPriorityEular_; }

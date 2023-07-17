@@ -126,6 +126,19 @@ Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
     return result;
 }
 
+Matrix4 Math::Mat4::RotMatFromAxes3(const Vector3& forward, const Vector3& right, const Vector3& up)
+{
+    Vector3 nForward = forward.Normalize();
+    Vector3 nRight = right.Normalize();
+    Vector3 nUp = up.Normalize();
+
+    return Matrix4{ nRight.x,              nRight.y,              nRight.z,    0,
+                    nUp.x,                 nUp.y,                 nUp.z,       0,
+                    nForward.x,            nForward.y,            nForward.z,  0,
+                    0,                     0,                     0,           1
+    };
+}
+
 Matrix4 Math::Mat4::ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection)
 {
     auto axisZ{ eyeDirection.Normalize() };

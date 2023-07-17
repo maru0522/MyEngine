@@ -45,6 +45,8 @@ namespace Math {
         // 座標変換
         Vector3 Transform(const Vector3& v, const Matrix4& m);
 
+        Matrix4 RotMatFromAxes3(const Vector3& forward, const Vector3& right, const Vector3& up);
+
         // ビュー行列
         Matrix4 ViewLookToLH(const Vector3& eyePosition, const Vector3& eyeDirection, const Vector3& upDirection);
         Matrix4 ViewLookAtLH(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& upDirection);

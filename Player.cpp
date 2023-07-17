@@ -59,13 +59,16 @@ void Player::Update(void)
     if (KEYS::IsTrigger(DIK_O))
     {
         // （正面ベクトル)rollを軸に-90度回転した状態になると思うんだけどなー
-        appearance_->GetCoordinatePtr()->SetAxisUp(Vector3{ 1,4,1 }.Normalize());
-        appearance_->GetCoordinatePtr()->SetAxisForward(Vector3{ 3,0,1 }.Normalize());
-        appearance_->GetCoordinatePtr()->SetAxisRight(Vector3{ 0,-1,5 }.Normalize());
-        //appearance_->GetCoordinatePtr()->SetAxisUp(Vector3{ 1,0,0 }.Normalize());
-        //appearance_->GetCoordinatePtr()->SetAxisForward(Vector3{ 0,0,1 }.Normalize());
-        //appearance_->GetCoordinatePtr()->SetAxisRight(Vector3{ 0,-1,0 }.Normalize());
+        //appearance_->GetCoordinatePtr()->SetAxisUp(Vector3{ 1,4,1 }.Normalize());
+        //appearance_->GetCoordinatePtr()->SetAxisForward(Vector3{ 3,0,1 }.Normalize());
+        //appearance_->GetCoordinatePtr()->SetAxisRight(Vector3{ 0,-1,5 }.Normalize());
+        appearance_->GetCoordinatePtr()->SetAxisUp(Vector3{ 1,0,0 }.Normalize());
+        appearance_->GetCoordinatePtr()->SetAxisForward(Vector3{ 0,0,1 }.Normalize());
+        appearance_->GetCoordinatePtr()->SetAxisRight(Vector3{ 0,-1,0 }.Normalize());
     }
+    appearance_->GetCoordinatePtr()->SetAxisUp(coordinate_.GetUpVec().Normalize());
+    appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec().Normalize());
+    appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec().Normalize());
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->Update();
 
