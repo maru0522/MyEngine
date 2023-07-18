@@ -15,6 +15,7 @@ class DemoScene :
 private:
     // ’è‹`
     using fsPath = std::experimental::filesystem::path;
+    const float kCamDist_ = 8.f;
 
 public:
     // ŠÖ”

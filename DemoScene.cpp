@@ -33,14 +33,19 @@ void DemoScene::Update(void)
 
     player_->Update();
     planet_->Update();
-    testP_->Update();
 
     if (debugCamFollow_) {
-        cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * 8.f);
-        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * kCamDist_);
         cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
+        cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
+        testP_->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * kCamDist_);
+        testP_->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
+        testP_->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
+        testP_->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
     }
 
+    testP_->Update();
     //for (auto& object : objects_) {
     //    object.second->Update();
     //}
@@ -58,7 +63,7 @@ void DemoScene::Draw3d(void)
 
     player_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
-    //testP_->Draw();
+    testP_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
@@ -169,6 +174,10 @@ void DemoScene::DebudGui(void)
         debugCamFollow_ = false :
         debugCamFollow_ = true;
     ImGui::Text(debugCamFollow_ ? "debugCamFollow : true" : "debugCanFollow : false");
+    GUI::ChildFrameEnd();
+
+    GUI::ChildFrameBegin("testP", { 400,100 });
+    GUI::Text("pos: (%f,%f,%f)", testP_->GetCoordinatePtr()->GetPosition().x, testP_->GetCoordinatePtr()->GetPosition().y, testP_->GetCoordinatePtr()->GetPosition().z);
     GUI::ChildFrameEnd();
 
     GUI::ChildFrameBegin("other", { 400,200 });
