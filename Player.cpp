@@ -4,7 +4,7 @@
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
-Player::Player(void)/* : isGrounded_(false)*/
+Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr)
 {
     CollisionManager::GetInstance()->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
@@ -69,7 +69,22 @@ void Player::Update(void)
     float rad{};
     if (inputVec.IsNonZero())
     {
-        rad = std::acosf(Math::Vec2::Dot(Vector2{ 0,1 }.Normalize(), inputVec.Normalize())); // {0,1}とinputVecの角度
+        Vector3 curForward = coordinate_.GetForwardVec().Normalize();
+        Vector2 forwardVec2d = Vector2{ curForward.x,curForward.y }.Normalize();
+
+        // 傾いた状態での正面ベクトルと入力ベクトルとの角度が取れてれば（内積の180°とかの諸問題なく）要らない処理
+#pragma region 本来ならいらない処理
+        // 2次元化した正面ベクトルと{0,1}ベクトルとの角度
+        rad = std::acosf(Math::Vec2::Dot(Vector2{ 0,1 }, inputVec.Normalize()));
+        // 2次元化した正面ベクトルと入力ベクトルを回転
+        Vector2 rotedForwardVec2d = Math::Vec2::RotateVector(forwardVec2d, rad);
+        Vector2 rotedInputVec = Math::Vec2::RotateVector(inputVec.Normalize(), rad);
+
+        // 回転後の、2次元化した正面ベクトルと入力ベクトルとの角度
+        rad = std::acosf(Math::Vec2::Dot(rotedForwardVec2d.Normalize(), rotedInputVec.Normalize()));
+#pragma endregion
+
+        //rad = std::acosf(Math::Vec2::Dot(Vector2{ 0,1 }.Normalize(), inputVec.Normalize())); // {0,1}とinputVecの角度
         constexpr float pi = Math::Function::ToRadian(180.f);
         if (inputVec.x < 0) rad = pi + (pi - rad); // 180度を超えた場合の処理。
 

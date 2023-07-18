@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Object3D.h"
+#include "CameraManager.h"
 #include "CollisionPrimitive.h"
 
 class Player
@@ -13,7 +14,7 @@ public:
     const float kGravity_{ 0.98f };
 
     // ä÷êî
-    Player(void);
+    Player(CameraManager* camMPtr);
 
     void Update(void);
     void Draw(void);
@@ -29,6 +30,7 @@ private:
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
 
     float jumpVecNorm_{};
+    CameraManager* camMPtr_{};
 public:
     // setter
 

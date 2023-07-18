@@ -106,7 +106,7 @@ const Vector2 operator/(const Vector2& v, float s)
 
 Vector2 Math::Vec2::Normalize(const Vector2& v)
 {
-    float len{ Length(v)};
+    float len{ Length(v) };
     if (len != 0) {
         return v / len;
     }
@@ -126,4 +126,11 @@ float Math::Vec2::Dot(const Vector2& v1, const Vector2& v2)
 float Math::Vec2::Length(const Vector2& v)
 {
     return std::sqrtf(v.x * v.x + v.y * v.y);
+}
+
+Vector2 Math::Vec2::RotateVector(const Vector2& v, float rad)
+{
+    float sinf = std::sinf(rad);
+    float cosf = std::cosf(rad);
+    return Vector2(v.x * cosf - v.y * sinf, v.x * sinf + v.y * cosf);
 }

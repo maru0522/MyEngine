@@ -44,5 +44,7 @@ namespace Math {
         float Cross(const Vector2& v1, const Vector2& v2);
         float Dot(const Vector2& v1, const Vector2& v2);
         float Length(const Vector2& v);
+
+        Vector2 RotateVector(const Vector2& v, float rad);
     }
 }
