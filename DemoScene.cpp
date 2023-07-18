@@ -45,6 +45,15 @@ void DemoScene::Update(void)
         testP_->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
     }
 
+    if (debugCamFuncFollow_)
+    {
+        cameraPtr->Follow(player_->GetCoordinatePtr()->GetPosPtr());
+    }
+    else
+    {
+        cameraPtr->UnFollow();
+    }
+
     testP_->Update();
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -193,6 +202,12 @@ void DemoScene::DebudGui(void)
         debugPlanetDraw_ = false :
         debugPlanetDraw_ = true;
     ImGui::Text(debugPlanetDraw_ ? "debugPlanetDraw : true" : "debugPlanetDraw : false");
+
+    if (GUI::ButtonTrg("camFuncFollow"))
+        debugCamFuncFollow_ ?
+        debugCamFuncFollow_ = false :
+        debugCamFuncFollow_ = true;
+    ImGui::Text(debugCamFuncFollow_ ? "debugCamFuncFollow_ : true" : "debugCamFuncFollow_ : false");
     GUI::ChildFrameEnd();
     GUI::End();
 }
