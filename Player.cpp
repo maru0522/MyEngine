@@ -75,8 +75,8 @@ void Player::Update(void)
 
     // 見た目の正面と右ベクトルを回転
     // **更新は次にUpdate()が呼ばれたときの先頭で行われるので1freme遅い
-    appearance_->GetCoordinatePtr()->SetAxisForward(newForward);
-    appearance_->GetCoordinatePtr()->SetAxisRight(newRight);
+    //appearance_->GetCoordinatePtr()->SetAxisForward(newForward);
+    //appearance_->GetCoordinatePtr()->SetAxisRight(newRight);
 
     //    // 入力ベクトル **これ移動ベクトルと両方やってんのめっちゃ冗長に感じる。
     //    Vector2 inputVec{};
@@ -161,12 +161,12 @@ void Player::Move(Vector3& inputVec, Vector3& moveVec, Vector3& velocity)
     //Vector3 pFFC = Math::Vec3::Cross()
 
     // pForwardFromCameraから再定義されたプレイヤー移動ベクトルの右
-    Vector3 redefinitionPRightVec = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), pForwardFromCamera).Normalize();
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), pForwardFromCamera).Normalize();
 
     // 移動ベクトル
     moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
     //moveVec += pRightFromCamera * inputVec.x;
-    moveVec += redefinitionPRightVec * inputVec.x;
+    moveVec += redefinitionPRightFromCamera * inputVec.x;
 
     //Vector3 forward = coordinate_.GetForwardVec().Normalize();
     //Vector3 right = coordinate_.GetRightVec().Normalize();
@@ -199,7 +199,7 @@ void Player::Move(Vector3& inputVec, Vector3& moveVec, Vector3& velocity)
     GUI::Text("move:                 [%f,%f,%f]", moveVec.x, moveVec.y, moveVec.z);
     GUI::Text("pForwardFromCamera:   [%f,%f,%f]", pForwardFromCamera.x, pForwardFromCamera.y, pForwardFromCamera.z);
     //GUI::Text("pRightFromCamera:     [%f,%f,%f]", pRightFromCamera.x, pRightFromCamera.y, pRightFromCamera.z);
-    GUI::Text("pRightFromCamera:     [%f,%f,%f]", redefinitionPRightVec.x, redefinitionPRightVec.y, redefinitionPRightVec.z);
+    GUI::Text("pRightFromCamera:     [%f,%f,%f]", redefinitionPRightFromCamera.x, redefinitionPRightFromCamera.y, redefinitionPRightFromCamera.z);
     GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
     GUI::Text("kGravity:             [%f]", kGravity_);
     GUI::Space();
