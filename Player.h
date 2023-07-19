@@ -20,7 +20,7 @@ public:
     void Draw(void);
 
 private:
-    Vector3 Move(void); // get velocity
+    void Move(Vector3& inputVec, Vector3& moveVec,Vector3& velocity); // get velocity & moveVec
     void OnCollision(void); // callback
 
     // ïœêî

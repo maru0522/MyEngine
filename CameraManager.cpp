@@ -12,8 +12,9 @@ Camera::Camera(const Vector3& pos) :
     nearZ_(0.1f), farZ_(1000.f),
     targetPtr_(nullptr), isFollow_(false)
 {
-    coordinate_.SetAxisUp({ 0,1,0 });
     coordinate_.SetAxisForward({ 0,0,1 });
+    coordinate_.SetAxisRight({ 1,0,0 });
+    coordinate_.SetAxisUp({ 0,1,0 });
     UpdateOrthoGraphic();
 }
 
@@ -23,7 +24,8 @@ void Camera::Update(void)
     Vector3 velocity = Move();
     Vector3 rotation = coordinate_.GetRotation();
     Vector3 eyeDir = coordinate_.GetMatAxisZ();
-    Vector3 up = coordinate_.GetUpVec();
+    Vector3 right = coordinate_.GetMatAxisX();
+    Vector3 up = coordinate_.GetMatAxisY();
 
     // debugCamera
     if (isDebugMode_) {
@@ -55,6 +57,7 @@ void Camera::Update(void)
     coordinate_.SetPosition(currentPos + velocity);
     coordinate_.SetRotation(rotation);
     coordinate_.SetAxisForward(eyeDir);
+    coordinate_.SetAxisRight(right);
     coordinate_.SetAxisUp(up);
     coordinate_.Update();
 
