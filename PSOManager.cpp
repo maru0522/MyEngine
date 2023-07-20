@@ -295,7 +295,7 @@ void HelperGraphicPipeline::SetBlend(D3D12_GRAPHICS_PIPELINE_STATE_DESC& pipelin
         blendDesc.BlendEnable = true;
         // 色反転(RGB値)
         blendDesc.BlendOp = D3D12_BLEND_OP_ADD;             // 加算
-        blendDesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;    // 1.0f - デストカラーの値
+        blendDesc.SrcBlend = D3D12_BLEND_INV_SRC_COLOR;    // 1.0f - デストカラーの値
         blendDesc.DestBlend = D3D12_BLEND_ZERO;             // 使わない
         break;
 

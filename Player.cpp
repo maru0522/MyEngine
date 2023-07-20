@@ -37,11 +37,13 @@ void Player::Update(void)
 #ifdef _DEBUG
     GUI::Begin("player", ImVec2{ 300,500 });
     GUI::Text("pos(1frame late):     [%f,%f,%f]", coordinate_.GetPosition().x, coordinate_.GetPosition().y, coordinate_.GetPosition().z);
+    GUI::Text("forwardVec:           [%f,%f,%f]", coordinate_.GetForwardVec().x, coordinate_.GetForwardVec().y, coordinate_.GetForwardVec().z);
     GUI::End();
 #endif // _DEBUG
     // ------------------
 
     // 移動量
+    int a{};
     Vector3 inputVec{};
     Vector3 moveVec{};
     Vector3 velocity{};
@@ -56,22 +58,24 @@ void Player::Update(void)
     sphereCollider_.center = coordinate_.GetPosition();
 
     // 更新された各軸から3方向の軸を再計算
-    Vector3 newRight = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()).Normalize();
-    coordinate_.SetAxisRight(newRight);
-    Vector3 newForward = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize());
-    coordinate_.SetAxisForward(newForward);
-    Vector3 newUp = coordinate_.GetUpVec().Normalize();
-    coordinate_.SetAxisUp(newUp);
+    Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize());
+    coordinate_.SetAxisRight(rightFromOldAxis.Normalize());
+    Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize());
+    coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
+    Vector3 upFromAxis = coordinate_.GetUpVec();
+    coordinate_.SetAxisUp(upFromAxis.Normalize());
 
-    // 移動ベクトルと今のプレイヤーの正面ベクトルとの角度
-    float rad = -std::acosf(Math::Vec3::Dot(newForward.Normalize(), moveVec.Normalize())); // 左手系では回転が左ねじのためマイナスをつけて時計回り回転に
-    // 入力ベクトルで角度が±のどちらか判別できる。
-    if (inputVec.x < 0) rad = -rad; // 反時計回り回転に
+    Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize());
+    coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
+    coordinate_.SetAxisForward(moveVec.Normalize());
 
-    // 上向きベクトル軸のrad回転した状態を表すクォータニオン
-    Quaternion rotAxisup = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().Normalize(), rad);
-    newForward = Math::QuaternionF::RotateVector(newForward, rotAxisup);
-    newRight = Math::QuaternionF::RotateVector(newRight, rotAxisup);
+    //// 移動ベクトルと今のプレイヤーの正面ベクトルとの角度
+    //float rad = -std::acosf(Math::Vec3::Dot(newForward.Normalize(), moveVec.Normalize())); // 左手系では回転が左ねじのためマイナスをつけて時計回り回転に
+    //// 入力ベクトルで角度が±のどちらか判別できる。
+    //if (inputVec.x < 0) rad = -rad; // 反時計回り回転に
+
+    //// 上向きベクトル軸のrad回転した状態を表すクォータニオン
+
 
     // 見た目の正面と右ベクトルを回転
     // **更新は次にUpdate()が呼ばれたときの先頭で行われるので1freme遅い
@@ -130,10 +134,10 @@ void Player::Update(void)
     GUI::Space();
     GUI::Space();
     //GUI::Text("forward(1frame late): [%f,%f,%f]", forward.x, forward.y, forward.z);
-    GUI::Text("forward(current):     [%f,%f,%f]", newForward.x, newForward.y, newForward.z);
+    GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
     //GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
-    GUI::Text("right(current):       [%f,%f,%f]", newRight.x, newRight.y, newRight.z);
-    GUI::Text("up:                   [%f,%f,%f]", newUp.x, newUp.y, newUp.z);
+    GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
+    GUI::Text("up:                   [%f,%f,%f]", upFromAxis.x, upFromAxis.y, upFromAxis.z);
     //GUI::Text("rad:                  [%f]", rad);
     //GUI::Text("inputVec:             [%f,%f]", inputVec.x, inputVec.y);
     GUI::End();
