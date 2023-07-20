@@ -39,10 +39,6 @@ void DemoScene::Update(void)
         cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
         cameraPtr->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
         cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
-        testP_->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * kCamDist_);
-        testP_->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
-        testP_->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
-        testP_->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
     }
 
     if (debugCamFuncFollow_)
