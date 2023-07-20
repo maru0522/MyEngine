@@ -27,7 +27,7 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr)
 
 void Player::Update(void)
 {
-    // --- 1Frame遅い ---
+    // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->SetAxisUp(coordinate_.GetUpVec().Normalize());
     appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec().Normalize());
     appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec().Normalize());
@@ -40,14 +40,11 @@ void Player::Update(void)
     GUI::Text("forwardVec:           [%f,%f,%f]", coordinate_.GetForwardVec().x, coordinate_.GetForwardVec().y, coordinate_.GetForwardVec().z);
     GUI::End();
 #endif // _DEBUG
-    // ------------------
 
     // 移動量
-    int a{};
-    Vector3 inputVec{};
     Vector3 moveVec{};
     Vector3 velocity{};
-    Move(inputVec, moveVec, velocity);
+    Move(moveVec, velocity); // 参照渡しで受け取る。
 
     // 座標更新
     Vector3 currentPos = coordinate_.GetPosition();
@@ -57,71 +54,17 @@ void Player::Update(void)
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
 
-    // 更新された各軸から3方向の軸を再計算
-    Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize());
+    // 3軸を再計算
+    Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
     coordinate_.SetAxisRight(rightFromOldAxis.Normalize());
-    Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize());
+    Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
     coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
-    Vector3 upFromAxis = coordinate_.GetUpVec();
-    coordinate_.SetAxisUp(upFromAxis.Normalize());
 
+    // 移動方向に合わせた軸を計算
+    Vector3 upFromAxis = coordinate_.GetUpVec();
     Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize());
     coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
     coordinate_.SetAxisForward(moveVec.Normalize());
-
-    //// 移動ベクトルと今のプレイヤーの正面ベクトルとの角度
-    //float rad = -std::acosf(Math::Vec3::Dot(newForward.Normalize(), moveVec.Normalize())); // 左手系では回転が左ねじのためマイナスをつけて時計回り回転に
-    //// 入力ベクトルで角度が±のどちらか判別できる。
-    //if (inputVec.x < 0) rad = -rad; // 反時計回り回転に
-
-    //// 上向きベクトル軸のrad回転した状態を表すクォータニオン
-
-
-    // 見た目の正面と右ベクトルを回転
-    // **更新は次にUpdate()が呼ばれたときの先頭で行われるので1freme遅い
-    //appearance_->GetCoordinatePtr()->SetAxisForward(newForward);
-    //appearance_->GetCoordinatePtr()->SetAxisRight(newRight);
-
-    //    // 入力ベクトル **これ移動ベクトルと両方やってんのめっちゃ冗長に感じる。
-    //    Vector2 inputVec{};
-    //    inputVec.x += KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
-    //    inputVec.y += KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-    //    // 入力されたベクトルとの角度を算出
-    //    //** 角度算出は入力があった時のみ。
-    //    float rad{};
-    //    if (inputVec.IsNonZero())
-    //    {
-    //        Vector3 curForward = coordinate_.GetForwardVec().Normalize();
-    //        Vector2 forwardVec2d = Vector2{ curForward.x,curForward.y }.Normalize();
-    //
-    //        // 傾いた状態での正面ベクトルと入力ベクトルとの角度が取れてれば（内積の180°とかの諸問題なく）要らない処理
-    //#pragma region 本来ならいらない処理
-    //        // 2次元化した正面ベクトルと{0,1}ベクトルとの角度
-    //        rad = std::acosf(Math::Vec2::Dot(Vector2{ 0,1 }, inputVec.Normalize()));
-    //        // 2次元化した正面ベクトルと入力ベクトルを回転
-    //        Vector2 rotedForwardVec2d = Math::Vec2::RotateVector(forwardVec2d, rad);
-    //        Vector2 rotedInputVec = Math::Vec2::RotateVector(inputVec.Normalize(), rad);
-    //
-    //        // 回転後の、2次元化した正面ベクトルと入力ベクトルとの角度
-    //        rad = std::acosf(Math::Vec2::Dot(rotedForwardVec2d.Normalize(), rotedInputVec.Normalize()));
-    //#pragma endregion
-    //
-    //        //rad = std::acosf(Math::Vec2::Dot(Vector2{ 0,1 }.Normalize(), inputVec.Normalize())); // {0,1}とinputVecの角度
-    //        constexpr float pi = Math::Function::ToRadian(180.f);
-    //        if (inputVec.x < 0) rad = pi + (pi - rad); // 180度を超えた場合の処理。
-    //
-    //        constexpr float epsilon = 0.00001f;
-    //        // 角度が0度および180度以外の場合
-    //        if (Math::Function::FixEpsilon(rad, 0.f, epsilon) != 0.f && Math::Function::FixEpsilon(rad, 3.141592f, epsilon) != 3.141592f)
-    //        {
-    //            // 正面ベクトルと右ベクトルを上ベクトルを軸に角度分回転
-    //            Quaternion rotAxisUp = Math::QuaternionF::MakeAxisAngle(coordinate_.GetUpVec().Normalize(), -rad); // 上ベクトルを軸に回転させた状態を表すクォータニオン ** -radなのは左手系の回転方向は左ねじなのに対し、角度を右ねじ想定で算出したため。
-    //            Vector3 rotedForward = Math::QuaternionF::RotateVector(coordinate_.GetForwardVec().Normalize(), rotAxisUp);
-    //            Vector3 rotedRight = Math::QuaternionF::RotateVector(coordinate_.GetRightVec().Normalize(), rotAxisUp);
-    //            coordinate_.SetAxisForward(rotedForward);
-    //            coordinate_.SetAxisRight(rotedRight);
-    //        }
-    //    }
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -152,35 +95,20 @@ void Player::Draw(void)
     appearance_->Draw(/*"Resources/red1x1.png"*/);
 }
 
-void Player::Move(Vector3& inputVec, Vector3& moveVec, Vector3& velocity)
+void Player::Move(Vector3& moveVec, Vector3& velocity)
 {
     // 入力ベクトル
+    Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    // 1行下のpRightFromCameraをコメントアウトするという事は、絶対にカメラが追従し、プレイヤーは星の縁に立てないものとする（カメラから見て縁に立っているように見えることは絶対ないものとする。）
-    //Vector3 pRightFromCamera = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetForwardVec().Normalize()); // 右Vec: cross(p.upVec, camera.forwardVec)
-    //Vector3 pFFC = Math::Vec3::Cross()
-
-    // pForwardFromCameraから再定義されたプレイヤー移動ベクトルの右
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), pForwardFromCamera).Normalize();
 
     // 移動ベクトル
     moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
-    //moveVec += pRightFromCamera * inputVec.x;
     moveVec += redefinitionPRightFromCamera * inputVec.x;
-
-    //Vector3 forward = coordinate_.GetForwardVec().Normalize();
-    //Vector3 right = coordinate_.GetRightVec().Normalize();
-
-    //// 移動ベクトル
-    //Vector3 moveVec{};
-    //if (KEYS::IsDown(DIK_W)) moveVec += forward;
-    //if (KEYS::IsDown(DIK_S)) moveVec -= forward;
-    //if (KEYS::IsDown(DIK_A)) moveVec -= right;
-    //if (KEYS::IsDown(DIK_D)) moveVec += right;
 
     // 重力
     jumpVecNorm_ -= kGravity_;
@@ -189,9 +117,6 @@ void Player::Move(Vector3& inputVec, Vector3& moveVec, Vector3& velocity)
     Vector3 jumpVec{};
     if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
     jumpVec += coordinate_.GetUpVec().Normalize() * jumpVecNorm_;
-
-    // 正面ベクトル更新
-    //coordinate_.SetAxisForward(moveVec.Normalize());
 
     // 移動量
     velocity += moveVec.Normalize() * kMoveSpeed_;
