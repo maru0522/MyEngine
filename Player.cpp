@@ -60,11 +60,15 @@ void Player::Update(void)
     Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
     coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
 
-    // 移動方向に合わせた軸を計算
-    Vector3 upFromAxis = coordinate_.GetUpVec();
-    Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize());
-    coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
-    coordinate_.SetAxisForward(moveVec.Normalize());
+    // 移動入力があった場合
+    if (moveVec.IsNonZero())
+    {
+        // 移動方向に合わせた軸を再計算
+        Vector3 upFromAxis = coordinate_.GetUpVec(); // 上ベクトル：(更新された上ベクトルを取得）
+        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+        coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
+        coordinate_.SetAxisForward(moveVec.Normalize());
+    }
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -80,7 +84,7 @@ void Player::Update(void)
     GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
     //GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
     GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
-    GUI::Text("up:                   [%f,%f,%f]", upFromAxis.x, upFromAxis.y, upFromAxis.z);
+    //GUI::Text("up:                   [%f,%f,%f]", upFromAxis.x, upFromAxis.y, upFromAxis.z);
     //GUI::Text("rad:                  [%f]", rad);
     //GUI::Text("inputVec:             [%f,%f]", inputVec.x, inputVec.y);
     GUI::End();
@@ -104,7 +108,7 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), pForwardFromCamera).Normalize();
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
     // 移動ベクトル
     moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
