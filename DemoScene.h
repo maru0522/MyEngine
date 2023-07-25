@@ -32,8 +32,8 @@ public:
     void HotReload(LevelData* lvdPtr);
 
     void DebudGui(void);
-    bool debugCamFuncFollow_{};
-    bool debugCamFollow_;
+    bool debugCamFuncFollow_{ true };
+    bool debugCamFollow_{ true };
     bool debugPlanetDraw_{ true };
 
     // ïœêî
