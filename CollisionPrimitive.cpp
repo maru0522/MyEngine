@@ -11,6 +11,9 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
         arg_Shpere->SetColInfo(CollisionInfo{ center,radius,id_ });
 
         // callback
+        //onTrigger_();
+        //arg_Shpere->GetOnTrigger()();
+
         onCollision_();
         arg_Shpere->GetOnCollision()();
     }
@@ -28,6 +31,9 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
         arg_Plane->SetColInfo(CollisionInfo{ center,radius,id_ });
 
         // callback
+        //onTrigger_();
+        //arg_Plane->GetOnTrigger()();
+
         onCollision_();
         arg_Plane->GetOnCollision()();
     }

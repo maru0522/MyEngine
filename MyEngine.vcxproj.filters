@@ -160,7 +160,12 @@
     <ClCompile Include="ICollider.cpp">
       <Filter>Entity\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="ColliderCamera.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Planet.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -300,7 +305,12 @@
     <ClInclude Include="ICollider.h">
       <Filter>Entity\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Planet.h" />
+    <ClInclude Include="ColliderCamera.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Model.hlsli">

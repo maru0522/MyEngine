@@ -89,6 +89,7 @@
     <ClCompile Include="BillBoard.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="ColliderCamera.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
     <ClCompile Include="CollisionChecker.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="CircleShadow.h" />
+    <ClInclude Include="ColliderCamera.h" />
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="CollisionChecker.h" />
     <ClInclude Include="CollisionManager.h" />

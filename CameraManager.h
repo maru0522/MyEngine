@@ -11,7 +11,8 @@ public:
     // ä÷êî
     Camera(void) : Camera(Vector3{ 0.f,0.f,0.f }) {}
     Camera(const Vector3& pos);
-    void Update(void);
+    virtual ~Camera(void) = default;
+    virtual void Update(void);
 
     //** cameraManageróp
     void UpdateOrthoGraphic(void);

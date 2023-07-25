@@ -9,7 +9,7 @@ using namespace Input;
 
 Camera::Camera(const Vector3& pos) :
     coordinate_(pos, Vector3{ 1.f,1.f,1.f }, Vector3{ 0.f,0.f,0.f }),
-    nearZ_(0.1f), farZ_(1000.f),
+    nearZ_(0.1f), farZ_(10000.f),
     targetPtr_(nullptr), isFollow_(false)
 {
     coordinate_.SetAxisForward({ 0,0,1 });

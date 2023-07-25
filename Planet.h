@@ -7,8 +7,9 @@ class Planet
 {
 public:
     // ’è”
-    const float kScale_{ 20.f };
-    const float kGravityArea_{ 50.f };
+    const float kScale_{ 50.f };
+    const float kGravityArea_{ 500.f };
+    const float kRepelCameraArea_{ 100.f };
 
     // ŠÖ”
     Planet(void);
@@ -18,10 +19,15 @@ public:
 
     CollisionPrimitive::SphereCollider surface_;
     CollisionPrimitive::SphereCollider gravityArea_;
+    CollisionPrimitive::SphereCollider repelCameraArea_;
 
 private:
     void OnCollision(void) {}
 
     // •Ï”
     std::unique_ptr<Object3D> body_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
+
+public:
+    // getter
+    const Vector3& GetPosition(void) { return body_->GetCoordinatePtr()->GetPosition(); }
 };

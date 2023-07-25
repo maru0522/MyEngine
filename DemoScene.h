@@ -8,6 +8,7 @@
 #include "LevelData.h"
 #include "Player.h"
 #include "Planet.h"
+#include "ColliderCamera.h"
 
 class DemoScene :
     public IScene
@@ -15,7 +16,8 @@ class DemoScene :
 private:
     // íËã`
     using fsPath = std::experimental::filesystem::path;
-    const float kCamDist_ = 8.f;
+    const float kCamDist_ = 80.f;
+    const float kCamDiff_ = 10.f;
 
 public:
     // ä÷êî
@@ -46,6 +48,7 @@ public:
     std::unique_ptr<LevelData> lvdPtr_;
 
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
+    std::unique_ptr<ColliderCamera> colCameraPtr{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
     std::unique_ptr<LightGroup> lightGroup_{ std::make_unique<LightGroup>() };
 };
 

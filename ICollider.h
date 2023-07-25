@@ -43,16 +43,22 @@ protected:
     std::string id_{};
     CollisionInfo colInfo_{};
     std::function<void(void)> onCollision_{};
+    std::function<void(void)> onTrigger_{};
+    std::function<void(void)> onRelease_{};
 
 public:
     // setter
     inline void SetID(const std::string& id) { id_ = id; }
     inline void SetColInfo(const CollisionInfo& colInfo) { colInfo_ = colInfo; }
     inline void SetOnCollision(const std::function<void(void)> callback_onCollision) { onCollision_ = callback_onCollision; }
+    inline void SetOnTrigger(const std::function<void(void)> callback_onTrigger) { onTrigger_ = callback_onTrigger; }
+    //inline void SetOnCollision(const std::function<void(void)> callback_onRelease) { onRelease_ = callback_onRelease; }
 
     // getter
     inline const std::string& GetID(void) { return id_; }
     inline const CollisionInfo& GetColInfo(void) { return colInfo_; }
     inline const std::function<void(void)>& GetOnCollision(void) { return onCollision_; }
+    inline const std::function<void(void)>& GetOnTrigger(void) { return onTrigger_; }
+    inline const std::function<void(void)>& GetOnRelease(void) { return onRelease_; }
 
 };
