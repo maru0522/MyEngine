@@ -112,6 +112,79 @@ Matrix4 Math::Mat4::Transpose(const Matrix4& m)
     return result;
 }
 
+Matrix4 Math::Mat4::Inverse(const Matrix4& m)
+{
+    Matrix4 result;
+    float mat[4][8] = { 0 };
+
+    for (size_t i = 0; i < 4; i++) {
+        for (size_t j = 0; j < 4; j++) {
+            mat[i][j] = m.m[i][j];
+        }
+    }
+
+    mat[0][4] = 1;
+    mat[1][5] = 1;
+    mat[2][6] = 1;
+    mat[3][7] = 1;
+
+    for (size_t n = 0; n < 4; n++) {
+        //最大の絶対値を探索する(とりあえず対象成分を最大と仮定しておく)
+        float max = abs(mat[n][n]);
+        size_t maxIndex = n;
+
+        for (size_t i = n + 1; i < 4; i++) {
+            if (abs(mat[i][n]) > max) {
+                max = abs(mat[i][n]);
+                maxIndex = i;
+            }
+        }
+
+        //最大の絶対値が0だったら逆行列は求められない
+        if (abs(mat[maxIndex][n]) <= 0.000001f) {
+            return result; //とりあえず単位行列返しちゃう
+        }
+
+        //入れ替え
+        if (n != maxIndex) {
+            for (size_t i = 0; i < 8; i++) {
+                float f = mat[maxIndex][i];
+                mat[maxIndex][i] = mat[n][i];
+                mat[n][i] = f;
+            }
+        }
+
+        //掛けたら1になる値を算出
+        float mul = 1 / mat[n][n];
+
+        //掛ける
+        for (size_t i = 0; i < 8; i++) {
+            mat[n][i] *= mul;
+        }
+
+        //他全部0にする
+        for (size_t i = 0; i < 4; i++) {
+            if (n == i) {
+                continue;
+            }
+
+            float tempMul = -mat[i][n];
+
+            for (size_t j = 0; j < 8; j++) {
+                mat[i][j] += mat[n][j] * tempMul;
+            }
+        }
+    }
+
+    for (size_t i = 0; i < 4; i++) {
+        for (size_t j = 0; j < 4; j++) {
+            result.m[i][j] = mat[i][j + 4];
+        }
+    }
+
+    return result;
+}
+
 // 座標変換（ベクトル行列の掛け算）を行うTransform 関数を作成する。　（透視変換にも対応している）
 Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 {

@@ -29,5 +29,7 @@ public:
         // 星からカメラ方向へのベクトル
         repelVec_ = (GetCoordinatePtr()->GetPosition() - planetCenter).Normalize();
     }
+
+    void SetViewMat(const Matrix4& viewMat) { matView_ = viewMat; }
 };
 

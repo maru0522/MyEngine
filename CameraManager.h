@@ -20,6 +20,7 @@ public:
 private:
     Vector3 Move(void);
 
+protected:
     // •Ï”
     WorldCoordinate coordinate_;
 

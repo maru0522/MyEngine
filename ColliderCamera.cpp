@@ -11,7 +11,19 @@ ColliderCamera::ColliderCamera(CollisionManager* colMPtr)
 
 void ColliderCamera::Update(void)
 {
-    Camera::Update();
+    using namespace Math;
+
+    coordinate_.Update();
+
+    // ビュー行列
+    isFollow_ ?
+        matView_ = Math::Mat4::ViewLookAtLH(coordinate_.GetPosition(), *targetPtr_, coordinate_.GetMatAxisY()) :
+        matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().Normalize(), coordinate_.GetUpVec().Normalize());
+    //matView_ = Math::Mat4::Inverse(coordinate_.GetMatWorld());
+
+    // 射影行列
+    matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
+
     sphereCollider_.center = GetCoordinatePtr()->GetPosition();
 }
 

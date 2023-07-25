@@ -78,6 +78,15 @@ void DemoScene::Update(void)
         colCameraPtr->UnFollow();
     }
 
+    if (debugCamFollow2_)
+    {
+        colCameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
+        colCameraPtr->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
+        colCameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
+
+        colCameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * 20.f);
+    }
+
     testP_->Update();
     //for (auto& object : objects_) {
     //    object.second->Update();

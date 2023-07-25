@@ -42,6 +42,9 @@ namespace Math {
         // 転置行列
         Matrix4 Transpose(const Matrix4& m);
 
+        // 逆行列
+        Matrix4 Inverse(const Matrix4& m);
+
         // 座標変換
         Vector3 Transform(const Vector3& v, const Matrix4& m);
 
