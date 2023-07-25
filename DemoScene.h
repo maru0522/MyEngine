@@ -32,10 +32,10 @@ public:
     void HotReload(LevelData* lvdPtr);
 
     void DebudGui(void);
-    bool debugCamFuncFollow_{ };
-    bool debugCamFollow_{ true };
-    bool debugCamFollow2_{ true };
-    bool debugPlanetDraw_{ true };
+    bool debugCamFuncFollow_{ }; // Follow
+    bool debugCamFollow_{ true }; // カメラとプレイヤーの距離が常に一定になるようにする
+    bool debugCamFollow2_{ true }; // 軸をプレイヤーと同じにする。
+    bool debugPlanetDraw_{ true }; // 星を描画する。
 
     // 変数
     std::unique_ptr<Player> player_{ std::make_unique<Player>(CameraManager::GetInstance()) };

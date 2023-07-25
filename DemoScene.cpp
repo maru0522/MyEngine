@@ -11,6 +11,7 @@ void DemoScene::Initialize(void)
     // カメラのデバッグカメラモードをON
     /*cameraPtr->SetIsDebugMode(true);*/
     colCameraPtr->SetIsDebugMode(true);
+    colCameraPtr->GetCoordinatePtr()->SetIsPriority(false);
     // 座標計算法をクォータニオン優先
     //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
     // カメラをマネージャーにセット
@@ -33,6 +34,16 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     lightGroup_->Update();
+
+
+    if (debugCamFollow2_)
+    {
+        colCameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
+        colCameraPtr->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
+        colCameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
+
+        colCameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * 20.f);
+    }
 
     player_->Update();
     planet_->Update();
@@ -78,14 +89,6 @@ void DemoScene::Update(void)
         colCameraPtr->UnFollow();
     }
 
-    if (debugCamFollow2_)
-    {
-        colCameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
-        colCameraPtr->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
-        colCameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
-
-        colCameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * 20.f);
-    }
 
     testP_->Update();
     //for (auto& object : objects_) {
