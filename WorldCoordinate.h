@@ -82,4 +82,5 @@ public:
     inline const Vector3& GetForwardVec(void) { return axes_.forward; }
     inline const Vector3& GetRightVec(void) { return axes_.right; }
     inline const Vector3& GetUpVec(void) { return axes_.up; }
+    inline const Axis3& GetAxes(void) { return axes_; }
 };

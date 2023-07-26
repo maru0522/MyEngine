@@ -69,6 +69,7 @@ void Player::Update(void)
         coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
         coordinate_.SetAxisForward(moveVec.Normalize());
     }
+    coordinate_.Update();
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -87,6 +88,13 @@ void Player::Update(void)
     //GUI::Text("up:                   [%f,%f,%f]", upFromAxis.x, upFromAxis.y, upFromAxis.z);
     //GUI::Text("rad:                  [%f]", rad);
     //GUI::Text("inputVec:             [%f,%f]", inputVec.x, inputVec.y);
+
+    ImGui::Text("matrix");
+    Matrix4 p = coordinate_.GetMatWorld();
+    ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
+    ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
+    ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
+    ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
     GUI::End();
 #endif // _DEBUG
 }

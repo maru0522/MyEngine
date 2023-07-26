@@ -33,7 +33,7 @@ public:
 
     void DebudGui(void);
     bool debugCamFuncFollow_{ }; // Follow
-    bool debugCamFollow_{ true }; // カメラとプレイヤーの距離が常に一定になるようにする
+    bool debugCamFollow_{ }; // カメラとプレイヤーの距離が常に一定になるようにする
     bool debugCamFollow2_{ true }; // 軸をプレイヤーと同じにする。
     bool debugPlanetDraw_{ true }; // 星を描画する。
 
