@@ -152,7 +152,7 @@ void DemoScene::Draw3d(void)
 
     player_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
-    testP_->Draw();
+    //testP_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

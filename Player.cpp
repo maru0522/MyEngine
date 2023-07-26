@@ -60,34 +60,18 @@ void Player::Update(void)
     Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
     coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
 
-    // 移動入力があった場合
-    if (moveVec.IsNonZero())
-    {
-        // 移動方向に合わせた軸を再計算
-        Vector3 upFromAxis = coordinate_.GetUpVec(); // 上ベクトル：(更新された上ベクトルを取得）
-        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-        coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
-        coordinate_.SetAxisForward(moveVec.Normalize());
-    }
     coordinate_.Update();
 
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-    //GUI::Text("moveVec:              [%f,%f,%f]", moveVec.x, moveVec.y, moveVec.z);
-    //GUI::Text("jumpVec:              [%f,%f,%f]", jumpVec.x, jumpVec.y, jumpVec.z);
     GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
     GUI::Text("kGravity:             [%f]", kGravity_);
     GUI::Space();
     GUI::Space();
-    //GUI::Text("forward(1frame late): [%f,%f,%f]", forward.x, forward.y, forward.z);
     GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
-    //GUI::Text("right(1frame late):   [%f,%f,%f]", right.x, right.y, right.z);
     GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
-    //GUI::Text("up:                   [%f,%f,%f]", upFromAxis.x, upFromAxis.y, upFromAxis.z);
-    //GUI::Text("rad:                  [%f]", rad);
-    //GUI::Text("inputVec:             [%f,%f]", inputVec.x, inputVec.y);
 
     ImGui::Text("matrix");
     Matrix4 p = coordinate_.GetMatWorld();
