@@ -83,7 +83,7 @@ void DemoScene::Update(void)
         a = (player_->GetSphereCollider().center - colCameraPtr->GetCoordinatePtr()->GetPosition()).Length();
 
         // プレイヤーとカメラとの距離がkCamDist未満になった場合
-        if (a < sCamdist - 3)
+        if (a < sCamdist - 1)
         {
             // カメラの正面方向に、プレイヤーの移動速度だけカメラ移動。
             /*cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - cameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
@@ -92,7 +92,7 @@ void DemoScene::Update(void)
             testP_->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() - (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize() * sCamFollowSpeed);
         }
         // プレイヤーとカメラとの距離がkCamDistより大きくになった場合
-        else if (a > sCamdist + 3)
+        else if (a > sCamdist + 1)
         {
             /*cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() + cameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
             /*colCameraPtr->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() + colCameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
@@ -114,18 +114,39 @@ void DemoScene::Update(void)
         /*cameraPtr->Follow(player_->GetCoordinatePtr()->GetPosPtr());*/
         //colCameraPtr->Follow(player_->GetCoordinatePtr()->GetPosPtr());
 
-        //const float correctDiff = 0.05f;
-        //float dot = player_->GetCoordinatePtr()->GetUpVec().Dot(colCameraPtr->GetCoordinatePtr()->GetForwardVec());
-        //if (-1.f + correctDiff <= dot && dot <= -1.f - correctDiff)
         //{
 
             // カメラのz軸を (p.pos - c.pos).normalize()
         colCamZ = (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize();
         colCameraPtr->GetCoordinatePtr()->SetAxisForward(colCamZ);
 
+        Vector3 pUpVec = player_->GetCoordinatePtr()->GetUpVec().Normalize();
+
+        // プレイヤーの上ベクトルと、カメラの正面ベクトル（カメラからプレイヤーへのベクトル）の内積は -1付近のとき
+        const float diff = 0.05f;
+        float pUpDotCForward = pUpVec.Dot(colCameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize());
+
         // カメラのx軸
         colCamX = player_->GetCoordinatePtr()->GetUpVec().Cross(colCamZ).Normalize();
-        if (colCamX.x < 0)
+
+        // カメラの上ベクトル
+        Vector3 cUpVec{};
+        if (-1.f + diff >= pUpDotCForward) // -0.95f <= dot(初期) 
+        {
+            // カメラの上ベクトル算出
+            cUpVec = colCamX.Cross(pUpVec).Normalize();
+        }
+        
+        // カメラから球の中心方向へのベクトル
+        Vector3 cam2SphereVec = (planet_->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize();
+        // カメラから球の中心方向へのベクトルの右ベクトル
+        Vector3 sphereVerticalRightVec = cUpVec.Cross(cam2SphereVec).Normalize();
+        Vector3 sphereVerticakUpVec = sphereVerticalRightVec.Cross(cam2SphereVec).Normalize();
+
+        // カメラから球の中心方向へのベクトルの上ベクトルと pUpVecとの内積
+        float verticalUpDotCam2Sphere = sphereVerticakUpVec.Dot(pUpVec);
+        // 値が0未満（カメラから見てプレイヤーが画面の下半分に行ったとき）
+        if (verticalUpDotCam2Sphere < 0) 
         {
             // 外積結果が左ベクトルの場合反転して右ベクトルにする
             colCamX = -colCamX;
