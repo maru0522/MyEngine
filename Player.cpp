@@ -54,11 +54,21 @@ void Player::Update(void)
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
 
-    // 3軸を再計算
+    // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
     Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
     coordinate_.SetAxisRight(rightFromOldAxis.Normalize());
     Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
     coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
+
+    // 移動入力があった場合
+    if (moveVec.IsNonZero())
+    {
+        // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+        Vector3 upFromAxis = coordinate_.GetUpVec(); // 上ベクトル：(更新された上ベクトルを取得）
+        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+        coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
+        coordinate_.SetAxisForward(moveVec.Normalize());
+    }
 
     coordinate_.Update();
 

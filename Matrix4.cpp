@@ -185,6 +185,26 @@ Matrix4 Math::Mat4::Inverse(const Matrix4& m)
     return result;
 }
 
+Matrix4 Math::Mat4::AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular)
+{
+    Matrix4 matWorld{ Mat4::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
+
+    matScale = Mat4::Scale(scale);
+
+    matRotate *= Mat4::RotationZ(rotEular.z);
+    matRotate *= Mat4::RotationX(rotEular.x);
+    matRotate *= Mat4::RotationY(rotEular.y);
+
+    matWorld = Mat4::Identity();
+    matWorld *= matScale;
+    matWorld *= matRotate;
+    matWorld = Mat4::Translate(matWorld, pos);
+
+    return matWorld;
+}
+
 // 座標変換（ベクトル行列の掛け算）を行うTransform 関数を作成する。　（透視変換にも対応している）
 Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 {

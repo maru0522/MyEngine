@@ -45,6 +45,9 @@ namespace Math {
         // 逆行列
         Matrix4 Inverse(const Matrix4& m);
 
+        // アフィン変換
+        Matrix4 AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular);
+
         // 座標変換
         Vector3 Transform(const Vector3& v, const Matrix4& m);
 
