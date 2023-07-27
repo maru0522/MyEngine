@@ -190,12 +190,12 @@ void TextureManager::GenerateMissingImage(void)
                 imageData[i] = {0.0f, 0.0f, 0.0f, 1.0f};
             }
             else if (i % 256 >= 128) {
-                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
+                imageData[i] = { 1.f, 0.f, 1.f, 1.f };
             }
         }
         else {
             if (i % 256 < 128) {
-                imageData[i] = { 0.5f, 0.5f, 0.5f, 1.0f };
+                imageData[i] = { 1.f, 0.f, 1.f, 1.f };
             }
             else if (i % 256 >= 128) {
                 imageData[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
