@@ -33,7 +33,7 @@ public:
     // 関数
     static void StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr);
     // 透視投影行列を任意のタイミングで更新するための関数
-    static void UpdateCBMatViewPerse(void);
+    static void UpdateCBMatViewPerse(CameraManager* camMPtr);
 
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
     static void SetDrawBlendMode(BlendMode blendmode);

@@ -1,7 +1,9 @@
 #include "WorldCoordinate.h"
 #include "CameraManager.h"
+#include "Object3D.h"
 #include "MathUtil.h"
 #include "WndAPI.h"
+#include "Sprite.h"
 #include "Input.h"
 
 using namespace Math;
@@ -125,6 +127,6 @@ void CameraManager::SetCurrentCamera(Camera* cameraPtr)
     current_ = cameraPtr;
     current_->Update();
     current_->UpdateOrthoGraphic();
-    Sprite::UpdateCBMatOrthoGraphic();
-    Object3D::UpdateCBMatViewPerse();
+    Sprite::UpdateCBMatOrthoGraphic(this);
+    Object3D::UpdateCBMatViewPerse(this);
 }

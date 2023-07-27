@@ -16,12 +16,12 @@ void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr
     //UpdateCBMatViewPerse();
 }
 
-void Object3D::UpdateCBMatViewPerse(void)
+void Object3D::UpdateCBMatViewPerse(CameraManager* camMPtr)
 {
-    sCbMatViewPerse_.GetConstBuffMap()->matView = CameraManager::GetInstance()->GetCurrentCamera()->GetMatView();
-    sCbMatViewPerse_.GetConstBuffMap()->matPerspective = CameraManager::GetInstance()->GetCurrentCamera()->GetMatProjPerspective();
+    sCbMatViewPerse_.GetConstBuffMap()->matView = camMPtr->GetCurrentCamera()->GetMatView();
+    sCbMatViewPerse_.GetConstBuffMap()->matPerspective = camMPtr->GetCurrentCamera()->GetMatProjPerspective();
 
-    sCbMatViewPerse_.GetConstBuffMap()->cameraPos = CameraManager::GetInstance()->GetCurrentCamera()->GetCoordinatePtr()->GetPosition();
+    sCbMatViewPerse_.GetConstBuffMap()->cameraPos = camMPtr->GetCurrentCamera()->GetCoordinatePtr()->GetPosition();
 }
 
 void Object3D::PreDraw(BlendMode blendmode)

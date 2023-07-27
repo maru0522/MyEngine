@@ -50,7 +50,7 @@ public:
     static void SetDrawBlendMode(BlendMode blendmode);
 
     // 平行投影行列を任意のタイミングで更新するための関数
-    static void UpdateCBMatOrthoGraphic(void);
+    static void UpdateCBMatOrthoGraphic(CameraManager* camMPtr);
 
     Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickNameが優先される。
     void Update(void);

@@ -44,12 +44,10 @@ void Sprite::SetDrawBlendMode(BlendMode blendmode)
     iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->rootSignature.Get());
 }
 
-void Sprite::UpdateCBMatOrthoGraphic(void)
+void Sprite::UpdateCBMatOrthoGraphic(CameraManager* camMPtr)
 {
-    // cameraManagerのptr取得
-    CameraManager* cameraMPtr = CameraManager::GetInstance();
     // 平行投影行列にカメラの保持する平行投影行列を代入
-    sCbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic = cameraMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
+    sCbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic = camMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
 Sprite::Sprite(const fsPath& path, const std::string& nickname) :

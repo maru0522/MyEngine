@@ -1,5 +1,6 @@
 #include "ColliderCamera.h"
-
+#include "MathUtil.h"
+#include "WndAPI.h"
 
 ColliderCamera::ColliderCamera(CollisionManager* colMPtr)
 {

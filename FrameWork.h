@@ -34,6 +34,7 @@ protected:
     // ïœêî
     InitDirectX* iDXPtr_{ InitDirectX::GetInstance() };                                         // ptr_InitDirectX
     PSOManager* psoMPtr_{ PSOManager::GetInstance() };                                          // ptr_GraphicsPipeline
+    CameraManager* camMPtr_{ CameraManager::GetInstance() };                                    // ptr_CameraManager
 
     std::unique_ptr<WndAPI> wnd_{ std::make_unique<WndAPI>() };                                 // WndAPI
     std::unique_ptr<TextureManager> texM_{ std::make_unique<TextureManager>() };                // textureManager

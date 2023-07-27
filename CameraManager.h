@@ -2,8 +2,7 @@
 #include <memory>
 #include "Vector3.h"
 #include "Matrix4.h"
-#include "Sprite.h"
-#include "Object3D.h"
+#include "WorldCoordinate.h"
 
 class Camera
 {

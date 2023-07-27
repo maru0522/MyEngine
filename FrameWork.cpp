@@ -75,10 +75,10 @@ void FrameWork::Update(void)
     imguiController_->End();
 
     // CameraManager更新
-    CameraManager::GetInstance()->Update();
+    camMPtr_->Update();
 
     // カメラの透視投影行列をObject3D用の定数に送る
-    Object3D::UpdateCBMatViewPerse();
+    Object3D::UpdateCBMatViewPerse(camMPtr_);
 }
 
 void FrameWork::Finalize(void)
