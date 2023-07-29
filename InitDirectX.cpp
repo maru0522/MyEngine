@@ -1,7 +1,8 @@
 #include <cassert>
 #include <vector>
-
 #include "InitDirectX.h"
+
+#pragma comment(lib,"dxgi.lib")
 
 InitDirectX* InitDirectX::GetInstance(void)
 {

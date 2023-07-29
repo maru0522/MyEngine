@@ -5,6 +5,12 @@
 #include <sstream>
 #include <string>
 
+#pragma comment(lib,"xaudio2.lib")
+#pragma comment(lib, "Mf.lib")
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "Mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
+
 AudioManager::AudioManager(void)
 {
     // XAudio2‰Šú‰»

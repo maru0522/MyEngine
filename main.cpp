@@ -4,10 +4,6 @@
 #include<d3dcompiler.h>
 #include<DirectXMath.h>
 #include<math.h>
-using namespace DirectX;
-#pragma comment(lib,"d3dcompiler.lib")
-#pragma comment(lib,"d3d12.lib")
-#pragma comment(lib,"dxgi.lib")
 #include<Windows.h>
 #include<vector>
 #include<string>

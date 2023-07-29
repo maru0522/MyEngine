@@ -1,6 +1,10 @@
 #include "Input.h"
 #include <cassert>
 
+#pragma comment(lib,"dinput8.lib")
+#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib, "xinput.lib")
+
 // é¿ëÃÇÃê∂ê¨
 static Microsoft::WRL::ComPtr<IDirectInput8> directInput_{ nullptr }; // DirectInputê∂ê¨
 

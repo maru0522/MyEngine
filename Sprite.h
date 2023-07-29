@@ -5,7 +5,6 @@
 #include <string>
 
 #include <d3d12.h>
-#pragma comment(lib,"d3d12.lib")
 
 #include "TextureManager.h"
 #include "CameraManager.h"

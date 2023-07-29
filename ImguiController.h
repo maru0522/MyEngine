@@ -3,7 +3,6 @@
 #include "WndAPI.h"
 #include "Vector4.h"
 #include <d3d12.h>
-#pragma comment(lib,"d3d12.lib")
 
 class ImGuiController
 {

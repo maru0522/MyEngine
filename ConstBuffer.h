@@ -5,7 +5,6 @@
 #include <wrl.h>
 #include <DirectXMath.h>
 #include <d3d12.h>
-#pragma comment(lib,"d3d12.lib")
 
 #include "InitDirectX.h"
 

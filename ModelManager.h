@@ -3,9 +3,7 @@
 #include <wrl.h>
 #include <vector>
 #include <DirectXMath.h>
-
 #include <d3d12.h>
-#pragma comment(lib,"d3d12.lib")
 
 #include "TextureManager.h"
 #include "VertexBuffer.h"

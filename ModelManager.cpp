@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+#pragma comment(lib,"d3d12.lib")
+
 using namespace Util;
 using VertexPosNormalUv_t = Mesh::VertexPosNormalUv_t;
 
