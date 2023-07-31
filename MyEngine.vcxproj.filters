@@ -166,6 +166,9 @@
     <ClCompile Include="Planet.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="Rabbit.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSOManager.h" />
@@ -309,6 +312,9 @@
       <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="Planet.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Rabbit.h">
       <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>

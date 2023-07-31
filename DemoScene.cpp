@@ -72,11 +72,12 @@ void DemoScene::Update(void)
     }
 
     player_->Update();
+    rabbit1_->Update();
     planet_->Update();
 
     colCameraPtr->SetPlanetCenter(planet_->GetPosition());
 
-    static float sCamFollowSpeed{ player_->kMoveSpeed_ };
+    static float sCamFollowSpeed{ 5.f };
     if (debugCamFollow_) {
         float a{};
         /*a = (player_->GetSphereCollider().center - cameraPtr->GetCoordinatePtr()->GetPosition()).Length();*/
@@ -229,6 +230,7 @@ void DemoScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw();
+    rabbit1_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
 

@@ -117,6 +117,7 @@
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Rabbit.cpp" />
     <ClCompile Include="RadialBlur.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Rabbit.h" />
     <ClInclude Include="RadialBlur.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="SceneFactory.h" />
