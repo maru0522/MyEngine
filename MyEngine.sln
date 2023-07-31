@@ -10,6 +10,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui", "imgui\imgui.vcxproj", "{975D305B-DA38-4F99-978A-5820E68EAD25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{77C3C69C-01ED-416E-BB83-E11EBAA8270E}"
+	ProjectSection(SolutionItems) = preProject
+		json.hpp = json.hpp
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
