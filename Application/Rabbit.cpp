@@ -1,5 +1,6 @@
 #include "Rabbit.h"
 #include "CollisionManager.h"
+#include "SimplifyImGui.h"
 
 Rabbit::Rabbit(void)
 {
@@ -37,6 +38,11 @@ void Rabbit::Update(void)
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->Update();
 
+    static float sDetectRadius{ kDetectRadius_ };
+    GUI::Begin("Rabbit");
+    ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
+    GUI::End();
+
     // 移動量
     Vector3 moveVec{};
     Vector3 velocity{};
@@ -49,6 +55,7 @@ void Rabbit::Update(void)
 
     // コライダー更新
     sphereCollider_.center = coordinate_.GetPosition();
+    detectPlayerCollider_.center = coordinate_.GetPosition();
 
     // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
     Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
@@ -83,6 +90,9 @@ void Rabbit::Move(Vector3& moveVec, Vector3& velocity)
     //moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
     //moveVec += redefinitionPRightFromCamera * inputVec.x;
 
+    // プレイヤから兎方向へのベクトルをそのまま移動ベクトルとして起用する（仮）
+    moveVec = (coordinate_.GetPosition() - pPos_).Normalize();
+
     // 重力
     jumpVecNorm_ -= kGravity_;
 
@@ -99,7 +109,7 @@ void Rabbit::OnCollision(void)
 {
     if (sphereCollider_.GetColInfo().id == "gravityArea")
     {
-        // 本来は球状重力エリア内に入ってる場合に行う処理。
+        // 球状重力エリア内に入ってる場合に行う処理。
         Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
         coordinate_.SetAxisUp(center2PlayerVec.Normalize());
     }
@@ -124,5 +134,9 @@ void Rabbit::OnCollision(void)
 
 void Rabbit::OnDetectPlayer(void)
 {
-
+    if (detectPlayerCollider_.GetColInfo().id == "player")
+    {
+        // 検知したプレイヤの座標を記録する。
+        pPos_ = detectPlayerCollider_.GetColInfo().v;
+    }
 }

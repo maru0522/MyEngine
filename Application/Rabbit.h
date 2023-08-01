@@ -8,7 +8,7 @@ class Rabbit
 {
 public:
     const float kRadius_{ 1.f };
-    const float kDetectRadius_{ 1.f };
+    const float kDetectRadius_{ 10.f };
     const float kJumpPower_{ 7.f };
     const float kMoveSpeed_{ 1.f };
     const float kGravity_{ 0.98f };
@@ -26,6 +26,7 @@ private:
     void OnDetectPlayer(void); // callback
 
     // ïœêî
+    Vector3 pPos_;
     WorldCoordinate coordinate_;
     CollisionPrimitive::SphereCollider sphereCollider_;
     CollisionPrimitive::SphereCollider detectPlayerCollider_;
