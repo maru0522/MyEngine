@@ -1,6 +1,7 @@
 #pragma once
-#include <random>
 #include <cmath>
+#include <random>
+#include <numbers>
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -11,7 +12,7 @@ static std::random_device sSeed_gen;
 static std::mt19937 sEngine(sSeed_gen());
 
 namespace Math {
-    constexpr float kPI{ 3.14159265f };
+    constexpr float kPI = std::numbers::pi_v<float>;
 
     namespace Function {
         inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::kPI / 180.0f; }
