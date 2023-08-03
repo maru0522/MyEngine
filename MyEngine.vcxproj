@@ -60,6 +60,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Other\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -79,6 +80,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableSpecificWarnings>4189;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Other\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
