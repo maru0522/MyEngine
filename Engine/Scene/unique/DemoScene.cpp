@@ -11,7 +11,7 @@ void DemoScene::Initialize(void)
     // カメラのデバッグカメラモードをON
     cameraPtr->SetIsDebugMode(true);
     colCameraPtr->SetIsDebugMode(true);
-    colCameraPtr->GetCoordinatePtr()->SetIsPriority(false);
+    colCameraPtr->GetCoordinatePtr()->SetIsPriority(true);
     // 座標計算法をクォータニオン優先
     //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
     // カメラをマネージャーにセット
@@ -29,6 +29,12 @@ void DemoScene::Initialize(void)
     // json読み込み&配置
     //lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //DeployObj(lvdPtr_.get());
+
+    //colCameraPtr->radius_ = 50.f;
+    //colCameraPtr->theta_ = 0.f;
+    //colCameraPtr->phi_ = 0.f;
+    testP_->GetCoordinatePtr()->SetAxes(Axis3{ Vector3(0,0,-1),Vector3(-1,0,0),Vector3(0,1,0) });
+    testP_->GetCoordinatePtr()->SetIsPriority(true);
 }
 
 void DemoScene::Update(void)
@@ -36,40 +42,19 @@ void DemoScene::Update(void)
     lightGroup_->Update();
     testP_->Update();
 
-    // *****
-    // カメラの座標 = プレイヤーの座標（当たり判定によって修正された古い座標[1frame前]）
-    // 
-    // プレイヤーのアップデート()
-    //     移動処理() (当たり判定による修正を受けてない新規座標[現在frame])
-    //     プレイヤーの座標を行列に変換[現在frame]
-    // 
-    // カメラの座標を行列に変換 (当たり判定によって修正を受けた古い座標を変換[1frame前]）
-    // 
-    // プレイヤーの座標を修正 (当たり判定による押し戻し)
-    // *****
-
-    static float sCamdist{ 60.f };
-    Vector3 goalPos;
-    if (debugCamFollow2_)
-    {
-        colCameraPtr->GetCoordinatePtr()->SetMatWorld(player_->GetCoordinatePtr()->GetMatWorld());
-        Vector3 ppos = player_->GetCoordinatePtr()->GetPosition();
-        //Vector3 pf = player_->GetCoordinatePtr()->GetForwardVec().Normalize();
-        Vector3 pu = player_->GetCoordinatePtr()->GetUpVec().Normalize();
-        //Vector3 pf20 = pf * sCamdist;
-        Vector3 pu20 = pu * sCamdist;
-        //Vector3 cpos = ppos - pf20;
-        Vector3 cpos2 = ppos + pu20;
-        //goalPos = cpos;
-        Axis3 toPlayer = { -player_->GetCoordinatePtr()->GetUpVec().Normalize(), player_->GetCoordinatePtr()->GetRightVec().Normalize(),player_->GetCoordinatePtr()->GetForwardVec().Normalize() };
-        //colCameraPtr->GetCoordinatePtr()->SetAxes(toPlayer);
-        colCameraPtr->GetCoordinatePtr()->SetAxisForward(-player_->GetCoordinatePtr()->GetUpVec().Normalize());
-        colCameraPtr->GetCoordinatePtr()->SetPosition(cpos2);
-
-        testP_->GetCoordinatePtr()->SetMatWorld(player_->GetCoordinatePtr()->GetMatWorld());
-        testP_->GetCoordinatePtr()->SetAxes(toPlayer);
-        testP_->GetCoordinatePtr()->SetPosition(cpos2);
-    }
+    static float sRadius4Cam{};
+    ImGui::SliderFloat("sRadius4Cam", &sRadius4Cam, 0.f, 200.f);
+    static float sTheta4Cam{};
+    //ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 3.14159f);
+    ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 6.28319f);
+    static float sPhi4Cam{ 0.f };
+    ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
+    static float sTheta4Cam2{};
+    ImGui::SliderFloat("sTheta4Cam2", &sTheta4Cam2, 0.f, 3.14159f);
+    static float sPhi4Cam2{ 3.14159f };
+    ImGui::SliderFloat("sPhi4Cam2", &sPhi4Cam2, 0.f, 6.28319f);
+    // カメラを球面座標系で管理する
+    Vector3 ppos = player_->GetCoordinatePtr()->GetPosition();
 
     player_->Update();
     rabbit1_->Update();
@@ -77,96 +62,25 @@ void DemoScene::Update(void)
 
     colCameraPtr->SetPlanetCenter(planet_->GetPosition());
 
-    static float sCamFollowSpeed{ 5.f };
-    if (debugCamFollow_) {
-        float a{};
-        /*a = (player_->GetSphereCollider().center - cameraPtr->GetCoordinatePtr()->GetPosition()).Length();*/
-        a = (player_->GetSphereCollider().center - colCameraPtr->GetCoordinatePtr()->GetPosition()).Length();
 
-        // プレイヤーとカメラとの距離がkCamDist未満になった場合
-        if (a < sCamdist - 1)
-        {
-            // カメラの正面方向に、プレイヤーの移動速度だけカメラ移動。
-            /*cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() - cameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
-            /*colCameraPtr->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
-            colCameraPtr->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() - (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize() * sCamFollowSpeed);
-            testP_->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() - (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize() * sCamFollowSpeed);
-        }
-        // プレイヤーとカメラとの距離がkCamDistより大きくになった場合
-        else if (a > sCamdist + 1)
-        {
-            /*cameraPtr->GetCoordinatePtr()->SetPosition(cameraPtr->GetCoordinatePtr()->GetPosition() + cameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
-            /*colCameraPtr->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() + colCameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize() * player_->kMoveSpeed_);*/
-            colCameraPtr->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() + (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize() * sCamFollowSpeed);
-            testP_->GetCoordinatePtr()->SetPosition(colCameraPtr->GetCoordinatePtr()->GetPosition() + (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize() * sCamFollowSpeed);
-        }
-
-        //cameraPtr->GetCoordinatePtr()->SetPosition(player_->GetCoordinatePtr()->GetPosition() - player_->GetCoordinatePtr()->GetForwardVec().Normalize() * kCamDist_);
-        //cameraPtr->GetCoordinatePtr()->SetAxisForward(player_->GetCoordinatePtr()->GetForwardVec().Normalize());
-        //cameraPtr->GetCoordinatePtr()->SetAxisRight(player_->GetCoordinatePtr()->GetRightVec().Normalize());
-        //cameraPtr->GetCoordinatePtr()->SetAxisUp(player_->GetCoordinatePtr()->GetUpVec().Normalize());
-    }
-
-    Vector3 colCamZ{};
-    Vector3 colCamX{};
-    Vector3 colCamY{};
-    if (debugCamFuncFollow_)
+    Matrix4 matWorld{ Math::Mat4::Identity() };
     {
-        /*cameraPtr->Follow(player_->GetCoordinatePtr()->GetPosPtr());*/
-        //colCameraPtr->Follow(player_->GetCoordinatePtr()->GetPosPtr());
+        using namespace Math;
 
-        //{
+        matWorld *= Mat4::Translate(matWorld, {0,0,sRadius4Cam });
 
-            // カメラのz軸を (p.pos - c.pos).normalize()
-        colCamZ = (player_->GetCoordinatePtr()->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize();
-        colCameraPtr->GetCoordinatePtr()->SetAxisForward(colCamZ);
+        Matrix4 matRotate{ Mat4::Identity() };
+        matRotate = Mat4::RotationX(sTheta4Cam) * Mat4::RotationY(sPhi4Cam);
 
-        Vector3 pUpVec = player_->GetCoordinatePtr()->GetUpVec().Normalize();
+        matWorld *= matRotate;
 
-        // プレイヤーの上ベクトルと、カメラの正面ベクトル（カメラからプレイヤーへのベクトル）の内積は -1付近のとき
-        const float diff = 0.05f;
-        float pUpDotCForward = pUpVec.Dot(colCameraPtr->GetCoordinatePtr()->GetForwardVec().Normalize());
-
-        // カメラのx軸
-        colCamX = player_->GetCoordinatePtr()->GetUpVec().Cross(colCamZ).Normalize();
-
-        // カメラの上ベクトル
-        Vector3 cUpVec{};
-        if (-1.f + diff >= pUpDotCForward) // -0.95f <= dot(初期) 
-        {
-            // カメラの上ベクトル算出
-            cUpVec = colCamX.Cross(pUpVec).Normalize();
-        }
-        
-        // カメラから球の中心方向へのベクトル
-        Vector3 cam2SphereVec = (planet_->GetPosition() - colCameraPtr->GetCoordinatePtr()->GetPosition()).Normalize();
-        // カメラから球の中心方向へのベクトルの右ベクトル
-        Vector3 sphereVerticalRightVec = cUpVec.Cross(cam2SphereVec).Normalize();
-        Vector3 sphereVerticakUpVec = sphereVerticalRightVec.Cross(cam2SphereVec).Normalize();
-
-        // カメラから球の中心方向へのベクトルの上ベクトルと pUpVecとの内積
-        float verticalUpDotCam2Sphere = sphereVerticakUpVec.Dot(pUpVec);
-        // 値が0未満（カメラから見てプレイヤーが画面の下半分に行ったとき）
-        if (verticalUpDotCam2Sphere < 0) 
-        {
-            // 外積結果が左ベクトルの場合反転して右ベクトルにする
-            colCamX = -colCamX;
-        }
-        colCameraPtr->GetCoordinatePtr()->SetAxisRight(colCamX);
-        // カメラのy軸
-        colCamY = colCamZ.Cross(colCamX).Normalize();
-        colCameraPtr->GetCoordinatePtr()->SetAxisUp(colCamY);
-
-        Axis3 cam = { colCamZ,colCamX,colCamY };
-        testP_->GetCoordinatePtr()->SetAxes(cam);
-        //}
-    }
-    else
-    {
-        /*cameraPtr->UnFollow();*/
-        //colCameraPtr->UnFollow();
+        matWorld.m[3][0] += ppos.x;
+        matWorld.m[3][1] += ppos.y;
+        matWorld.m[3][2] += ppos.z;
     }
 
+    colCameraPtr->GetCoordinatePtr()->SetMatWorld(matWorld);
+    testP_->GetCoordinatePtr()->SetMatWorld(matWorld);
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -176,13 +90,12 @@ void DemoScene::Update(void)
     //    HotReload(lvdPtr_.get());
     //}
 
-    DebudGui();
-
     static bool isCamDebug{};
 
     GUI::Begin("debug tab maruyama");
     if (GUI::ButtonTrg("switch camera"))
     {
+        // デバッグ用のカメラと切替
         if (isCamDebug)
         {
             isCamDebug = false;
@@ -197,9 +110,8 @@ void DemoScene::Update(void)
     }
 
     GUI::Text(isCamDebug ? "true" : "false");
-
-    ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
-    ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
+    //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
+    //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
     GUI::Space();
     ImGui::Text("dummyp matrix");
     Matrix4 p = testP_->GetCoordinatePtr()->GetMatWorld();
@@ -218,9 +130,9 @@ void DemoScene::Update(void)
 
     GUI::Space();
     ImGui::Text("colCamVec");
-    ImGui::Text("z %f,%f,%f", colCamZ.x, colCamZ.y, colCamZ.z);
-    ImGui::Text("x %f,%f,%f", colCamX.x, colCamX.y, colCamX.z);
-    ImGui::Text("y %f,%f,%f", colCamY.x, colCamY.y, colCamY.z);
+    //ImGui::Text("z %f,%f,%f", colCamZ.x, colCamZ.y, colCamZ.z);
+    //ImGui::Text("x %f,%f,%f", colCamX.x, colCamX.y, colCamX.z);
+    //ImGui::Text("y %f,%f,%f", colCamY.x, colCamY.y, colCamY.z);
     GUI::End();
 
 }
@@ -308,72 +220,4 @@ void DemoScene::HotReload(LevelData* lvdPtr)
         //    cameraPtr->rotation_ = objectData.rot;
         //}
     }
-}
-
-void DemoScene::DebudGui(void)
-{
-    //using namespace Math::Function;
-    //GUI::Begin("demoInfo", { 200,400 });
-    //GUI::ChildFrameBegin("player", { 400,100 });
-    ////const Vector3& pPos = player_->GetCoordinatePtr()->GetPosition();
-    ////const Quaternion& pRot = player_->body_->coordinate_.GetRotation();
-    ////const Vector3& pSca = player_->GetCoordinatePtr()->GetScale();
-    //ImGui::Text("player");
-    ////ImGui::Text("pos: (%f,%f,%f)", pPos.x, pPos.y, pPos.z);
-    ////ImGui::Text("sca: (%f,%f,%f)", pSca.x, pSca.y, pSca.z);
-    //ImGui::Text("%s", player_->GetPartnerId().c_str());
-    ////ImGui::Text("isHit:(%d)", player_->GetIsHit());
-    ////ImGui::Text("rot(qua): (%f,%f,%f,%f)", pRot.x, pRot.y, pRot.z, pRot.w);
-    //GUI::ChildFrameEnd();
-    //GUI::ChildFrameBegin("camera", { 400,140 });
-    //const Vector3& cPos = colCameraPtr->GetCoordinatePtr()->GetPosition();
-    //const Vector3& cRot = colCameraPtr->GetCoordinatePtr()->GetRotation();
-    //const Vector3& cUp = colCameraPtr->GetCoordinatePtr()->GetMatAxisY();
-    //ImGui::Text("camera");
-    //ImGui::Text("pos: (%f,%f,%f)", cPos.x, cPos.y, cPos.z);
-    //ImGui::Text("up : (%f,%f,%f)", cUp.x, cUp.y, cUp.z);
-    //ImGui::Text("rot(rad): (%f,%f,%f)", cRot.x, cRot.y, cRot.z);
-    //ImGui::Text("rot(deg): (%f,%f,%f)", ToDegree(cRot.x), ToDegree(cRot.y), ToDegree(cRot.z));
-    ////Vector3 f = cameraPtr->GetCoordinatePtr()->GetForwardVec().ExtractVector3();
-    ////Vector3 u = cameraPtr->GetCoordinatePtr()->GetUpVec().ExtractVector3();
-    ////ImGui::Text("forwardV: (%f,%f,%f)", f.x, f.y, f.z);
-    ////ImGui::Text("upV: (%f,%f,%f)", u.x, u.y, u.z);
-    //if (GUI::ButtonTrg("camera"))
-    //    debugCamFollow_ ?
-    //    debugCamFollow_ = false :
-    //    debugCamFollow_ = true;
-    //ImGui::Text(debugCamFollow_ ? "debugCamFollow : true" : "debugCanFollow : false");
-    //GUI::ChildFrameEnd();
-
-    //GUI::ChildFrameBegin("testP", { 400,100 });
-    //GUI::Text("pos: (%f,%f,%f)", testP_->GetCoordinatePtr()->GetPosition().x, testP_->GetCoordinatePtr()->GetPosition().y, testP_->GetCoordinatePtr()->GetPosition().z);
-    //GUI::ChildFrameEnd();
-
-    //GUI::ChildFrameBegin("other", { 400,200 });
-    //ImGui::Text("other");
-    //if (GUI::ButtonTrg("camFollow"))
-    //    debugCamFollow_ ?
-    //    debugCamFollow_ = false :
-    //    debugCamFollow_ = true;
-    //ImGui::Text(debugCamFollow_ ? "debugCamFollow : true" : "debugCamFollow : false");
-
-    //if (GUI::ButtonTrg("drawPlanet"))
-    //    debugPlanetDraw_ ?
-    //    debugPlanetDraw_ = false :
-    //    debugPlanetDraw_ = true;
-    //ImGui::Text(debugPlanetDraw_ ? "debugPlanetDraw : true" : "debugPlanetDraw : false");
-
-    //if (GUI::ButtonTrg("camFuncFollow"))
-    //    debugCamFuncFollow_ ?
-    //    debugCamFuncFollow_ = false :
-    //    debugCamFuncFollow_ = true;
-    //ImGui::Text(debugCamFuncFollow_ ? "debugCamFuncFollow_ : true" : "debugCamFuncFollow_ : false");
-    ////GUI::Space();
-    ////Vector3 origin(0.f, 0.f, 0.f);
-    ////Vector3 point(10.f, 10.f, 10.f);
-    ////Vector3 result(origin - point);
-    ////float resultf(result.Length());
-    ////ImGui::Text("result: (%f)",resultf);
-    //GUI::ChildFrameEnd();
-    //GUI::End();
 }

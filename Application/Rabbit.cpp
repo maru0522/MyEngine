@@ -41,6 +41,7 @@ void Rabbit::Update(void)
     static float sDetectRadius{ kDetectRadius_ };
     GUI::Begin("Rabbit");
     ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
+    detectPlayerCollider_.radius = sDetectRadius;
     GUI::End();
 
     // ˆÚ“®—Ê

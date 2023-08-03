@@ -79,9 +79,9 @@ namespace Math {
             return 1 / std::tan(arg_v);
         }
 
-        // x:動径r, y:緯度θ, z:経度φ
-        Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
-        Vector3 ToRectAngularCoordinate(const Vector3& sphericalCoordinate);
+        // 球面座標系をデカルト座標系に変換する   r:動径r, theta:緯度θ, phi:経度φ
+        Vector3 ToCartesian(float r,float theta, float phi);
+        //Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
     }
 
     namespace Ease {
