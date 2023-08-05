@@ -50,7 +50,7 @@ private:
 
     Model_t model_;
     bool isInvisible_{};
-    WorldCoordinate coordinate_;
+    WorldCoordinate2 coordinate_;
     ConstBuffer<CBData3d_t> cb_;
 
     static LightGroup* sLightGroupPtr_;
@@ -63,9 +63,9 @@ public:
     static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
     inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
-    inline void SetCoordinate(const WorldCoordinate& coordinate) { coordinate_ = coordinate; }
+    inline void SetCoordinate(const WorldCoordinate2& coordinate) { coordinate_ = coordinate; }
 
-    inline const WorldCoordinate& GetCoordinate(void) { return coordinate_; }
-    inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
+    inline const WorldCoordinate2& GetCoordinate(void) { return coordinate_; }
+    inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
 };
 

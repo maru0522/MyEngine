@@ -1,5 +1,6 @@
 #pragma once
 #include "WorldCoordinate.h"
+#include "Transform.h"
 #include "CollisionPrimitive.h"
 #include <memory>
 #include "Object3D.h"
@@ -27,9 +28,14 @@ private:
 
     // ïœêî
     Vector3 pPos_;
-    WorldCoordinate coordinate_;
+
+    WorldCoordinate2 coordinate_;
+    Transform transform_;
+    Axis3 axes_;
+
     CollisionPrimitive::SphereCollider sphereCollider_;
     CollisionPrimitive::SphereCollider detectPlayerCollider_;
+
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
 
     float jumpVecNorm_{};

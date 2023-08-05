@@ -16,11 +16,18 @@ Rabbit::Rabbit(void)
     sphereCollider_.radius = kRadius_;
     detectPlayerCollider_.radius = kDetectRadius_;
 
-    coordinate_.SetPosition({ 0,60,20 }); // 初期位置
-    coordinate_.SetAxisForward({ 0,0,1 });
-    coordinate_.SetAxisRight({ 1,0,0 });
-    coordinate_.SetAxisUp({ 0,1,0 });
-    coordinate_.SetIsPriority(false);
+    // 初期位置
+    transform_.position = { 0,60,20 };
+    // 初期姿勢
+    axes_.forward = { 0,0,1 };
+    axes_.right = { 1,0,0 };
+    axes_.up = { 0,1,0 };
+
+    //coordinate_.SetPosition({ 0,60,20 }); // 初期位置
+    //coordinate_.SetAxisForward({ 0,0,1 });
+    //coordinate_.SetAxisRight({ 1,0,0 });
+    //coordinate_.SetAxisUp({ 0,1,0 });
+    //coordinate_.SetIsPriority(false);
 
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec());
@@ -50,19 +57,24 @@ void Rabbit::Update(void)
     Move(moveVec, velocity); // 参照渡しで受け取る。
 
     // 座標更新
-    Vector3 currentPos = coordinate_.GetPosition();
+    Vector3 currentPos = transform_.position;
     currentPos += velocity;
-    coordinate_.SetPosition(currentPos);
+    transform_.position = currentPos;
 
     // コライダー更新
-    sphereCollider_.center = coordinate_.GetPosition();
-    detectPlayerCollider_.center = coordinate_.GetPosition();
+    sphereCollider_.center = currentPos;
+    detectPlayerCollider_.center = currentPos;
 
     // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-    Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-    coordinate_.SetAxisRight(rightFromOldAxis.Normalize());
-    Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-    coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
+    //Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+    //coordinate_.SetAxisRight(rightFromOldAxis.Normalize());
+    //Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    //coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
+
+    Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(),axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+    axes_.right = rightFromOldAxis;
+    Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(),axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    axes_.forward = forwardFromOldAxis;
 
     // 移動入力があった場合
     if (moveVec.IsNonZero())

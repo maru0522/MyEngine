@@ -6,6 +6,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+#include "Transform.h"
 #include "Quaternion.h"
 
 static std::random_device sSeed_gen;
@@ -81,8 +82,14 @@ namespace Math {
         }
 
         // 球面座標系をデカルト座標系に変換する   r:動径r, theta:緯度θ, phi:経度φ
-        Vector3 ToCartesian(float r,float theta, float phi);
+        Vector3 ToCartesian(float r, float theta, float phi);
         //Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
+
+        // アフィン変換
+        Matrix4 AffinTrans(const Transform& transform);
+        Matrix4 AffinTrans(const Transform& transform, const Axis3& axes);
+        Matrix4 AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular);
+        Matrix4 AffinTrans(const Vector3& pos, const Vector3& scale, const Axis3& axes);
     }
 
     namespace Ease {

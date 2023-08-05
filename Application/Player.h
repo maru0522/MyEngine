@@ -25,7 +25,7 @@ private:
 
     // ïœêî
     //bool isGrounded_{};
-    WorldCoordinate coordinate_;
+    WorldCoordinate2 coordinate_;
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
 
@@ -35,7 +35,7 @@ public:
     // setter
 
     // getter
-    inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
+    inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
     inline const std::string& GetPartnerId(void) { return sphereCollider_.GetColInfo().id; }
 };

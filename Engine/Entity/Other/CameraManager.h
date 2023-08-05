@@ -21,7 +21,7 @@ private:
 
 protected:
     // ïœêî
-    WorldCoordinate coordinate_;
+    WorldCoordinate2 coordinate_;
 
     Matrix4 matProj_OrthoGraphic_;
     Matrix4 matProj_Perspective_;
@@ -42,7 +42,7 @@ public:
     inline void SetIsDebugMode(bool isDebug) { isDebugMode_ = isDebug; }
 
     // getter
-    inline WorldCoordinate* GetCoordinatePtr(void) { return &coordinate_; }
+    inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
 
     inline const Matrix4& GetMatProjOrthoGraphic(void) { return matProj_OrthoGraphic_; }
     inline const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }

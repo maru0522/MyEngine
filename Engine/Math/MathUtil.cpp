@@ -137,3 +137,81 @@ Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
 
     return result;
 }
+
+Matrix4 Math::Function::AffinTrans(const Transform& transform)
+{
+    Matrix4 matWorld{ Mat4::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
+
+    matScale = Mat4::Scale(transform.scale);
+
+    matRotate *= Mat4::RotationZ(transform.rotation.z);
+    matRotate *= Mat4::RotationX(transform.rotation.x);
+    matRotate *= Mat4::RotationY(transform.rotation.y);
+
+    matWorld *= matScale;
+    matWorld *= matRotate;
+    matWorld = Mat4::Translate(matWorld, transform.position);
+
+    return matWorld;
+}
+
+Matrix4 Math::Function::AffinTrans(const Transform& transform, const Axis3& axes)
+{
+    Matrix4 matWorld{ Mat4::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
+
+    matScale = Mat4::Scale(transform.scale);
+
+    Vector3 forward = axes.forward.Normalize();
+    Vector3 right = axes.right.Normalize();
+    Vector3 up = axes.up.Normalize();
+    matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
+
+    matWorld *= matScale;
+    matWorld *= matRotate;
+    matWorld = Mat4::Translate(matWorld, transform.position);
+
+    return matWorld;
+}
+
+Matrix4 Math::Function::AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular)
+{
+    Matrix4 matWorld{ Mat4::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
+
+    matScale = Mat4::Scale(scale);
+
+    matRotate *= Mat4::RotationZ(rotEular.z);
+    matRotate *= Mat4::RotationX(rotEular.x);
+    matRotate *= Mat4::RotationY(rotEular.y);
+
+    matWorld *= matScale;
+    matWorld *= matRotate;
+    matWorld = Mat4::Translate(matWorld, pos);
+
+    return matWorld;
+}
+
+Matrix4 Math::Function::AffinTrans(const Vector3& pos, const Vector3& scale, const Axis3& axes)
+{
+    Matrix4 matWorld{ Mat4::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
+
+    matScale = Mat4::Scale(scale);
+
+    Vector3 forward = axes.forward.Normalize();
+    Vector3 right = axes.right.Normalize();
+    Vector3 up = axes.up.Normalize();
+    matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
+
+    matWorld *= matScale;
+    matWorld *= matRotate;
+    matWorld = Mat4::Translate(matWorld, pos);
+
+    return matWorld;
+}
