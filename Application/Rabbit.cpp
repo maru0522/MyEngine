@@ -23,12 +23,6 @@ Rabbit::Rabbit(void)
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
 
-    //coordinate_.SetPosition({ 0,60,20 }); // 初期位置
-    //coordinate_.SetAxisForward({ 0,0,1 });
-    //coordinate_.SetAxisRight({ 1,0,0 });
-    //coordinate_.SetAxisUp({ 0,1,0 });
-    //coordinate_.SetIsPriority(false);
-
     appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
     appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec());
     appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec());
@@ -66,11 +60,6 @@ void Rabbit::Update(void)
     detectPlayerCollider_.center = currentPos;
 
     // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-    //Vector3 rightFromOldAxis = Math::Vec3::Cross(coordinate_.GetUpVec().Normalize(), coordinate_.GetForwardVec().Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-    //coordinate_.SetAxisRight(rightFromOldAxis.Normalize());
-    //Vector3 forwardFromOldAxis = Math::Vec3::Cross(coordinate_.GetRightVec().Normalize(), coordinate_.GetUpVec().Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-    //coordinate_.SetAxisForward(forwardFromOldAxis.Normalize());
-
     Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(),axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
     axes_.right = rightFromOldAxis;
     Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(),axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
@@ -80,12 +69,13 @@ void Rabbit::Update(void)
     if (moveVec.IsNonZero())
     {
         // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-        Vector3 upFromAxis = coordinate_.GetUpVec(); // 上ベクトル：(更新された上ベクトルを取得）
+        Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
         Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-        coordinate_.SetAxisRight(rightFromMoveVec.Normalize());
-        coordinate_.SetAxisForward(moveVec.Normalize());
+        axes_.right = rightFromMoveVec.Normalize();
+        axes_.forward = moveVec.Normalize();
     }
 
+    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     coordinate_.Update();
 }
 
@@ -104,14 +94,14 @@ void Rabbit::Move(Vector3& moveVec, Vector3& velocity)
     //moveVec += redefinitionPRightFromCamera * inputVec.x;
 
     // プレイヤから兎方向へのベクトルをそのまま移動ベクトルとして起用する（仮）
-    moveVec = (coordinate_.GetPosition() - pPos_).Normalize();
+    moveVec = (transform_.position - pPos_).Normalize();
 
     // 重力
     jumpVecNorm_ -= kGravity_;
 
     // ジャンプベクトル
     Vector3 jumpVec{};
-    jumpVec += coordinate_.GetUpVec().Normalize() * jumpVecNorm_;
+    jumpVec += axes_.up.Normalize() * jumpVecNorm_;
 
     // 移動量
     velocity += moveVec.Normalize() * kMoveSpeed_;
@@ -124,7 +114,7 @@ void Rabbit::OnCollision(void)
     {
         // 球状重力エリア内に入ってる場合に行う処理。
         Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
-        coordinate_.SetAxisUp(center2PlayerVec.Normalize());
+        axes_.up = center2PlayerVec.Normalize();
     }
     if (sphereCollider_.GetColInfo().id == "terrainSurface")
     {
@@ -135,13 +125,13 @@ void Rabbit::OnCollision(void)
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
 
-        Vector3 currentPos = coordinate_.GetPosition();
+        Vector3 currentPos = transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-        currentPos += coordinate_.GetUpVec().Normalize() * -diff; // ここをマイナス符号で値反転
+        currentPos += axes_.up.Normalize() * -diff; // ここをマイナス符号で値反転
 
-        coordinate_.SetPosition(currentPos);
+        transform_.position = currentPos;
     }
 }
 

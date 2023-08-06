@@ -14,6 +14,13 @@ struct Transform
     Vector3 position;
     Vector3 rotation;
     Vector3 scale;
+
+    void Initialize(void)
+    {
+        position = { 0,0,0 };
+        rotation = { 0,0,0 };
+        scale = { 1,1,1 };
+    }
 };
 
 struct Axis3
@@ -28,6 +35,13 @@ struct Axis3
         this->forward = forward;
         this->right = right;
         this->up = up;
+    }
+
+    void Initialize(void)
+    {
+        forward = { 0,0,1 };
+        right = { 1,0,0 };
+        up = { 0,1,0 };
     }
 };
 

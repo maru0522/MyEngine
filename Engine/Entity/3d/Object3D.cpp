@@ -60,16 +60,18 @@ Object3D::Object3D(const fsPath& path) :
     // マテリアルを定数バッファへ転送
     model_.UpdateCB();
 
-
     // 定数バッファ生成
     cb_.Create();
+
+    transform_.Initialize();
+    axes_.Initialize();
 }
 
 void Object3D::Update(void)
 {
     // 座標計算と転送
-    coordinate_.Update();
-    cb_.GetConstBuffMap()->matWorld = coordinate_.GetMatWorld();
+    coordinate_.mat_world
+    cb_.GetConstBuffMap()->matWorld = coordinate_.mat_world;
     model_.UpdateCB();
 }
 

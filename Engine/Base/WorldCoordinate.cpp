@@ -56,23 +56,23 @@ using namespace Math;
 //}
 
 WorldCoordinate2::WorldCoordinate2(const Matrix4& world, const Matrix4& sca, const Matrix4& rot, const Matrix4& pos)
-    : world(world), sca(sca), rot(rot), pos(pos)
+    : mat_world(world), mat_sca(sca), mat_rot(rot), mat_pos(pos)
 {
 }
 
 void WorldCoordinate2::CompositionSRT(void)
 {
-    world *= sca;
-    world *= rot;
-    world *= pos;
+    mat_world *= mat_sca;
+    mat_world *= mat_rot;
+    mat_world *= mat_pos;
 }
 
 void WorldCoordinate2::Initialize(void)
 {
     Matrix4 identity = Math::Mat4::Identity();
 
-    world = identity;
-    sca = identity;
-    rot = identity;
-    pos = identity;
+    mat_world = identity;
+    mat_sca = identity;
+    mat_rot = identity;
+    mat_pos = identity;
 }

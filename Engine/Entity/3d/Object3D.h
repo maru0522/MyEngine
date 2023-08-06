@@ -8,6 +8,7 @@
 #include "FileSystem.h"
 #include "Matrix4.h"
 #include "LightGroup.h"
+#include "Transform.h"
 
 class Object3D
 {
@@ -48,10 +49,13 @@ private:
     // ïœêî
     Object3D* parent_;
 
-    Model_t model_;
-    bool isInvisible_{};
     WorldCoordinate2 coordinate_;
+    Transform transform_;
+    Axis3 axes_;
+
     ConstBuffer<CBData3d_t> cb_;
+    bool isInvisible_{};
+    Model_t model_;
 
     static LightGroup* sLightGroupPtr_;
     static ModelManager* sModelMPtr_;
