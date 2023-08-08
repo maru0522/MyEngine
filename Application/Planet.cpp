@@ -20,8 +20,8 @@ Planet::Planet(void)
     repelCameraArea_.SetOnCollision(std::bind(&Planet::OnCollision, this));
 
     // 星自体の座標とスケールの設定
-    body_->GetCoordinatePtr()->SetPosition({ 0,0,0 });
-    body_->GetCoordinatePtr()->SetScale({ kScale_,kScale_,kScale_ });
+    transform_.position = { 0,0,0 };
+    transform_.scale = { kScale_,kScale_,kScale_ };
 
     // 各コライダーの半径を設定
     surface_.radius = 1.f * kScale_;
@@ -31,12 +31,13 @@ Planet::Planet(void)
 
 void Planet::Update(void)
 {
-    body_->Update();
+    appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_);
+    appearance_->Update();
 
-    surface_.center = body_->GetCoordinatePtr()->GetPosition();
+    surface_.center = transform_.position;
 }
 
 void Planet::Draw(void)
 {
-    body_->Draw();
+    appearance_->Draw();
 }

@@ -17,6 +17,8 @@ public:
     void Update(void);
     void Draw(void);
 
+    Transform transform_;
+
     CollisionPrimitive::SphereCollider surface_;
     CollisionPrimitive::SphereCollider gravityArea_;
     CollisionPrimitive::SphereCollider repelCameraArea_;
@@ -25,9 +27,9 @@ private:
     void OnCollision(void) {}
 
     // ïœêî
-    std::unique_ptr<Object3D> body_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };
 
 public:
     // getter
-    const Vector3& GetPosition(void) { return body_->GetCoordinatePtr()->GetPosition(); }
+    const Vector3& GetPosition(void) { return transform_.position; }
 };

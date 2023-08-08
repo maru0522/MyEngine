@@ -22,21 +22,12 @@ Rabbit::Rabbit(void)
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
-
-    appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
-    appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec());
-    appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec());
-    appearance_->GetCoordinatePtr()->SetAxisUp(coordinate_.GetUpVec());
-    appearance_->GetCoordinatePtr()->SetIsPriority(false);
 }
 
 void Rabbit::Update(void)
 {
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->SetAxisUp(coordinate_.GetUpVec().Normalize());
-    appearance_->GetCoordinatePtr()->SetAxisForward(coordinate_.GetForwardVec().Normalize());
-    appearance_->GetCoordinatePtr()->SetAxisRight(coordinate_.GetRightVec().Normalize());
-    appearance_->GetCoordinatePtr()->SetPosition(coordinate_.GetPosition());
+    appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
     appearance_->Update();
 
     static float sDetectRadius{ kDetectRadius_ };
@@ -76,7 +67,6 @@ void Rabbit::Update(void)
     }
 
     coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
-    coordinate_.Update();
 }
 
 void Rabbit::Draw(void)

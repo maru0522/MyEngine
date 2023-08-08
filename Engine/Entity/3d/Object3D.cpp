@@ -21,7 +21,7 @@ void Object3D::UpdateCBMatViewPerse(CameraManager* camMPtr)
     sCbMatViewPerse_.GetConstBuffMap()->matView = camMPtr->GetCurrentCamera()->GetMatView();
     sCbMatViewPerse_.GetConstBuffMap()->matPerspective = camMPtr->GetCurrentCamera()->GetMatProjPerspective();
 
-    sCbMatViewPerse_.GetConstBuffMap()->cameraPos = camMPtr->GetCurrentCamera()->GetCoordinatePtr()->GetPosition();
+    sCbMatViewPerse_.GetConstBuffMap()->cameraPos = camMPtr->GetCurrentCamera()->GetTransformPtr()->position;
 }
 
 void Object3D::PreDraw(BlendMode blendmode)
@@ -62,15 +62,11 @@ Object3D::Object3D(const fsPath& path) :
 
     // 定数バッファ生成
     cb_.Create();
-
-    transform_.Initialize();
-    axes_.Initialize();
 }
 
 void Object3D::Update(void)
 {
     // 座標計算と転送
-    coordinate_.mat_world
     cb_.GetConstBuffMap()->matWorld = coordinate_.mat_world;
     model_.UpdateCB();
 }

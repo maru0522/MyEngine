@@ -3,7 +3,7 @@
 
 struct Transform
 {
-    Transform(void) : Transform(Vector3{}, Vector3{}, Vector3{}) {}
+    Transform(void) { Initialize(); }
     Transform(const Vector3& position, const Vector3& rotation, const Vector3& scale)
     {
         this->position = position;
@@ -29,7 +29,7 @@ struct Axis3
     Vector3 right;
     Vector3 up;
 
-    Axis3(void) : Axis3(Vector3{}, Vector3{}, Vector3{}) {}
+    Axis3(void) { Initialize(); }
     Axis3(const Vector3& forward, const Vector3& right, const Vector3& up)
     {
         this->forward = forward;

@@ -27,7 +27,7 @@ public:
         // 星1つに対して、ColliderCameraも1つの計算なので、コライダーのID指定でcenterを受け取るわけにはいかない。
 
         // 星からカメラ方向へのベクトル
-        repelVec_ = (GetCoordinatePtr()->GetPosition() - planetCenter).Normalize();
+        repelVec_ = (transform_.position - planetCenter).Normalize();
     }
 
     void SetViewMat(const Matrix4& viewMat) { matView_ = viewMat; }

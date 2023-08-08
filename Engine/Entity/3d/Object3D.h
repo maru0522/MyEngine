@@ -50,9 +50,6 @@ private:
     Object3D* parent_;
 
     WorldCoordinate2 coordinate_;
-    Transform transform_;
-    Axis3 axes_;
-
     ConstBuffer<CBData3d_t> cb_;
     bool isInvisible_{};
     Model_t model_;
@@ -69,7 +66,6 @@ public:
     inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
     inline void SetCoordinate(const WorldCoordinate2& coordinate) { coordinate_ = coordinate; }
 
-    inline const WorldCoordinate2& GetCoordinate(void) { return coordinate_; }
     inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
 };
 

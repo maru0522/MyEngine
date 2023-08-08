@@ -2,6 +2,7 @@
 #include <memory>
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "Transform.h"
 #include "WorldCoordinate.h"
 
 class Camera
@@ -22,6 +23,9 @@ private:
 protected:
     // ïœêî
     WorldCoordinate2 coordinate_;
+    Transform transform_;
+    Axis3 axes_;
+
 
     Matrix4 matProj_OrthoGraphic_;
     Matrix4 matProj_Perspective_;
@@ -43,6 +47,8 @@ public:
 
     // getter
     inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
+    Transform* GetTransformPtr(void) { return &transform_; }
+    Axis3* GetAxis3Ptr(void) { return &axes_; }
 
     inline const Matrix4& GetMatProjOrthoGraphic(void) { return matProj_OrthoGraphic_; }
     inline const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }

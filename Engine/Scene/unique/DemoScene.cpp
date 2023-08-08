@@ -6,12 +6,11 @@
 void DemoScene::Initialize(void)
 {
     // カメラの座標設定
-    cameraPtr->GetCoordinatePtr()->SetPosition({ 0,0,-70 });
-    colCameraPtr->GetCoordinatePtr()->SetPosition({ 0,0,-70 });
+    cameraPtr->GetTransformPtr()->position = { 0,0,-70 };
+    colCameraPtr->GetTransformPtr()->position = { 0,0,-70 };
     // カメラのデバッグカメラモードをON
     cameraPtr->SetIsDebugMode(true);
     colCameraPtr->SetIsDebugMode(true);
-    colCameraPtr->GetCoordinatePtr()->SetIsPriority(true);
     // 座標計算法をクォータニオン優先
     //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
     // カメラをマネージャーにセット
@@ -33,8 +32,6 @@ void DemoScene::Initialize(void)
     //colCameraPtr->radius_ = 50.f;
     //colCameraPtr->theta_ = 0.f;
     //colCameraPtr->phi_ = 0.f;
-    testP_->GetCoordinatePtr()->SetAxes(Axis3{ Vector3(0,0,-1),Vector3(-1,0,0),Vector3(0,1,0) });
-    testP_->GetCoordinatePtr()->SetIsPriority(true);
 }
 
 void DemoScene::Update(void)
@@ -54,7 +51,7 @@ void DemoScene::Update(void)
     static float sPhi4Cam2{ 3.14159f };
     ImGui::SliderFloat("sPhi4Cam2", &sPhi4Cam2, 0.f, 6.28319f);
     // カメラを球面座標系で管理する
-    Vector3 ppos = player_->GetCoordinatePtr()->GetPosition();
+    Vector3 ppos = player_->GetTransformPtr()->position;
 
     player_->Update();
     rabbit1_->Update();
@@ -79,8 +76,8 @@ void DemoScene::Update(void)
         matWorld.m[3][2] += ppos.z;
     }
 
-    colCameraPtr->GetCoordinatePtr()->SetMatWorld(matWorld);
-    testP_->GetCoordinatePtr()->SetMatWorld(matWorld);
+    colCameraPtr->GetCoordinatePtr()->mat_world = matWorld;
+    testP_->GetCoordinatePtr()->mat_world = matWorld;
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -114,7 +111,7 @@ void DemoScene::Update(void)
     //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
     GUI::Space();
     ImGui::Text("dummyp matrix");
-    Matrix4 p = testP_->GetCoordinatePtr()->GetMatWorld();
+    Matrix4 p = testP_->GetCoordinatePtr()->mat_world;
     ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
@@ -122,7 +119,7 @@ void DemoScene::Update(void)
 
     GUI::Space();
     ImGui::Text("followCamera matrix");
-    Matrix4 c = colCameraPtr->GetCoordinatePtr()->GetMatWorld();
+    Matrix4 c = colCameraPtr->GetCoordinatePtr()->mat_world;
     ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);
@@ -144,7 +141,7 @@ void DemoScene::Draw3d(void)
     player_->Draw();
     rabbit1_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
-    //testP_->Draw();
+    testP_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
@@ -164,60 +161,60 @@ void DemoScene::Finalize(void)
 {
 }
 
-void DemoScene::DeployObj(LevelData* lvdPtr)
-{
-    using namespace Math::QuaternionF;
+//void DemoScene::DeployObj(LevelData* lvdPtr)
+//{
+//    using namespace Math::QuaternionF;
 
-    for (auto& objectData : lvdPtr->objects_) {
-        if (objectData.type == "MESH") {
-            objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
-            objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
-            //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
-            objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
-            objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
-        }
-        if (objectData.type == "LIGHT") {
-            if (!objectData.isInvisible) lightGroup_->SetPointLightActive(0, true);
-            lightGroup_->SetPointLightColor(0, { 1,1,1 });
-            lightGroup_->SetPointLightPos(0, objectData.trans);
-            lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
-        }
+    //for (auto& objectData : lvdPtr->objects_) {
+        //if (objectData.type == "MESH") {
+        //    objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
+        //    objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
+        //    //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
+        //    objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
+        //    objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
+        //}
+        //if (objectData.type == "LIGHT") {
+        //    if (!objectData.isInvisible) lightGroup_->SetPointLightActive(0, true);
+        //    lightGroup_->SetPointLightColor(0, { 1,1,1 });
+        //    lightGroup_->SetPointLightPos(0, objectData.trans);
+        //    lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
+        //}
         //if (objectData.type == "CAMERA") {
         //    cameraPtr->eye_ = objectData.trans;
         //    cameraPtr->rotation_ = objectData.rot;
         //}
-    }
-}
+    //}
+//}
 
-void DemoScene::HotReload(LevelData* lvdPtr)
-{
-    using namespace Math::QuaternionF;
+//void DemoScene::HotReload(LevelData* lvdPtr)
+//{
+//    using namespace Math::QuaternionF;
 
-    for (auto& objectData : lvdPtr->objects_) {
-        if (objectData.type == "MESH") {
-            if (objects_.find(objectData.name) == objects_.end()) {
-                objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
-                objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
-                //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
-                objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
-                objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
-            }
-            objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
-            //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
-            objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
-            objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
-        }
-        if (objectData.type == "LIGHT") {
-            objectData.isInvisible ?
-                lightGroup_->SetPointLightActive(0, false) :
-                lightGroup_->SetPointLightActive(0, true);
-            lightGroup_->SetPointLightColor(0, { 1,1,1 });
-            lightGroup_->SetPointLightPos(0, objectData.trans);
-            lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
-        }
+    //for (auto& objectData : lvdPtr->objects_) {
+        //if (objectData.type == "MESH") {
+        //    if (objects_.find(objectData.name) == objects_.end()) {
+        //        objects_.emplace(objectData.name, new Object3D{ "Resources/model/cube/cube.obj" });
+        //        objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
+        //        //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
+        //        objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
+        //        objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
+        //    }
+        //    objects_[objectData.name]->GetCoordinatePtr()->SetPosition(objectData.trans);
+        //    //objects_[objectData.name]->coordinate_.SetRotation(EulerToQuaternion(objectData.rot));
+        //    objects_[objectData.name]->GetCoordinatePtr()->SetScale(objectData.scale);
+        //    objects_[objectData.name]->SetIsInvisible(objectData.isInvisible);
+        //}
+        //if (objectData.type == "LIGHT") {
+        //    objectData.isInvisible ?
+        //        lightGroup_->SetPointLightActive(0, false) :
+        //        lightGroup_->SetPointLightActive(0, true);
+        //    lightGroup_->SetPointLightColor(0, { 1,1,1 });
+        //    lightGroup_->SetPointLightPos(0, objectData.trans);
+        //    lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
+        //}
         //if (objectData.type == "CAMERA") {
         //    cameraPtr->eye_ = objectData.trans;
         //    cameraPtr->rotation_ = objectData.rot;
         //}
-    }
-}
+    //}
+//}
