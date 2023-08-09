@@ -63,7 +63,8 @@ void Player::Update(void)
         axes_.forward = moveVec.Normalize();
     }
 
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_,axes_);
+    // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
+    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -160,5 +161,7 @@ void Player::OnCollision(void)
         currentPos += axes_.up * -diff; // ここをマイナス符号で値反転
 
         transform_.position = currentPos;
+
+        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
 }
