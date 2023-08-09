@@ -3,7 +3,7 @@
 #include <memory>
 #include "CollisionPrimitive.h"
 
-class CollisionManager
+class CollisionManager final
 {
 private:
     // singleton

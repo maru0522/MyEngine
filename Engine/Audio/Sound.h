@@ -4,7 +4,7 @@
 #include "AudioManager.h"
 #include <xaudio2.h>
 
-class Sound
+class Sound final
 {
 private:
     // ’è‹`

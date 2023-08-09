@@ -11,7 +11,7 @@
 #include "ColliderCamera.h"
 #include "Rabbit.h"
 
-class DemoScene :
+class DemoScene final :
     public IScene
 {
 private:

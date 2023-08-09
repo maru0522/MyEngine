@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-struct Vector3
+struct Vector3 final
 {
 public:
     // •Ï”

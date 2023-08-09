@@ -7,7 +7,7 @@
 
 #include "InitDirectX.h"
 
-class TextureManager
+class TextureManager final
 {
 private:
     // ’è‹`

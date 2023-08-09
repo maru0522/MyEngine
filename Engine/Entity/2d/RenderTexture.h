@@ -2,7 +2,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 
-class RenderTexture
+class RenderTexture final
 {
 private:
     // ’è‹`

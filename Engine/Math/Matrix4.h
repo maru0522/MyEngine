@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector3.h"
 
-struct Matrix4
+struct Matrix4 final
 {
 public:
     // ŠÖ”

@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 
-class FPSController
+class FPSController final
 {
 public:
     // ä÷êî

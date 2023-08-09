@@ -1,7 +1,7 @@
 #pragma once
 #include "FrameWork.h"
 
-class GameSystem :
+class GameSystem final :
     public FrameWork
 {
 public:

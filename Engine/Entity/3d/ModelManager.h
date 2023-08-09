@@ -16,7 +16,7 @@
 #include "Vector2.h"
 #include "Mesh.h"
 
-struct Model_t
+struct Model_t final
 {
 private:
     // ’è‹`

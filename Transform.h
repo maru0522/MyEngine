@@ -1,7 +1,7 @@
 #pragma once
 #include <Vector3.h>
 
-struct Transform
+struct Transform final
 {
     Transform(void) { Initialize(); }
     Transform(const Vector3& position, const Vector3& rotation, const Vector3& scale)
@@ -23,7 +23,7 @@ struct Transform
     }
 };
 
-struct Axis3
+struct Axis3 final
 {
     Vector3 forward;
     Vector3 right;
@@ -45,7 +45,7 @@ struct Axis3
     }
 };
 
-struct AxisRot
+struct AxisRot final
 {
     Vector3 axis;
     float rad;

@@ -60,7 +60,7 @@ public:
     inline bool GetIsFollow(void) { return isFollow_; }
 };
 
-class CameraManager
+class CameraManager final
 {
 private:
     // Singleton

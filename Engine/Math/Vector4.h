@@ -1,7 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 
-struct Vector4
+struct Vector4 final
 {
 public:
     // •Ï”

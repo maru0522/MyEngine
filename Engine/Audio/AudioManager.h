@@ -9,7 +9,7 @@
 #include <mfidl.h>
 #include <mfreadwrite.h>
 
-class AudioManager
+class AudioManager final
 {
 private:
     // ’è‹`

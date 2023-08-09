@@ -4,7 +4,7 @@
 #include "Vector4.h"
 #include <d3d12.h>
 
-class ImGuiController
+class ImGuiController final
 {
 public:
     enum class UIStyle

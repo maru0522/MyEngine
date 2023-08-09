@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-class WndAPI
+class WndAPI final
 {
 public:
     // Ã“IŠÖ”

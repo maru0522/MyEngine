@@ -8,7 +8,7 @@
 #include "ImguiController.h"
 #include "DirectionalLight.h"
 
-class LightGroup
+class LightGroup final
 {
 private:
     // ’è‹`

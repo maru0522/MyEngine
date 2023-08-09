@@ -8,7 +8,7 @@
 #include "WndAPI.h"
 #include "FPSController.h"
 
-class InitDirectX
+class InitDirectX final
 {
 private:
     // ’è‹`

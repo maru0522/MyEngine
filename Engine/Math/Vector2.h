@@ -1,6 +1,6 @@
 #pragma once
 
-struct Vector2
+struct Vector2 final
 {
 public:
     // •Ï”
