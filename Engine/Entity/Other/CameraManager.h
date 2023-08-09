@@ -22,7 +22,7 @@ private:
 
 protected:
     // ïœêî
-    WorldCoordinate2 coordinate_;
+    Coordinate coordinate_;
     Transform transform_;
     Axis3 axes_;
 
@@ -46,7 +46,7 @@ public:
     inline void SetIsDebugMode(bool isDebug) { isDebugMode_ = isDebug; }
 
     // getter
-    inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
+    inline Coordinate* GetCoordinatePtr(void) { return &coordinate_; }
     Transform* GetTransformPtr(void) { return &transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
 

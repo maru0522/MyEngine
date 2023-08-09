@@ -29,7 +29,7 @@ private:
     // •Ï”
     Vector3 pPos_;
 
-    WorldCoordinate2 coordinate_;
+    Coordinate coordinate_;
     Transform transform_;
     Axis3 axes_;
 

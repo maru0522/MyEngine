@@ -24,7 +24,7 @@ private:
     void OnCollision(void); // callback
 
     // ïœêî
-    WorldCoordinate2 coordinate_;
+    Coordinate coordinate_;
     Transform transform_;
     Axis3 axes_;
 
@@ -37,7 +37,7 @@ public:
     // setter
 
     // getter
-    inline WorldCoordinate2* GetCoordinatePtr(void) { return &coordinate_; }
+    inline Coordinate* GetCoordinatePtr(void) { return &coordinate_; }
     Transform* GetTransformPtr(void) { return &transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
