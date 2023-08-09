@@ -16,7 +16,7 @@ void ColliderCamera::Update(void)
 {
     using namespace Math;
 
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_);
+    //coordinate_.mat_world = Math::Function::AffinTrans(transform_);
 
     // ƒrƒ…[s—ñ
     //isFollow_ ?

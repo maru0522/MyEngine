@@ -46,10 +46,6 @@ void DemoScene::Update(void)
     ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 6.28319f);
     static float sPhi4Cam{ 0.f };
     ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
-    static float sTheta4Cam2{};
-    ImGui::SliderFloat("sTheta4Cam2", &sTheta4Cam2, 0.f, 3.14159f);
-    static float sPhi4Cam2{ 3.14159f };
-    ImGui::SliderFloat("sPhi4Cam2", &sPhi4Cam2, 0.f, 6.28319f);
     // ƒJƒƒ‰‚ð‹…–ÊÀ•WŒn‚ÅŠÇ—‚·‚é
     Vector3 ppos = player_->GetTransformPtr()->position;
 
@@ -64,9 +60,10 @@ void DemoScene::Update(void)
     {
         using namespace Math;
 
-        matWorld *= Mat4::Translate(matWorld, {0,0,sRadius4Cam });
+        matWorld *= Mat4::Translate(matWorld, {0,0,-sRadius4Cam });
 
         Matrix4 matRotate{ Mat4::Identity() };
+        //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
         matRotate = Mat4::RotationX(sTheta4Cam) * Mat4::RotationY(sPhi4Cam);
 
         matWorld *= matRotate;
