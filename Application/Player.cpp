@@ -63,7 +63,8 @@ void Player::Update(void)
         axes_.forward = moveVec.Normalize();
     }
 
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_,axes_);
+    // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
+    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -159,6 +160,10 @@ void Player::OnCollision(void)
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
         currentPos += axes_.up * -diff; // ここをマイナス符号で値反転
 
+        // 座標を補正
         transform_.position = currentPos;
+
+        // 補正された値で行列を生成
+        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
 }
