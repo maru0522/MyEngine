@@ -64,6 +64,7 @@ void Player::Update(void)
     }
 
     // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
+    // 計算量を減らしたい場合、コミットID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d を参照
     coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 
 #ifdef _DEBUG
