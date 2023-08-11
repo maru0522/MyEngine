@@ -111,6 +111,11 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
     moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
     moveVec += redefinitionPRightFromCamera * inputVec.x;
 
+    theta_ += 0.02f * inputVec.y;
+    phi_ += 0.02f * inputVec.x;
+    Math::Function::Loop(theta_, 0.f, 6.28319f);
+    Math::Function::Loop(phi_, 0.f, 6.28319f);
+
     // 重力
     jumpVecNorm_ -= kGravity_;
 

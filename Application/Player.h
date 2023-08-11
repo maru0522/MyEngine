@@ -19,8 +19,11 @@ public:
     void Update(void);
     void Draw(void);
 
+    float rad_{ 45.f };
+    float theta_{ 0.85f };
+    float phi_;
 private:
-    void Move(Vector3& moveVec,Vector3& velocity); // get velocity & moveVec
+    void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
     void OnCollision(void); // callback
 
     // ïœêî

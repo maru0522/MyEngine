@@ -39,13 +39,17 @@ void DemoScene::Update(void)
     lightGroup_->Update();
     testP_->Update();
 
-    static float sRadius4Cam{};
-    ImGui::SliderFloat("sRadius4Cam", &sRadius4Cam, 0.f, 200.f);
-    static float sTheta4Cam{};
-    //ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 3.14159f);
-    ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 6.28319f);
-    static float sPhi4Cam{ 0.f };
-    ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
+    //static float sRadius4Cam{};
+    //ImGui::SliderFloat("sRadius4Cam", &sRadius4Cam, 0.f, 200.f);
+    //static float sTheta4Cam{};
+    ////ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 3.14159f);
+    //ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 6.28319f);
+    //static float sPhi4Cam{ 0.f };
+    //ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
+
+    ImGui::SliderFloat("sRadius4Cam", &player_->rad_, 0.f, 200.f);
+    ImGui::SliderFloat("sTheta4Cam", &player_->theta_, 0.f, 6.28319f);
+    ImGui::SliderFloat("sPhi4Cam", &player_->phi_, 0.f, 6.28319f);
     // ƒJƒƒ‰‚ð‹…–ÊÀ•WŒn‚ÅŠÇ—‚·‚é
     Vector3 ppos = player_->GetTransformPtr()->position;
 
@@ -54,17 +58,17 @@ void DemoScene::Update(void)
     planet_->Update();
 
     colCameraPtr->SetPlanetCenter(planet_->GetPosition());
-
+    colCameraPtr->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
 
     Matrix4 matWorld{ Math::Mat4::Identity() };
     {
         using namespace Math;
 
-        matWorld *= Mat4::Translate(matWorld, {0,0,-sRadius4Cam });
+        matWorld *= Mat4::Translate(matWorld, {0,0,-player_->rad_ });
 
         Matrix4 matRotate{ Mat4::Identity() };
         //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
-        matRotate = Mat4::RotationX(sTheta4Cam) * Mat4::RotationY(sPhi4Cam);
+        matRotate = Mat4::RotationX(player_->theta_) * Mat4::RotationY(player_->phi_);
 
         matWorld *= matRotate;
 
@@ -138,7 +142,7 @@ void DemoScene::Draw3d(void)
     player_->Draw();
     rabbit1_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
-    testP_->Draw();
+    //testP_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

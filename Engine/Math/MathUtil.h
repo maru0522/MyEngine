@@ -31,6 +31,12 @@ namespace Math {
             if (value < min) value = max;
         }
 
+        template<typename T>
+        void Loop(T& value, T min, T max) {
+            if (value < min) value = max;
+            else if (value > max) value = min;
+        }
+
         template<typename T> // Žw’è‚µ‚½Œ^‚Ìƒ‰ƒ“ƒ_ƒ€‚È’l‚ð•Ô‹p
         inline T Random(double min, double max) {
 
