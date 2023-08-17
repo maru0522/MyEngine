@@ -102,6 +102,7 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec = inputVec.Normalize();
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(camMPtr_->GetCurrentCamera()->GetAxis3Ptr()->right, axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -111,10 +112,8 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
     moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
     moveVec += redefinitionPRightFromCamera * inputVec.x;
 
-    theta_ += 0.02f * inputVec.y;
-    phi_ += 0.02f * inputVec.x;
-    Math::Function::Loop(theta_, 0.f, 6.28319f);
-    Math::Function::Loop(phi_, 0.f, 6.28319f);
+    // カメラ座標用の値を補正
+    SphericalCamera(inputVec);
 
     // 重力
     jumpVecNorm_ -= kGravity_;
@@ -141,6 +140,43 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
     GUI::Space();
     GUI::End();
 #endif // _DEBUG
+}
+
+void Player::SphericalCamera(Vector3& inputVec)
+{
+    // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
+    // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+    if (axes_.forward.Dot(camMPtr_->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+    {
+        // カメラとプレイヤーの距離
+        float dist = (camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - transform_.position).Length();
+
+        // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+        if (dist < current_rad_)
+        {
+            // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
+            // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+            //current_rad_ = dist;
+        }
+    }
+    else
+    {
+        // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+        if (current_rad_ < default_rad_)
+        {
+            current_rad_ += 0.1f;
+            //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+        }
+        else if (current_rad_ > default_rad_)
+        {
+            current_rad_ -= 0.1f;
+        }
+
+        theta_ += 0.02f * inputVec.y;
+        phi_ += 0.02f * inputVec.x;
+        Math::Function::Loop(theta_, 0.f, 6.28319f);
+        Math::Function::Loop(phi_, 0.f, 6.28319f);
+    }
 }
 
 void Player::OnCollision(void)

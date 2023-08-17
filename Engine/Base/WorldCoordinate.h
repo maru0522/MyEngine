@@ -24,4 +24,7 @@ struct Coordinate final
     Vector3 GetMatAxisX(void) const { return { mat_world.m[0][0],mat_world.m[0][1],mat_world.m[0][2] }; }
     Vector3 GetMatAxisY(void) const { return { mat_world.m[1][0],mat_world.m[1][1],mat_world.m[1][2] }; }
     Vector3 GetMatAxisZ(void) const { return { mat_world.m[2][0],mat_world.m[2][1],mat_world.m[2][2] }; }
+
+    // s—ñ‚©‚ç•½sˆÚ“®¬•ª‚ğ”²‚«o‚·
+    Vector3 GetMatPos(void) const { return { mat_world.m[3][0],mat_world.m[3][1],mat_world.m[3][2] }; }
 };

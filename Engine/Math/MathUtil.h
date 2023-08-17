@@ -58,6 +58,7 @@ namespace Math {
             }
         }
 
+        // ’l‚ªŽw’è‚µ‚½’l“à‚É“ü‚Á‚Ä‚é‚©
         template<typename T>
         inline bool InRange(T value, T min, T max) {
             return min < value && value < max;

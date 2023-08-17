@@ -19,11 +19,13 @@ public:
     void Update(void);
     void Draw(void);
 
-    float rad_{ 60.f };
+    float default_rad_{ 60.f };
+    float current_rad_{ default_rad_ };
     float theta_{ 0.85f };
     float phi_;
 private:
     void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
+    void SphericalCamera(Vector3& inputVec); // correct value for camera
     void OnCollision(void); // callback
 
     // ïœêî

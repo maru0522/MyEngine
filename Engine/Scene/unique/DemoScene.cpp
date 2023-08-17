@@ -47,7 +47,7 @@ void DemoScene::Update(void)
     //static float sPhi4Cam{ 0.f };
     //ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
 
-    ImGui::SliderFloat("sRadius4Cam", &player_->rad_, 0.f, 200.f);
+    ImGui::SliderFloat("sRadius4Cam", &player_->current_rad_, 0.f, 200.f);
     ImGui::SliderFloat("sTheta4Cam", &player_->theta_, 0.f, 6.28319f);
     ImGui::SliderFloat("sPhi4Cam", &player_->phi_, 0.f, 6.28319f);
     // ƒJƒƒ‰‚ð‹…–ÊÀ•WŒn‚ÅŠÇ—‚·‚é
@@ -64,7 +64,7 @@ void DemoScene::Update(void)
     {
         using namespace Math;
 
-        matWorld *= Mat4::Translate(matWorld, {0,0,-player_->rad_ });
+        matWorld *= Mat4::Translate(matWorld, {0,0,-player_->current_rad_ });
 
         Matrix4 matRotate{ Mat4::Identity() };
         //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
