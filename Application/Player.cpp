@@ -149,6 +149,8 @@ void Player::SphericalCamera(Vector3& inputVec)
         // カメラとプレイヤーの距離
         float dist = (camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - transform_.position).Length();
 
+        // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
+        // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
         current_rad_ = dist;
     }
 
