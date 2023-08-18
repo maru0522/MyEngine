@@ -10,6 +10,13 @@ const bool CollisionChecker::SphereToSphere(const CollisionPrimitive::SphereColl
            (s2.radius + s1.radius) * (s2.radius + s1.radius);
 }
 
+const bool CollisionChecker::SphereToPoint(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PointCollider& p)
+{
+    return (s.center.x - p.pos.x) * (s.center.x - p.pos.x) +
+           (s.center.y - p.pos.y) * (s.center.y - p.pos.y) +
+           (s.center.z - p.pos.z) * (s.center.z - p.pos.z) <= s.radius * s.radius;
+}
+
 const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PlaneCollider& p, Vector3* intersection)
 {
     float distV = Math::Vec3::Dot(s.center, p.normal.Normalize());
@@ -24,6 +31,16 @@ const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereColli
     return true;
 }
 
+const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& p)
+{
+    if (s.center == s.center && p.center == p.center)
+    {
+
+    }
+
+    return false;
+}
+
 const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2)
 {
     float dot = Math::Vec3::Dot(p1.normal, p2.normal);
@@ -36,4 +53,31 @@ const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollide
     }
 
     return true;
+}
+
+const bool CollisionChecker::AABBToAABB(const CollisionPrimitive::AABBCollider& a1, const CollisionPrimitive::AABBCollider& a2)
+{
+    Vector3 a1_min = { a1.center.x - a1.radius.x, a1.center.y - a1.radius.y, a1.center.z - a1.radius.z };
+    Vector3 a1_max = { a1.center.x + a1.radius.x, a1.center.y + a1.radius.y, a1.center.z + a1.radius.z };
+    Vector3 a2_min = { a2.center.x - a2.radius.x, a2.center.y - a2.radius.y, a2.center.z - a2.radius.z };
+    Vector3 a2_max = { a2.center.x + a2.radius.x, a2.center.y + a2.radius.y, a2.center.z + a2.radius.z };
+
+    return a1_min.x <= a2_max.x &&
+           a1_max.x >= a2_min.x &&
+           a1_min.y <= a2_max.y &&
+           a1_max.y >= a2_min.y &&
+           a1_min.z <= a2_max.z &&
+           a1_max.z >= a2_min.z;
+}
+
+const bool CollisionChecker::AABBToPoint(const CollisionPrimitive::AABBCollider& a, const CollisionPrimitive::PointCollider& p)
+{
+    return (a.center.x - a.radius.x <= p.pos.x && p.pos.x <= a.center.x + a.radius.x) &&
+           (a.center.y - a.radius.y <= p.pos.y && p.pos.y <= a.center.y + a.radius.y) &&
+           (a.center.z - a.radius.z <= p.pos.z && p.pos.z <= a.center.z + a.radius.z);
+}
+
+const bool CollisionChecker::PointToPoint(const CollisionPrimitive::PointCollider& p1, const CollisionPrimitive::PointCollider& p2)
+{
+    return p1.pos == p2.pos;
 }

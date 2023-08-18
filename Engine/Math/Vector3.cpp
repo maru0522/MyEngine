@@ -94,6 +94,11 @@ bool Vector3::operator==(const Vector3& v)
     return x == v.x && y == v.y && z == v.z;
 }
 
+const bool Vector3::operator==(const Vector3& v) const
+{
+    return x == v.x && y == v.y && z == v.z;
+}
+
 // 2€‰‰Zq +
 const Vector3 operator+(const Vector3& v1, const Vector3& v2)
 {

@@ -32,6 +32,7 @@ public:
 
     // 比較オバロ
     bool operator==(const Vector3& v);
+    const bool operator==(const Vector3& v) const;
 };
 
 // 2項オバロ

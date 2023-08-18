@@ -8,6 +8,8 @@ namespace CollisionPrimitive
 {
     struct SphereCollider;
     struct PlaneCollider;
+    struct PointCollider;
+    struct AABBCollider;
 }
 
 struct CollisionInfo
@@ -25,6 +27,8 @@ struct CollisionInfo
     std::string id{};
     Vector3 v{};
     float f{};
+    float f2{};
+    float f3{};
 };
 
 class ICollider
@@ -37,6 +41,8 @@ public:
 
     virtual bool Col(CollisionPrimitive::SphereCollider* arg_Shpere) = 0;
     virtual bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) = 0;
+    virtual bool Col(CollisionPrimitive::PointCollider* arg_Point) = 0;
+    virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
 
 protected:
     // ïœêî
