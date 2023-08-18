@@ -144,6 +144,14 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
 
 void Player::SphericalCamera(Vector3& inputVec)
 {
+    if (jumpVecNorm_)
+    {
+        // カメラとプレイヤーの距離
+        float dist = (camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - transform_.position).Length();
+
+        current_rad_ = dist;
+    }
+
     // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
     // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
     if (axes_.forward.Dot(camMPtr_->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
