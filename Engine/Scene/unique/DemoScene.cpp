@@ -133,6 +133,10 @@ void DemoScene::Update(void)
     //ImGui::Text("y %f,%f,%f", colCamY.x, colCamY.y, colCamY.z);
     GUI::End();
 
+    hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
+    hole_->Update();
+    house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
+    house_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -143,6 +147,9 @@ void DemoScene::Draw3d(void)
     rabbit1_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
+
+    hole_->Draw();
+    house_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

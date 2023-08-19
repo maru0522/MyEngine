@@ -19,7 +19,7 @@ public:
     void Update(void);
     void Draw(void);
 
-    float default_rad_{ 60.f };
+    float default_rad_{ 65.f };
     float current_rad_{ default_rad_ };
     float theta_{ 0.85f };
     float phi_;
