@@ -31,14 +31,19 @@ const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereColli
     return true;
 }
 
-const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& p)
+const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a)
 {
-    if (s.center == s.center && p.center == p.center)
-    {
+    // AABB“à‚ÅÅ‚à‹…‚É‹ß‚¢“_
+    Vector3 nearest{};
+    nearest.x = (std::max)(a.center.x - a.radius.x, (std::min)(s.center.x, a.center.x + a.radius.x));
+    nearest.y = (std::max)(a.center.y - a.radius.y, (std::min)(s.center.y, a.center.y + a.radius.y));
+    nearest.z = (std::max)(a.center.z - a.radius.z, (std::min)(s.center.z, a.center.z + a.radius.z));
+    // nearest == sphere.center ‚Ìê‡A‹…‚ÍAABB“à‚É‚ ‚é‚½‚ß true
 
-    }
-
-    return false;
+    // SphereToPoint() ‚Æ“¯‚¶
+    return (s.center.x - nearest.x) * (s.center.x - nearest.x) +
+           (s.center.y - nearest.y) * (s.center.y - nearest.y) +
+           (s.center.z - nearest.z) * (s.center.z - nearest.z) <= s.radius * s.radius;
 }
 
 const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2)

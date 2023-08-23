@@ -17,7 +17,7 @@ namespace CollisionChecker
     // ‹…‚Æ•½–Ê
     const bool SphereToPlane(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PlaneCollider& p, Vector3* intersection = nullptr);
     // ‹…‚Æ’¼•û‘Ì
-    const bool SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& p);
+    const bool SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a);
 
     // •½–Ê‚Æ•½–Ê
     const bool PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2);
