@@ -35,9 +35,9 @@ void Player::Update(void)
 #endif // _DEBUG
 
     // 移動量
-    Vector3 moveVec{};
+    moveVec_ = { 0,0,0 }; // 初期化
     Vector3 velocity{};
-    Move(moveVec, velocity); // 参照渡しで受け取る。
+    Move(moveVec_, velocity); // 参照渡しで受け取る。
 
     // 座標更新
     Vector3 currentPos = transform_.position;
@@ -54,13 +54,13 @@ void Player::Update(void)
     axes_.forward = forwardFromOldAxis.Normalize();
 
     // 移動入力があった場合
-    if (moveVec.IsNonZero())
+    if (moveVec_.IsNonZero())
     {
         // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
         Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
-        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec_.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
         axes_.right = rightFromMoveVec.Normalize();
-        axes_.forward = moveVec.Normalize();
+        axes_.forward = moveVec_.Normalize();
     }
 
     // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
@@ -211,6 +211,22 @@ void Player::OnCollision(void)
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
         currentPos += axes_.up * -diff; // ここをマイナス符号で値反転
+
+        // 座標を補正
+        transform_.position = currentPos;
+
+        // 補正された値で行列を生成
+        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    }
+    if (sphereCollider_.GetColInfo().id == "rock")
+    {
+        // めり込み距離の算出方法が分からん。AABB側の半径どうやって算出するんや。
+
+        // 現在座標
+        Vector3 currentPos = transform_.position;
+
+        // 移動した分だけ押し戻すようにする。
+        currentPos -= moveVec_;
 
         // 座標を補正
         transform_.position = currentPos;

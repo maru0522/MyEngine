@@ -10,6 +10,8 @@
 #include "Planet.h"
 #include "ColliderCamera.h"
 #include "Rabbit.h"
+#include "Rock.h"
+#include "CollisionManager.h"
 
 class DemoScene final :
     public IScene
@@ -49,6 +51,11 @@ public:
     //
     std::unique_ptr<Object3D> hole_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
     std::unique_ptr<Object3D> house_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
+    std::unique_ptr<Rock> rock1_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Rock> rock2_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Rock> rock3_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Rock> rock4_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Rock> rock5_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
 
     // jsonì«Ç›çûÇ›&îzíuóp
     std::map<std::string, std::unique_ptr<Object3D>> objects_;

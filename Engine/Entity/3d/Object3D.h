@@ -40,12 +40,14 @@ public:
     static void SetDrawBlendMode(BlendMode blendmode);
 
     Object3D(const fsPath& path/*,Type type*/);
-    void Update(void);
-    void Draw(void);
+    virtual ~Object3D(void) = default;
+
+    virtual void Update(void);
+    virtual void Draw(void);
     void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
     void Draw(const fsPath& path);
 
-private:
+protected:
     // ïœêî
     Object3D* parent_;
 

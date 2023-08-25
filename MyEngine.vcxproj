@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Rock.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
     <ClCompile Include="Engine\Entity\Other\CameraManager.cpp" />
@@ -243,6 +244,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Rock.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />

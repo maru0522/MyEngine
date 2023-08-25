@@ -1,0 +1,35 @@
+#include "Rock.h"
+#include "MathUtil.h"
+
+Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj")
+{
+    colMPtr->Register(&collision_AABB_);
+    collision_AABB_.SetID("rock");
+    collision_AABB_.SetOnCollision(std::bind(&Rock::OnCollision, this));
+    collision_AABB_.radius = kRadius_;
+    transform_.scale = kRadius_; // cube‚Ìxyz‚ª‘S‚Ä1‚¾‚©‚ç‰Â”\‚È•¶
+
+    // ‰ŠúˆÊ’u
+    transform_.position = { 0,60,0 };
+    // ‰Šúp¨
+    axes_.forward = { 0,0,1 };
+    axes_.right = { 1,0,0 };
+    axes_.up = { 0,1,0 };
+}
+
+void Rock::Update(void)
+{
+    Object3D::Update();
+
+    collision_AABB_.center = transform_.position;
+    coordinate_.mat_world = Math::Function::AffinTrans(transform_,axes_);
+}
+
+void Rock::Draw(void)
+{
+    Object3D::Draw();
+}
+
+void Rock::OnCollision(void)
+{
+}

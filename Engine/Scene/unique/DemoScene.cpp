@@ -32,6 +32,12 @@ void DemoScene::Initialize(void)
     //colCameraPtr->radius_ = 50.f;
     //colCameraPtr->theta_ = 0.f;
     //colCameraPtr->phi_ = 0.f;
+
+    rock1_->TransformPtr()->position = { 50,0,0 };
+    rock2_->TransformPtr()->position = { 47,12,3 };
+    rock3_->TransformPtr()->position = { 45,-6,7 };
+    rock4_->TransformPtr()->position = { 45,-15,-5 };
+    rock5_->TransformPtr()->position = { 46,7,-6 };
 }
 
 void DemoScene::Update(void)
@@ -137,6 +143,12 @@ void DemoScene::Update(void)
     hole_->Update();
     house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
     house_->Update();
+
+    rock1_->Update();
+    rock2_->Update();
+    rock3_->Update();
+    rock4_->Update();
+    rock5_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -150,6 +162,11 @@ void DemoScene::Draw3d(void)
 
     hole_->Draw();
     house_->Draw();
+    rock1_->Draw();
+    rock2_->Draw();
+    rock3_->Draw();
+    rock4_->Draw();
+    rock5_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

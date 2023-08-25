@@ -187,6 +187,7 @@
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Application\Rock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -358,6 +359,7 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Application\Rock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
