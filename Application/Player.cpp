@@ -234,4 +234,8 @@ void Player::OnCollision(void)
         // •â³‚³‚ê‚½’l‚Ås—ñ‚ğ¶¬
         coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
+    if (sphereCollider_.GetColInfo().id == "rabbit")
+    {
+        captureCount_rabbit++;
+    }
 }

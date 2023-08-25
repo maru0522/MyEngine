@@ -23,6 +23,8 @@ public:
     float current_rad_{ default_rad_ };
     float theta_{ 0.85f };
     float phi_;
+
+    int32_t captureCount_rabbit; // “e‚ğ•ß‚Ü‚¦‚½‰ñ”
 private:
     void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
     void SphericalCamera(Vector3& inputVec); // correct value for camera

@@ -26,53 +26,56 @@ Rabbit::Rabbit(void)
 
 void Rabbit::Update(void)
 {
-    // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
-    appearance_->Update();
-
-    static float sDetectRadius{ kDetectRadius_ };
-    GUI::Begin("Rabbit");
-    ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
-    detectPlayerCollider_.radius = sDetectRadius;
-    GUI::End();
-
-    // 移動量
-    Vector3 moveVec{};
-    Vector3 velocity{};
-    Move(moveVec, velocity); // 参照渡しで受け取る。
-
-    // 座標更新
-    Vector3 currentPos = transform_.position;
-    currentPos += velocity;
-    transform_.position = currentPos;
-
-    // コライダー更新
-    sphereCollider_.center = currentPos;
-    detectPlayerCollider_.center = currentPos;
-
-    // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-    Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(),axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-    axes_.right = rightFromOldAxis;
-    Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(),axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-    axes_.forward = forwardFromOldAxis;
-
-    // 移動入力があった場合
-    if (moveVec.IsNonZero())
+    if (isCaptured_ == false)
     {
-        // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-        Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
-        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-        axes_.right = rightFromMoveVec.Normalize();
-        axes_.forward = moveVec.Normalize();
-    }
+        // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
+        appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
+        appearance_->Update();
 
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        static float sDetectRadius{ kDetectRadius_ };
+        GUI::Begin("Rabbit");
+        ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
+        detectPlayerCollider_.radius = sDetectRadius;
+        GUI::End();
+
+        // 移動量
+        Vector3 moveVec{};
+        Vector3 velocity{};
+        Move(moveVec, velocity); // 参照渡しで受け取る。
+
+        // 座標更新
+        Vector3 currentPos = transform_.position;
+        currentPos += velocity;
+        transform_.position = currentPos;
+
+        // コライダー更新
+        sphereCollider_.center = currentPos;
+        detectPlayerCollider_.center = currentPos;
+
+        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(), axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+        axes_.right = rightFromOldAxis;
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(), axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        axes_.forward = forwardFromOldAxis;
+
+        // 移動入力があった場合
+        if (moveVec.IsNonZero())
+        {
+            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+            Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            axes_.right = rightFromMoveVec.Normalize();
+            axes_.forward = moveVec.Normalize();
+        }
+
+        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    }
 }
 
 void Rabbit::Draw(void)
 {
     // 赤色のテクスチャを適用。（クソ見辛い）
-    appearance_->Draw("Resources/red1x1.png");
+    if (isCaptured_ == false) { appearance_->Draw("Resources/red1x1.png"); }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
 }
@@ -122,6 +125,10 @@ void Rabbit::OnCollision(void)
         currentPos += axes_.up.Normalize() * -diff; // ここをマイナス符号で値反転
 
         transform_.position = currentPos;
+    }
+    if (sphereCollider_.GetColInfo().id == "player")
+    {
+        isCaptured_ = true;
     }
 }
 

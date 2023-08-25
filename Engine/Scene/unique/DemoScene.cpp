@@ -33,6 +33,9 @@ void DemoScene::Initialize(void)
     //colCameraPtr->theta_ = 0.f;
     //colCameraPtr->phi_ = 0.f;
 
+    rabbit2_->GetTransformPtr()->position = { 10,60, 20 };
+    rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
+
     rock1_->TransformPtr()->position = { 50,0,0 };
     rock2_->TransformPtr()->position = { 47,12,3 };
     rock3_->TransformPtr()->position = { 45,-6,7 };
@@ -61,6 +64,8 @@ void DemoScene::Update(void)
 
     player_->Update();
     rabbit1_->Update();
+    rabbit2_->Update();
+    rabbit3_->Update();
     planet_->Update();
 
     colCameraPtr->SetPlanetCenter(planet_->GetPosition());
@@ -157,6 +162,8 @@ void DemoScene::Draw3d(void)
 
     player_->Draw();
     rabbit1_->Draw();
+    rabbit2_->Draw();
+    rabbit3_->Draw();
     if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
 
