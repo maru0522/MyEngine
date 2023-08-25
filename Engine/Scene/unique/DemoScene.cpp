@@ -7,9 +7,13 @@ void DemoScene::Initialize(void)
 {
     // カメラの座標設定
     cameraPtr->GetTransformPtr()->position = { 0,0,-70 };
+    cameraPtr->GetTransformPtr()->position = { 0,190,0 };
+    cameraPtr->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 };
     colCameraPtr->GetTransformPtr()->position = { 0,0,-70 };
+    colCameraPtr->GetTransformPtr()->position = { 3,172,-3 };
     // カメラのデバッグカメラモードをON
     cameraPtr->SetIsDebugMode(true);
+    colCameraPtr->SetIsDebugMode(true);
     colCameraPtr->SetIsDebugMode(true);
     // 座標計算法をクォータニオン優先
     //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
@@ -65,6 +69,50 @@ void DemoScene::Update(void)
     // カメラを球面座標系で管理する
     Vector3 ppos = player_->GetTransformPtr()->position;
 
+    static bool isCamDebug{};
+
+    // 遠目から惑星を見るカメラに切り替える処理
+    static bool isTimer{};
+    static int32_t timer{};
+    if (isTimer)
+    {
+        timer++;
+    }
+
+    if (player_->isFallHole1_ || player_->isFallHole2_)
+    {
+        isCamDebug = true;
+        isTimer = true;
+        timer = 0;
+        CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
+        cameraPtr->SetIsDebugMode(true);
+    }
+
+    if (timer > 130)
+    {
+        isCamDebug = false;
+        isTimer = false;
+        timer = 0;
+        CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
+    }
+
+    GUI::Begin("debug tab maruyama");
+    //if (GUI::ButtonTrg("switch camera"))
+    //{
+    //    // デバッグ用のカメラと切替
+    //    if (isCamDebug)
+    //    {
+    //        isCamDebug = false;
+    //        CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
+    //    }
+    //    else
+    //    {
+    //        isCamDebug = true;
+    //        CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
+    //        cameraPtr->SetIsDebugMode(true);
+    //    }
+    //}
+
     player_->Update();
     rabbit1_->Update();
     rabbit2_->Update();
@@ -78,7 +126,7 @@ void DemoScene::Update(void)
     {
         using namespace Math;
 
-        matWorld *= Mat4::Translate(matWorld, {0,0,-player_->current_rad_ });
+        matWorld *= Mat4::Translate(matWorld, { 0,0,-player_->current_rad_ });
 
         Matrix4 matRotate{ Mat4::Identity() };
         //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
@@ -101,25 +149,6 @@ void DemoScene::Update(void)
     //    lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //    HotReload(lvdPtr_.get());
     //}
-
-    static bool isCamDebug{};
-
-    GUI::Begin("debug tab maruyama");
-    if (GUI::ButtonTrg("switch camera"))
-    {
-        // デバッグ用のカメラと切替
-        if (isCamDebug)
-        {
-            isCamDebug = false;
-            CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
-        }
-        else
-        {
-            isCamDebug = true;
-            CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
-            cameraPtr->SetIsDebugMode(true);
-        }
-    }
 
     GUI::Text(isCamDebug ? "true" : "false");
     //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);

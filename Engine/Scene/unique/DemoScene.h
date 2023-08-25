@@ -68,6 +68,7 @@ public:
 
     std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
     std::unique_ptr<ColliderCamera> colCameraPtr{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
+    std::unique_ptr<ColliderCamera> camera4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
     std::unique_ptr<LightGroup> lightGroup_{ std::make_unique<LightGroup>() };
 };
 

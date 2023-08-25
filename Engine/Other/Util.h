@@ -65,7 +65,7 @@ namespace Util {
         inline void SetEndTime(float endTime) { endTime_ = endTime; }
 
         inline const float GetEndTime(void) { return endTime_; }
-        inline const bool GetIsEnd(void) { return endTime_ < (GetNowCount<milliseconds>() - startTime_) / 1000.0f; } // endTime < elapsedTime
+        inline const bool GetIsEnd(void) { return endTime_ < ((GetNowCount<milliseconds>() - startTime_) / 1000.0f); } // endTime < elapsedTime
         inline const float GetElapsedTime(void) { return float{ (GetNowCount<milliseconds>() - startTime_) / 1000.0f }; }
 
     private:
