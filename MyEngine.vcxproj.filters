@@ -187,7 +187,13 @@
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Application\Rock.cpp" />
+    <ClCompile Include="Application\IIvent.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Rock.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\IventArea_Tantative.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -359,7 +365,13 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="Application\Rock.h" />
+    <ClInclude Include="Application\IIvent.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Rock.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\IventArea_Tantative.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

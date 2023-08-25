@@ -12,6 +12,7 @@
 #include "Rabbit.h"
 #include "Rock.h"
 #include "CollisionManager.h"
+#include "IventArea_Tantative.h"
 
 class DemoScene final :
     public IScene
@@ -51,7 +52,9 @@ public:
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     //
-    std::unique_ptr<Object3D> hole_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
+    //std::unique_ptr<Object3D> hole_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
+    std::unique_ptr<IventArea_Tantative> hole1_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel1") };
+    std::unique_ptr<IventArea_Tantative> hole2_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel2") };
     std::unique_ptr<Object3D> house_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
     std::unique_ptr<Rock> rock1_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock2_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };

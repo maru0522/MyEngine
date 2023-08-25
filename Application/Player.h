@@ -25,6 +25,8 @@ public:
     float phi_;
 
     int32_t captureCount_rabbit; // “e‚ğ•ß‚Ü‚¦‚½‰ñ”
+    bool isFallHole1_;
+    bool isFallHole2_;
 private:
     void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
     void SphericalCamera(Vector3& inputVec); // correct value for camera

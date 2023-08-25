@@ -23,6 +23,17 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr)
 
 void Player::Update(void)
 {
+    if (isFallHole1_)
+    {
+        transform_.position = { 0,-15,48 };
+        isFallHole1_ = false;
+    }
+    if (isFallHole2_)
+    {
+        transform_.position = { 0,15,-48 };
+        isFallHole2_ = false;
+    }
+
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
     appearance_->Update();
@@ -237,5 +248,13 @@ void Player::OnCollision(void)
     if (sphereCollider_.GetColInfo().id == "rabbit")
     {
         captureCount_rabbit++;
+    }
+    if (sphereCollider_.GetColInfo().id == "tunnel1")
+    {
+        isFallHole1_ = true;
+    }
+    if (sphereCollider_.GetColInfo().id == "tunnel2")
+    {
+        isFallHole2_ = true;
     }
 }

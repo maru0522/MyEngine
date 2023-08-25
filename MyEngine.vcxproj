@@ -90,6 +90,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\IIvent.cpp" />
+    <ClCompile Include="Application\IventArea_Tantative.cpp" />
     <ClCompile Include="Application\Rock.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
@@ -244,6 +246,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\IIvent.h" />
+    <ClInclude Include="Application\IventArea_Tantative.h" />
     <ClInclude Include="Application\Rock.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />

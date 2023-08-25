@@ -33,6 +33,9 @@ void DemoScene::Initialize(void)
     //colCameraPtr->theta_ = 0.f;
     //colCameraPtr->phi_ = 0.f;
 
+    hole1_->transform_.position = { 0,0,-48 };
+    hole2_->transform_.position = { 0,0,48 };
+
     rabbit2_->GetTransformPtr()->position = { 10,60, 20 };
     rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
 
@@ -144,8 +147,9 @@ void DemoScene::Update(void)
     //ImGui::Text("y %f,%f,%f", colCamY.x, colCamY.y, colCamY.z);
     GUI::End();
 
-    hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
-    hole_->Update();
+    //hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
+    hole1_->Update();
+    hole2_->Update();
     house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
     house_->Update();
 
@@ -167,7 +171,8 @@ void DemoScene::Draw3d(void)
     if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
 
-    hole_->Draw();
+    hole1_->Draw();
+    hole2_->Draw();
     house_->Draw();
     rock1_->Draw();
     rock2_->Draw();
