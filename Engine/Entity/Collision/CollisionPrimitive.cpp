@@ -14,8 +14,12 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
         //onTrigger_();
         //arg_Shpere->GetOnTrigger()();
 
-        onCollision_();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
         arg_Shpere->GetOnCollision()();
+        //AllOnFunction();
+        //arg_Shpere->AllOnFunction();
     }
 
     return isHit;

@@ -35,6 +35,13 @@ public:
     virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
 
 protected:
+    void AllOnFunction(void) // ‚È‚º‚©ãè‚­‚¢‚©‚È‚¢ ˆ—‚ª’Ê‚ç‚È‚¢(?)‚¹‚¢‚Å³í‚É“®‚©‚È‚¢
+    {
+        if (onCollision_) { onCollision_; }
+        if (onTrigger_) { onTrigger_; }
+        if (onRelease_) { onRelease_; }
+    }
+
     // •Ï”
     std::string id_{};
     ICollider* other_{};
