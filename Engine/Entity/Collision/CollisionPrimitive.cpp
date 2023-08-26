@@ -7,8 +7,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
 
     if (isHit)
     {
-        colInfo_ = { arg_Shpere->center, arg_Shpere->radius, arg_Shpere->GetID() };
-        arg_Shpere->SetColInfo(CollisionInfo{ center,radius,id_ });
+        other_ = arg_Shpere;
+        arg_Shpere->SetOther(this);
 
         // callback
         //onTrigger_();
@@ -27,8 +27,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
 
     if (isHit)
     {
-        colInfo_ = { arg_Plane->normal, arg_Plane->distance, arg_Plane->GetID() };
-        arg_Plane->SetColInfo(CollisionInfo{ center,radius,id_ });
+        other_ = arg_Plane;
+        arg_Plane->SetOther(this);
 
         // callback
         //onTrigger_();
@@ -47,9 +47,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
 
     if (isHit)
     {
-        colInfo_.v = arg_Point->pos;
-        colInfo_.id = arg_Point->GetID();
-        arg_Point->SetColInfo(CollisionInfo{ center,radius,id_ });
+        other_ = arg_Point;
+        arg_Point->SetOther(this);
 
         onCollision_();
         arg_Point->GetOnCollision()();
@@ -64,10 +63,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* a
 
     if (isHit)
     {
-        colInfo_ = { arg_AABB->center, arg_AABB->radius.x, arg_AABB->GetID() };
-        colInfo_.f2 = arg_AABB->radius.y;
-        colInfo_.f3 = arg_AABB->radius.z;
-        arg_AABB->SetColInfo(CollisionInfo{ center,radius,id_ });
+        other_ = arg_AABB;
+        arg_AABB->SetOther(this);
 
         onCollision_();
         arg_AABB->GetOnCollision()();
@@ -82,8 +79,8 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* a
 
     if (isHit)
     {
-        colInfo_ = { arg_Plane->normal, arg_Plane->distance, arg_Plane->GetID() };
-        arg_Plane->SetColInfo(CollisionInfo{ normal,distance,id_ });
+        other_ = arg_Plane;
+        arg_Plane->SetOther(this);
 
         // callback
         onCollision_();
@@ -99,8 +96,8 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* 
 
     if (isHit)
     {
-        colInfo_ = { arg_Shpere->center, arg_Shpere->radius, arg_Shpere->GetID() };
-        arg_Shpere->SetColInfo(CollisionInfo{ normal,distance,id_ });
+        other_ = arg_Shpere;
+        arg_Shpere->SetOther(this);
 
         // callback
         onCollision_();
@@ -134,11 +131,8 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* a
 
     if (isHit)
     {
-        colInfo_ = { arg_Shpere->center,arg_Shpere->radius,arg_Shpere->GetID() };
-        CollisionInfo colInfo(center, radius.x, id_);
-        colInfo.f2 = radius.y;
-        colInfo.f3 = radius.z;
-        arg_Shpere->SetColInfo(colInfo);
+        other_ = arg_Shpere;
+        arg_Shpere->SetOther(this);
 
         onCollision_();
         arg_Shpere->GetOnCollision()();
@@ -162,12 +156,8 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PointCollider* ar
 
     if (isHit)
     {
-        colInfo_.v = arg_Point->pos;
-        colInfo_.id = arg_Point->GetID();
-        CollisionInfo colInfo(center, radius.x, id_);
-        colInfo.f2 = radius.y;
-        colInfo.f3 = radius.z;
-        arg_Point->SetColInfo(colInfo);
+        other_ = arg_Point;
+        arg_Point->SetOther(this);
 
         onCollision_();
         arg_Point->GetOnCollision()();
@@ -182,13 +172,8 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg
 
     if (isHit)
     {
-        colInfo_ = { arg_AABB->center, arg_AABB->radius.x, arg_AABB->GetID() };
-        colInfo_.f2 = radius.y;
-        colInfo_.f3 = radius.z;
-        CollisionInfo colInfo(center, radius.x, id_);
-        colInfo.f2 = radius.y;
-        colInfo.f3 = radius.z;
-        arg_AABB->SetColInfo(colInfo);
+        other_ = arg_AABB;
+        arg_AABB->SetOther(this);
 
         onCollision_();
         arg_AABB->GetOnCollision()();
@@ -203,11 +188,8 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* 
 
     if (isHit)
     {
-        colInfo_ = { arg_Shpere->center,arg_Shpere->radius,arg_Shpere->GetID() };
-        CollisionInfo colInfo{};
-        colInfo.v = pos;
-        colInfo.id = id_;
-        arg_Shpere->SetColInfo(colInfo);
+        other_ = arg_Shpere;
+        arg_Shpere->SetOther(this);
 
         onCollision_();
         arg_Shpere->GetOnCollision()();
@@ -240,13 +222,8 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::AABBCollider* ar
 
     if (isHit)
     {
-        colInfo_ = { arg_AABB->center, arg_AABB->radius.x, arg_AABB->GetID() };
-        colInfo_.f2 = arg_AABB->radius.y;
-        colInfo_.f3 = arg_AABB->radius.z;
-        CollisionInfo colInfo{};
-        colInfo.v = pos;
-        colInfo.id = id_;
-        arg_AABB->SetColInfo(colInfo);
+        other_ = arg_AABB;
+        arg_AABB->SetOther(this);
 
         onCollision_();
         arg_AABB->GetOnCollision()();

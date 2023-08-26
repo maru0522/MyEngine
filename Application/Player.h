@@ -52,6 +52,6 @@ public:
     Transform* GetTransformPtr(void) { return &transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
-    inline const std::string& GetPartnerId(void) { return sphereCollider_.GetColInfo().id; }
+    inline const std::string& GetPartnerId(void) { return sphereCollider_.GetOther()->GetID(); }
 };
 

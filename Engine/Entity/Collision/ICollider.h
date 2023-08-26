@@ -10,26 +10,16 @@ namespace CollisionPrimitive
     struct PlaneCollider;
     struct PointCollider;
     struct AABBCollider;
-}
 
-struct CollisionInfo
-{
-    CollisionInfo(void) noexcept = default;
-    CollisionInfo(const Vector3 v, float f,const std::string& id) noexcept : v(v), f(f), id(id) {}
-
-    void Reset(void)
+    enum class Shape
     {
-        v = { 0.f,0.f,0.f };
-        f = 0.f;
-        id.assign("Reseted");
-    }
-
-    std::string id{};
-    Vector3 v{};
-    float f{};
-    float f2{};
-    float f3{};
-};
+        UNKNOWN, // 未定義
+        SPHERE,  // 球
+        PLANE,   // 平面
+        POINT,   // 点
+        AABB,    // 直方体
+    };
+}
 
 class ICollider
 {
@@ -47,24 +37,27 @@ public:
 protected:
     // 変数
     std::string id_{};
-    CollisionInfo colInfo_{};
+    ICollider* other_{};
+    CollisionPrimitive::Shape shape_{}; // 条件分岐時に、形状単位だと便利かも
+
     std::function<void(void)> onCollision_{};
     std::function<void(void)> onTrigger_{};
     std::function<void(void)> onRelease_{};
 
 public:
     // setter
-    inline void SetID(const std::string& id) { id_ = id; }
-    inline void SetColInfo(const CollisionInfo& colInfo) { colInfo_ = colInfo; }
-    inline void SetOnCollision(const std::function<void(void)> callback_onCollision) { onCollision_ = callback_onCollision; }
-    inline void SetOnTrigger(const std::function<void(void)> callback_onTrigger) { onTrigger_ = callback_onTrigger; }
+    void SetID(const std::string& id) { id_ = id; }
+    void SetOther(ICollider* col) { other_ = col; }
+    void SetOnCollision(const std::function<void(void)> callback_onCollision) { onCollision_ = callback_onCollision; }
+    void SetOnTrigger(const std::function<void(void)> callback_onTrigger) { onTrigger_ = callback_onTrigger; }
     //inline void SetOnCollision(const std::function<void(void)> callback_onRelease) { onRelease_ = callback_onRelease; }
 
     // getter
-    inline const std::string& GetID(void) { return id_; }
-    inline const CollisionInfo& GetColInfo(void) { return colInfo_; }
-    inline const std::function<void(void)>& GetOnCollision(void) { return onCollision_; }
-    inline const std::function<void(void)>& GetOnTrigger(void) { return onTrigger_; }
-    inline const std::function<void(void)>& GetOnRelease(void) { return onRelease_; }
+    const std::string& GetID(void) { return id_; }
+    ICollider* GetOther(void) { return other_; }
+    CollisionPrimitive::Shape GetShape(void) { return shape_; }
+    const std::function<void(void)>& GetOnCollision(void) { return onCollision_; }
+    const std::function<void(void)>& GetOnTrigger(void) { return onTrigger_; }
+    const std::function<void(void)>& GetOnRelease(void) { return onRelease_; }
 
 };

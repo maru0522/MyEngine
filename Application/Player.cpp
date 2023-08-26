@@ -202,20 +202,24 @@ void Player::SphericalCamera(Vector3& inputVec)
 
 void Player::OnCollision(void)
 {
-    if (sphereCollider_.GetColInfo().id == "gravityArea")
+    if (sphereCollider_.GetOther()->GetID() == "gravityArea")
     {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+
         // 本来は球状重力エリア内に入ってる場合に行う処理。
-        Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
+        //Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
+        Vector3 center2PlayerVec = sphereCollider_.center - other->center;
         axes_.up = center2PlayerVec.Normalize();
     }
-    if (sphereCollider_.GetColInfo().id == "terrainSurface")
+    if (sphereCollider_.GetOther()->GetID() == "terrainSurface")
     {
-        //isGrounded_ = true;
-        //jumpVec_ = { 0,0,0 };
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+
+        // ジャンプする量
         jumpVecNorm_ = 0.f;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
+        float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
 
         Vector3 currentPos = transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
@@ -229,7 +233,7 @@ void Player::OnCollision(void)
         // 補正された値で行列を生成
         coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
-    if (sphereCollider_.GetColInfo().id == "rock")
+    if (sphereCollider_.GetOther()->GetID() == "rock")
     {
         // めり込み距離の算出方法が分からん。AABB側の半径どうやって算出するんや。
 
@@ -245,15 +249,15 @@ void Player::OnCollision(void)
         // 補正された値で行列を生成
         coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
-    if (sphereCollider_.GetColInfo().id == "rabbit")
+    if (sphereCollider_.GetOther()->GetID() == "rabbit")
     {
         captureCount_rabbit++;
     }
-    if (sphereCollider_.GetColInfo().id == "tunnel1")
+    if (sphereCollider_.GetOther()->GetID() == "tunnel1")
     {
         isFallHole1_ = true;
     }
-    if (sphereCollider_.GetColInfo().id == "tunnel2")
+    if (sphereCollider_.GetOther()->GetID() == "tunnel2")
     {
         isFallHole2_ = true;
     }

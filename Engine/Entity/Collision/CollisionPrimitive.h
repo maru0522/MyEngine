@@ -24,7 +24,16 @@ namespace CollisionPrimitive
     struct SphereCollider final : public ICollider
     {
         // ŠÖ”
-        SphereCollider(void) noexcept = default;
+        SphereCollider(void) 
+        {
+            shape_ = Shape::SPHERE;
+        }
+        SphereCollider(const std::string& id)
+        {
+            id_ = id;
+            shape_ = Shape::SPHERE;
+        }
+
         inline bool Dispatch(ICollider* other) override { return other->Col(this); }
 
         // •Ï”

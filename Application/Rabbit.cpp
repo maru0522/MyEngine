@@ -103,20 +103,23 @@ void Rabbit::Move(Vector3& moveVec, Vector3& velocity)
 
 void Rabbit::OnCollision(void)
 {
-    if (sphereCollider_.GetColInfo().id == "gravityArea")
+    if (sphereCollider_.GetOther()->GetID() == "gravityArea")
     {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+
         // 球状重力エリア内に入ってる場合に行う処理。
-        Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
+        Vector3 center2PlayerVec = sphereCollider_.center - other->center;
         axes_.up = center2PlayerVec.Normalize();
     }
-    if (sphereCollider_.GetColInfo().id == "terrainSurface")
+    if (sphereCollider_.GetOther()->GetID() == "terrainSurface")
     {
-        //isGrounded_ = true;
-        //jumpVec_ = { 0,0,0 };
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+
+        // ジャンプ量
         jumpVecNorm_ = 0.f;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
+        float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
 
         Vector3 currentPos = transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
@@ -126,7 +129,7 @@ void Rabbit::OnCollision(void)
 
         transform_.position = currentPos;
     }
-    if (sphereCollider_.GetColInfo().id == "player")
+    if (sphereCollider_.GetOther()->GetID() == "player")
     {
         isCaptured_ = true;
     }
@@ -134,9 +137,11 @@ void Rabbit::OnCollision(void)
 
 void Rabbit::OnDetectPlayer(void)
 {
-    if (detectPlayerCollider_.GetColInfo().id == "player")
+    if (detectPlayerCollider_.GetOther()->GetID() == "player")
     {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(detectPlayerCollider_.GetOther());
+
         // 検知したプレイヤの座標を記録する。
-        pPos_ = detectPlayerCollider_.GetColInfo().v;
+        pPos_ = other->center;
     }
 }
