@@ -17,7 +17,10 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
         if (onCollision_) { onCollision_(); }
         if (onTrigger_) { onTrigger_(); }
         if (onRelease_) { onRelease_(); }
-        arg_Shpere->GetOnCollision()();
+        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
+        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
+        if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
+
         //AllOnFunction();
         //arg_Shpere->AllOnFunction();
     }
@@ -38,8 +41,12 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
         //onTrigger_();
         //arg_Plane->GetOnTrigger()();
 
-        onCollision_();
-        arg_Plane->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Plane->GetOnCollision()) { arg_Plane->GetOnCollision()(); }
+        if (arg_Plane->GetOnTrigger()) { arg_Plane->GetOnTrigger()(); }
+        if (arg_Plane->GetOnRelease()) { arg_Plane->GetOnRelease()(); }
     }
 
     return isHit;
@@ -54,8 +61,12 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
         other_ = arg_Point;
         arg_Point->SetOther(this);
 
-        onCollision_();
-        arg_Point->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Point->GetOnCollision()) { arg_Point->GetOnCollision()(); }
+        if (arg_Point->GetOnTrigger()) { arg_Point->GetOnTrigger()(); }
+        if (arg_Point->GetOnRelease()) { arg_Point->GetOnRelease()(); }
     }
 
     return isHit;
@@ -70,8 +81,12 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* a
         other_ = arg_AABB;
         arg_AABB->SetOther(this);
 
-        onCollision_();
-        arg_AABB->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_AABB->GetOnCollision()) { arg_AABB->GetOnCollision()(); }
+        if (arg_AABB->GetOnTrigger()) { arg_AABB->GetOnTrigger()(); }
+        if (arg_AABB->GetOnRelease()) { arg_AABB->GetOnRelease()(); }
     }
 
     return isHit;
@@ -87,8 +102,12 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* a
         arg_Plane->SetOther(this);
 
         // callback
-        onCollision_();
-        arg_Plane->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Plane->GetOnCollision()) { arg_Plane->GetOnCollision()(); }
+        if (arg_Plane->GetOnTrigger()) { arg_Plane->GetOnTrigger()(); }
+        if (arg_Plane->GetOnRelease()) { arg_Plane->GetOnRelease()(); }
     }
 
     return isHit;
@@ -104,8 +123,12 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* 
         arg_Shpere->SetOther(this);
 
         // callback
-        onCollision_();
-        arg_Shpere->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
+        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
+        if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
     }
 
     return isHit;
@@ -138,8 +161,12 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* a
         other_ = arg_Shpere;
         arg_Shpere->SetOther(this);
 
-        onCollision_();
-        arg_Shpere->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
+        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
+        if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
     }
 
     return isHit;
@@ -163,8 +190,12 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PointCollider* ar
         other_ = arg_Point;
         arg_Point->SetOther(this);
 
-        onCollision_();
-        arg_Point->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Point->GetOnCollision()) { arg_Point->GetOnCollision()(); }
+        if (arg_Point->GetOnTrigger()) { arg_Point->GetOnTrigger()(); }
+        if (arg_Point->GetOnRelease()) { arg_Point->GetOnRelease()(); }
     }
 
     return isHit;
@@ -179,8 +210,12 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg
         other_ = arg_AABB;
         arg_AABB->SetOther(this);
 
-        onCollision_();
-        arg_AABB->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_AABB->GetOnCollision()) { arg_AABB->GetOnCollision()(); }
+        if (arg_AABB->GetOnTrigger()) { arg_AABB->GetOnTrigger()(); }
+        if (arg_AABB->GetOnRelease()) { arg_AABB->GetOnRelease()(); }
     }
 
     return isHit;
@@ -195,8 +230,12 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* 
         other_ = arg_Shpere;
         arg_Shpere->SetOther(this);
 
-        onCollision_();
-        arg_Shpere->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
+        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
+        if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
     }
 
     return isHit;
@@ -229,8 +268,12 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::AABBCollider* ar
         other_ = arg_AABB;
         arg_AABB->SetOther(this);
 
-        onCollision_();
-        arg_AABB->GetOnCollision()();
+        if (onCollision_) { onCollision_(); }
+        if (onTrigger_) { onTrigger_(); }
+        if (onRelease_) { onRelease_(); }
+        if (arg_AABB->GetOnCollision()) { arg_AABB->GetOnCollision()(); }
+        if (arg_AABB->GetOnTrigger()) { arg_AABB->GetOnTrigger()(); }
+        if (arg_AABB->GetOnRelease()) { arg_AABB->GetOnRelease()(); }
     }
 
     return isHit;
