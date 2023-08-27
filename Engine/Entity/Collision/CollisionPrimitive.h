@@ -75,6 +75,7 @@ namespace CollisionPrimitive
         // •Ï”
         Vector3 center{ 0, 0, 0 };
         Vector3 radius{ 0, 0, 0 };
+        Vector3 inter{ 0, 0, 0 };
 
     private://2
         bool Col(CollisionPrimitive::SphereCollider* arg_Shpere) override;

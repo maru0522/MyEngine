@@ -31,7 +31,7 @@ const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereColli
     return true;
 }
 
-const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a)
+const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection = nullptr)
 {
     // AABB内で最も球に近い点
     Vector3 nearest{};
@@ -39,6 +39,9 @@ const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollid
     nearest.y = (std::max)(a.center.y - a.radius.y, (std::min)(s.center.y, a.center.y + a.radius.y));
     nearest.z = (std::max)(a.center.z - a.radius.z, (std::min)(s.center.z, a.center.z + a.radius.z));
     // nearest == sphere.center の場合、球はAABB内にあるため true
+
+    // 交錯点を記録
+    if (intersection) { *intersection = nearest; }
 
     // SphereToPoint() と同じ
     return (s.center.x - nearest.x) * (s.center.x - nearest.x) +

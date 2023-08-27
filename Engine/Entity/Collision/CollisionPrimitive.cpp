@@ -74,7 +74,7 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
 { // ‹…‚Æ’¼•û‘Ì
-    bool isHit = CollisionChecker::SphereToAABB(*this, *arg_AABB);
+    bool isHit = CollisionChecker::SphereToAABB(*this, *arg_AABB, &arg_AABB->inter);
 
     if (isHit)
     {
@@ -154,7 +154,7 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::AABBCollider* ar
 
 bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // ’¼•û‘Ì‚Æ‹…
-    bool isHit = CollisionChecker::SphereToAABB(*arg_Shpere, *this);
+    bool isHit = CollisionChecker::SphereToAABB(*arg_Shpere, *this, &this->inter);
 
     if (isHit)
     {
