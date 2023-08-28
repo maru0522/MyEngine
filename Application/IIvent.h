@@ -7,7 +7,6 @@ public:
     IIvent(void) = default;
     virtual ~IIvent(void) = default;
 
-    //template<typename T,typename U>
-    //std::function<T(U)> onCollision_{};
+    std::function<void(void)> funcion_event_{};
 };
 
