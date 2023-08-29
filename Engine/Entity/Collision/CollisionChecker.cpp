@@ -31,7 +31,7 @@ const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereColli
     return true;
 }
 
-const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection = nullptr)
+const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection)
 {
     // AABBì‡Ç≈ç≈Ç‡ãÖÇ…ãﬂÇ¢ì_
     Vector3 nearest{};
