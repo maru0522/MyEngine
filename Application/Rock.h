@@ -23,7 +23,7 @@ private:
     Transform transform_;
     Axis3 axes_;
 
-    CollisionPrimitive::AABBCollider collision_AABB_;
+    CollisionPrimitive::AABBCollider collision_aabb_;
 
 public:
     // getter

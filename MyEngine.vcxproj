@@ -93,6 +93,7 @@
     <ClCompile Include="Application\IIvent.cpp" />
     <ClCompile Include="Application\IventArea_Tantative.cpp" />
     <ClCompile Include="Application\Rock.cpp" />
+    <ClCompile Include="Application\StickyBall.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
     <ClCompile Include="Engine\Entity\Other\CameraManager.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="Application\IIvent.h" />
     <ClInclude Include="Application\IventArea_Tantative.h" />
     <ClInclude Include="Application\Rock.h" />
+    <ClInclude Include="Application\StickyBall.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />

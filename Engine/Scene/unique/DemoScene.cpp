@@ -48,6 +48,8 @@ void DemoScene::Initialize(void)
     rock3_->TransformPtr()->position = { 45,-6,7 };
     rock4_->TransformPtr()->position = { 45,-15,-5 };
     rock5_->TransformPtr()->position = { 46,7,-6 };
+
+    sticky1_->SetRoot({ 0,50.f,0 });
 }
 
 void DemoScene::Update(void)
@@ -97,21 +99,21 @@ void DemoScene::Update(void)
     }
 
     GUI::Begin("debug tab maruyama");
-    //if (GUI::ButtonTrg("switch camera"))
-    //{
-    //    // デバッグ用のカメラと切替
-    //    if (isCamDebug)
-    //    {
-    //        isCamDebug = false;
-    //        CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
-    //    }
-    //    else
-    //    {
-    //        isCamDebug = true;
-    //        CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
-    //        cameraPtr->SetIsDebugMode(true);
-    //    }
-    //}
+    if (GUI::ButtonTrg("switch camera"))
+    {
+        // デバッグ用のカメラと切替
+        if (isCamDebug)
+        {
+            isCamDebug = false;
+            CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
+        }
+        else
+        {
+            isCamDebug = true;
+            CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
+            cameraPtr->SetIsDebugMode(true);
+        }
+    }
 
     player_->Update();
     rabbit1_->Update();
@@ -187,6 +189,8 @@ void DemoScene::Update(void)
     rock3_->Update();
     rock4_->Update();
     rock5_->Update();
+
+    sticky1_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -208,6 +212,8 @@ void DemoScene::Draw3d(void)
     rock3_->Draw();
     rock4_->Draw();
     rock5_->Draw();
+
+    sticky1_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

@@ -11,18 +11,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
         arg_Shpere->SetOther(this);
 
         // callback
-        //onTrigger_();
-        //arg_Shpere->GetOnTrigger()();
-
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
-        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
-        //if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
-
-        //AllOnFunction();
-        //arg_Shpere->AllOnFunction();
+        AllOnFunction();
+        arg_Shpere->AllOnFunction();
     }
 
     return isHit;

@@ -14,7 +14,7 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr)
     sphereCollider_.radius = kRadius_;
 
     // ‰ŠúˆÊ’u
-    transform_.position = { 0,60,0 };
+    transform_.position = { 0,60,-10 };
     // ‰Šúp¨
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };

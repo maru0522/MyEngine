@@ -13,6 +13,7 @@
 #include "Rock.h"
 #include "CollisionManager.h"
 #include "IventArea_Tantative.h"
+#include "StickyBall.h"
 
 class DemoScene final :
     public IScene
@@ -61,6 +62,7 @@ public:
     std::unique_ptr<Rock> rock3_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock4_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock5_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
+    std::unique_ptr<StickyBall> sticky1_{std::make_unique<StickyBall>(CollisionManager::GetInstance()) };
 
     // jsonì«Ç›çûÇ›&îzíuóp
     std::map<std::string, std::unique_ptr<Object3D>> objects_;

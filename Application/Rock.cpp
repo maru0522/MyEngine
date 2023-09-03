@@ -3,10 +3,10 @@
 
 Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj")
 {
-    colMPtr->Register(&collision_AABB_);
-    collision_AABB_.SetID("rock");
-    collision_AABB_.SetOnCollision(std::bind(&Rock::OnCollision, this));
-    collision_AABB_.radius = kRadius_;
+    colMPtr->Register(&collision_aabb_);
+    collision_aabb_.SetID("rock");
+    collision_aabb_.SetOnCollision(std::bind(&Rock::OnCollision, this));
+    collision_aabb_.radius = kRadius_;
     transform_.scale = kRadius_; // cube‚Ìxyz‚ª‘S‚Ä1‚¾‚©‚ç‰Â”\‚È•¶
 
     // ‰ŠúˆÊ’u
@@ -21,7 +21,7 @@ void Rock::Update(void)
 {
     Object3D::Update();
 
-    collision_AABB_.center = transform_.position;
+    collision_aabb_.center = transform_.position;
     coordinate_.mat_world = Math::Function::AffinTrans(transform_,axes_);
 }
 

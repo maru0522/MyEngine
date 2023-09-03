@@ -194,6 +194,9 @@
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="Application\IventArea_Tantative.cpp" />
+    <ClCompile Include="Application\StickyBall.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -372,6 +375,9 @@
       <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="Application\IventArea_Tantative.h" />
+    <ClInclude Include="Application\StickyBall.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

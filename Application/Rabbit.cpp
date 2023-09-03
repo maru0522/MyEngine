@@ -87,6 +87,7 @@ void Rabbit::Move(Vector3& moveVec, Vector3& velocity)
     //moveVec += redefinitionPRightFromCamera * inputVec.x;
 
     // プレイヤから兎方向へのベクトルをそのまま移動ベクトルとして起用する（仮）
+    // [メモ]プレイヤーの向きと兎の向きを内積でとって、直角に近いほど速度をある程度減速させれば、ターンしたときでも捕まえやすくなるのでは？
     moveVec = (transform_.position - pPos_).Normalize();
 
     // 重力
