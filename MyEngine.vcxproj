@@ -101,6 +101,7 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionChecker.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionManager.cpp" />
+    <ClCompile Include="Engine\Other\Timer.cpp" />
     <ClCompile Include="Engine\Scene\unique\DemoScene.cpp" />
     <ClCompile Include="Engine\Base\FPSController.cpp" />
     <ClCompile Include="Engine\Base\FrameWork.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="Application\IventArea_Tantative.h" />
     <ClInclude Include="Application\Rock.h" />
     <ClInclude Include="Application\StickyBall.h" />
+    <ClInclude Include="Engine\Other\Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />

@@ -197,6 +197,9 @@
     <ClCompile Include="Application\StickyBall.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Other\Timer.cpp">
+      <Filter>Engine\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -377,6 +380,9 @@
     <ClInclude Include="Application\IventArea_Tantative.h" />
     <ClInclude Include="Application\StickyBall.h">
       <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Other\Timer.h">
+      <Filter>Engine\Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

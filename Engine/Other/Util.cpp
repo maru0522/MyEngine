@@ -6,36 +6,7 @@
 #include <fstream>
 #include <ctime>
 #include <iomanip>
-
-using namespace std::chrono;
-
-template<class TimeUnit>
-inline int32_t Util::Timer::GetNowCount(void)
-{
-    // templateの型は[時間間隔をを表す型]でなければならない。
-    // ref: https://cpprefjp.github.io/reference/chrono/duration_aliases.html
-
-    return (int32_t)duration_cast<TimeUnit>(steady_clock::now().time_since_epoch()).count();
-}
-
-std::string Util::Timer::GetNowDateTime(void)
-{
-    std::time_t now = std::time(nullptr);
-    std::tm tm{};
-    localtime_s(&tm, &now);
-
-    std::stringstream ss;
-    ss << 1900 + tm.tm_year << ":" << std::setfill('0') << std::setw(2) << tm.tm_mon + 1 << ":" << tm.tm_mday << " "
-        << std::setfill('0') << std::setw(2) << tm.tm_hour << ":" << std::setfill('0') << std::setw(2) << tm.tm_min
-        << ":" << std::setfill('0') << std::setw(2) << tm.tm_sec;
-    return ss.str();
-}
-
-void Util::Timer::Start(float endTime)
-{
-    startTime_ = GetNowCount<milliseconds>();
-    endTime_ = endTime;
-}
+#include "Timer.h"
 
 void Util::Log::PrintOutputWindow(const std::string& str)
 {
@@ -53,15 +24,15 @@ void Util::Log::PrintExternalText(const std::string& str, const std::experimenta
 
     if (ifs.is_open()) { // ログテキストを開けた場合
         ofs.open(fileName, std::ios::app); // ログテキスト展開
-        std::string writeString{ Timer::GetNowDateTime() }; // 現在の日時を文字列型で取得
+        std::string writeString{ ITimer::GetNowDateTime() }; // 現在の日時を文字列型で取得
         ofs << writeString << " - " << str << std::endl;
         ofs.close();
     }
     else { // ログテキストを開けなかった場合
         ofs.open(fileName, std::ios::out); // ログテキスト生成
-        std::string createDate{ Timer::GetNowDateTime() }; // 作成日時を文字列型で取得
+        std::string createDate{ ITimer::GetNowDateTime() }; // 作成日時を文字列型で取得
         ofs << "This text log was created on " << createDate << std::endl;
-        std::string writeString{ Timer::GetNowDateTime() }; // 現在の日時を文字列型で取得
+        std::string writeString{ ITimer::GetNowDateTime() }; // 現在の日時を文字列型で取得
         ofs << writeString << " - " << str << std::endl;
         ofs.close();
     }
