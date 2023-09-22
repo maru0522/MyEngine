@@ -6,20 +6,22 @@
 void DemoScene::Initialize(void)
 {
     // カメラの座標設定
-    cameraPtr->GetTransformPtr()->position = { 0,0,-70 };
-    cameraPtr->GetTransformPtr()->position = { 0,190,0 };
-    cameraPtr->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 };
-    colCameraPtr->GetTransformPtr()->position = { 0,0,-70 };
-    colCameraPtr->GetTransformPtr()->position = { 3,172,-3 };
+    camera_debugPtr_->GetTransformPtr()->position = { 0,0,-70 };
+    camera_debugPtr_->GetTransformPtr()->position = { 0,190,0 };
+    camera_debugPtr_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 };
+    camera_colPtr_->GetTransformPtr()->position = { 0,0,-70 };
+    camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };
+    camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };
+    camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 };
+    camera_4Hole_->SetIsOldUpdateMethod(true);
     // カメラのデバッグカメラモードをON
-    cameraPtr->SetIsDebugMode(true);
-    colCameraPtr->SetIsDebugMode(true);
-    colCameraPtr->SetIsDebugMode(true);
+    camera_debugPtr_->SetIsDebugMode(true);
+    camera_colPtr_->SetIsDebugMode(true);
     // 座標計算法をクォータニオン優先
     //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
     // カメラをマネージャーにセット
     /*CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());*/
-    CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
+    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
 
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
@@ -86,8 +88,8 @@ void DemoScene::Update(void)
         isCamDebug = true;
         isTimer = true;
         timer = 0;
-        CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
-        cameraPtr->SetIsDebugMode(true);
+        CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
+        camera_debugPtr_->SetIsDebugMode(true);
     }
 
     if (timer > 130)
@@ -95,7 +97,16 @@ void DemoScene::Update(void)
         isCamDebug = false;
         isTimer = false;
         timer = 0;
-        CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
+        CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
+    }
+
+    if (KEYS::IsTrigger(DIK_7))
+    {
+        CameraManager::GetInstance()->SetCurrentCamera(camera_4Hole_.get());
+    }
+    if (KEYS::IsTrigger(DIK_6))
+    {
+        CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
     }
 
     GUI::Begin("debug tab maruyama");
@@ -105,13 +116,13 @@ void DemoScene::Update(void)
         if (isCamDebug)
         {
             isCamDebug = false;
-            CameraManager::GetInstance()->SetCurrentCamera(colCameraPtr.get());
+            CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
         }
         else
         {
             isCamDebug = true;
-            CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());
-            cameraPtr->SetIsDebugMode(true);
+            CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
+            camera_debugPtr_->SetIsDebugMode(true);
         }
     }
 
@@ -121,8 +132,8 @@ void DemoScene::Update(void)
     rabbit3_->Update();
     planet_->Update();
 
-    colCameraPtr->SetPlanetCenter(planet_->GetPosition());
-    colCameraPtr->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
+    camera_colPtr_->SetPlanetCenter(planet_->GetPosition());
+    camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
 
     Matrix4 matWorld{ Math::Mat4::Identity() };
     {
@@ -141,7 +152,7 @@ void DemoScene::Update(void)
         matWorld.m[3][2] += ppos.z;
     }
 
-    colCameraPtr->GetCoordinatePtr()->mat_world = matWorld;
+    camera_colPtr_->GetCoordinatePtr()->mat_world = matWorld;
     testP_->GetCoordinatePtr()->mat_world = matWorld;
 
     //for (auto& object : objects_) {
@@ -165,7 +176,7 @@ void DemoScene::Update(void)
 
     GUI::Space();
     ImGui::Text("followCamera matrix");
-    Matrix4 c = colCameraPtr->GetCoordinatePtr()->mat_world;
+    Matrix4 c = camera_colPtr_->GetCoordinatePtr()->mat_world;
     ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);

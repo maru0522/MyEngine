@@ -68,9 +68,9 @@ public:
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
 
-    std::unique_ptr<Camera> cameraPtr{ std::make_unique<Camera>() };
-    std::unique_ptr<ColliderCamera> colCameraPtr{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
-    std::unique_ptr<ColliderCamera> camera4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
+    std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
+    std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
     std::unique_ptr<LightGroup> lightGroup_{ std::make_unique<LightGroup>() };
 };
 

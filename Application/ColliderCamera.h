@@ -19,6 +19,7 @@ private:
     // ïœêî
     Vector3 repelVec_;
     CollisionPrimitive::SphereCollider sphereCollider_;
+    bool is_oldUpdateMethod_;
 
 public:
     // setter
@@ -34,5 +35,7 @@ public:
     void CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec);
 
     void SetViewMat(const Matrix4& viewMat) { matView_ = viewMat; }
+
+    void SetIsOldUpdateMethod(bool is_oldUpdateMethod) { is_oldUpdateMethod_ = is_oldUpdateMethod; }
 };
 

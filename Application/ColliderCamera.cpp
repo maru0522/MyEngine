@@ -14,16 +14,18 @@ void ColliderCamera::Update(void)
 {
     using namespace Math;
 
-    //coordinate_.mat_world = Math::Function::AffinTrans(transform_);
+    if (is_oldUpdateMethod_)
+    {
+        Camera::Update();
+    }
+    else
+    {
+        // ビュー行列
+        matView_ = Math::Mat4::Inverse(coordinate_.mat_world);
 
-    // ビュー行列
-    //isFollow_ ?
-    //    matView_ = Math::Mat4::ViewLookAtLH(coordinate_.GetPosition(), *targetPtr_, coordinate_.GetMatAxisY()) :
-    //    matView_ = Math::Mat4::ViewLookToLH(coordinate_.GetPosition(), coordinate_.GetForwardVec().Normalize(), coordinate_.GetUpVec().Normalize());
-    matView_ = Math::Mat4::Inverse(coordinate_.mat_world);
-
-    // 射影行列
-    matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
+        // 射影行列
+        matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
+    }
 
     sphereCollider_.center = transform_.position;
 }
