@@ -36,6 +36,8 @@ public:
     void DeployObj(LevelData* lvdPtr);
     void HotReload(LevelData* lvdPtr);
 
+    void CameraSetUp(void);
+
     //bool debugCamFuncFollow_{ false }; // Follow
     //bool debugCamFollow_{ false }; // カメラとプレイヤーの距離が常に一定になるようにする
     //bool debugCamFollow2_{ }; // 軸をプレイヤーと同じにする。

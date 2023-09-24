@@ -2,26 +2,12 @@
 #include "DemoScene.h"
 #include "SimplifyImGui.h"
 #include "CollisionChecker.h"
+#include "Timer.h"
 
 void DemoScene::Initialize(void)
 {
-    // カメラの座標設定
-    camera_debugPtr_->GetTransformPtr()->position = { 0,0,-70 };
-    camera_debugPtr_->GetTransformPtr()->position = { 0,190,0 };
-    camera_debugPtr_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 };
-    camera_colPtr_->GetTransformPtr()->position = { 0,0,-70 };
-    camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };
-    camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };
-    camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 };
-    camera_4Hole_->SetIsOldUpdateMethod(true);
-    // カメラのデバッグカメラモードをON
-    camera_debugPtr_->SetIsDebugMode(true);
-    camera_colPtr_->SetIsDebugMode(true);
-    // 座標計算法をクォータニオン優先
-    //cameraPtr->GetCoordinatePtr()->SetIsPriority(false);
-    // カメラをマネージャーにセット
-    /*CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());*/
-    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
+    // カメラの設定
+    CameraSetUp();
 
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
@@ -73,30 +59,90 @@ void DemoScene::Update(void)
     // カメラを球面座標系で管理する
     Vector3 ppos = player_->GetTransformPtr()->position;
 
-    static bool isCamDebug{};
 
     // 遠目から惑星を見るカメラに切り替える処理
-    static bool isTimer{};
-    static int32_t timer{};
-    if (isTimer)
+    const Vector3 kPos_watch_planet = { 0,190,0 };  // 惑星を見るためのカメラの座標（固定）
+    static Vector3 pos_playerAtSwitching;           // カメラを切り替えたときの惑星を見るためのカメラの初期座標として切替時のプレイヤーの座標を入れておくもの
+    static uint32_t phase_easingHoleCam;            // カメラのイージングの段階
+    // イージング用のタイマー
+    static FrameTimer phase0_timer_easingHoleCam;   // 初期座標から固定座標へのイージング用タイマー
+    static FrameTimer phase1_timer_easingHoleCam;   // 固定座標に滞在する用のタイマー
+    static FrameTimer phase2_timer_easingHoleCam;   // 固定座標から、転移先（プレイヤー追従カメラ）の座標へのイージング用タイマー
+
+    phase0_timer_easingHoleCam.Update();
+    phase1_timer_easingHoleCam.Update();
+    phase2_timer_easingHoleCam.Update();
+    float rate{};
+
+    switch (phase_easingHoleCam)
     {
-        timer++;
+    case 0:
+        if (phase0_timer_easingHoleCam.GetIsFinished())
+        {
+            phase_easingHoleCam++;
+            phase1_timer_easingHoleCam.Start(100);
+        }
+        else
+        {
+            rate = phase0_timer_easingHoleCam.GetTimeRate();
+        }
+        break;
+    case 1:
+        if (phase1_timer_easingHoleCam.GetIsFinished())
+        {
+            phase_easingHoleCam++;
+            phase2_timer_easingHoleCam.Start(50);
+        }
+        else
+        {
+            rate = phase1_timer_easingHoleCam.GetTimeRate();
+        }
+        break;
+    case 2:
+        if (phase2_timer_easingHoleCam.GetIsFinished())
+        {
+            phase_easingHoleCam = 3;
+        }
+        rate = phase2_timer_easingHoleCam.GetTimeRate();
+        break;
     }
 
+    if (rate)
+    {
+        Vector3 pos_camera4Hole;
+        if (phase_easingHoleCam == 0)
+        {
+            pos_camera4Hole.x = Math::Ease::EaseInSine(rate, pos_playerAtSwitching.x, kPos_watch_planet.x);
+            pos_camera4Hole.y = Math::Ease::EaseInSine(rate, pos_playerAtSwitching.y, kPos_watch_planet.y);
+            pos_camera4Hole.z = Math::Ease::EaseInSine(rate, pos_playerAtSwitching.z, kPos_watch_planet.z);
+        }
+        else if (phase_easingHoleCam == 1)
+        {
+            pos_camera4Hole = kPos_watch_planet;
+        }
+        else if (phase_easingHoleCam == 2)
+        {
+            pos_camera4Hole.x = Math::Ease::EaseInSine(rate, kPos_watch_planet.x, camera_colPtr_->GetCoordinatePtr()->GetMatPos().x);
+            pos_camera4Hole.y = Math::Ease::EaseInSine(rate, kPos_watch_planet.y, camera_colPtr_->GetCoordinatePtr()->GetMatPos().y);
+            pos_camera4Hole.z = Math::Ease::EaseInSine(rate, kPos_watch_planet.z, camera_colPtr_->GetCoordinatePtr()->GetMatPos().z);
+        }
+        camera_4Hole_->GetTransformPtr()->position = pos_camera4Hole;
+    }
+
+    // プレイヤーが穴の当たり判定に触れたら
     if (player_->isFallHole1_ || player_->isFallHole2_)
     {
-        isCamDebug = true;
-        isTimer = true;
-        timer = 0;
-        CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
-        camera_debugPtr_->SetIsDebugMode(true);
+        // イージング用タイマースタート
+        phase0_timer_easingHoleCam.Start(50);
+        // 穴用カメラの初期座標を、プレイヤー追従カメラの座標で記録
+        pos_playerAtSwitching = player_->GetTransformPtr()->position;
+        // マネージャーにセット
+        CameraManager::GetInstance()->SetCurrentCamera(camera_4Hole_.get());
+        phase_easingHoleCam = 0;
     }
 
-    if (timer > 130)
+    if (phase2_timer_easingHoleCam.GetIsFinished())
     {
-        isCamDebug = false;
-        isTimer = false;
-        timer = 0;
         CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
     }
 
@@ -109,6 +155,7 @@ void DemoScene::Update(void)
         CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
     }
 
+    static bool isCamDebug{};
     GUI::Begin("debug tab maruyama");
     if (GUI::ButtonTrg("switch camera"))
     {
@@ -183,10 +230,21 @@ void DemoScene::Update(void)
     ImGui::Text("%f, %f, %f, %f", c.m[3][0], c.m[3][1], c.m[3][2], c.m[3][3]);
 
     GUI::Space();
-    ImGui::Text("colCamVec");
-    //ImGui::Text("z %f,%f,%f", colCamZ.x, colCamZ.y, colCamZ.z);
-    //ImGui::Text("x %f,%f,%f", colCamX.x, colCamX.y, colCamX.z);
-    //ImGui::Text("y %f,%f,%f", colCamY.x, colCamY.y, colCamY.z);
+    ImGui::Text("holeCamera matrix");
+    Matrix4 c2 = camera_4Hole_->GetCoordinatePtr()->mat_world;
+    ImGui::Text("%f, %f, %f, %f", c2.m[0][0], c2.m[0][1], c2.m[0][2], c2.m[0][3]);
+    ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
+    ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);
+    ImGui::Text("%f, %f, %f, %f", c2.m[3][0], c2.m[3][1], c2.m[3][2], c2.m[3][3]);
+
+    GUI::Space();
+    ImGui::Text("timer_easing");
+    GUI::Text("phase:%d", phase_easingHoleCam);
+    ImGui::Text("frame0:%f / %d", phase0_timer_easingHoleCam.GetFrameCurrent(), phase0_timer_easingHoleCam.GetFrameMax());
+    ImGui::Text("frame1:%f / %d", phase1_timer_easingHoleCam.GetFrameCurrent(), phase1_timer_easingHoleCam.GetFrameMax());
+    ImGui::Text("frame2:%f / %d", phase2_timer_easingHoleCam.GetFrameCurrent(), phase2_timer_easingHoleCam.GetFrameMax());
+    GUI::Space();
+
     GUI::End();
 
     //hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
@@ -242,6 +300,25 @@ void DemoScene::Draw2dBack(void)
 
 void DemoScene::Finalize(void)
 {
+}
+
+void DemoScene::CameraSetUp(void)
+{
+    //>> カメラの座標設定
+    camera_debugPtr_->GetTransformPtr()->position = { 0,0,-70 };         // デバッグカメラの座標
+    camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };          // プレイヤー用カメラの座標
+    camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };            // 穴に落ちたとき用カメラの座標
+    camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 }; // 穴に落ちたとき用カメラの回転
+    camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
+
+
+    //>> カメラのデバッグカメラモードをON
+    camera_debugPtr_->SetIsDebugMode(true); // デバッグカメラ
+
+
+    //>> カメラをマネージャーにセット
+    /*CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());*/
+    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get()); // プレイヤー用カメラを設定
 }
 
 //void DemoScene::DeployObj(LevelData* lvdPtr)

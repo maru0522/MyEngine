@@ -43,14 +43,14 @@ void InternalTimer::Finish(void)
     mil_pauseTime_ = 0;
     mil_totalPuaseTime_ = 0.f;
     sec_finishTime_ = 0.f;
-    spd_slow_ = 1.f;
+    gameSpeed_ = 1.f;
     mil_slowTime_ = 0;
 }
 
 void InternalTimer::StartSlow(float spd)
 {
     mil_slowTime_ = GetNowCount<milliseconds>();
-    spd_slow_ = spd;
+    gameSpeed_ = spd;
 }
 
 void InternalTimer::FinishSlow(void)
@@ -59,10 +59,10 @@ void InternalTimer::FinishSlow(void)
     if (mil_slowTime_ == 0) return;
 
     // 停止していた時間の合計 += (今の時間 - スローモーション開始時の時間) * (1 - 速度)　※速度が0.1で実時間10秒進めた場合、内部では1秒しか立っていないことを表すため、停止していた時間の合計に9秒分足している（後で合計の経過時間から引くため）
-    mil_totalPuaseTime_ += (GetNowCount<milliseconds>() - mil_slowTime_) * (1 - spd_slow_);
+    mil_totalPuaseTime_ += (GetNowCount<milliseconds>() - mil_slowTime_) * (1 - gameSpeed_);
     // 停止していた時の時間を初期化
     mil_slowTime_ = 0;
-    spd_slow_ = 1.f;
+    gameSpeed_ = 1.f;
 }
 
 const float InternalTimer::GetElapsedTime()
@@ -72,7 +72,7 @@ const float InternalTimer::GetElapsedTime()
     int32_t elapsed_slow{};
 
     if (mil_pauseTime_) elapsed_pause = (current - mil_pauseTime_);
-    if (mil_slowTime_) elapsed_slow = uint32_t((current - mil_slowTime_) * (1 - spd_slow_));
+    if (mil_slowTime_) elapsed_slow = uint32_t((current - mil_slowTime_) * (1 - gameSpeed_));
 
     return float{ (current - mil_startTime_ - mil_totalPuaseTime_ - elapsed_pause - elapsed_slow) / 1000.0f };
 }
@@ -83,6 +83,7 @@ FrameTimer::FrameTimer(int32_t frame_max, int32_t value_add) : frame_max_(frame_
 
 void FrameTimer::Start(void)
 {
+    // 最大値が0なら
     if (frame_max_ == 0)
     {
         // ログ出して棄却
@@ -90,7 +91,15 @@ void FrameTimer::Start(void)
         return;
     }
 
-    frame_current_ += value_add_;
+    // 既にタイマーが終了していたら
+    if (GetIsFinished())
+    {
+        // 値を初期化
+        frame_current_ = 0;
+    }
+
+    // 加算
+    frame_current_ += value_add_; // 連続フレームでの使用はだめ
 }
 
 void FrameTimer::Start(int32_t frame_max)
@@ -102,12 +111,12 @@ void FrameTimer::Start(int32_t frame_max)
 void FrameTimer::Update(void)
 {
     // (フレームのカウントが始まっている && 最大フレームを超えていない) && ポーズ中ではない
-    if (GetIsFinished() && is_pause_ == false)
+    if (frame_current_ && frame_current_ < frame_max_ && is_pause_ == false)
     {
         if (frame_current_ >= frame_max_ && is_loop_) frame_current_ = 0;
 
         // 現在値 += 加算値 * ゲームスピード
-        frame_current_ += value_add_ * value_speed_;
+        frame_current_ += value_add_ * gameSpeed_;
     }
 }
 
