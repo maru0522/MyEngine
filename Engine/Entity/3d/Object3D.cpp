@@ -18,6 +18,10 @@ void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr
 
 void Object3D::UpdateCBMatViewPerse(CameraManager* camMPtr)
 {
+    // nullチェック
+    if (!camMPtr) { return; }
+    if (!camMPtr->GetCurrentCamera()) { return; }
+
     sCbMatViewPerse_.GetConstBuffMap()->matView = camMPtr->GetCurrentCamera()->GetMatView();
     sCbMatViewPerse_.GetConstBuffMap()->matPerspective = camMPtr->GetCurrentCamera()->GetMatProjPerspective();
 

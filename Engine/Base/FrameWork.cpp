@@ -55,7 +55,7 @@ void FrameWork::Initialize()
     Sound::StaticInitalize(audioM_.get());
 
     // SceneManager初期化
-    sceneM_->Initialize(SceneFactory::Usage::DEMO);
+    SceneManager::GetInstance()->Initialize(SceneFactory::Usage::TITLE);
     // ImguiController初期化
     imguiController_->Initialize(wnd_.get());
 }
@@ -69,7 +69,7 @@ void FrameWork::Update(void)
     imguiController_->Begin();
 
     // SceneManager更新
-    sceneM_->Update();
+    SceneManager::GetInstance()->Update();
     DebugGui();
 
     // ImguiController更新終了

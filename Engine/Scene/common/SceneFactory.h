@@ -4,6 +4,8 @@
 
 #include "DemoScene.h"
 #include "TitleScene.h"
+#include "GameScene.h"
+#include "ResultScene.h"
 
 class SceneFactory
 {
@@ -13,6 +15,8 @@ public:
     {
         DEMO,
         TITLE,
+        GAME,
+        RESULT,
     };
 
     // ä÷êî

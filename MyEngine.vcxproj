@@ -119,6 +119,8 @@
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Scene\common\IScene.cpp" />
     <ClCompile Include="Engine\Entity\Light\LightGroup.cpp" />
+    <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
+    <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -254,6 +256,8 @@
     <ClInclude Include="Application\Rock.h" />
     <ClInclude Include="Application\StickyBall.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
+    <ClInclude Include="Engine\Scene\unique\GameScene.h" />
+    <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />

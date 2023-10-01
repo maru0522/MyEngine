@@ -6,11 +6,10 @@
 class SceneManager
 {
 public:
-    // ŠÖ”
-    SceneManager(void);
-    ~SceneManager(void);
+    //>> ŠÖ”
+    static SceneManager* GetInstance(void);
 
-    void RequestChangeScene(std::unique_ptr<IScene>& nextScene, int32_t waitFrame = 0);
+    void RequestChangeScene(SceneFactory::Usage nextScene, int32_t waitFrame = 0);
 
     void Initialize(SceneFactory::Usage firstScene = SceneFactory::Usage::DEMO);
     void Update(void);
@@ -19,10 +18,16 @@ public:
     void Draw2dBack(void);
 
 private:
-    // •Ï”
+    //>> •Ï”
     int32_t waitFrame_{};
     std::unique_ptr<IScene> currentScene_{ nullptr };
     std::unique_ptr<IScene> nextScene_{ nullptr };
 
     std::unique_ptr<SceneFactory> sceneFactory_{ nullptr };
+
+    //>> singleton
+    SceneManager(void);
+    ~SceneManager(void);
+    SceneManager(const SceneManager&) = delete;
+    SceneManager& operator=(const SceneManager&) = delete;
 };

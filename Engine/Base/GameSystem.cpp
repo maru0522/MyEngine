@@ -22,12 +22,12 @@ void GameSystem::Draw(void)
         postEffect_->PreDrawScene();
         // --”wŒi2DUI‚Ì•`‰æ-- //
         Sprite::PreDraw();
-        sceneM_->Draw2dBack();
+        SceneManager::GetInstance()->Draw2dBack();
         // --”wŒi2DUI‚Ì•`‰æ-- //
 
         // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
         Object3D::PreDraw();
-        sceneM_->Draw3d();
+        SceneManager::GetInstance()->Draw3d();
         // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
         postEffect_->PostDrawScene();
         // -----ƒŒƒ“ƒ_[ƒeƒNƒXƒ`ƒƒ‚Ö‘‚«ž‚Ý----- //
@@ -40,7 +40,7 @@ void GameSystem::Draw(void)
 
         // --‘OŒi2DUI‚Ì•`‰æ-- //
         Sprite::PreDraw();
-        sceneM_->Draw2dFore();
+        SceneManager::GetInstance()->Draw2dFore();
         // --‘OŒi2DUI‚Ì•`‰æ-- //
 
         imguiController_->Draw();
@@ -52,17 +52,17 @@ void GameSystem::Draw(void)
         iDXPtr_->PreDraw();
         // --”wŒi2DUI‚Ì•`‰æ-- //
         Sprite::PreDraw();
-        sceneM_->Draw2dBack();
+        SceneManager::GetInstance()->Draw2dBack();
         // --”wŒi2DUI‚Ì•`‰æ-- //
 
         // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
         Object3D::PreDraw();
-        sceneM_->Draw3d();
+        SceneManager::GetInstance()->Draw3d();
         // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
 
         // --‘OŒi2DUI‚Ì•`‰æ-- //
         Sprite::PreDraw();
-        sceneM_->Draw2dFore();
+        SceneManager::GetInstance()->Draw2dFore();
         // --‘OŒi2DUI‚Ì•`‰æ-- //
 
         imguiController_->Draw();
