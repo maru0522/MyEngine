@@ -1,4 +1,3 @@
-#include "WorldCoordinate.h"
 #include "CameraManager.h"
 #include "Object3D.h"
 #include "MathUtil.h"

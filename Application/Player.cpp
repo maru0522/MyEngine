@@ -5,7 +5,7 @@
 #include "CollisionChecker.h"
 #include "CollisionManager.h"
 
-Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr)
+Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehavior::IDLE)
 {
     CollisionManager::GetInstance()->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
@@ -38,22 +38,7 @@ void Player::Update(void)
     appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
     appearance_->Update();
 
-#ifdef _DEBUG
-    //GUI::Begin("player", ImVec2{ 300,500 });
-    //GUI::Text("pos(1frame late):     [%f,%f,%f]", coordinate_.GetPosition().x, coordinate_.GetPosition().y, coordinate_.GetPosition().z);
-    //GUI::Text("forwardVec:           [%f,%f,%f]", coordinate_.GetForwardVec().x, coordinate_.GetForwardVec().y, coordinate_.GetForwardVec().z);
-    //GUI::End();
-#endif // _DEBUG
-
-    // 移動量
-    moveVec_ = { 0,0,0 }; // 初期化
-    Vector3 velocity{};
-    Move(moveVec_, velocity); // 参照渡しで受け取る。
-
-    // 座標更新
-    Vector3 currentPos = transform_.position;
-    currentPos += velocity;
-    transform_.position = currentPos;
+    pbm_.ManagementBehavior();
 
     // コライダー更新
     sphereCollider_.center = transform_.position;
@@ -80,8 +65,21 @@ void Player::Update(void)
 
 #ifdef _DEBUG
     GUI::Begin("player");
-    GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
-    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    
+    switch (pbm_.GetStatePtr()->GetCurState())
+    {
+    case PlayerBehavior::IDLE:
+        GUI::Text("Behavior: Idle");
+        break;
+    case PlayerBehavior::MOVE:
+        GUI::Text("Behavior: Move");
+        break;
+    default:
+        GUI::Text("Behavior: Unknown");
+        break;
+    }
+    //GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
+    //GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
     GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
     GUI::Text("kGravity:             [%f]", kGravity_);
     GUI::Space();
@@ -95,6 +93,13 @@ void Player::Update(void)
     ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
+    GUI::Text("pos(current):         [%f,%f,%f]", transform_.position.x, transform_.position.y, transform_.position.z);
+    GUI::Text("rot(current):         [%f,%f,%f]", transform_.rotation.x, transform_.rotation.y, transform_.rotation.z);
+    GUI::Text("sca(current):         [%f,%f,%f]", transform_.scale.x, transform_.scale.y, transform_.scale.z);
+    GUI::Space();
+    GUI::Text("forward(current):     [%f,%f,%f]", axes_.forward.x, axes_.forward.y, axes_.forward.z);
+    GUI::Text("right(current):       [%f,%f,%f]", axes_.right.x, axes_.right.y, axes_.right.z);
+    GUI::Text("up(current):          [%f,%f,%f]", axes_.up.x, axes_.up.y, axes_.up.z);
     GUI::End();
 #endif // _DEBUG
 }

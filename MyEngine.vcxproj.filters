@@ -180,9 +180,6 @@
     <ClCompile Include="Engine\Audio\Sound.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Base\WorldCoordinate.cpp">
-      <Filter>Engine\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Application\LevelData.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -200,6 +197,7 @@
     <ClCompile Include="Engine\Other\Timer.cpp">
       <Filter>Engine\Other</Filter>
     </ClCompile>
+    <ClCompile Include="Application\PlayerBehavior.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -361,9 +359,6 @@
     <ClInclude Include="Engine\Audio\Sound.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Base\WorldCoordinate.h">
-      <Filter>Engine\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Application\LevelData.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -384,6 +379,7 @@
     <ClInclude Include="Engine\Other\Timer.h">
       <Filter>Engine\Other</Filter>
     </ClInclude>
+    <ClInclude Include="Application\PlayerBehavior.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

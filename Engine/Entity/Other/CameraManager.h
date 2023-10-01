@@ -3,7 +3,6 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "Transform.h"
-#include "WorldCoordinate.h"
 
 class Camera
 {
@@ -22,7 +21,7 @@ private:
 
 protected:
     // ïœêî
-    Coordinate coordinate_;
+    TransformMatrix coordinate_;
     Transform transform_;
     Axis3 axes_;
 
@@ -46,7 +45,7 @@ public:
     inline void SetIsDebugMode(bool isDebug) { isDebugMode_ = isDebug; }
 
     // getter
-    inline Coordinate* GetCoordinatePtr(void) { return &coordinate_; }
+    inline TransformMatrix* GetCoordinatePtr(void) { return &coordinate_; }
     Transform* GetTransformPtr(void) { return &transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
 

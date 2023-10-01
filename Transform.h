@@ -1,5 +1,6 @@
 #pragma once
-#include <Vector3.h>
+#include "Vector3.h"
+#include "Matrix4.h"
 
 struct Transform final
 {
@@ -21,6 +22,43 @@ struct Transform final
         rotation = { 0,0,0 };
         scale = { 1,1,1 };
     }
+};
+
+struct TransformMatrix final
+{
+    TransformMatrix(void) { Initialize(); }
+    TransformMatrix(const Matrix4& world, const Matrix4& sca, const Matrix4& rot, const Matrix4& pos)
+        : mat_world(world), mat_sca(sca), mat_rot(rot), mat_pos(pos) {}
+
+    // 値を初期化する
+    void Initialize(void) {
+        Matrix4 identity = Math::Mat4::Identity();
+
+        mat_world = identity;
+        mat_sca = identity;
+        mat_rot = identity;
+        mat_pos = identity;
+    }
+    // 行列をscale,rotate,positionの順に合成する
+    void CompositionSRT(void) {
+        mat_world *= mat_sca;
+        mat_world *= mat_rot;
+        mat_world *= mat_pos;
+    }
+
+    Matrix4 mat_world;
+    Matrix4 mat_sca;
+    Matrix4 mat_rot;
+    Matrix4 mat_pos;
+
+    // getter
+    // 行列から結果的な軸ベクトルを抜き出す。
+    Vector3 GetMatAxisX(void) const { return { mat_world.m[0][0],mat_world.m[0][1],mat_world.m[0][2] }; }
+    Vector3 GetMatAxisY(void) const { return { mat_world.m[1][0],mat_world.m[1][1],mat_world.m[1][2] }; }
+    Vector3 GetMatAxisZ(void) const { return { mat_world.m[2][0],mat_world.m[2][1],mat_world.m[2][2] }; }
+
+    // 行列から平行移動成分を抜き出す
+    Vector3 GetMatPos(void) const { return { mat_world.m[3][0],mat_world.m[3][1],mat_world.m[3][2] }; }
 };
 
 struct Axis3 final

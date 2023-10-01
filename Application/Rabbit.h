@@ -1,5 +1,4 @@
 #pragma once
-#include "WorldCoordinate.h"
 #include "Transform.h"
 #include "CollisionPrimitive.h"
 #include <memory>
@@ -30,7 +29,7 @@ private:
     Vector3 pPos_;
     bool isCaptured_{};
 
-    Coordinate coordinate_;
+    TransformMatrix coordinate_;
     Transform transform_;
     Axis3 axes_;
 

@@ -1,0 +1,155 @@
+#pragma once
+#include <memory>
+#include "Vector3.h"
+#include "CameraManager.h"
+
+// 前方宣言
+class Player; // 苦肉
+
+// 振舞いを羅列するenumクラス
+enum class PlayerBehavior
+{
+    NONE = -1,  // 指定なし
+
+    IDLE,       //
+
+    MOVE,       // 移動
+    //WALK,       // 歩き
+    //RUN,        // 走り
+
+    STOOP,      // しゃがみ
+
+    JUMP,       // ジャンプ
+    JUMP_STOOP, // じゃがみジャンプ
+    JUMP_BACK,  // 反転ジャンプ
+    JUMP_LONG,  // 幅跳び
+};
+
+// 振舞いを示すクラスのインターフェース
+class IPlayerBehavior
+{
+public:
+    //>> 関数
+    IPlayerBehavior(Player* arg_playerPtr) : 
+        nextState_(PlayerBehavior::NONE), playerPtr_(arg_playerPtr) {};
+    virtual ~IPlayerBehavior(void) = default;
+
+    // 状態遷移時の初期化処理
+    virtual void Entry(void) = 0;
+    // 当該状態時の様子
+    virtual void Execute(void) = 0;
+    // 状態遷移遷移前の終了処理
+    virtual void Exit(void) = 0;
+
+    // 他状態への遷移要件確認
+    virtual void RequirementCheck(void) = 0;
+
+protected:
+    //>> 変数
+    PlayerBehavior nextState_;
+    PlayerBehavior debug_curState_;
+
+private:
+    Player* playerPtr_;
+
+public:
+    //>> getter
+    PlayerBehavior GetNextState(void) { return nextState_; }
+    PlayerBehavior GetCurState(void) { return debug_curState_; }
+
+protected:
+    // 循環参照回避のため、h内に定義出来ず
+    const Vector3& GetPlayerMoveVec(void);
+    const Axis3& GetPlayerAxes(void);
+    const Transform& GetPlayerTransform(void);
+    float GetPlayerJumpVecNorm(void);
+    float GetPlayerDefaultRad(void);
+    float GetPlayerCurrentRad(void);
+    float GetPlayerTheta(void);
+    float GetPlayerPhi(void);
+    float GetPlayerGravity(void);
+    float GetPlayerJumpPower(void);
+    float GetPlayerMoveSpeed(void);
+    CameraManager* GetPlayerCamMPtr(void);
+
+    //>> setter
+    void SetPlayerMoveVec(const Vector3& arg_moveVec);
+    void SetPlayerAxes(const Axis3& arg_axes);
+    void SetPlayerJumpVecNorm(float arg_jumpVecNorm);
+    void SetPlayerCurrentRad(float arg_currentRad);
+    void SetPlayerTheta(float arg_theta);
+    void SetPlayerPhi(float arg_phi);
+    void SetPlayerTransformPosition(const Vector3& arg_pos);
+
+};
+
+
+//----------------------------------------------------------------------------------------
+// IDLE状態を示すクラス
+class PlayerBehavior_Idle final : public IPlayerBehavior
+{
+public:
+    //>> 関数
+    PlayerBehavior_Idle(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
+    virtual ~PlayerBehavior_Idle(void) override = default;
+
+    void Entry(void) override {};
+    void Execute(void) override {} ;
+    void Exit(void) override {};
+
+private:
+    void RequirementCheck(void) override;
+};
+
+// MOVE状態を示すクラス
+class PlayerBehavior_Move final : public IPlayerBehavior
+{
+public:
+    //>> 関数
+    PlayerBehavior_Move(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
+    virtual ~PlayerBehavior_Move(void) override = default;
+
+    void Entry(void) override {};
+    void Execute(void) override;
+    void Exit(void) override {};
+
+private:
+    void RequirementCheck(void) override;
+};
+
+
+//----------------------------------------------------------------------------------------
+// 振舞いを示すクラスを生み出すクラス
+class PlayerBehaviorFactory final
+{
+public:
+    //>> 関数
+    PlayerBehaviorFactory(void) = default;
+    ~PlayerBehaviorFactory(void) = default;
+
+    std::unique_ptr<IPlayerBehavior> Create(Player* arg_playerPtr, PlayerBehavior arg_state);
+};
+
+// 振舞いを管理するクラス
+class PlayerBehaviorMachine final
+{
+public:
+    //>> 関数
+    PlayerBehaviorMachine(Player* arg_playerPtr, PlayerBehavior arg_state);
+    ~PlayerBehaviorMachine(void) = default;
+
+    void ManagementBehavior(void);
+
+private:
+    // 状態遷移条件を満たしているか確認し、遷移する
+    void NextStateCheck(void);
+
+    //>> 変数
+    std::unique_ptr<IPlayerBehavior> statePtr_;
+    PlayerBehaviorFactory stateFactory_;
+    Player* playerPtr_;
+
+public:
+    //>> getter
+    IPlayerBehavior* GetStatePtr(void) { return statePtr_.get(); }
+};

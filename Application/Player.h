@@ -3,17 +3,21 @@
 #include "Object3D.h"
 #include "CameraManager.h"
 #include "CollisionPrimitive.h"
+#include "PlayerBehavior.h"
 
 class Player
 {
 public:
-    // ’è”
+    //>> ’è‹`
+    friend IPlayerBehavior;
+
+    //>> ’è”
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 3.f };
     const float kMoveSpeed_{ 1.f };
     const float kGravity_{ 0.2f };
 
-    // ŠÖ”
+    //>> ŠÖ”
     Player(CameraManager* camMPtr);
 
     void Update(void);
@@ -32,8 +36,8 @@ private:
     void SphericalCamera(Vector3& inputVec); // correct value for camera
     void OnCollision(void); // callback
 
-    // •Ï”
-    Coordinate coordinate_;
+    //>> •Ï”
+    TransformMatrix coordinate_;
     Transform transform_;
     Axis3 axes_;
 
@@ -44,11 +48,13 @@ private:
 
     float jumpVecNorm_{};
     CameraManager* camMPtr_{};
-public:
-    // setter
 
-    // getter
-    inline Coordinate* GetCoordinatePtr(void) { return &coordinate_; }
+    PlayerBehaviorMachine pbm_;
+public:
+    //>> setter
+
+    //>> getter
+    inline TransformMatrix* GetTransMatPtr(void) { return &coordinate_; }
     Transform* GetTransformPtr(void) { return &transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }

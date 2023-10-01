@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="Application\IIvent.cpp" />
     <ClCompile Include="Application\IventArea_Tantative.cpp" />
+    <ClCompile Include="Application\PlayerBehavior.cpp" />
     <ClCompile Include="Application\Rock.cpp" />
     <ClCompile Include="Application\StickyBall.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
@@ -141,7 +142,6 @@
     <ClCompile Include="Engine\Math\Vector3.cpp" />
     <ClCompile Include="Engine\Math\Vector4.cpp" />
     <ClCompile Include="Engine\Base\WndAPI.cpp" />
-    <ClCompile Include="Engine\Base\WorldCoordinate.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +250,7 @@
   <ItemGroup>
     <ClInclude Include="Application\IIvent.h" />
     <ClInclude Include="Application\IventArea_Tantative.h" />
+    <ClInclude Include="Application\PlayerBehavior.h" />
     <ClInclude Include="Application\Rock.h" />
     <ClInclude Include="Application\StickyBall.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
@@ -308,7 +309,6 @@
     <ClInclude Include="Engine\Math\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector4.h" />
     <ClInclude Include="Engine\Base\WndAPI.h" />
-    <ClInclude Include="Engine\Base\WorldCoordinate.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
