@@ -253,7 +253,7 @@ void Player::OnCollision(void)
         Vector3 currentPos = transform_.position;
 
         // ˆÚ“®‚µ‚½•ª‚¾‚¯‰Ÿ‚µ–ß‚·‚æ‚¤‚É‚·‚éB
-        currentPos -= oldVelocity_;
+        currentPos -= velocity_;
 
         // À•W‚ğ•â³
         transform_.position = currentPos;
