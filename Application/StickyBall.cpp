@@ -1,7 +1,7 @@
 #include "StickyBall.h"
 #include "SimplifyImGui.h"
 
-StickyBall::StickyBall(CollisionManager* colMPtr) : Object3D("Resources/model/sphere/sphere.obj")
+StickyBall::StickyBall(CollisionManager* colMPtr) : Object3D("Resources/model/sphere/sphere.obj"), colMPtr_(colMPtr)
 {
     // 初期位置
     transform_.position = { 0,0,0 };
@@ -18,6 +18,11 @@ StickyBall::StickyBall(CollisionManager* colMPtr) : Object3D("Resources/model/sp
     collision_sphere_.SetOnCollision(std::bind(&StickyBall::OnCollision, this)); // 衝突時のcallback用関数の設定
     collision_sphere_.radius = kRadius_; // 球の初期半径 = 規定値
     collision_sphere_.center = transform_.position + axes_.up * kDistance_to_root_; // 球の初期座標 = 根元の座標 + 上向きベクトル * 規定値
+}
+
+StickyBall::~StickyBall(void)
+{
+    colMPtr_->UnRegister(&collision_sphere_);
 }
 
 void StickyBall::Update(void)

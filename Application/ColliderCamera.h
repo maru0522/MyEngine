@@ -11,6 +11,7 @@ public:
 
     // ŠÖ”
     ColliderCamera(CollisionManager* colMPtr);
+    ~ColliderCamera(void);
     void Update(void) override;
 
 private:
@@ -19,6 +20,7 @@ private:
     // •Ï”
     Vector3 repelVec_;
     CollisionPrimitive::SphereCollider sphereCollider_;
+    CollisionManager* colMPtr_;
     bool is_oldUpdateMethod_;
 
 public:

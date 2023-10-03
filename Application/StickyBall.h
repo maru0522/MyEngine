@@ -13,6 +13,7 @@ public:
 
     // ä÷êî
     StickyBall(CollisionManager* colMPtr);
+    ~StickyBall(void);
 
     void Update(void) override;
     void Draw(void) override;
@@ -25,6 +26,7 @@ private:
     Axis3 axes_;
 
     CollisionPrimitive::SphereCollider collision_sphere_; // ãÖÇÃç¿ïW
+    CollisionManager* colMPtr_;
     float distance_to_defPos_;
 
 public:

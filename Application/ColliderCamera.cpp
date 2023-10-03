@@ -2,12 +2,17 @@
 #include "MathUtil.h"
 #include "WndAPI.h"
 
-ColliderCamera::ColliderCamera(CollisionManager* colMPtr)
+ColliderCamera::ColliderCamera(CollisionManager* colMPtr) : colMPtr_(colMPtr)
 {
     colMPtr->Register(&sphereCollider_);
     sphereCollider_.SetID("colliderCamera");
     sphereCollider_.SetOnCollision(std::bind(&ColliderCamera::OnCollision, this));
     sphereCollider_.radius = kColRadius_;
+}
+
+ColliderCamera::~ColliderCamera(void)
+{
+    colMPtr_->UnRegister(&sphereCollider_);
 }
 
 void ColliderCamera::Update(void)

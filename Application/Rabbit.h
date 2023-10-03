@@ -15,6 +15,7 @@ public:
 
     // ä÷êî
     Rabbit(void);
+    ~Rabbit(void);
 
     void Update(void);
     void Draw(void);

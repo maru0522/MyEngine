@@ -1,6 +1,6 @@
 #include "IventArea_Tantative.h"
 
-IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::string& id) : Object3D("Resources/model/cube/cube.obj")
+IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::string& id) : Object3D("Resources/model/cube/cube.obj"),colMPtr_(colMPtr)
 {
     colMPtr->Register(&aabb_);
     aabb_.SetID(id);
@@ -15,6 +15,11 @@ IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::s
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
+}
+
+IventArea_Tantative::~IventArea_Tantative(void)
+{
+    colMPtr_->UnRegister(&aabb_);
 }
 
 void IventArea_Tantative::Update(void)

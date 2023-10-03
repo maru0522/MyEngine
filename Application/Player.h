@@ -19,6 +19,7 @@ public:
 
     //>> ä÷êî
     Player(CameraManager* camMPtr);
+    ~Player(void);
 
     void Update(void);
     void Draw(void);

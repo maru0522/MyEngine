@@ -13,7 +13,7 @@ public:
 
     // ŠÖ”
     IventArea_Tantative(CollisionManager* colMPtr,const std::string& id);
-    ~IventArea_Tantative(void) = default;
+    ~IventArea_Tantative(void);
 
     void Update(void) override;
     void Draw(void) override;
@@ -21,6 +21,7 @@ public:
     // •Ï”
     Transform transform_;
     Axis3 axes_;
+    CollisionManager* colMPtr_;
     CollisionPrimitive::AABBCollider aabb_;
 
     void OnCollision(void); // callback

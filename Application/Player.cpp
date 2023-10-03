@@ -23,6 +23,11 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehav
     moveVec_ = { 0,1,0 };
 }
 
+Player::~Player(void)
+{
+    CollisionManager::GetInstance()->UnRegister(&sphereCollider_);
+}
+
 void Player::Update(void)
 {
     if (isFallHole1_)

@@ -25,6 +25,12 @@ Rabbit::Rabbit(void)
     axes_.up = { 0,1,0 };
 }
 
+Rabbit::~Rabbit(void)
+{
+    CollisionManager::GetInstance()->UnRegister(&sphereCollider_);
+    CollisionManager::GetInstance()->UnRegister(&detectPlayerCollider_);
+}
+
 void Rabbit::Update(void)
 {
     if (isCaptured_ == false)

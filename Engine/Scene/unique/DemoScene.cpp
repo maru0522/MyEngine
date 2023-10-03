@@ -43,7 +43,7 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
-    //if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
+    if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
 
     lightGroup_->Update();
     testP_->Update();

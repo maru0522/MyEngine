@@ -29,6 +29,13 @@ Planet::Planet(void)
     repelCameraArea_.radius = 1.f * kRepelCameraArea_;
 }
 
+Planet::~Planet(void)
+{
+    CollisionManager::GetInstance()->UnRegister(&surface_);
+    CollisionManager::GetInstance()->UnRegister(&gravityArea_);
+    CollisionManager::GetInstance()->UnRegister(&repelCameraArea_);
+}
+
 void Planet::Update(void)
 {
     appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_);

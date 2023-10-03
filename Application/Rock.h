@@ -12,6 +12,7 @@ public:
 
     // ä÷êî
     Rock(CollisionManager* colMPtr);
+    ~Rock(void);
 
     void Update(void) override;
     void Draw(void) override;
@@ -24,6 +25,7 @@ private:
     Axis3 axes_;
 
     CollisionPrimitive::AABBCollider collision_aabb_;
+    CollisionManager* colMPtr_;
 
 public:
     // getter

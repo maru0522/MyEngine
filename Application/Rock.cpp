@@ -1,7 +1,7 @@
 #include "Rock.h"
 #include "MathUtil.h"
 
-Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj")
+Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj"), colMPtr_(colMPtr)
 {
     colMPtr->Register(&collision_aabb_);
     collision_aabb_.SetID("rock");
@@ -15,6 +15,11 @@ Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj"
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
+}
+
+Rock::~Rock(void)
+{
+    colMPtr_->UnRegister(&collision_aabb_);
 }
 
 void Rock::Update(void)
