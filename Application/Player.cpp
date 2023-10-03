@@ -19,6 +19,8 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehav
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
+
+    moveVec_ = { 0,1,0 };
 }
 
 void Player::Update(void)
@@ -43,29 +45,34 @@ void Player::Update(void)
     // コライダー更新
     sphereCollider_.center = transform_.position;
 
-    // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-    Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up, axes_.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-    axes_.right = rightFromOldAxis.Normalize();
-    Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right, axes_.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-    axes_.forward = forwardFromOldAxis.Normalize();
+    //// 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+    //Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up, axes_.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+    //axes_.right = rightFromOldAxis.Normalize();
+    //Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right, axes_.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    //axes_.forward = forwardFromOldAxis.Normalize();
 
-    // 移動入力があった場合
-    if (moveVec_.IsNonZero())
-    {
-        // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-        Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
-        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec_.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-        axes_.right = rightFromMoveVec.Normalize();
-        axes_.forward = moveVec_.Normalize();
-    }
+    //// 移動入力があった場合
+    //if (moveVec_.IsNonZero())
+    //{
+    //    // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+    //    Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
+    //    Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec_.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+    //    axes_.right = rightFromMoveVec.Normalize();
+    //    axes_.forward = moveVec_.Normalize();
+    //}
 
     // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
     // 計算量を減らしたい場合、コミットID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d を参照
     coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 
 #ifdef _DEBUG
+    GUI::Begin("Control");
+    GUI::Text("Move:WASD");
+    GUI::Text("Jump:SPACE");
+    GUI::End();
+
     GUI::Begin("player");
-    
+
     switch (pbm_.GetStatePtr()->GetCurState())
     {
     case PlayerBehavior::IDLE:
@@ -84,8 +91,8 @@ void Player::Update(void)
     GUI::Text("kGravity:             [%f]", kGravity_);
     GUI::Space();
     GUI::Space();
-    GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
-    GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
+    //GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
+    //GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
 
     ImGui::Text("matrix");
     Matrix4 p = coordinate_.mat_world;
@@ -246,7 +253,7 @@ void Player::OnCollision(void)
         Vector3 currentPos = transform_.position;
 
         // 移動した分だけ押し戻すようにする。
-        currentPos -= moveVec_;
+        currentPos -= oldVelocity_;
 
         // 座標を補正
         transform_.position = currentPos;

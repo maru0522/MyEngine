@@ -60,6 +60,7 @@ public:
 protected:
     // 循環参照回避のため、h内に定義出来ず
     const Vector3& GetPlayerMoveVec(void);
+    const Vector3& GetPlayerVelociy(void);
     const Axis3& GetPlayerAxes(void);
     const Transform& GetPlayerTransform(void);
     float GetPlayerJumpVecNorm(void);
@@ -74,13 +75,13 @@ protected:
 
     //>> setter
     void SetPlayerMoveVec(const Vector3& arg_moveVec);
+    void SetPlayerVelocity(const Vector3& arg_velocity);
     void SetPlayerAxes(const Axis3& arg_axes);
     void SetPlayerJumpVecNorm(float arg_jumpVecNorm);
     void SetPlayerCurrentRad(float arg_currentRad);
     void SetPlayerTheta(float arg_theta);
     void SetPlayerPhi(float arg_phi);
     void SetPlayerTransformPosition(const Vector3& arg_pos);
-
 };
 
 
@@ -94,7 +95,7 @@ public:
     virtual ~PlayerBehavior_Idle(void) override = default;
 
     void Entry(void) override {};
-    void Execute(void) override {} ;
+    void Execute(void) override;
     void Exit(void) override {};
 
 private:

@@ -62,6 +62,33 @@ void PlayerBehaviorMachine::NextStateCheck(void)
     }
 }
 
+void PlayerBehavior_Idle::Execute(void)
+{
+    // 重力
+    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
+
+    // ジャンプベクトル
+    Vector3 jumpVec = GetPlayerAxes().up;
+
+    // 移動量 = ジャンプvec * ジャンプ量
+    Vector3 velocity = jumpVec * GetPlayerJumpVecNorm(); // Idle状態は重力以外の移動量は発生しない想定
+
+    // 座標更新
+    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
+    SetPlayerVelocity(velocity);
+
+    // 姿勢制御
+    {
+        //// 現在のプレイヤーの各軸情報
+        //const Axis3& playerAxes = GetPlayerAxes();
+
+        //// 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+        //Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+        //Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        //SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
+    }
+}
+
 //----------------------------------------------------------------------------------------
 void PlayerBehavior_Idle::RequirementCheck(void) // "IDLE"
 {
@@ -156,13 +183,33 @@ void PlayerBehavior_Move::Execute(void)
 
     // 座標更新
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
+    SetPlayerVelocity(velocity);
     SetPlayerMoveVec(moveVec);
 
-    #ifdef _DEBUG
-        GUI::Begin("player");
-        GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-        GUI::End();
-    #endif // _DEBUG
+    // 姿勢制御
+    {
+        // 現在のプレイヤーの各軸情報
+        const Axis3& playerAxes = GetPlayerAxes();
+
+        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
+        // 移動入力があった場合
+        if (moveVec.IsNonZero())
+        {
+            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
+        }
+    }
+
+#ifdef _DEBUG
+    GUI::Begin("player");
+    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    GUI::End();
+#endif // _DEBUG
 }
 
 void PlayerBehavior_Move::RequirementCheck(void) // "MOVE"
@@ -180,6 +227,11 @@ void PlayerBehavior_Move::RequirementCheck(void) // "MOVE"
 const Vector3& IPlayerBehavior::GetPlayerMoveVec(void)
 {
     return playerPtr_->moveVec_;
+}
+
+const Vector3& IPlayerBehavior::GetPlayerVelociy(void)
+{
+    return playerPtr_->velocity_;
 }
 
 const Axis3& IPlayerBehavior::GetPlayerAxes(void)
@@ -240,6 +292,11 @@ CameraManager* IPlayerBehavior::GetPlayerCamMPtr(void)
 void IPlayerBehavior::SetPlayerMoveVec(const Vector3& arg_moveVec)
 {
     playerPtr_->moveVec_ = arg_moveVec;
+}
+
+void IPlayerBehavior::SetPlayerVelocity(const Vector3& arg_velocity)
+{
+    playerPtr_->moveVec_ = arg_velocity;
 }
 
 void IPlayerBehavior::SetPlayerAxes(const Axis3& arg_axes)

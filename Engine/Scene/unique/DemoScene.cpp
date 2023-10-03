@@ -3,6 +3,7 @@
 #include "SimplifyImGui.h"
 #include "CollisionChecker.h"
 #include "Timer.h"
+#include "SceneManager.h"
 
 void DemoScene::Initialize(void)
 {
@@ -42,6 +43,8 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
+    //if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
+
     lightGroup_->Update();
     testP_->Update();
 

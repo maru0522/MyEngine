@@ -41,7 +41,8 @@ private:
     Transform transform_;
     Axis3 axes_;
 
-    Vector3 moveVec_; // ‚ß‚è‚ñ‚¾‚É‰Ÿ‚µ–ß‚¹‚é‚æ‚¤‚É
+    Vector3 moveVec_;
+    Vector3 velocity_; // ‚ß‚è‚ñ‚¾‚É‰Ÿ‚µ–ß‚¹‚é‚æ‚¤‚É
 
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };

@@ -14,6 +14,7 @@ Rabbit::Rabbit(void)
     detectPlayerCollider_.SetOnCollision(std::bind(&Rabbit::OnDetectPlayer, this));
 
     sphereCollider_.radius = kRadius_;
+    sphereCollider_.center = { 0,60,20 };
     detectPlayerCollider_.radius = kDetectRadius_;
 
     // ‰ŠúˆÊ’u

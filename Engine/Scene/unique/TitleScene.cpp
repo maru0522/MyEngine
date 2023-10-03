@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include "SimplifyImGui.h"
 
 void TitleScene::Initialize(void)
 {
@@ -12,6 +13,10 @@ void TitleScene::Update(void)
     {
         SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::DEMO);
     }
+
+    GUI::Begin("Text");
+    GUI::Text("key-space : go next");
+    GUI::End();
 }
 
 void TitleScene::Draw3d(void)
