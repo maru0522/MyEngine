@@ -44,6 +44,7 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
+    if(rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured()&& rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
 
     lightGroup_->Update();
     testP_->Update();
