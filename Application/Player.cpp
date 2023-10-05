@@ -86,6 +86,15 @@ void Player::Update(void)
     case PlayerBehavior::MOVE:
         GUI::Text("Behavior: Move");
         break;
+    case PlayerBehavior::STOOP:
+        GUI::Text("Behavior: STOOP");
+        break;
+    case PlayerBehavior::MOVE_STOOP:
+        GUI::Text("Behavior: MOVE_STOOP");
+        break;
+    case PlayerBehavior::JUMP:
+        GUI::Text("Behavior: JUMP");
+        break;
     default:
         GUI::Text("Behavior: Unknown");
         break;

@@ -12,16 +12,14 @@ enum class PlayerBehavior
     NONE = -1,  // 指定なし
 
     IDLE,       //
+    STOOP,      // しゃがみ
 
     MOVE,       // 移動
-    //WALK,       // 歩き
-    //RUN,        // 走り
-
-    STOOP,      // しゃがみ
+    MOVE_STOOP, // しゃがみ移動
 
     JUMP,       // ジャンプ
     JUMP_STOOP, // じゃがみジャンプ
-    JUMP_BACK,  // 反転ジャンプ
+    JUMP_REVERSE,  // 反転ジャンプ
     JUMP_LONG,  // 幅跳び
 };
 
@@ -102,6 +100,22 @@ private:
     void RequirementCheck(void) override;
 };
 
+// STOOP状態を示すクラス
+class PlayerBehavior_Stoop final : public IPlayerBehavior
+{
+public:
+    //>> 関数
+    PlayerBehavior_Stoop(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
+    virtual ~PlayerBehavior_Stoop(void) override = default;
+
+    void Entry(void) override {};
+    void Execute(void) override;
+    void Exit(void) override {};
+
+private:
+    void RequirementCheck(void) override;
+};
+
 // MOVE状態を示すクラス
 class PlayerBehavior_Move final : public IPlayerBehavior
 {
@@ -118,6 +132,53 @@ private:
     void RequirementCheck(void) override;
 };
 
+// MOVE_STOOP状態を示すクラス
+class PlayerBehavior_MoveStoop final : public IPlayerBehavior
+{
+public:
+    //>> 関数
+    PlayerBehavior_MoveStoop(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
+    virtual ~PlayerBehavior_MoveStoop(void) override = default;
+
+    void Entry(void) override {};
+    void Execute(void) override;
+    void Exit(void) override {};
+
+private:
+    void RequirementCheck(void) override;
+};
+
+// JUMP状態を示すクラス
+class PlayerBehavior_Jump final : public IPlayerBehavior
+{
+public:
+    //>> 関数
+    PlayerBehavior_Jump(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
+    virtual ~PlayerBehavior_Jump(void) override = default;
+
+    void Entry(void) override;
+    void Execute(void) override;
+    void Exit(void) override {};
+
+private:
+    void RequirementCheck(void) override;
+};
+
+// JUMP_LONG状態を示すクラス
+class PlayerBehavior_JumpLong final : public IPlayerBehavior
+{
+public:
+    //>> 関数
+    PlayerBehavior_JumpLong(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
+    virtual ~PlayerBehavior_JumpLong(void) override = default;
+
+    void Entry(void) override;
+    void Execute(void) override;
+    void Exit(void) override {};
+
+private:
+    void RequirementCheck(void) override;
+};
 
 //----------------------------------------------------------------------------------------
 // 振舞いを示すクラスを生み出すクラス
