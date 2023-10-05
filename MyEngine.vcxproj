@@ -145,6 +145,7 @@
     <ClCompile Include="Engine\Math\Vector4.cpp" />
     <ClCompile Include="Engine\Base\WndAPI.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\BloomPS.hlsl">
@@ -258,6 +259,7 @@
     <ClInclude Include="Engine\Other\Timer.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h" />
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
