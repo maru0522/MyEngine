@@ -130,7 +130,8 @@ void Player::Draw(void)
     // 赤色のテクスチャを適用。（クソ見辛い）
     //appearance_->Draw("Resources/red1x1.png");
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
-    appearance_->Draw(/*"Resources/red1x1.png"*/);
+    if (pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::STOOP || pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::MOVE_STOOP) { appearance_->Draw("Resources/red1x1.png"); }
+    else { appearance_->Draw(/*"Resources/red1x1.png"*/); }
 }
 
 void Player::Move(Vector3& moveVec, Vector3& velocity)
