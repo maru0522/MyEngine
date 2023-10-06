@@ -1,29 +1,4 @@
-﻿#include<d3d12.h>
-#include<dxgi1_6.h>
-#include<cassert>
-#include<d3dcompiler.h>
-#include<DirectXMath.h>
-#include<math.h>
-#include<Windows.h>
-#include<vector>
-#include<string>
-#include<DirectXTex.h>
-#include<wrl.h>
-#include "Util.h"
 #include <memory>
-
-#include "WndAPI.h"
-#include "Input.h"
-#include "InitDirectX.h"
-#include "TextureManager.h"
-#include "ConstBuffer.h"
-#include "PSOManager.h"
-#include "CameraManager.h"
-#include "Sprite.h"
-#include "ModelManager.h"
-#include "Object3D.h"
-#include "SceneManager.h"
-
 #include "FrameWork.h"
 #include "GameSystem.h"
 

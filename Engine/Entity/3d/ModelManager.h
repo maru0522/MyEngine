@@ -1,9 +1,12 @@
-﻿#pragma once
+#pragma once
 #include <map>
 #include <wrl.h>
 #include <vector>
 #include <DirectXMath.h>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 
 #include "TextureManager.h"
 #include "VertexBuffer.h"

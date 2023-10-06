@@ -1,8 +1,7 @@
-﻿#pragma once
+#pragma once
 #include <wrl.h>
 #include "WndAPI.h"
 #include "Vector4.h"
-#include <d3d12.h>
 
 class ImGuiController final
 {

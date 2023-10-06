@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <map>
 #include <wrl.h>
 #include <fstream>

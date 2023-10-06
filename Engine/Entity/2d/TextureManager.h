@@ -1,9 +1,12 @@
-﻿#pragma once
+#pragma once
 #include "FileSystem.h"
 #include <string>
 #include <map>
 #include <wrl.h>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 
 #include "InitDirectX.h"
 

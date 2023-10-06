@@ -1,10 +1,13 @@
-﻿#pragma once
+#pragma once
 #include <Windows.h>
 #include <cassert>
 #include <algorithm>
 #include <wrl.h>
 #include <DirectXMath.h>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 
 #include "InitDirectX.h"
 

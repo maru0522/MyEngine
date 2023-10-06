@@ -1,7 +1,10 @@
-﻿#pragma once
+#pragma once
 #include <wrl.h>
 #include <string>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 #include "Sprite.h"
 #include "Vector4.h"
 #include "Matrix4.h"

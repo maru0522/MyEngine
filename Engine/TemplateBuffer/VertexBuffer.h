@@ -1,7 +1,10 @@
-﻿#pragma once
+#pragma once
 #include "InitDirectX.h"
 #include <cassert>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 #include <vector>
 #include "Util.h"
 #include <wrl.h>

@@ -1,10 +1,13 @@
-﻿#pragma once
+#pragma once
 #include <array>
 #include <DirectXMath.h>
 #include <wrl.h>
 #include <string>
 
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 
 #include "TextureManager.h"
 #include "CameraManager.h"

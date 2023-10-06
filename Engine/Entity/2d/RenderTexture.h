@@ -1,6 +1,9 @@
-﻿#pragma once
+#pragma once
 #include <wrl.h>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 
 class RenderTexture final
 {

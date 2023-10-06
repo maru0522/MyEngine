@@ -1,8 +1,11 @@
-﻿#pragma once
+#pragma once
 #include <vector>
 #include <wrl.h>
 #include <memory>
+#pragma warning(push)
+#pragma warning(disable:4820)
 #include <d3d12.h>
+#pragma warning(pop)
 #include <dxgi1_6.h>
 
 #include "WndAPI.h"
