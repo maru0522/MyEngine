@@ -92,13 +92,13 @@
   <ItemGroup>
     <ClCompile Include="Application\IIvent.cpp" />
     <ClCompile Include="Application\IventArea_Tantative.cpp" />
-    <ClCompile Include="Application\PlayerBehavior.cpp" />
-    <ClCompile Include="Application\Rock.cpp" />
-    <ClCompile Include="Application\StickyBall.cpp" />
+    <ClCompile Include="Application\Entity\PlayerBehavior.cpp" />
+    <ClCompile Include="Application\Object\Rock.cpp" />
+    <ClCompile Include="Application\Object\StickyBall.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
     <ClCompile Include="Engine\Entity\Other\CameraManager.cpp" />
-    <ClCompile Include="Application\ColliderCamera.cpp" />
+    <ClCompile Include="Application\Object\ColliderCamera.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionChecker.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionManager.cpp" />
@@ -111,8 +111,8 @@
     <ClCompile Include="Engine\Entity\PostEffect\HighLumi.cpp" />
     <ClCompile Include="Engine\Entity\Collision\ICollider.cpp" />
     <ClCompile Include="Application\LevelData.cpp" />
-    <ClCompile Include="Application\Planet.cpp" />
-    <ClCompile Include="Application\Player.cpp" />
+    <ClCompile Include="Application\Object\Planet.cpp" />
+    <ClCompile Include="Application\Entity\Player.cpp" />
     <ClCompile Include="Engine\Base\PSOManager.cpp" />
     <ClCompile Include="Engine\Base\ImguiController.cpp" />
     <ClCompile Include="Engine\Base\InitDirectX.cpp" />
@@ -129,7 +129,7 @@
     <ClCompile Include="Engine\Entity\3d\Object3D.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
-    <ClCompile Include="Application\Rabbit.cpp" />
+    <ClCompile Include="Application\Entity\Rabbit.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\RadialBlur.cpp" />
     <ClCompile Include="Engine\Entity\2d\RenderTexture.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneFactory.cpp" />
@@ -253,9 +253,9 @@
   <ItemGroup>
     <ClInclude Include="Application\IIvent.h" />
     <ClInclude Include="Application\IventArea_Tantative.h" />
-    <ClInclude Include="Application\PlayerBehavior.h" />
-    <ClInclude Include="Application\Rock.h" />
-    <ClInclude Include="Application\StickyBall.h" />
+    <ClInclude Include="Application\Entity\PlayerBehavior.h" />
+    <ClInclude Include="Application\Object\Rock.h" />
+    <ClInclude Include="Application\Object\StickyBall.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h" />
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
@@ -265,7 +265,7 @@
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
     <ClInclude Include="Engine\Entity\Other\CameraManager.h" />
     <ClInclude Include="Engine\Entity\Light\CircleShadow.h" />
-    <ClInclude Include="Application\ColliderCamera.h" />
+    <ClInclude Include="Application\Object\ColliderCamera.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionChecker.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionManager.h" />
@@ -280,8 +280,8 @@
     <ClInclude Include="Engine\Entity\Collision\ICollider.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Application\LevelData.h" />
-    <ClInclude Include="Application\Planet.h" />
-    <ClInclude Include="Application\Player.h" />
+    <ClInclude Include="Application\Object\Planet.h" />
+    <ClInclude Include="Application\Entity\Player.h" />
     <ClInclude Include="Engine\Base\PSOManager.h" />
     <ClInclude Include="Engine\Base\ImguiController.h" />
     <ClInclude Include="Engine\TemplateBuffer\IndexBuffer.h" />
@@ -298,7 +298,7 @@
     <ClInclude Include="Engine\Entity\Light\PointLight.h" />
     <ClInclude Include="Engine\Entity\PostEffect\PostEffect.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
-    <ClInclude Include="Application\Rabbit.h" />
+    <ClInclude Include="Application\Entity\Rabbit.h" />
     <ClInclude Include="Engine\Entity\PostEffect\RadialBlur.h" />
     <ClInclude Include="Engine\Entity\2d\RenderTexture.h" />
     <ClInclude Include="Engine\Scene\common\SceneFactory.h" />
