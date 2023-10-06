@@ -14,6 +14,7 @@ public:
     //>> ’è”
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 3.f };
+    const float kJumpLongPower_{ 15.f };
     const float kMoveSpeed_{ 1.f };
     const float kGravity_{ 0.2f };
 
@@ -44,11 +45,12 @@ private:
 
     Vector3 moveVec_;
     Vector3 velocity_; // ‚ß‚è‚ñ‚¾‚É‰Ÿ‚µ–ß‚¹‚é‚æ‚¤‚É
+    float jumpVecNorm_{};
+    bool isLanding_{};
 
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
 
-    float jumpVecNorm_{};
     CameraManager* camMPtr_{};
 
     PlayerBehaviorMachine pbm_;

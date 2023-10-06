@@ -104,6 +104,7 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
     bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 左シフトが入力されている
     if (isDown_LSHIFT)
@@ -121,8 +122,8 @@ void PlayerBehavior_Idle::RequirementCheck(void)
         return;
     }
 
-    // SPACEが入力されている
-    if (isDown_SPACE)
+    // SPACEが入力されている && 地面に足がついている
+    if (isDown_SPACE && isLanding)
     {
         // PlayerState を JUMP(ジャンプ)へ
         nextState_ = PlayerBehavior::JUMP;
@@ -156,6 +157,7 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
     bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
     bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
     if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
@@ -173,8 +175,8 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
         return;
     }
 
-    // SPACEが入力されている
-    if (isDown_SPACE)
+    // SPACEが入力されている && 地面に足がついている
+    if (isDown_SPACE && isLanding)
     {
         // PlayerState を JUMP_STOOP(しゃがみジャンプ)へ
         nextState_ = PlayerBehavior::JUMP_STOOP;
@@ -291,9 +293,10 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
 void PlayerBehavior_Move::RequirementCheck(void)
 {
-    bool isDown_anyWASD = KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S);
+    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
     bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
     if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
@@ -311,8 +314,8 @@ void PlayerBehavior_Move::RequirementCheck(void)
         return;
     }
 
-    // SPACEが入力されている
-    if (isDown_SPACE)
+    // SPACEが入力されている && 地面に足がついている
+    if (isDown_SPACE && isLanding)
     {
         // PlayerState を JUMP(ジャンプ)へ
         nextState_ = PlayerBehavior::JUMP;
@@ -475,6 +478,8 @@ void PlayerBehavior_Jump::Entry(void) // JUMP
 
 void PlayerBehavior_Jump::Execute(void)
 {
+    debug_curState_ = PlayerBehavior::JUMP;
+
     // 重力
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
@@ -488,9 +493,13 @@ void PlayerBehavior_Jump::Execute(void)
 
 void PlayerBehavior_Jump::RequirementCheck(void)
 {
-    // 移動キーが入力されていなかったら && 左SHIFTが入力されていなかったら
-    if (KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S) == 0 &&
-        KEYS::IsDown(DIK_LSHIFT) == false)
+    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+    bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    bool isLanding = GetPlayerJumpVecNorm() == 0.f;
+
+    // 移動キーが入力されていない && 左SHIFTが入力されていない
+    if (isDown_anyWASD == false && isDown_LSHIFT == false)
     {
         // PlayerState を IDLEへ
         nextState_ = PlayerBehavior::IDLE;
@@ -521,7 +530,113 @@ void PlayerBehavior_JumpLong::Entry(void)
 
 void PlayerBehavior_JumpLong::Execute(void)
 {
+    debug_curState_ = PlayerBehavior::JUMP_LONG;
 
+
+    // 幅跳びする方向ベクトル
+    Vector3 vec3_jumpLong = GetPlayerMoveVec();
+
+    // 入力ベクトル
+    Vector3 inputVec{};
+    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
+    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec = inputVec.Normalize();
+
+    // カメラ視点のプレイヤー移動ベクトル
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+
+    // 移動ベクトル = 前後vec + 水平vec
+    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+
+    // カメラ座標用の値を補正
+    {
+        if (GetPlayerJumpVecNorm())
+        {
+            // カメラとプレイヤーの距離
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+
+            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
+            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+            SetPlayerCurrentRad(dist);
+        }
+
+        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
+        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        {
+            // カメラとプレイヤーの距離
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+
+            // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+            if (dist < GetPlayerCurrentRad())
+            {
+                // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
+                // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+                //current_rad_ = dist;
+            }
+        }
+        else
+        {
+            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+            {
+                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
+                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+            }
+            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+            {
+                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+            }
+
+            float theta = GetPlayerTheta();
+            float phi = GetPlayerPhi();
+
+            theta += 0.02f * inputVec.y;
+            phi += 0.02f * inputVec.x;
+            Math::Function::Loop(theta, 0.f, 6.28319f);
+            Math::Function::Loop(phi, 0.f, 6.28319f);
+
+            SetPlayerTheta(theta);
+            SetPlayerPhi(phi);
+        }
+    }
+
+    // 重力
+    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
+
+    // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
+    Vector3 velocity = (moveVec.Normalize() * GetPlayerMoveSpeed()) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
+
+    // 座標更新
+    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
+    SetPlayerVelocity(velocity);
+    SetPlayerMoveVec(moveVec);
+
+    // 姿勢制御
+    {
+        // 現在のプレイヤーの各軸情報
+        const Axis3& playerAxes = GetPlayerAxes();
+
+        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
+        // 移動入力があった場合
+        if (moveVec.IsNonZero())
+        {
+            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
+        }
+    }
+
+#ifdef _DEBUG
+    GUI::Begin("player");
+    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    GUI::End();
+#endif // _DEBUG
 }
 
 void PlayerBehavior_JumpLong::RequirementCheck(void)
@@ -582,6 +697,11 @@ float IPlayerBehavior::GetPlayerGravity(void)
 float IPlayerBehavior::GetPlayerJumpPower(void)
 {
     return playerPtr_->kJumpPower_;
+}
+
+float IPlayerBehavior::GetPlayerJumpLongPower(void)
+{
+    return playerPtr_->kJumpLongPower_;
 }
 
 float IPlayerBehavior::GetPlayerMoveSpeed(void)

@@ -68,6 +68,7 @@ protected:
     float GetPlayerPhi(void);
     float GetPlayerGravity(void);
     float GetPlayerJumpPower(void);
+    float GetPlayerJumpLongPower(void);
     float GetPlayerMoveSpeed(void);
     CameraManager* GetPlayerCamMPtr(void);
 
