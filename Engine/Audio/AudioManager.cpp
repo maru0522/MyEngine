@@ -1,4 +1,4 @@
-#include "AudioManager.h"
+ï»¿#include "AudioManager.h"
 #include "Util.h"
 #include <cassert>
 #include <iostream>
@@ -13,11 +13,11 @@
 
 AudioManager::AudioManager(void)
 {
-    // XAudio2‰Šú‰»
+    // XAudio2åˆæœŸåŒ–
     HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
     hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 
-    // Media Foundation‰Šú‰»
+    // Media FoundationåˆæœŸåŒ–
     hr = MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 }
 
@@ -29,7 +29,7 @@ AudioManager::~AudioManager(void)
 
 void AudioManager::Load(const fsPath& path)
 {
-    // Šù‚É“Ç‚İ‚ñ‚¾audioƒf[ƒ^‚Æ‚Ìd•¡Šm”FB
+    // æ—¢ã«èª­ã¿è¾¼ã‚“ã audioãƒ‡ãƒ¼ã‚¿ã¨ã®é‡è¤‡ç¢ºèªã€‚
     if (soundDatum_.count(path)) {
         Util::Log::PrintOutputWindow("An audio file with the same name was loaded. Some audio files may not have been loaded.");
         return;
@@ -42,7 +42,7 @@ void AudioManager::Load(const fsPath& path)
 void AudioManager::LoadFolder(const fsPath& path)
 {
     for (const std::experimental::filesystem::directory_entry& file : std::experimental::filesystem::directory_iterator(path)) {
-        // ƒtƒ@ƒCƒ‹–¼æ“¾
+        // ãƒ•ã‚¡ã‚¤ãƒ«åå–å¾—
         std::experimental::filesystem::path fileName{ file.path().filename().string() };
         Load(path / fileName);
     }
@@ -52,11 +52,11 @@ void AudioManager::LoadMp3(const fsPath& path)
 {
     std::wstring wPath{ path.c_str() };
 
-    // ƒ\[ƒXƒŠ[ƒ_[‚Ì¶¬
+    // ã‚½ãƒ¼ã‚¹ãƒªãƒ¼ãƒ€ãƒ¼ã®ç”Ÿæˆ
     HRESULT hr = MFCreateSourceReaderFromURL(path.c_str(), NULL, mFSourceReader_.GetAddressOf());
     assert(SUCCEEDED(hr));
 
-    // ƒƒfƒBƒAƒ^ƒCƒv‚Ìæ“¾
+    // ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¤ãƒ—ã®å–å¾—
     MFCreateMediaType(mFMediaType_.GetAddressOf());
     mFMediaType_->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
     mFMediaType_->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
@@ -65,11 +65,11 @@ void AudioManager::LoadMp3(const fsPath& path)
     mFMediaType_.Reset();
     mFSourceReader_->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, mFMediaType_.GetAddressOf());
 
-    // ƒI[ƒfƒBƒIƒf[ƒ^Œ`®‚Ìì¬
+    // ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ä½œæˆ
     WAVEFORMATEX* wfex{};
     MFCreateWaveFormatExFromMFMediaType(mFMediaType_.Get(), &wfex, nullptr);
 
-    // ƒf[ƒ^‚Ì“Ç‚İ‚İ
+    // ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
     std::vector<BYTE> mediaData;
     while (true)
     {
@@ -99,7 +99,7 @@ void AudioManager::LoadMp3(const fsPath& path)
     mFSourceReader_.Reset();
     mFMediaType_.Reset();
 
-    // ƒ\[ƒXƒ{ƒCƒX‚Ì¶¬
+    // ã‚½ãƒ¼ã‚¹ãƒœã‚¤ã‚¹ã®ç”Ÿæˆ
     hr = xAudio2_->CreateSourceVoice(&soundDatum_[path].pSourceVoice, &soundDatum_[path].wfex);
     assert(SUCCEEDED(hr));
 }
@@ -109,37 +109,37 @@ void AudioManager::LoadWave(const fsPath& path)
     std::ifstream file{ path, std::ios_base::binary };
     assert(file.is_open());
 
-    // "RIFF"ƒ`ƒƒƒ“ƒN“Ç‚İ‚İ
+    // "RIFF"ãƒãƒ£ãƒ³ã‚¯èª­ã¿è¾¼ã¿
     RiffHeader_t riff{};
     file.read((char*)&riff, sizeof(riff));
-    if (std::strncmp(riff.chunk.id, "RIFF", 4) != 0) assert(0);     // ƒ`ƒƒƒ“ƒNF"RIFF"ˆÈŠO‚ÌƒGƒ‰[
-    if (std::strncmp(riff.type, "WAVE", 4) != 0) assert(0);         // ƒ^ƒCƒv@F"WAVE"ˆÈŠO‚ÌƒGƒ‰[
+    if (std::strncmp(riff.chunk.id, "RIFF", 4) != 0) assert(0);     // ãƒãƒ£ãƒ³ã‚¯ï¼š"RIFF"ä»¥å¤–ã®æ™‚ã‚¨ãƒ©ãƒ¼
+    if (std::strncmp(riff.type, "WAVE", 4) != 0) assert(0);         // ã‚¿ã‚¤ãƒ—ã€€ï¼š"WAVE"ä»¥å¤–ã®æ™‚ã‚¨ãƒ©ãƒ¼
 
-    // "fmt "ƒ`ƒƒƒ“ƒN“Ç‚İ‚İ
+    // "fmt "ãƒãƒ£ãƒ³ã‚¯èª­ã¿è¾¼ã¿
     FormatChunk_t format{};
     file.read((char*)&format, sizeof(ChunkHeader_t));
-    SkipHeader(file, format.chunk, "LIST");             // ƒ`ƒƒƒ“ƒN‚ª "LIST" ‚¾‚Á‚½ƒXƒLƒbƒv
-    SkipHeader(file, format.chunk, "JUNK");             // ƒ`ƒƒƒ“ƒN‚ª "JUNK" ‚¾‚Á‚½ƒXƒLƒbƒv
+    SkipHeader(file, format.chunk, "LIST");             // ãƒãƒ£ãƒ³ã‚¯ãŒ "LIST" ã ã£ãŸæ™‚ã‚¹ã‚­ãƒƒãƒ—
+    SkipHeader(file, format.chunk, "JUNK");             // ãƒãƒ£ãƒ³ã‚¯ãŒ "JUNK" ã ã£ãŸæ™‚ã‚¹ã‚­ãƒƒãƒ—
 
-    if (std::strncmp(format.chunk.id, "fmt ", 4) != 0) assert(0);   // ƒ`ƒƒƒ“ƒNF"fmt "ˆÈŠO‚ÌƒGƒ‰[
+    if (std::strncmp(format.chunk.id, "fmt ", 4) != 0) assert(0);   // ãƒãƒ£ãƒ³ã‚¯ï¼š"fmt "ä»¥å¤–ã®æ™‚ã‚¨ãƒ©ãƒ¼
     assert(format.chunk.size <= sizeof(format.fmt));
     file.read((char*)&format.fmt, format.chunk.size);
 
-    // "data" ƒ`ƒƒƒ“ƒN“Ç‚İ‚İ
+    // "data" ãƒãƒ£ãƒ³ã‚¯èª­ã¿è¾¼ã¿
     ChunkHeader_t data{};
     file.read((char*)&data, sizeof(data));
-    SkipHeader(file, data, "LIST");             // ƒ`ƒƒƒ“ƒN‚ª "LIST" ‚¾‚Á‚½ƒXƒLƒbƒv
-    SkipHeader(file, data, "JUNK");             // ƒ`ƒƒƒ“ƒN‚ª "JUNK" ‚¾‚Á‚½ƒXƒLƒbƒv
-    SkipHeader(file, data, "bext");             // ƒ`ƒƒƒ“ƒN‚ª "bext" ‚¾‚Á‚½ƒXƒLƒbƒv
+    SkipHeader(file, data, "LIST");             // ãƒãƒ£ãƒ³ã‚¯ãŒ "LIST" ã ã£ãŸæ™‚ã‚¹ã‚­ãƒƒãƒ—
+    SkipHeader(file, data, "JUNK");             // ãƒãƒ£ãƒ³ã‚¯ãŒ "JUNK" ã ã£ãŸæ™‚ã‚¹ã‚­ãƒƒãƒ—
+    SkipHeader(file, data, "bext");             // ãƒãƒ£ãƒ³ã‚¯ãŒ "bext" ã ã£ãŸæ™‚ã‚¹ã‚­ãƒƒãƒ—
 
-    if (std::strncmp(data.id, "REAPER", 6) == 0) assert(0);         // REAPER(DAW)‚ğg‚Á‚Äì‚ç‚ê‚Ä‚¢‚éê‡,“Ç‚İ‚ß‚È‚¢‚Ì‚ÅƒGƒ‰[
-    if (std::strncmp(data.id, "data", 4) != 0) assert(0);           // ƒ`ƒƒƒ“ƒNF"data"ˆÈŠO‚ÌƒGƒ‰[
+    if (std::strncmp(data.id, "REAPER", 6) == 0) assert(0);         // REAPER(DAW)ã‚’ä½¿ã£ã¦ä½œã‚‰ã‚Œã¦ã„ã‚‹å ´åˆ,èª­ã¿è¾¼ã‚ãªã„ã®ã§ã‚¨ãƒ©ãƒ¼
+    if (std::strncmp(data.id, "data", 4) != 0) assert(0);           // ãƒãƒ£ãƒ³ã‚¯ï¼š"data"ä»¥å¤–ã®æ™‚ã‚¨ãƒ©ãƒ¼
     std::vector<char> pBuffer(data.size);
     file.read(pBuffer.data(), data.size);
     SoundData_t tempSound{ format.fmt,  (uint32_t)data.size, std::vector<BYTE>(pBuffer.begin(),pBuffer.end()) };
     soundDatum_.insert({ path, tempSound });
 
-    // ƒ\[ƒXƒ{ƒCƒX‚Ì¶¬
+    // ã‚½ãƒ¼ã‚¹ãƒœã‚¤ã‚¹ã®ç”Ÿæˆ
     HRESULT hr = xAudio2_->CreateSourceVoice(&soundDatum_[path].pSourceVoice, &soundDatum_[path].wfex);
     assert(SUCCEEDED(hr));
 
@@ -148,11 +148,11 @@ void AudioManager::LoadWave(const fsPath& path)
 
 void AudioManager::SkipHeader(std::ifstream& file, ChunkHeader_t& chunkHead, const char* chunkId, size_t cmpNum)
 {
-    // “Ç‚İ‚ñ‚¾ƒ`ƒƒƒ“ƒN‚ªw’è‚µ‚½id‚¾‚Á‚½i—áFJUNK
+    // èª­ã¿è¾¼ã‚“ã ãƒãƒ£ãƒ³ã‚¯ãŒæŒ‡å®šã—ãŸidã ã£ãŸæ™‚ï¼ˆä¾‹ï¼šJUNK
     if (strncmp(chunkHead.id, chunkId, cmpNum) == 0) {
-        // “Ç‚İæ‚èˆÊ’u‚ğ“–ŠYƒ`ƒƒƒ“ƒN‚ÌÅŒã‚Ü‚ÅˆÚ“®
+        // èª­ã¿å–ã‚Šä½ç½®ã‚’å½“è©²ãƒãƒ£ãƒ³ã‚¯ã®æœ€å¾Œã¾ã§ç§»å‹•
         file.seekg(chunkHead.size, std::ios_base::cur);
-        // Ä“Ç‚İ‚İ
+        // å†èª­ã¿è¾¼ã¿
         file.read((char*)&chunkHead, sizeof(chunkHead));
     }
 }

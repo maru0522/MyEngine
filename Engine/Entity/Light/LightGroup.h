@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <cstdint>
 #include "Vector3.h"
 #include "SpotLight.h"
@@ -11,11 +11,11 @@
 class LightGroup final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
-    // ’è”
+    // å®šæ•°
     static constexpr uint32_t kDirLightNum_ = 3;
     static constexpr uint32_t kPointLightNum_ = 3;
     static constexpr uint32_t kSpotLightNum_ = 3;
@@ -23,15 +23,15 @@ public:
 
     struct CBLightGroup_t
     {
-        Vector3 ambientColor; // ŠÂ‹«Œõ‚ÌF
+        Vector3 ambientColor; // ç’°å¢ƒå…‰ã®è‰²
         float pad;
-        DirectionalLight::CBDirLight_t dirLights[kDirLightNum_];         // •½sŒõŒ¹—p
-        PointLight::CBPointLight_t pointLights[kPointLightNum_];         // “_ŒõŒ¹—p
-        SpotLight::CBSpotLight_t spotLights[kSpotLightNum_];             // ƒXƒ|ƒbƒgƒ‰ƒCƒg—p
-        CircleShadow::CBCircleShadow_t circleShadows[kCircleShadowNum_]; // ŠÛ‰e—p
+        DirectionalLight::CBDirLight_t dirLights[kDirLightNum_];         // å¹³è¡Œå…‰æºç”¨
+        PointLight::CBPointLight_t pointLights[kPointLightNum_];         // ç‚¹å…‰æºç”¨
+        SpotLight::CBSpotLight_t spotLights[kSpotLightNum_];             // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆç”¨
+        CircleShadow::CBCircleShadow_t circleShadows[kCircleShadowNum_]; // ä¸¸å½±ç”¨
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     LightGroup(void);
     void Update(void);
     void Draw(void);
@@ -41,7 +41,7 @@ private:
     void DefaultLightSetting(void);
     void DebugImGui(void);
 
-    // •Ï”
+    // å¤‰æ•°
     ConstBuffer<CBLightGroup_t> cbLightGroup_;
     Vector3 ambientColor_{ 1,1,1 };
     DirectionalLight dirLights_[kDirLightNum_];
@@ -51,7 +51,7 @@ private:
     bool isDirty_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     void SetAmbientColor(const Vector3& color);
 
     void SetLightDir(size_t index, const Vector3& lightDir);

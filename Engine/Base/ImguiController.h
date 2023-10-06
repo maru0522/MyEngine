@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include <wrl.h>
 #include "WndAPI.h"
 #include "Vector4.h"
@@ -17,7 +17,7 @@ public:
         CUSTOM_ENEMYMOUSE,
     };
 
-    // ä÷êî
+    // Èñ¢Êï∞
     ImGuiController(void);
     ~ImGuiController(void);
 
@@ -35,11 +35,11 @@ private:
     void CustomBlackDevil(void);
     void CustomEnemyMouse(void);
 
-    // ïœêî
+    // Â§âÊï∞
     UIStyle style_;
 
 public:
-    // setterÅEgetter
+    // setter„Éªgetter
     inline void SetStyle(UIStyle style) { style_ = style; }
 };
 

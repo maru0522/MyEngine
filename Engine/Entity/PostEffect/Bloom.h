@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "PostEffect.h"
 #include "HighLumi.h"
 class Bloom :

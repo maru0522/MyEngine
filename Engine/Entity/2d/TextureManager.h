@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "FileSystem.h"
 #include <string>
 #include <map>
@@ -10,48 +10,48 @@
 class TextureManager final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
 public:
     struct Image
     {
-        // Š‘®
+        // æ‰€å±
         fsPath path{};
 
-        // ƒoƒbƒtƒ@
+        // ãƒãƒƒãƒ•ã‚¡
         ComPtr<ID3D12Resource> buff{ nullptr };
-        // srv‚Ìgpuƒnƒ“ƒhƒ‹
+        // srvã®gpuãƒãƒ³ãƒ‰ãƒ«
         D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle{};
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     void Initialize(void);
 
-    // w’è‚µ‚½‰æ‘œ‚ğ“Ç‚İ‚İ
+    // æŒ‡å®šã—ãŸç”»åƒã‚’èª­ã¿è¾¼ã¿
     void Load(const fsPath& path);
     void Load(const fsPath& path, const std::string& nickname);
 
-    // w’è‚µ‚½ƒtƒHƒ‹ƒ_‚Ì‰æ‘œ‚ğ‘S‚Ä“Ç‚İ‚İ(.png/.jpg/.jepg‚Ì‚İ)
+    // æŒ‡å®šã—ãŸãƒ•ã‚©ãƒ«ãƒ€ã®ç”»åƒã‚’å…¨ã¦èª­ã¿è¾¼ã¿(.png/.jpg/.jepgã®ã¿)
     void LoadFolder(const fsPath& path);
 
-    // •ÛŠÇ‚³‚ê‚Ä‚éImage‚ğ‘Î‰‚·‚épath‚Åˆø‚«o‚·B
+    // ä¿ç®¡ã•ã‚Œã¦ã‚‹Imageã‚’å¯¾å¿œã™ã‚‹pathã§å¼•ãå‡ºã™ã€‚
     const Image* GetImagePtr(const fsPath& path) const;
-    // •ÛŠÇ‚³‚ê‚Ä‚éImage‚ğ‘Î‰‚·‚énickname‚Åˆø‚«o‚·B
+    // ä¿ç®¡ã•ã‚Œã¦ã‚‹Imageã‚’å¯¾å¿œã™ã‚‹nicknameã§å¼•ãå‡ºã™ã€‚
     const Image* GetImagePtrByNickname(const std::string& nickname);
 
 private:
-    // o—ˆã‚ª‚Á‚½î•ñ‘Ì[Image]‚ğmapƒRƒ“ƒeƒi‚É“o˜^‚·‚é
+    // å‡ºæ¥ä¸ŠãŒã£ãŸæƒ…å ±ä½“[Image]ã‚’mapã‚³ãƒ³ãƒ†ãƒŠã«ç™»éŒ²ã™ã‚‹
     void RegisterImg(const Image& img);
     void RegisterNickname(const fsPath& path, const std::string& nickname);
 
-    void GenerateMissingImage(void); // ƒGƒ‰[‰æ‘œ‚Ì¶¬‚Æ“o˜^
+    void GenerateMissingImage(void); // ã‚¨ãƒ©ãƒ¼ç”»åƒã®ç”Ÿæˆã¨ç™»éŒ²
 
     bool CheckDuplicateTexture(const Image& img);
     bool CheckDuplicateNickname(const std::string& nickname);
 
-    // •Ï”
-    std::map<std::string, fsPath> paths_{}; // ƒjƒbƒNƒl[ƒ€‚Ækey‚ğ•R•t‚¯B
-    std::map<fsPath, Image> textures_{}; // key‚ÆImage‚ğ•R•t‚¯B
+    // å¤‰æ•°
+    std::map<std::string, fsPath> paths_{}; // ãƒ‹ãƒƒã‚¯ãƒãƒ¼ãƒ ã¨keyã‚’ç´ä»˜ã‘ã€‚
+    std::map<fsPath, Image> textures_{}; // keyã¨Imageã‚’ç´ä»˜ã‘ã€‚
 };

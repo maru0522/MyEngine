@@ -1,7 +1,7 @@
-#include "Vector3.h"
+ï»¿#include "Vector3.h"
 #include <cmath>
 
-// ƒxƒNƒgƒ‹‚Ì’·‚³‚ğ‹‚ß‚é
+// ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã‚’æ±‚ã‚ã‚‹
 float Vector3::Length(void) const
 {
     return std::sqrtf(x * x + y * y + z * z);
@@ -12,7 +12,7 @@ bool Vector3::IsNonZero(void) const
     return x || y || z;
 }
 
-// ƒxƒNƒgƒ‹‚ğ³‹K‰»‚·‚é(’PˆÊƒxƒNƒgƒ‹‚É)‚·‚é
+// ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã™ã‚‹(å˜ä½ãƒ™ã‚¯ãƒˆãƒ«ã«)ã™ã‚‹
 Vector3 Vector3::Normalize(void) const
 {
     float len{ Length() };
@@ -22,13 +22,13 @@ Vector3 Vector3::Normalize(void) const
     return *this;
 }
 
-// “àÏ‚ğ‹‚ß‚é
+// å†…ç©ã‚’æ±‚ã‚ã‚‹
 float Vector3::Dot(const Vector3& v) const
 {
     return x * v.x + y * v.y + z * v.z;
 }
 
-// ŠOÏ‚ğ‹‚ß‚é
+// å¤–ç©ã‚’æ±‚ã‚ã‚‹
 Vector3 Vector3::Cross(const Vector3& v) const
 {
     return Vector3{ y * v.z - z * v.y,
@@ -36,13 +36,13 @@ Vector3 Vector3::Cross(const Vector3& v) const
                     x * v.y - y * v.x };
 }
 
-// ’P€‰‰Zq +
+// å˜é …æ¼”ç®—å­ +
 Vector3 Vector3::operator+() const
 {
     return *this;
 }
 
-// ’P€‰‰Zq -
+// å˜é …æ¼”ç®—å­ -
 Vector3 Vector3::operator-() const
 {
     return Vector3{ -x, -y, -z };
@@ -56,7 +56,7 @@ Vector3& Vector3::operator=(const Vector3& v)
     return *this;
 }
 
-// ‘ã“ü‰‰Zq +=
+// ä»£å…¥æ¼”ç®—å­ +=
 Vector3& Vector3::operator+=(const Vector3& v)
 {
     x += v.x;
@@ -64,7 +64,7 @@ Vector3& Vector3::operator+=(const Vector3& v)
     z += v.z;
     return *this;
 }
-// ‘ã“ü‰‰Zq -=
+// ä»£å…¥æ¼”ç®—å­ -=
 Vector3& Vector3::operator-=(const Vector3& v)
 {
     x -= v.x;
@@ -72,7 +72,7 @@ Vector3& Vector3::operator-=(const Vector3& v)
     z -= v.z;
     return *this;
 }
-// ‘ã“ü‰‰Zq *=
+// ä»£å…¥æ¼”ç®—å­ *=
 Vector3& Vector3::operator*=(float s)
 {
     x *= s;
@@ -80,7 +80,7 @@ Vector3& Vector3::operator*=(float s)
     z *= s;
     return *this;
 }
-// ‘ã“ü‰‰Zq /=
+// ä»£å…¥æ¼”ç®—å­ /=
 Vector3& Vector3::operator/=(float s)
 {
     x /= s;
@@ -99,13 +99,13 @@ const bool Vector3::operator==(const Vector3& v) const
     return x == v.x && y == v.y && z == v.z;
 }
 
-// 2€‰‰Zq +
+// 2é …æ¼”ç®—å­ +
 const Vector3 operator+(const Vector3& v1, const Vector3& v2)
 {
     Vector3 temp{ v1 };
     return temp += v2;
 }
-// 2€‰‰Zq -
+// 2é …æ¼”ç®—å­ -
 const Vector3 operator-(const Vector3& v1, const Vector3& v2)
 {
     Vector3 temp{ v1 };

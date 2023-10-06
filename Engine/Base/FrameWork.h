@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include "WndAPI.h"
 #include "InitDirectX.h"
 #include "TextureManager.h"
@@ -14,7 +14,7 @@
 class FrameWork
 {
 public:
-    // ä÷êî
+    // Èñ¢Êï∞
     virtual ~FrameWork(void) = default;
 
     void Run(void);
@@ -31,7 +31,7 @@ private:
     void ResetPostEffect(int num);
 
 protected:
-    // ïœêî
+    // Â§âÊï∞
     InitDirectX* iDXPtr_{ InitDirectX::GetInstance() };                                         // ptr_InitDirectX
     PSOManager* psoMPtr_{ PSOManager::GetInstance() };                                          // ptr_GraphicsPipeline
     CameraManager* camMPtr_{ CameraManager::GetInstance() };                                    // ptr_CameraManager

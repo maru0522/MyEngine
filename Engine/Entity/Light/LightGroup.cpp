@@ -1,4 +1,4 @@
-#include "LightGroup.h"
+ï»¿#include "LightGroup.h"
 #include <imgui.h>
 
 LightGroup::LightGroup(void)
@@ -10,7 +10,7 @@ LightGroup::LightGroup(void)
 
 void LightGroup::Update(void)
 {
-    // ’l‚ÌXV‚ª‚ ‚Á‚½‚¾‚¯’è”ƒoƒbƒtƒ@‚É“]‘—‚·‚é
+    // å€¤ã®æ›´æ–°ãŒã‚ã£ãŸæ™‚ã ã‘å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«è»¢é€ã™ã‚‹
     if (isDirty_) {
         TransferCB();
         isDirty_ = false;
@@ -26,44 +26,44 @@ void LightGroup::Draw(void)
 
 void LightGroup::TransferCB(void)
 {
-    // ŠÂ‹«Œõ
+    // ç’°å¢ƒå…‰
     cbLightGroup_.GetConstBuffMap()->ambientColor = ambientColor_;
 
-    // •½sŒõŒ¹
+    // å¹³è¡Œå…‰æº
     for (size_t i = 0; i < kDirLightNum_; i++)
     {
-        // ƒ‰ƒCƒg‚ª—LŒø‚È‚çİ’è‚ğ“]‘—
+        // ãƒ©ã‚¤ãƒˆãŒæœ‰åŠ¹ãªã‚‰è¨­å®šã‚’è»¢é€
         if (dirLights_[i].GetIsActive()) {
             cbLightGroup_.GetConstBuffMap()->dirLights[i].isActive = 1;
             cbLightGroup_.GetConstBuffMap()->dirLights[i].lightV = -dirLights_[i].GetLightDir();
             cbLightGroup_.GetConstBuffMap()->dirLights[i].lightColor = dirLights_[i].GetLightColor();
         }
-        // ƒ‰ƒCƒg‚ª–³Œø‚È‚ç“]‘—‚µ‚È‚¢B
+        // ãƒ©ã‚¤ãƒˆãŒç„¡åŠ¹ãªã‚‰è»¢é€ã—ãªã„ã€‚
         else {
             cbLightGroup_.GetConstBuffMap()->dirLights[i].isActive = 0;
         }
     }
 
-    // “_ŒõŒ¹
+    // ç‚¹å…‰æº
     for (size_t i = 0; i < kPointLightNum_; i++)
     {
-        // ƒ‰ƒCƒg‚ª—LŒø‚È‚çİ’è‚ğ“]‘—
+        // ãƒ©ã‚¤ãƒˆãŒæœ‰åŠ¹ãªã‚‰è¨­å®šã‚’è»¢é€
         if (pointLights_[i].GetIsActive()) {
             cbLightGroup_.GetConstBuffMap()->pointLights[i].isActive = 1;
             cbLightGroup_.GetConstBuffMap()->pointLights[i].lightPos = pointLights_[i].GetLightPos();
             cbLightGroup_.GetConstBuffMap()->pointLights[i].lightColor = pointLights_[i].GetLightColor();
             cbLightGroup_.GetConstBuffMap()->pointLights[i].lightAtten = pointLights_[i].GetLightAtten();
         }
-        // ƒ‰ƒCƒg‚ª–³Œø‚È‚ç“]‘—‚µ‚È‚¢B
+        // ãƒ©ã‚¤ãƒˆãŒç„¡åŠ¹ãªã‚‰è»¢é€ã—ãªã„ã€‚
         else {
             cbLightGroup_.GetConstBuffMap()->pointLights[i].isActive = 0;
         }
     }
 
-    // ƒXƒ|ƒbƒgƒ‰ƒCƒg
+    // ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
     for (size_t i = 0; i < kSpotLightNum_; i++)
     {
-        // ƒ‰ƒCƒg‚ª—LŒø‚È‚çİ’è‚ğ“]‘—
+        // ãƒ©ã‚¤ãƒˆãŒæœ‰åŠ¹ãªã‚‰è¨­å®šã‚’è»¢é€
         if (spotLights_[i].GetIsActive()) {
             cbLightGroup_.GetConstBuffMap()->spotLights[i].isActive = 1;
             cbLightGroup_.GetConstBuffMap()->spotLights[i].lightV = -spotLights_[i].GetLightDir();
@@ -72,16 +72,16 @@ void LightGroup::TransferCB(void)
             cbLightGroup_.GetConstBuffMap()->spotLights[i].lightAtten = spotLights_[i].GetLightAtten();
             cbLightGroup_.GetConstBuffMap()->spotLights[i].lightFactorAngleCos = spotLights_[i].GetLightFactorAngleCos();
         }
-        // ƒ‰ƒCƒg‚ª–³Œø‚È‚ç“]‘—‚µ‚È‚¢B
+        // ãƒ©ã‚¤ãƒˆãŒç„¡åŠ¹ãªã‚‰è»¢é€ã—ãªã„ã€‚
         else {
             cbLightGroup_.GetConstBuffMap()->spotLights[i].isActive = 0;
         }
     }
 
-    // ŠÛ‰e
+    // ä¸¸å½±
     for (size_t i = 0; i < kCircleShadowNum_; i++)
     {
-        // —LŒø‚È‚çİ’è‚ğ“]‘—
+        // æœ‰åŠ¹ãªã‚‰è¨­å®šã‚’è»¢é€
         if (circleShadows_[i].GetIsActive()) {
             cbLightGroup_.GetConstBuffMap()->circleShadows[i].isActive = 1;
             cbLightGroup_.GetConstBuffMap()->circleShadows[i].dir = -circleShadows_[i].GetDir();
@@ -90,7 +90,7 @@ void LightGroup::TransferCB(void)
             cbLightGroup_.GetConstBuffMap()->circleShadows[i].atten = circleShadows_[i].GetAtten();
             cbLightGroup_.GetConstBuffMap()->circleShadows[i].factorAngleCos = circleShadows_[i].GetFactorAngleCos();
         }
-        // ƒ‰ƒCƒg‚ª–³Œø‚È‚ç“]‘—‚µ‚È‚¢B
+        // ãƒ©ã‚¤ãƒˆãŒç„¡åŠ¹ãªã‚‰è»¢é€ã—ãªã„ã€‚
         else {
             cbLightGroup_.GetConstBuffMap()->spotLights[i].isActive = 0;
         }

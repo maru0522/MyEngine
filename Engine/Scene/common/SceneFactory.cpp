@@ -1,16 +1,16 @@
-#include "SceneFactory.h"
+ï»¿#include "SceneFactory.h"
 
 std::unique_ptr<IScene> SceneFactory::CreateScene(Usage scene)
 {
-    // ƒV[ƒ“‚ªDEMO‚È‚ç
+    // ã‚·ãƒ¼ãƒ³ãŒDEMOãªã‚‰
     if (scene == Usage::DEMO) { return std::make_unique<DemoScene>(); }
-    // ƒV[ƒ“‚ªTITLE‚È‚ç
+    // ã‚·ãƒ¼ãƒ³ãŒTITLEãªã‚‰
     if (scene == Usage::TITLE) { return std::make_unique<TitleScene>(); }
-    // ƒV[ƒ“‚ªGAME‚È‚ç
+    // ã‚·ãƒ¼ãƒ³ãŒGAMEãªã‚‰
     if (scene == Usage::GAME) { return std::make_unique<GameScene>(); }
-    // ƒV[ƒ“‚ªRESULT‚È‚ç
+    // ã‚·ãƒ¼ãƒ³ãŒRESULTãªã‚‰
     if (scene == Usage::RESULT) { return std::make_unique<ResultScene>(); }
 
-    // ‰½‚àw’è‚ª‚È‚¢ê‡DEMOƒV[ƒ“‚ğ•Ô‚·
+    // ä½•ã‚‚æŒ‡å®šãŒãªã„å ´åˆDEMOã‚·ãƒ¼ãƒ³ã‚’è¿”ã™
     return std::make_unique<DemoScene>();
 }

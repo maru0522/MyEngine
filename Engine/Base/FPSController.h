@@ -1,18 +1,18 @@
-#pragma once
+ï»¿#pragma once
 #include <chrono>
 
 class FPSController final
 {
 public:
-    // ŠÖ”
+    // é–¢æ•°
     void Initialize(void);
     void Update(void);
 
     inline void SetFPS(uint32_t fps) { fps_ = fps; }
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     uint32_t fps_{ 60 };
 
-    std::chrono::steady_clock::time_point timeRef_{}; // ŠÔ‹L˜^iFPSŒÅ’è—pj
+    std::chrono::steady_clock::time_point timeRef_{}; // æ™‚é–“è¨˜éŒ²ï¼ˆFPSå›ºå®šç”¨ï¼‰
 };

@@ -1,41 +1,41 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
 
 struct Vector3 final
 {
 public:
-    // •Ï”
-    float x{};	// x¬•ª
-    float y{};	// y¬•ª
-    float z{};	// z¬•ª
+    // å¤‰æ•°
+    float x{};	// xæˆåˆ†
+    float y{};	// yæˆåˆ†
+    float z{};	// zæˆåˆ†
 
-    // ŠÖ”
+    // é–¢æ•°
     Vector3(void) = default;
     constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
 
-    Vector3 Normalize(void) const;            // ³‹K‰»‚·‚é
-    Vector3 Cross(const Vector3& v) const;    // ŠOÏ‚ğ‹‚ß‚é
-    float Dot(const Vector3& v) const;        // “àÏ‚ğ‹‚ß‚é
-    float Length(void) const;                 // ƒmƒ‹ƒ€(’·‚³)‚ğ‹‚ß‚é
-    bool IsNonZero(void) const;               // xyz‚Ì‚Ç‚ê‚©1‚Â‚Å‚à’l‚ª“ü‚Á‚Ä‚¢‚é‚©
+    Vector3 Normalize(void) const;            // æ­£è¦åŒ–ã™ã‚‹
+    Vector3 Cross(const Vector3& v) const;    // å¤–ç©ã‚’æ±‚ã‚ã‚‹
+    float Dot(const Vector3& v) const;        // å†…ç©ã‚’æ±‚ã‚ã‚‹
+    float Length(void) const;                 // ãƒãƒ«ãƒ (é•·ã•)ã‚’æ±‚ã‚ã‚‹
+    bool IsNonZero(void) const;               // xyzã®ã©ã‚Œã‹1ã¤ã§ã‚‚å€¤ãŒå…¥ã£ã¦ã„ã‚‹ã‹
 
-    // ’P€ƒIƒoƒ
+    // å˜é …ã‚ªãƒãƒ­
     Vector3 operator+() const;
     Vector3 operator-() const;
 
-    // ‘ã“üƒIƒoƒ
+    // ä»£å…¥ã‚ªãƒãƒ­
     Vector3& operator=(const Vector3& v);
     Vector3& operator+=(const Vector3& v);
     Vector3& operator-=(const Vector3& v);
     Vector3& operator*=(float s);
     Vector3& operator/=(float s);
 
-    // ”äŠrƒIƒoƒ
+    // æ¯”è¼ƒã‚ªãƒãƒ­
     bool operator==(const Vector3& v);
     const bool operator==(const Vector3& v) const;
 };
 
-// 2€ƒIƒoƒ
+// 2é …ã‚ªãƒãƒ­
 const Vector3 operator+(const Vector3& v1, const Vector3& v2);
 const Vector3 operator-(const Vector3& v1, const Vector3& v2);
 const Vector3 operator*(const Vector3& v, float s);
@@ -51,10 +51,10 @@ namespace Math {
 
         Vector3 Resolution(const Vector3& v, const Vector3& axis4Proj);
 
-        // •âŠ®ŠÖ”
-        const Vector3 lerp(const Vector3& start, const Vector3& end, const float t); // üŒ`•âŠ®i1ŸŠÖ”•âŠ®j
-        const Vector3 bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t); // ƒxƒWƒGi2ŸŠÖ”•âŠ®j
-        const Vector3 bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t); // ƒxƒWƒGi3ŸŠÖ”•âŠ®j
+        // è£œå®Œé–¢æ•°
+        const Vector3 lerp(const Vector3& start, const Vector3& end, const float t); // ç·šå½¢è£œå®Œï¼ˆ1æ¬¡é–¢æ•°è£œå®Œï¼‰
+        const Vector3 bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t); // ãƒ™ã‚¸ã‚¨ï¼ˆ2æ¬¡é–¢æ•°è£œå®Œï¼‰
+        const Vector3 bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t); // ãƒ™ã‚¸ã‚¨ï¼ˆ3æ¬¡é–¢æ•°è£œå®Œï¼‰
 
         Vector3 splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t);
 

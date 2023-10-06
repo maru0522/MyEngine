@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "Vector2.h"
 #include "Vector3.h"
@@ -13,18 +13,18 @@ namespace CollisionPrimitive
 
     enum class Shape
     {
-        UNKNOWN, // –¢’è‹`
-        SPHERE,  // ‹…
-        PLANE,   // •½–Ê
-        POINT,   // “_
-        AABB,    // ’¼•û‘Ì
+        UNKNOWN, // æœªå®šç¾©
+        SPHERE,  // çƒ
+        PLANE,   // å¹³é¢
+        POINT,   // ç‚¹
+        AABB,    // ç›´æ–¹ä½“
     };
 }
 
 class ICollider
 {
 public:
-    // ŠÖ”
+    // é–¢æ•°
     ICollider(void) = default;
     virtual ~ICollider(void) = default;
     virtual bool Dispatch(ICollider* other) = 0;
@@ -35,17 +35,17 @@ public:
     virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
 
 protected:
-    void AllOnFunction(void) // ‚È‚º‚©ãè‚­‚¢‚©‚È‚¢ ˆ—‚ª’Ê‚ç‚È‚¢(?)‚¹‚¢‚Å³í‚É“®‚©‚È‚¢
+    void AllOnFunction(void) // ãªãœã‹ä¸Šæ‰‹ãã„ã‹ãªã„ å‡¦ç†ãŒé€šã‚‰ãªã„(?)ã›ã„ã§æ­£å¸¸ã«å‹•ã‹ãªã„
     {
         if (onCollision_) { onCollision_(); }
         if (onTrigger_) { onTrigger_(); }
         if (onRelease_) { onRelease_(); }
     }
 
-    // •Ï”
+    // å¤‰æ•°
     std::string id_{};
     ICollider* other_{};
-    CollisionPrimitive::Shape shape_{}; // ğŒ•ªŠò‚ÉAŒ`ó’PˆÊ‚¾‚Æ•Ö—˜‚©‚à
+    CollisionPrimitive::Shape shape_{}; // æ¡ä»¶åˆ†å²æ™‚ã«ã€å½¢çŠ¶å˜ä½ã ã¨ä¾¿åˆ©ã‹ã‚‚
 
     std::function<void(void)> onCollision_{};
     std::function<void(void)> onTrigger_{};

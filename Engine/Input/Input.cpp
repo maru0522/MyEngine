@@ -1,12 +1,12 @@
-#include "Input.h"
+ï»¿#include "Input.h"
 #include <cassert>
 
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib, "xinput.lib")
 
-// À‘Ì‚Ì¶¬
-static Microsoft::WRL::ComPtr<IDirectInput8> directInput_{ nullptr }; // DirectInput¶¬
+// å®Ÿä½“ã®ç”Ÿæˆ
+static Microsoft::WRL::ComPtr<IDirectInput8> directInput_{ nullptr }; // DirectInputç”Ÿæˆ
 
 #pragma region keyboard
 Microsoft::WRL::ComPtr<IDirectInputDevice8> Input::Keyboard::sKeyboard_{ nullptr };
@@ -40,36 +40,36 @@ void Input::Keyboard::Initialize(WndAPI* p_wndapi)
     HRESULT hr = S_FALSE;
 
     if (directInput_ == nullptr) {
-        // DirectInput‚Ì‰Šú‰»
+        // DirectInputã®åˆæœŸåŒ–
         hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
         assert(SUCCEEDED(hr));
     }
 
-    // ƒL[ƒ{[ƒhƒfƒoƒCƒX‚Ì¶¬
+    // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ‡ãƒã‚¤ã‚¹ã®ç”Ÿæˆ
     hr = directInput_->CreateDevice(GUID_SysKeyboard, &sKeyboard_, NULL);
     assert(SUCCEEDED(hr));
 
-    // “ü—Íƒf[ƒ^Œ`®‚ÌƒZƒbƒg
-    hr = sKeyboard_->SetDataFormat(&c_dfDIKeyboard); // •W€Œ`®
+    // å…¥åŠ›ãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ã‚»ãƒƒãƒˆ
+    hr = sKeyboard_->SetDataFormat(&c_dfDIKeyboard); // æ¨™æº–å½¢å¼
     assert(SUCCEEDED(hr));
 
-    // ”r‘¼§ŒäƒŒƒxƒ‹‚ÌƒZƒbƒg
+    // æ’ä»–åˆ¶å¾¡ãƒ¬ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
     hr = sKeyboard_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
     assert(SUCCEEDED(hr));
 }
 
 void Input::Keyboard::Update(void)
 {
-    // preKeys‚Öî•ñ•Û‘¶
+    // preKeysã¸æƒ…å ±ä¿å­˜
     memcpy(sKeysPre_.data(), sKeys_.data(), sizeof(sKeys_));
 
-    // ƒL[ƒ{[ƒhî•ñ‚Ìæ“¾
+    // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æƒ…å ±ã®å–å¾—
     sKeyboard_->Acquire();
 
-    // ƒL[‚Ì“ü—Íó‘Ô‚Ì‰Šú‰»
+    // ã‚­ãƒ¼ã®å…¥åŠ›çŠ¶æ…‹ã®åˆæœŸåŒ–
     sKeys_.fill(0);
 
-    // ƒL[‘S‚Ä‚Ì“ü—Íó‘Ô‚Ìæ“¾
+    // ã‚­ãƒ¼å…¨ã¦ã®å…¥åŠ›çŠ¶æ…‹ã®å–å¾—
     sKeyboard_->GetDeviceState((DWORD)size(sKeys_), sKeys_.data());
 }
 
@@ -78,12 +78,12 @@ void Input::Keyboard::Update(void)
 //    HRESULT hr = S_FALSE;
 //
 //    if (directInput_ == nullptr) {
-//        // DirectInput‚Ì‰Šú‰»
+//        // DirectInputã®åˆæœŸåŒ–
 //        hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
 //        assert(SUCCEEDED(hr));
 //    }
 //
-//    // ƒfƒoƒCƒX‚Ì—ñ‹“
+//    // ãƒ‡ãƒã‚¤ã‚¹ã®åˆ—æŒ™
 //    hr = directInput_->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, nullptr, DIEDFL_ATTACHEDONLY);
 //    assert(SUCCEEDED(hr));
 //}
@@ -94,7 +94,7 @@ void Input::Keyboard::Update(void)
 //        return;
 //    }
 //
-//    // preKeys‚Öî•ñ•Û‘¶
+//    // preKeysã¸æƒ…å ±ä¿å­˜
 //    memcpy(&diStatePre_, &diState_, sizeof(diState_));
 //
 //    diPad_->Acquire();
@@ -235,7 +235,7 @@ void Input::InitializeAll(WndAPI* p_wndapi)
 {
     KEYS::Initialize(p_wndapi);
     //DPAD::Initialize(p_wndapi);
-    XPAD::Initialize(); // dinput.h‚Æ‚ÍŠÖŒW‚È‚¢‚½‚ß•s—v
+    XPAD::Initialize(); // dinput.hã¨ã¯é–¢ä¿‚ãªã„ãŸã‚ä¸è¦
     Mouse::Initialize(p_wndapi);
 }
 
@@ -252,40 +252,40 @@ void Input::Mouse::Initialize(WndAPI* p_wndapi)
     HRESULT hr = S_FALSE;
 
     if (directInput_ == nullptr) {
-        // DirectInput‚Ì‰Šú‰»
+        // DirectInputã®åˆæœŸåŒ–
         hr = DirectInput8Create(p_wndapi->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, nullptr);
         assert(SUCCEEDED(hr));
     }
 
-    // ƒ}ƒEƒXƒfƒoƒCƒX‚Ì¶¬
+    // ãƒã‚¦ã‚¹ãƒ‡ãƒã‚¤ã‚¹ã®ç”Ÿæˆ
     hr = directInput_->CreateDevice(GUID_SysMouse, &sMouse_, NULL);
     assert(SUCCEEDED(hr));
 
-    // “ü—Íƒf[ƒ^Œ`®‚ÌƒZƒbƒg
+    // å…¥åŠ›ãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ã‚»ãƒƒãƒˆ
     hr = sMouse_->SetDataFormat(&c_dfDIMouse);
     assert(SUCCEEDED(hr));
 
-    // ”r‘¼§ŒäƒŒƒxƒ‹‚ÌƒZƒbƒg
+    // æ’ä»–åˆ¶å¾¡ãƒ¬ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
     hr = sMouse_->SetCooperativeLevel(p_wndapi->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
     assert(SUCCEEDED(hr));
 
-    // ƒ|ƒCƒ“ƒ^–á‚¤
+    // ãƒã‚¤ãƒ³ã‚¿è²°ã†
     sWndApiPtr_ = p_wndapi;
 }
 
 void Input::Mouse::Update(void)
 {
-    // ÅV‚Ìî•ñ‚ğæ“¾
+    // æœ€æ–°ã®æƒ…å ±ã‚’å–å¾—
     sMouse_->Acquire();
     sMouse_->Poll();
 
-    // 1F‘O‚Ìî•ñ
+    // 1Få‰ã®æƒ…å ±
     sMouseStatePre_ = sMouseState_;
 
-    // “ü—Íó‘Ô‚ğæ“¾
+    // å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—
     sMouse_->GetDeviceState(sizeof(sMouseState_.mState), &sMouseState_.mState);
 
-    // ˆÊ’u‚ğæ“¾
+    // ä½ç½®ã‚’å–å¾—
     POINT pos;
     GetCursorPos(&pos);
     ScreenToClient(sWndApiPtr_->GetHwnd(), &pos);

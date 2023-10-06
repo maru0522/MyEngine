@@ -1,4 +1,4 @@
-#include "SimplifyImGui.h"
+﻿#include "SimplifyImGui.h"
 
 void GUI::Begin(const std::string& windowName, const ImVec2& firstSize)
 {

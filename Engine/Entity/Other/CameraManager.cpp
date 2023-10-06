@@ -1,4 +1,4 @@
-#include "CameraManager.h"
+ï»¿#include "CameraManager.h"
 #include "Object3D.h"
 #include "MathUtil.h"
 #include "WndAPI.h"
@@ -25,7 +25,7 @@ void Camera::Update(void)
     Vector3 velocity = Move();
     Vector3 currentPos = transform_.position;
     Vector3 rotation = transform_.rotation;
-    // ‚æ‚­l‚¦‚½‚ç‚±‚ê1Frame‘O‚ÌŽp¨‚¶‚á‚ËH
+    // ã‚ˆãè€ƒãˆãŸã‚‰ã“ã‚Œ1Frameå‰ã®å§¿å‹¢ã˜ã‚ƒã­ï¼Ÿ
     Vector3 eyeDir = coordinate_.GetMatAxisZ();
     Vector3 right = coordinate_.GetMatAxisX();
     Vector3 up = coordinate_.GetMatAxisY();
@@ -34,22 +34,22 @@ void Camera::Update(void)
     if (isDebugMode_) {
         const Vector2& mouseVelocity = Mouse::GetCursorVec();
 
-        // ‰ñ“]
-        if (Mouse::IsDown(Mouse::Click::RIGHT)) { // ‰EƒNƒŠ‰Ÿ‚µ‚Ä‚é
+        // å›žè»¢
+        if (Mouse::IsDown(Mouse::Click::RIGHT)) { // å³ã‚¯ãƒªæŠ¼ã—ã¦ã‚‹
             const float rotSpeed = 0.0025f;
             rotation.x += Mouse::GetCursorVec().y * rotSpeed;
             rotation.y += Mouse::GetCursorVec().x * rotSpeed;
         }
 
-        // •½sˆÚ“®
-        if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // ‰EƒNƒŠ‰Ÿ‚µ‚Ä‚È‚¢ && ƒzƒC[ƒ‹‰Ÿ‚µ‚Ä‚é
+        // å¹³è¡Œç§»å‹•
+        if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // å³ã‚¯ãƒªæŠ¼ã—ã¦ãªã„ && ãƒ›ã‚¤ãƒ¼ãƒ«æŠ¼ã—ã¦ã‚‹
             const float moveSpeed = 0.05f;
             velocity += coordinate_.GetMatAxisX().Normalize() * -mouseVelocity.x * moveSpeed;
             velocity += coordinate_.GetMatAxisY().Normalize() * mouseVelocity.y * moveSpeed;
         }
 
-        // ‘OŒãˆÚ“®
-        if (!Mouse::IsDown(Mouse::Click::RIGHT) && !Mouse::IsDown(Mouse::Click::CENTER)) { // ‰EƒNƒŠ‰Ÿ‚µ‚Ä‚È‚¢ && ƒzƒC[ƒ‹‰Ÿ‚µ‚Ä‚È‚¢
+        // å‰å¾Œç§»å‹•
+        if (!Mouse::IsDown(Mouse::Click::RIGHT) && !Mouse::IsDown(Mouse::Click::CENTER)) { // å³ã‚¯ãƒªæŠ¼ã—ã¦ãªã„ && ãƒ›ã‚¤ãƒ¼ãƒ«æŠ¼ã—ã¦ãªã„
             const float moveSpeed = 0.01f;
             velocity += coordinate_.GetMatAxisZ().Normalize() * Mouse::GetScroll() * moveSpeed;
         }
@@ -62,12 +62,12 @@ void Camera::Update(void)
     axes_.up = up;
     coordinate_.mat_world = Math::Function::AffinTrans(transform_);
 
-    // ƒrƒ…[s—ñ
+    // ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—
     isFollow_ ?
         matView_ = Math::Mat4::ViewLookAtLH(transform_.position, *targetPtr_, coordinate_.GetMatAxisY()):
         matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up = up);
 
-    // ŽË‰es—ñ
+    // å°„å½±è¡Œåˆ—
     matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }
 
@@ -116,13 +116,13 @@ void CameraManager::Update(void)
 
 void CameraManager::SetCurrentCamera(Camera* cameraPtr)
 {
-    // nullƒ`ƒFƒbƒN
+    // nullãƒã‚§ãƒƒã‚¯
     if (current_) {
-        // Žg—p‚Ì—L–³‚ÉŠÖŒW‚È‚­ƒfƒoƒbƒOƒJƒƒ‰ƒ‚[ƒh‚ÍOFF
+        // ä½¿ç”¨ã®æœ‰ç„¡ã«é–¢ä¿‚ãªããƒ‡ãƒãƒƒã‚°ã‚«ãƒ¡ãƒ©ãƒ¢ãƒ¼ãƒ‰ã¯OFF
         current_->SetIsDebugMode(false);
     }
 
-    // V‹KƒJƒƒ‰‚ðƒZƒbƒg
+    // æ–°è¦ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
     current_ = cameraPtr;
     current_->Update();
     current_->UpdateOrthoGraphic();

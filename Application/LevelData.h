@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "json.hpp"
 #include "Vector3.h"
@@ -12,7 +12,7 @@ public:
     static void ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPtr);
     struct ObjectData_t
     {
-        std::string file_name; // ƒJƒXƒ^ƒ€ƒvƒƒpƒeƒB
+        std::string file_name; // ã‚«ã‚¹ã‚¿ãƒ ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
         std::string name;
         std::string type;
         bool isInvisible;

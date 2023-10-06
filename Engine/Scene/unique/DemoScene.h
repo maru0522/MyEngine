@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "IScene.h"
 #include "FileSystem.h"
 #include "Sprite.h"
@@ -19,13 +19,13 @@ class DemoScene final :
     public IScene
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     using fsPath = std::experimental::filesystem::path;
     const float kCamDist_ = 80.f;
     const float kCamDiff_ = 10.f;
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     void Initialize(void) override;
     void Update(void) override;
     void Draw3d(void) override;
@@ -39,12 +39,12 @@ public:
     void CameraSetUp(void);
 
     //bool debugCamFuncFollow_{ false }; // Follow
-    //bool debugCamFollow_{ false }; // ƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚Ì‹——£‚ªí‚Éˆê’è‚É‚È‚é‚æ‚¤‚É‚·‚é
-    //bool debugCamFollow2_{ }; // ²‚ğƒvƒŒƒCƒ„[‚Æ“¯‚¶‚É‚·‚éB
-    bool debugPlanetDraw_{ true }; // ¯‚ğ•`‰æ‚·‚éB
-    bool debugSpherical_{ true }; // ‹…–ÊÀ•WŒn‚ÅƒJƒƒ‰‚ğŠÇ—‚·‚é
+    //bool debugCamFollow_{ false }; // ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è·é›¢ãŒå¸¸ã«ä¸€å®šã«ãªã‚‹ã‚ˆã†ã«ã™ã‚‹
+    //bool debugCamFollow2_{ }; // è»¸ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨åŒã˜ã«ã™ã‚‹ã€‚
+    bool debugPlanetDraw_{ true }; // æ˜Ÿã‚’æç”»ã™ã‚‹ã€‚
+    bool debugSpherical_{ true }; // çƒé¢åº§æ¨™ç³»ã§ã‚«ãƒ¡ãƒ©ã‚’ç®¡ç†ã™ã‚‹
 
-    // •Ï”
+    // å¤‰æ•°
     std::unique_ptr<Player> player_{ std::make_unique<Player>(CameraManager::GetInstance()) };
     std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>() };
     std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>() };
@@ -66,7 +66,7 @@ public:
     std::unique_ptr<Rock> rock5_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<StickyBall> sticky1_{std::make_unique<StickyBall>(CollisionManager::GetInstance()) };
 
-    // json“Ç‚İ‚İ&”z’u—p
+    // jsonèª­ã¿è¾¼ã¿&é…ç½®ç”¨
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector3.h"
 #include "CameraManager.h"
 #include "CollisionManager.h"
@@ -9,7 +9,7 @@ class ColliderCamera : public Camera
 public:
     const float kColRadius_{ 3.f };
 
-    // ŠÖ”
+    // é–¢æ•°
     ColliderCamera(CollisionManager* colMPtr);
     ~ColliderCamera(void);
     void Update(void) override;
@@ -17,7 +17,7 @@ public:
 private:
     void OnCollision(void);
 
-    // •Ï”
+    // å¤‰æ•°
     Vector3 repelVec_;
     CollisionPrimitive::SphereCollider sphereCollider_;
     CollisionManager* colMPtr_;
@@ -26,14 +26,14 @@ private:
 public:
     // setter
     void SetPlanetCenter(const Vector3& planetCenter) {
-        // Update‚Éˆø”‚Â‚¯‚é‚Ì‚ÍŒ™‚¾‚¯‚ÇAƒJƒvƒZƒ‹‰»‚·‚é‚¤‚¦‚ÅA‘¼‚ÌƒNƒ‰ƒX‚Éˆ—‘‚­‚æ‚è‚Íƒ}ƒV
-        // ¯1‚Â‚É‘Î‚µ‚ÄAColliderCamera‚à1‚Â‚ÌŒvZ‚È‚Ì‚ÅAƒRƒ‰ƒCƒ_[‚ÌIDw’è‚Åcenter‚ğó‚¯æ‚é‚í‚¯‚É‚Í‚¢‚©‚È‚¢B
+        // Updateã«å¼•æ•°ã¤ã‘ã‚‹ã®ã¯å«Œã ã‘ã©ã€ã‚«ãƒ—ã‚»ãƒ«åŒ–ã™ã‚‹ã†ãˆã§ã€ä»–ã®ã‚¯ãƒ©ã‚¹ã«å‡¦ç†æ›¸ãã‚ˆã‚Šã¯ãƒã‚·
+        // æ˜Ÿ1ã¤ã«å¯¾ã—ã¦ã€ColliderCameraã‚‚1ã¤ã®è¨ˆç®—ãªã®ã§ã€ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®IDæŒ‡å®šã§centerã‚’å—ã‘å–ã‚‹ã‚ã‘ã«ã¯ã„ã‹ãªã„ã€‚
 
-        // ¯‚©‚çƒJƒƒ‰•ûŒü‚Ö‚ÌƒxƒNƒgƒ‹
+        // æ˜Ÿã‹ã‚‰ã‚«ãƒ¡ãƒ©æ–¹å‘ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«
         repelVec_ = (transform_.position - planetCenter).Normalize();
     }
 
-    // ƒvƒŒƒCƒ„[‚ÌÀ•W‚©‚çƒvƒŒƒCƒ„[•ûŒü‚Ö‚ÌƒxƒNƒgƒ‹‚ğ³–ÊƒxƒNƒgƒ‹‚Æ‚µ‚ÄZo‚·‚é
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ–¹å‘ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«ã¨ã—ã¦ç®—å‡ºã™ã‚‹
     void CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec);
 
     void SetViewMat(const Matrix4& viewMat) { matView_ = viewMat; }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "InitDirectX.h"
 #include <cassert>
 #include <d3d12.h>
@@ -9,60 +9,60 @@
 class IndexBuffer
 {
 public:
-    // ŠÖ”
+    // é–¢æ•°
     IndexBuffer(void) = default;
     ~IndexBuffer(void) {}
 
     void Create(const std::vector<uint16_t>& indices) {
-        // ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^‘S‘Ì‚ÌƒTƒCƒY
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿å…¨ä½“ã®ã‚µã‚¤ã‚º
         uint32_t sizeIB = static_cast<uint32_t>(sizeof(uint16_t) * indices.size());
 
-        // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ìİ’è
-        D3D12_HEAP_PROPERTIES heapProp{}; // ƒq[ƒvİ’è
-        heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPU‚Ö‚Ì“]‘——p
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®è¨­å®š
+        D3D12_HEAP_PROPERTIES heapProp{}; // ãƒ’ãƒ¼ãƒ—è¨­å®š
+        heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUã¸ã®è»¢é€ç”¨
 
-        // ƒŠƒ\[ƒXİ’è
+        // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
         D3D12_RESOURCE_DESC resDesc{};
         resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        resDesc.Width = sizeIB; // ƒCƒ“ƒfƒbƒNƒXî•ñ‚ª“ü‚é•ª‚ÌƒTƒCƒY
+        resDesc.Width = sizeIB; // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æƒ…å ±ãŒå…¥ã‚‹åˆ†ã®ã‚µã‚¤ã‚º
         resDesc.Height = 1;
         resDesc.DepthOrArraySize = 1;
         resDesc.MipLevels = 1;
         resDesc.SampleDesc.Count = 1;
         resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-        // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ì¶¬
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
         HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateCommittedResource(
-            &heapProp, // ƒq[ƒvİ’è
+            &heapProp, // ãƒ’ãƒ¼ãƒ—è¨­å®š
             D3D12_HEAP_FLAG_NONE,
-            &resDesc, // ƒŠƒ\[ƒXİ’è
+            &resDesc, // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
             D3D12_RESOURCE_STATE_GENERIC_READ,
             nullptr,
             IID_PPV_ARGS(&buff_));
         assert(SUCCEEDED(hr));
 
-        // ƒ}ƒbƒsƒ“ƒO
-        uint16_t* indexMap_{ nullptr }; // GPUƒƒ‚ƒŠ‚Ìmap
+        // ãƒãƒƒãƒ”ãƒ³ã‚°
+        uint16_t* indexMap_{ nullptr }; // GPUãƒ¡ãƒ¢ãƒªã®map
         hr = buff_->Map(0, nullptr, (void**)&indexMap_);
         assert(SUCCEEDED(hr));
 
-        std::copy(indices.begin(), indices.end(), indexMap_); // ‘SƒCƒ“ƒfƒbƒNƒX‚É‘Î‚µ‚Ä
+        std::copy(indices.begin(), indices.end(), indexMap_); // å…¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«å¯¾ã—ã¦
 
-        // ƒ}ƒbƒsƒ“ƒO‰ğœ
+        // ãƒãƒƒãƒ”ãƒ³ã‚°è§£é™¤
         buff_->Unmap(0, nullptr);
 
-        // ƒCƒ“ƒfƒNƒXƒoƒbƒtƒ@ƒrƒ…[
-        // GPU‰¼‘zƒAƒhƒŒƒX
+        // ã‚¤ãƒ³ãƒ‡ã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
+        // GPUä»®æƒ³ã‚¢ãƒ‰ãƒ¬ã‚¹
         ibView_.BufferLocation = buff_->GetGPUVirtualAddress();
         ibView_.Format = DXGI_FORMAT_R16_UINT;
-        // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ÌƒTƒCƒY
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
         ibView_.SizeInBytes = sizeIB;
     }
 
 private:
-    // •Ï”
-    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{}; // ’¸“_ƒoƒbƒtƒ@
-    D3D12_INDEX_BUFFER_VIEW ibView_{};              // ’¸“_ƒoƒbƒtƒ@ƒrƒ…[
+    // å¤‰æ•°
+    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{}; // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
+    D3D12_INDEX_BUFFER_VIEW ibView_{};              // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
 
 public:
     // getter

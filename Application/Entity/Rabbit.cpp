@@ -1,4 +1,4 @@
-#include "Rabbit.h"
+ï»¿#include "Rabbit.h"
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
@@ -17,9 +17,9 @@ Rabbit::Rabbit(void)
     sphereCollider_.center = { 0,60,20 };
     detectPlayerCollider_.radius = kDetectRadius_;
 
-    // ‰ŠúˆÊ’u
+    // åˆæœŸä½ç½®
     transform_.position = { 0,60,20 };
-    // ‰Šúp¨
+    // åˆæœŸå§¿å‹¢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
@@ -35,7 +35,7 @@ void Rabbit::Update(void)
 {
     if (isCaptured_ == false)
     {
-        // 1Frame’x‚¢•`‰æÀ•W“™XV ** À•W‚ªŠm’è‚µ‚½Œã‚ÉA“–‚½‚è”»’èˆ—‚ÅÀ•W‚ğ•â³‚·‚é‚½‚ßA1Frame’x‚ç‚¹‚È‚¢‚ÆƒKƒN‚Â‚­‰Â”\«‚ª‚ ‚éB
+        // 1Frameé…ã„æç”»åº§æ¨™ç­‰æ›´æ–° ** åº§æ¨™ãŒç¢ºå®šã—ãŸå¾Œã«ã€å½“ãŸã‚Šåˆ¤å®šå‡¦ç†ã§åº§æ¨™ã‚’è£œæ­£ã™ã‚‹ãŸã‚ã€1Frameé…ã‚‰ã›ãªã„ã¨ã‚¬ã‚¯ã¤ãå¯èƒ½æ€§ãŒã‚ã‚‹ã€‚
         appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
         appearance_->Update();
 
@@ -45,32 +45,32 @@ void Rabbit::Update(void)
         detectPlayerCollider_.radius = sDetectRadius;
         GUI::End();
 
-        // ˆÚ“®—Ê
+        // ç§»å‹•é‡
         Vector3 moveVec{};
         Vector3 velocity{};
-        Move(moveVec, velocity); // QÆ“n‚µ‚Åó‚¯æ‚éB
+        Move(moveVec, velocity); // å‚ç…§æ¸¡ã—ã§å—ã‘å–ã‚‹ã€‚
 
-        // À•WXV
+        // åº§æ¨™æ›´æ–°
         Vector3 currentPos = transform_.position;
         currentPos += velocity;
         transform_.position = currentPos;
 
-        // ƒRƒ‰ƒCƒ_[XV
+        // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
         sphereCollider_.center = currentPos;
         detectPlayerCollider_.center = currentPos;
 
-        // ‹…–Ê‚Ì‚Ç‚ÌˆÊ’u‚É‚¢‚é‚©‚É‰‚¶‚ÄA³‚µ‚¢p¨‚É‚·‚é‚½‚ß‚É3²‚ğÄŒvZ
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(), axes_.forward.Normalize()); // ‰EƒxƒNƒgƒ‹F(XV‚³‚ê‚½ãƒxƒNƒgƒ‹ x ŒÃ‚¢³–ÊƒxƒNƒgƒ‹)
+        // çƒé¢ã®ã©ã®ä½ç½®ã«ã„ã‚‹ã‹ã«å¿œã˜ã¦ã€æ­£ã—ã„å§¿å‹¢ã«ã™ã‚‹ãŸã‚ã«3è»¸ã‚’å†è¨ˆç®—
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(), axes_.forward.Normalize()); // å³ãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ« x å¤ã„æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«)
         axes_.right = rightFromOldAxis;
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(), axes_.up.Normalize()); // ³–ÊƒxƒNƒgƒ‹F(XV‚³‚ê‚½‰EƒxƒNƒgƒ‹ x XV‚³‚ê‚½ãƒxƒNƒgƒ‹)
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(), axes_.up.Normalize()); // æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸå³ãƒ™ã‚¯ãƒˆãƒ« x æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ«)
         axes_.forward = forwardFromOldAxis;
 
-        // ˆÚ“®“ü—Í‚ª‚ ‚Á‚½ê‡
+        // ç§»å‹•å…¥åŠ›ãŒã‚ã£ãŸå ´åˆ
         if (moveVec.IsNonZero())
         {
-            // ˆÚ“®•ûŒü‚ğŒü‚­‚æ‚¤‚ÈAˆÚ“®•ûŒü‚É‡‚í‚¹‚½p¨‚É‚·‚é‚½‚ß‚É‰EŒü‚«ƒxƒNƒgƒ‹‚ğÄŒvZ
-            Vector3 upFromAxis = axes_.up; // ãƒxƒNƒgƒ‹F(XV‚³‚ê‚½ãƒxƒNƒgƒ‹‚ğæ“¾j
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // ‰EƒxƒNƒgƒ‹F(XV‚³‚ê‚½ãƒxƒNƒgƒ‹ x ˆÚ“®ƒxƒNƒgƒ‹iˆÚ“®•ûŒü à ³–ÊƒxƒNƒgƒ‹))
+            // ç§»å‹•æ–¹å‘ã‚’å‘ãã‚ˆã†ãªã€ç§»å‹•æ–¹å‘ã«åˆã‚ã›ãŸå§¿å‹¢ã«ã™ã‚‹ãŸã‚ã«å³å‘ããƒ™ã‚¯ãƒˆãƒ«ã‚’å†è¨ˆç®—
+            Vector3 upFromAxis = axes_.up; // ä¸Šãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—ï¼‰
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // å³ãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ« x ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆç§»å‹•æ–¹å‘ â‰’ æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«))
             axes_.right = rightFromMoveVec.Normalize();
             axes_.forward = moveVec.Normalize();
         }
@@ -81,30 +81,30 @@ void Rabbit::Update(void)
 
 void Rabbit::Draw(void)
 {
-    // ÔF‚ÌƒeƒNƒXƒ`ƒƒ‚ğ“K—pBiƒNƒ\Œ©h‚¢j
+    // èµ¤è‰²ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’é©ç”¨ã€‚ï¼ˆã‚¯ã‚½è¦‹è¾›ã„ï¼‰
     if (isCaptured_ == false) { appearance_->Draw("Resources/red1x1.png"); }
-    // ƒfƒtƒHƒ‹ƒg•\¦i‘Î‰‚·‚éƒeƒNƒXƒ`ƒƒ‚ª‚»‚à‚»‚à‚È‚¢‚Ì‚ÅAMissingTexture‚É’u‚«Š·‚í‚éB‚ß‚Á‚¿‚álogo‚éBj
+    // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¡¨ç¤ºï¼ˆå¯¾å¿œã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒãã‚‚ãã‚‚ãªã„ã®ã§ã€MissingTextureã«ç½®ãæ›ã‚ã‚‹ã€‚ã‚ã£ã¡ã‚ƒlogå‡ºã‚‹ã€‚ï¼‰
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
 }
 
 void Rabbit::Move(Vector3& moveVec, Vector3& velocity)
 {
-    // ˆÚ“®ƒxƒNƒgƒ‹
-    //moveVec += pForwardFromCamera * inputVec.y; // “ü—ÍƒxƒNƒgƒ‹‚É‰‚¶‚Ä‰ÁZ
+    // ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
+    //moveVec += pForwardFromCamera * inputVec.y; // å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«ã«å¿œã˜ã¦åŠ ç®—
     //moveVec += redefinitionPRightFromCamera * inputVec.x;
 
-    // ƒvƒŒƒCƒ„‚©‚ç“e•ûŒü‚Ö‚ÌƒxƒNƒgƒ‹‚ğ‚»‚Ì‚Ü‚ÜˆÚ“®ƒxƒNƒgƒ‹‚Æ‚µ‚Ä‹N—p‚·‚éi‰¼j
-    // [ƒƒ‚]ƒvƒŒƒCƒ„[‚ÌŒü‚«‚Æ“e‚ÌŒü‚«‚ğ“àÏ‚Å‚Æ‚Á‚ÄA’¼Šp‚É‹ß‚¢‚Ù‚Ç‘¬“x‚ğ‚ ‚é’ö“xŒ¸‘¬‚³‚¹‚ê‚ÎAƒ^[ƒ“‚µ‚½‚Æ‚«‚Å‚à•ß‚Ü‚¦‚â‚·‚­‚È‚é‚Ì‚Å‚ÍH
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ã‹ã‚‰å…æ–¹å‘ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ãã®ã¾ã¾ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã¨ã—ã¦èµ·ç”¨ã™ã‚‹ï¼ˆä»®ï¼‰
+    // [ãƒ¡ãƒ¢]ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãã¨å…ã®å‘ãã‚’å†…ç©ã§ã¨ã£ã¦ã€ç›´è§’ã«è¿‘ã„ã»ã©é€Ÿåº¦ã‚’ã‚ã‚‹ç¨‹åº¦æ¸›é€Ÿã•ã›ã‚Œã°ã€ã‚¿ãƒ¼ãƒ³ã—ãŸã¨ãã§ã‚‚æ•ã¾ãˆã‚„ã™ããªã‚‹ã®ã§ã¯ï¼Ÿ
     moveVec = (transform_.position - pPos_).Normalize();
 
-    // d—Í
+    // é‡åŠ›
     jumpVecNorm_ -= kGravity_;
 
-    // ƒWƒƒƒ“ƒvƒxƒNƒgƒ‹
+    // ã‚¸ãƒ£ãƒ³ãƒ—ãƒ™ã‚¯ãƒˆãƒ«
     Vector3 jumpVec{};
     jumpVec += axes_.up.Normalize() * jumpVecNorm_;
 
-    // ˆÚ“®—Ê
+    // ç§»å‹•é‡
     velocity += moveVec.Normalize() * kMoveSpeed_;
     velocity += jumpVec;
 }
@@ -115,7 +115,7 @@ void Rabbit::OnCollision(void)
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
-        // ‹…ód—ÍƒGƒŠƒA“à‚É“ü‚Á‚Ä‚éê‡‚És‚¤ˆ—B
+        // çƒçŠ¶é‡åŠ›ã‚¨ãƒªã‚¢å†…ã«å…¥ã£ã¦ã‚‹å ´åˆã«è¡Œã†å‡¦ç†ã€‚
         Vector3 center2PlayerVec = sphereCollider_.center - other->center;
         axes_.up = center2PlayerVec.Normalize();
     }
@@ -123,17 +123,17 @@ void Rabbit::OnCollision(void)
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
-        // ƒWƒƒƒ“ƒv—Ê
+        // ã‚¸ãƒ£ãƒ³ãƒ—é‡
         jumpVecNorm_ = 0.f;
 
-        // ‚ß‚è‚İ‹——£‚ğo‚· (‚ß‚è‚ñ‚Å‚¢‚é‘z’è - ‹——£j‚È‚Ì‚ÅŒ‹‰Ê‚Íƒ}ƒCƒiƒX‘z’èHH
+        // ã‚ã‚Šè¾¼ã¿è·é›¢ã‚’å‡ºã™ (ã‚ã‚Šè¾¼ã‚“ã§ã„ã‚‹æƒ³å®š - è·é›¢ï¼‰ãªã®ã§çµæœã¯ãƒã‚¤ãƒŠã‚¹æƒ³å®šï¼Ÿï¼Ÿ
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
 
         Vector3 currentPos = transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
-        // ³‹K‰»‚³‚ê‚½‹…‚©‚çƒvƒŒƒCƒ„[‚Ü‚Å‚ÌƒxƒNƒgƒ‹ * ‚ß‚è‚İ‹——£
-        currentPos += axes_.up.Normalize() * -diff; // ‚±‚±‚ğƒ}ƒCƒiƒX•„†‚Å’l”½“]
+        // æ­£è¦åŒ–ã•ã‚ŒãŸçƒã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ã§ã®ãƒ™ã‚¯ãƒˆãƒ« * ã‚ã‚Šè¾¼ã¿è·é›¢
+        currentPos += axes_.up.Normalize() * -diff; // ã“ã“ã‚’ãƒã‚¤ãƒŠã‚¹ç¬¦å·ã§å€¤åè»¢
 
         transform_.position = currentPos;
     }
@@ -149,7 +149,7 @@ void Rabbit::OnDetectPlayer(void)
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(detectPlayerCollider_.GetOther());
 
-        // ŒŸ’m‚µ‚½ƒvƒŒƒCƒ„‚ÌÀ•W‚ğ‹L˜^‚·‚éB
+        // æ¤œçŸ¥ã—ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ã®åº§æ¨™ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
         pPos_ = other->center;
     }
 }

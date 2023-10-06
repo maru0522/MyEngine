@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector3.h"
 #include "Matrix4.h"
 
 class Quaternion
 {
-public: // •Ï”
+public: // å¤‰æ•°
     float x{};
     float y{};
     float z{};
     float w{};
 
-    // ŠÖ”
+    // é–¢æ•°
     Quaternion(void) = default;
     constexpr Quaternion(const Vector3& v) noexcept : x(v.x), y(v.y), z(v.z), w(0) {}
     constexpr Quaternion(const Vector3& v, float w) noexcept : x(v.x), y(v.y), z(v.z), w(w) {}
@@ -23,18 +23,18 @@ public: // •Ï”
     float Dot(const Quaternion& q) const;
     float Length(void) const;
 
-    // ’P€‰‰ZqƒI[ƒo[ƒ[ƒh
+    // å˜é …æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
     Quaternion operator+() const;
     Quaternion operator-() const;
 
-    // ‘ã“ü‰‰ZqƒI[ƒo[ƒ[ƒh
+    // ä»£å…¥æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
     Quaternion& operator+=(const Quaternion& q);
     Quaternion& operator-=(const Quaternion& q);
     Quaternion& operator*=(float s);
     Quaternion& operator/=(float s);
 };
 
-// 2€‰‰ZqƒI[ƒo[ƒ[ƒh
+// 2é …æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 const Quaternion operator+(const Quaternion& q1, const Quaternion& q2);
 const Quaternion operator-(const Quaternion& q1, const Quaternion& q2);
 const Quaternion operator*(const Quaternion& q1, const Quaternion& q2);
@@ -42,26 +42,26 @@ const Quaternion operator*(const Quaternion& q, float s);
 const Quaternion operator/(const Quaternion& q, float s);
 
 namespace Math {
-    // Func‚ÌF
+    // Funcã®F
     namespace QuaternionF {
         inline Quaternion Identity(void) { return Quaternion(0, 0, 0, 1); }
 
-        // ”CˆÓ²‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“
+        // ä»»æ„è»¸å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
         Quaternion MakeAxisAngle(const Vector3& axis, float radian);
-        // ƒIƒCƒ‰[Šp‚©‚çƒNƒH[ƒ^ƒjƒIƒ“
+        // ã‚ªã‚¤ãƒ©ãƒ¼è§’ã‹ã‚‰ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
         Quaternion EulerToQuaternion(const Vector3& eular);
 
-        // ƒxƒNƒgƒ‹‚ğƒNƒH[ƒ^ƒjƒIƒ“‚Å‰ñ“]‚³‚¹‚½Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ‹‚ß‚é
+        // ãƒ™ã‚¯ãƒˆãƒ«ã‚’ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã§å›è»¢ã•ã›ãŸçµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹
         Vector3 RotateVector(const Vector3& v, const Quaternion& q);
 
-        // ƒNƒH[ƒ^ƒjƒIƒ“‚©‚ç‰ñ“]s—ñ‚ğ‹‚ß‚é
+        // ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‹ã‚‰å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
         Matrix4 MakeRotateMatrix(const Quaternion& q);
-        // 3‚Â‚ÌƒNƒH[ƒ^ƒjƒIƒ“‚©‚ç‰ñ“]s—ñ‚ğ‹‚ß‚é
+        // 3ã¤ã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‹ã‚‰å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
         Matrix4 MakeRotateMatrix3(const Quaternion& forward, const Quaternion& right, const Quaternion& up);
 
-        //‹…–ÊüŒ`•âŠÔ
+        //çƒé¢ç·šå½¢è£œé–“
         Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
-        // u‚©‚çv‚Ö‚Ì‰ñ“]‚ğ¶¬
+        // uã‹ã‚‰vã¸ã®å›è»¢ã‚’ç”Ÿæˆ
         Quaternion DirectionToDirection(const Vector3& u, const Vector3& v);
     }
 }

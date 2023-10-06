@@ -1,36 +1,36 @@
-#pragma once
+ï»¿#pragma once
 #include "CollisionPrimitive.h"
 
 /*
- * ‹…
- * “_
- * •½–Ê
- * ’¼•û‘Ì
+ * çƒ
+ * ç‚¹
+ * å¹³é¢
+ * ç›´æ–¹ä½“
  */
 
 namespace CollisionChecker
 {
-    // ‹…‚Æ‹…
+    // çƒã¨çƒ
     const bool SphereToSphere(const CollisionPrimitive::SphereCollider& s1, const CollisionPrimitive::SphereCollider& s2);
-    // ‹…‚Æ“_
+    // çƒã¨ç‚¹
     const bool SphereToPoint(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PointCollider& p);
-    // ‹…‚Æ•½–Ê
+    // çƒã¨å¹³é¢
     const bool SphereToPlane(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PlaneCollider& p, Vector3* intersection = nullptr);
-    // ‹…‚Æ’¼•û‘Ì
+    // çƒã¨ç›´æ–¹ä½“
     const bool SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection = nullptr);
 
-    // •½–Ê‚Æ•½–Ê
+    // å¹³é¢ã¨å¹³é¢
     const bool PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2);
-    // •½–Ê‚Æ“_
+    // å¹³é¢ã¨ç‚¹
     const bool PlaneToPoint(const CollisionPrimitive::PlaneCollider& pl, const CollisionPrimitive::PointCollider& po);
-    // •½–Ê‚Æ’¼•û‘Ì
+    // å¹³é¢ã¨ç›´æ–¹ä½“
     const bool PlaneToAABB(const CollisionPrimitive::PlaneCollider& p, const CollisionPrimitive::PlaneCollider& a);
 
-    // ’¼•û‘Ì‚Æ’¼•û‘Ì
+    // ç›´æ–¹ä½“ã¨ç›´æ–¹ä½“
     const bool AABBToAABB(const CollisionPrimitive::AABBCollider& a1, const CollisionPrimitive::AABBCollider& a2);
-    // ’¼•û‘Ì‚Æ“_
+    // ç›´æ–¹ä½“ã¨ç‚¹
     const bool AABBToPoint(const CollisionPrimitive::AABBCollider& a, const CollisionPrimitive::PointCollider& p);
 
-    // “_‚Æ“_
+    // ç‚¹ã¨ç‚¹
     const bool PointToPoint(const CollisionPrimitive::PointCollider& p1, const CollisionPrimitive::PointCollider& p2);
 }

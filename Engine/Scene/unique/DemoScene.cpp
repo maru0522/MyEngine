@@ -1,4 +1,4 @@
-#include "Input.h"
+ï»¿#include "Input.h"
 #include "DemoScene.h"
 #include "SimplifyImGui.h"
 #include "CollisionChecker.h"
@@ -7,18 +7,18 @@
 
 void DemoScene::Initialize(void)
 {
-    // ƒJƒƒ‰‚ÌÝ’è
+    // ã‚«ãƒ¡ãƒ©ã®è¨­å®š
     CameraSetUp();
 
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
-    // Žg‚¤
+    // ä½¿ã†
     lightGroup_->SetDirLightActive(0, true);
     lightGroup_->SetDirLightColor(0, { 1,1,1 });
     lightGroup_->SetLightDir(0, { 0,-1,0 });
 
-    // json“Ç‚Ýž‚Ý&”z’u
+    // jsonèª­ã¿è¾¼ã¿&é…ç½®
     //lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //DeployObj(lvdPtr_.get());
 
@@ -60,18 +60,18 @@ void DemoScene::Update(void)
     ImGui::SliderFloat("sRadius4Cam", &player_->current_rad_, 0.f, 200.f);
     ImGui::SliderFloat("sTheta4Cam", &player_->theta_, 0.f, 6.28319f);
     ImGui::SliderFloat("sPhi4Cam", &player_->phi_, 0.f, 6.28319f);
-    // ƒJƒƒ‰‚ð‹…–ÊÀ•WŒn‚ÅŠÇ—‚·‚é
+    // ã‚«ãƒ¡ãƒ©ã‚’çƒé¢åº§æ¨™ç³»ã§ç®¡ç†ã™ã‚‹
     Vector3 ppos = player_->GetTransformPtr()->position;
 
 
-    // ‰“–Ú‚©‚ç˜f¯‚ðŒ©‚éƒJƒƒ‰‚ÉØ‚è‘Ö‚¦‚éˆ—
-    const Vector3 kPos_watch_planet = { 0,190,0 };  // ˜f¯‚ðŒ©‚é‚½‚ß‚ÌƒJƒƒ‰‚ÌÀ•WiŒÅ’èj
-    static Vector3 pos_playerAtSwitching;           // ƒJƒƒ‰‚ðØ‚è‘Ö‚¦‚½‚Æ‚«‚Ì˜f¯‚ðŒ©‚é‚½‚ß‚ÌƒJƒƒ‰‚Ì‰ŠúÀ•W‚Æ‚µ‚ÄØ‘ÖŽž‚ÌƒvƒŒƒCƒ„[‚ÌÀ•W‚ð“ü‚ê‚Ä‚¨‚­‚à‚Ì
-    static uint32_t phase_easingHoleCam;            // ƒJƒƒ‰‚ÌƒC[ƒWƒ“ƒO‚Ì’iŠK
-    // ƒC[ƒWƒ“ƒO—p‚Ìƒ^ƒCƒ}[
-    static FrameTimer phase0_timer_easingHoleCam;   // ‰ŠúÀ•W‚©‚çŒÅ’èÀ•W‚Ö‚ÌƒC[ƒWƒ“ƒO—pƒ^ƒCƒ}[
-    static FrameTimer phase1_timer_easingHoleCam;   // ŒÅ’èÀ•W‚É‘ØÝ‚·‚é—p‚Ìƒ^ƒCƒ}[
-    static FrameTimer phase2_timer_easingHoleCam;   // ŒÅ’èÀ•W‚©‚çA“]ˆÚæiƒvƒŒƒCƒ„[’Ç]ƒJƒƒ‰j‚ÌÀ•W‚Ö‚ÌƒC[ƒWƒ“ƒO—pƒ^ƒCƒ}[
+    // é ç›®ã‹ã‚‰æƒ‘æ˜Ÿã‚’è¦‹ã‚‹ã‚«ãƒ¡ãƒ©ã«åˆ‡ã‚Šæ›¿ãˆã‚‹å‡¦ç†
+    const Vector3 kPos_watch_planet = { 0,190,0 };  // æƒ‘æ˜Ÿã‚’è¦‹ã‚‹ãŸã‚ã®ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ï¼ˆå›ºå®šï¼‰
+    static Vector3 pos_playerAtSwitching;           // ã‚«ãƒ¡ãƒ©ã‚’åˆ‡ã‚Šæ›¿ãˆãŸã¨ãã®æƒ‘æ˜Ÿã‚’è¦‹ã‚‹ãŸã‚ã®ã‚«ãƒ¡ãƒ©ã®åˆæœŸåº§æ¨™ã¨ã—ã¦åˆ‡æ›¿æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã‚’å…¥ã‚Œã¦ãŠãã‚‚ã®
+    static uint32_t phase_easingHoleCam;            // ã‚«ãƒ¡ãƒ©ã®ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã®æ®µéšŽ
+    // ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ç”¨ã®ã‚¿ã‚¤ãƒžãƒ¼
+    static FrameTimer phase0_timer_easingHoleCam;   // åˆæœŸåº§æ¨™ã‹ã‚‰å›ºå®šåº§æ¨™ã¸ã®ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ç”¨ã‚¿ã‚¤ãƒžãƒ¼
+    static FrameTimer phase1_timer_easingHoleCam;   // å›ºå®šåº§æ¨™ã«æ»žåœ¨ã™ã‚‹ç”¨ã®ã‚¿ã‚¤ãƒžãƒ¼
+    static FrameTimer phase2_timer_easingHoleCam;   // å›ºå®šåº§æ¨™ã‹ã‚‰ã€è»¢ç§»å…ˆï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è¿½å¾“ã‚«ãƒ¡ãƒ©ï¼‰ã®åº§æ¨™ã¸ã®ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ç”¨ã‚¿ã‚¤ãƒžãƒ¼
 
     phase0_timer_easingHoleCam.Update();
     phase1_timer_easingHoleCam.Update();
@@ -133,14 +133,14 @@ void DemoScene::Update(void)
         camera_4Hole_->GetTransformPtr()->position = pos_camera4Hole;
     }
 
-    // ƒvƒŒƒCƒ„[‚ªŒŠ‚Ì“–‚½‚è”»’è‚ÉG‚ê‚½‚ç
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç©´ã®å½“ãŸã‚Šåˆ¤å®šã«è§¦ã‚ŒãŸã‚‰
     if (player_->isFallHole1_ || player_->isFallHole2_)
     {
-        // ƒC[ƒWƒ“ƒO—pƒ^ƒCƒ}[ƒXƒ^[ƒg
+        // ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ç”¨ã‚¿ã‚¤ãƒžãƒ¼ã‚¹ã‚¿ãƒ¼ãƒˆ
         phase0_timer_easingHoleCam.Start(50);
-        // ŒŠ—pƒJƒƒ‰‚Ì‰ŠúÀ•W‚ðAƒvƒŒƒCƒ„[’Ç]ƒJƒƒ‰‚ÌÀ•W‚Å‹L˜^
+        // ç©´ç”¨ã‚«ãƒ¡ãƒ©ã®åˆæœŸåº§æ¨™ã‚’ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è¿½å¾“ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã§è¨˜éŒ²
         pos_playerAtSwitching = player_->GetTransformPtr()->position;
-        // ƒ}ƒl[ƒWƒƒ[‚ÉƒZƒbƒg
+        // ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ã‚»ãƒƒãƒˆ
         CameraManager::GetInstance()->SetCurrentCamera(camera_4Hole_.get());
         phase_easingHoleCam = 0;
     }
@@ -163,7 +163,7 @@ void DemoScene::Update(void)
     GUI::Begin("debug tab maruyama");
     if (GUI::ButtonTrg("switch camera"))
     {
-        // ƒfƒoƒbƒO—p‚ÌƒJƒƒ‰‚ÆØ‘Ö
+        // ãƒ‡ãƒãƒƒã‚°ç”¨ã®ã‚«ãƒ¡ãƒ©ã¨åˆ‡æ›¿
         if (isCamDebug)
         {
             isCamDebug = false;
@@ -308,21 +308,21 @@ void DemoScene::Finalize(void)
 
 void DemoScene::CameraSetUp(void)
 {
-    //>> ƒJƒƒ‰‚ÌÀ•WÝ’è
-    camera_debugPtr_->GetTransformPtr()->position = { 0,0,-70 };         // ƒfƒoƒbƒOƒJƒƒ‰‚ÌÀ•W
-    camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };          // ƒvƒŒƒCƒ„[—pƒJƒƒ‰‚ÌÀ•W
-    camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };            // ŒŠ‚É—Ž‚¿‚½‚Æ‚«—pƒJƒƒ‰‚ÌÀ•W
-    camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 }; // ŒŠ‚É—Ž‚¿‚½‚Æ‚«—pƒJƒƒ‰‚Ì‰ñ“]
-    camera_4Hole_->SetIsOldUpdateMethod(true);                           // ŒŠ‚É—Ž‚¿‚½‚Æ‚«—pƒJƒƒ‰‚ÌŒvŽZ•û–@‚ðÝ’è
+    //>> ã‚«ãƒ¡ãƒ©ã®åº§æ¨™è¨­å®š
+    camera_debugPtr_->GetTransformPtr()->position = { 0,0,-70 };         // ãƒ‡ãƒãƒƒã‚°ã‚«ãƒ¡ãƒ©ã®åº§æ¨™
+    camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };          // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”¨ã‚«ãƒ¡ãƒ©ã®åº§æ¨™
+    camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };            // ç©´ã«è½ã¡ãŸã¨ãç”¨ã‚«ãƒ¡ãƒ©ã®åº§æ¨™
+    camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 }; // ç©´ã«è½ã¡ãŸã¨ãç”¨ã‚«ãƒ¡ãƒ©ã®å›žè»¢
+    camera_4Hole_->SetIsOldUpdateMethod(true);                           // ç©´ã«è½ã¡ãŸã¨ãç”¨ã‚«ãƒ¡ãƒ©ã®è¨ˆç®—æ–¹æ³•ã‚’è¨­å®š
 
 
-    //>> ƒJƒƒ‰‚ÌƒfƒoƒbƒOƒJƒƒ‰ƒ‚[ƒh‚ðON
-    camera_debugPtr_->SetIsDebugMode(true); // ƒfƒoƒbƒOƒJƒƒ‰
+    //>> ã‚«ãƒ¡ãƒ©ã®ãƒ‡ãƒãƒƒã‚°ã‚«ãƒ¡ãƒ©ãƒ¢ãƒ¼ãƒ‰ã‚’ON
+    camera_debugPtr_->SetIsDebugMode(true); // ãƒ‡ãƒãƒƒã‚°ã‚«ãƒ¡ãƒ©
 
 
-    //>> ƒJƒƒ‰‚ðƒ}ƒl[ƒWƒƒ[‚ÉƒZƒbƒg
+    //>> ã‚«ãƒ¡ãƒ©ã‚’ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ã‚»ãƒƒãƒˆ
     /*CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());*/
-    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get()); // ƒvƒŒƒCƒ„[—pƒJƒƒ‰‚ðÝ’è
+    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get()); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”¨ã‚«ãƒ¡ãƒ©ã‚’è¨­å®š
 }
 
 //void DemoScene::DeployObj(LevelData* lvdPtr)

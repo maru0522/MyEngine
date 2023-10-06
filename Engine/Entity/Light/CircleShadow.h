@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector2.h"
 #include "Vector3.h"
 #include "MathUtil.h"
@@ -6,7 +6,7 @@
 class CircleShadow
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     typedef float (*mf)(float);
     const mf toRad = Math::Function::ToRadian;
 
@@ -25,7 +25,7 @@ public:
     };
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     Vector3 dir_{ 1,0,0 };
     Vector3 casterPos_{ 0,0,0 };
     Vector3 atten_{ 0.5f,0.6f,0.f };
@@ -34,7 +34,7 @@ private:
     bool isActive_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline void SetAtten(const Vector3& atten) { atten_ = atten; }
     inline void SetIsActive(bool isActive) { isActive_ = isActive; }
     inline void SetDir(const Vector3& dir) { dir_ = dir.Normalize(); }

@@ -1,4 +1,4 @@
-#include "RadialBlur.h"
+﻿#include "RadialBlur.h"
 
 RadialBlur::RadialBlur(void)
     : PostEffect()

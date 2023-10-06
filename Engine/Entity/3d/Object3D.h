@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "TextureManager.h"
 #include "CameraManager.h"
 #include "ModelManager.h"
@@ -12,17 +12,17 @@
 class Object3D
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     using fsPath = std::experimental::filesystem::path;
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-    struct CBData3d_t // ’è”ƒoƒbƒtƒ@—p"ƒf[ƒ^"\‘¢‘Ì
+    struct CBData3d_t // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨"ãƒ‡ãƒ¼ã‚¿"æ§‹é€ ä½“
     {
-        Matrix4 matWorld; // 3Ds—ñ•ÏŠ·
+        Matrix4 matWorld; // 3Dè¡Œåˆ—å¤‰æ›
     };
 
-    struct CBMatViewPerse_t // ’è”ƒoƒbƒtƒ@—p"Ë‰es—ñ"\‘¢‘Ì
+    struct CBMatViewPerse_t // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨"å°„å½±è¡Œåˆ—"æ§‹é€ ä½“
     {
         Matrix4 matView;
         Matrix4 matPerspective;
@@ -30,9 +30,9 @@ private:
     };
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     static void StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr);
-    // “§‹“Š‰es—ñ‚ğ”CˆÓ‚Ìƒ^ƒCƒ~ƒ“ƒO‚ÅXV‚·‚é‚½‚ß‚ÌŠÖ”
+    // é€è¦–æŠ•å½±è¡Œåˆ—ã‚’ä»»æ„ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§æ›´æ–°ã™ã‚‹ãŸã‚ã®é–¢æ•°
     static void UpdateCBMatViewPerse(CameraManager* camMPtr);
 
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
@@ -47,7 +47,7 @@ public:
     void Draw(const fsPath& path);
 
 protected:
-    // •Ï”
+    // å¤‰æ•°
     Object3D* parent_;
 
     TransformMatrix coordinate_;
@@ -61,7 +61,7 @@ protected:
     static ConstBuffer<CBMatViewPerse_t> sCbMatViewPerse_;
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
     inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }

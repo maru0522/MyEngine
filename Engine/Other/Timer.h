@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include <chrono>
 
 class ITimer
 {
 public:
-    //>> ’è‹`
+    //>> å®šç¾©
     using nanoseconds = std::chrono::nanoseconds;
     using microseconds = std::chrono::microseconds;
     using milliseconds = std::chrono::milliseconds;
@@ -12,15 +12,15 @@ public:
     using minutes = std::chrono::minutes;
     using hours = std::chrono::hours;
 
-    //>> ŠÖ”
+    //>> é–¢æ•°
     ITimer(void) = default;
     virtual ~ITimer(void) = default;
 
     /// <summary>
-    /// <para>Windows‚ª‹N“®‚µ‚Ä‚©‚ç‚ÌŒo‰ßŠÔ‚ğƒ~ƒŠ•b’PˆÊ‚Å‚ ‚ç‚í‚µ‚½’l‚ğ•Ô‚·B</para>
-    /// <para>“ú“™‚ğæ“¾‚·‚é‚í‚¯‚Å‚Í‚È‚¢‚ªA‚±‚ÌŠÖ”‚Ì‘¶İˆÓ‹`‚ÍŠÔŒv‘ª‚É‚ ‚éB</para>
-    /// <para>TimeUnit‚Ístd::chrono::duration‚Ì•Ê–¼‚É‚ ‚é[ŠÔŠÔŠu‚ğ•\‚·Œ^]</para>
-    /// <para>‚Ì‚İ‚ğg—p‚Å‚«‚éB</para>
+    /// <para>WindowsãŒèµ·å‹•ã—ã¦ã‹ã‚‰ã®çµŒéæ™‚é–“ã‚’ãƒŸãƒªç§’å˜ä½ã§ã‚ã‚‰ã‚ã—ãŸå€¤ã‚’è¿”ã™ã€‚</para>
+    /// <para>æ—¥æ™‚ç­‰ã‚’å–å¾—ã™ã‚‹ã‚ã‘ã§ã¯ãªã„ãŒã€ã“ã®é–¢æ•°ã®å­˜åœ¨æ„ç¾©ã¯æ™‚é–“è¨ˆæ¸¬ã«ã‚ã‚‹ã€‚</para>
+    /// <para>TimeUnitã¯std::chrono::durationã®åˆ¥åã«ã‚ã‚‹[æ™‚é–“é–“éš”ã‚’è¡¨ã™å‹]</para>
+    /// <para>ã®ã¿ã‚’ä½¿ç”¨ã§ãã‚‹ã€‚</para>
     /// </summary>
     /// <typeparam name="TimeUnit"></typeparam>
     /// <returns></returns>
@@ -30,7 +30,7 @@ public:
     }
 
     /// <summary>
-    /// <para>‹A‚Á‚Ä‚©‚ç‘‚«‚á‚¦‚¦</para>
+    /// <para>å¸°ã£ã¦ã‹ã‚‰æ›¸ãã‚ƒãˆãˆ</para>
     /// </summary>
     /// <param name=""></param>
     /// <returns></returns>
@@ -47,7 +47,7 @@ public:
     }
 
 protected:
-    //>> •Ï”
+    //>> å¤‰æ•°
     float gameSpeed_{1.f};
 
 public:
@@ -62,72 +62,72 @@ public:
 class InternalTimer final : public ITimer
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     InternalTimer(float sec_finishTime = 1.f) : sec_finishTime_(sec_finishTime) {}
     InternalTimer(void) : InternalTimer(0.f) {}
     virtual ~InternalTimer(void) = default;
 
-    // ŠJn
+    // é–‹å§‹
     void Start(void);
     void Start(float sec_finishTime = 1.0f);
-    // ’â~ 
-    void Pause(void); // int32_t‚ğg‚Á‚Ä‚¢‚éˆ×A596ŠÔ’ö‚µ‚©ˆê’â~‚Å‚«‚È‚¢B
-    // ÄŠJ
+    // åœæ­¢ 
+    void Pause(void); // int32_tã‚’ä½¿ã£ã¦ã„ã‚‹ç‚ºã€596æ™‚é–“ç¨‹ã—ã‹ä¸€æ™‚åœæ­¢ã§ããªã„ã€‚
+    // å†é–‹
     void Resume(void);
-    // I—¹
+    // çµ‚äº†
     void Finish(void);
 
-    // ƒXƒ[ƒ‚[ƒVƒ‡ƒ“
+    // ã‚¹ãƒ­ãƒ¼ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
     void StartSlow(float spd = 1.f);
     void FinishSlow(void);
 
 private:
-    //>> •Ï”
-    int32_t mil_startTime_{};     // Œv‘ªŠJn‚ÌPC“à•”‚ÌŠÔ
-    int32_t mil_pauseTime_{};     // ˆê’â~‚ÌPC“à•”‚ÌŠÔ
-    int32_t mil_slowTime_{};      // ƒXƒ[ƒ‚[ƒVƒ‡ƒ“ŠJn‚ÌPC“à•”‚ÌŠÔ
-    float mil_totalPuaseTime_{};  // ’â~‚µ‚Ä‚¢‚½ŠÔ‚ª‡Œv‰½ƒ~ƒŠ•b‚©
-    float sec_finishTime_{};      // ƒS[ƒ‹‚ğ‰½•b‚É‚·‚é‚©
+    //>> å¤‰æ•°
+    int32_t mil_startTime_{};     // è¨ˆæ¸¬é–‹å§‹æ™‚ã®PCå†…éƒ¨ã®æ™‚é–“
+    int32_t mil_pauseTime_{};     // ä¸€æ™‚åœæ­¢æ™‚ã®PCå†…éƒ¨ã®æ™‚é–“
+    int32_t mil_slowTime_{};      // ã‚¹ãƒ­ãƒ¼ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚ã®PCå†…éƒ¨ã®æ™‚é–“
+    float mil_totalPuaseTime_{};  // åœæ­¢ã—ã¦ã„ãŸæ™‚é–“ãŒåˆè¨ˆä½•ãƒŸãƒªç§’ã‹
+    float sec_finishTime_{};      // ã‚´ãƒ¼ãƒ«ã‚’ä½•ç§’ã«ã™ã‚‹ã‹
 
 public:
     //>> setter
     void SetEndTime(float finishTime) { sec_finishTime_ = finishTime; }
 
     //>> getter
-    const float GetElapsedTime(); // Œo‰ßŠÔæ“¾
-    bool GetIsSlow(void) { return mil_slowTime_ > 0; } // ¡ƒXƒ[ƒ‚[ƒVƒ‡ƒ“’†‚©
-    const float GetEndTime(void) { return sec_finishTime_; } // –Ú•WŠÔ‚ª‰½•b‚©
-    const bool GetIsFinished(void) { return sec_finishTime_ <= ((GetNowCount<milliseconds>() - mil_startTime_) / 1000.0f); } // –Ú“I‚Æ‚µ‚Äİ’è‚µ‚½ŠÔ‚ğ’´‚¦‚Ä‚¢‚é‚©i‚ ‚é‚¢‚ÍI—¹‚³‚¹‚ç‚ê‚½‚©j
+    const float GetElapsedTime(); // çµŒéæ™‚é–“å–å¾—
+    bool GetIsSlow(void) { return mil_slowTime_ > 0; } // ä»Šã‚¹ãƒ­ãƒ¼ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ã‹
+    const float GetEndTime(void) { return sec_finishTime_; } // ç›®æ¨™æ™‚é–“ãŒä½•ç§’ã‹
+    const bool GetIsFinished(void) { return sec_finishTime_ <= ((GetNowCount<milliseconds>() - mil_startTime_) / 1000.0f); } // ç›®çš„ã¨ã—ã¦è¨­å®šã—ãŸæ™‚é–“ã‚’è¶…ãˆã¦ã„ã‚‹ã‹ï¼ˆã‚ã‚‹ã„ã¯çµ‚äº†ã•ã›ã‚‰ã‚ŒãŸã‹ï¼‰
 };
 
 
 class FrameTimer final : public ITimer
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     FrameTimer(int32_t frame_max, int32_t value_add = 1);
     FrameTimer(void) : FrameTimer(100) {}
     virtual ~FrameTimer(void) = default;
 
-    // ŠJn
+    // é–‹å§‹
     void Start(void);
     void Start(int32_t frame_max);
-    // XV
+    // æ›´æ–°
     void Update(void);
-    // ’â~
+    // åœæ­¢
     void Pause(void);
-    // ÄŠJ
+    // å†é–‹
     void Resume(void);
-    // I—¹
+    // çµ‚äº†
     void Finish(void);
 
 private:
-    //>> •Ï”
-    float frame_current_{};   // Œ»İ’l
-    int32_t frame_max_{};     // Å‘å’l
-    int32_t value_add_{};     // –ˆƒtƒŒ[ƒ€AŠô‚Â‰ÁZ‚·‚é‚©
-    bool is_pause_{};         // ƒ|[ƒY’†‚©”Û‚©
-    bool is_loop_{};          // ƒ‹[ƒv‚·‚é‚©
+    //>> å¤‰æ•°
+    float frame_current_{};   // ç¾åœ¨å€¤
+    int32_t frame_max_{};     // æœ€å¤§å€¤
+    int32_t value_add_{};     // æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã€å¹¾ã¤åŠ ç®—ã™ã‚‹ã‹
+    bool is_pause_{};         // ãƒãƒ¼ã‚ºä¸­ã‹å¦ã‹
+    bool is_loop_{};          // ãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‹
 
 public:
     //>> setter

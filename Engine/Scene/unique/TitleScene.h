@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "IScene.h"
 #include "Sprite.h"
 #include "CameraManager.h"
@@ -7,7 +7,7 @@ class TitleScene final :
     public IScene
 {
 public:
-    // �֐�
+    // 関数
     void Initialize(void) override;
     void Update(void) override;
     void Draw3d(void) override;

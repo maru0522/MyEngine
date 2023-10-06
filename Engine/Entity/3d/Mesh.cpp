@@ -1,17 +1,17 @@
-#include "Mesh.h"
+ï»¿#include "Mesh.h"
 
 void Mesh::CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices)
 {
     for (auto& it : smoothData_) {
-        // Še–Ê—p‚Ì‹¤’Ê’¸“_ƒRƒŒƒNƒVƒ‡ƒ“
+        // å„é¢ç”¨ã®å…±é€šé ‚ç‚¹ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
         std::vector<uint16_t>& v = it.second;
-        // ‘S’¸“_‚Ì–@ü‚ğ•½‹Ï‚·‚é
+        // å…¨é ‚ç‚¹ã®æ³•ç·šã‚’å¹³å‡ã™ã‚‹
         Vector3 normal{};
         for (uint16_t idx : v) {
             normal += {vertices[idx].normal.x, vertices[idx].normal.y, vertices[idx].normal.z };
         }
         normal = (normal / (float)v.size()).Normalize();
-        // ‹¤’Ê–@ü‚ğg—p‚·‚é‚·‚×‚Ä‚Ì
+        // å…±é€šæ³•ç·šã‚’ä½¿ç”¨ã™ã‚‹ã™ã¹ã¦ã®
         for (uint16_t idx : v) {
             vertices[idx].normal = { normal.x,normal.y,normal.z };
         }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <wrl.h>
 #include <string>
 #include <d3d12.h>
@@ -12,14 +12,14 @@
 class PostEffect
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     
-    // ’è”
+    // å®šæ•°
     static const float kClearColor[4];
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     PostEffect(void);
     virtual ~PostEffect() = default;
 
@@ -32,17 +32,17 @@ protected:
     inline void SetPSOName(const std::string psoName) { psoName_ = psoName; }
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     Matrix4 matWorld_;
 
     ConstBuffer<Sprite::CBData2d_t> cb_;
     VertexBuffer<Sprite::VertexPosUv_t> vertexBuffer_;
 
     RenderTexture renderTexture_[2];
-    ComPtr<ID3D12Resource> depthBuff_;  // [“xƒoƒbƒtƒ@
-    ComPtr<ID3D12DescriptorHeap> srvHeap_; // srv—pƒfƒXƒNƒq[ƒv
-    ComPtr<ID3D12DescriptorHeap> rtvHeap_; // rtv—pƒfƒXƒNƒq[ƒv
-    ComPtr<ID3D12DescriptorHeap> dsvHeap_; // dsv—pƒfƒXƒNƒq[ƒv
+    ComPtr<ID3D12Resource> depthBuff_;  // æ·±åº¦ãƒãƒƒãƒ•ã‚¡
+    ComPtr<ID3D12DescriptorHeap> srvHeap_; // srvç”¨ãƒ‡ã‚¹ã‚¯ãƒ’ãƒ¼ãƒ—
+    ComPtr<ID3D12DescriptorHeap> rtvHeap_; // rtvç”¨ãƒ‡ã‚¹ã‚¯ãƒ’ãƒ¼ãƒ—
+    ComPtr<ID3D12DescriptorHeap> dsvHeap_; // dsvç”¨ãƒ‡ã‚¹ã‚¯ãƒ’ãƒ¼ãƒ—
 
     std::string psoName_;
 };

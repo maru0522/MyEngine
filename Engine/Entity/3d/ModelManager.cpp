@@ -1,4 +1,4 @@
-#include "ModelManager.h"
+ï»¿#include "ModelManager.h"
 #include "Util.h"
 #include <fstream>
 #include <sstream>
@@ -10,26 +10,26 @@ using VertexPosNormalUv_t = Mesh::VertexPosNormalUv_t;
 
 void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
 {
-    // Šù‚É“Ç‚İ‚ñ‚¾modelƒf[ƒ^‚Æ‚Ìd•¡Šm”FB
+    // æ—¢ã«èª­ã¿è¾¼ã‚“ã modelãƒ‡ãƒ¼ã‚¿ã¨ã®é‡è¤‡ç¢ºèªã€‚
     if (models_.count(path)) {
         Util::Log::PrintOutputWindow("A .obj file with the same name was loaded. Some models may not have been loaded.");
         return;
     }
 
-    // ”z—ñ—p‚ÌˆêModel
+    // é…åˆ—ç”¨ã®ä¸€æ™‚Model
     Model_t tempModel;
     tempModel.isSmoothing_ = smoothing;
-    // ”z—ñ—p‚ÌˆêMesh
+    // é…åˆ—ç”¨ã®ä¸€æ™‚Mesh
     Mesh tempMesh;
     tempMesh.SetPath(path);
 
-    // ’¸“_‚ÆƒCƒ“ƒfƒbƒNƒXî•ñ
+    // é ‚ç‚¹ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æƒ…å ±
     std::ifstream ifs;
     ifs.open(path);
     assert(!ifs.fail());
 
-    std::vector<Vector3> positions{}; // ’¸“_
-    std::vector<Vector3> normals{};   // –@ü
+    std::vector<Vector3> positions{}; // é ‚ç‚¹
+    std::vector<Vector3> normals{};   // æ³•ç·š
     std::vector<Vector2> texcoords{}; // uv
 
     std::vector<VertexPosNormalUv_t> vertices{};
@@ -51,7 +51,7 @@ void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
             LoadMaterial(tempModel, path);
         }
 
-        // ’¸“_
+        // é ‚ç‚¹
         if (key == "v")
         {
             Vector3 pos;
@@ -62,18 +62,18 @@ void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
             positions.emplace_back(pos);
         }
 
-        // ƒeƒNƒXƒ`ƒƒ
+        // ãƒ†ã‚¯ã‚¹ãƒãƒ£
         if (key == "vt")
         {
             Vector2 texcoord{};
             line_iss >> texcoord.x;
             line_iss >> texcoord.y;
 
-            texcoord.y = 1.0f - texcoord.y; // V•ûŒü”½“]
+            texcoord.y = 1.0f - texcoord.y; // Væ–¹å‘åè»¢
             texcoords.emplace_back(texcoord);
         }
 
-        // –@ü
+        // æ³•ç·š
         if (key == "vn")
         {
             Vector3 normal{};
@@ -96,22 +96,22 @@ void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
                 unsigned short indexTexcoord{};
 
                 index_iss >> indexPos;
-                index_iss.seekg(1, std::ios_base::cur); // ƒXƒ‰ƒbƒVƒ…‚ğ”ò‚Î‚·
+                index_iss.seekg(1, std::ios_base::cur); // ã‚¹ãƒ©ãƒƒã‚·ãƒ¥ã‚’é£›ã°ã™
                 index_iss >> indexTexcoord;
-                index_iss.seekg(1, std::ios_base::cur); // ƒXƒ‰ƒbƒVƒ…‚ğ”ò‚Î‚·
+                index_iss.seekg(1, std::ios_base::cur); // ã‚¹ãƒ©ãƒƒã‚·ãƒ¥ã‚’é£›ã°ã™
                 index_iss >> indexNormal;
 
                 VertexPosNormalUv_t vertex{};
                 vertex.pos = positions[indexPos - 1];
                 vertex.normal = normals[indexNormal - 1];
                 vertex.uv = texcoords[indexTexcoord - 1];
-                // ’¸“_ƒf[ƒ^‚Ì’Ç‰Á
+                // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ 
                 vertices.emplace_back(vertex);
-                // ƒGƒbƒW•½ŠŠ‰»—pƒf[ƒ^‚Ì’Ç‰Á
+                // ã‚¨ãƒƒã‚¸å¹³æ»‘åŒ–ç”¨ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ 
                 if (smoothing) tempMesh.AddSmoothData(indexPos, (uint16_t)vertices.size() - 1);
-                // ’¸“_ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^‚Ì’Ç‰Á
+                // é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ 
                 indices.emplace_back((uint16_t)indices.size());
-                //-> indices.size()‚ğemplace_back()‚·‚é‚±‚Æ‚É‚æ‚Á‚ÄA’Ç‰Á‚³‚ê‚½’¸“_ƒf[ƒ^‚Ì—v‘f”‚É‡‚í‚¹‚½ƒCƒ“ƒfƒbƒNƒX‚ª’Ç‰Á‚³‚ê‚Ä‚¢‚­
+                //-> indices.size()ã‚’emplace_back()ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦ã€è¿½åŠ ã•ã‚ŒãŸé ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®è¦ç´ æ•°ã«åˆã‚ã›ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒè¿½åŠ ã•ã‚Œã¦ã„ã
             }
         }
     }
@@ -119,17 +119,17 @@ void ModelManager::LoadOBJ(const fsPath& path, bool smoothing)
     ifs.close();
     if (smoothing)tempMesh.CalcSmoothedVertNormals(vertices);
 
-    // ’¸“_ƒoƒbƒtƒ@
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
     tempMesh.CreateVB(vertices);
-    // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
     tempMesh.CreateIB(indices);
 
-    // ”z—ñ‚É’Ç‰Á
+    // é…åˆ—ã«è¿½åŠ 
     meshes_.emplace(path, tempMesh);
 
-    // ’¸“_ƒf[ƒ^mesh‚Ì•ÛŠÇƒAƒhƒŒƒX‚ğ‚½‚¹‚éB
+    // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿meshã®ä¿ç®¡ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æŒãŸã›ã‚‹ã€‚
     tempModel.meshPtr_ = &meshes_[path];
-    // ”z—ñ‚É’Ç‰Á ¦’è”ƒoƒbƒtƒ@¶¬‚ÍObject3D‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ås‚¤B
+    // é…åˆ—ã«è¿½åŠ  â€»å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆã¯Object3Dã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§è¡Œã†ã€‚
     models_.emplace(path, tempModel);
 
 }
@@ -138,64 +138,64 @@ void ModelManager::LoadMaterial(Model_t& model, const fsPath& path)
 {
     const std::string mtlname{ path.stem().string() + ".mtl" };
 
-    // ƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€
+    // ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ 
     std::ifstream file;
-    // ƒ}ƒeƒŠƒAƒ‹ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+    // ãƒãƒ†ãƒªã‚¢ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
     file.open(path.parent_path().string() + "/" + mtlname);
-    // ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“¸”s‚ğƒ`ƒFƒbƒN
+    // ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³å¤±æ•—ã‚’ãƒã‚§ãƒƒã‚¯
     assert(!file.fail());
 
-    // 1s‚¸‚Â“Ç‚İ‚Ş
+    // 1è¡Œãšã¤èª­ã¿è¾¼ã‚€
     std::string line;
     while (std::getline(file, line)) {
-        // 1s•ª‚Ì•¶š—ñ‚ğƒXƒgƒŠ[ƒ€‚É•ÏŠ·
+        // 1è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«å¤‰æ›
         std::istringstream line_iss(line);
 
-        // ”¼ŠpƒXƒy[ƒX‹æØ‚è‚Ås‚Ìæ“ª•¶š—ñ‚ğæ“¾
+        // åŠè§’ã‚¹ãƒšãƒ¼ã‚¹åŒºåˆ‡ã‚Šã§è¡Œã®å…ˆé ­æ–‡å­—åˆ—ã‚’å–å¾—
         std::string key;
         std::getline(line_iss, key, ' ');
 
-        // æ“ª‚Ìƒ^ƒu•¶š‚Í–³‹‚·‚é
+        // å…ˆé ­ã®ã‚¿ãƒ–æ–‡å­—ã¯ç„¡è¦–ã™ã‚‹
         if (key[0] == '\t') {
-            key.erase(key.begin()); // æ“ª‚Ì•¶š‚ğíœ
+            key.erase(key.begin()); // å…ˆé ­ã®æ–‡å­—ã‚’å‰Šé™¤
         }
 
-        // æ“ª•¶š—ñ‚ªnewmtl‚È‚çƒ}ƒeƒŠƒAƒ‹–¼
+        // å…ˆé ­æ–‡å­—åˆ—ãŒnewmtlãªã‚‰ãƒãƒ†ãƒªã‚¢ãƒ«å
         if (key == "newmtl") {
-            // ƒ}ƒeƒŠƒAƒ‹–¼“Ç‚İ‚İ
+            // ãƒãƒ†ãƒªã‚¢ãƒ«åèª­ã¿è¾¼ã¿
             line_iss >> model.material_.name;
         }
 
-        // æ“ª•¶š—ñ‚ªKa‚È‚çƒAƒ“ƒrƒGƒ“ƒgF
+        // å…ˆé ­æ–‡å­—åˆ—ãŒKaãªã‚‰ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆè‰²
         if (key == "Ka") {
             line_iss >> model.material_.ambient.x;
             line_iss >> model.material_.ambient.y;
             line_iss >> model.material_.ambient.z;
         }
 
-        // æ“ª•¶š—ñ‚È‚çKd‚È‚çƒfƒBƒtƒ…[ƒYF
+        // å…ˆé ­æ–‡å­—åˆ—ãªã‚‰Kdãªã‚‰ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºè‰²
         if (key == "Kd") {
             line_iss >> model.material_.diffuse.x;
             line_iss >> model.material_.diffuse.y;
             line_iss >> model.material_.diffuse.z;
         }
 
-        // æ“ª•¶š—ñ‚ªKs‚È‚çƒXƒyƒLƒ…ƒ‰[F
+        // å…ˆé ­æ–‡å­—åˆ—ãŒKsãªã‚‰ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼è‰²
         if (key == "Ks") {
             line_iss >> model.material_.specular.x;
             line_iss >> model.material_.specular.y;
             line_iss >> model.material_.specular.z;
         }
 
-        // æ“ª•¶š—ñ‚ªmap_Kd‚È‚çƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹–¼
+        // å…ˆé ­æ–‡å­—åˆ—ãŒmap_Kdãªã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«å
         if (key == "map_Kd") {
             std::string tmpName;
 
-            // ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼“Ç‚İ‚İ
+            // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ•ã‚¡ã‚¤ãƒ«åèª­ã¿è¾¼ã¿
             line_iss >> tmpName;
             model.material_.texKey = path.parent_path() / tmpName;
 
-            // ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+            // ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
             texMPtr_->Load(model.material_.texKey);
         }
     }
@@ -209,16 +209,16 @@ Model_t ModelManager::GetModel(const fsPath& path)
     }
     catch (const std::exception&)
     {
-        // ƒGƒ‰[ƒƒO
+        // ã‚¨ãƒ©ãƒ¼ãƒ­ã‚°
         Util::Log::PrintOutputWindow("[ModelManager] : Couldn't find a 3Dmodel corresponding to the argument path(" + path.string() + "), so replaced it with \"cube\". ");
-        // w’è‚³‚ê‚½ƒ‚ƒfƒ‹‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡cube‚É’u‚«Š·‚¦‚Ä•Ô‹p‚·‚é
+        // æŒ‡å®šã•ã‚ŒãŸãƒ¢ãƒ‡ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆcubeã«ç½®ãæ›ãˆã¦è¿”å´ã™ã‚‹
         return models_["Resources/cube/cube.obj"];
     }
 }
 
 void Model_t::UpdateCB(void)
 {
-    // ’è”ƒoƒbƒtƒ@‚Ìƒ}ƒeƒŠƒAƒ‹‚Ì’l‚ğXV‚·‚é
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒ†ãƒªã‚¢ãƒ«ã®å€¤ã‚’æ›´æ–°ã™ã‚‹
     cbMaterial_.GetConstBuffMap()->ambient = material_.ambient;
     cbMaterial_.GetConstBuffMap()->diffuse = material_.diffuse;
     cbMaterial_.GetConstBuffMap()->specular = material_.specular;

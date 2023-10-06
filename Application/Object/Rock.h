@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Object3D.h"
 #include "CollisionManager.h"
 #include "CollisionPrimitive.h"
@@ -7,10 +7,10 @@ class Rock :
     public Object3D
 {
 public:
-    // �萔
+    // 定数
     const Vector3 kRadius_{ 10,1,1 };
 
-    // �֐�
+    // 関数
     Rock(CollisionManager* colMPtr);
     ~Rock(void);
 
@@ -20,7 +20,7 @@ public:
 private:
     void OnCollision(void);
 
-    // �ϐ�
+    // 変数
     Transform transform_;
     Axis3 axes_;
 

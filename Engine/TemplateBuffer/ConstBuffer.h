@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Windows.h>
 #include <cassert>
 #include <algorithm>
@@ -11,45 +11,45 @@
 template<typename T> class ConstBuffer
 {
 public:
-    // ŠÖ”
+    // é–¢æ•°
     ConstBuffer(void) = default;
     ~ConstBuffer(void) = default;
 
     void Create() {
-        // ’è”ƒoƒbƒtƒ@¶¬—p‚Ìİ’è
-        // ƒq[ƒvİ’è
+        // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆç”¨ã®è¨­å®š
+        // ãƒ’ãƒ¼ãƒ—è¨­å®š
         D3D12_HEAP_PROPERTIES cbHeapProp{};
-        cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;               // GPU‚Ö‚Ì“]‘——p
+        cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;               // GPUã¸ã®è»¢é€ç”¨
 
-        // ƒŠƒ\[ƒXİ’è
+        // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
         D3D12_RESOURCE_DESC cbResourceDesc{};
         cbResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        cbResourceDesc.Width = (sizeof(T) + 0xff) & ~0xff; //256ƒoƒCƒgƒAƒ‰ƒCƒ“ƒƒ“ƒg
+        cbResourceDesc.Width = (sizeof(T) + 0xff) & ~0xff; //256ãƒã‚¤ãƒˆã‚¢ãƒ©ã‚¤ãƒ³ãƒ¡ãƒ³ãƒˆ
         cbResourceDesc.Height = 1;
         cbResourceDesc.DepthOrArraySize = 1;
         cbResourceDesc.MipLevels = 1;
         cbResourceDesc.SampleDesc.Count = 1;
         cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-        // ’è”ƒoƒbƒtƒ@‚Ì¶¬
+        // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
         HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateCommittedResource(
-            &cbHeapProp,    // ƒq[ƒvİ’è
+            &cbHeapProp,    // ãƒ’ãƒ¼ãƒ—è¨­å®š
             D3D12_HEAP_FLAG_NONE,
-            &cbResourceDesc,    // ƒŠƒ\[ƒXİ’è
+            &cbResourceDesc,    // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
             D3D12_RESOURCE_STATE_GENERIC_READ,
             nullptr,
             IID_PPV_ARGS(&buffer_));
         assert(SUCCEEDED(hr));
 
-        // ’è”ƒoƒbƒtƒ@‚Ìƒ}ƒbƒsƒ“ƒO
+        // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒƒãƒ”ãƒ³ã‚°
         CBMap();
-        //SetColor‚Íg—pæ‚ÉˆÏ”C
+        //SetColorã¯ä½¿ç”¨å…ˆã«å§”ä»»
     }
 
 private:
-    // cBMaterial‚ÆcMapMaterial‚Ìƒ}ƒbƒsƒ“ƒO
+    // cBMaterialã¨cMapMaterialã®ãƒãƒƒãƒ”ãƒ³ã‚°
     void CBMap(void) {
-        // ’è”ƒoƒbƒtƒ@‚Ìƒ}ƒbƒsƒ“ƒO
+        // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒƒãƒ”ãƒ³ã‚°
         HRESULT hr = buffer_->Map(0, nullptr, (void**)&cbTypeMap_);
         assert(SUCCEEDED(hr));
     }
@@ -58,14 +58,14 @@ private:
         buffer_->Unmap(0, nullptr);
     }
 
-    // •Ï”
+    // å¤‰æ•°
     Microsoft::WRL::ComPtr<ID3D12Resource> buffer_{};
     T* cbTypeMap_{};
 
 public:
     // getter
-    // private•Ï”: cBTypeMap_ ‚ğæ“¾
-    T* GetConstBuffMap(void) { return cbTypeMap_; } // ’l‘‚«Š·‚¦—pæ“¾iƒ}ƒeƒŠƒAƒ‹ƒJƒ‰[‚ÌƒZƒbƒeƒBƒ“ƒO‚Æ‚©j
-    // private•Ï”: cBMaterial ‚ğæ“¾
+    // privateå¤‰æ•°: cBTypeMap_ ã‚’å–å¾—
+    T* GetConstBuffMap(void) { return cbTypeMap_; } // å€¤æ›¸ãæ›ãˆç”¨å–å¾—ï¼ˆãƒãƒ†ãƒªã‚¢ãƒ«ã‚«ãƒ©ãƒ¼ã®ã‚»ãƒƒãƒ†ã‚£ãƒ³ã‚°ã¨ã‹ï¼‰
+    // privateå¤‰æ•°: cBMaterial ã‚’å–å¾—
     ID3D12Resource* GetBuffer(void) { return buffer_.Get(); }
 };

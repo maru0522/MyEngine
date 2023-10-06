@@ -1,23 +1,23 @@
-#include "StickyBall.h"
+ï»¿#include "StickyBall.h"
 #include "SimplifyImGui.h"
 
 StickyBall::StickyBall(CollisionManager* colMPtr) : Object3D("Resources/model/sphere/sphere.obj"), colMPtr_(colMPtr)
 {
-    // ‰ŠúˆÊ’u
+    // åˆæœŸä½ç½®
     transform_.position = { 0,0,0 };
     transform_.scale = { kRadius_,kRadius_,kRadius_ };
 
-    // ‰Šúp¨
+    // åˆæœŸå§¿å‹¢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
 
-    // ƒRƒ‰ƒCƒ_[İ’è
-    colMPtr->Register(&collision_sphere_); // ƒ}ƒl[ƒWƒƒ[‚É“o˜^
-    collision_sphere_.SetID("sticky_ball"); // tagİ’è
-    collision_sphere_.SetOnCollision(std::bind(&StickyBall::OnCollision, this)); // Õ“Ë‚Ìcallback—pŠÖ”‚Ìİ’è
-    collision_sphere_.radius = kRadius_; // ‹…‚Ì‰Šú”¼Œa = ‹K’è’l
-    collision_sphere_.center = transform_.position + axes_.up * kDistance_to_root_; // ‹…‚Ì‰ŠúÀ•W = ªŒ³‚ÌÀ•W + ãŒü‚«ƒxƒNƒgƒ‹ * ‹K’è’l
+    // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼è¨­å®š
+    colMPtr->Register(&collision_sphere_); // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ç™»éŒ²
+    collision_sphere_.SetID("sticky_ball"); // tagè¨­å®š
+    collision_sphere_.SetOnCollision(std::bind(&StickyBall::OnCollision, this)); // è¡çªæ™‚ã®callbackç”¨é–¢æ•°ã®è¨­å®š
+    collision_sphere_.radius = kRadius_; // çƒã®åˆæœŸåŠå¾„ = è¦å®šå€¤
+    collision_sphere_.center = transform_.position + axes_.up * kDistance_to_root_; // çƒã®åˆæœŸåº§æ¨™ = æ ¹å…ƒã®åº§æ¨™ + ä¸Šå‘ããƒ™ã‚¯ãƒˆãƒ« * è¦å®šå€¤
 }
 
 StickyBall::~StickyBall(void)
@@ -29,31 +29,31 @@ void StickyBall::Update(void)
 {
     Object3D::Update();
 
-    // –{—ˆ‘z’è‚³‚ê‚Ä‚¢‚é‹…‚Ì‰ŠúÀ•W(ªŒ³‚ÌÀ•W + ãŒü‚«ƒxƒNƒgƒ‹ * ‹K’è’l)
+    // æœ¬æ¥æƒ³å®šã•ã‚Œã¦ã„ã‚‹çƒã®åˆæœŸåº§æ¨™(æ ¹å…ƒã®åº§æ¨™ + ä¸Šå‘ããƒ™ã‚¯ãƒˆãƒ« * è¦å®šå€¤)
     Vector3 default_stickyPos = transform_.position + axes_.up * kDistance_to_root_;
 
-    // ‹…‚ÌÀ•W‚ªA1ƒtƒŒ[ƒ€‘O‚Ì‘S‘ÌXV‚ÌI”ÕiÕ“ËXVˆ—“àj‚Å•â³‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAÀ¿1ƒtƒŒ[ƒ€’x‚ê(?)
-    // ‘z’è‚³‚ê‚éÀ•W‚©‚ç‚Ç‚Ì’ö“x‚¸‚ê‚Ä‚¢‚é‚© = ‹…‚ÌŒ»İÀ•W - default_sticky_pos
+    // çƒã®åº§æ¨™ãŒã€1ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®å…¨ä½“æ›´æ–°ã®çµ‚ç›¤ï¼ˆè¡çªæ›´æ–°å‡¦ç†å†…ï¼‰ã§è£œæ­£ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€å®Ÿè³ª1ãƒ•ãƒ¬ãƒ¼ãƒ é…ã‚Œ(?)
+    // æƒ³å®šã•ã‚Œã‚‹åº§æ¨™ã‹ã‚‰ã©ã®ç¨‹åº¦ãšã‚Œã¦ã„ã‚‹ã‹ = çƒã®ç¾åœ¨åº§æ¨™ - default_sticky_pos
     distance_to_defPos_ = (collision_sphere_.center - default_stickyPos).Length();
-    // distance_to_defPos_‚ª0.f‚Å‚Í‚È‚¢ê‡‹…‚ğ–{—ˆ‘z’è‚³‚ê‚éˆÊ’u‚Ö­‚µ‚¸‚Â•â³‚·‚éB ¦‹É¬’l‚Æ‚µ‚Ä0.02f‚Ü‚Å‚ÌŒë·‚Í–³‹‚³‚ê‚éB
+    // distance_to_defPos_ãŒ0.fã§ã¯ãªã„å ´åˆçƒã‚’æœ¬æ¥æƒ³å®šã•ã‚Œã‚‹ä½ç½®ã¸å°‘ã—ãšã¤è£œæ­£ã™ã‚‹ã€‚ â€»æ¥µå°å€¤ã¨ã—ã¦0.02fã¾ã§ã®èª¤å·®ã¯ç„¡è¦–ã•ã‚Œã‚‹ã€‚
     float a = Math::Function::FixEpsilon<float>(distance_to_defPos_, 0.f, 0.02f);
     if (a)
     {
-        // •â³‘¬“x
+        // è£œæ­£é€Ÿåº¦
         const float correctSpd = 0.05f;
 
-        // ‹…‚ÌŒ»İÀ•W‚©‚ç‹…‚Ì‘z’è‰Šú‚Ö‚ÌƒxƒNƒgƒ‹
+        // çƒã®ç¾åœ¨åº§æ¨™ã‹ã‚‰çƒã®æƒ³å®šåˆæœŸã¸ã®ãƒ™ã‚¯ãƒˆãƒ«
         Vector3 vec_curPos2DefPos = (default_stickyPos - collision_sphere_.center).Normalize();
 
-        // ‹…‚ÌŒ»İÀ•W‚ğæ“¾
+        // çƒã®ç¾åœ¨åº§æ¨™ã‚’å–å¾—
         Vector3 spherePos = collision_sphere_.center;
-        // æ“¾‚µ‚½•Ï”‚É‘Î‚µ‚Ä•â³’l‚ğ‰ÁZ
+        // å–å¾—ã—ãŸå¤‰æ•°ã«å¯¾ã—ã¦è£œæ­£å€¤ã‚’åŠ ç®—
         spherePos += vec_curPos2DefPos * correctSpd;
-        // •â³Ï‚ÌÀ•W‚ğ”½‰f
+        // è£œæ­£æ¸ˆã®åº§æ¨™ã‚’åæ˜ 
         collision_sphere_.center = spherePos;
     }
 
-    // Œ©‚½–Ú˜M‚é—p
+    // è¦‹ãŸç›®å¼„ã‚‹ç”¨
     GUI::Begin("sticky");
     GUI::Text("other");
     GUI::Text("def_sticPos: %f,%f,%f", default_stickyPos.x, default_stickyPos.y, default_stickyPos.z);
@@ -83,32 +83,32 @@ void StickyBall::Draw(void)
 
 void StickyBall::OnCollision(void)
 {
-    if (collision_sphere_.GetOther()->GetID() == "player") // tag:"player"‚ÆG‚ê‚Ä‚¢‚éê‡
+    if (collision_sphere_.GetOther()->GetID() == "player") // tag:"player"ã¨è§¦ã‚Œã¦ã„ã‚‹å ´åˆ
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(collision_sphere_.GetOther());
 
-        // ƒV[ƒ“Update()Œã‚ÌÕ“ËUpdate()‚ÅŒvZ‚³‚ê‚é
-        // ‹…‘Ì‚ğ‰Ÿ‚µo‚·ˆ—B¦‚½‚¾‚µA‰Ÿ‚µo‚µŒã‚Ì‹…‘ÌÀ•W‚ªA(ªŒ³À•W + ‹K’è’l) ‚ğ’´‚¦‚Ä‚¢‚éê‡‰Ÿ‚µo‚µ‚³‚ê‚È‚¢B
+        // ã‚·ãƒ¼ãƒ³Update()å¾Œã®è¡çªUpdate()ã§è¨ˆç®—ã•ã‚Œã‚‹
+        // çƒä½“ã‚’æŠ¼ã—å‡ºã™å‡¦ç†ã€‚â€»ãŸã ã—ã€æŠ¼ã—å‡ºã—å¾Œã®çƒä½“åº§æ¨™ãŒã€(æ ¹å…ƒåº§æ¨™ + è¦å®šå€¤) ã‚’è¶…ãˆã¦ã„ã‚‹å ´åˆæŠ¼ã—å‡ºã—ã•ã‚Œãªã„ã€‚
 
-        // ƒvƒŒƒCƒ„[‚ÌÀ•W‚Æ©g‚Ì‹…‚ÌÀ•W‚©‚ç‰Ÿ‚µo‚³‚ê‚é•ûŒü‚ğZo‚·‚é
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã¨è‡ªèº«ã®çƒã®åº§æ¨™ã‹ã‚‰æŠ¼ã—å‡ºã•ã‚Œã‚‹æ–¹å‘ã‚’ç®—å‡ºã™ã‚‹
         Vector3 p_to_this = (collision_sphere_.center - other->center).Normalize();
 
-        // ‚ß‚è‚İ‹——£‚ğo‚· (‚ß‚è‚ñ‚Å‚¢‚é‘z’è - ‹——£j¦’l‚Íƒ}ƒCƒiƒX‚Å•Ô‚é
+        // ã‚ã‚Šè¾¼ã¿è·é›¢ã‚’å‡ºã™ (ã‚ã‚Šè¾¼ã‚“ã§ã„ã‚‹æƒ³å®š - è·é›¢ï¼‰â€»å€¤ã¯ãƒã‚¤ãƒŠã‚¹ã§è¿”ã‚‹
         float diff = Vector3(collision_sphere_.center - other->center).Length() - (other->radius + collision_sphere_.radius);
 
-        // Œ»İÀ•W
+        // ç¾åœ¨åº§æ¨™
         Vector3 currentPos = collision_sphere_.center;
 
-        // ³‹K‰»‚³‚ê‚½‹…‚©‚çƒvƒŒƒCƒ„[‚Ü‚Å‚ÌƒxƒNƒgƒ‹ * ‚ß‚è‚İ‹——£
-        currentPos += p_to_this * -diff; // ‚±‚±‚ğƒ}ƒCƒiƒX•„†‚Å’l”½“]
+        // æ­£è¦åŒ–ã•ã‚ŒãŸçƒã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ã§ã®ãƒ™ã‚¯ãƒˆãƒ« * ã‚ã‚Šè¾¼ã¿è·é›¢
+        currentPos += p_to_this * -diff; // ã“ã“ã‚’ãƒã‚¤ãƒŠã‚¹ç¬¦å·ã§å€¤åè»¢
 
-        // ˆÚ“®Œã‚ÌÀ•W‚ªAŒ³‚ÌÀ•W‚æ‚è‹K’è’lˆÈã—£‚ê‚Ä‚¢‚È‚¢‚È‚çAÀ•W‚ğ•â³‰Â”\
+        // ç§»å‹•å¾Œã®åº§æ¨™ãŒã€å…ƒã®åº§æ¨™ã‚ˆã‚Šè¦å®šå€¤ä»¥ä¸Šé›¢ã‚Œã¦ã„ãªã„ãªã‚‰ã€åº§æ¨™ã‚’è£œæ­£å¯èƒ½
         //if ((collision_sphere_.center - currentPos).Length() < kDistance_to_defPos_)
         //{
-            // À•W‚ğ•â³
+            // åº§æ¨™ã‚’è£œæ­£
         collision_sphere_.center = currentPos;
 
-        // •â³‚³‚ê‚½’l‚Ås—ñ‚ğ¶¬
+        // è£œæ­£ã•ã‚ŒãŸå€¤ã§è¡Œåˆ—ã‚’ç”Ÿæˆ
         coordinate_.mat_world = Math::Function::AffinTrans(collision_sphere_.center, transform_.scale, axes_);
         //}
     }

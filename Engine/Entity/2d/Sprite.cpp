@@ -1,4 +1,4 @@
-#include <vector>
+ï»¿#include <vector>
 #include "Sprite.h"
 #include "Matrix4.h"
 #include "MathUtil.h"
@@ -15,7 +15,7 @@ void Sprite::StaticInitialize(TextureManager* texMPtr)
     sTexMPtr_ = texMPtr;
     sCbMatOrthoGraphic_.Create();
 
-    // ‰Šú‰»‚ÍƒJƒƒ‰‚ª‘¶İ‚µ‚È‚¢‚½‚ßCameraManager‚ÌSetCurrentCamera()‚ÉÀs‚·‚é‚æ‚¤‚É‚·‚é
+    // åˆæœŸåŒ–æ™‚ã¯ã‚«ãƒ¡ãƒ©ãŒå­˜åœ¨ã—ãªã„ãŸã‚CameraManagerã®SetCurrentCamera()æ™‚ã«å®Ÿè¡Œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
     //UpdateCBMatOrthoGraphic();
 }
 
@@ -23,14 +23,14 @@ void Sprite::PreDraw(BlendMode blendmode)
 {
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-    // ƒvƒŠƒ~ƒeƒBƒuŒ`ó‚Ìİ’èƒRƒ}ƒ“ƒh
-    iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // OŠpŒ`ƒŠƒXƒg
+    // ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å½¢çŠ¶ã®è¨­å®šã‚³ãƒãƒ³ãƒ‰
+    iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // ä¸‰è§’å½¢ãƒªã‚¹ãƒˆ
 
-    // SRVƒq[ƒv‚Ìİ’èƒRƒ}ƒ“ƒh
+    // SRVãƒ’ãƒ¼ãƒ—ã®è¨­å®šã‚³ãƒãƒ³ãƒ‰
     std::vector<ID3D12DescriptorHeap*> ppHeaps = { iDX->GetDescHeap_t()->GetDescHeap() };
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
-    // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Æƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ìİ’èƒRƒ}ƒ“ƒh
+    // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã¨ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®è¨­å®šã‚³ãƒãƒ³ãƒ‰
     iDX->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->pipelineState.Get());
     iDX->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->rootSignature.Get());
 }
@@ -39,14 +39,14 @@ void Sprite::SetDrawBlendMode(BlendMode blendmode)
 {
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
-    // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Æƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ìİ’èƒRƒ}ƒ“ƒh
+    // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã¨ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®è¨­å®šã‚³ãƒãƒ³ãƒ‰
     iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->pipelineState.Get());
     iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_SPRITE", blendmode)->rootSignature.Get());
 }
 
 void Sprite::UpdateCBMatOrthoGraphic(CameraManager* camMPtr)
 {
-    // •½s“Š‰es—ñ‚ÉƒJƒƒ‰‚Ì•Û‚·‚é•½s“Š‰es—ñ‚ğ‘ã“ü
+    // å¹³è¡ŒæŠ•å½±è¡Œåˆ—ã«ã‚«ãƒ¡ãƒ©ã®ä¿æŒã™ã‚‹å¹³è¡ŒæŠ•å½±è¡Œåˆ—ã‚’ä»£å…¥
     sCbMatOrthoGraphic_.GetConstBuffMap()->matOrthoGraphic = camMPtr->GetCurrentCamera()->GetMatProjOrthoGraphic();
 }
 
@@ -65,14 +65,14 @@ Sprite::Sprite(const fsPath& path, const std::string& nickname) :
     cutLength_.x = (float)imagePtr_->buff->GetDesc().Width;
     cutLength_.y = (float)imagePtr_->buff->GetDesc().Height;
 
-    // ’è”ƒoƒbƒtƒ@¶¬
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
     cb_.Create();
 
     std::vector<VertexPosUv_t> vertices;
-    vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // ¶‰º
-    vertices.emplace_back(VertexPosUv_t{ {   0.0f,   0.0f, 0.0f }, {0.0f, 0.0f} }); // ¶ã
-    vertices.emplace_back(VertexPosUv_t{ { 100.0f, 100.0f, 0.0f }, {1.0f, 1.0f} }); // ‰E‰º
-    vertices.emplace_back(VertexPosUv_t{ { 100.0f,   0.0f, 0.0f }, {1.0f, 0.0f} }); // ‰Eã
+    vertices.emplace_back(VertexPosUv_t{ {   0.0f, 100.0f, 0.0f }, {0.0f, 1.0f} }); // å·¦ä¸‹
+    vertices.emplace_back(VertexPosUv_t{ {   0.0f,   0.0f, 0.0f }, {0.0f, 0.0f} }); // å·¦ä¸Š
+    vertices.emplace_back(VertexPosUv_t{ { 100.0f, 100.0f, 0.0f }, {1.0f, 1.0f} }); // å³ä¸‹
+    vertices.emplace_back(VertexPosUv_t{ { 100.0f,   0.0f, 0.0f }, {1.0f, 0.0f} }); // å³ä¸Š
 
     vertexBuffer_.Create(vertices);
 
@@ -91,29 +91,29 @@ void Sprite::Draw(void)
 
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
-    // ’¸“_ƒoƒbƒtƒ@ƒrƒ…[‚Ìİ’èƒRƒ}ƒ“ƒh
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã®è¨­å®šã‚³ãƒãƒ³ãƒ‰
     iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_.GetVbView());
 
-    // ’è”ƒoƒbƒtƒ@ƒrƒ…[(CBV)‚Ìİ’èƒRƒ}ƒ“ƒh
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼(CBV)ã®è¨­å®šã‚³ãƒãƒ³ãƒ‰
     iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
     iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, sCbMatOrthoGraphic_.GetBuffer()->GetGPUVirtualAddress());
 
-    // SRVƒq[ƒv‚Ìæ“ª‚É‚ ‚éSRV‚ğƒ‹[ƒgƒpƒ‰ƒ[ƒ^0”Ô‚Éİ’è
+    // SRVãƒ’ãƒ¼ãƒ—ã®å…ˆé ­ã«ã‚ã‚‹SRVã‚’ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿0ç•ªã«è¨­å®š
     iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle);
 
-    // •`‰æƒRƒ}ƒ“ƒh
-    iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_.GetVerticesNum(), 1, 0, 0); // ‘S‚Ä‚Ì’¸“_‚ğg‚Á‚Ä•`‰æ
+    // æç”»ã‚³ãƒãƒ³ãƒ‰
+    iDXPtr->GetCommandList()->DrawInstanced((unsigned int)vertexBuffer_.GetVerticesNum(), 1, 0, 0); // å…¨ã¦ã®é ‚ç‚¹ã‚’ä½¿ã£ã¦æç”»
 }
 
 void Sprite::TransferVertex(void)
 {
-    // ƒAƒ“ƒJ[ƒ|ƒCƒ“ƒg
+    // ã‚¢ãƒ³ã‚«ãƒ¼ãƒã‚¤ãƒ³ãƒˆ
     float left{ (0.f - anchorPoint_.x) * size_.x * scale_.x };
     float right{ (1.f - anchorPoint_.x) * size_.x * scale_.x };
     float top{ (0.f - anchorPoint_.y) * size_.y * scale_.y };
     float bottom{ (1.f - anchorPoint_.y) * size_.y * scale_.y };
 
-    // ”½“]
+    // åè»¢
     if (isFlipX_) {
         left = -left;
         right = -right;
@@ -124,14 +124,14 @@ void Sprite::TransferVertex(void)
         bottom = -bottom;
     }
 
-    // ’¸“_À•W
+    // é ‚ç‚¹åº§æ¨™
     std::vector<VertexPosUv_t> vertices;
-    vertices.emplace_back(VertexPosUv_t{ {   left, bottom, 0.0f }, {0.0f, 1.0f} }); // ¶‰º
-    vertices.emplace_back(VertexPosUv_t{ {   left,    top, 0.0f }, {0.0f, 0.0f} }); // ¶ã
-    vertices.emplace_back(VertexPosUv_t{ {  right, bottom, 0.0f }, {1.0f, 1.0f} }); // ‰E‰º
-    vertices.emplace_back(VertexPosUv_t{ {  right,    top, 0.0f }, {1.0f, 0.0f} }); // ‰Eã
+    vertices.emplace_back(VertexPosUv_t{ {   left, bottom, 0.0f }, {0.0f, 1.0f} }); // å·¦ä¸‹
+    vertices.emplace_back(VertexPosUv_t{ {   left,    top, 0.0f }, {0.0f, 0.0f} }); // å·¦ä¸Š
+    vertices.emplace_back(VertexPosUv_t{ {  right, bottom, 0.0f }, {1.0f, 1.0f} }); // å³ä¸‹
+    vertices.emplace_back(VertexPosUv_t{ {  right,    top, 0.0f }, {1.0f, 0.0f} }); // å³ä¸Š
 
-    // uvÀ•W
+    // uvåº§æ¨™
     float texLeft{ cutStartPoint_.x / imagePtr_->buff->GetDesc().Width };
     float texRight{ (cutStartPoint_.x + cutLength_.x) / imagePtr_->buff->GetDesc().Width };
     float texTop{ cutStartPoint_.y / imagePtr_->buff->GetDesc().Height };
@@ -157,7 +157,7 @@ void Sprite::UpdateMatrix(void)
 
     if (parent_) matWorld_ *= parent_->matWorld_;
 
-    // ’è”ƒoƒbƒtƒ@‚É“]‘—
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«è»¢é€
     cb_.GetConstBuffMap()->matWorld = matWorld_;
 }
 
@@ -165,13 +165,13 @@ void Sprite::SetColor(const Vector4& rgba)
 {
     Vector4 lrgba = rgba;
 
-    // ’l‚ğ0.f~1.f“à‚Éû‚ß‚é
+    // å€¤ã‚’0.f~1.få†…ã«åã‚ã‚‹
     lrgba.x = Math::Function::Clamp(rgba.x, 0.f, 1.f);
     lrgba.y = Math::Function::Clamp(rgba.y, 0.f, 1.f);
     lrgba.z = Math::Function::Clamp(rgba.z, 0.f, 1.f);
     lrgba.w = Math::Function::Clamp(rgba.w, 0.f, 1.f);
 
-    // ’l‚ğ‘‚«‚Ş‚Æ©“®“I‚É“]‘—‚³‚ê‚é
+    // å€¤ã‚’æ›¸ãè¾¼ã‚€ã¨è‡ªå‹•çš„ã«è»¢é€ã•ã‚Œã‚‹
     cb_.GetConstBuffMap()->color = lrgba;
 }
 
@@ -179,16 +179,16 @@ void Sprite::SetColor255(const Vector4& rgba)
 {
     Vector4 lrgba = rgba;
 
-    // ’l‚ğ0.f~255.f“à‚Éû‚ß‚é
+    // å€¤ã‚’0.f~255.få†…ã«åã‚ã‚‹
     lrgba.x = Math::Function::Clamp(rgba.x, 0.f, 255.f);
     lrgba.y = Math::Function::Clamp(rgba.y, 0.f, 255.f);
     lrgba.z = Math::Function::Clamp(rgba.z, 0.f, 255.f);
     lrgba.w = Math::Function::Clamp(rgba.w, 0.f, 255.f);
 
-    // ³‹K‰»
+    // æ­£è¦åŒ–
     lrgba = { lrgba.x / 255.f, lrgba.y / 255.f, lrgba.z / 255.f, lrgba.w / 255.f };
 
-    // ’l‚ğ‘‚«‚Ş‚Æ©“®“I‚É“]‘—‚³‚ê‚é
+    // å€¤ã‚’æ›¸ãè¾¼ã‚€ã¨è‡ªå‹•çš„ã«è»¢é€ã•ã‚Œã‚‹
     cb_.GetConstBuffMap()->color = lrgba;
 }
 

@@ -1,4 +1,4 @@
-#include "Player.h"
+ï»¿#include "Player.h"
 #include "Input.h"
 #include "Quaternion.h"
 #include "SimplifyImGui.h"
@@ -13,9 +13,9 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehav
 
     sphereCollider_.radius = kRadius_;
 
-    // ‰ŠúˆÊ’u
+    // åˆæœŸä½ç½®
     transform_.position = { 0,60,-10 };
-    // ‰Šúp¨
+    // åˆæœŸå§¿å‹¢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
@@ -41,33 +41,33 @@ void Player::Update(void)
         isFallHole2_ = false;
     }
 
-    // 1Frame’x‚¢•`‰æÀ•W“™XV ** À•W‚ªŠm’è‚µ‚½Œã‚ÉA“–‚½‚è”»’èˆ—‚ÅÀ•W‚ğ•â³‚·‚é‚½‚ßA1Frame’x‚ç‚¹‚È‚¢‚ÆƒKƒN‚Â‚­‰Â”\«‚ª‚ ‚éB
+    // 1Frameé…ã„æç”»åº§æ¨™ç­‰æ›´æ–° ** åº§æ¨™ãŒç¢ºå®šã—ãŸå¾Œã«ã€å½“ãŸã‚Šåˆ¤å®šå‡¦ç†ã§åº§æ¨™ã‚’è£œæ­£ã™ã‚‹ãŸã‚ã€1Frameé…ã‚‰ã›ãªã„ã¨ã‚¬ã‚¯ã¤ãå¯èƒ½æ€§ãŒã‚ã‚‹ã€‚
     appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
     appearance_->Update();
 
     pbm_.ManagementBehavior();
 
-    // ƒRƒ‰ƒCƒ_[XV
+    // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
     sphereCollider_.center = transform_.position;
 
-    //// ‹…–Ê‚Ì‚Ç‚ÌˆÊ’u‚É‚¢‚é‚©‚É‰‚¶‚ÄA³‚µ‚¢p¨‚É‚·‚é‚½‚ß‚É3²‚ğÄŒvZ
-    //Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up, axes_.forward); // ‰EƒxƒNƒgƒ‹F(XV‚³‚ê‚½ãƒxƒNƒgƒ‹ x ŒÃ‚¢³–ÊƒxƒNƒgƒ‹)
+    //// çƒé¢ã®ã©ã®ä½ç½®ã«ã„ã‚‹ã‹ã«å¿œã˜ã¦ã€æ­£ã—ã„å§¿å‹¢ã«ã™ã‚‹ãŸã‚ã«3è»¸ã‚’å†è¨ˆç®—
+    //Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up, axes_.forward); // å³ãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ« x å¤ã„æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«)
     //axes_.right = rightFromOldAxis.Normalize();
-    //Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right, axes_.up); // ³–ÊƒxƒNƒgƒ‹F(XV‚³‚ê‚½‰EƒxƒNƒgƒ‹ x XV‚³‚ê‚½ãƒxƒNƒgƒ‹)
+    //Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right, axes_.up); // æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸå³ãƒ™ã‚¯ãƒˆãƒ« x æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ«)
     //axes_.forward = forwardFromOldAxis.Normalize();
 
-    //// ˆÚ“®“ü—Í‚ª‚ ‚Á‚½ê‡
+    //// ç§»å‹•å…¥åŠ›ãŒã‚ã£ãŸå ´åˆ
     //if (moveVec_.IsNonZero())
     //{
-    //    // ˆÚ“®•ûŒü‚ğŒü‚­‚æ‚¤‚ÈAˆÚ“®•ûŒü‚É‡‚í‚¹‚½p¨‚É‚·‚é‚½‚ß‚É‰EŒü‚«ƒxƒNƒgƒ‹‚ğÄŒvZ
-    //    Vector3 upFromAxis = axes_.up; // ãƒxƒNƒgƒ‹F(XV‚³‚ê‚½ãƒxƒNƒgƒ‹‚ğæ“¾j
-    //    Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec_.Normalize()); // ‰EƒxƒNƒgƒ‹F(XV‚³‚ê‚½ãƒxƒNƒgƒ‹ x ˆÚ“®ƒxƒNƒgƒ‹iˆÚ“®•ûŒü à ³–ÊƒxƒNƒgƒ‹))
+    //    // ç§»å‹•æ–¹å‘ã‚’å‘ãã‚ˆã†ãªã€ç§»å‹•æ–¹å‘ã«åˆã‚ã›ãŸå§¿å‹¢ã«ã™ã‚‹ãŸã‚ã«å³å‘ããƒ™ã‚¯ãƒˆãƒ«ã‚’å†è¨ˆç®—
+    //    Vector3 upFromAxis = axes_.up; // ä¸Šãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—ï¼‰
+    //    Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec_.Normalize()); // å³ãƒ™ã‚¯ãƒˆãƒ«ï¼š(æ›´æ–°ã•ã‚ŒãŸä¸Šãƒ™ã‚¯ãƒˆãƒ« x ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆç§»å‹•æ–¹å‘ â‰’ æ­£é¢ãƒ™ã‚¯ãƒˆãƒ«))
     //    axes_.right = rightFromMoveVec.Normalize();
     //    axes_.forward = moveVec_.Normalize();
     //}
 
-    // Œ»İ‚ÌÀ•W‚Ås—ñ‚ğ¶¬id—Í‚É‚æ‚Á‚Ä‚ß‚è‚ñ‚Å‚¢‚éBj@-> ‚ß‚è‚İ•â³‚ÍOnCollision()‚ÉˆøŒp‚¬
-    // ŒvZ—Ê‚ğŒ¸‚ç‚µ‚½‚¢ê‡AƒRƒ~ƒbƒgID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d ‚ğQÆ
+    // ç¾åœ¨ã®åº§æ¨™ã§è¡Œåˆ—ã‚’ç”Ÿæˆï¼ˆé‡åŠ›ã«ã‚ˆã£ã¦ã‚ã‚Šè¾¼ã‚“ã§ã„ã‚‹ã€‚ï¼‰ã€€-> ã‚ã‚Šè¾¼ã¿è£œæ­£ã¯OnCollision()ã«å¼•ç¶™ã
+    // è¨ˆç®—é‡ã‚’æ¸›ã‚‰ã—ãŸã„å ´åˆã€ã‚³ãƒŸãƒƒãƒˆID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d ã‚’å‚ç…§
     coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 
 #ifdef _DEBUG
@@ -127,41 +127,41 @@ void Player::Update(void)
 
 void Player::Draw(void)
 {
-    // ÔF‚ÌƒeƒNƒXƒ`ƒƒ‚ğ“K—pBiƒNƒ\Œ©h‚¢j
+    // èµ¤è‰²ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’é©ç”¨ã€‚ï¼ˆã‚¯ã‚½è¦‹è¾›ã„ï¼‰
     //appearance_->Draw("Resources/red1x1.png");
-    // ƒfƒtƒHƒ‹ƒg•\¦i‘Î‰‚·‚éƒeƒNƒXƒ`ƒƒ‚ª‚»‚à‚»‚à‚È‚¢‚Ì‚ÅAMissingTexture‚É’u‚«Š·‚í‚éB‚ß‚Á‚¿‚álogo‚éBj
+    // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¡¨ç¤ºï¼ˆå¯¾å¿œã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒãã‚‚ãã‚‚ãªã„ã®ã§ã€MissingTextureã«ç½®ãæ›ã‚ã‚‹ã€‚ã‚ã£ã¡ã‚ƒlogå‡ºã‚‹ã€‚ï¼‰
     if (pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::STOOP || pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::MOVE_STOOP) { appearance_->Draw("Resources/red1x1.png"); }
     else { appearance_->Draw(/*"Resources/red1x1.png"*/); }
 }
 
 void Player::Move(Vector3& moveVec, Vector3& velocity)
 {
-    // “ü—ÍƒxƒNƒgƒ‹
+    // å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec = inputVec.Normalize();
 
-    // ƒJƒƒ‰‹“_‚ÌƒvƒŒƒCƒ„[ˆÚ“®ƒxƒNƒgƒ‹
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(camMPtr_->GetCurrentCamera()->GetAxis3Ptr()->right, axes_.up).Normalize(); // ³–ÊVec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(axes_.up, pForwardFromCamera).Normalize(); // ‰EVec: cross(p.upVec, pForwardFromCamera)
+    // ã‚«ãƒ¡ãƒ©è¦–ç‚¹ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(camMPtr_->GetCurrentCamera()->GetAxis3Ptr()->right, axes_.up).Normalize(); // æ­£é¢Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(axes_.up, pForwardFromCamera).Normalize(); // å³Vec: cross(p.upVec, pForwardFromCamera)
 
-    // ˆÚ“®ƒxƒNƒgƒ‹
-    moveVec += pForwardFromCamera * inputVec.y; // “ü—ÍƒxƒNƒgƒ‹‚É‰‚¶‚Ä‰ÁZ
+    // ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
+    moveVec += pForwardFromCamera * inputVec.y; // å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«ã«å¿œã˜ã¦åŠ ç®—
     moveVec += redefinitionPRightFromCamera * inputVec.x;
 
-    // ƒJƒƒ‰À•W—p‚Ì’l‚ğ•â³
+    // ã‚«ãƒ¡ãƒ©åº§æ¨™ç”¨ã®å€¤ã‚’è£œæ­£
     SphericalCamera(inputVec);
 
-    // d—Í
+    // é‡åŠ›
     jumpVecNorm_ -= kGravity_;
 
-    // ƒWƒƒƒ“ƒvƒxƒNƒgƒ‹
+    // ã‚¸ãƒ£ãƒ³ãƒ—ãƒ™ã‚¯ãƒˆãƒ«
     Vector3 jumpVec{};
     if (KEYS::IsTrigger(DIK_SPACE)) { jumpVecNorm_ = kJumpPower_; }
     jumpVec += axes_.up * jumpVecNorm_;
 
-    // ˆÚ“®—Ê
+    // ç§»å‹•é‡
     velocity += moveVec.Normalize() * kMoveSpeed_;
     velocity += jumpVec;
 
@@ -184,32 +184,32 @@ void Player::SphericalCamera(Vector3& inputVec)
 {
     if (jumpVecNorm_)
     {
-        // ƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚Ì‹——£
+        // ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è·é›¢
         float dist = (camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - transform_.position).Length();
 
-        // ƒWƒƒƒ“ƒv‚ÉƒJƒƒ‰‚Ì’Ç]‚ªŒyŒ¸ à ‰æ–Ê‚Ì—h‚ê‚ğ—}§‚·‚é–Ú“I
-        // “àÏ‚ª‹K’è’l–¢–‚ÌƒWƒƒƒ“ƒv‚ğŒJ‚è•Ô‚·‚ÆƒJƒƒ‰‹——£‚Ç‚ñ‚Ç‚ñ‰“‚­‚È‚Á‚Ä‚¢‚­•s‹ï‡‚ªo‚Ä‚é
+        // ã‚¸ãƒ£ãƒ³ãƒ—æ™‚ã«ã‚«ãƒ¡ãƒ©ã®è¿½å¾“ãŒè»½æ¸› â‰’ ç”»é¢ã®æºã‚Œã‚’æŠ‘åˆ¶ã™ã‚‹ç›®çš„
+        // å†…ç©ãŒè¦å®šå€¤æœªæº€ã®æ™‚ã‚¸ãƒ£ãƒ³ãƒ—ã‚’ç¹°ã‚Šè¿”ã™ã¨ã‚«ãƒ¡ãƒ©è·é›¢ã©ã‚“ã©ã‚“é ããªã£ã¦ã„ãä¸å…·åˆãŒå‡ºã¦ã‚‹
         current_rad_ = dist;
     }
 
-    // ƒvƒŒƒCƒ„[‚Ì³–Ê‚ÆƒJƒƒ‰‚Ì³–Ê‚Ì“àÏ‚ª "‹K’è’l" –¢–‚Ì
-    // ‹K’è’l‚Ì’l‚ğ¬‚³‚­‚·‚é‚Ù‚ÇAƒvƒŒƒCƒ„[‚ª‰æ–Ê’†‰›‚É‹ß‚¢ˆÊ’u‚ÅAƒJƒƒ‰‚Ì‹““®‚ªØ‚è‘Ö‚í‚éB
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­£é¢ã¨ã‚«ãƒ¡ãƒ©ã®æ­£é¢ã®å†…ç©ãŒ "è¦å®šå€¤" æœªæº€ã®æ™‚
+    // è¦å®šå€¤ã®å€¤ã‚’å°ã•ãã™ã‚‹ã»ã©ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç”»é¢ä¸­å¤®ã«è¿‘ã„ä½ç½®ã§ã€ã‚«ãƒ¡ãƒ©ã®æŒ™å‹•ãŒåˆ‡ã‚Šæ›¿ã‚ã‚‹ã€‚
     if (axes_.forward.Dot(camMPtr_->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
     {
-        // ƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚Ì‹——£
+        // ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è·é›¢
         float dist = (camMPtr_->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - transform_.position).Length();
 
-        // ŠY“–‹——£‚ªA–{—ˆİ’è‚³‚ê‚Ä‚¢‚éƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚æ‚è’Z‚¢ê‡AŠY“–‹——£‚ğİ’è‹——£‚Æ‚·‚éB
+        // è©²å½“è·é›¢ãŒã€æœ¬æ¥è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢ã‚ˆã‚ŠçŸ­ã„å ´åˆã€è©²å½“è·é›¢ã‚’è¨­å®šè·é›¢ã¨ã™ã‚‹ã€‚
         if (dist < current_rad_)
         {
-            // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‘¤‚ÉŒü‚©‚Á‚ÄˆÚ“®‚·‚éÛAƒJƒƒ‰‚ÌÀ•W‚ğŒÅ’è‚·‚éˆÓ}
-            // ‚µ‚©‚µAŒ»ó‚¾‚ÆƒJƒƒ‰‚ª‰“‚´‚©‚éˆ—‚ªãè‚­‹@”\‚µ‚Ä‚¢‚È‚¢ˆ×ƒRƒƒ“ƒgƒAƒEƒgB
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©å´ã«å‘ã‹ã£ã¦ç§»å‹•ã™ã‚‹éš›ã€ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’å›ºå®šã™ã‚‹æ„å›³
+            // ã—ã‹ã—ã€ç¾çŠ¶ã ã¨ã‚«ãƒ¡ãƒ©ãŒé ã–ã‹ã‚‹å‡¦ç†ãŒä¸Šæ‰‹ãæ©Ÿèƒ½ã—ã¦ã„ãªã„ç‚ºã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã€‚
             //current_rad_ = dist;
         }
     }
     else
     {
-        // Œ»İ‹——£(cureent_rad_)‚ªA‰Šú‹——£(default_rad_)‚æ‚è¬‚³‚¢’l‚È‚çAŒ»İ‹——£‚ğ•â³‚·‚éB
+        // ç¾åœ¨è·é›¢(cureent_rad_)ãŒã€åˆæœŸè·é›¢(default_rad_)ã‚ˆã‚Šå°ã•ã„å€¤ãªã‚‰ã€ç¾åœ¨è·é›¢ã‚’è£œæ­£ã™ã‚‹ã€‚
         if (current_rad_ < default_rad_)
         {
             current_rad_ += 0.1f;
@@ -233,7 +233,7 @@ void Player::OnCollision(void)
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
-        // –{—ˆ‚Í‹…ód—ÍƒGƒŠƒA“à‚É“ü‚Á‚Ä‚éê‡‚És‚¤ˆ—B
+        // æœ¬æ¥ã¯çƒçŠ¶é‡åŠ›ã‚¨ãƒªã‚¢å†…ã«å…¥ã£ã¦ã‚‹å ´åˆã«è¡Œã†å‡¦ç†ã€‚
         //Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
         Vector3 center2PlayerVec = sphereCollider_.center - other->center;
         axes_.up = center2PlayerVec.Normalize();
@@ -242,38 +242,38 @@ void Player::OnCollision(void)
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
-        // ƒWƒƒƒ“ƒv‚·‚é—Ê
+        // ã‚¸ãƒ£ãƒ³ãƒ—ã™ã‚‹é‡
         jumpVecNorm_ = 0.f;
 
-        // ‚ß‚è‚İ‹——£‚ğo‚· (‚ß‚è‚ñ‚Å‚¢‚é‘z’è - ‹——£j‚È‚Ì‚ÅŒ‹‰Ê‚Íƒ}ƒCƒiƒX‘z’èHH
+        // ã‚ã‚Šè¾¼ã¿è·é›¢ã‚’å‡ºã™ (ã‚ã‚Šè¾¼ã‚“ã§ã„ã‚‹æƒ³å®š - è·é›¢ï¼‰ãªã®ã§çµæœã¯ãƒã‚¤ãƒŠã‚¹æƒ³å®šï¼Ÿï¼Ÿ
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
 
         Vector3 currentPos = transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
-        // ³‹K‰»‚³‚ê‚½‹…‚©‚çƒvƒŒƒCƒ„[‚Ü‚Å‚ÌƒxƒNƒgƒ‹ * ‚ß‚è‚İ‹——£
-        currentPos += axes_.up * -diff; // ‚±‚±‚ğƒ}ƒCƒiƒX•„†‚Å’l”½“]
+        // æ­£è¦åŒ–ã•ã‚ŒãŸçƒã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ã§ã®ãƒ™ã‚¯ãƒˆãƒ« * ã‚ã‚Šè¾¼ã¿è·é›¢
+        currentPos += axes_.up * -diff; // ã“ã“ã‚’ãƒã‚¤ãƒŠã‚¹ç¬¦å·ã§å€¤åè»¢
 
-        // À•W‚ğ•â³
+        // åº§æ¨™ã‚’è£œæ­£
         transform_.position = currentPos;
 
-        // •â³‚³‚ê‚½’l‚Ås—ñ‚ğ¶¬
+        // è£œæ­£ã•ã‚ŒãŸå€¤ã§è¡Œåˆ—ã‚’ç”Ÿæˆ
         coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
     if (sphereCollider_.GetOther()->GetID() == "rock")
     {
-        // ‚ß‚è‚İ‹——£‚ÌZo•û–@‚ª•ª‚©‚ç‚ñBAABB‘¤‚Ì”¼Œa‚Ç‚¤‚â‚Á‚ÄZo‚·‚é‚ñ‚âB
+        // ã‚ã‚Šè¾¼ã¿è·é›¢ã®ç®—å‡ºæ–¹æ³•ãŒåˆ†ã‹ã‚‰ã‚“ã€‚AABBå´ã®åŠå¾„ã©ã†ã‚„ã£ã¦ç®—å‡ºã™ã‚‹ã‚“ã‚„ã€‚
 
-        // Œ»İÀ•W
+        // ç¾åœ¨åº§æ¨™
         Vector3 currentPos = transform_.position;
 
-        // ˆÚ“®‚µ‚½•ª‚¾‚¯‰Ÿ‚µ–ß‚·‚æ‚¤‚É‚·‚éB
+        // ç§»å‹•ã—ãŸåˆ†ã ã‘æŠ¼ã—æˆ»ã™ã‚ˆã†ã«ã™ã‚‹ã€‚
         currentPos -= velocity_;
 
-        // À•W‚ğ•â³
+        // åº§æ¨™ã‚’è£œæ­£
         transform_.position = currentPos;
 
-        // •â³‚³‚ê‚½’l‚Ås—ñ‚ğ¶¬
+        // è£œæ­£ã•ã‚ŒãŸå€¤ã§è¡Œåˆ—ã‚’ç”Ÿæˆ
         coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
     if (sphereCollider_.GetOther()->GetID() == "rabbit")

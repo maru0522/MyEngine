@@ -1,4 +1,4 @@
-#include "ResultScene.h"
+﻿#include "ResultScene.h"
 
 void ResultScene::Initialize(void)
 {

@@ -1,4 +1,4 @@
-#include "Timer.h"
+ï»¿#include "Timer.h"
 #include "Util.h"
 
 void InternalTimer::Start(void)
@@ -8,9 +8,9 @@ void InternalTimer::Start(void)
 
 void InternalTimer::Start(float sec_finishTime)
 {
-    // Šù‚Éİ’è‚³‚ê‚½–Ú“IŠÔ‚ğ‰ß‚¬‚Ä‚¢‚éi‚ ‚é‚¢‚Í‚ ‚é‚¢‚ÍI—¹‚³‚¹‚ç‚ê‚½)
-    if (GetIsFinished()) { Finish(); } // Še•Ï”‰Šú‰»
-    // ‚Ü‚¾–Ú“IŠÔ‚ğ‰ß‚¬‚Ä‚¢‚È‚¢ && I—¹‚ğÀs‚µ‚Ä‚¢‚È‚¢ó‘Ô‚È‚çŠü‹p
+    // æ—¢ã«è¨­å®šã•ã‚ŒãŸç›®çš„æ™‚é–“ã‚’éãã¦ã„ã‚‹ï¼ˆã‚ã‚‹ã„ã¯ã‚ã‚‹ã„ã¯çµ‚äº†ã•ã›ã‚‰ã‚ŒãŸ)
+    if (GetIsFinished()) { Finish(); } // å„å¤‰æ•°åˆæœŸåŒ–
+    // ã¾ã ç›®çš„æ™‚é–“ã‚’éãã¦ã„ãªã„ && çµ‚äº†ã‚’å®Ÿè¡Œã—ã¦ã„ãªã„çŠ¶æ…‹ãªã‚‰æ£„å´
     else if (mil_startTime_ > 0) return;
 
     mil_startTime_ = GetNowCount<milliseconds>();
@@ -19,7 +19,7 @@ void InternalTimer::Start(float sec_finishTime)
 
 void InternalTimer::Pause(void)
 {
-    // ÄŠJ‚ğÀs‚µ‚Ä‚¢‚È‚¢ó‘Ô‚È‚çŠü‹p
+    // å†é–‹ã‚’å®Ÿè¡Œã—ã¦ã„ãªã„çŠ¶æ…‹ãªã‚‰æ£„å´
     if (mil_pauseTime_ > 0) return;
 
     mil_pauseTime_ = GetNowCount<milliseconds>();
@@ -27,18 +27,18 @@ void InternalTimer::Pause(void)
 
 void InternalTimer::Resume(void)
 {
-    // ’â~‚ğÀs‚µ‚Ä‚¢‚È‚¢ó‘Ô‚È‚çŠü‹p
+    // åœæ­¢ã‚’å®Ÿè¡Œã—ã¦ã„ãªã„çŠ¶æ…‹ãªã‚‰æ£„å´
     if (mil_pauseTime_ == 0) return;
 
-    // ’â~‚µ‚Ä‚¢‚½ŠÔ‚Ì‡Œv += ¡‚ÌŠÔ - ’â~‚µ‚½‚ÌŠÔ
+    // åœæ­¢ã—ã¦ã„ãŸæ™‚é–“ã®åˆè¨ˆ += ä»Šã®æ™‚é–“ - åœæ­¢ã—ãŸæ™‚ã®æ™‚é–“
     mil_totalPuaseTime_ += GetNowCount<milliseconds>() - mil_pauseTime_;
-    // ’â~‚µ‚Ä‚¢‚½‚ÌŠÔ‚ğ‰Šú‰»
+    // åœæ­¢ã—ã¦ã„ãŸæ™‚ã®æ™‚é–“ã‚’åˆæœŸåŒ–
     mil_pauseTime_ = 0;
 }
 
 void InternalTimer::Finish(void)
 {
-    // Še•Ï”‚Ì‰Šú‰»
+    // å„å¤‰æ•°ã®åˆæœŸåŒ–
     mil_startTime_ = 0;
     mil_pauseTime_ = 0;
     mil_totalPuaseTime_ = 0.f;
@@ -55,12 +55,12 @@ void InternalTimer::StartSlow(float spd)
 
 void InternalTimer::FinishSlow(void)
 {
-    // ƒXƒ[ƒ‚[ƒVƒ‡ƒ“‚ğŠJn‚µ‚Ä‚¢‚È‚¢‚È‚çŠü‹pB
+    // ã‚¹ãƒ­ãƒ¼ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é–‹å§‹ã—ã¦ã„ãªã„ãªã‚‰æ£„å´ã€‚
     if (mil_slowTime_ == 0) return;
 
-    // ’â~‚µ‚Ä‚¢‚½ŠÔ‚Ì‡Œv += (¡‚ÌŠÔ - ƒXƒ[ƒ‚[ƒVƒ‡ƒ“ŠJn‚ÌŠÔ) * (1 - ‘¬“x)@¦‘¬“x‚ª0.1‚ÅÀŠÔ10•bi‚ß‚½ê‡A“à•”‚Å‚Í1•b‚µ‚©—§‚Á‚Ä‚¢‚È‚¢‚±‚Æ‚ğ•\‚·‚½‚ßA’â~‚µ‚Ä‚¢‚½ŠÔ‚Ì‡Œv‚É9•b•ª‘«‚µ‚Ä‚¢‚éiŒã‚Å‡Œv‚ÌŒo‰ßŠÔ‚©‚çˆø‚­‚½‚ßj
+    // åœæ­¢ã—ã¦ã„ãŸæ™‚é–“ã®åˆè¨ˆ += (ä»Šã®æ™‚é–“ - ã‚¹ãƒ­ãƒ¼ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚ã®æ™‚é–“) * (1 - é€Ÿåº¦)ã€€â€»é€Ÿåº¦ãŒ0.1ã§å®Ÿæ™‚é–“10ç§’é€²ã‚ãŸå ´åˆã€å†…éƒ¨ã§ã¯1ç§’ã—ã‹ç«‹ã£ã¦ã„ãªã„ã“ã¨ã‚’è¡¨ã™ãŸã‚ã€åœæ­¢ã—ã¦ã„ãŸæ™‚é–“ã®åˆè¨ˆã«9ç§’åˆ†è¶³ã—ã¦ã„ã‚‹ï¼ˆå¾Œã§åˆè¨ˆã®çµŒéæ™‚é–“ã‹ã‚‰å¼•ããŸã‚ï¼‰
     mil_totalPuaseTime_ += (GetNowCount<milliseconds>() - mil_slowTime_) * (1 - gameSpeed_);
-    // ’â~‚µ‚Ä‚¢‚½‚ÌŠÔ‚ğ‰Šú‰»
+    // åœæ­¢ã—ã¦ã„ãŸæ™‚ã®æ™‚é–“ã‚’åˆæœŸåŒ–
     mil_slowTime_ = 0;
     gameSpeed_ = 1.f;
 }
@@ -83,23 +83,23 @@ FrameTimer::FrameTimer(int32_t frame_max, int32_t value_add) : frame_max_(frame_
 
 void FrameTimer::Start(void)
 {
-    // Å‘å’l‚ª0‚È‚ç
+    // æœ€å¤§å€¤ãŒ0ãªã‚‰
     if (frame_max_ == 0)
     {
-        // ƒƒOo‚µ‚ÄŠü‹p
+        // ãƒ­ã‚°å‡ºã—ã¦æ£„å´
         Util::Log::PrintOutputWindow("[FrameTimer]: \"Start()\" could not be executed because frame_max_ is 0.");
         return;
     }
 
-    // Šù‚Éƒ^ƒCƒ}[‚ªI—¹‚µ‚Ä‚¢‚½‚ç
+    // æ—¢ã«ã‚¿ã‚¤ãƒãƒ¼ãŒçµ‚äº†ã—ã¦ã„ãŸã‚‰
     if (GetIsFinished())
     {
-        // ’l‚ğ‰Šú‰»
+        // å€¤ã‚’åˆæœŸåŒ–
         frame_current_ = 0;
     }
 
-    // ‰ÁZ
-    frame_current_ += value_add_; // ˜A‘±ƒtƒŒ[ƒ€‚Å‚Ìg—p‚Í‚¾‚ß
+    // åŠ ç®—
+    frame_current_ += value_add_; // é€£ç¶šãƒ•ãƒ¬ãƒ¼ãƒ ã§ã®ä½¿ç”¨ã¯ã ã‚
 }
 
 void FrameTimer::Start(int32_t frame_max)
@@ -110,12 +110,12 @@ void FrameTimer::Start(int32_t frame_max)
 
 void FrameTimer::Update(void)
 {
-    // (ƒtƒŒ[ƒ€‚ÌƒJƒEƒ“ƒg‚ªn‚Ü‚Á‚Ä‚¢‚é && Å‘åƒtƒŒ[ƒ€‚ğ’´‚¦‚Ä‚¢‚È‚¢) && ƒ|[ƒY’†‚Å‚Í‚È‚¢
+    // (ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚«ã‚¦ãƒ³ãƒˆãŒå§‹ã¾ã£ã¦ã„ã‚‹ && æœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¶…ãˆã¦ã„ãªã„) && ãƒãƒ¼ã‚ºä¸­ã§ã¯ãªã„
     if (frame_current_ && frame_current_ < frame_max_ && is_pause_ == false)
     {
         if (frame_current_ >= frame_max_ && is_loop_) frame_current_ = 0;
 
-        // Œ»İ’l += ‰ÁZ’l * ƒQ[ƒ€ƒXƒs[ƒh
+        // ç¾åœ¨å€¤ += åŠ ç®—å€¤ * ã‚²ãƒ¼ãƒ ã‚¹ãƒ”ãƒ¼ãƒ‰
         frame_current_ += value_add_ * gameSpeed_;
     }
 }
@@ -137,7 +137,7 @@ void FrameTimer::Finish(void)
 
 bool FrameTimer::GetIsFinished(void)
 {
-    // ƒ[ƒœZ‰ñ”ğ
+    // ã‚¼ãƒ­é™¤ç®—å›é¿
     if (frame_max_ == 0) return false;
 
     return frame_current_ / frame_max_ >= 1.f;
@@ -145,10 +145,10 @@ bool FrameTimer::GetIsFinished(void)
 
 float FrameTimer::GetTimeRate(bool is_clamp0To1)
 {
-    // ƒ[ƒœZ‰ñ”ğ
+    // ã‚¼ãƒ­é™¤ç®—å›é¿
     if (frame_max_ == 0) return 0;
 
-    // Œ‹‰Ê‚ª 0~1 ‚Ìclamp‚·‚é‚©
+    // çµæœãŒ 0~1 ã®æ™‚clampã™ã‚‹ã‹
     if(is_clamp0To1) return std::clamp(frame_current_ / frame_max_, 0.f, 1.f);
 
     return frame_current_ / frame_max_;

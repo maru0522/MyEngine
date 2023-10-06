@@ -1,4 +1,4 @@
-#include "Util.h"
+ï»¿#include "Util.h"
 #include <chrono>
 #include <cmath>
 #include <Windows.h>
@@ -22,17 +22,17 @@ void Util::Log::PrintExternalText(const std::string& str, const std::experimenta
     std::ifstream ifs{ logTextPath };
     std::ofstream ofs{};
 
-    if (ifs.is_open()) { // ƒƒOƒeƒLƒXƒg‚ğŠJ‚¯‚½ê‡
-        ofs.open(fileName, std::ios::app); // ƒƒOƒeƒLƒXƒg“WŠJ
-        std::string writeString{ ITimer::GetNowDateTime() }; // Œ»İ‚Ì“ú‚ğ•¶š—ñŒ^‚Åæ“¾
+    if (ifs.is_open()) { // ãƒ­ã‚°ãƒ†ã‚­ã‚¹ãƒˆã‚’é–‹ã‘ãŸå ´åˆ
+        ofs.open(fileName, std::ios::app); // ãƒ­ã‚°ãƒ†ã‚­ã‚¹ãƒˆå±•é–‹
+        std::string writeString{ ITimer::GetNowDateTime() }; // ç¾åœ¨ã®æ—¥æ™‚ã‚’æ–‡å­—åˆ—å‹ã§å–å¾—
         ofs << writeString << " - " << str << std::endl;
         ofs.close();
     }
-    else { // ƒƒOƒeƒLƒXƒg‚ğŠJ‚¯‚È‚©‚Á‚½ê‡
-        ofs.open(fileName, std::ios::out); // ƒƒOƒeƒLƒXƒg¶¬
-        std::string createDate{ ITimer::GetNowDateTime() }; // ì¬“ú‚ğ•¶š—ñŒ^‚Åæ“¾
+    else { // ãƒ­ã‚°ãƒ†ã‚­ã‚¹ãƒˆã‚’é–‹ã‘ãªã‹ã£ãŸå ´åˆ
+        ofs.open(fileName, std::ios::out); // ãƒ­ã‚°ãƒ†ã‚­ã‚¹ãƒˆç”Ÿæˆ
+        std::string createDate{ ITimer::GetNowDateTime() }; // ä½œæˆæ—¥æ™‚ã‚’æ–‡å­—åˆ—å‹ã§å–å¾—
         ofs << "This text log was created on " << createDate << std::endl;
-        std::string writeString{ ITimer::GetNowDateTime() }; // Œ»İ‚Ì“ú‚ğ•¶š—ñŒ^‚Åæ“¾
+        std::string writeString{ ITimer::GetNowDateTime() }; // ç¾åœ¨ã®æ—¥æ™‚ã‚’æ–‡å­—åˆ—å‹ã§å–å¾—
         ofs << writeString << " - " << str << std::endl;
         ofs.close();
     }

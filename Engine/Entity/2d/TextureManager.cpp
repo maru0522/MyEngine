@@ -1,4 +1,4 @@
-#include "TextureManager.h"
+ï»¿#include "TextureManager.h"
 #include "Util.h"
 #include "Vector4.h"
 #include <DirectXTex.h>
@@ -13,33 +13,33 @@ void TextureManager::Load(const fsPath& path)
 {
     InitDirectX* p_idx{ InitDirectX::GetInstance() };
 
-    Image tempImg{}; // ‚Ä‚ñ‚Û‚ç‚è‚ñ
+    Image tempImg{}; // ã¦ã‚“ã½ã‚‰ã‚Šã‚“
 
     tempImg.path = path;
 
-    // Imaged•¡Šm”F
+    // Imageé‡è¤‡ç¢ºèª
     if (CheckDuplicateTexture(tempImg)) return;
 
-#pragma region ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
-    //‰æ‘œƒCƒ[ƒWƒf[ƒ^”z—ñ
+#pragma region ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
+    //ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿é…åˆ—
     DirectX::TexMetadata metadata{};
     DirectX::ScratchImage scratchImg{};
 
-    // WICƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh‚Ég‚¤ path‚ğ•¶š—ñ•ÏŠ·
+    // WICãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰ã«ä½¿ã† pathã‚’æ–‡å­—åˆ—å¤‰æ›
     std::string strPath{ tempImg.path.string() };
     std::wstring wStrPath{ strPath.begin(), strPath.end() };
     const wchar_t* szFile{ wStrPath.c_str() };
 
-    // WICƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh
+    // WICãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰
     HRESULT hr = LoadFromWICFile(szFile, DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) return;
     assert(SUCCEEDED(hr));
 #pragma endregion
 
-#pragma region ƒ~ƒbƒvƒ}ƒbƒv
+#pragma region ãƒŸãƒƒãƒ—ãƒãƒƒãƒ—
     DirectX::ScratchImage mipChain{};
 
-    // ƒ~ƒbƒvƒ}ƒbƒv¶¬
+    // ãƒŸãƒƒãƒ—ãƒãƒƒãƒ—ç”Ÿæˆ
     hr = GenerateMipMaps(scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipChain);
     if (SUCCEEDED(hr)) {
         scratchImg = std::move(mipChain);
@@ -47,17 +47,17 @@ void TextureManager::Load(const fsPath& path)
     }
 #pragma endregion
 
-    // “Ç‚İ‚ñ‚¾ƒfƒBƒtƒ…[ƒYƒeƒNƒXƒ`ƒƒ‚ğSRGB‚Æ‚µ‚Äˆµ‚¤
+    // èª­ã¿è¾¼ã‚“ã ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’SRGBã¨ã—ã¦æ‰±ã†
     metadata.format = DirectX::MakeSRGB(metadata.format);
 
-#pragma region ƒq[ƒvİ’è‚ÆƒfƒXƒNƒŠƒvƒ^İ’è
-    // ƒq[ƒvİ’è
+#pragma region ãƒ’ãƒ¼ãƒ—è¨­å®šã¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿è¨­å®š
+    // ãƒ’ãƒ¼ãƒ—è¨­å®š
     D3D12_HEAP_PROPERTIES texHeapProp{};
     texHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
     texHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
     texHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
-    // ƒŠƒ\[ƒXİ’è
+    // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
     D3D12_RESOURCE_DESC textureResourceDesc{};
     textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
     textureResourceDesc.Format = metadata.format;
@@ -68,46 +68,46 @@ void TextureManager::Load(const fsPath& path)
     textureResourceDesc.SampleDesc.Count = 1;
 #pragma endregion
 
-#pragma region ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@
-    // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Ì¶¬
+#pragma region ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
     hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff));
     assert(SUCCEEDED(hr));
 #pragma endregion
 
-#pragma region ƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
-    // ‘Sƒ~ƒbƒvƒ}ƒbƒv‚É‚Â‚¢‚Ä
+#pragma region ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
+    // å…¨ãƒŸãƒƒãƒ—ãƒãƒƒãƒ—ã«ã¤ã„ã¦
     for (size_t i = 0; i < metadata.mipLevels; i++) {
-        // ƒ~ƒbƒvƒ}ƒbƒvƒŒƒxƒ‹‚ğw’è‚µ‚ÄƒCƒ[ƒW‚ğæ“¾
+        // ãƒŸãƒƒãƒ—ãƒãƒƒãƒ—ãƒ¬ãƒ™ãƒ«ã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—
         const DirectX::Image* img = scratchImg.GetImage(i, 0, 0);
 
-        // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Éƒf[ƒ^“]‘—
+        // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿è»¢é€
         hr = tempImg.buff->WriteToSubresource(
             static_cast<UINT>(i),
-            nullptr,		// ‘S—Ìˆæ‚ÖƒRƒs[
-            img->pixels,	// Œ³ƒf[ƒ^ƒAƒhƒŒƒX
-            static_cast<UINT>(img->rowPitch),	// 1ƒ‰ƒCƒ“ƒTƒCƒY
-            static_cast<UINT>(img->slicePitch)	// ‘SƒTƒCƒY
+            nullptr,		// å…¨é ˜åŸŸã¸ã‚³ãƒ”ãƒ¼
+            img->pixels,	// å…ƒãƒ‡ãƒ¼ã‚¿ã‚¢ãƒ‰ãƒ¬ã‚¹
+            static_cast<UINT>(img->rowPitch),	// 1ãƒ©ã‚¤ãƒ³ã‚µã‚¤ã‚º
+            static_cast<UINT>(img->slicePitch)	// å…¨ã‚µã‚¤ã‚º
         );
         assert(SUCCEEDED(hr));
     }
 #pragma endregion
 
-    // InitDirectX“à‚ÌDescriptorHeap‚É¶¬B
-    // •Ô‚è’l‚Ågpu‚ÌƒAƒhƒŒƒX‚ğæ“¾B
+    // InitDirectXå†…ã®DescriptorHeapã«ç”Ÿæˆã€‚
+    // è¿”ã‚Šå€¤ã§gpuã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—ã€‚
     tempImg.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff.Get());
 
-    // “o˜^
+    // ç™»éŒ²
     RegisterImg(tempImg);
 }
 
 void TextureManager::Load(const fsPath& path, const std::string& nickname)
 {
-    // nickname‚Ìd•¡Šm”F
+    // nicknameã®é‡è¤‡ç¢ºèª
     if (CheckDuplicateNickname(nickname)) return;
 
     Load(path);
 
-    //nickname“o˜^
+    //nicknameç™»éŒ²
     RegisterNickname(path, nickname);
 }
 
@@ -130,7 +130,7 @@ const TextureManager::Image* TextureManager::GetImagePtr(const fsPath& path) con
     }
     catch (const std::out_of_range&)
     {
-        // ƒGƒ‰[ƒƒOo—Í
+        // ã‚¨ãƒ©ãƒ¼ãƒ­ã‚°å‡ºåŠ›
         Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a texture corresponding to the argument path(" + path.string() + "), so replaced it with \"Missing Texture\". ");
         return &textures_.at("MISSING");
     }
@@ -146,7 +146,7 @@ const TextureManager::Image* TextureManager::GetImagePtrByNickname(const std::st
     }
     catch (const std::exception&)
     {
-        // ƒGƒ‰[ƒƒOo—Í
+        // ã‚¨ãƒ©ãƒ¼ãƒ­ã‚°å‡ºåŠ›
         Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a path corresponding to the argument nickname(" + nickname + "), so replaced it with \"MISSING\". ");
         path = "MISSING";
     }
@@ -156,13 +156,13 @@ const TextureManager::Image* TextureManager::GetImagePtrByNickname(const std::st
 
 void TextureManager::RegisterImg(const Image& img)
 {
-    // Image‚Ì—v‘f\’z
+    // Imageã®è¦ç´ æ§‹ç¯‰
     textures_.emplace(img.path, img);
 }
 
 void TextureManager::RegisterNickname(const fsPath& path, const std::string& nickname)
 {
-    // nickname‚Ì—v‘f\’z
+    // nicknameã®è¦ç´ æ§‹ç¯‰
     paths_.emplace(nickname, path);
 }
 
@@ -170,20 +170,20 @@ void TextureManager::GenerateMissingImage(void)
 {
     InitDirectX* p_idx{ InitDirectX::GetInstance() };
 
-#pragma region missingTexture¶¬
-    Image tempImg{}; // ‚Ä‚ñ‚Û‚ç‚è‚ñ
+#pragma region missingTextureç”Ÿæˆ
+    Image tempImg{}; // ã¦ã‚“ã½ã‚‰ã‚Šã‚“
 
     tempImg.path = "MISSING";
 
-    // ˆê•Ó‚ÌƒsƒNƒZƒ‹”
+    // ä¸€è¾ºã®ãƒ”ã‚¯ã‚»ãƒ«æ•°
     constexpr size_t imageLength{ 256 };
-    // ”z—ñ‚Ì—v‘f”
+    // é…åˆ—ã®è¦ç´ æ•°
     constexpr size_t imageDataCount{ imageLength * imageLength };
 
-    // ƒCƒ[ƒWƒf[ƒ^”z—ñ
+    // ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿é…åˆ—
     std::vector<Vector4> imageData{imageDataCount};
 
-    // ¶¬
+    // ç”Ÿæˆ
     for (size_t i = 0; i < imageDataCount; i++) {
         if (i < 32513) {
             if (i % 256 < 128) {
@@ -207,14 +207,14 @@ void TextureManager::GenerateMissingImage(void)
 
 #pragma endregion
 
-#pragma region ƒq[ƒvİ’è‚ÆƒfƒXƒNƒŠƒvƒ^İ’è
-    // ƒq[ƒvİ’è
+#pragma region ãƒ’ãƒ¼ãƒ—è¨­å®šã¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿è¨­å®š
+    // ãƒ’ãƒ¼ãƒ—è¨­å®š
     D3D12_HEAP_PROPERTIES texHeapProp{};
     texHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
     texHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
     texHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
-    // ƒŠƒ\[ƒXİ’è
+    // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
     D3D12_RESOURCE_DESC textureResourceDesc{};
     textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
     textureResourceDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -225,8 +225,8 @@ void TextureManager::GenerateMissingImage(void)
     textureResourceDesc.SampleDesc.Count = 1;
 #pragma endregion
 
-#pragma region ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@
-    // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Ì¶¬
+#pragma region ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
     HRESULT hr = p_idx->GetDevice()->CreateCommittedResource(
         &texHeapProp,
         D3D12_HEAP_FLAG_NONE,
@@ -238,33 +238,33 @@ void TextureManager::GenerateMissingImage(void)
     assert(SUCCEEDED(hr));
 #pragma endregion
 
-#pragma region ƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
-    // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Éƒf[ƒ^“]‘—
+#pragma region ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿è»¢é€
     hr = tempImg.buff->WriteToSubresource(
         0,
-        nullptr,		// ‘S—Ìˆæ‚ÖƒRƒs[
-        imageData.data(),	// Œ³ƒf[ƒ^ƒAƒhƒŒƒX
-        sizeof(Vector4) * imageLength,    // 1ƒ‰ƒCƒ“ƒTƒCƒY
-        sizeof(Vector4) * imageDataCount  // ‘SƒTƒCƒY
+        nullptr,		// å…¨é ˜åŸŸã¸ã‚³ãƒ”ãƒ¼
+        imageData.data(),	// å…ƒãƒ‡ãƒ¼ã‚¿ã‚¢ãƒ‰ãƒ¬ã‚¹
+        sizeof(Vector4) * imageLength,    // 1ãƒ©ã‚¤ãƒ³ã‚µã‚¤ã‚º
+        sizeof(Vector4) * imageDataCount  // å…¨ã‚µã‚¤ã‚º
     );
 
     assert(SUCCEEDED(hr));
 #pragma endregion
 
-    // InitDirectX“à‚ÌDescriptorHeap‚É¶¬B
-    // •Ô‚è’l‚Ågpu‚ÌƒAƒhƒŒƒX‚ğæ“¾B
+    // InitDirectXå†…ã®DescriptorHeapã«ç”Ÿæˆã€‚
+    // è¿”ã‚Šå€¤ã§gpuã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—ã€‚
     tempImg.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff.Get());
 
 
-    // “o˜^
+    // ç™»éŒ²
     RegisterImg(tempImg);
 }
 
 bool TextureManager::CheckDuplicateTexture(const Image& img)
 {
-    // Image‚ª“o˜^Ï‚İ‚©ƒ`ƒFƒbƒN
+    // ImageãŒç™»éŒ²æ¸ˆã¿ã‹ãƒã‚§ãƒƒã‚¯
     if (textures_.count(img.path)) {
-        // “o˜^Ï‚İ‚Ìê‡ƒƒOo—Í
+        // ç™»éŒ²æ¸ˆã¿ã®å ´åˆãƒ­ã‚°å‡ºåŠ›
         Util::Log::PrintOutputWindow("[TextureManager] : This image is already loaded. (" + img.path.string() + ")");
 
         return true;
@@ -274,9 +274,9 @@ bool TextureManager::CheckDuplicateTexture(const Image& img)
 
 bool TextureManager::CheckDuplicateNickname(const std::string& nickname)
 {
-    // nickname‚ª“o˜^Ï‚İ‚©ƒ`ƒFƒbƒN
+    // nicknameãŒç™»éŒ²æ¸ˆã¿ã‹ãƒã‚§ãƒƒã‚¯
     if (paths_.count(nickname)) {
-        // “o˜^Ï‚İ‚Ìê‡ƒƒOo—Í
+        // ç™»éŒ²æ¸ˆã¿ã®å ´åˆãƒ­ã‚°å‡ºåŠ›
         Util::Log::PrintOutputWindow("[TextureManager] : This nickname is already in use. (" + nickname + ") The registration has therefore been cancelled.");
 
         return true;

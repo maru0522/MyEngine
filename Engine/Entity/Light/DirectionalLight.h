@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector3.h"
 #include "ConstBuffer.h"
 
 class DirectionalLight
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
@@ -18,14 +18,14 @@ public:
     };
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     Vector3 lightDir_{ 1,0,0 };
     Vector3 lightColor_{ 1,1,1 };
 
     bool isActive_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.Normalize(); }
     inline void SetLightColor(const Vector3& lightColor) { lightColor_ = lightColor; }
     inline void SetIsActive(bool isActive) { isActive_ = isActive; }

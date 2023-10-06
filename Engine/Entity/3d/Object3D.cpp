@@ -1,4 +1,4 @@
-#include "Object3D.h"
+ï»¿#include "Object3D.h"
 #include "InitDirectX.h"
 
 LightGroup* Object3D::sLightGroupPtr_{ nullptr };
@@ -12,13 +12,13 @@ void Object3D::StaticInitialize(ModelManager* modelMPtr, TextureManager* texMPtr
     sTexMPtr_ = texMPtr;
     sCbMatViewPerse_.Create();
 
-    // ‰Šú‰»Žž‚ÍƒJƒƒ‰‚ª‘¶Ý‚µ‚È‚¢‚½‚ßCameraManager‚ÌSetCurrentCamera()Žž‚ÉŽÀs‚·‚é‚æ‚¤‚É‚·‚é
+    // åˆæœŸåŒ–æ™‚ã¯ã‚«ãƒ¡ãƒ©ãŒå­˜åœ¨ã—ãªã„ãŸã‚CameraManagerã®SetCurrentCamera()æ™‚ã«å®Ÿè¡Œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
     //UpdateCBMatViewPerse();
 }
 
 void Object3D::UpdateCBMatViewPerse(CameraManager* camMPtr)
 {
-    // nullƒ`ƒFƒbƒN
+    // nullãƒã‚§ãƒƒã‚¯
     if (!camMPtr) { return; }
     if (!camMPtr->GetCurrentCamera()) { return; }
 
@@ -30,17 +30,17 @@ void Object3D::UpdateCBMatViewPerse(CameraManager* camMPtr)
 
 void Object3D::PreDraw(BlendMode blendmode)
 {
-    // ƒCƒ“ƒXƒ^ƒ“ƒXŽæ“¾
+    // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-    // ƒvƒŠƒ~ƒeƒBƒuŒ`ó‚ÌÝ’èƒRƒ}ƒ“ƒh
-    iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // ŽOŠpŒ`ƒŠƒXƒg
+    // ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–å½¢çŠ¶ã®è¨­å®šã‚³ãƒžãƒ³ãƒ‰
+    iDX->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // ä¸‰è§’å½¢ãƒªã‚¹ãƒˆ
 
     std::vector<ID3D12DescriptorHeap*> ppHeaps = { iDX->GetDescHeap_t()->GetDescHeap() };
-    // SRVƒq[ƒv‚ÌÝ’èƒRƒ}ƒ“ƒh
+    // SRVãƒ’ãƒ¼ãƒ—ã®è¨­å®šã‚³ãƒžãƒ³ãƒ‰
     iDX->GetCommandList()->SetDescriptorHeaps((UINT)ppHeaps.size(), ppHeaps.data());
 
-    // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Æƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌÝ’èƒRƒ}ƒ“ƒh
+    // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã¨ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®è¨­å®šã‚³ãƒžãƒ³ãƒ‰
     iDX->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D",blendmode)->pipelineState.Get());
     iDX->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->rootSignature.Get());
 }
@@ -49,7 +49,7 @@ void Object3D::SetDrawBlendMode(BlendMode blendmode)
 {
     InitDirectX* iDXPtr = InitDirectX::GetInstance();
 
-    // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Æƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌÝ’èƒRƒ}ƒ“ƒh
+    // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã¨ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®è¨­å®šã‚³ãƒžãƒ³ãƒ‰
     iDXPtr->GetCommandList()->SetPipelineState(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->pipelineState.Get());
     iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->rootSignature.Get());
 }
@@ -57,20 +57,20 @@ void Object3D::SetDrawBlendMode(BlendMode blendmode)
 Object3D::Object3D(const fsPath& path) :
     parent_(nullptr)
 {
-    // ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
+    // ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
     model_ = sModelMPtr_->GetModel(path);
-    // ƒ‚ƒfƒ‹‚Ìƒ}ƒeƒŠƒAƒ‹—p’è”ƒoƒbƒtƒ@‚ð¶¬
+    // ãƒ¢ãƒ‡ãƒ«ã®ãƒžãƒ†ãƒªã‚¢ãƒ«ç”¨å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’ç”Ÿæˆ
     model_.cbMaterial_.Create();
-    // ƒ}ƒeƒŠƒAƒ‹‚ð’è”ƒoƒbƒtƒ@‚Ö“]‘—
+    // ãƒžãƒ†ãƒªã‚¢ãƒ«ã‚’å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¸è»¢é€
     model_.UpdateCB();
 
-    // ’è”ƒoƒbƒtƒ@¶¬
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
     cb_.Create();
 }
 
 void Object3D::Update(void)
 {
-    // À•WŒvŽZ‚Æ“]‘—
+    // åº§æ¨™è¨ˆç®—ã¨è»¢é€
     cb_.GetConstBuffMap()->matWorld = coordinate_.mat_world;
     model_.UpdateCB();
 }
@@ -86,20 +86,20 @@ void Object3D::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture)
 
     InitDirectX* iDX = InitDirectX::GetInstance();
 
-    // ’¸“_ƒoƒbƒtƒ@
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
     iDX->GetCommandList()->IASetVertexBuffers(0, 1, &model_.meshPtr_->GetVBPtr()->GetVbView());
-    // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
     iDX->GetCommandList()->IASetIndexBuffer(&model_.meshPtr_->GetIBPtr()->GetIbView());
 
-    // ’è”ƒoƒbƒtƒ@ƒrƒ…[iCBVj‚ÌÝ’èƒRƒ}ƒ“ƒh
+    // å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ï¼ˆCBVï¼‰ã®è¨­å®šã‚³ãƒžãƒ³ãƒ‰
     iDX->GetCommandList()->SetGraphicsRootConstantBufferView(1, cb_.GetBuffer()->GetGPUVirtualAddress());
     iDX->GetCommandList()->SetGraphicsRootConstantBufferView(2, sCbMatViewPerse_.GetBuffer()->GetGPUVirtualAddress());
     iDX->GetCommandList()->SetGraphicsRootConstantBufferView(3, model_.cbMaterial_.GetBuffer()->GetGPUVirtualAddress());
 
-    //Žw’è‚Ìƒq[ƒv‚É‚ ‚éSRV‚ðƒ‹[ƒgƒpƒ‰ƒ[ƒ^0”Ô‚ÉÝ’è
+    //æŒ‡å®šã®ãƒ’ãƒ¼ãƒ—ã«ã‚ã‚‹SRVã‚’ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿0ç•ªã«è¨­å®š
     iDX->GetCommandList()->SetGraphicsRootDescriptorTable(0, texture);
 
-    // •`‰æƒRƒ}ƒ“ƒhƒŠƒXƒg
+    // æç”»ã‚³ãƒžãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
     iDX->GetCommandList()->DrawIndexedInstanced((uint32_t)model_.meshPtr_->GetIBPtr()->GetIndicesNum(), 1, 0, 0, 0);
 }
 

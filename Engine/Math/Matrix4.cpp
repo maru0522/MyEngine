@@ -1,9 +1,9 @@
-#include "MathUtil.h"
+ï»¿#include "MathUtil.h"
 #include "Matrix4.h"
 #include "Vector3.h"
 #include <cmath> // sin cos
 
-// ’PˆÊs—ñ‚ğ‹‚ß‚é
+// å˜ä½è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 Math::Mat4::Identity()
 {
     static const Matrix4 result
@@ -16,7 +16,7 @@ Matrix4 Math::Mat4::Identity()
     return result;
 }
 
-// Šg‘åk¬s—ñ‚ğ‹‚ß‚é
+// æ‹¡å¤§ç¸®å°è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 Math::Mat4::Scale(const Vector3& s)
 {
     Matrix4 result
@@ -29,7 +29,7 @@ Matrix4 Math::Mat4::Scale(const Vector3& s)
     return result;
 }
 
-// x ²‚Ü‚í‚è‚Ì‰ñ“]s—ñ‚ğ‹‚ß‚é
+// x è»¸ã¾ã‚ã‚Šã®å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 Math::Mat4::RotationX(float angle)
 {
     float sin = std::sin(angle);
@@ -45,7 +45,7 @@ Matrix4 Math::Mat4::RotationX(float angle)
     return result;
 }
 
-// y ²‚Ü‚í‚è‚Ì‰ñ“]s—ñ‚ğ‹‚ß‚é
+// y è»¸ã¾ã‚ã‚Šã®å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 Math::Mat4::RotationY(float angle)
 {
     float sin = std::sin(angle);
@@ -61,7 +61,7 @@ Matrix4 Math::Mat4::RotationY(float angle)
     return result;
 }
 
-// z ²‚Ü‚í‚è‚Ì‰ñ“]s—ñ‚ğ‹‚ß‚é
+// z è»¸ã¾ã‚ã‚Šã®å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 Math::Mat4::RotationZ(float angle)
 {
     float sin = std::sin(angle);
@@ -77,7 +77,7 @@ Matrix4 Math::Mat4::RotationZ(float angle)
     return result;
 }
 
-// •½sˆÚ“®s—ñ‚ğ‹‚ß‚é
+// å¹³è¡Œç§»å‹•è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 Math::Mat4::Translation(const Vector3& t)
 {
     Matrix4 result
@@ -129,7 +129,7 @@ Matrix4 Math::Mat4::Inverse(const Matrix4& m)
     mat[3][7] = 1;
 
     for (size_t n = 0; n < 4; n++) {
-        //Å‘å‚Ìâ‘Î’l‚ğ’Tõ‚·‚é(‚Æ‚è‚ ‚¦‚¸‘ÎÛ¬•ª‚ğÅ‘å‚Æ‰¼’è‚µ‚Ä‚¨‚­)
+        //æœ€å¤§ã®çµ¶å¯¾å€¤ã‚’æ¢ç´¢ã™ã‚‹(ã¨ã‚Šã‚ãˆãšå¯¾è±¡æˆåˆ†ã‚’æœ€å¤§ã¨ä»®å®šã—ã¦ãŠã)
         float max = abs(mat[n][n]);
         size_t maxIndex = n;
 
@@ -140,12 +140,12 @@ Matrix4 Math::Mat4::Inverse(const Matrix4& m)
             }
         }
 
-        //Å‘å‚Ìâ‘Î’l‚ª0‚¾‚Á‚½‚ç‹ts—ñ‚Í‹‚ß‚ç‚ê‚È‚¢
+        //æœ€å¤§ã®çµ¶å¯¾å€¤ãŒ0ã ã£ãŸã‚‰é€†è¡Œåˆ—ã¯æ±‚ã‚ã‚‰ã‚Œãªã„
         if (abs(mat[maxIndex][n]) <= 0.000001f) {
-            return result; //‚Æ‚è‚ ‚¦‚¸’PˆÊs—ñ•Ô‚µ‚¿‚á‚¤
+            return result; //ã¨ã‚Šã‚ãˆãšå˜ä½è¡Œåˆ—è¿”ã—ã¡ã‚ƒã†
         }
 
-        //“ü‚ê‘Ö‚¦
+        //å…¥ã‚Œæ›¿ãˆ
         if (n != maxIndex) {
             for (size_t i = 0; i < 8; i++) {
                 float f = mat[maxIndex][i];
@@ -154,15 +154,15 @@ Matrix4 Math::Mat4::Inverse(const Matrix4& m)
             }
         }
 
-        //Š|‚¯‚½‚ç1‚É‚È‚é’l‚ğZo
+        //æ›ã‘ãŸã‚‰1ã«ãªã‚‹å€¤ã‚’ç®—å‡º
         float mul = 1 / mat[n][n];
 
-        //Š|‚¯‚é
+        //æ›ã‘ã‚‹
         for (size_t i = 0; i < 8; i++) {
             mat[n][i] *= mul;
         }
 
-        //‘¼‘S•”0‚É‚·‚é
+        //ä»–å…¨éƒ¨0ã«ã™ã‚‹
         for (size_t i = 0; i < 4; i++) {
             if (n == i) {
                 continue;
@@ -185,7 +185,7 @@ Matrix4 Math::Mat4::Inverse(const Matrix4& m)
     return result;
 }
 
-// À•W•ÏŠ·iƒxƒNƒgƒ‹s—ñ‚ÌŠ|‚¯Zj‚ğs‚¤Transform ŠÖ”‚ğì¬‚·‚éB@i“§‹•ÏŠ·‚É‚à‘Î‰‚µ‚Ä‚¢‚éj
+// åº§æ¨™å¤‰æ›ï¼ˆãƒ™ã‚¯ãƒˆãƒ«è¡Œåˆ—ã®æ›ã‘ç®—ï¼‰ã‚’è¡Œã†Transform é–¢æ•°ã‚’ä½œæˆã™ã‚‹ã€‚ã€€ï¼ˆé€è¦–å¤‰æ›ã«ã‚‚å¯¾å¿œã—ã¦ã„ã‚‹ï¼‰
 Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 {
     float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
@@ -293,7 +293,7 @@ Matrix4::Matrix4(float m00, float m01, float m02, float m03, float m10, float m1
     m[3][3] = m33;
 }
 
-// ‘ã“ü‰‰Zq *= ‚ÌƒI[ƒoƒ[ƒhŠÖ”is—ñ‚Æs—ñ‚ÌÏ)
+// ä»£å…¥æ¼”ç®—å­ *= ã®ã‚ªãƒ¼ãƒãƒ­ãƒ¼ãƒ‰é–¢æ•°ï¼ˆè¡Œåˆ—ã¨è¡Œåˆ—ã®ç©)
 Matrix4& operator*=(Matrix4& m1, const Matrix4& m2)
 {
     Matrix4 result{ };
@@ -311,14 +311,14 @@ Matrix4& operator*=(Matrix4& m1, const Matrix4& m2)
     return m1;
 }
 
-// 2€‰‰Zq * ‚ÌƒI[ƒoƒ[ƒhŠÖ”is—ñ‚Æs—ñ‚ÌÏj
+// 2é …æ¼”ç®—å­ * ã®ã‚ªãƒ¼ãƒãƒ­ãƒ¼ãƒ‰é–¢æ•°ï¼ˆè¡Œåˆ—ã¨è¡Œåˆ—ã®ç©ï¼‰
 const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2)
 {
     Matrix4 result = m1;
     return result *= m2;
 }
 
-// 2€‰‰Zq * ‚Ì@ƒI[ƒoƒ[ƒhŠÖ”iƒxƒNƒgƒ‹‚Æs—ñ‚ÌÏj
+// 2é …æ¼”ç®—å­ * ã®ã€€ã‚ªãƒ¼ãƒãƒ­ãƒ¼ãƒ‰é–¢æ•°ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ã¨è¡Œåˆ—ã®ç©ï¼‰
 const Vector3 operator*(const Vector3& v, const Matrix4& m)
 {
     return Math::Mat4::Transform(v, m);

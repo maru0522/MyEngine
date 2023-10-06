@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <wrl.h>
 #include "FileSystem.h"
 #include "AudioManager.h"
@@ -7,7 +7,7 @@
 class Sound final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
@@ -18,7 +18,7 @@ public:
         UNLIMIT,
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     static void StaticInitalize(AudioManager* audioMPtr);
     Sound(const fsPath& path);
 
@@ -30,7 +30,7 @@ public:
     void SetPitch(float pitch);
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     static AudioManager* sAudioMPtr_;
 
     AudioManager::SoundData_t* soundPtr_;

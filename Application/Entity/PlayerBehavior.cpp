@@ -1,4 +1,4 @@
-#include "PlayerBehavior.h"
+﻿#include "PlayerBehavior.h"
 #include "Input.h"
 #include "Vector3.h"
 #include "CameraManager.h"
@@ -30,71 +30,71 @@ PlayerBehaviorMachine::PlayerBehaviorMachine(Player* arg_playerPtr, PlayerBehavi
 
 void PlayerBehaviorMachine::ManagementBehavior(void)
 {
-    // nullチェック
+    // null繝√ぉ繝・け
     if (!statePtr_) { return; }
 
-    // 状態遷移条件を満たしているか確認し、遷移する
+    // 迥ｶ諷矩・遘ｻ譚｡莉ｶ繧呈ｺ縺溘＠縺ｦ縺・ｋ縺狗｢ｺ隱阪＠縲・・遘ｻ縺吶ｋ
     NextStateCheck();
 
-    // 状態更新
+    // 迥ｶ諷区峩譁ｰ
     statePtr_->Execute();
 }
 
 void PlayerBehaviorMachine::NextStateCheck(void)
 {
-    // 状態遷移するかどうか確認する
-    statePtr_->RequirementCheck(); // 状態遷移する場合は nextStateを変更する
+    // 迥ｶ諷矩・遘ｻ縺吶ｋ縺九←縺・°遒ｺ隱阪☆繧・
+    statePtr_->RequirementCheck(); // 迥ｶ諷矩・遘ｻ縺吶ｋ蝣ｴ蜷医・ nextState繧貞､画峩縺吶ｋ
 
-    // nextStateが"NONE"以外である場合、状態遷移を行う
+    // nextState縺・NONE"莉･螟悶〒縺ゅｋ蝣ｴ蜷医∫憾諷矩・遘ｻ繧定｡後≧
     PlayerBehavior nextState = statePtr_->GetNextState();
     if (nextState != PlayerBehavior::NONE)
     {
-        // 既存のstateがあれば終了処理
+        // 譌｢蟄倥・state縺後≠繧後・邨ゆｺ・・逅・
         statePtr_->Exit();
-        // 上書き
+        // 荳頑嶌縺・
         statePtr_.reset();
         statePtr_ = stateFactory_.Create(playerPtr_, nextState);
-        // 初期化処理
+        // 蛻晄悄蛹門・逅・
         statePtr_->Entry();
 
-        // それぞれの、"振舞い"に必要な情報をあてがう
+        // 縺昴ｌ縺槭ｌ縺ｮ縲・謖ｯ闊槭＞"縺ｫ蠢・ｦ√↑諠・ｱ繧偵≠縺ｦ縺後≧
     }
 }
 
 //----------------------------------------------------------------------------------------
 //IDLE,       //
-//STOOP,      // しゃがみ
+//STOOP,      // 縺励ｃ縺後∩
 //
-//MOVE,       // 移動
-//MOVE_STOOP, // しゃがみ移動
+//MOVE,       // 遘ｻ蜍・
+//MOVE_STOOP, // 縺励ｃ縺後∩遘ｻ蜍・
 //
-//JUMP,       // ジャンプ
-//JUMP_STOOP, // じゃがみジャンプ
-//JUMP_REVERSE,  // 反転ジャンプ
-//JUMP_LONG,  // 幅跳び
+//JUMP,       // 繧ｸ繝｣繝ｳ繝・
+//JUMP_STOOP, // 縺倥ｃ縺後∩繧ｸ繝｣繝ｳ繝・
+//JUMP_REVERSE,  // 蜿崎ｻ｢繧ｸ繝｣繝ｳ繝・
+//JUMP_LONG,  // 蟷・ｷｳ縺ｳ
 
 void PlayerBehavior_Idle::Execute(void) // "IDLE"
 {
     debug_curState_ = PlayerBehavior::IDLE;
 
-    // 重力
+    // 驥榊鴨
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 移動量 = 上方向 * ジャンプ量
-    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle状態は重力以外の移動量は発生しない想定
+    // 遘ｻ蜍暮㍼ = 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
+    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle迥ｶ諷九・驥榊鴨莉･螟悶・遘ｻ蜍暮㍼縺ｯ逋ｺ逕溘＠縺ｪ縺・Φ螳・
 
-    // 座標更新
+    // 蠎ｧ讓呎峩譁ｰ
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
 
-    // 姿勢制御
+    // 蟋ｿ蜍｢蛻ｶ蠕｡
     {
-        //// 現在のプレイヤーの各軸情報
+        //// 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
         //const Axis3& playerAxes = GetPlayerAxes();
 
-        //// 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        //Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        //Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        //// 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
+        //Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
+        //Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
         //SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
     }
 }
@@ -106,26 +106,26 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
-    // 左シフトが入力されている
+    // 蟾ｦ繧ｷ繝輔ヨ縺悟・蜉帙＆繧後※縺・ｋ
     if (isDown_LSHIFT)
     {
-        // PlayerState を STOOP(しゃがみ)へ
+        // PlayerState 繧・STOOP(縺励ｃ縺後∩)縺ｸ
         nextState_ = PlayerBehavior::STOOP;
         return;
     }
 
-    // 移動キーが入力されている
+    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
     if (isDown_anyWASD)
     {
-        // PlayerState を MOVE(移動)へ
+        // PlayerState 繧・MOVE(遘ｻ蜍・縺ｸ
         nextState_ = PlayerBehavior::MOVE;
         return;
     }
 
-    // SPACEが入力されている && 地面に足がついている
+    // SPACE縺悟・蜉帙＆繧後※縺・ｋ && 蝨ｰ髱｢縺ｫ雜ｳ縺後▽縺・※縺・ｋ
     if (isDown_SPACE && isLanding)
     {
-        // PlayerState を JUMP(ジャンプ)へ
+        // PlayerState 繧・JUMP(繧ｸ繝｣繝ｳ繝・縺ｸ
         nextState_ = PlayerBehavior::JUMP;
         return;
     }
@@ -135,13 +135,13 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 {
     debug_curState_ = PlayerBehavior::STOOP;
 
-    // 重力
+    // 驥榊鴨
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 移動量 = 上方向 * ジャンプ量
-    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle状態は重力以外の移動量は発生しない想定
+    // 遘ｻ蜍暮㍼ = 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
+    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle迥ｶ諷九・驥榊鴨莉･螟悶・遘ｻ蜍暮㍼縺ｯ逋ｺ逕溘＠縺ｪ縺・Φ螳・
 
-    // 座標更新
+    // 蠎ｧ讓呎峩譁ｰ
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
 
@@ -159,26 +159,26 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
-    // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
+    // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・&& 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・&& SPACE縺悟・蜉帙＆繧後※縺・ｋ
     if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
     {
-        // PlayerState を Idleへ
+        // PlayerState 繧・Idle縺ｸ
         nextState_ = PlayerBehavior::IDLE;
         return;
     }
 
-    // 左SHIFTが入力されている && 移動キーが入力されている
-    if (isDown_anyWASD) // ここを通っている時点で、実質左SHIFTが入力されている
+    // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ && 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
+    if (isDown_anyWASD) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ
     {
-        // PlayerState を MOVE_STOOP(しゃがみ移動)へ
+        // PlayerState 繧・MOVE_STOOP(縺励ｃ縺後∩遘ｻ蜍・縺ｸ
         nextState_ = PlayerBehavior::MOVE_STOOP;
         return;
     }
 
-    // SPACEが入力されている && 地面に足がついている
+    // SPACE縺悟・蜉帙＆繧後※縺・ｋ && 蝨ｰ髱｢縺ｫ雜ｳ縺後▽縺・※縺・ｋ
     if (isDown_SPACE && isLanding)
     {
-        // PlayerState を JUMP_STOOP(しゃがみジャンプ)へ
+        // PlayerState 繧・JUMP_STOOP(縺励ｃ縺後∩繧ｸ繝｣繝ｳ繝・縺ｸ
         nextState_ = PlayerBehavior::JUMP_STOOP;
         return;
     }
@@ -188,49 +188,49 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 {
     debug_curState_ = PlayerBehavior::MOVE;
 
-    // 入力ベクトル
+    // 蜈･蜉帙・繧ｯ繝医Ν
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec = inputVec.Normalize();
 
-    // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 繧ｫ繝｡繝ｩ隕也せ縺ｮ繝励Ξ繧､繝､繝ｼ遘ｻ蜍輔・繧ｯ繝医Ν
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 豁｣髱｢Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 蜿ｳVec: cross(p.upVec, pForwardFromCamera)
 
-    // 移動ベクトル = 前後vec + 水平vec
+    // 遘ｻ蜍輔・繧ｯ繝医Ν = 蜑榊ｾ計ec + 豌ｴ蟷ｳvec
     Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
-    // カメラ座標用の値を補正
+    // 繧ｫ繝｡繝ｩ蠎ｧ讓咏畑縺ｮ蛟､繧定｣懈ｭ｣
     {
         if (GetPlayerJumpVecNorm())
         {
-            // カメラとプレイヤーの距離
+            // 繧ｫ繝｡繝ｩ縺ｨ繝励Ξ繧､繝､繝ｼ縺ｮ霍晞屬
             float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+            // 繧ｸ繝｣繝ｳ繝玲凾縺ｫ繧ｫ繝｡繝ｩ縺ｮ霑ｽ蠕薙′霆ｽ貂・竕・逕ｻ髱｢縺ｮ謠ｺ繧後ｒ謚大宛縺吶ｋ逶ｮ逧・
+            // 蜀・ｩ阪′隕丞ｮ壼､譛ｪ貅縺ｮ譎ゅず繝｣繝ｳ繝励ｒ郢ｰ繧願ｿ斐☆縺ｨ繧ｫ繝｡繝ｩ霍晞屬縺ｩ繧薙←繧馴□縺上↑縺｣縺ｦ縺・￥荳榊・蜷医′蜃ｺ縺ｦ繧・
             SetPlayerCurrentRad(dist);
         }
 
-        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        // 繝励Ξ繧､繝､繝ｼ縺ｮ豁｣髱｢縺ｨ繧ｫ繝｡繝ｩ縺ｮ豁｣髱｢縺ｮ蜀・ｩ阪′ "隕丞ｮ壼､" 譛ｪ貅縺ｮ譎・
+        // 隕丞ｮ壼､縺ｮ蛟､繧貞ｰ上＆縺上☆繧九⊇縺ｩ縲√・繝ｬ繧､繝､繝ｼ縺檎判髱｢荳ｭ螟ｮ縺ｫ霑代＞菴咲ｽｮ縺ｧ縲√き繝｡繝ｩ縺ｮ謖吝虚縺悟・繧頑崛繧上ｋ縲・
         if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
         {
-            // カメラとプレイヤーの距離
+            // 繧ｫ繝｡繝ｩ縺ｨ繝励Ξ繧､繝､繝ｼ縺ｮ霍晞屬
             float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+            // 隧ｲ蠖楢ｷ晞屬縺後∵悽譚･險ｭ螳壹＆繧後※縺・ｋ繝励Ξ繧､繝､繝ｼ縺ｨ縺ｮ霍晞屬繧医ｊ遏ｭ縺・ｴ蜷医∬ｩｲ蠖楢ｷ晞屬繧定ｨｭ螳夊ｷ晞屬縺ｨ縺吶ｋ縲・
             if (dist < GetPlayerCurrentRad())
             {
-                // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
-                // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+                // 繝励Ξ繧､繝､繝ｼ縺後き繝｡繝ｩ蛛ｴ縺ｫ蜷代°縺｣縺ｦ遘ｻ蜍輔☆繧矩圀縲√き繝｡繝ｩ縺ｮ蠎ｧ讓吶ｒ蝗ｺ螳壹☆繧区э蝗ｳ
+                // 縺励°縺励∫樟迥ｶ縺縺ｨ繧ｫ繝｡繝ｩ縺碁□縺悶°繧句・逅・′荳頑焔縺乗ｩ溯・縺励※縺・↑縺・ぜ繧ｳ繝｡繝ｳ繝医い繧ｦ繝医・
                 //current_rad_ = dist;
             }
         }
         else
         {
-            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+            // 迴ｾ蝨ｨ霍晞屬(cureent_rad_)縺後∝・譛溯ｷ晞屬(default_rad_)繧医ｊ蟆上＆縺・､縺ｪ繧峨∫樟蝨ｨ霍晞屬繧定｣懈ｭ｣縺吶ｋ縲・
             if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
             {
                 SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
@@ -254,32 +254,32 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         }
     }
 
-    // 重力
+    // 驥榊鴨
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
+    // 遘ｻ蜍暮㍼ = 遘ｻ蜍夫ec * 遘ｻ蜍暮溷ｺｦ + 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
     Vector3 velocity = (moveVec.Normalize() * GetPlayerMoveSpeed()) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
 
-    // 座標更新
+    // 蠎ｧ讓呎峩譁ｰ
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
     SetPlayerMoveVec(moveVec);
 
-    // 姿勢制御
+    // 蟋ｿ蜍｢蛻ｶ蠕｡
     {
-        // 現在のプレイヤーの各軸情報
+        // 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
         const Axis3& playerAxes = GetPlayerAxes();
 
-        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        // 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
         SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-        // 移動入力があった場合
+        // 遘ｻ蜍募・蜉帙′縺ゅ▲縺溷ｴ蜷・
         if (moveVec.IsNonZero())
         {
-            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            // 遘ｻ蜍墓婿蜷代ｒ蜷代￥繧医≧縺ｪ縲∫ｧｻ蜍墓婿蜷代↓蜷医ｏ縺帙◆蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ蜿ｳ蜷代″繝吶け繝医Ν繧貞・險育ｮ・
+            Vector3 upFromAxis = playerAxes.up; // 荳翫・繧ｯ繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν繧貞叙蠕暦ｼ・
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 遘ｻ蜍輔・繧ｯ繝医Ν・育ｧｻ蜍墓婿蜷・竕・豁｣髱｢繝吶け繝医Ν))
             SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
         }
     }
@@ -298,26 +298,26 @@ void PlayerBehavior_Move::RequirementCheck(void)
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
-    // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
+    // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・&& 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・&& SPACE縺悟・蜉帙＆繧後※縺・ｋ
     if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
     {
-        // PlayerState を IDLEへ
+        // PlayerState 繧・IDLE縺ｸ
         nextState_ = PlayerBehavior::IDLE;
         return;
     }
 
-    // 左シフトが入力されている
-    if (isDown_LSHIFT) // ここを通っている時点で、実質移動キーが入力されている
+    // 蟾ｦ繧ｷ繝輔ヨ縺悟・蜉帙＆繧後※縺・ｋ
+    if (isDown_LSHIFT) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
     {
-        // PlayerState を MOVE_STOOP(しゃがみ移動)へ
+        // PlayerState 繧・MOVE_STOOP(縺励ｃ縺後∩遘ｻ蜍・縺ｸ
         nextState_ = PlayerBehavior::MOVE_STOOP;
         return;
     }
 
-    // SPACEが入力されている && 地面に足がついている
+    // SPACE縺悟・蜉帙＆繧後※縺・ｋ && 蝨ｰ髱｢縺ｫ雜ｳ縺後▽縺・※縺・ｋ
     if (isDown_SPACE && isLanding)
     {
-        // PlayerState を JUMP(ジャンプ)へ
+        // PlayerState 繧・JUMP(繧ｸ繝｣繝ｳ繝・縺ｸ
         nextState_ = PlayerBehavior::JUMP;
         return;
     }
@@ -327,49 +327,49 @@ void PlayerBehavior_MoveStoop::Execute(void)
 {
     debug_curState_ = PlayerBehavior::MOVE_STOOP;
 
-    // 入力ベクトル
+    // 蜈･蜉帙・繧ｯ繝医Ν
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec = inputVec.Normalize();
 
-    // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 繧ｫ繝｡繝ｩ隕也せ縺ｮ繝励Ξ繧､繝､繝ｼ遘ｻ蜍輔・繧ｯ繝医Ν
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 豁｣髱｢Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 蜿ｳVec: cross(p.upVec, pForwardFromCamera)
 
-    // 移動ベクトル = 前後vec + 水平vec
+    // 遘ｻ蜍輔・繧ｯ繝医Ν = 蜑榊ｾ計ec + 豌ｴ蟷ｳvec
     Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
-    // カメラ座標用の値を補正
+    // 繧ｫ繝｡繝ｩ蠎ｧ讓咏畑縺ｮ蛟､繧定｣懈ｭ｣
     {
         if (GetPlayerJumpVecNorm())
         {
-            // カメラとプレイヤーの距離
+            // 繧ｫ繝｡繝ｩ縺ｨ繝励Ξ繧､繝､繝ｼ縺ｮ霍晞屬
             float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+            // 繧ｸ繝｣繝ｳ繝玲凾縺ｫ繧ｫ繝｡繝ｩ縺ｮ霑ｽ蠕薙′霆ｽ貂・竕・逕ｻ髱｢縺ｮ謠ｺ繧後ｒ謚大宛縺吶ｋ逶ｮ逧・
+            // 蜀・ｩ阪′隕丞ｮ壼､譛ｪ貅縺ｮ譎ゅず繝｣繝ｳ繝励ｒ郢ｰ繧願ｿ斐☆縺ｨ繧ｫ繝｡繝ｩ霍晞屬縺ｩ繧薙←繧馴□縺上↑縺｣縺ｦ縺・￥荳榊・蜷医′蜃ｺ縺ｦ繧・
             SetPlayerCurrentRad(dist);
         }
 
-        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        // 繝励Ξ繧､繝､繝ｼ縺ｮ豁｣髱｢縺ｨ繧ｫ繝｡繝ｩ縺ｮ豁｣髱｢縺ｮ蜀・ｩ阪′ "隕丞ｮ壼､" 譛ｪ貅縺ｮ譎・
+        // 隕丞ｮ壼､縺ｮ蛟､繧貞ｰ上＆縺上☆繧九⊇縺ｩ縲√・繝ｬ繧､繝､繝ｼ縺檎判髱｢荳ｭ螟ｮ縺ｫ霑代＞菴咲ｽｮ縺ｧ縲√き繝｡繝ｩ縺ｮ謖吝虚縺悟・繧頑崛繧上ｋ縲・
         if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
         {
-            // カメラとプレイヤーの距離
+            // 繧ｫ繝｡繝ｩ縺ｨ繝励Ξ繧､繝､繝ｼ縺ｮ霍晞屬
             float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+            // 隧ｲ蠖楢ｷ晞屬縺後∵悽譚･險ｭ螳壹＆繧後※縺・ｋ繝励Ξ繧､繝､繝ｼ縺ｨ縺ｮ霍晞屬繧医ｊ遏ｭ縺・ｴ蜷医∬ｩｲ蠖楢ｷ晞屬繧定ｨｭ螳夊ｷ晞屬縺ｨ縺吶ｋ縲・
             if (dist < GetPlayerCurrentRad())
             {
-                // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
-                // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+                // 繝励Ξ繧､繝､繝ｼ縺後き繝｡繝ｩ蛛ｴ縺ｫ蜷代°縺｣縺ｦ遘ｻ蜍輔☆繧矩圀縲√き繝｡繝ｩ縺ｮ蠎ｧ讓吶ｒ蝗ｺ螳壹☆繧区э蝗ｳ
+                // 縺励°縺励∫樟迥ｶ縺縺ｨ繧ｫ繝｡繝ｩ縺碁□縺悶°繧句・逅・′荳頑焔縺乗ｩ溯・縺励※縺・↑縺・ぜ繧ｳ繝｡繝ｳ繝医い繧ｦ繝医・
                 //current_rad_ = dist;
             }
         }
         else
         {
-            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+            // 迴ｾ蝨ｨ霍晞屬(cureent_rad_)縺後∝・譛溯ｷ晞屬(default_rad_)繧医ｊ蟆上＆縺・､縺ｪ繧峨∫樟蝨ｨ霍晞屬繧定｣懈ｭ｣縺吶ｋ縲・
             if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
             {
                 SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
@@ -393,32 +393,32 @@ void PlayerBehavior_MoveStoop::Execute(void)
         }
     }
 
-    // 重力
+    // 驥榊鴨
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
+    // 遘ｻ蜍暮㍼ = 遘ｻ蜍夫ec * 遘ｻ蜍暮溷ｺｦ + 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
     Vector3 velocity = (moveVec.Normalize() * (GetPlayerMoveSpeed() / 2)) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
 
-    // 座標更新
+    // 蠎ｧ讓呎峩譁ｰ
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
     SetPlayerMoveVec(moveVec);
 
-    // 姿勢制御
+    // 蟋ｿ蜍｢蛻ｶ蠕｡
     {
-        // 現在のプレイヤーの各軸情報
+        // 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
         const Axis3& playerAxes = GetPlayerAxes();
 
-        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        // 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
         SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-        // 移動入力があった場合
+        // 遘ｻ蜍募・蜉帙′縺ゅ▲縺溷ｴ蜷・
         if (moveVec.IsNonZero())
         {
-            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            // 遘ｻ蜍墓婿蜷代ｒ蜷代￥繧医≧縺ｪ縲∫ｧｻ蜍墓婿蜷代↓蜷医ｏ縺帙◆蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ蜿ｳ蜷代″繝吶け繝医Ν繧貞・險育ｮ・
+            Vector3 upFromAxis = playerAxes.up; // 荳翫・繧ｯ繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν繧貞叙蠕暦ｼ・
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 遘ｻ蜍輔・繧ｯ繝医Ν・育ｧｻ蜍墓婿蜷・竕・豁｣髱｢繝吶け繝医Ν))
             SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
         }
     }
@@ -436,36 +436,36 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
     bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
 
-    // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
+    // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・&& 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・&& SPACE縺悟・蜉帙＆繧後※縺・ｋ
     if (isDown_LSHIFT == false && isDown_anyWASD == false  && isDown_SPACE == false)
     {
-        // PlayerState を Idleへ
+        // PlayerState 繧・Idle縺ｸ
         nextState_ = PlayerBehavior::IDLE;
         return;
     }
 
-    // 左SHIFTが入力されていない
+    // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・
     if (isDown_LSHIFT == false)
     {
-        // PlayerState を MOVE(移動)へ
+        // PlayerState 繧・MOVE(遘ｻ蜍・縺ｸ
         nextState_ = PlayerBehavior::MOVE;
         return;
     }
 
-    // 移動キーが入力されていない
+    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・
     if (isDown_anyWASD == false)
     {
-        // PlayerState を STOOP(しゃがみ)へ
+        // PlayerState 繧・STOOP(縺励ｃ縺後∩)縺ｸ
         nextState_ = PlayerBehavior::STOOP;
         return;
     }
 
 
 
-    // 移動キーが入力されている
-    if (isDown_SPACE) // ここを通っている時点で、実質左SHIFTが入力されている
+    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
+    if (isDown_SPACE) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ
     {
-        // PlayerState を JUMP_LONG(幅跳び)へ
+        // PlayerState 繧・JUMP_LONG(蟷・ｷｳ縺ｳ)縺ｸ
         nextState_ = PlayerBehavior::JUMP_LONG;
         return;
     }
@@ -480,13 +480,13 @@ void PlayerBehavior_Jump::Execute(void)
 {
     debug_curState_ = PlayerBehavior::JUMP;
 
-    // 重力
+    // 驥榊鴨
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 移動量 = 上方向 * ジャンプ量
-    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle状態は重力以外の移動量は発生しない想定
+    // 遘ｻ蜍暮㍼ = 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
+    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle迥ｶ諷九・驥榊鴨莉･螟悶・遘ｻ蜍暮㍼縺ｯ逋ｺ逕溘＠縺ｪ縺・Φ螳・
 
-    // 座標更新
+    // 蠎ｧ讓呎峩譁ｰ
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
 }
@@ -498,15 +498,15 @@ void PlayerBehavior_Jump::RequirementCheck(void)
     //bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
     //bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
-    // 移動キーが入力されていない && 左SHIFTが入力されていない
+    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・&& 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・
     if (isDown_anyWASD == false && isDown_LSHIFT == false)
     {
-        // PlayerState を IDLEへ
+        // PlayerState 繧・IDLE縺ｸ
         nextState_ = PlayerBehavior::IDLE;
         return;
     }
 
-    // 移動キーが入力されている && 左SHIFTが入力されていない
+    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ && 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・
     if (KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S) != 0 &&
         KEYS::IsDown(DIK_LSHIFT) == false)
     {
@@ -514,7 +514,7 @@ void PlayerBehavior_Jump::RequirementCheck(void)
         return;
     }
 
-    // 移動キーが入力されている && 左SHIFTが入力されている
+    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ && 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ
     if (KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S) != 0 &&
         KEYS::IsDown(DIK_LSHIFT))
     {
@@ -533,52 +533,52 @@ void PlayerBehavior_JumpLong::Execute(void)
     debug_curState_ = PlayerBehavior::JUMP_LONG;
 
 
-    // 幅跳びする方向ベクトル
+    // 蟷・ｷｳ縺ｳ縺吶ｋ譁ｹ蜷代・繧ｯ繝医Ν
     Vector3 vec3_jumpLong = GetPlayerMoveVec();
 
-    // 入力ベクトル
+    // 蜈･蜉帙・繧ｯ繝医Ν
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec = inputVec.Normalize();
 
-    // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 繧ｫ繝｡繝ｩ隕也せ縺ｮ繝励Ξ繧､繝､繝ｼ遘ｻ蜍輔・繧ｯ繝医Ν
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 豁｣髱｢Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 蜿ｳVec: cross(p.upVec, pForwardFromCamera)
 
-    // 移動ベクトル = 前後vec + 水平vec
+    // 遘ｻ蜍輔・繧ｯ繝医Ν = 蜑榊ｾ計ec + 豌ｴ蟷ｳvec
     Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
-    // カメラ座標用の値を補正
+    // 繧ｫ繝｡繝ｩ蠎ｧ讓咏畑縺ｮ蛟､繧定｣懈ｭ｣
     {
         if (GetPlayerJumpVecNorm())
         {
-            // カメラとプレイヤーの距離
+            // 繧ｫ繝｡繝ｩ縺ｨ繝励Ξ繧､繝､繝ｼ縺ｮ霍晞屬
             float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+            // 繧ｸ繝｣繝ｳ繝玲凾縺ｫ繧ｫ繝｡繝ｩ縺ｮ霑ｽ蠕薙′霆ｽ貂・竕・逕ｻ髱｢縺ｮ謠ｺ繧後ｒ謚大宛縺吶ｋ逶ｮ逧・
+            // 蜀・ｩ阪′隕丞ｮ壼､譛ｪ貅縺ｮ譎ゅず繝｣繝ｳ繝励ｒ郢ｰ繧願ｿ斐☆縺ｨ繧ｫ繝｡繝ｩ霍晞屬縺ｩ繧薙←繧馴□縺上↑縺｣縺ｦ縺・￥荳榊・蜷医′蜃ｺ縺ｦ繧・
             SetPlayerCurrentRad(dist);
         }
 
-        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        // 繝励Ξ繧､繝､繝ｼ縺ｮ豁｣髱｢縺ｨ繧ｫ繝｡繝ｩ縺ｮ豁｣髱｢縺ｮ蜀・ｩ阪′ "隕丞ｮ壼､" 譛ｪ貅縺ｮ譎・
+        // 隕丞ｮ壼､縺ｮ蛟､繧貞ｰ上＆縺上☆繧九⊇縺ｩ縲√・繝ｬ繧､繝､繝ｼ縺檎判髱｢荳ｭ螟ｮ縺ｫ霑代＞菴咲ｽｮ縺ｧ縲√き繝｡繝ｩ縺ｮ謖吝虚縺悟・繧頑崛繧上ｋ縲・
         if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
         {
-            // カメラとプレイヤーの距離
+            // 繧ｫ繝｡繝ｩ縺ｨ繝励Ξ繧､繝､繝ｼ縺ｮ霍晞屬
             float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+            // 隧ｲ蠖楢ｷ晞屬縺後∵悽譚･險ｭ螳壹＆繧後※縺・ｋ繝励Ξ繧､繝､繝ｼ縺ｨ縺ｮ霍晞屬繧医ｊ遏ｭ縺・ｴ蜷医∬ｩｲ蠖楢ｷ晞屬繧定ｨｭ螳夊ｷ晞屬縺ｨ縺吶ｋ縲・
             if (dist < GetPlayerCurrentRad())
             {
-                // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
-                // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+                // 繝励Ξ繧､繝､繝ｼ縺後き繝｡繝ｩ蛛ｴ縺ｫ蜷代°縺｣縺ｦ遘ｻ蜍輔☆繧矩圀縲√き繝｡繝ｩ縺ｮ蠎ｧ讓吶ｒ蝗ｺ螳壹☆繧区э蝗ｳ
+                // 縺励°縺励∫樟迥ｶ縺縺ｨ繧ｫ繝｡繝ｩ縺碁□縺悶°繧句・逅・′荳頑焔縺乗ｩ溯・縺励※縺・↑縺・ぜ繧ｳ繝｡繝ｳ繝医い繧ｦ繝医・
                 //current_rad_ = dist;
             }
         }
         else
         {
-            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+            // 迴ｾ蝨ｨ霍晞屬(cureent_rad_)縺後∝・譛溯ｷ晞屬(default_rad_)繧医ｊ蟆上＆縺・､縺ｪ繧峨∫樟蝨ｨ霍晞屬繧定｣懈ｭ｣縺吶ｋ縲・
             if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
             {
                 SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
@@ -602,32 +602,32 @@ void PlayerBehavior_JumpLong::Execute(void)
         }
     }
 
-    // 重力
+    // 驥榊鴨
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
+    // 遘ｻ蜍暮㍼ = 遘ｻ蜍夫ec * 遘ｻ蜍暮溷ｺｦ + 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
     Vector3 velocity = (moveVec.Normalize() * GetPlayerMoveSpeed()) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
 
-    // 座標更新
+    // 蠎ｧ讓呎峩譁ｰ
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
     SetPlayerMoveVec(moveVec);
 
-    // 姿勢制御
+    // 蟋ｿ蜍｢蛻ｶ蠕｡
     {
-        // 現在のプレイヤーの各軸情報
+        // 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
         const Axis3& playerAxes = GetPlayerAxes();
 
-        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+        // 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
+        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
+        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
         SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-        // 移動入力があった場合
+        // 遘ｻ蜍募・蜉帙′縺ゅ▲縺溷ｴ蜷・
         if (moveVec.IsNonZero())
         {
-            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            // 遘ｻ蜍墓婿蜷代ｒ蜷代￥繧医≧縺ｪ縲∫ｧｻ蜍墓婿蜷代↓蜷医ｏ縺帙◆蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ蜿ｳ蜷代″繝吶け繝医Ν繧貞・險育ｮ・
+            Vector3 upFromAxis = playerAxes.up; // 荳翫・繧ｯ繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν繧貞叙蠕暦ｼ・
+            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 遘ｻ蜍輔・繧ｯ繝医Ν・育ｧｻ蜍墓婿蜷・竕・豁｣髱｢繝吶け繝医Ν))
             SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
         }
     }

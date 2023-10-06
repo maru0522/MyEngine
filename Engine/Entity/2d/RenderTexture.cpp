@@ -1,41 +1,41 @@
-#include <cassert>
+ï»¿#include <cassert>
 #include <d3dx12.h>
 #include "WndAPI.h"
 #include "InitDirectX.h"
 #include "RenderTexture.h"
 
-const float  RenderTexture::kClearColor[4]{ 0.25f, 0.5f, 0.1f, 0.f }; // ‰©—Î‚İ‚½‚¢‚È
+const float  RenderTexture::kClearColor[4]{ 0.25f, 0.5f, 0.1f, 0.f }; // é»„ç·‘ã¿ãŸã„ãª
 
 void RenderTexture::Create(void)
 {
-    // ƒeƒNƒXƒ`ƒƒƒq[ƒvİ’è
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ’ãƒ¼ãƒ—è¨­å®š
     CD3DX12_HEAP_PROPERTIES textureHeapProp{ D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0 };
-    // ƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒXİ’è
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
     CD3DX12_RESOURCE_DESC textureDesc =
         CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, WndAPI::kWidth_, (UINT)WndAPI::kHeight_, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
-    // ƒeƒNƒXƒ`ƒƒƒNƒŠƒAİ’è
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¯ãƒªã‚¢è¨­å®š
     CD3DX12_CLEAR_VALUE texClearValue{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kClearColor };
-    // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Ì¶¬
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
     HRESULT hr = InitDirectX::GetInstance()->GetDevice()->
         CreateCommittedResource(&textureHeapProp, D3D12_HEAP_FLAG_NONE, &textureDesc, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, &texClearValue, IID_PPV_ARGS(&texBuff_));
     assert(SUCCEEDED(hr));
 
-    // ƒeƒNƒXƒ`ƒƒ‚ğÔƒNƒŠƒA
-    constexpr uint32_t pixelCount = WndAPI::kWidth_ * WndAPI::kHeight_; // ‰æ‘f”
-    constexpr uint32_t rowPitch = sizeof(uint32_t) * WndAPI::kWidth_;   // 1s•ª‚Ìƒf[ƒ^ƒTƒCƒY
-    constexpr uint32_t deothPitch = rowPitch * WndAPI::kHeight_;        // ‘S‘Ì‚Ìƒf[ƒ^ƒTƒCƒY
-    // ƒCƒ[ƒW
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èµ¤ã‚¯ãƒªã‚¢
+    constexpr uint32_t pixelCount = WndAPI::kWidth_ * WndAPI::kHeight_; // ç”»ç´ æ•°
+    constexpr uint32_t rowPitch = sizeof(uint32_t) * WndAPI::kWidth_;   // 1è¡Œåˆ†ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+    constexpr uint32_t deothPitch = rowPitch * WndAPI::kHeight_;        // å…¨ä½“ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+    // ã‚¤ãƒ¡ãƒ¼ã‚¸
     std::vector<uint32_t> img(pixelCount);
-    for (size_t i = 0; i < pixelCount; i++) { img[i] = 0xff0000ff; } // ÔF
+    for (size_t i = 0; i < pixelCount; i++) { img[i] = 0xff0000ff; } // èµ¤è‰²
 
-    // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Éƒf[ƒ^“]‘—
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿è»¢é€
     hr = texBuff_->WriteToSubresource(0, nullptr, img.data(), rowPitch, deothPitch);
     assert(SUCCEEDED(hr));
 }
 
 void RenderTexture::TransitionResourceBarrier(D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter)
 {
-    // ƒŠƒ\[ƒXƒoƒŠƒA•ÏX
+    // ãƒªã‚½ãƒ¼ã‚¹ãƒãƒªã‚¢å¤‰æ›´
     CD3DX12_RESOURCE_BARRIER cResBarrier = CD3DX12_RESOURCE_BARRIER::Transition(texBuff_.Get(), stateBefore, stateAfter);
     InitDirectX::GetInstance()->GetCommandList()->ResourceBarrier(1, &cResBarrier);
 }

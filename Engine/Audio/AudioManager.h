@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <map>
 #include <wrl.h>
 #include <fstream>
@@ -12,7 +12,7 @@
 class AudioManager final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
@@ -44,7 +44,7 @@ public:
     };
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     AudioManager(void);
     ~AudioManager(void);
 
@@ -57,7 +57,7 @@ private:
     void LoadWave(const fsPath& path);
     void SkipHeader(std::ifstream& file, ChunkHeader_t& chunkHead, const char* chunkId, size_t cmpNum = 4);
 
-    // •Ï”
+    // å¤‰æ•°
     // XAudio2
     ComPtr<IXAudio2> xAudio2_;
     IXAudio2MasteringVoice* masterVoice_;

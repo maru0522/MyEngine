@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include "Vector3.h"
 #include "Matrix4.h"
@@ -7,20 +7,20 @@
 class Camera
 {
 public:
-    // ŠÖ”
+    // é–¢æ•°
     Camera(void) : Camera(Vector3{ 0.f,0.f,0.f }) {}
     Camera(const Vector3& pos);
     virtual ~Camera(void) = default;
     virtual void Update(void);
 
-    //** cameraManager—p
+    //** cameraManagerç”¨
     void UpdateOrthoGraphic(void);
 
 private:
     Vector3 Move(void);
 
 protected:
-    // •Ï”
+    // å¤‰æ•°
     TransformMatrix coordinate_;
     Transform transform_;
     Axis3 axes_;
@@ -68,11 +68,11 @@ private:
     CameraManager(const CameraManager&) = delete;
     CameraManager& operator=(const CameraManager&) = delete;
 
-    // •Ï”
+    // å¤‰æ•°
     Camera* current_;
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     static CameraManager* GetInstance(void);
 
     void Update(void);

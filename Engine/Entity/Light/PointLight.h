@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector3.h"
 
 class PointLight
 {
 public:
-    // ’è‹`
+    // å®šç¾©
     struct CBPointLight_t
     {
         Vector3 lightPos;
@@ -16,14 +16,14 @@ public:
     };
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     Vector3 lightPos_;
     Vector3 lightColor_;
     Vector3 lightAtten_;
     bool isActive_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline void SetIsActive(bool isActive) { isActive_ = isActive; }
     inline void SetLightPos(const Vector3& lightpos) { lightPos_ = lightpos; }
     inline void SetLightColor(const Vector3& lightcolor) { lightColor_ = lightcolor; }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object3D.h"
 #include "CollisionManager.h"
 
@@ -6,12 +6,12 @@ class StickyBall :
     public Object3D
 {
 public:
-    // ’è”
-    const float kDistance_to_root_{ 1.f };      // ª–{‚©‚ç•‚‚¢‚Ä‚é‹…‚Ü‚Å‚Ì‹——£
-    const float kDistance_to_defPos_{ 5.f };    // Œ³‚Ì‹…‚ÌÀ•W‚©‚ç‚Ç‚ê‚¾‚¯—£‚ê‚é‚±‚Æ‚ª‚Å‚«‚é‚©
-    const float kRadius_{ 2.f };                // ‹…©‘Ì‚Ì‘å‚«‚³
+    // å®šæ•°
+    const float kDistance_to_root_{ 1.f };      // æ ¹æœ¬ã‹ã‚‰æµ®ã„ã¦ã‚‹çƒã¾ã§ã®è·é›¢
+    const float kDistance_to_defPos_{ 5.f };    // å…ƒã®çƒã®åº§æ¨™ã‹ã‚‰ã©ã‚Œã ã‘é›¢ã‚Œã‚‹ã“ã¨ãŒã§ãã‚‹ã‹
+    const float kRadius_{ 2.f };                // çƒè‡ªä½“ã®å¤§ãã•
 
-    // ŠÖ”
+    // é–¢æ•°
     StickyBall(CollisionManager* colMPtr);
     ~StickyBall(void);
 
@@ -21,11 +21,11 @@ public:
 private:
     void OnCollision(void);
 
-    // •Ï”
-    Transform transform_; // ªŒ³‚ÌÀ•W
+    // å¤‰æ•°
+    Transform transform_; // æ ¹å…ƒã®åº§æ¨™
     Axis3 axes_;
 
-    CollisionPrimitive::SphereCollider collision_sphere_; // ‹…‚ÌÀ•W
+    CollisionPrimitive::SphereCollider collision_sphere_; // çƒã®åº§æ¨™
     CollisionManager* colMPtr_;
     float distance_to_defPos_;
 

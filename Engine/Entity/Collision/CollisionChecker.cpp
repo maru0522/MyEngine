@@ -1,4 +1,4 @@
-#include "CollisionChecker.h"
+ï»¿#include "CollisionChecker.h"
 #include "Vector3.h"
 #include <cmath>
 
@@ -33,17 +33,17 @@ const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereColli
 
 const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection)
 {
-    // AABB“à‚ÅÅ‚à‹…‚É‹ß‚¢“_
+    // AABBå†…ã§æœ€ã‚‚çƒã«è¿‘ã„ç‚¹
     Vector3 nearest{};
     nearest.x = (std::max)(a.center.x - a.radius.x, (std::min)(s.center.x, a.center.x + a.radius.x));
     nearest.y = (std::max)(a.center.y - a.radius.y, (std::min)(s.center.y, a.center.y + a.radius.y));
     nearest.z = (std::max)(a.center.z - a.radius.z, (std::min)(s.center.z, a.center.z + a.radius.z));
-    // nearest == sphere.center ‚Ìê‡A‹…‚ÍAABB“à‚É‚ ‚é‚½‚ß true
+    // nearest == sphere.center ã®å ´åˆã€çƒã¯AABBå†…ã«ã‚ã‚‹ãŸã‚ true
 
-    // Œğö“_‚ğ‹L˜^
+    // äº¤éŒ¯ç‚¹ã‚’è¨˜éŒ²
     if (intersection) { *intersection = nearest; }
 
-    // SphereToPoint() ‚Æ“¯‚¶
+    // SphereToPoint() ã¨åŒã˜
     return (s.center.x - nearest.x) * (s.center.x - nearest.x) +
            (s.center.y - nearest.y) * (s.center.y - nearest.y) +
            (s.center.z - nearest.z) * (s.center.z - nearest.z) <= s.radius * s.radius;
@@ -53,7 +53,7 @@ const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollide
 {
     float dot = Math::Vec3::Dot(p1.normal, p2.normal);
 
-    // “àÏ‚ª1‚É‹ß‚¢ê‡–³ŒÀ•½–Ê
+    // å†…ç©ãŒ1ã«è¿‘ã„å ´åˆç„¡é™å¹³é¢
     if (std::fabsf(dot - 1.f) < 0.0001f)
     {
         float distDiff = std::fabsf(p1.distance - p2.distance);

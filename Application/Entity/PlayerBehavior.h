@@ -1,49 +1,49 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include "Vector3.h"
 #include "CameraManager.h"
 
-// ‘O•ûéŒ¾
-class Player; // ‹ê“÷
+// å‰æ–¹å®£è¨€
+class Player; // è‹¦è‚‰
 
-// U•‘‚¢‚ð—…—ñ‚·‚éenumƒNƒ‰ƒX
+// æŒ¯èˆžã„ã‚’ç¾…åˆ—ã™ã‚‹enumã‚¯ãƒ©ã‚¹
 enum class PlayerBehavior
 {
-    NONE = -1,  // Žw’è‚È‚µ
+    NONE = -1,  // æŒ‡å®šãªã—
 
     IDLE,       //
-    STOOP,      // ‚µ‚á‚ª‚Ý
+    STOOP,      // ã—ã‚ƒãŒã¿
 
-    MOVE,       // ˆÚ“®
-    MOVE_STOOP, // ‚µ‚á‚ª‚ÝˆÚ“®
+    MOVE,       // ç§»å‹•
+    MOVE_STOOP, // ã—ã‚ƒãŒã¿ç§»å‹•
 
-    JUMP,       // ƒWƒƒƒ“ƒv
-    JUMP_STOOP, // ‚¶‚á‚ª‚ÝƒWƒƒƒ“ƒv
-    JUMP_REVERSE,  // ”½“]ƒWƒƒƒ“ƒv
-    JUMP_LONG,  // •’µ‚Ñ
+    JUMP,       // ã‚¸ãƒ£ãƒ³ãƒ—
+    JUMP_STOOP, // ã˜ã‚ƒãŒã¿ã‚¸ãƒ£ãƒ³ãƒ—
+    JUMP_REVERSE,  // åè»¢ã‚¸ãƒ£ãƒ³ãƒ—
+    JUMP_LONG,  // å¹…è·³ã³
 };
 
-// U•‘‚¢‚ðŽ¦‚·ƒNƒ‰ƒX‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
+// æŒ¯èˆžã„ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
 class IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     IPlayerBehavior(Player* arg_playerPtr) : 
         nextState_(PlayerBehavior::NONE), playerPtr_(arg_playerPtr) {};
     virtual ~IPlayerBehavior(void) = default;
 
-    // ó‘Ô‘JˆÚŽž‚Ì‰Šú‰»ˆ—
+    // çŠ¶æ…‹é·ç§»æ™‚ã®åˆæœŸåŒ–å‡¦ç†
     virtual void Entry(void) = 0;
-    // “–ŠYó‘ÔŽž‚Ì—lŽq
+    // å½“è©²çŠ¶æ…‹æ™‚ã®æ§˜å­
     virtual void Execute(void) = 0;
-    // ó‘Ô‘JˆÚ‘JˆÚ‘O‚ÌI—¹ˆ—
+    // çŠ¶æ…‹é·ç§»é·ç§»å‰ã®çµ‚äº†å‡¦ç†
     virtual void Exit(void) = 0;
 
-    // ‘¼ó‘Ô‚Ö‚Ì‘JˆÚ—vŒŠm”F
+    // ä»–çŠ¶æ…‹ã¸ã®é·ç§»è¦ä»¶ç¢ºèª
     virtual void RequirementCheck(void) = 0;
 
 protected:
-    //>> •Ï”
+    //>> å¤‰æ•°
     PlayerBehavior nextState_;
     PlayerBehavior debug_curState_;
 
@@ -56,7 +56,7 @@ public:
     PlayerBehavior GetCurState(void) { return debug_curState_; }
 
 protected:
-    // zŠÂŽQÆ‰ñ”ð‚Ì‚½‚ßAh“à‚É’è‹`o—ˆ‚¸
+    // å¾ªç’°å‚ç…§å›žé¿ã®ãŸã‚ã€hå†…ã«å®šç¾©å‡ºæ¥ãš
     const Vector3& GetPlayerMoveVec(void);
     const Vector3& GetPlayerVelociy(void);
     const Axis3& GetPlayerAxes(void);
@@ -85,11 +85,11 @@ protected:
 
 
 //----------------------------------------------------------------------------------------
-// IDLEó‘Ô‚ðŽ¦‚·ƒNƒ‰ƒX
+// IDLEçŠ¶æ…‹ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehavior_Idle final : public IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehavior_Idle(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_Idle(void) override = default;
 
@@ -101,11 +101,11 @@ private:
     void RequirementCheck(void) override;
 };
 
-// STOOPó‘Ô‚ðŽ¦‚·ƒNƒ‰ƒX
+// STOOPçŠ¶æ…‹ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehavior_Stoop final : public IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehavior_Stoop(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_Stoop(void) override = default;
 
@@ -117,11 +117,11 @@ private:
     void RequirementCheck(void) override;
 };
 
-// MOVEó‘Ô‚ðŽ¦‚·ƒNƒ‰ƒX
+// MOVEçŠ¶æ…‹ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehavior_Move final : public IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehavior_Move(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_Move(void) override = default;
 
@@ -133,11 +133,11 @@ private:
     void RequirementCheck(void) override;
 };
 
-// MOVE_STOOPó‘Ô‚ðŽ¦‚·ƒNƒ‰ƒX
+// MOVE_STOOPçŠ¶æ…‹ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehavior_MoveStoop final : public IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehavior_MoveStoop(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_MoveStoop(void) override = default;
 
@@ -149,11 +149,11 @@ private:
     void RequirementCheck(void) override;
 };
 
-// JUMPó‘Ô‚ðŽ¦‚·ƒNƒ‰ƒX
+// JUMPçŠ¶æ…‹ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehavior_Jump final : public IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehavior_Jump(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_Jump(void) override = default;
 
@@ -165,11 +165,11 @@ private:
     void RequirementCheck(void) override;
 };
 
-// JUMP_LONGó‘Ô‚ðŽ¦‚·ƒNƒ‰ƒX
+// JUMP_LONGçŠ¶æ…‹ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehavior_JumpLong final : public IPlayerBehavior
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehavior_JumpLong(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_JumpLong(void) override = default;
 
@@ -182,32 +182,32 @@ private:
 };
 
 //----------------------------------------------------------------------------------------
-// U•‘‚¢‚ðŽ¦‚·ƒNƒ‰ƒX‚ð¶‚Ýo‚·ƒNƒ‰ƒX
+// æŒ¯èˆžã„ã‚’ç¤ºã™ã‚¯ãƒ©ã‚¹ã‚’ç”Ÿã¿å‡ºã™ã‚¯ãƒ©ã‚¹
 class PlayerBehaviorFactory final
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehaviorFactory(void) = default;
     ~PlayerBehaviorFactory(void) = default;
 
     std::unique_ptr<IPlayerBehavior> Create(Player* arg_playerPtr, PlayerBehavior arg_state);
 };
 
-// U•‘‚¢‚ðŠÇ—‚·‚éƒNƒ‰ƒX
+// æŒ¯èˆžã„ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 class PlayerBehaviorMachine final
 {
 public:
-    //>> ŠÖ”
+    //>> é–¢æ•°
     PlayerBehaviorMachine(Player* arg_playerPtr, PlayerBehavior arg_state);
     ~PlayerBehaviorMachine(void) = default;
 
     void ManagementBehavior(void);
 
 private:
-    // ó‘Ô‘JˆÚðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©Šm”F‚µA‘JˆÚ‚·‚é
+    // çŠ¶æ…‹é·ç§»æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ç¢ºèªã—ã€é·ç§»ã™ã‚‹
     void NextStateCheck(void);
 
-    //>> •Ï”
+    //>> å¤‰æ•°
     std::unique_ptr<IPlayerBehavior> statePtr_;
     PlayerBehaviorFactory stateFactory_;
     Player* playerPtr_;

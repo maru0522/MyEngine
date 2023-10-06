@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include "Transform.h"
 #include "CollisionPrimitive.h"
 #include <memory>
@@ -13,7 +13,7 @@ public:
     const float kMoveSpeed_{ 0.2f };
     const float kGravity_{ 0.98f };
 
-    // ä÷êî
+    // Èñ¢Êï∞
     Rabbit(void);
     ~Rabbit(void);
 
@@ -26,7 +26,7 @@ private:
     void OnCollision(void); // callback
     void OnDetectPlayer(void); // callback
 
-    // ïœêî
+    // Â§âÊï∞
     Vector3 pPos_;
     bool isCaptured_{};
 

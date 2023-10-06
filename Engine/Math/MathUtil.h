@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <cmath>
 #include <random>
 #include <numbers>
@@ -37,7 +37,7 @@ namespace Math {
             else if (value > max) value = min;
         }
 
-        template<typename T> // w’è‚µ‚½Œ^‚Ìƒ‰ƒ“ƒ_ƒ€‚È’l‚ğ•Ô‹p
+        template<typename T> // æŒ‡å®šã—ãŸå‹ã®ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤ã‚’è¿”å´
         inline T Random(double min, double max) {
 
             std::uniform_real_distribution<> dist1(min, max);
@@ -58,27 +58,27 @@ namespace Math {
             }
         }
 
-        // ’l‚ªw’è‚µ‚½’l“à‚É“ü‚Á‚Ä‚é‚©
+        // å€¤ãŒæŒ‡å®šã—ãŸå€¤å†…ã«å…¥ã£ã¦ã‚‹ã‹
         template<typename T>
         inline bool InRange(T value, T min, T max) {
             return min < value && value < max;
         }
 
-        // ˆø”: À’l,—‘z’l,‹É¬”
-        // À’l‚ª—‘z’l‚©‚ç}‹É¬”‚Ì”ÍˆÍ“à‚Å‚ ‚éA—‘z’l‚ª•Ô‚³‚ê‚éB
+        // å¼•æ•°: å®Ÿå€¤,ç†æƒ³å€¤,æ¥µå°æ•°
+        // å®Ÿå€¤ãŒç†æƒ³å€¤ã‹ã‚‰Â±æ¥µå°æ•°ã®ç¯„å›²å†…ã§ã‚ã‚‹æ™‚ã€ç†æƒ³å€¤ãŒè¿”ã•ã‚Œã‚‹ã€‚
         template<typename T>
         inline T FixEpsilon(T fixValue, T idealValue, T epsilon) {
             if (idealValue - epsilon < fixValue && fixValue < idealValue + epsilon) fixValue = idealValue;
             return fixValue;
         }
 
-        template<class T> // ³ = 1, 0 = 0, •‰ = -1
+        template<class T> // æ­£ = 1, 0 = 0, è²  = -1
         inline int32_t Sgn(T arg_v) {
             if (arg_v == 0) return 0;
             return arg_v > 0 ? 1 : -1;
         }
 
-        template<class T> // ³ = 0 ~ 1, •‰ = -1
+        template<class T> // æ­£ = 0 ~ 1, è²  = -1
         inline int32_t SgnA(T arg_v) {
             return arg_v >= 0 ? 1 : -1;
         }
@@ -88,11 +88,11 @@ namespace Math {
             return 1 / std::tan(arg_v);
         }
 
-        // ‹…–ÊÀ•WŒn‚ğƒfƒJƒ‹ƒgÀ•WŒn‚É•ÏŠ·‚·‚é   r:“®Œar, theta:ˆÜ“xƒÆ, phi:Œo“xƒÓ
+        // çƒé¢åº§æ¨™ç³»ã‚’ãƒ‡ã‚«ãƒ«ãƒˆåº§æ¨™ç³»ã«å¤‰æ›ã™ã‚‹   r:å‹•å¾„r, theta:ç·¯åº¦Î¸, phi:çµŒåº¦Ï†
         Vector3 ToCartesian(float r, float theta, float phi);
         //Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
 
-        // ƒAƒtƒBƒ“•ÏŠ·
+        // ã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›
         Matrix4 AffinTrans(const Transform& transform);
         Matrix4 AffinTrans(const Transform& transform, const Axis3& axes);
         Matrix4 AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular);

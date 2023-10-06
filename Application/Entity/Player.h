@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include "Object3D.h"
 #include "CameraManager.h"
@@ -8,17 +8,17 @@
 class Player
 {
 public:
-    //>> ’è‹`
+    //>> å®šç¾©
     friend IPlayerBehavior;
 
-    //>> ’è”
+    //>> å®šæ•°
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 3.f };
     const float kJumpLongPower_{ 15.f };
     const float kMoveSpeed_{ 1.f };
     const float kGravity_{ 0.2f };
 
-    //>> ŠÖ”
+    //>> é–¢æ•°
     Player(CameraManager* camMPtr);
     ~Player(void);
 
@@ -30,7 +30,7 @@ public:
     float theta_{ 0.85f };
     float phi_;
 
-    int32_t captureCount_rabbit; // “e‚ğ•ß‚Ü‚¦‚½‰ñ”
+    int32_t captureCount_rabbit; // å…ã‚’æ•ã¾ãˆãŸå›æ•°
     bool isFallHole1_;
     bool isFallHole2_;
 private:
@@ -38,13 +38,13 @@ private:
     void SphericalCamera(Vector3& inputVec); // correct value for camera
     void OnCollision(void); // callback
 
-    //>> •Ï”
+    //>> å¤‰æ•°
     TransformMatrix coordinate_;
     Transform transform_;
     Axis3 axes_;
 
     Vector3 moveVec_;
-    Vector3 velocity_; // ‚ß‚è‚ñ‚¾‚É‰Ÿ‚µ–ß‚¹‚é‚æ‚¤‚É
+    Vector3 velocity_; // ã‚ã‚Šè¾¼ã‚“ã æ™‚ã«æŠ¼ã—æˆ»ã›ã‚‹ã‚ˆã†ã«
     float jumpVecNorm_{};
     bool isLanding_{};
 

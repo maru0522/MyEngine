@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <cmath>
 #include "Vector2.h"
 #include "Vector3.h"
@@ -7,7 +7,7 @@
 class SpotLight
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     typedef float (*mf)(float);
     const mf toRad = Math::Function::ToRadian;
 
@@ -28,7 +28,7 @@ public:
     };
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     Vector3 lightDir_{ 1,0,0 };
     Vector3 lightPos_{ 0,0,0 };
     Vector3 lightColor_{ 1,1,1 };
@@ -38,7 +38,7 @@ private:
     bool isActive_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.Normalize(); }
     inline void SetLightPos(const Vector3& lightPos) { lightPos_ = lightPos; }
     inline void SetLightColor(const Vector3& lightcolor) { lightColor_ = lightcolor; }

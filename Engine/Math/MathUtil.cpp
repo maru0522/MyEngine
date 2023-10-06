@@ -1,4 +1,4 @@
-#include "MathUtil.h"
+ï»¿#include "MathUtil.h"
 
 float Math::Ease::EaseInSine(float t, float start, float end)
 {
@@ -117,7 +117,7 @@ float Math::Ease::EaseInOutElastic(float t, float start, float end)
 //{
 //    const Vector3& rac = rectAngularCoordiante;
 //
-//    // result = x:“®Œar, y:ˆÜ“xƒÆ, z:Œo“xƒÓ
+//    // result = x:å‹•å¾„r, y:ç·¯åº¦Î¸, z:çµŒåº¦Ï†
 //    Vector3 result;
 //    result.x = std::sqrtf(rac.x * rac.x + rac.y * rac.y + rac.z * rac.z);
 //    result.y = std::acosf(rac.z / result.x);
@@ -128,7 +128,7 @@ float Math::Ease::EaseInOutElastic(float t, float start, float end)
 
 Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
 {
-    // r:“®Œar, theta:ˆÜ“xƒÆ, phi:Œo“xƒÓ
+    // r:å‹•å¾„r, theta:ç·¯åº¦Î¸, phi:çµŒåº¦Ï†
     Vector3 result;
 
     result.x = r * std::sinf(theta) * std::cosf(phi);

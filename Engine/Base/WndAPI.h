@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Windows.h>
 #include <cstdint>
 #include <string>
@@ -6,40 +6,40 @@
 class WndAPI final
 {
 public:
-    // Ã“IŠÖ”
+    // é™çš„é–¢æ•°
     static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-    // Ã“I•Ï”
-    // ƒEƒBƒ“ƒhƒEƒTƒCƒY
+    // é™çš„å¤‰æ•°
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º
     static constexpr size_t kWidth_{ 1280 };
     static constexpr size_t kHeight_{ 720 };
 
 private:
-    // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX–¼
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹å
     static const std::wstring kWindowClassName_;
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     WndAPI(void);
     WndAPI(const char* title);
     void Delete(void);
 
-    // ƒEƒBƒ“ƒhƒE‚Ì•\Ž¦ó‘Ô‚ð•ÏX‚·‚éŠÖ”
-    // ƒfƒtƒHƒ‹ƒg:nCmdShow = SW_SHOW
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºçŠ¶æ…‹ã‚’å¤‰æ›´ã™ã‚‹é–¢æ•°
+    // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ:nCmdShow = SW_SHOW
     // https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
     void SetDisplay(int32_t nCmdShow);
 
-    // ƒEƒBƒ“ƒhƒEŒÅ’è—p‚ÌƒƒbƒZ[ƒWƒ‹[ƒvˆ—
-    // WM_QUIT‚È‚çFALSE‚ð•Ô‚·
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å›ºå®šç”¨ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ«ãƒ¼ãƒ—å‡¦ç†
+    // WM_QUITãªã‚‰FALSEã‚’è¿”ã™
     bool GetKeepWindow();
 
-    // ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ÌŽæ“¾
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã®å–å¾—
     inline HWND GetHwnd() const { return hwnd_; }
 
     inline HINSTANCE GetHInstance() const { return w_.hInstance; }
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     WNDCLASSEX w_{};
 
     HWND hwnd_{};
@@ -47,7 +47,7 @@ private:
 
 //void SetWindowSize(int width, int height)
 //{
-//    // ƒEƒBƒ“ƒhƒEƒTƒCƒY‚Ö‚Ì‘ã“üˆ—
+//    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã¸ã®ä»£å…¥å‡¦ç†
 //
 //    // CameraManager* -> current_ -> UpdateOrthoGraphic();
 //    // Sprite::UpdateCBMatOrthoGraphic();

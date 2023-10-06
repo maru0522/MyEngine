@@ -1,24 +1,24 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "Object3D.h"
 #include "CollisionManager.h"
 #include "CollisionPrimitive.h"
 
-// ‰¼’u‚«‚ÌƒNƒ‰ƒX
+// ä»®ç½®ãã®ã‚¯ãƒ©ã‚¹
 class IventArea_Tantative : public Object3D
 {
 public:
-    // ’è”
+    // å®šæ•°
     const Vector3 kRadius_{ 5,5,5 };
 
-    // ŠÖ”
+    // é–¢æ•°
     IventArea_Tantative(CollisionManager* colMPtr,const std::string& id);
     ~IventArea_Tantative(void);
 
     void Update(void) override;
     void Draw(void) override;
 
-    // •Ï”
+    // å¤‰æ•°
     Transform transform_;
     Axis3 axes_;
     CollisionManager* colMPtr_;

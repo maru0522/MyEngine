@@ -1,4 +1,4 @@
-#include "Bloom.h"
+﻿#include "Bloom.h"
 
 Bloom::Bloom(void)
     : PostEffect()

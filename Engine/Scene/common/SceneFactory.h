@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include <string>
 
@@ -10,7 +10,7 @@
 class SceneFactory
 {
 public:
-    // ’è‹`
+    // å®šç¾©
     enum class Usage
     {
         DEMO,
@@ -19,6 +19,6 @@ public:
         RESULT,
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     std::unique_ptr<IScene> CreateScene(Usage scene);
 };

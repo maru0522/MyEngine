@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <map>
 #include <wrl.h>
 #include <vector>
@@ -19,19 +19,19 @@
 struct Model_t final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
 
 public:
     struct Material_t
     {
-        std::string name{};           // ƒ}ƒeƒŠƒAƒ‹‚Ì–¼‘O
-        Vector3 ambient{};            // ambientiŠÂ‹«j‰e‹¿“x
-        Vector3 diffuse{};            // diffuseiL”Äj‰e‹¿“x
-        Vector3 specular{};           // speculari‹¾–Ê”½Ëj‰e‹¿“x
-        float_t alpha{};              // ƒAƒ‹ƒtƒ@
-        fsPath texKey{};              // ƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹–¼
+        std::string name{};           // ãƒãƒ†ãƒªã‚¢ãƒ«ã®åå‰
+        Vector3 ambient{};            // ambientï¼ˆç’°å¢ƒï¼‰å½±éŸ¿åº¦
+        Vector3 diffuse{};            // diffuseï¼ˆåºƒæ±ï¼‰å½±éŸ¿åº¦
+        Vector3 specular{};           // specularï¼ˆé¡é¢åå°„ï¼‰å½±éŸ¿åº¦
+        float_t alpha{};              // ã‚¢ãƒ«ãƒ•ã‚¡
+        fsPath texKey{};              // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«å
 
         Material_t() :
             ambient(0.3f, 0.3f, 0.3f),
@@ -40,7 +40,7 @@ public:
             alpha(1.0f) {}
     };
 
-    struct CBMaterial_t // ’è”ƒoƒbƒtƒ@—p\‘¢‘Ì
+    struct CBMaterial_t // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨æ§‹é€ ä½“
     {
         Vector3 ambient;    // ambient
         float_t pad1;
@@ -50,10 +50,10 @@ public:
         float_t alpha;      // alpha
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     void UpdateCB(void);
 
-    // •Ï”
+    // å¤‰æ•°
     Mesh* meshPtr_;
     Material_t material_;
 
@@ -65,29 +65,29 @@ public:
 class ModelManager
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
     using fsPath = std::experimental::filesystem::path;
     using Material_t = Model_t::Material_t;
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     ModelManager(TextureManager* texMPtr) : texMPtr_(texMPtr) {}
     void LoadOBJ(const fsPath& path, bool smoothing);
 
 private:
     void LoadMaterial(Model_t& model,const fsPath& path);
 
-    // •Ï”
-    // << ƒ‚ƒfƒ‹‚Ì’¸“_ƒf[ƒ^•ÛŠÇƒRƒ“ƒeƒi >>
-    // << ƒ‚ƒfƒ‹‚Ì•ÛŠÇƒRƒ“ƒeƒi >>
+    // å¤‰æ•°
+    // << ãƒ¢ãƒ‡ãƒ«ã®é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ä¿ç®¡ã‚³ãƒ³ãƒ†ãƒŠ >>
+    // << ãƒ¢ãƒ‡ãƒ«ã®ä¿ç®¡ã‚³ãƒ³ãƒ†ãƒŠ >>
     std::map<fsPath, Mesh> meshes_;
     std::map<fsPath, Model_t> models_;
 
     TextureManager* texMPtr_;
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     Model_t GetModel(const fsPath& path);
     //const Model_t* GetModelPtrByNickname(const std::string nickname);
 };

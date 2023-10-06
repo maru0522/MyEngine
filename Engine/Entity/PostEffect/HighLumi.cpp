@@ -1,4 +1,4 @@
-#include "HighLumi.h"
+﻿#include "HighLumi.h"
 
 HighLumi::HighLumi(void)
     : PostEffect()

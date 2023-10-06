@@ -1,12 +1,12 @@
-#include "TitleScene.h"
+ï»¿#include "TitleScene.h"
 #include "Input.h"
 #include "SceneManager.h"
 #include "SimplifyImGui.h"
 
 void TitleScene::Initialize(void)
 {
-    //>> ƒJƒƒ‰‚ÌƒfƒoƒbƒOƒJƒƒ‰ƒ‚[ƒh‚ðON
-    camera_debugPtr_->SetIsDebugMode(true); // ƒfƒoƒbƒOƒJƒƒ‰
+    //>> ã‚«ãƒ¡ãƒ©ã®ãƒ‡ãƒãƒƒã‚°ã‚«ãƒ¡ãƒ©ãƒ¢ãƒ¼ãƒ‰ã‚’ON
+    camera_debugPtr_->SetIsDebugMode(true); // ãƒ‡ãƒãƒƒã‚°ã‚«ãƒ¡ãƒ©
 
     CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
 }

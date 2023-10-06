@@ -1,4 +1,4 @@
-#include "Vector4.h"
+﻿#include "Vector4.h"
 #include <cmath>
 
 float Vector4::Length(void) const

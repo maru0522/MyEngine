@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector3.h"
 #include "Matrix4.h"
 
@@ -30,7 +30,7 @@ struct TransformMatrix final
     TransformMatrix(const Matrix4& world, const Matrix4& sca, const Matrix4& rot, const Matrix4& pos)
         : mat_world(world), mat_sca(sca), mat_rot(rot), mat_pos(pos) {}
 
-    // ’l‚ğ‰Šú‰»‚·‚é
+    // å€¤ã‚’åˆæœŸåŒ–ã™ã‚‹
     void Initialize(void) {
         Matrix4 identity = Math::Mat4::Identity();
 
@@ -39,7 +39,7 @@ struct TransformMatrix final
         mat_rot = identity;
         mat_pos = identity;
     }
-    // s—ñ‚ğscale,rotate,position‚Ì‡‚É‡¬‚·‚é
+    // è¡Œåˆ—ã‚’scale,rotate,positionã®é †ã«åˆæˆã™ã‚‹
     void CompositionSRT(void) {
         mat_world *= mat_sca;
         mat_world *= mat_rot;
@@ -52,12 +52,12 @@ struct TransformMatrix final
     Matrix4 mat_pos;
 
     // getter
-    // s—ñ‚©‚çŒ‹‰Ê“I‚È²ƒxƒNƒgƒ‹‚ğ”²‚«o‚·B
+    // è¡Œåˆ—ã‹ã‚‰çµæœçš„ãªè»¸ãƒ™ã‚¯ãƒˆãƒ«ã‚’æŠœãå‡ºã™ã€‚
     Vector3 GetMatAxisX(void) const { return { mat_world.m[0][0],mat_world.m[0][1],mat_world.m[0][2] }; }
     Vector3 GetMatAxisY(void) const { return { mat_world.m[1][0],mat_world.m[1][1],mat_world.m[1][2] }; }
     Vector3 GetMatAxisZ(void) const { return { mat_world.m[2][0],mat_world.m[2][1],mat_world.m[2][2] }; }
 
-    // s—ñ‚©‚ç•½sˆÚ“®¬•ª‚ğ”²‚«o‚·
+    // è¡Œåˆ—ã‹ã‚‰å¹³è¡Œç§»å‹•æˆåˆ†ã‚’æŠœãå‡ºã™
     Vector3 GetMatPos(void) const { return { mat_world.m[3][0],mat_world.m[3][1],mat_world.m[3][2] }; }
 };
 

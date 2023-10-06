@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
 #include <wrl.h>
 #include <memory>
@@ -11,16 +11,16 @@
 class InitDirectX final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
     struct DescriptorHeap_t
     {
     public:
-        // ŠÖ”
+        // é–¢æ•°
         DescriptorHeap_t(InitDirectX* p_idx);
 
-        // srv‚ğƒq[ƒv‚É¶¬
+        // srvã‚’ãƒ’ãƒ¼ãƒ—ã«ç”Ÿæˆ
         size_t CreateSRV(const D3D12_RESOURCE_DESC& rscDesc, ID3D12Resource* p_rsc);
 
         // setter
@@ -30,13 +30,13 @@ private:
         inline ID3D12DescriptorHeap* GetDescHeap(void) { return descriptorHeap_.Get(); }
 
     private:
-        // •Ï”
-        // DescriptorHeapƒRƒ“ƒXƒgƒ‰ƒNƒ^ ‚Å‰Šú‰»
+        // å¤‰æ•°
+        // DescriptorHeapã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ ã§åˆæœŸåŒ–
         ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
         uint32_t maxSRVDesc{ 256 };
         uint32_t maxCBVDesc{ 256 };
         uint32_t maxUAVDesc{ 256 };
-        uint32_t SRVCount{ 1 }; // ImGui—p‚ÌƒfƒXƒNƒŠƒvƒ^¶¬‚Ì‚½‚ß1‚Â•ª‚ ‚¯‚éB
+        uint32_t SRVCount{ 1 }; // ImGuiç”¨ã®ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ç”Ÿæˆã®ãŸã‚1ã¤åˆ†ã‚ã‘ã‚‹ã€‚
         uint32_t CBVCount{};
         uint32_t UAVCount{};
 
@@ -44,10 +44,10 @@ private:
     };
 
 public:
-    // Ã“IŠÖ”
+    // é™çš„é–¢æ•°
     static InitDirectX* GetInstance(void);
 
-    // ŠÖ”
+    // é–¢æ•°
     void Initialize(WndAPI* p_wndapi);
     void PreDraw(void);
     void PostDraw(void);
@@ -59,66 +59,66 @@ public:
     inline size_t GetBackBufferCount() const { return backBuffers_.size(); }
 
 private:
-    // •Ï”
+    // å¤‰æ•°
 
-#pragma region DX12•Ï”
-    // DebugLayer() ‚Å‰Šú‰»
+#pragma region DX12å¤‰æ•°
+    // DebugLayer() ã§åˆæœŸåŒ–
     ComPtr<ID3D12Debug1> debugController_{ nullptr };
 
-    // DXGIDevice() ‚Å‰Šú‰»
+    // DXGIDevice() ã§åˆæœŸåŒ–
     ComPtr<IDXGIFactory7> dxgiFactory_{ nullptr };
     ComPtr<ID3D12Device> device_{ nullptr };
 
-    // SuppressErrors() ‚Å‰Šú‰»
+    // SuppressErrors() ã§åˆæœŸåŒ–
     ComPtr<ID3D12InfoQueue> infoQueue_{ nullptr };
 
-    // Commands() ‚Å‰Šú‰»
+    // Commands() ã§åˆæœŸåŒ–
     ComPtr<ID3D12CommandAllocator> cmdAllocator_{ nullptr };
     ComPtr<ID3D12GraphicsCommandList> commandList_{ nullptr };
     ComPtr<ID3D12CommandQueue> commandQueue_{ nullptr };
 
-    // SwapChain() ‚Å‰Šú‰»
+    // SwapChain() ã§åˆæœŸåŒ–
     ComPtr<IDXGISwapChain4> swapChain_{ nullptr };
 
-    // RTVDescHeap() ‚Å‰Šú‰»
+    // RTVDescHeap() ã§åˆæœŸåŒ–
     D3D12_DESCRIPTOR_HEAP_DESC rtvDescHeapDesc_{};
     ComPtr<ID3D12DescriptorHeap> rtvHeap_{ nullptr };
 
-    // RTV() ‚Å‰Šú‰»
-    std::vector<ComPtr<ID3D12Resource>> backBuffers_{}; // ƒoƒbƒNƒoƒbƒtƒ@
+    // RTV() ã§åˆæœŸåŒ–
+    std::vector<ComPtr<ID3D12Resource>> backBuffers_{}; // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡
 
-    // DescriptorHeap() ‚Å‰Šú‰»
+    // DescriptorHeap() ã§åˆæœŸåŒ–
     std::unique_ptr<DescriptorHeap_t> descHeap_{ nullptr };
 
-    // DepthBuffer() ‚Å‰Šú‰»
+    // DepthBuffer() ã§åˆæœŸåŒ–
     ComPtr<ID3D12Resource> depthBuff_{ nullptr };
     ComPtr<ID3D12DescriptorHeap> dsvHeap_{ nullptr };
 
-    // Fence() ‚Å‰Šú‰»
+    // Fence() ã§åˆæœŸåŒ–
     ComPtr<ID3D12Fence> fence_{ nullptr };
     UINT64 fenceVal_{};
 #pragma endregion
 
-    // Initialize() ‚Åg—p
+    // Initialize() ã§ä½¿ç”¨
     std::unique_ptr<FPSController> fpsController_{ std::make_unique<FPSController>() };
 
 private:
-    // ŠÖ”
+    // é–¢æ•°
     void DebugLayer(void);
-    void DXGIDevice(void);      // ƒAƒ_ƒvƒ^‚Ì‘I•Ê/ƒfƒoƒCƒX‚Ì¶¬ ¦Debug only
-    void SuppressErrors(void);  // ŠÖ”“à‚Åw’è‚³‚ê‚½ƒGƒ‰[‚Ì•\¦‚ğ—}§ ¦Debug only
-    void Commands(void);        // ƒRƒ}ƒ“ƒhƒAƒƒP[ƒ^/ƒŠƒXƒg/ƒLƒ…[‚Ì¶¬
+    void DXGIDevice(void);      // ã‚¢ãƒ€ãƒ—ã‚¿ã®é¸åˆ¥/ãƒ‡ãƒã‚¤ã‚¹ã®ç”Ÿæˆ â€»Debug only
+    void SuppressErrors(void);  // é–¢æ•°å†…ã§æŒ‡å®šã•ã‚ŒãŸã‚¨ãƒ©ãƒ¼ã®è¡¨ç¤ºã‚’æŠ‘åˆ¶ â€»Debug only
+    void Commands(void);        // ã‚³ãƒãƒ³ãƒ‰ã‚¢ãƒ­ã‚±ãƒ¼ã‚¿/ãƒªã‚¹ãƒˆ/ã‚­ãƒ¥ãƒ¼ã®ç”Ÿæˆ
     void SwapChain(WndAPI* p_wndapi);
-    void RTVDescHeap(void);     // RTV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì¶¬ + ¶¬‚·‚é‚½‚ß‚Ìİ’èiƒfƒXƒNƒŠƒvƒ^j
-    void RTV(void);             // RTV‚Ì¶¬ + ¶¬‚·‚é‚½‚ß‚Ìİ’èiƒfƒXƒNƒŠƒvƒ^j
+    void RTVDescHeap(void);     // RTVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®ç”Ÿæˆ + ç”Ÿæˆã™ã‚‹ãŸã‚ã®è¨­å®šï¼ˆãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼‰
+    void RTV(void);             // RTVã®ç”Ÿæˆ + ç”Ÿæˆã™ã‚‹ãŸã‚ã®è¨­å®šï¼ˆãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼‰
     void DescriptorHeap(void);
     void DepthBuffer(void);
     void Fence(void);
 
-    void ClearRTV(void);        // RTV‚ğƒNƒŠƒA
-    void ClearDepthBuff(void);  // [“xƒoƒbƒtƒ@‚ğƒNƒŠƒA
+    void ClearRTV(void);        // RTVã‚’ã‚¯ãƒªã‚¢
+    void ClearDepthBuff(void);  // æ·±åº¦ãƒãƒƒãƒ•ã‚¡ã‚’ã‚¯ãƒªã‚¢
 
-    // ƒVƒ“ƒOƒ‹ƒgƒ“
+    // ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³
     InitDirectX(void) {};
     ~InitDirectX(void) {};
     InitDirectX(const InitDirectX&) = delete;

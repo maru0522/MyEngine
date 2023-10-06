@@ -1,4 +1,4 @@
-#include "IventArea_Tantative.h"
+ï»¿#include "IventArea_Tantative.h"
 
 IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::string& id) : Object3D("Resources/model/cube/cube.obj"),colMPtr_(colMPtr)
 {
@@ -8,10 +8,10 @@ IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::s
     aabb_.radius = kRadius_;
 
     transform_.position = { 0, 0, 0 };
-    transform_.scale = kRadius_; // cube‚Ìxyz‚ª‘S‚Ä1‚¾‚©‚ç‰Â”\‚È•¶
+    transform_.scale = kRadius_; // cubeã®xyzãŒå…¨ã¦1ã ã‹ã‚‰å¯èƒ½ãªæ–‡
     transform_.rotation = { 0, 0, 0 };
 
-    // ‰Šúp¨
+    // åˆæœŸå§¿å‹¢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };

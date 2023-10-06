@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "InitDirectX.h"
 #include <cassert>
 #include <d3d12.h>
@@ -9,63 +9,63 @@
 template<class T> class VertexBuffer
 {
 public:
-    // ŠÖ”
+    // é–¢æ•°
     VertexBuffer(void) = default;
     ~VertexBuffer(void) {/* buff_->Unmap(0, nullptr); */}
 
     void Create(const std::vector<T>& vertices) {
-        // ’¸“_ƒf[ƒ^‘S‘Ì‚ÌƒTƒCƒY = ’¸“_ƒf[ƒ^ˆê‚Â•ª‚ÌƒTƒCƒY * ’¸“_ƒf[ƒ^‚Ì—v‘f”
+        // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿å…¨ä½“ã®ã‚µã‚¤ã‚º = é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ä¸€ã¤åˆ†ã®ã‚µã‚¤ã‚º * é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®è¦ç´ æ•°
         unsigned int sizeVB = static_cast<uint32_t>(sizeof(vertices[0]) * vertices.size());
 
-        // ’¸“_ƒoƒbƒtƒ@‚Ìİ’è
-        D3D12_HEAP_PROPERTIES heapProp{}; // ƒq[ƒvİ’è
-        heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPU‚Ö‚Ì“]‘——p
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®è¨­å®š
+        D3D12_HEAP_PROPERTIES heapProp{}; // ãƒ’ãƒ¼ãƒ—è¨­å®š
+        heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUã¸ã®è»¢é€ç”¨
 
-        // ƒŠƒ\[ƒXİ’è
+        // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
         D3D12_RESOURCE_DESC resDesc{};
         resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        resDesc.Width = sizeVB; // ’¸“_ƒf[ƒ^‘S‘Ì‚ÌƒTƒCƒY
+        resDesc.Width = sizeVB; // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿å…¨ä½“ã®ã‚µã‚¤ã‚º
         resDesc.Height = 1;
         resDesc.DepthOrArraySize = 1;
         resDesc.MipLevels = 1;
         resDesc.SampleDesc.Count = 1;
         resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-        // ’¸“_ƒoƒbƒtƒ@‚Ì¶¬
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
         HRESULT hr = InitDirectX::GetInstance()->GetDevice()->CreateCommittedResource(
-            &heapProp, // ƒq[ƒvİ’è
+            &heapProp, // ãƒ’ãƒ¼ãƒ—è¨­å®š
             D3D12_HEAP_FLAG_NONE,
-            &resDesc, // ƒŠƒ\[ƒXİ’è
+            &resDesc, // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
             D3D12_RESOURCE_STATE_GENERIC_READ,
             nullptr,
             IID_PPV_ARGS(&buff_));
         assert(SUCCEEDED(hr));
 
-        // GPUã‚Ìƒoƒbƒtƒ@‚É‘Î‰‚µ‚½‰¼‘zƒƒ‚ƒŠ(ƒƒCƒ“ƒƒ‚ƒŠã)‚ğæ“¾
+        // GPUä¸Šã®ãƒãƒƒãƒ•ã‚¡ã«å¯¾å¿œã—ãŸä»®æƒ³ãƒ¡ãƒ¢ãƒª(ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ¢ãƒªä¸Š)ã‚’å–å¾—
         hr = buff_->Map(0, nullptr, (void**)&vertMap_);
         assert(SUCCEEDED(hr));
 
-        // ‘S’¸“_‚É‘Î‚µ‚Ä
+        // å…¨é ‚ç‚¹ã«å¯¾ã—ã¦
         TransferVertexToBuffer(vertices);
 
-        // ’¸“_ƒoƒbƒtƒ@ƒrƒ…[
-        // GPU‰¼‘zƒAƒhƒŒƒX
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
+        // GPUä»®æƒ³ã‚¢ãƒ‰ãƒ¬ã‚¹
         vbView_.BufferLocation = buff_->GetGPUVirtualAddress();
-        // ’¸“_ƒoƒbƒtƒ@‚ÌƒTƒCƒY
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
         vbView_.SizeInBytes = sizeVB;
-        // ’¸“_1‚Â•ª‚Ìƒf[ƒ^ƒTƒCƒY
+        // é ‚ç‚¹1ã¤åˆ†ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
         vbView_.StrideInBytes = sizeof(vertices[0]);
     }
     void TransferVertexToBuffer(const std::vector<T>& vertices) {
-        // bufferì¬‚æ‚èA‘å‚«‚¢size‚Ìvertices‚ğg—p‚É—áŠOƒXƒ[‚È‚¢‚µ•s‹ï‡‚ª‹N‚«‚é‰Â”\«‚ ‚èB
-        std::copy(vertices.begin(), vertices.end(), vertMap_); // ‘S’¸“_‚É‘Î‚µ‚Ä
+        // bufferä½œæˆæ™‚ã‚ˆã‚Šã€å¤§ãã„sizeã®verticesã‚’ä½¿ç”¨æ™‚ã«ä¾‹å¤–ã‚¹ãƒ­ãƒ¼ãªã„ã—ä¸å…·åˆãŒèµ·ãã‚‹å¯èƒ½æ€§ã‚ã‚Šã€‚
+        std::copy(vertices.begin(), vertices.end(), vertMap_); // å…¨é ‚ç‚¹ã«å¯¾ã—ã¦
     }
 
 private:
-    // •Ï”
-    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{}; // ’¸“_ƒoƒbƒtƒ@
-    D3D12_VERTEX_BUFFER_VIEW vbView_{};             // ’¸“_ƒoƒbƒtƒ@ƒrƒ…[
-    T* vertMap_{};                                  // GPUƒƒ‚ƒŠ‚Ìmap
+    // å¤‰æ•°
+    Microsoft::WRL::ComPtr<ID3D12Resource> buff_{}; // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
+    D3D12_VERTEX_BUFFER_VIEW vbView_{};             // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
+    T* vertMap_{};                                  // GPUãƒ¡ãƒ¢ãƒªã®map
 
 public:
     // getter

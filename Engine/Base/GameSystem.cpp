@@ -1,4 +1,4 @@
-#include "CollisionManager.h"
+ï»¿#include "CollisionManager.h"
 #include "SimplifyImGui.h"
 #include "GameSystem.h"
 #include "Object3D.h"
@@ -18,52 +18,52 @@ void GameSystem::Update(void)
 void GameSystem::Draw(void)
 {
     if (postEffect_.get()) {
-        // -----ƒŒƒ“ƒ_[ƒeƒNƒXƒ`ƒƒ‚Ö‘‚«ž‚Ý----- //
+        // -----ãƒ¬ãƒ³ãƒ€ãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¸æ›¸ãè¾¼ã¿----- //
         postEffect_->PreDrawScene();
-        // --”wŒi2DUI‚Ì•`‰æ-- //
+        // --èƒŒæ™¯2DUIã®æç”»-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dBack();
-        // --”wŒi2DUI‚Ì•`‰æ-- //
+        // --èƒŒæ™¯2DUIã®æç”»-- //
 
-        // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
+        // --3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»-- //
         Object3D::PreDraw();
         SceneManager::GetInstance()->Draw3d();
-        // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
+        // --3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»-- //
         postEffect_->PostDrawScene();
-        // -----ƒŒƒ“ƒ_[ƒeƒNƒXƒ`ƒƒ‚Ö‘‚«ž‚Ý----- //
+        // -----ãƒ¬ãƒ³ãƒ€ãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¸æ›¸ãè¾¼ã¿----- //
 
 
-        // -----ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì•`‰æ----- //
+        // -----ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»----- //
         iDXPtr_->PreDraw();
 
         postEffect_->Draw();
 
-        // --‘OŒi2DUI‚Ì•`‰æ-- //
+        // --å‰æ™¯2DUIã®æç”»-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dFore();
-        // --‘OŒi2DUI‚Ì•`‰æ-- //
+        // --å‰æ™¯2DUIã®æç”»-- //
 
         imguiController_->Draw();
 
         iDXPtr_->PostDraw();
-        // -----ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì•`‰æ----- //
+        // -----ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»----- //
     }
     else {
         iDXPtr_->PreDraw();
-        // --”wŒi2DUI‚Ì•`‰æ-- //
+        // --èƒŒæ™¯2DUIã®æç”»-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dBack();
-        // --”wŒi2DUI‚Ì•`‰æ-- //
+        // --èƒŒæ™¯2DUIã®æç”»-- //
 
-        // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
+        // --3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»-- //
         Object3D::PreDraw();
         SceneManager::GetInstance()->Draw3d();
-        // --3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ-- //
+        // --3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»-- //
 
-        // --‘OŒi2DUI‚Ì•`‰æ-- //
+        // --å‰æ™¯2DUIã®æç”»-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dFore();
-        // --‘OŒi2DUI‚Ì•`‰æ-- //
+        // --å‰æ™¯2DUIã®æç”»-- //
 
         imguiController_->Draw();
         iDXPtr_->PostDraw();

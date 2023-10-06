@@ -1,4 +1,4 @@
-#include "LevelData.h"
+ï»¿#include "LevelData.h"
 #include "MathUtil.h"
 #include <fstream>
 #include <cassert>
@@ -9,30 +9,30 @@ std::unique_ptr<LevelData> LevelData::Load(const std::string& path)
     ifs.open(path);
     assert(!ifs.fail());
 
-    // json•¶š—ñ‚Ìƒf[ƒ^
+    // jsonæ–‡å­—åˆ—ã®ãƒ‡ãƒ¼ã‚¿
     nlohmann::json deserialized;
 
-    // ‰ğ“€
+    // è§£å‡
     ifs >> deserialized;
 
-    // ³‚µ‚¢ƒŒƒxƒ‹ƒf[ƒ^ƒtƒ@ƒCƒ‹‚©ƒ`ƒFƒbƒN
+    // æ­£ã—ã„ãƒ¬ãƒ™ãƒ«ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã‹ãƒã‚§ãƒƒã‚¯
     assert(deserialized.is_object());
     assert(deserialized.contains("name"));
     assert(deserialized["name"].is_string());
 
-    // "name"‚ğ•¶š—ñ‚Æ‚µ‚Äæ“¾
+    // "name"ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å–å¾—
     std::string name = deserialized["name"].get<std::string>();
-    // ³‚µ‚¢ƒŒƒxƒ‹ƒf[ƒ^ƒtƒ@ƒCƒ‹‚©ƒ`ƒFƒbƒN
+    // æ­£ã—ã„ãƒ¬ãƒ™ãƒ«ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã‹ãƒã‚§ãƒƒã‚¯
     assert(name.compare("scene") == 0);
 
-    // ƒŒƒxƒ‹ƒf[ƒ^Ši”[—pƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+    // ãƒ¬ãƒ™ãƒ«ãƒ‡ãƒ¼ã‚¿æ ¼ç´ç”¨ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
     std::unique_ptr<LevelData> levelData = std::make_unique<LevelData>();
 
-    // objects‚Ì‘SƒIƒuƒWƒFƒNƒg‚ğ‘–¸
+    // objectsã®å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’èµ°æŸ»
     for (nlohmann::json& object : deserialized["objects"]) {
         ScanRecursive(object, levelData.get());
 
-        // Ä‹NŒÄo‚Å}‚ğ‘–¸‚·‚é
+        // å†èµ·å‘¼å‡ºã§æã‚’èµ°æŸ»ã™ã‚‹
         for (nlohmann::json& child : object["children"])
         {
             ScanRecursive(child, levelData.get());
@@ -46,38 +46,38 @@ void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPt
 {
     assert(jsonObject.contains("type"));
 
-    // í•Ê‚ğæ“¾
+    // ç¨®åˆ¥ã‚’å–å¾—
     std::string type = jsonObject["type"].get<std::string>();
 
     // MESH
     if (type.compare("MESH") == 0) {
-        // —v‘f’Ç‰Á
+        // è¦ç´ è¿½åŠ 
         levelDataPtr->objects_.emplace_back(LevelData::ObjectData_t{});
-        // ¡’Ç‰Á‚µ‚½—v‘f‚ÌQÆ‚ğ“¾‚é
+        // ä»Šè¿½åŠ ã—ãŸè¦ç´ ã®å‚ç…§ã‚’å¾—ã‚‹
         LevelData::ObjectData_t& objectData = levelDataPtr->objects_.back();
         objectData.type = type;
 
         if (jsonObject.contains("file_name")) {
-            // ƒtƒ@ƒCƒ‹–¼
+            // ãƒ•ã‚¡ã‚¤ãƒ«å
             objectData.file_name = jsonObject["file_name"];
         }
 
         objectData.name = jsonObject["name"].get<std::string>();
 
-        // ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚Ìƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
+        // ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
         nlohmann::json& transform = jsonObject["transform"];
 
-        // •½sˆÚ“®
+        // å¹³è¡Œç§»å‹•
         objectData.trans.x = (float)transform["translation"][0];
         objectData.trans.y = (float)transform["translation"][2];
         objectData.trans.z = (float)transform["translation"][1];
 
-        // ‰ñ“]Šp
+        // å›è»¢è§’
         objectData.rot.x = Math::Function::ToRadian(-(float)transform["rotation"][0]);
         objectData.rot.y = Math::Function::ToRadian(-(float)transform["rotation"][2]);
         objectData.rot.z = Math::Function::ToRadian((float)transform["rotation"][1]);
 
-        // ƒXƒP[ƒŠƒ“ƒO
+        // ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°
         objectData.scale.x = (float)transform["scaling"][0];
         objectData.scale.y = (float)transform["scaling"][2];
         objectData.scale.z = (float)transform["scaling"][1];
@@ -88,33 +88,33 @@ void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPt
 
     // LIGHT
     if (type.compare("LIGHT") == 0) {
-        // —v‘f’Ç‰Á
+        // è¦ç´ è¿½åŠ 
         levelDataPtr->objects_.emplace_back(LevelData::ObjectData_t{});
-        // ¡’Ç‰Á‚µ‚½—v‘f‚ÌQÆ‚ğ“¾‚é
+        // ä»Šè¿½åŠ ã—ãŸè¦ç´ ã®å‚ç…§ã‚’å¾—ã‚‹
         LevelData::ObjectData_t& objectData = levelDataPtr->objects_.back();
         objectData.type = type;
 
         if (jsonObject.contains("file_name")) {
-            // ƒtƒ@ƒCƒ‹–¼
+            // ãƒ•ã‚¡ã‚¤ãƒ«å
             objectData.file_name = jsonObject["file_name"];
         }
 
         objectData.name = jsonObject["name"].get<std::string>();
 
-        // ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚Ìƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
+        // ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
         nlohmann::json& transform = jsonObject["transform"];
 
-        // •½sˆÚ“®
+        // å¹³è¡Œç§»å‹•
         objectData.trans.x = (float)transform["translation"][0];
         objectData.trans.y = (float)transform["translation"][2];
         objectData.trans.z = (float)transform["translation"][1];
 
-        // ‰ñ“]Šp
+        // å›è»¢è§’
         objectData.rot.x = Math::Function::ToRadian(-(float)transform["rotation"][0]);
         objectData.rot.y = Math::Function::ToRadian(-(float)transform["rotation"][2]);
         objectData.rot.z = Math::Function::ToRadian((float)transform["rotation"][1]);
 
-        // ƒXƒP[ƒŠƒ“ƒO
+        // ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°
         objectData.scale.x = (float)transform["scaling"][0];
         objectData.scale.y = (float)transform["scaling"][2];
         objectData.scale.z = (float)transform["scaling"][1];
@@ -125,33 +125,33 @@ void LevelData::ScanRecursive(nlohmann::json& jsonObject, LevelData* levelDataPt
 
     // CAMERA
     if (type.compare("CAMERA") == 0) {
-        // —v‘f’Ç‰Á
+        // è¦ç´ è¿½åŠ 
         levelDataPtr->objects_.emplace_back(LevelData::ObjectData_t{});
-        // ¡’Ç‰Á‚µ‚½—v‘f‚ÌQÆ‚ğ“¾‚é
+        // ä»Šè¿½åŠ ã—ãŸè¦ç´ ã®å‚ç…§ã‚’å¾—ã‚‹
         LevelData::ObjectData_t& objectData = levelDataPtr->objects_.back();
         objectData.type = type;
 
         if (jsonObject.contains("file_name")) {
-            // ƒtƒ@ƒCƒ‹–¼
+            // ãƒ•ã‚¡ã‚¤ãƒ«å
             objectData.file_name = jsonObject["file_name"];
         }
 
         objectData.name = jsonObject["name"].get<std::string>();
 
-        // ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚Ìƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
+        // ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
         nlohmann::json& transform = jsonObject["transform"];
 
-        // •½sˆÚ“®
+        // å¹³è¡Œç§»å‹•
         objectData.trans.x = (float)transform["translation"][0];
         objectData.trans.y = (float)transform["translation"][2];
         objectData.trans.z = (float)transform["translation"][1];
 
-        // ‰ñ“]Šp
+        // å›è»¢è§’
         objectData.rot.x = Math::Function::ToRadian(-(float)transform["rotation"][0]) + Math::Function::ToRadian(90.f);
         objectData.rot.y = Math::Function::ToRadian(-(float)transform["rotation"][2]);
         objectData.rot.z = Math::Function::ToRadian((float)transform["rotation"][1]);
 
-        // ƒXƒP[ƒŠƒ“ƒO
+        // ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°
         objectData.scale.x = (float)transform["scaling"][0];
         objectData.scale.y = (float)transform["scaling"][2];
         objectData.scale.z = (float)transform["scaling"][1];

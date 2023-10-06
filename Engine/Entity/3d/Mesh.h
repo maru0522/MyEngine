@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "VertexBuffer.h"
 #include <unordered_map>
 #include "IndexBuffer.h"
@@ -9,18 +9,18 @@
 class Mesh
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     using fsPath = std::experimental::filesystem::path;
 
 public:
-    struct VertexPosNormalUv_t // ’¸“_ƒoƒbƒtƒ@—p"ƒf[ƒ^"\‘¢‘Ì
+    struct VertexPosNormalUv_t // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”¨"ãƒ‡ãƒ¼ã‚¿"æ§‹é€ ä½“
     {
-        Vector3 pos;    // xyzÀ•W
-        Vector3 normal; // –@üƒxƒNƒgƒ‹
-        Vector2 uv;     // uvÀ•W
+        Vector3 pos;    // xyzåº§æ¨™
+        Vector3 normal; // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+        Vector2 uv;     // uvåº§æ¨™
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     Mesh(void) = default;
     Mesh(const fsPath& path) : path_(path) {}
 
@@ -30,7 +30,7 @@ public:
     void CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices);
     inline void AddSmoothData(uint16_t indexPos, uint16_t indexVert) { smoothData_[indexPos].emplace_back(indexVert); }
 
-    // setterEgetter
+    // setterãƒ»getter
     inline void SetPath(const fsPath& path) { path_ = path; }
 
     inline fsPath& GetPath(void) { return path_; }
@@ -38,7 +38,7 @@ public:
     inline VertexBuffer<VertexPosNormalUv_t>* GetVBPtr(void) { return &vertexBuffer_; }
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     fsPath path_{}; // KEY
 
     IndexBuffer indexBuffer_{};

@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+﻿#include "SceneManager.h"
 
 SceneManager::SceneManager(void)
 {
@@ -27,34 +27,34 @@ void SceneManager::RequestChangeScene(SceneFactory::Usage nextScene, int32_t wai
 
 void SceneManager::Initialize(SceneFactory::Usage firstScene)
 {
-    // �ŏ��̃V�[���𐶐�
+    // 最初のシーンを生成
     currentScene_ = sceneFactory_->CreateScene(firstScene);
     currentScene_->Initialize();
 }
 
 void SceneManager::Update(void)
 {
-    // ���V�[���̗\�񂪂���
+    // 次シーンの予約がある
     if (nextScene_) {
-        // �ҋ@�t���[���w�肪�Ȃ� && ���݃V�[����nullptr�ł͂Ȃ�
+        // 待機フレーム指定がない && 現在シーンがnullptrではない
         if (waitFrame_ == 0 && currentScene_) {
             currentScene_->Finalize();
             currentScene_.reset();
         }
 
-        // �V�[���ڍs
-        currentScene_ = std::move(nextScene_); // �Ǘ������ڏ�
-        nextScene_.reset();                    // ���V�[����nullptr�ɂ���
-        currentScene_->Initialize();           // ���݃V�[����������
+        // シーン移行
+        currentScene_ = std::move(nextScene_); // 管理権限移譲
+        nextScene_.reset();                    // 次シーンをnullptrにする
+        currentScene_->Initialize();           // 現在シーンを初期化
     }
 
-    // ���݃V�[��Update()
+    // 現在シーンUpdate()
     currentScene_->Update();
 
 
-    // �ҋ@�t���[��������������
+    // 待機フレームを減少させる
     waitFrame_--;
-    // �ҋ@�t���[����0�ȉ��ɂȂ�Ȃ�
+    // 待機フレームは0以下にならない
     waitFrame_ = (std::max)(waitFrame_, 0);
 }
 

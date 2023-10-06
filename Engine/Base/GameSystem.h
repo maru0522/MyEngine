@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "FrameWork.h"
 
 class GameSystem final :
     public FrameWork
 {
 public:
-    // �֐�
+    // 関数
     GameSystem(void) {};
 
     void Initialize() override;

@@ -1,4 +1,4 @@
-#include "Sound.h"
+ï»¿#include "Sound.h"
 #include <cassert>
 #include "MathUtil.h"
 
@@ -13,8 +13,8 @@ Sound::Sound(const fsPath& path) : soundPtr_(nullptr), volume_(1), pitch_(1)
 {
     soundPtr_ = sAudioMPtr_->GetSoundPtr(path);
 
-    // nullƒ`ƒFƒbƒN
-    assert(sAudioMPtr_->GetSoundPtr(path) && "[Sound] : soundPtr‚ªnullptr‚Å‚·B");
+    // nullãƒã‚§ãƒƒã‚¯
+    assert(sAudioMPtr_->GetSoundPtr(path) && "[Sound] : soundPtrãŒnullptrã§ã™ã€‚");
 }
 
 void Sound::Play(uint32_t count, Loop type)
@@ -24,8 +24,8 @@ void Sound::Play(uint32_t count, Loop type)
     buf.AudioBytes = soundPtr_->bufferSize;
     buf.Flags = XAUDIO2_END_OF_STREAM;
 
-    if (type == Loop::LIMIT) buf.LoopCount = count;                     // ‰ñ”ƒ‹[ƒv
-    if (type == Loop::UNLIMIT) buf.LoopCount = XAUDIO2_LOOP_INFINITE;   // –³ŒÀƒ‹[ƒv
+    if (type == Loop::LIMIT) buf.LoopCount = count;                     // å›žæ•°ãƒ«ãƒ¼ãƒ—
+    if (type == Loop::UNLIMIT) buf.LoopCount = XAUDIO2_LOOP_INFINITE;   // ç„¡é™ãƒ«ãƒ¼ãƒ—
 
     HRESULT hr = soundPtr_->pSourceVoice->SubmitSourceBuffer(&buf);
     hr = soundPtr_->pSourceVoice->Start();

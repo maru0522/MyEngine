@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 class IScene
 {
 public:
-    // �֐�
+    // 関数
     virtual ~IScene(void) = default;
 
     virtual void Initialize(void) = 0;

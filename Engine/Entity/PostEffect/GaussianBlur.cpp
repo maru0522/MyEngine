@@ -1,4 +1,4 @@
-#include "GaussianBlur.h"
+﻿#include "GaussianBlur.h"
 
 GaussianBlur::GaussianBlur(void) 
     : PostEffect()

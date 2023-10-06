@@ -1,29 +1,29 @@
-#include "Planet.h"
+ï»¿#include "Planet.h"
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
 Planet::Planet(void)
 {
-    // ƒ}ƒl[ƒWƒƒ[‚É“o˜^
+    // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã«ç™»éŒ²
     CollisionManager::GetInstance()->Register(&surface_);
     CollisionManager::GetInstance()->Register(&gravityArea_);
     CollisionManager::GetInstance()->Register(&repelCameraArea_);
 
-    // ŠeƒRƒ‰ƒCƒ_[‚Ì–¼‘O‚ğİ’è
+    // å„ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®åå‰ã‚’è¨­å®š
     surface_.SetID("terrainSurface");
     gravityArea_.SetID("gravityArea");
     repelCameraArea_.SetID("repelCameraArea");
 
-    // OnCollision‚Ìİ’è
+    // OnCollisionã®è¨­å®š
     surface_.SetOnCollision(std::bind(&Planet::OnCollision, this));
     gravityArea_.SetOnCollision(std::bind(&Planet::OnCollision, this));
     repelCameraArea_.SetOnCollision(std::bind(&Planet::OnCollision, this));
 
-    // ¯©‘Ì‚ÌÀ•W‚ÆƒXƒP[ƒ‹‚Ìİ’è
+    // æ˜Ÿè‡ªä½“ã®åº§æ¨™ã¨ã‚¹ã‚±ãƒ¼ãƒ«ã®è¨­å®š
     transform_.position = { 0,0,0 };
     transform_.scale = { kScale_,kScale_,kScale_ };
 
-    // ŠeƒRƒ‰ƒCƒ_[‚Ì”¼Œa‚ğİ’è
+    // å„ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®åŠå¾„ã‚’è¨­å®š
     surface_.radius = 1.f * kScale_;
     gravityArea_.radius = 1.f * kGravityArea_;
     repelCameraArea_.radius = 1.f * kRepelCameraArea_;

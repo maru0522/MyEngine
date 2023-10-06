@@ -1,8 +1,8 @@
-#include "CollisionChecker.h"
+Ôªø#include "CollisionChecker.h"
 #include "CollisionPrimitive.h"
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
-{ // ãÖÇ∆ãÖ
+{ // ÁêÉ„Å®ÁêÉ
     bool isHit = CollisionChecker::SphereToSphere(*this, *arg_Shpere);
 
     if (isHit)
@@ -19,7 +19,7 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
 }
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
-{ // ãÖÇ∆ïΩñ 
+{ // ÁêÉ„Å®Âπ≥Èù¢
     bool isHit = CollisionChecker::SphereToPlane(*this, *arg_Plane);
 
     if (isHit)
@@ -43,7 +43,7 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
 }
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
-{ // ãÖÇ∆ì_
+{ // ÁêÉ„Å®ÁÇπ
     bool isHit = CollisionChecker::SphereToPoint(*this, *arg_Point);
 
     if (isHit)
@@ -63,7 +63,7 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
 }
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
-{ // ãÖÇ∆íºï˚ëÃ
+{ // ÁêÉ„Å®Áõ¥Êñπ‰Ωì
     bool isHit = CollisionChecker::SphereToAABB(*this, *arg_AABB, &arg_AABB->inter);
 
     if (isHit)
@@ -83,7 +83,7 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* a
 }
 
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
-{ // ïΩñ Ç∆ïΩñ 
+{ // Âπ≥Èù¢„Å®Âπ≥Èù¢
     bool isHit = CollisionChecker::PlaneToPlane(*this, *arg_Plane);
 
     if (isHit)
@@ -104,7 +104,7 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* a
 }
 
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
-{ // ïΩñ Ç∆ãÖ
+{ // Âπ≥Èù¢„Å®ÁêÉ
     bool isHit = CollisionChecker::SphereToPlane(*arg_Shpere, *this);
 
     if (isHit)
@@ -125,7 +125,7 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* 
 }
 
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
-{ // ïΩñ Ç∆ì_
+{ // Âπ≥Èù¢„Å®ÁÇπ
     if (arg_Point)
     {
 
@@ -134,7 +134,7 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PointCollider* a
 }
 
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
-{ // ïΩñ Ç∆íºï˚ëÃ
+{ // Âπ≥Èù¢„Å®Áõ¥Êñπ‰Ωì
     if (arg_AABB)
     {
 
@@ -143,7 +143,7 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::AABBCollider* ar
 }
 
 bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
-{ // íºï˚ëÃÇ∆ãÖ
+{ // Áõ¥Êñπ‰Ωì„Å®ÁêÉ
     bool isHit = CollisionChecker::SphereToAABB(*arg_Shpere, *this, &this->inter);
 
     if (isHit)
@@ -163,7 +163,7 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* a
 }
 
 bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
-{ // íºï˚ëÃÇ∆ïΩñ 
+{ // Áõ¥Êñπ‰Ωì„Å®Âπ≥Èù¢
     if (arg_Plane)
     {
 
@@ -172,7 +172,7 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PlaneCollider* ar
 }
 
 bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
-{ // íºï˚ëÃÇ∆ì_
+{ // Áõ¥Êñπ‰Ωì„Å®ÁÇπ
     bool isHit = CollisionChecker::AABBToPoint(*this, *arg_Point);
 
     if (isHit)
@@ -192,7 +192,7 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PointCollider* ar
 }
 
 bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
-{ // íºï˚ëÃÇ∆íºï˚ëÃ
+{ // Áõ¥Êñπ‰Ωì„Å®Áõ¥Êñπ‰Ωì
     bool isHit = CollisionChecker::AABBToAABB(*this, *arg_AABB);
 
     if (isHit)
@@ -212,7 +212,7 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg
 }
 
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
-{ // ì_Ç∆ãÖ
+{ // ÁÇπ„Å®ÁêÉ
     bool isHit = CollisionChecker::SphereToPoint(*arg_Shpere, *this);
 
     if (isHit)
@@ -232,7 +232,7 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* 
 }
 
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
-{ // ì_Ç∆ïΩñ 
+{ // ÁÇπ„Å®Âπ≥Èù¢
     if (arg_Plane)
     {
 
@@ -241,7 +241,7 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::PlaneCollider* a
 }
 
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
-{ // ì_Ç∆ì_
+{ // ÁÇπ„Å®ÁÇπ
     if (arg_Point)
     {
 
@@ -250,7 +250,7 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::PointCollider* a
 }
 
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
-{ // ì_Ç∆íºï˚ëÃ
+{ // ÁÇπ„Å®Áõ¥Êñπ‰Ωì
     bool isHit = CollisionChecker::AABBToPoint(*arg_AABB, *this);
 
     if (isHit)

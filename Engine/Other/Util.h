@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "FileSystem.h"
 #include <typeinfo>
@@ -11,7 +11,7 @@ namespace Util {
         std::wstring ToWString(const std::string& str);
         std::wstring ToWString(const char* cStr);
 
-        // ƒNƒ‰ƒX–¼‚ğstring‚Åæ“¾
+        // ã‚¯ãƒ©ã‚¹åã‚’stringã§å–å¾—
         template<class T> inline std::string NameOf(bool removePrefix = false) {
             std::string str{ typeid(T).name() };
 

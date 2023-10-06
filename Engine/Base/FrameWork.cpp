@@ -1,4 +1,4 @@
-#include "SimplifyImGui.h"
+ï»¿#include "SimplifyImGui.h"
 #include "GaussianBlur.h"
 #include "RadialBlur.h"
 #include "FrameWork.h"
@@ -29,62 +29,62 @@ void FrameWork::Run(void)
 
 void FrameWork::Initialize()
 {
-    // InitDirectX‰Šú‰»
+    // InitDirectXåˆæœŸåŒ–
     iDXPtr_->Initialize(wnd_.get());
-    // “ü—ÍŒnƒNƒ‰ƒX‘S‚Ä‰Šú‰»
+    // å…¥åŠ›ç³»ã‚¯ãƒ©ã‚¹å…¨ã¦åˆæœŸåŒ–
     Input::InitializeAll(wnd_.get());
-    // TextureManager‰Šú‰»
+    // TextureManageråˆæœŸåŒ–
     texM_->Initialize();
-    // TextureManager - ƒeƒNƒXƒ`ƒƒ“Ç‚Ýž‚Ý
+    // TextureManager - ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
     texM_->LoadFolder("Resources");
-    // ModelManager - 3Dƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
+    // ModelManager - 3Dãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
     modelM_->LoadOBJ("Resources/model/cube/cube.obj", false);
     modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj", false);
     modelM_->LoadOBJ("Resources/model/lolP/lolP.obj", false);
     modelM_->LoadOBJ("Resources/model/sphere/sphere.obj", true);
-    // AudioManager - ‰¹Šy&SE“Ç‚Ýž‚Ý
+    // AudioManager - éŸ³æ¥½&SEèª­ã¿è¾¼ã¿
     audioM_->LoadFolder("Resources/sound");
-    // GraphicsPipeline‰Šú‰»
+    // GraphicsPipelineåˆæœŸåŒ–
     psoMPtr_->Create();
 
-    // Sprite‰Šú‰»
+    // SpriteåˆæœŸåŒ–
     Sprite::StaticInitialize(texM_.get());
-    // Object3D‰Šú‰»
+    // Object3DåˆæœŸåŒ–
     Object3D::StaticInitialize(modelM_.get(), texM_.get());
-    // Sound‰Šú‰»
+    // SoundåˆæœŸåŒ–
     Sound::StaticInitalize(audioM_.get());
 
-    // SceneManager‰Šú‰»
+    // SceneManageråˆæœŸåŒ–
     SceneManager::GetInstance()->Initialize(SceneFactory::Usage::TITLE);
-    // ImguiController‰Šú‰»
+    // ImguiControlleråˆæœŸåŒ–
     imguiController_->Initialize(wnd_.get());
 }
 
 void FrameWork::Update(void)
 {
-    // “ü—ÍŒnƒNƒ‰ƒX‘S‚ÄXV
+    // å…¥åŠ›ç³»ã‚¯ãƒ©ã‚¹å…¨ã¦æ›´æ–°
     Input::UpdateAll();
 
-    // ImguiControllerXVŠJŽn
+    // ImguiControlleræ›´æ–°é–‹å§‹
     imguiController_->Begin();
 
-    // SceneManagerXV
+    // SceneManageræ›´æ–°
     SceneManager::GetInstance()->Update();
     DebugGui();
 
-    // ImguiControllerXVI—¹
+    // ImguiControlleræ›´æ–°çµ‚äº†
     imguiController_->End();
 
-    // CameraManagerXV
+    // CameraManageræ›´æ–°
     camMPtr_->Update();
 
-    // ƒJƒƒ‰‚Ì“§Ž‹“Š‰es—ñ‚ðObject3D—p‚Ì’è”‚É‘—‚é
+    // ã‚«ãƒ¡ãƒ©ã®é€è¦–æŠ•å½±è¡Œåˆ—ã‚’Object3Dç”¨ã®å®šæ•°ã«é€ã‚‹
     Object3D::UpdateCBMatViewPerse(camMPtr_);
 }
 
 void FrameWork::Finalize(void)
 {
-    // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚ð“o˜^‰ðœ
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ²è§£é™¤
     wnd_->Delete();
 }
 

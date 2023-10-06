@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <map>
 #include <wrl.h>
 #include <array>
@@ -9,23 +9,23 @@
 class HelperGraphicPipeline
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
     enum class BlendMode
     {
-        // –³‚µ
+        // ç„¡ã—
         NONE,
-        // ”¼“§–¾‡¬
+        // åŠé€æ˜åˆæˆ
         ALPHA,
-        // ‰ÁZ‡¬
+        // åŠ ç®—åˆæˆ
         ADDITIVE,
-        // Œ¸Z‡¬
+        // æ¸›ç®—åˆæˆ
         SUBTRACTIVE,
-        // æZ‡¬
+        // ä¹—ç®—åˆæˆ
         MULTIPLICATION,
-        // F”½“]
+        // è‰²åè»¢
         INVERSION,
 
         MAX_ARRAY,
@@ -47,19 +47,19 @@ public:
 protected:
     struct PSO_t
     {
-        // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
+        // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
         ComPtr<ID3D12RootSignature> rootSignature{};
-        // ƒpƒCƒvƒ‰ƒ“ƒXƒe[ƒg‚Ì¶¬
+        // ãƒ‘ã‚¤ãƒ—ãƒ©ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã®ç”Ÿæˆ
         ComPtr<ID3D12PipelineState> pipelineState{};
     };
 
     struct Blob_t
     {
-        // ’¸“_ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
+        // é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         ComPtr<ID3DBlob> vsBlob{ nullptr };
-        // ƒWƒIƒƒgƒŠƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
+        // ã‚¸ã‚ªãƒ¡ãƒˆãƒªã‚·ã‚§ãƒ¼ãƒ€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         ComPtr<ID3DBlob> gsBlob{ nullptr };
-        // ƒsƒNƒZƒ‹ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
+        // ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         ComPtr<ID3DBlob> psBlob{ nullptr };
     };
 
@@ -87,11 +87,11 @@ private:
 class IGraphicsPipeline : public HelperGraphicPipeline
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 protected:
-    // pipelineStateObject_‚ğ¶¬‚·‚éÛ‚Ìİ’è
+    // pipelineStateObject_ã‚’ç”Ÿæˆã™ã‚‹éš›ã®è¨­å®š
     struct IGraphicsPipelineStructure_t
     {
         SamplerType samplerType{};
@@ -107,16 +107,16 @@ protected:
     };
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     IGraphicsPipeline(void) = default;
     void Create(IGraphicsPipelineStructure_t* igpsPtr, BlendMode blendMode);
 
 private:
-    // •Ï”
+    // å¤‰æ•°
     PSO_t pipelineStateObject_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline ID3D12RootSignature* GetRootSignaturePtr(void) { pipelineStateObject_.rootSignature.Get(); }
     inline ID3D12PipelineState* GetPipelineStatePtr(void) { pipelineStateObject_.pipelineState.Get(); }
     inline PSO_t* GetPipelineStateObjectPtr(void) { return &pipelineStateObject_; }
@@ -125,7 +125,7 @@ public:
 class PSOManager : public IGraphicsPipeline
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     struct GraphicsPipelineBlend_t
     {
         std::array<IGraphicsPipeline, static_cast<size_t>(HelperGraphicPipeline::BlendMode::MAX_ARRAY)> blends;
@@ -140,7 +140,7 @@ private:
     };
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     static PSOManager* GetInstance(void);
 
     void Create();
@@ -149,17 +149,17 @@ private:
     inline void AddPipeline(const std::string& key) { pipelineStateObjects_.emplace(key, GraphicsPipelineBlend_t()); }
     inline void SetComplete(const std::string& key) { pipelineStateObjects_[key].Create(); }
 
-    // •Ï”
+    // å¤‰æ•°
     std::map<std::string, GraphicsPipelineBlend_t> pipelineStateObjects_{};
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline std::map<std::string, GraphicsPipelineBlend_t>* GetPSOsMap(void) { return &pipelineStateObjects_; }
     inline GraphicsPipelineBlend_t* GetPSOBlendPtr(const std::string key) { return &pipelineStateObjects_[key]; }
     inline IGraphicsPipeline::PSO_t* GetPSOPtr(const std::string key, HelperGraphicPipeline::BlendMode blendMode = HelperGraphicPipeline::BlendMode::NONE) { return pipelineStateObjects_[key].blends[static_cast<size_t>(blendMode)].GetPipelineStateObjectPtr(); }
 
 private:
-    // ƒVƒ“ƒOƒ‹ƒgƒ“
+    // ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³
     PSOManager(void) {};
     ~PSOManager(void) {};
     PSOManager(const PSOManager&) = delete;

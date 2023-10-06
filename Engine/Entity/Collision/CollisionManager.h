@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <forward_list>
 #include <memory>
 #include "CollisionPrimitive.h"
@@ -12,11 +12,11 @@ private:
     CollisionManager(const CollisionManager&) = delete;
     CollisionManager& operator=(const CollisionManager&) = delete;
 
-    // ’è‹`
+    // å®šç¾©
     std::forward_list<ICollider*> collidersPtrList_;
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     static CollisionManager* GetInstance(void);
 
     void Update(void);

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector2.h"
 #include "Vector3.h"
 #include "ICollider.h"
@@ -7,11 +7,11 @@ namespace CollisionPrimitive
 {
     struct PointCollider final : public ICollider
     {
-        // ŠÖ”
+        // é–¢æ•°
         PointCollider(void) noexcept = default;
         inline bool Dispatch(ICollider* other) override { return other->Col(this); }
 
-        // •Ï”
+        // å¤‰æ•°
         Vector3 pos{ 0, 0, 0 };
 
     private: //4
@@ -23,7 +23,7 @@ namespace CollisionPrimitive
 
     struct SphereCollider final : public ICollider
     {
-        // ŠÖ”
+        // é–¢æ•°
         SphereCollider(void) 
         {
             shape_ = Shape::SPHERE;
@@ -36,7 +36,7 @@ namespace CollisionPrimitive
 
         inline bool Dispatch(ICollider* other) override { return other->Col(this); }
 
-        // •Ï”
+        // å¤‰æ•°
         Vector3 center{ 0, 0, 0 };
         float radius{ 0.f };
 
@@ -50,11 +50,11 @@ namespace CollisionPrimitive
     struct PlaneCollider final : public ICollider
     {
     public:
-        // ŠÖ”
+        // é–¢æ•°
         PlaneCollider(void) noexcept = default;
         inline bool Dispatch(ICollider* other) override { return other->Col(this); }
 
-        // •Ï”
+        // å¤‰æ•°
         Vector3 normal{ 0, 1, 0 };
         float distance{ 0.f };
 
@@ -68,11 +68,11 @@ namespace CollisionPrimitive
     struct AABBCollider final : public ICollider
     {
     public:
-        // ŠÖ”
+        // é–¢æ•°
         AABBCollider(void) noexcept = default;
         inline bool Dispatch(ICollider* other) override { return other->Col(this); }
 
-        // •Ï”
+        // å¤‰æ•°
         Vector3 center{ 0, 0, 0 };
         Vector3 radius{ 0, 0, 0 };
         Vector3 inter{ 0, 0, 0 };

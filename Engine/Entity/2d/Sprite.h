@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <array>
 #include <DirectXMath.h>
 #include <wrl.h>
@@ -20,38 +20,38 @@
 class Sprite
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     using fsPath = std::experimental::filesystem::path;
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
-    struct CBMatOrthoGraphic_t // ’è”ƒoƒbƒtƒ@—p"Ë‰es—ñ"\‘¢‘Ì
+    struct CBMatOrthoGraphic_t // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨"å°„å½±è¡Œåˆ—"æ§‹é€ ä½“
     {
         Matrix4 matOrthoGraphic;
     };
 
-    struct CBData2d_t // ’è”ƒoƒbƒtƒ@—p"ƒf[ƒ^"\‘¢‘Ì
+    struct CBData2d_t // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨"ãƒ‡ãƒ¼ã‚¿"æ§‹é€ ä½“
     {
-        Matrix4 matWorld; // 3D•ÏŠ·s—ñ
-        Vector4 color; // FiRGBAj
+        Matrix4 matWorld; // 3Då¤‰æ›è¡Œåˆ—
+        Vector4 color; // è‰²ï¼ˆRGBAï¼‰
     };
 
-    struct VertexPosUv_t // ’¸“_ƒoƒbƒtƒ@—p"ƒf[ƒ^"\‘¢‘Ì
+    struct VertexPosUv_t // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”¨"ãƒ‡ãƒ¼ã‚¿"æ§‹é€ ä½“
     {
-        Vector3 pos; // xyzÀ•W
-        Vector2 uv; // uvÀ•W
+        Vector3 pos; // xyzåº§æ¨™
+        Vector2 uv; // uvåº§æ¨™
     };
 
-    // ŠÖ”
+    // é–¢æ•°
     static void StaticInitialize(TextureManager* texMPtr);
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
     static void SetDrawBlendMode(BlendMode blendmode);
 
-    // •½s“Š‰es—ñ‚ğ”CˆÓ‚Ìƒ^ƒCƒ~ƒ“ƒO‚ÅXV‚·‚é‚½‚ß‚ÌŠÖ”
+    // å¹³è¡ŒæŠ•å½±è¡Œåˆ—ã‚’ä»»æ„ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§æ›´æ–°ã™ã‚‹ãŸã‚ã®é–¢æ•°
     static void UpdateCBMatOrthoGraphic(CameraManager* camMPtr);
 
-    Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickName‚ª—Dæ‚³‚ê‚éB
+    Sprite(const fsPath& path, const std::string& nickname = "noAssign"); // nickNameãŒå„ªå…ˆã•ã‚Œã‚‹ã€‚
     void Update(void);
     void Draw(void);
 
@@ -60,7 +60,7 @@ protected:
     void UpdateMatrix(void);
 
 protected:
-    // •Ï”
+    // å¤‰æ•°
     static TextureManager* sTexMPtr_;
     static ConstBuffer<CBMatOrthoGraphic_t> sCbMatOrthoGraphic_;
 
@@ -86,7 +86,7 @@ protected:
     const TextureManager::Image* imagePtr_;
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline const Vector2& GetPosition(void) { return position_; }
     inline const Vector2& GetScale(void) { return scale_; }
     inline const Vector2& GetSize(void) { return size_; }

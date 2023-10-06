@@ -1,33 +1,33 @@
-#include <thread>
+ï»¿#include <thread>
 
 #include "FPSController.h"
 
 void FPSController::Initialize(void)
 {
-    // Œ»İŠÔ‚ğ‹L˜^‚·‚é
+    // ç¾åœ¨æ™‚é–“ã‚’è¨˜éŒ²ã™ã‚‹
     timeRef_ = std::chrono::steady_clock::now();
 }
 
 void FPSController::Update(void)
 {
-    const std::chrono::microseconds kMinTime_{ uint64_t(1000000.0f / fps_) }; // 1/60•b‚Ò‚Á‚½‚è‚ÌŠÔ
-    const std::chrono::microseconds kMinCheckTime_{ uint64_t(1000000.0f / (fps_ + 5)) }; // 1/60•b‚æ‚è‹Í‚©‚É’Z‚¢ŠÔ
+    const std::chrono::microseconds kMinTime_{ uint64_t(1000000.0f / fps_) }; // 1/60ç§’ã´ã£ãŸã‚Šã®æ™‚é–“
+    const std::chrono::microseconds kMinCheckTime_{ uint64_t(1000000.0f / (fps_ + 5)) }; // 1/60ç§’ã‚ˆã‚Šåƒ…ã‹ã«çŸ­ã„æ™‚é–“
 
-    //@Œ»İŠÔ‚ğæ“¾‚·‚é
+    //ã€€ç¾åœ¨æ™‚é–“ã‚’å–å¾—ã™ã‚‹
     std::chrono::steady_clock::time_point now{ std::chrono::steady_clock::now() };
-    // ‘O‰ñ‹L˜^‚©‚ç‚ÌŒo‰ßŠÔ‚ğæ“¾‚·‚é
+    // å‰å›è¨˜éŒ²ã‹ã‚‰ã®çµŒéæ™‚é–“ã‚’å–å¾—ã™ã‚‹
     std::chrono::microseconds elapsed{ std::chrono::duration_cast<std::chrono::microseconds>(now - timeRef_) };
 
-    // 1/60•bi‚æ‚è‹Í‚©‚É’Z‚¢ŠÔjŒo‚Á‚Ä‚¢‚È‚¢ê‡
+    // 1/60ç§’ï¼ˆã‚ˆã‚Šåƒ…ã‹ã«çŸ­ã„æ™‚é–“ï¼‰çµŒã£ã¦ã„ãªã„å ´åˆ
     if (elapsed < kMinCheckTime_) {
-        // 1/60•bŒo‰ß‚·‚é‚Ü‚Å”÷¬‚ÈƒXƒŠ[ƒv‚ğŒJ‚è•Ô‚·
+        // 1/60ç§’çµŒéã™ã‚‹ã¾ã§å¾®å°ãªã‚¹ãƒªãƒ¼ãƒ—ã‚’ç¹°ã‚Šè¿”ã™
         while (std::chrono::steady_clock::now() - timeRef_ < kMinTime_)
         {
-            // 1ƒ}ƒCƒNƒ•bƒXƒŠ[ƒv
+            // 1ãƒã‚¤ã‚¯ãƒ­ç§’ã‚¹ãƒªãƒ¼ãƒ—
             std::this_thread::sleep_for(std::chrono::microseconds(1));
         }
     }
 
-    // Œ»İ‚ÌŠÔ‚ğ‹L˜^
+    // ç¾åœ¨ã®æ™‚é–“ã‚’è¨˜éŒ²
     timeRef_ = std::chrono::steady_clock::now();
 }

@@ -1,27 +1,27 @@
-#pragma once
+ï»¿#pragma once
 #include <wrl.h>
 #include <d3d12.h>
 
 class RenderTexture final
 {
 private:
-    // ’è‹`
+    // å®šç¾©
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    // ’è”
+    // å®šæ•°
     static const float kClearColor[4];
 
 public:
-    // ŠÖ”
+    // é–¢æ•°
     RenderTexture(void) = default;
     void Create(void);
     void TransitionResourceBarrier(D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
 
 private:
-    // •Ï”
-    ComPtr<ID3D12Resource> texBuff_;   // texƒoƒbƒtƒ@
+    // å¤‰æ•°
+    ComPtr<ID3D12Resource> texBuff_;   // texãƒãƒƒãƒ•ã‚¡
 
 public:
-    // setterEgetter
+    // setterãƒ»getter
     inline ID3D12Resource* GetTexBuffPtr(void) { return texBuff_.Get(); }
 };
 
