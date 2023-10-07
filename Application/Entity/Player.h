@@ -13,11 +13,11 @@ public:
 
     //>> 定数
     const float kRadius_{ 1.f };
-    const float kJumpPower_{ 3.f };
-    const float kJumpLongPower_{ 2.f };
+    const float kJumpPower_{ 1.3f };
+    const float kJumpLongPower_{ 1.3f };
     const float kMoveSpeed_{ 1.f };
-    const float kMoveJumpLongSpeed_{ 3.f };
-    const float kGravity_{ 0.24f };
+    const float kMoveJumpLongSpeed_{ 2.f };
+    const float kGravity_{ 0.1f };
 
     //>> 関数
     Player(CameraManager* camMPtr);
