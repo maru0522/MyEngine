@@ -1,4 +1,4 @@
-﻿#include "Player.h"
+#include "Player.h"
 #include "Input.h"
 #include "Quaternion.h"
 #include "SimplifyImGui.h"
@@ -69,6 +69,9 @@ void Player::Update(void)
     // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
     // 計算量を減らしたい場合、コミットID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d を参照
     coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+
+    // 着地フラグは毎フレームfalseになるが、着地してるならOnCollisionでtrueになる。
+    isLanding_ = false;
 
 #ifdef _DEBUG
     GUI::Begin("Control");
@@ -244,6 +247,7 @@ void Player::OnCollision(void)
 
         // ジャンプする量
         jumpVecNorm_ = 0.f;
+        isLanding_ = true;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);

@@ -1,7 +1,8 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 #include "Vector3.h"
 #include "CameraManager.h"
+#include "Timer.h"
 
 // 前方宣言
 class Player; // 苦肉
@@ -28,7 +29,7 @@ class IPlayerBehavior
 {
 public:
     //>> 関数
-    IPlayerBehavior(Player* arg_playerPtr) : 
+    IPlayerBehavior(Player* arg_playerPtr) :
         nextState_(PlayerBehavior::NONE), playerPtr_(arg_playerPtr) {};
     virtual ~IPlayerBehavior(void) = default;
 
@@ -70,6 +71,8 @@ protected:
     float GetPlayerJumpPower(void);
     float GetPlayerJumpLongPower(void);
     float GetPlayerMoveSpeed(void);
+    float GetPlayerMoveJumpLongSpeed(void);
+    bool GetPlayerIsLanding(void);
     CameraManager* GetPlayerCamMPtr(void);
 
     //>> setter
@@ -152,6 +155,10 @@ private:
 // JUMP状態を示すクラス
 class PlayerBehavior_Jump final : public IPlayerBehavior
 {
+private:
+    //>> 定義
+    const float kMove_divide_{ 2.f }; // 空中で移動速度を元の何分の1にするか
+
 public:
     //>> 関数
     PlayerBehavior_Jump(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 #include "Object3D.h"
 #include "CameraManager.h"
@@ -14,9 +14,10 @@ public:
     //>> 定数
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 3.f };
-    const float kJumpLongPower_{ 15.f };
+    const float kJumpLongPower_{ 2.f };
     const float kMoveSpeed_{ 1.f };
-    const float kGravity_{ 0.2f };
+    const float kMoveJumpLongSpeed_{ 3.f };
+    const float kGravity_{ 0.24f };
 
     //>> 関数
     Player(CameraManager* camMPtr);
