@@ -1,4 +1,4 @@
-﻿#include "Mesh.h"
+#include "Mesh.h"
 
 void Mesh::CalcSmoothedVertNormals(std::vector<VertexPosNormalUv_t>& vertices)
 {

@@ -1,4 +1,4 @@
-﻿#include "SimplifyImGui.h"
+#include "SimplifyImGui.h"
 #include "GaussianBlur.h"
 #include "RadialBlur.h"
 #include "FrameWork.h"
@@ -41,6 +41,7 @@ void FrameWork::Initialize()
     modelM_->LoadOBJ("Resources/model/cube/cube.obj", false);
     modelM_->LoadOBJ("Resources/model/ICOSphere/ICOSphere.obj", false);
     modelM_->LoadOBJ("Resources/model/lolP/lolP.obj", false);
+    modelM_->LoadOBJ("Resources/model/player/Casual_Male.obj", false);
     modelM_->LoadOBJ("Resources/model/sphere/sphere.obj", true);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");

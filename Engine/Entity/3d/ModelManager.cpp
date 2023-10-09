@@ -1,4 +1,4 @@
-﻿#include "ModelManager.h"
+#include "ModelManager.h"
 #include "Util.h"
 #include <fstream>
 #include <sstream>
