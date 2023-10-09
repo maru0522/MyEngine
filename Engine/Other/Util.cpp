@@ -1,4 +1,4 @@
-﻿#include "Util.h"
+#include "Util.h"
 #include <chrono>
 #include <cmath>
 #include <Windows.h>

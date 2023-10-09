@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "WndAPI.h"
 #include "InitDirectX.h"
 #include "TextureManager.h"

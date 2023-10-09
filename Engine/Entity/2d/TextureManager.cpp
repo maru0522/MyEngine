@@ -1,4 +1,4 @@
-﻿#include "TextureManager.h"
+#include "TextureManager.h"
 #include "Util.h"
 #include "Vector4.h"
 #include <DirectXTex.h>

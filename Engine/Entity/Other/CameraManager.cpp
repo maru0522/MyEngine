@@ -1,4 +1,4 @@
-﻿#include "CameraManager.h"
+#include "CameraManager.h"
 #include "Object3D.h"
 #include "MathUtil.h"
 #include "WndAPI.h"

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Vector2.h"
 #include "Vector3.h"
 #include "ICollider.h"
@@ -82,5 +82,10 @@ namespace CollisionPrimitive
         bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) override;
         bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
         bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
+    };
+
+    struct OBBCollider final :public ICollider
+    {
+
     };
 }

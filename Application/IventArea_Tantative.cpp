@@ -1,4 +1,4 @@
-﻿#include "IventArea_Tantative.h"
+#include "IventArea_Tantative.h"
 
 IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::string& id) : Object3D("Resources/model/cube/cube.obj"),colMPtr_(colMPtr)
 {

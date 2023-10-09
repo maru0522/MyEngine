@@ -1,4 +1,4 @@
-﻿#include "Input.h"
+#include "Input.h"
 #include "DemoScene.h"
 #include "SimplifyImGui.h"
 #include "CollisionChecker.h"

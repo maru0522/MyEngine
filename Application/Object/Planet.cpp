@@ -1,4 +1,4 @@
-﻿#include "Planet.h"
+#include "Planet.h"
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 

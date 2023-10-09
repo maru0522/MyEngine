@@ -50,7 +50,8 @@ private:
     bool isLanding_{};
 
     CollisionPrimitive::SphereCollider sphereCollider_;
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
+    //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };
 
     CameraManager* camMPtr_{};
 

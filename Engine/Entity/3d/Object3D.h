@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "TextureManager.h"
 #include "CameraManager.h"
 #include "ModelManager.h"

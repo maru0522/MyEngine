@@ -1,4 +1,4 @@
-﻿#include "Object3D.h"
+#include "Object3D.h"
 #include "InitDirectX.h"
 
 LightGroup* Object3D::sLightGroupPtr_{ nullptr };
