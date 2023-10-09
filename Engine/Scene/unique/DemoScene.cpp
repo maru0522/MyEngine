@@ -32,11 +32,11 @@ void DemoScene::Initialize(void)
     rabbit2_->GetTransformPtr()->position = { 10,60, 20 };
     rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
 
-    rock1_->TransformPtr()->position = { 50,0,0 };
-    rock2_->TransformPtr()->position = { 47,12,3 };
-    rock3_->TransformPtr()->position = { 45,-6,7 };
-    rock4_->TransformPtr()->position = { 45,-15,-5 };
-    rock5_->TransformPtr()->position = { 46,7,-6 };
+    rock1_->TransformPtr()->position = { 48,18,9 };
+    rock2_->TransformPtr()->position = { 49,-23,6 };
+    rock3_->TransformPtr()->position = { 48,-6,24 };
+    rock4_->TransformPtr()->position = { 49,10,-20 };
+    rock5_->TransformPtr()->position = { 48,-12,-15 };
 
     sticky1_->SetRoot({ 0,50.f,0 });
 }
