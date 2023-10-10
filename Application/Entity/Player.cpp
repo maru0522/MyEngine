@@ -42,7 +42,7 @@ void Player::Update(void)
     }
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
+    appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
     appearance_->Update();
 
     pbm_.ManagementBehavior();
@@ -68,7 +68,7 @@ void Player::Update(void)
 
     // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
     // 計算量を減らしたい場合、コミットID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d を参照
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 
     // 着地フラグは毎フレームfalseになるが、着地してるならOnCollisionでtrueになる。
     isLanding_ = false;
@@ -112,7 +112,7 @@ void Player::Update(void)
     //GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
 
     ImGui::Text("matrix");
-    Matrix4 p = coordinate_.mat_world;
+    Matrix4 p = matTrans_.mat_world;
     ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
@@ -253,7 +253,7 @@ void Player::OnCollision(void)
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
 
         Vector3 currentPos = transform_.position;
-        //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
+        //currentPos += player->body_->matTrans_.GetUpVec().ExtractVector3();
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
         currentPos += axes_.up * -diff; // ここをマイナス符号で値反転
@@ -262,7 +262,7 @@ void Player::OnCollision(void)
         transform_.position = currentPos;
 
         // 補正された値で行列を生成
-        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
     if (sphereCollider_.GetOther()->GetID() == "rock")
     {
@@ -278,7 +278,7 @@ void Player::OnCollision(void)
         transform_.position = currentPos;
 
         // 補正された値で行列を生成
-        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
     if (sphereCollider_.GetOther()->GetID() == "rabbit")
     {

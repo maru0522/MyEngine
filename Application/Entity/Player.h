@@ -40,7 +40,7 @@ private:
     void OnCollision(void); // callback
 
     //>> 変数
-    TransformMatrix coordinate_;
+    TransformMatrix matTrans_;
     Transform transform_;
     Axis3 axes_;
 
@@ -60,7 +60,7 @@ public:
     //>> setter
 
     //>> getter
-    inline TransformMatrix* GetTransMatPtr(void) { return &coordinate_; }
+    inline TransformMatrix* GetTransMatPtr(void) { return &matTrans_; }
     Transform* GetTransformPtr(void) { return &transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
