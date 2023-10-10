@@ -250,9 +250,6 @@
     <ClInclude Include="Engine\Other\Util.h">
       <Filter>Engine\Other</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Other\FileSystem.h">
-      <Filter>Engine\Other</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Entity\2d\Sprite.h">
       <Filter>Engine\Entity\2D</Filter>
     </ClInclude>

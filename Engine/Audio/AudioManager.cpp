@@ -41,9 +41,9 @@ void AudioManager::Load(const fsPath& path)
 
 void AudioManager::LoadFolder(const fsPath& path)
 {
-    for (const std::experimental::filesystem::directory_entry& file : std::experimental::filesystem::directory_iterator(path)) {
+    for (const std::filesystem::directory_entry& file : std::filesystem::directory_iterator(path)) {
         // ファイル名取得
-        std::experimental::filesystem::path fileName{ file.path().filename().string() };
+        std::filesystem::path fileName{ file.path().filename().string() };
         Load(path / fileName);
     }
 }

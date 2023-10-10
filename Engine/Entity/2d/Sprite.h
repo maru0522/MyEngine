@@ -14,7 +14,7 @@
 #include "VertexBuffer.h"
 #include "ConstBuffer.h"
 #include "PSOManager.h"
-#include "FileSystem.h"
+#include <filesystem>
 #include "Vector2.h"
 #include "Vector4.h"
 #include "Matrix4.h"
@@ -24,7 +24,7 @@ class Sprite
 {
 private:
     // 定義
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 

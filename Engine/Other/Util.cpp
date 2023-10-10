@@ -16,7 +16,7 @@ void Util::Log::PrintOutputWindow(const std::string& str)
     OutputDebugString(toWStr.c_str());
 }
 
-void Util::Log::PrintExternalText(const std::string& str, const std::experimental::filesystem::path& logTextPath)
+void Util::Log::PrintExternalText(const std::string& str, const std::filesystem::path& logTextPath)
 {
     const std::string fileName{ "mLogs.txt" };
     std::ifstream ifs{ logTextPath };

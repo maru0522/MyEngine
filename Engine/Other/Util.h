@@ -1,6 +1,6 @@
-﻿#pragma once
+#pragma once
 #include <string>
-#include "FileSystem.h"
+#include <filesystem>
 #include <typeinfo>
 
 namespace Util {
@@ -37,6 +37,6 @@ namespace Util {
 
     namespace Log {
         void PrintOutputWindow(const std::string& str);
-        void PrintExternalText(const std::string& str, const std::experimental::filesystem::path& logTextPath = std::experimental::filesystem::current_path());
+        void PrintExternalText(const std::string& str, const std::filesystem::path& logTextPath = std::filesystem::current_path());
     }
 }

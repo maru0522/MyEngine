@@ -1,5 +1,5 @@
 #pragma once
-#include "FileSystem.h"
+#include <filesystem>
 #include <string>
 #include <map>
 #include <wrl.h>
@@ -15,7 +15,7 @@ class TextureManager final
 private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
 
 public:
     struct Image

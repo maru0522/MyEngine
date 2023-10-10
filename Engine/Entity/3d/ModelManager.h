@@ -10,7 +10,7 @@
 
 #include "TextureManager.h"
 #include "VertexBuffer.h"
-#include "FileSystem.h"
+#include <filesystem>
 #include "IndexBuffer.h"
 #include "ConstBuffer.h"
 #include "PSOManager.h"
@@ -24,7 +24,7 @@ struct Model_t final
 private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
 
 public:
     struct Material_t
@@ -70,7 +70,7 @@ class ModelManager
 private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
     using Material_t = Model_t::Material_t;
 
 public:

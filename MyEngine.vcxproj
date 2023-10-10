@@ -275,7 +275,6 @@
     <ClInclude Include="Engine\Entity\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\TemplateBuffer\ConstBuffer.h" />
     <ClInclude Include="Engine\Scene\unique\DemoScene.h" />
-    <ClInclude Include="Engine\Other\FileSystem.h" />
     <ClInclude Include="Engine\Base\FPSController.h" />
     <ClInclude Include="Engine\Base\FrameWork.h" />
     <ClInclude Include="Engine\Base\GameSystem.h" />

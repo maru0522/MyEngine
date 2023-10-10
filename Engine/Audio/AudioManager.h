@@ -2,7 +2,7 @@
 #include <map>
 #include <wrl.h>
 #include <fstream>
-#include "FileSystem.h"
+#include <filesystem>
 #include <xaudio2.h>
 
 #include <mfapi.h>
@@ -14,7 +14,7 @@ class AudioManager final
 private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
 
     struct ChunkHeader_t
     {

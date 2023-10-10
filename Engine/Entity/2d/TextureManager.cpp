@@ -113,8 +113,8 @@ void TextureManager::Load(const fsPath& path, const std::string& nickname)
 
 void TextureManager::LoadFolder(const fsPath& path)
 {
-    for (const std::experimental::filesystem::directory_entry& file : std::experimental::filesystem::directory_iterator(path)) {
-        std::experimental::filesystem::path fileName{ file.path().filename().string() };
+    for (const std::filesystem::directory_entry& file : std::filesystem::directory_iterator(path)) {
+        std::filesystem::path fileName{ file.path().filename().string() };
 
         if (file.path().extension() == ".png" || file.path().extension() == ".jpg" || file.path().extension() == ".jpeg") {
             Load(path / fileName);

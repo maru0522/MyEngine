@@ -4,7 +4,7 @@
 #include "ModelManager.h"
 #include "ConstBuffer.h"
 #include "PSOManager.h"
-#include "FileSystem.h"
+#include <filesystem>
 #include "Matrix4.h"
 #include "LightGroup.h"
 #include "Transform.h"
@@ -13,7 +13,7 @@ class Object3D
 {
 private:
     // 定義
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
     using BlendMode = HelperGraphicPipeline::BlendMode;
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 

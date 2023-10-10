@@ -1,6 +1,6 @@
-﻿#pragma once
+#pragma once
 #include <wrl.h>
-#include "FileSystem.h"
+#include <filesystem>
 #include "AudioManager.h"
 #include <xaudio2.h>
 
@@ -9,7 +9,7 @@ class Sound final
 private:
     // 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
 
 public:
     enum class Loop

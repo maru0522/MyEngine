@@ -2,7 +2,7 @@
 #include "VertexBuffer.h"
 #include <unordered_map>
 #include "IndexBuffer.h"
-#include "FileSystem.h"
+#include <filesystem>
 #include "Vector3.h"
 #include "Vector2.h"
 
@@ -10,7 +10,7 @@ class Mesh
 {
 private:
     // 定義
-    using fsPath = std::experimental::filesystem::path;
+    using fsPath = std::filesystem::path;
 
 public:
     struct VertexPosNormalUv_t // 頂点バッファ用"データ"構造体
