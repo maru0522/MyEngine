@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Object3D.h"
 #include "CollisionManager.h"
 

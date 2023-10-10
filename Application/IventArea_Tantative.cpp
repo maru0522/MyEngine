@@ -27,7 +27,7 @@ void IventArea_Tantative::Update(void)
     Object3D::Update();
 
     aabb_.center = transform_.position;
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_.position, transform_.scale, transform_.rotation);
+    matTrans_.mat_world = Math::Function::AffinTrans(transform_.position, transform_.scale, transform_.rotation);
 }
 
 void IventArea_Tantative::Draw(void)

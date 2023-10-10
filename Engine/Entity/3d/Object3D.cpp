@@ -71,7 +71,7 @@ Object3D::Object3D(const fsPath& path) :
 void Object3D::Update(void)
 {
     // 座標計算と転送
-    cb_.GetConstBuffMap()->matWorld = coordinate_.mat_world;
+    cb_.GetConstBuffMap()->matWorld = matTrans_.mat_world;
     model_.UpdateCB();
 }
 

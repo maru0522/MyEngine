@@ -1,19 +1,37 @@
 #pragma once
-#include <filesystem>
+#include "Object3D.h"
+#include "CollisionPrimitive.h"
+#include "CollisionManager.h"
 
-class Pipe
+class Pipe final : public Object3D
 {
 public:
-    //>> 定義
-    using fsPath = std::filesystem::path;
-
     //>> 関数
-    Pipe(const fsPath& arg_modelPath);
+    Pipe(CollisionManager* colMPtr);
+    ~Pipe(void) override;
 
-    void Update(void);
-    void Draw(void);
+    void Update(void) override;
+    void Draw(void) override;
+
+private:
+    void Collision_PushBack(void);
+    void Collision_EnterInside(void);
 
     //>> 変数
+    TransformMatrix matTrans_;
+    Transform transform_;
+    Axis3 axes_;
 
+    CollisionManager* colMPtr_{};
+    CollisionPrimitive::SphereCollider collision_pushback_; // 当たり判定
+    CollisionPrimitive::SphereCollider collision_enterInside_; // 土管に入る時の当たり判定
+
+    Pipe* partnerPipePtr_{};
+public:
+    //>> setter
+    void SetPosition(const Vector3& arg_pos);
+    void SetRadius_ColPushBack(float arg_radius) { collision_pushback_.radius = arg_radius; }
+    void SetRadius_ColEnterInside(float arg_radius) { collision_enterInside_.radius = arg_radius; }
+    void SetPartnerPtr(Pipe* arg_partnerPtr) { partnerPipePtr_ = arg_partnerPtr; }
 };
 

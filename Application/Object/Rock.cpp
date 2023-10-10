@@ -1,4 +1,4 @@
-﻿#include "Rock.h"
+#include "Rock.h"
 #include "MathUtil.h"
 
 Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj"), colMPtr_(colMPtr)
@@ -27,7 +27,7 @@ void Rock::Update(void)
     Object3D::Update();
 
     collision_aabb_.center = transform_.position;
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_,axes_);
+    matTrans_.mat_world = Math::Function::AffinTrans(transform_,axes_);
 }
 
 void Rock::Draw(void)

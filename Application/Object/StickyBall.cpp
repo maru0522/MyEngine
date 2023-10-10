@@ -1,4 +1,4 @@
-﻿#include "StickyBall.h"
+#include "StickyBall.h"
 #include "SimplifyImGui.h"
 
 StickyBall::StickyBall(CollisionManager* colMPtr) : Object3D("Resources/model/sphere/sphere.obj"), colMPtr_(colMPtr)
@@ -73,7 +73,7 @@ void StickyBall::Update(void)
     ImGui::SliderFloat("z", &transform_.scale.z, 1.f, 10.f);
     GUI::End();
 
-    coordinate_.mat_world = Math::Function::AffinTrans(collision_sphere_.center, transform_.scale, axes_);
+    matTrans_.mat_world = Math::Function::AffinTrans(collision_sphere_.center, transform_.scale, axes_);
 }
 
 void StickyBall::Draw(void)
@@ -109,7 +109,7 @@ void StickyBall::OnCollision(void)
         collision_sphere_.center = currentPos;
 
         // 補正された値で行列を生成
-        coordinate_.mat_world = Math::Function::AffinTrans(collision_sphere_.center, transform_.scale, axes_);
+        matTrans_.mat_world = Math::Function::AffinTrans(collision_sphere_.center, transform_.scale, axes_);
         //}
     }
 }

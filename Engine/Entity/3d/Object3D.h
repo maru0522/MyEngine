@@ -50,7 +50,7 @@ protected:
     // 変数
     Object3D* parent_;
 
-    TransformMatrix coordinate_;
+    TransformMatrix matTrans_;
     ConstBuffer<CBData3d_t> cb_;
     bool isInvisible_{};
     Model_t model_;
@@ -65,8 +65,8 @@ public:
     static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
     inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
-    inline void SetCoordinate(const TransformMatrix& coordinate) { coordinate_ = coordinate; }
+    inline void SetCoordinate(const TransformMatrix& coordinate) { matTrans_ = coordinate; }
 
-    inline TransformMatrix* GetCoordinatePtr(void) { return &coordinate_; }
+    inline TransformMatrix* GetCoordinatePtr(void) { return &matTrans_; }
 };
 
