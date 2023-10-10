@@ -209,6 +209,9 @@
     <ClCompile Include="Application\Entity\PlayerBehavior.cpp">
       <Filter>Application\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Object\Pipe.cpp">
+      <Filter>Application\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -401,6 +404,9 @@
     </ClInclude>
     <ClInclude Include="Application\Entity\PlayerBehavior.h">
       <Filter>Application\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Object\Pipe.h">
+      <Filter>Application\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
