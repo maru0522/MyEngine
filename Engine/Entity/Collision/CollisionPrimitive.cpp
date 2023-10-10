@@ -1,4 +1,4 @@
-﻿#include "CollisionChecker.h"
+#include "CollisionChecker.h"
 #include "CollisionPrimitive.h"
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
@@ -82,6 +82,15 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* a
     return isHit;
 }
 
+bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
+{
+    if (arg_OBB)
+    {
+
+    }
+    return false;
+}
+
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
 { // 平面と平面
     bool isHit = CollisionChecker::PlaneToPlane(*this, *arg_Plane);
@@ -136,6 +145,15 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PointCollider* a
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
 { // 平面と直方体
     if (arg_AABB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
+{
+    if (arg_OBB)
     {
 
     }
@@ -211,6 +229,15 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg
     return isHit;
 }
 
+bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
+{
+    if (arg_OBB)
+    {
+
+    }
+    return false;
+}
+
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // 点と球
     bool isHit = CollisionChecker::SphereToPoint(*arg_Shpere, *this);
@@ -267,4 +294,58 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::AABBCollider* ar
     }
 
     return isHit;
+}
+
+bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
+{
+    if (arg_OBB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
+{
+    if (arg_Shpere)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
+{
+    if (arg_Plane)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
+{
+    if (arg_Point)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
+{
+    if (arg_AABB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
+{
+    if (arg_OBB)
+    {
+
+    }
+    return false;
 }

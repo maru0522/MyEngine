@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <string>
 #include "Vector2.h"
 #include "Vector3.h"
@@ -10,6 +10,7 @@ namespace CollisionPrimitive
     struct PlaneCollider;
     struct PointCollider;
     struct AABBCollider;
+    struct OBBCollider;
 
     enum class Shape
     {
@@ -17,7 +18,8 @@ namespace CollisionPrimitive
         SPHERE,  // 球
         PLANE,   // 平面
         POINT,   // 点
-        AABB,    // 直方体
+        AABB,    // XYZ軸に平行な直方体
+        OBB,     // 分離軸に平行な直方体
     };
 }
 
@@ -33,6 +35,7 @@ public:
     virtual bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) = 0;
     virtual bool Col(CollisionPrimitive::PointCollider* arg_Point) = 0;
     virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
+    virtual bool Col(CollisionPrimitive::OBBCollider* arg_OBB) = 0;
 
 protected:
     void AllOnFunction(void) // なぜか上手くいかない 処理が通らない(?)せいで正常に動かない
