@@ -1,4 +1,4 @@
-﻿#include "SimplifyImGui.h"
+#include "SimplifyImGui.h"
 
 void GUI::Begin(const std::string& windowName, const ImVec2& firstSize)
 {
@@ -45,3 +45,31 @@ void GUI::Space(void)
 {
     ImGui::Spacing();
 }
+
+void GUI::SliderFloat(const std::string& arg_label, float* arg_value, float arg_value_min, float arg_value_max)
+{
+    ImGui::SliderFloat(arg_label.c_str(), arg_value, arg_value_min, arg_value_max);
+}
+
+void GUI::SliderFloat2(const std::string& arg_label, float arg_value[2], float arg_value_min, float arg_value_max)
+{
+    ImGui::SliderFloat2(arg_label.c_str(), arg_value, arg_value_min, arg_value_max);
+}
+
+void GUI::SliderFloat2(const std::string& arg_label, Vector2& arg_value, float arg_value_min, float arg_value_max)
+{
+    float* v[2] = { &arg_value.x, &arg_value.y };
+    ImGui::SliderFloat2(arg_label.c_str(), *v, arg_value_min, arg_value_max);
+}
+
+void GUI::SliderFloat3(const std::string& arg_label, float arg_value[3], float arg_value_min, float arg_value_max)
+{
+    ImGui::SliderFloat3(arg_label.c_str(), arg_value, arg_value_min, arg_value_max);
+}
+
+void GUI::SliderFloat3(const std::string& arg_label, Vector3& arg_value, float arg_value_min, float arg_value_max)
+{
+    float* v[3] = { &arg_value.x, &arg_value.y, &arg_value.z};
+    ImGui::SliderFloat3(arg_label.c_str(), *v, arg_value_min, arg_value_max);
+}
+

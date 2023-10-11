@@ -18,7 +18,6 @@ private:
     void Collision_EnterInside(void);
 
     //>> 変数
-    TransformMatrix matTrans_;
     Transform transform_;
     Axis3 axes_;
 
@@ -30,6 +29,7 @@ private:
 public:
     //>> setter
     void SetPosition(const Vector3& arg_pos);
+    void SetRotation(const Vector3& arg_rot) { transform_.rotation = arg_rot; }
     void SetRadius_ColPushBack(float arg_radius) { collision_pushback_.radius = arg_radius; }
     void SetRadius_ColEnterInside(float arg_radius) { collision_enterInside_.radius = arg_radius; }
     void SetPartnerPtr(Pipe* arg_partnerPtr) { partnerPipePtr_ = arg_partnerPtr; }

@@ -1,4 +1,4 @@
-﻿#include "MathUtil.h"
+#include "MathUtil.h"
 
 float Math::Ease::EaseInSine(float t, float start, float end)
 {

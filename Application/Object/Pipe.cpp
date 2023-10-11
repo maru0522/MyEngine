@@ -1,5 +1,6 @@
 #include "Pipe.h"
 #include "MathUtil.h"
+#include "SimplifyImGui.h"
 
 Pipe::Pipe(CollisionManager* colMPtr) : Object3D("Resources/model/pipe/pipe.obj"),colMPtr_(colMPtr)
 {
@@ -11,6 +12,11 @@ Pipe::Pipe(CollisionManager* colMPtr) : Object3D("Resources/model/pipe/pipe.obj"
     colMPtr->Register(&collision_enterInside_);
     collision_enterInside_.SetID("pipe_enterInside");
     collision_enterInside_.SetOnCollision(std::bind(&Pipe::Collision_EnterInside, this));
+
+    // 初期姿勢
+    axes_.forward = { 0,0,1 };
+    axes_.right = { 1,0,0 };
+    axes_.up = { 0,1,0 };
 }
 
 Pipe::~Pipe(void)
@@ -23,7 +29,16 @@ Pipe::~Pipe(void)
 
 void Pipe::Update(void)
 {
-    matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    GUI::Begin("pipe");
+    GUI::Text("pos:(%f,%f,%f)", transform_.position.x, transform_.position.y, transform_.position.z);
+    GUI::SliderFloat3("transform_pos", transform_.position, -200.f, 200.f);
+    GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
+    //GUI::SliderFloat3("axis_forward", axes_.forward, -1.f, 1.f);
+    //GUI::SliderFloat3("axis_right", axes_.right, -1.f, 1.f);
+    //GUI::SliderFloat3("axis_up", axes_.up, -1.f, 1.f);
+    GUI::End();
+    //matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    matTrans_.mat_world = Math::Function::AffinTrans(transform_);
     Object3D::Update();
 }
 

@@ -39,6 +39,11 @@ void DemoScene::Initialize(void)
     rock5_->TransformPtr()->position = { 48,-12,-15 };
 
     sticky1_->SetRoot({ 0,50.f,0 });
+
+    pipe1_->SetPosition({ 16,42.5f,20.f });
+    pipe1_->SetRotation({ 0.497f,0.f,5.962f });
+    pipe2_->SetPosition({ -29.855f,-38.f ,-11.024f});
+    pipe2_->SetRotation({ 3.465f,0.f,0.621f });
 }
 
 void DemoScene::Update(void)
@@ -264,6 +269,7 @@ void DemoScene::Update(void)
     rock5_->Update();
 
     sticky1_->Update();
+    pipe1_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -287,6 +293,7 @@ void DemoScene::Draw3d(void)
     rock5_->Draw();
 
     sticky1_->Draw();
+    pipe1_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

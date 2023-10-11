@@ -14,6 +14,7 @@
 #include "CollisionManager.h"
 #include "IventArea_Tantative.h"
 #include "StickyBall.h"
+#include "Pipe.h"
 
 class DemoScene final :
     public IScene
@@ -65,6 +66,9 @@ public:
     std::unique_ptr<Rock> rock4_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock5_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<StickyBall> sticky1_{std::make_unique<StickyBall>(CollisionManager::GetInstance()) };
+
+    std::unique_ptr<Pipe> pipe1_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
 
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;

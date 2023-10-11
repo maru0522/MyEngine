@@ -1,6 +1,8 @@
-﻿#pragma once
+#pragma once
 #include <string>
 #include <imgui.h>
+#include "Vector2.h"
+#include "Vector3.h"
 
 namespace GUI
 {
@@ -17,4 +19,10 @@ namespace GUI
     void CheckBox(const std::string& checkboxName, bool* v);
     void Text(const char* fmt,...);
     void Space(void);
+
+    void SliderFloat(const std::string& arg_label, float* arg_value, float arg_value_min, float arg_value_max);
+    void SliderFloat2(const std::string& arg_label, float arg_value[2], float arg_value_min, float arg_value_max);
+    void SliderFloat2(const std::string& arg_label, Vector2& arg_value, float arg_value_min, float arg_value_max);
+    void SliderFloat3(const std::string& arg_label, float arg_value[3], float arg_value_min, float arg_value_max);
+    void SliderFloat3(const std::string& arg_label, Vector3& arg_value, float arg_value_min, float arg_value_max);
 }
