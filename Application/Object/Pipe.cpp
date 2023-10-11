@@ -13,6 +13,8 @@ Pipe::Pipe(CollisionManager* colMPtr) : Object3D("Resources/model/pipe/pipe.obj"
     collision_enterInside_.SetID("pipe_enterInside");
     collision_enterInside_.SetOnCollision(std::bind(&Pipe::Collision_EnterInside, this));
 
+    transform_.scale = { 1.8f,1.8f,1.8f };
+
     // 初期姿勢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };

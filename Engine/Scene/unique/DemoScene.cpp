@@ -270,6 +270,7 @@ void DemoScene::Update(void)
 
     sticky1_->Update();
     pipe1_->Update();
+    pipe2_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -294,6 +295,7 @@ void DemoScene::Draw3d(void)
 
     sticky1_->Draw();
     pipe1_->Draw();
+    pipe2_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
