@@ -80,7 +80,7 @@ protected:
     static void VSerializeRootSignature(ID3DBlob** rootSigBlobDPtr, D3D12_ROOT_SIGNATURE_DESC* rootSignatureDescPtr);
     static void VCreateRootSignature(ID3DBlob* rootSigBlobPtr, ID3D12RootSignature** rootSignatureDPtr);
 
-    static D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineDesc(Blob_t* blobsPtr, const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, const PSO_t& psoRef, D3D12_CULL_MODE cullMode, BlendMode blendMode);
+    static D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineDesc(Blob_t* blobsPtr, const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, const PSO_t& psoRef, D3D12_CULL_MODE cullMode, BlendMode blendMode,bool isDepthEnable);
     static void VCreatePSO(D3D12_GRAPHICS_PIPELINE_STATE_DESC* pipelineDescPtr, ID3D12PipelineState** psoDPtr);
 private:
     static void SetSamplerDesc(D3D12_STATIC_SAMPLER_DESC& samplerDescRef,size_t patternNum);
@@ -102,6 +102,7 @@ protected:
         RootParameterStructure_t rps{};
         std::unique_ptr<Blob_t> blobs{};
         std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayouts{};
+        bool isDepthEnable{ true };
 
         IGraphicsPipelineStructure_t(void)
         {
@@ -140,6 +141,7 @@ private:
         inline void AddInputLayout(D3D12_INPUT_ELEMENT_DESC inputLayout) { igps.inputLayouts.emplace_back(inputLayout); }
         void CompileShader(ShaderType shaderType, const std::string& filename, const std::string& entryPoint);
         void SetRootParameterStructure(size_t descriptorRangeNum, size_t rootParamsCBNum);
+        void SetDepthEnable(bool arg_isDepthEnable) { igps.isDepthEnable = arg_isDepthEnable; }
     };
 
 public:

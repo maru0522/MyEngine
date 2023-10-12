@@ -74,6 +74,8 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
+    png_backGround_->Update();
+
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
     if(rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured()&& rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
 
@@ -317,6 +319,15 @@ void DemoScene::Update(void)
     coin17_->Update();
     coin18_->Update();
     coin19_->Update();
+
+    GUI::Begin("backGround");
+    if (GUI::ButtonTrg("bg_switch"))
+    {
+        isBG_ ? isBG_ = false :
+            isBG_ = true;
+    }
+    
+    GUI::End();
 }
 
 void DemoScene::Draw3d(void)
@@ -377,6 +388,7 @@ void DemoScene::Draw2dFore(void)
 
 void DemoScene::Draw2dBack(void)
 {
+    if(isBG_) png_backGround_->Draw();
 }
 
 void DemoScene::Finalize(void)

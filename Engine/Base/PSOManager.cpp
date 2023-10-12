@@ -1,4 +1,4 @@
-﻿#include "PSOManager.h"
+#include "PSOManager.h"
 #include <cassert>
 #include "Util.h"
 #include "InitDirectX.h"
@@ -40,7 +40,7 @@ void IGraphicsPipeline::Create(IGraphicsPipelineStructure_t* igpsPtr, BlendMode 
     VCreateRootSignature(rootSigBlob.Get(), pipelineStateObject_.rootSignature.GetAddressOf());
 
     // パイプラインデスク
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc = CreatePipelineDesc(igpsPtr->blobs.get(), igpsPtr->inputLayouts, pipelineStateObject_, igpsPtr->cullMode, blendMode);
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc = CreatePipelineDesc(igpsPtr->blobs.get(), igpsPtr->inputLayouts, pipelineStateObject_, igpsPtr->cullMode, blendMode,igpsPtr->isDepthEnable);
     // パイプラインステートオブジェクト生成
     VCreatePSO(&pipelineDesc, pipelineStateObject_.pipelineState.GetAddressOf());
 }
@@ -146,7 +146,7 @@ void HelperGraphicPipeline::VCreateRootSignature(ID3DBlob* rootSigBlobPtr, ID3D1
     assert(SUCCEEDED(hr));
 }
 
-D3D12_GRAPHICS_PIPELINE_STATE_DESC HelperGraphicPipeline::CreatePipelineDesc(Blob_t* blobsPtr, const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, const PSO_t& psoRef, D3D12_CULL_MODE cullMode, BlendMode blendMode)
+D3D12_GRAPHICS_PIPELINE_STATE_DESC HelperGraphicPipeline::CreatePipelineDesc(Blob_t* blobsPtr, const std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayoutRef, const PSO_t& psoRef, D3D12_CULL_MODE cullMode, BlendMode blendMode, bool isDepthEnable)
 {
     // グラフィックスパイプライン設定
     D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc{};
@@ -177,7 +177,7 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC HelperGraphicPipeline::CreatePipelineDesc(Blo
     }
     pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID; // ポリゴン内塗りつぶし
     pipelineDesc.RasterizerState.DepthClipEnable = true; // 深度クリッピングを有効に
-    pipelineDesc.DepthStencilState.DepthEnable = true;
+    pipelineDesc.DepthStencilState.DepthEnable = isDepthEnable;
     pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
     pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
     pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
@@ -326,6 +326,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("PSO_SPRITE")->SetRootParameterStructure(1, 2);
     GetPSOBlendPtr("PSO_SPRITE")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("PSO_SPRITE")->SetSamplerType(SamplerType::NORMAL);
+    GetPSOBlendPtr("PSO_SPRITE")->SetDepthEnable(false);
     SetComplete("PSO_SPRITE");
 
     // object3D
@@ -338,6 +339,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("PSO_OBJECT3D")->SetRootParameterStructure(1, 4);
     GetPSOBlendPtr("PSO_OBJECT3D")->SetCullMode(D3D12_CULL_MODE_BACK);
     GetPSOBlendPtr("PSO_OBJECT3D")->SetSamplerType(SamplerType::NORMAL);
+    GetPSOBlendPtr("PSO_OBJECT3D")->SetDepthEnable(true);
     SetComplete("PSO_OBJECT3D");
 
     // postEffect
@@ -349,6 +351,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("PSO_POSTEFFECT")->SetRootParameterStructure(2, 1);
     GetPSOBlendPtr("PSO_POSTEFFECT")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("PSO_POSTEFFECT")->SetSamplerType(SamplerType::POSTEFFECT);
+    GetPSOBlendPtr("PSO_POSTEFFECT")->SetDepthEnable(true);
     SetComplete("PSO_POSTEFFECT");
 
     // gaussianblur
@@ -360,6 +363,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("GAUSSIAN")->SetRootParameterStructure(2, 1);
     GetPSOBlendPtr("GAUSSIAN")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("GAUSSIAN")->SetSamplerType(SamplerType::POSTEFFECT);
+    GetPSOBlendPtr("GAUSSIAN")->SetDepthEnable(true);
     SetComplete("GAUSSIAN");
 
     // radialblur
@@ -371,6 +375,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("RADIAL")->SetRootParameterStructure(2, 1);
     GetPSOBlendPtr("RADIAL")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("RADIAL")->SetSamplerType(SamplerType::POSTEFFECT);
+    GetPSOBlendPtr("RADIAL")->SetDepthEnable(true);
     SetComplete("RADIAL");
 
     // extractHiLumi
@@ -382,6 +387,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("HIGHLUMI")->SetRootParameterStructure(2, 1);
     GetPSOBlendPtr("HIGHLUMI")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("HIGHLUMI")->SetSamplerType(SamplerType::POSTEFFECT);
+    GetPSOBlendPtr("HIGHLUMI")->SetDepthEnable(true);
     SetComplete("HIGHLUMI");
 
     // bloom
@@ -393,6 +399,7 @@ void PSOManager::Create()
     GetPSOBlendPtr("BLOOM")->SetRootParameterStructure(2, 1);
     GetPSOBlendPtr("BLOOM")->SetCullMode(D3D12_CULL_MODE_NONE);
     GetPSOBlendPtr("BLOOM")->SetSamplerType(SamplerType::POSTEFFECT);
+    GetPSOBlendPtr("BLOOM")->SetDepthEnable(true);
     SetComplete("BLOOM");
 }
 

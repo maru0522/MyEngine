@@ -1,4 +1,4 @@
-﻿#include "CollisionManager.h"
+#include "CollisionManager.h"
 #include "SimplifyImGui.h"
 #include "GameSystem.h"
 #include "Object3D.h"
