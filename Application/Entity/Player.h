@@ -37,7 +37,10 @@ public:
 private:
     void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
     void SphericalCamera(Vector3& inputVec); // correct value for camera
-    void OnCollision(void); // callback
+
+    // callback
+    void OnCollision(void);
+    void OnTrigger(void);
 
     //>> 変数
     TransformMatrix matTrans_;
@@ -56,6 +59,7 @@ private:
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };
+
 
     CameraManager* camMPtr_{};
 

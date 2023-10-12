@@ -1,4 +1,4 @@
-﻿#include "Sound.h"
+#include "Sound.h"
 #include <cassert>
 #include "MathUtil.h"
 

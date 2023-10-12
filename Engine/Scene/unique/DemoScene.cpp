@@ -50,6 +50,26 @@ void DemoScene::Initialize(void)
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
 
     coin1_->SetPosition({ 20.f,55.f,0.f });
+    coin2_->SetPosition({ 25.f,52.f,0.f });
+    coin3_->SetPosition({ 30.f,49.f,0.f });
+
+    coin4_->SetPosition({ 0.f,10.f,51.f });
+    coin5_->SetPosition({ 7.5f,7.5f,51.f });
+    coin6_->SetPosition({ 10.f,0.f,51.f });
+    coin7_->SetPosition({ 7.5f,-7.5f,51.f });
+    coin8_->SetPosition({ 0.f,-10.f,51.f });
+    coin9_->SetPosition({ -7.5f,-7.5f,51.f });
+    coin10_->SetPosition({ -10.f,0.f,51.f });
+    coin11_->SetPosition({ -7.5f,7.5f,51.f });
+
+    coin12_->SetPosition({ 0.f,10.f,-51.f });
+    coin13_->SetPosition({ 7.5f,7.5f,-51.f });
+    coin14_->SetPosition({ 10.f,0.f,-51.f });
+    coin15_->SetPosition({ 7.5f,-7.5f,-51.f });
+    coin16_->SetPosition({ 0.f,-10.f,-51.f });
+    coin17_->SetPosition({ -7.5f,-7.5f,-51.f });
+    coin18_->SetPosition({ -10.f,0.f,-51.f });
+    coin19_->SetPosition({ -7.5f,7.5f,-51.f });
 }
 
 void DemoScene::Update(void)
@@ -279,6 +299,24 @@ void DemoScene::Update(void)
     pipe2_->Update();
 
     coin1_->Update();
+    coin2_->Update();
+    coin3_->Update();
+    coin4_->Update();
+    coin5_->Update();
+    coin6_->Update();
+    coin7_->Update();
+    coin8_->Update();
+    coin9_->Update();
+    coin10_->Update();
+    coin11_->Update();
+    coin12_->Update();
+    coin13_->Update();
+    coin14_->Update();
+    coin15_->Update();
+    coin16_->Update();
+    coin17_->Update();
+    coin18_->Update();
+    coin19_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -306,6 +344,26 @@ void DemoScene::Draw3d(void)
     pipe2_->Draw();
 
     coin1_->Draw();
+    coin2_->Draw();
+    coin3_->Draw();
+
+    coin4_->Draw();
+    coin5_->Draw();
+    coin6_->Draw();
+    coin7_->Draw();
+    coin8_->Draw();
+    coin9_->Draw();
+    coin10_->Draw();
+    coin11_->Draw();
+
+    coin12_->Draw();
+    coin13_->Draw();
+    coin14_->Draw();
+    coin15_->Draw();
+    coin16_->Draw();
+    coin17_->Draw();
+    coin18_->Draw();
+    coin19_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

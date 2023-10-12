@@ -2,6 +2,7 @@
 #include "Object3D.h"
 #include "CollisionPrimitive.h"
 #include "CollisionManager.h"
+#include "Sound.h"
 
 class Coin :
     public Object3D
@@ -21,9 +22,12 @@ private:
     Axis3 axes_;
 
     bool is_taken_{};
+    bool is_takenPre_{};
 
     CollisionManager* colMPtr_{};
     CollisionPrimitive::SphereCollider collision_contact_; // 当たり判定
+
+    Sound se_getCoin_{ "Resources/sound/coin.wav" };
 
 public:
     //>> setter

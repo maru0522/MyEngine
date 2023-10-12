@@ -15,6 +15,8 @@ Coin::Coin(CollisionManager* colMPtr) : Object3D("Resources/model/coin/coin.obj"
     axes_.up = { 0,1,0 };
 
     collision_contact_.center = { 3000,3000,3000 };
+
+    se_getCoin_.SetVolume(0.3f);
 }
 
 Coin::~Coin(void)
@@ -30,9 +32,17 @@ void Coin::Update(void)
     GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
     GUI::End();
 
+    if (is_takenPre_ == false && is_taken_)
+    {
+        if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
+        se_getCoin_.Play();
+    }
+    is_takenPre_ = is_taken_;
+
     transform_.rotation.y += 0.04f;
     matTrans_.mat_world = Math::Function::AffinTrans(transform_);
     Object3D::Update();
+
 }
 
 void Coin::Draw(void)

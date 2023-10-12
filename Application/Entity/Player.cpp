@@ -10,6 +10,7 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehav
     CollisionManager::GetInstance()->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
     sphereCollider_.SetOnCollision(std::bind(&Player::OnCollision, this));
+    sphereCollider_.SetOnTrigger(std::bind(&Player::OnTrigger, this));
 
     sphereCollider_.radius = kRadius_;
 
@@ -335,6 +336,10 @@ void Player::OnCollision(void)
     {
         is_enterPipe2_ = true;
     }
+}
+
+void Player::OnTrigger(void)
+{
     if (sphereCollider_.GetOther()->GetID() == "coin_contact")
     {
         coinNum_++;

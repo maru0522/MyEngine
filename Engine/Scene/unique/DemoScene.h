@@ -72,6 +72,24 @@ public:
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
 
     std::unique_ptr<Coin> coin1_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin2_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin3_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin4_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin5_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin6_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin7_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin8_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin9_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin10_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin11_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin12_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin13_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin14_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin15_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin16_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin17_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin18_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
+    std::unique_ptr<Coin> coin19_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
 
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;

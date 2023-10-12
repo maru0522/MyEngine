@@ -3,6 +3,7 @@
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // 球と球
+
     bool isHit = CollisionChecker::SphereToSphere(*this, *arg_Shpere);
 
     if (isHit)
@@ -11,8 +12,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
         arg_Shpere->SetOther(this);
 
         // callback
-        AllOnFunction();
-        arg_Shpere->AllOnFunction();
+        ExecuteCollisionCallback();
+        arg_Shpere->ExecuteCollisionCallback();
     }
 
     return isHit;
@@ -20,6 +21,7 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
 { // 球と平面
+
     bool isHit = CollisionChecker::SphereToPlane(*this, *arg_Plane);
 
     if (isHit)
@@ -28,15 +30,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
         arg_Plane->SetOther(this);
 
         // callback
-        //onTrigger_();
-        //arg_Plane->GetOnTrigger()();
-
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Plane->GetOnCollision()) { arg_Plane->GetOnCollision()(); }
-        if (arg_Plane->GetOnTrigger()) { arg_Plane->GetOnTrigger()(); }
-        //if (arg_Plane->GetOnRelease()) { arg_Plane->GetOnRelease()(); }
+        ExecuteCollisionCallback();
+        arg_Plane->ExecuteCollisionCallback();
     }
 
     return isHit;
@@ -51,12 +46,9 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
         other_ = arg_Point;
         arg_Point->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Point->GetOnCollision()) { arg_Point->GetOnCollision()(); }
-        if (arg_Point->GetOnTrigger()) { arg_Point->GetOnTrigger()(); }
-        //if (arg_Point->GetOnRelease()) { arg_Point->GetOnRelease()(); }
+        // callback
+        ExecuteCollisionCallback();
+        arg_Point->ExecuteCollisionCallback();
     }
 
     return isHit;

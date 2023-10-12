@@ -37,14 +37,10 @@ public:
     virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
     virtual bool Col(CollisionPrimitive::OBBCollider* arg_OBB) = 0;
 
-protected:
-    void AllOnFunction(void) // なぜか上手くいかない 処理が通らない(?)せいで正常に動かない
-    {
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        if (onRelease_) { onRelease_(); }
-    }
+    // 1freme前の接触判定を残すのに使用する。
+    void ExecuteCollisionCallback(void);
 
+protected:
     // 変数
     std::string id_{};
     ICollider* other_{};
