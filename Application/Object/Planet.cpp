@@ -46,5 +46,5 @@ void Planet::Update(void)
 
 void Planet::Draw(void)
 {
-    appearance_->Draw("Resources/gray1x1.png");
+    appearance_->Draw("Resources/planet.png");
 }

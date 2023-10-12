@@ -55,6 +55,9 @@ public:
     std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     std::unique_ptr<Sprite> png_backGround_{ std::make_unique<Sprite>("Resources/BackGround.png") };
     bool isBG_;
+
+    std::unique_ptr<Object3D> skydome_{ std::make_unique<Object3D>("Resources/model/skydome/skydome.obj") };
+
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     //

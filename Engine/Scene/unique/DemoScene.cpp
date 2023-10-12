@@ -319,6 +319,7 @@ void DemoScene::Update(void)
     coin17_->Update();
     coin18_->Update();
     coin19_->Update();
+    skydome_->Update();
 
     GUI::Begin("backGround");
     if (GUI::ButtonTrg("bg_switch"))
@@ -375,6 +376,7 @@ void DemoScene::Draw3d(void)
     coin17_->Draw();
     coin18_->Draw();
     coin19_->Draw();
+    skydome_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
