@@ -95,6 +95,7 @@
     <ClCompile Include="Application\IIvent.cpp" />
     <ClCompile Include="Application\IventArea_Tantative.cpp" />
     <ClCompile Include="Application\Entity\PlayerBehavior.cpp" />
+    <ClCompile Include="Application\Object\Coin.cpp" />
     <ClCompile Include="Application\Object\Pipe.cpp" />
     <ClCompile Include="Application\Object\Rock.cpp" />
     <ClCompile Include="Application\Object\StickyBall.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="Application\IIvent.h" />
     <ClInclude Include="Application\IventArea_Tantative.h" />
     <ClInclude Include="Application\Entity\PlayerBehavior.h" />
+    <ClInclude Include="Application\Object\Coin.h" />
     <ClInclude Include="Application\Object\Pipe.h" />
     <ClInclude Include="Application\Object\Rock.h" />
     <ClInclude Include="Application\Object\StickyBall.h" />

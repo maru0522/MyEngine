@@ -48,6 +48,8 @@ void DemoScene::Initialize(void)
     pipe2_->SetRotation({ 3.465f,0.f,0.621f });
     pipe2_->SetPartnerPtr(pipe1_.get());
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
+
+    coin1_->SetPosition({ 20.f,55.f,0.f });
 }
 
 void DemoScene::Update(void)
@@ -275,6 +277,8 @@ void DemoScene::Update(void)
     sticky1_->Update();
     pipe1_->Update();
     pipe2_->Update();
+
+    coin1_->Update();
 }
 
 void DemoScene::Draw3d(void)
@@ -300,6 +304,8 @@ void DemoScene::Draw3d(void)
     sticky1_->Draw();
     pipe1_->Draw();
     pipe2_->Draw();
+
+    coin1_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

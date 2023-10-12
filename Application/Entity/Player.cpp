@@ -189,7 +189,7 @@ void Player::Move(Vector3& moveVec, Vector3& velocity)
     GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
     GUI::Text("kGravity:             [%f]", kGravity_);
     GUI::Space();
-    GUI::Space();
+    GUI::Text("coin:                 [%d]", coinNum_);
     GUI::End();
 #endif // _DEBUG
 }
@@ -334,5 +334,9 @@ void Player::OnCollision(void)
     if (sphereCollider_.GetOther()->GetID() == "pipe_enterInside2")
     {
         is_enterPipe2_ = true;
+    }
+    if (sphereCollider_.GetOther()->GetID() == "coin_contact")
+    {
+        coinNum_++;
     }
 }

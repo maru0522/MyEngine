@@ -51,6 +51,7 @@ private:
 
     bool is_enterPipe1_;
     bool is_enterPipe2_;
+    int32_t coinNum_;
 
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };

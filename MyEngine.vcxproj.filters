@@ -212,6 +212,7 @@
     <ClCompile Include="Application\Object\Pipe.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Object\Coin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -405,6 +406,7 @@
     <ClInclude Include="Application\Object\Pipe.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Object\Coin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

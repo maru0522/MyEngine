@@ -44,6 +44,7 @@ void FrameWork::Initialize()
     //modelM_->LoadOBJ("Resources/model/player/Casual_Male.obj", false);
     modelM_->LoadOBJ("Resources/model/sphere/sphere.obj", true);
     modelM_->LoadOBJ("Resources/model/pipe/pipe.obj", false);
+    modelM_->LoadOBJ("Resources/model/coin/coin.obj", false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化
