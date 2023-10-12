@@ -41,6 +41,17 @@ void Player::Update(void)
         isFallHole2_ = false;
     }
 
+    if (is_enterPipe1_)
+    {
+        transform_.position = { -35.855f,-42.f ,-21.024f };
+        is_enterPipe1_ = false;
+    }
+    if (is_enterPipe2_)
+    {
+        transform_.position = { 10.f,43.5f,14.f };
+        is_enterPipe2_ = false;
+    }
+
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
     appearance_->Update();
@@ -272,7 +283,7 @@ void Player::OnCollision(void)
         Vector3 currentPos = transform_.position;
 
         // 移動した分だけ押し戻すようにする。
-        currentPos -= velocity_;
+        currentPos -= moveVec_;
 
         // 座標を補正
         transform_.position = currentPos;
@@ -291,5 +302,37 @@ void Player::OnCollision(void)
     if (sphereCollider_.GetOther()->GetID() == "tunnel2")
     {
         isFallHole2_ = true;
+    }
+    if (sphereCollider_.GetOther()->GetID() == "pipe_pushback")
+    {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+
+        // プレイヤーから土管方向へのベクトル
+        Vector3 vec_player2pipe = (other->center - sphereCollider_.center).Normalize();
+        // プレイヤーの座標
+        Vector3 currentPos = transform_.position;
+        currentPos -= velocity_;
+        transform_.position = currentPos;
+        sphereCollider_.center = transform_.position;
+
+        // めり込み距離を出す
+        float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
+
+        // 正規化された球からプレイヤーまでのベクトル * めり込み距離
+        currentPos += -vec_player2pipe * -diff;
+
+        // 座標を補正
+        transform_.position = currentPos;
+
+        // 補正された値で行列を生成
+        matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    }
+    if (sphereCollider_.GetOther()->GetID() == "pipe_enterInside1")
+    {
+        is_enterPipe1_ = true;
+    }
+    if (sphereCollider_.GetOther()->GetID() == "pipe_enterInside2")
+    {
+        is_enterPipe2_ = true;
     }
 }

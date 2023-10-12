@@ -42,8 +42,12 @@ void DemoScene::Initialize(void)
 
     pipe1_->SetPosition({ 16,42.5f,20.f });
     pipe1_->SetRotation({ 0.497f,0.f,5.962f });
+    pipe1_->SetPartnerPtr(pipe2_.get());
+    pipe1_->GetColPushbackPtr()->SetID("pipe_enterInside1");
     pipe2_->SetPosition({ -29.855f,-38.f ,-11.024f});
     pipe2_->SetRotation({ 3.465f,0.f,0.621f });
+    pipe2_->SetPartnerPtr(pipe1_.get());
+    pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
 }
 
 void DemoScene::Update(void)

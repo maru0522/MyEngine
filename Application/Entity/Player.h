@@ -49,6 +49,9 @@ private:
     float jumpVecNorm_{};
     bool isLanding_{};
 
+    bool is_enterPipe1_;
+    bool is_enterPipe2_;
+
     CollisionPrimitive::SphereCollider sphereCollider_;
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };

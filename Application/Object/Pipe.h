@@ -33,5 +33,10 @@ public:
     void SetRadius_ColPushBack(float arg_radius) { collision_pushback_.radius = arg_radius; }
     void SetRadius_ColEnterInside(float arg_radius) { collision_enterInside_.radius = arg_radius; }
     void SetPartnerPtr(Pipe* arg_partnerPtr) { partnerPipePtr_ = arg_partnerPtr; }
+
+    // getter
+    const Vector3& GetPosition(void) { return transform_.position; }
+    Transform* GetTransformPtr(void) { return &transform_; }
+    CollisionPrimitive::SphereCollider* GetColPushbackPtr(void) { return &collision_pushback_; }
 };
 
