@@ -1,4 +1,4 @@
-﻿#include "Rabbit.h"
+#include "Rabbit.h"
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
@@ -82,7 +82,7 @@ void Rabbit::Update(void)
 void Rabbit::Draw(void)
 {
     // 赤色のテクスチャを適用。（クソ見辛い）
-    if (isCaptured_ == false) { appearance_->Draw("Resources/red1x1.png"); }
+    if (isCaptured_ == false) { appearance_->Draw(); }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
 }

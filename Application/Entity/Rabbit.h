@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Transform.h"
 #include "CollisionPrimitive.h"
 #include <memory>
@@ -37,7 +37,7 @@ private:
     CollisionPrimitive::SphereCollider sphereCollider_;
     CollisionPrimitive::SphereCollider detectPlayerCollider_;
 
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/rabbit/rabbit.obj") };
 
     float jumpVecNorm_{};
 
