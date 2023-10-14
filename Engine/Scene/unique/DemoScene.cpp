@@ -18,6 +18,13 @@ void DemoScene::Initialize(void)
     lightGroup_->SetDirLightColor(0, { 1,1,1 });
     lightGroup_->SetLightDir(0, { 0,-1,0 });
 
+    lightGroup_->SetCircleShadowActive(0, true);
+    lightGroup_->SetCircleShadowDir(0, { 0,-1,0 });
+    lightGroup_->SetCircleShadowCasterPos(0, { 0,60,0 });
+    lightGroup_->SetCircleShadowAtten(0, {0.5f,0.6f,0 });
+    lightGroup_->SetCircleShadowFactorAngle(0, { 0.2f,0.5f });
+    lightGroup_->SetCircleShadowDistanceCasterLight(0, 100.f);
+
     // json読み込み&配置
     //lvdPtr_ = LevelData::Load("Resources/untitled.json");
     //DeployObj(lvdPtr_.get());
@@ -74,6 +81,13 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
+    Vector3 p2p = (planet_->GetPosition() - player_->GetTransformPtr()->position).Normalize();
+    lightGroup_->SetCircleShadowDir(0, p2p);
+    lightGroup_->SetCircleShadowCasterPos(0, player_->GetTransformPtr()->position + p2p * 20.f);
+    lightGroup_->SetCircleShadowAtten(0, { 0.5f,0.6f,0 });
+    lightGroup_->SetCircleShadowFactorAngle(0, { 0.2f,0.5f });
+    lightGroup_->SetCircleShadowDistanceCasterLight(0, 100.f);
+
     png_backGround_->Update();
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }

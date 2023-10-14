@@ -1,4 +1,4 @@
-﻿#include "LightGroup.h"
+#include "LightGroup.h"
 #include <imgui.h>
 
 LightGroup::LightGroup(void)
@@ -228,6 +228,12 @@ void LightGroup::SetCircleShadowCasterPos(size_t index, const Vector3& casterPos
 void LightGroup::SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight)
 {
     circleShadows_[index].SetDisctanceCasterLight(distanceCasterLight);
+    isDirty_ = true;
+}
+
+void LightGroup::SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle)
+{
+    circleShadows_[index].SetFactorAngle(factorAngle);
     isDirty_ = true;
 }
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cstdint>
 #include "Vector3.h"
 #include "SpotLight.h"
@@ -74,6 +74,7 @@ public:
     void SetCircleShadowAtten(size_t index, const Vector3& atten);
     void SetCircleShadowCasterPos(size_t index, const Vector3& casterPos);
     void SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight);
+    void SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle);
     inline void SetCircleShadowActive(size_t index, bool isActive) { circleShadows_[index].SetIsActive(isActive); }
 };
 
