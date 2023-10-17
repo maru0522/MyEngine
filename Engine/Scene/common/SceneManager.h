@@ -3,6 +3,7 @@
 #include "IScene.h"
 #include "SceneFactory.h"
 #include "SceneTransitionManager.h"
+#include "Timer.h"
 
 class SceneManager
 {
@@ -10,7 +11,7 @@ public:
     //>> 関数
     static SceneManager* GetInstance(void);
 
-    void RequestChangeScene(SceneName arg_nextScene);
+    void RequestChangeScene(SceneName arg_nextScene, int32_t arg_waitFrame = 100);
 
     void Initialize(SceneName firstScene = SceneName::DEMO);
     void Update(void);
@@ -27,6 +28,7 @@ private:
     //>> 変数
     std::unique_ptr<IScene> currentScene_{ nullptr };
     SceneName next_SceneName_;
+    FrameTimer timer_waitChangeScene_;
 
     SceneFactory sceneFactory_;
     SceneTransitionManager sceneTransitionManager_;

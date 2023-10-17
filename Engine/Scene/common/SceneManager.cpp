@@ -19,9 +19,14 @@ SceneManager* SceneManager::GetInstance(void)
     return &instatnce;
 }
 
-void SceneManager::RequestChangeScene(SceneName arg_nextScene)
+void SceneManager::RequestChangeScene(SceneName arg_nextScene, int32_t arg_waitFrame)
 {
+    // 次のシーン名を設定
     next_SceneName_ = arg_nextScene;
+    // シーンを変更するまでの時間を設定（arg_waitFrame後、シーンが切り替わる）
+    timer_waitChangeScene_.Start(arg_waitFrame);
+    // シーン遷移の再生
+    sceneTransitionManager_.PlaySceneTransition(SceneTransitionName::FADEINOUT);
 }
 
 void SceneManager::Initialize(SceneName firstScene)
@@ -33,30 +38,23 @@ void SceneManager::Initialize(SceneName firstScene)
 
 void SceneManager::Update(void)
 {
-    // シーン遷移再生中ではない
-    if (sceneTransitionManager_.IsPlayingAnimation() == false)
-    {
-        // シーン遷移をする必要がある
-        if (IsNeedSceneChange())
-        {
-            // シーンを変更
-            ChangeScene();
-            // シーン遷移の再生
-            sceneTransitionManager_.PlaySceneTransition(SceneTransitionName::FADEINOUT);
+    // 現在シーンの更新処理
+    currentScene_->Update();
 
-            // シーン遷移マネージャーを更新
-            sceneTransitionManager_.Update();
-            return;
-        }
-
-        // 現在シーンUpdate()
-        currentScene_->Update();
-    }
-    // シーン遷移再生中である
-    else
+    // シーン遷移が再生中である
+    if (sceneTransitionManager_.IsPlayingAnimation())
     {
-        // シーン遷移マネージャーを更新
+        // シーンが変更するまでのカウント
+        timer_waitChangeScene_.Update();
+        // シーン遷移の更新処理
         sceneTransitionManager_.Update();
+    }
+
+    // シーンを変更すべきである && シーン変更までの時間が経過している
+    if (IsNeedSceneChange() && timer_waitChangeScene_.GetIsFinished())
+    {
+        // シーンを変更
+        ChangeScene();
     }
 }
 

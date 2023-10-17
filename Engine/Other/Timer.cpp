@@ -104,7 +104,7 @@ void FrameTimer::Start(void)
 
 void FrameTimer::Start(int32_t frame_max)
 {
-    frame_max_ = frame_max;
+    frame_max_ = frame_max + 1;
     Start();
 }
 

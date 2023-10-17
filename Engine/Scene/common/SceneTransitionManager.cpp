@@ -14,7 +14,7 @@ void SceneTransitionManager::Update(void)
 
 void SceneTransitionManager::Draw(void)
 {
-    // シーン遷移を再生するなら
+    // シーン遷移を再生する
     if (is_playingAnimation_)
     {
         sceneTransitionPtr_->Display();
