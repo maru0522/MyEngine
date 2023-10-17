@@ -1,4 +1,4 @@
-﻿#include "TitleScene.h"
+#include "TitleScene.h"
 #include "Input.h"
 #include "SceneManager.h"
 #include "SimplifyImGui.h"
@@ -15,7 +15,7 @@ void TitleScene::Update(void)
 {
     if (KEYS::IsTrigger(DIK_SPACE))
     {
-        SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::DEMO);
+        SceneManager::GetInstance()->RequestChangeScene(SceneName::DEMO);
     }
 
     GUI::Begin("Text");

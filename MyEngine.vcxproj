@@ -107,6 +107,8 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionChecker.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\Other\Timer.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransitionFactory.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransitionManager.cpp" />
     <ClCompile Include="Engine\Scene\unique\DemoScene.cpp" />
     <ClCompile Include="Engine\Base\FPSController.cpp" />
     <ClCompile Include="Engine\Base\FrameWork.cpp" />
@@ -263,6 +265,8 @@
     <ClInclude Include="Application\Object\Rock.h" />
     <ClInclude Include="Application\Object\StickyBall.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h" />
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition.h" />

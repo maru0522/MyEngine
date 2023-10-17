@@ -1,4 +1,4 @@
-﻿#include "Timer.h"
+#include "Timer.h"
 #include "Util.h"
 
 void InternalTimer::Start(void)

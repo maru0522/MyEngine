@@ -2,6 +2,7 @@
 #include <memory>
 #include "IScene.h"
 #include "SceneFactory.h"
+#include "SceneTransitionManager.h"
 
 class SceneManager
 {
@@ -9,21 +10,26 @@ public:
     //>> 関数
     static SceneManager* GetInstance(void);
 
-    void RequestChangeScene(SceneFactory::Usage nextScene, int32_t waitFrame = 0);
+    void RequestChangeScene(SceneName arg_nextScene);
 
-    void Initialize(SceneFactory::Usage firstScene = SceneFactory::Usage::DEMO);
+    void Initialize(SceneName firstScene = SceneName::DEMO);
     void Update(void);
     void Draw3d(void);
     void Draw2dFore(void);
     void Draw2dBack(void);
 
 private:
-    //>> 変数
-    int32_t waitFrame_{};
-    std::unique_ptr<IScene> currentScene_{ nullptr };
-    std::unique_ptr<IScene> nextScene_{ nullptr };
+    // シーンを変更する必要があるかチェック
+    bool IsNeedSceneChange(void);
+    // シーンを変更する
+    void ChangeScene(void);
 
-    std::unique_ptr<SceneFactory> sceneFactory_{ nullptr };
+    //>> 変数
+    std::unique_ptr<IScene> currentScene_{ nullptr };
+    SceneName next_SceneName_;
+
+    SceneFactory sceneFactory_;
+    SceneTransitionManager sceneTransitionManager_;
 
     //>> singleton
     SceneManager(void);

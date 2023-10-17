@@ -90,8 +90,8 @@ void DemoScene::Update(void)
 
     png_backGround_->Update();
 
-    if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
-    if(rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured()&& rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneFactory::Usage::TITLE); }
+    if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
+    if(rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured()&& rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
 
     lightGroup_->Update();
     testP_->Update();

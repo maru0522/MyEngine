@@ -61,7 +61,7 @@ void FrameWork::Initialize()
     Sound::StaticInitalize(audioM_.get());
 
     // SceneManager初期化
-    SceneManager::GetInstance()->Initialize(SceneFactory::Usage::TITLE);
+    SceneManager::GetInstance()->Initialize(SceneName::TITLE);
     // ImguiController初期化
     imguiController_->Initialize(wnd_.get());
 }
