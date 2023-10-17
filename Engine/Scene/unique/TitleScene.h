@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "IScene.h"
 #include "Sprite.h"
 #include "CameraManager.h"

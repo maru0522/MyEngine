@@ -36,7 +36,6 @@ void TitleScene::Draw2dFore(void)
 
 void TitleScene::Draw2dBack(void)
 {
-    png_logo_->Draw();
 }
 
 void TitleScene::Finalize(void)

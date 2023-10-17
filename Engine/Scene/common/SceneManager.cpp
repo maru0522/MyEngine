@@ -42,7 +42,10 @@ void SceneManager::Update(void)
             // シーンを変更
             ChangeScene();
             // シーン遷移の再生
-            sceneTransitionManager_.PlaySceneTransition(SceneTransitionName::FADEIN);
+            sceneTransitionManager_.PlaySceneTransition(SceneTransitionName::FADEINOUT);
+
+            // シーン遷移マネージャーを更新
+            sceneTransitionManager_.Update();
             return;
         }
 
@@ -59,36 +62,22 @@ void SceneManager::Update(void)
 
 void SceneManager::Draw3d(void)
 {
-    // シーン遷移再生中ではない
-    if (sceneTransitionManager_.IsPlayingAnimation() == false)
-    {
-        currentScene_->Draw3d();
-    }
+    currentScene_->Draw3d();
 }
 
 void SceneManager::Draw2dFore(void)
 {
-    // シーン遷移再生中ではない
-    if (sceneTransitionManager_.IsPlayingAnimation() == false)
-    {
-        currentScene_->Draw2dFore();
-    }
-    // シーン遷移再生中である
-    else
+    currentScene_->Draw2dFore();
+    if (sceneTransitionManager_.IsPlayingAnimation())
     {
         // シーン遷移の描画
         sceneTransitionManager_.Draw();
     }
-    
 }
 
 void SceneManager::Draw2dBack(void)
 {
-    // シーン遷移再生中ではない
-    if (sceneTransitionManager_.IsPlayingAnimation() == false)
-    {
-        currentScene_->Draw2dBack();
-    }
+    currentScene_->Draw2dBack();
 }
 
 bool SceneManager::IsNeedSceneChange(void)

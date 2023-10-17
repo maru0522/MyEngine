@@ -1,8 +1,6 @@
 #include "Timer.h"
 #include "Util.h"
 
-int32_t DeltaTimer::sMilliSeconds_past_;
-
 void InternalTimer::Start(void)
 {
     mil_startTime_ = GetNowCount<milliseconds>();
@@ -160,15 +158,10 @@ float FrameTimer::GetTimeRate(bool is_clamp0To1)
     return frame_current_ / frame_max_;
 }
 
-float DeltaTimer::DeltaTime(int32_t arg_current_milliSeconds)
+float DeltaTimer::DeltaTime(int32_t arg_past_milliSeconds, int32_t arg_current_milliSeconds)
 {
     // ミリ秒数をint型で取得している前提なので、1000で割って秒数に戻す
-    return (sMilliSeconds_past_ - arg_current_milliSeconds) / 1000.f;
-}
-
-void DeltaTimer::StaticUpdate(void)
-{
-    sMilliSeconds_past_ = ITimer::GetNowCount<milliseconds>();
+    return (arg_past_milliSeconds - arg_current_milliSeconds) / 1000.f;
 }
 
 void DeltaTimer::Start(void)
@@ -189,7 +182,7 @@ void DeltaTimer::Start(void)
     }
 
     // 加算
-    sec_current_ += DeltaTime(GetNowCount<milliseconds>()); // 連続フレームでの使用はだめ
+    sec_current_ += 0.00001f; // 連続フレームでの使用はだめ
 }
 
 void DeltaTimer::Start(float sec_max)
@@ -207,8 +200,11 @@ void DeltaTimer::Update(void)
         if (sec_current_ >= sec_max_ && is_loop_) { sec_current_ = 0; }
 
         // 現在値 += 加算値 * ゲームスピード
-        sec_current_ += DeltaTime(GetNowCount<milliseconds>()) * gameSpeed_;
+        sec_current_ += DeltaTime(milliSec_past_, GetNowCount<milliseconds>()) * gameSpeed_;
     }
+
+    // 前フレームのミリ秒数を記録しておく
+    milliSec_past_ = GetNowCount<milliseconds>();
 }
 
 void DeltaTimer::Pause(void)

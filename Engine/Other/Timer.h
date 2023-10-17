@@ -147,9 +147,9 @@ public:
 
 class DeltaTimer : public ITimer
 {
+public:
     //>> 関数
-    static float DeltaTime(int32_t arg_current_milliSeconds); // スネークの後ろがmilliSecondsなのは、あくまで要素としてミリ秒数を指定するため
-    static void StaticUpdate(void);
+    static float DeltaTime(int32_t arg_past_milliSeconds, int32_t arg_current_milliSeconds); // スネークの後ろがmilliSecondsなのは、あくまで要素としてミリ秒数を指定するため
 
     DeltaTimer(float arg_max_sec) : sec_max_(arg_max_sec) {}
     DeltaTimer(void) : DeltaTimer(100) {}
@@ -167,9 +167,9 @@ class DeltaTimer : public ITimer
     // 終了
     void Finish(void);
 
+private:
     //>> 変数
-    static int32_t sMilliSeconds_past_;
-
+    int32_t milliSec_past_{}; // 前回時のミリ秒数
     float sec_current_{};   // 現在秒数
     float sec_max_{};       // 最大秒数
     bool is_pause_{};       // ポーズ中か否か
@@ -177,7 +177,7 @@ class DeltaTimer : public ITimer
 
 public:
     //>> setter
-    void SetMaxFrame(int32_t frame_max) { sec_max_ = frame_max; }
+    void SetMaxFrame(float frame_max) { sec_max_ = frame_max; }
     void SetIsLoop(bool is_loop) { is_loop_ = is_loop; }
 
     //>> getter
@@ -186,5 +186,5 @@ public:
     bool GetIsPause(void) { return is_pause_; }
     float GetTimeRate(bool is_clamp0To1 = true);
     float GetFrameCurrent(void) { return sec_current_; }
-    int32_t GetFrameMax(void) { return sec_max_; }
+    float GetFrameMax(void) { return sec_max_; }
 };

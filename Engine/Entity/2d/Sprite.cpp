@@ -1,4 +1,4 @@
-﻿#include <vector>
+#include <vector>
 #include "Sprite.h"
 #include "Matrix4.h"
 #include "MathUtil.h"
