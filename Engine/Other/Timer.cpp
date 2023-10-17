@@ -1,6 +1,8 @@
 #include "Timer.h"
 #include "Util.h"
 
+int32_t DeltaTimer::sMilliSeconds_past_;
+
 void InternalTimer::Start(void)
 {
     mil_startTime_ = GetNowCount<milliseconds>();
@@ -110,10 +112,14 @@ void FrameTimer::Start(int32_t frame_max)
 
 void FrameTimer::Update(void)
 {
-    // (フレームのカウントが始まっている && 最大フレームを超えていない) && ポーズ中ではない
-    if (frame_current_ && frame_current_ < frame_max_ && is_pause_ == false)
+    // フレームのカウントが始まっている && ポーズ中ではない
+    if (frame_current_ && (is_pause_ == false))
     {
-        if (frame_current_ >= frame_max_ && is_loop_) frame_current_ = 0;
+        // フレームのカウントが最大値以上である && ループする
+        if (frame_current_ >= frame_max_ && is_loop_) 
+        { 
+            frame_current_ = 0;
+        }
 
         // 現在値 += 加算値 * ゲームスピード
         frame_current_ += value_add_ * gameSpeed_;
@@ -138,7 +144,7 @@ void FrameTimer::Finish(void)
 bool FrameTimer::GetIsFinished(void)
 {
     // ゼロ除算回避
-    if (frame_max_ == 0) return false;
+    if (frame_max_ == 0) { return false; }
 
     return frame_current_ / frame_max_ >= 1.f;
 }
@@ -146,10 +152,95 @@ bool FrameTimer::GetIsFinished(void)
 float FrameTimer::GetTimeRate(bool is_clamp0To1)
 {
     // ゼロ除算回避
-    if (frame_max_ == 0) return 0;
+    if (frame_max_ == 0) { return 0; }
 
     // 結果が 0~1 の時clampするか
-    if(is_clamp0To1) return std::clamp(frame_current_ / frame_max_, 0.f, 1.f);
+    if (is_clamp0To1) { return std::clamp(frame_current_ / frame_max_, 0.f, 1.f); }
 
     return frame_current_ / frame_max_;
+}
+
+float DeltaTimer::DeltaTime(int32_t arg_current_milliSeconds)
+{
+    // ミリ秒数をint型で取得している前提なので、1000で割って秒数に戻す
+    return (sMilliSeconds_past_ - arg_current_milliSeconds) / 1000.f;
+}
+
+void DeltaTimer::StaticUpdate(void)
+{
+    sMilliSeconds_past_ = ITimer::GetNowCount<milliseconds>();
+}
+
+void DeltaTimer::Start(void)
+{
+    // 最大値が0なら
+    if (sec_max_ == 0)
+    {
+        // ログ出して棄却
+        Util::Log::PrintOutputWindow("[FrameTimer]: \"Start()\" could not be executed because frame_max_ is 0.");
+        return;
+    }
+
+    // 既にタイマーが終了していたら
+    if (GetIsFinished())
+    {
+        // 値を初期化
+        sec_current_ = 0;
+    }
+
+    // 加算
+    sec_current_ += DeltaTime(GetNowCount<milliseconds>()); // 連続フレームでの使用はだめ
+}
+
+void DeltaTimer::Start(float sec_max)
+{
+    sec_max_ = sec_max;
+    Start();
+}
+
+void DeltaTimer::Update(void)
+{
+    // 秒数カウントが始まっている ポーズ中ではない
+    if (sec_current_ && (is_pause_ == false))
+    {
+        // 秒数カウントが最大秒数を超えている
+        if (sec_current_ >= sec_max_ && is_loop_) { sec_current_ = 0; }
+
+        // 現在値 += 加算値 * ゲームスピード
+        sec_current_ += DeltaTime(GetNowCount<milliseconds>()) * gameSpeed_;
+    }
+}
+
+void DeltaTimer::Pause(void)
+{
+    is_pause_ = true;
+}
+
+void DeltaTimer::Resume(void)
+{
+    is_pause_ = false;
+}
+
+void DeltaTimer::Finish(void)
+{
+    sec_current_ = sec_max_;
+}
+
+bool DeltaTimer::GetIsFinished(void)
+{
+    // ゼロ除算回避
+    if (sec_max_ == 0) { return false; }
+
+    return sec_current_ / sec_max_ >= 1.f;
+}
+
+float DeltaTimer::GetTimeRate(bool is_clamp0To1)
+{
+    // ゼロ除算回避
+    if (sec_max_ == 0) { return 0; }
+
+    // 結果が 0~1 の時clampするか
+    if (is_clamp0To1) { return std::clamp(sec_current_ / sec_max_, 0.f, 1.f); }
+
+    return sec_current_ / sec_max_;
 }

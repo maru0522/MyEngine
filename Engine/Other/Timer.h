@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <chrono>
 
 class ITimer
@@ -65,7 +65,7 @@ public:
     //>> 関数
     InternalTimer(float sec_finishTime = 1.f) : sec_finishTime_(sec_finishTime) {}
     InternalTimer(void) : InternalTimer(0.f) {}
-    virtual ~InternalTimer(void) = default;
+    ~InternalTimer(void) override = default;
 
     // 開始
     void Start(void);
@@ -107,7 +107,7 @@ public:
     //>> 関数
     FrameTimer(int32_t frame_max, int32_t value_add = 1);
     FrameTimer(void) : FrameTimer(100) {}
-    virtual ~FrameTimer(void) = default;
+    ~FrameTimer(void) override = default;
 
     // 開始
     void Start(void);
@@ -123,7 +123,7 @@ public:
 
 private:
     //>> 変数
-    float frame_current_{};   // 現在値
+    float frame_current_{}; // 現在値
     int32_t frame_max_{};     // 最大値
     int32_t value_add_{};     // 毎フレーム、幾つ加算するか
     bool is_pause_{};         // ポーズ中か否か
@@ -143,4 +143,48 @@ public:
     float GetFrameCurrent(void) { return frame_current_; }
     int32_t GetAddValue(void) { return value_add_; }
     int32_t GetFrameMax(void) { return frame_max_; }
+};
+
+class DeltaTimer : public ITimer
+{
+    //>> 関数
+    static float DeltaTime(int32_t arg_current_milliSeconds); // スネークの後ろがmilliSecondsなのは、あくまで要素としてミリ秒数を指定するため
+    static void StaticUpdate(void);
+
+    DeltaTimer(float arg_max_sec) : sec_max_(arg_max_sec) {}
+    DeltaTimer(void) : DeltaTimer(100) {}
+    ~DeltaTimer(void) override = default;
+
+    // 開始
+    void Start(void);
+    void Start(float sec_max);
+    // 更新
+    void Update(void);
+    // 停止
+    void Pause(void);
+    // 再開
+    void Resume(void);
+    // 終了
+    void Finish(void);
+
+    //>> 変数
+    static int32_t sMilliSeconds_past_;
+
+    float sec_current_{};   // 現在秒数
+    float sec_max_{};       // 最大秒数
+    bool is_pause_{};       // ポーズ中か否か
+    bool is_loop_{};        // ループするか
+
+public:
+    //>> setter
+    void SetMaxFrame(int32_t frame_max) { sec_max_ = frame_max; }
+    void SetIsLoop(bool is_loop) { is_loop_ = is_loop; }
+
+    //>> getter
+    bool GetIsLoop(void) { return is_loop_; }
+    bool GetIsFinished(void);
+    bool GetIsPause(void) { return is_pause_; }
+    float GetTimeRate(bool is_clamp0To1 = true);
+    float GetFrameCurrent(void) { return sec_current_; }
+    int32_t GetFrameMax(void) { return sec_max_; }
 };
