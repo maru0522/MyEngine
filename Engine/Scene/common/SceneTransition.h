@@ -42,4 +42,5 @@ public:
 private:
     //>> 変数
     Sprite png_deepBlue_{ "Resources/BackGround.png" };
+    bool is_out_; // 暗転しきったか
 };
