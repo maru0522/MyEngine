@@ -33,68 +33,68 @@ void PlayerBehaviorMachine::ManagementBehavior(void)
     // nullチェック
     if (!statePtr_) { return; }
 
-    // 迥ｶ諷矩・遘ｻ譚｡莉ｶ繧呈ｺ縺溘＠縺ｦ縺・ｋ縺狗｢ｺ隱阪＠縲・・遘ｻ縺吶ｋ
+    // 状態遷移条件を満たしているか確認し、遷移する
     NextStateCheck();
 
-    // 迥ｶ諷区峩譁ｰ
+    // 状態更新
     statePtr_->Execute();
 }
 
 void PlayerBehaviorMachine::NextStateCheck(void)
 {
-    // 迥ｶ諷矩・遘ｻ縺吶ｋ縺九←縺・°遒ｺ隱阪☆繧・
-    statePtr_->RequirementCheck(); // 迥ｶ諷矩・遘ｻ縺吶ｋ蝣ｴ蜷医・ nextState繧貞､画峩縺吶ｋ
+    // 状態遷移するかどうか確認する
+    statePtr_->RequirementCheck(); // 状態遷移する場合は nextStateを変更する
 
-    // nextState縺・NONE"莉･螟悶〒縺ゅｋ蝣ｴ蜷医∫憾諷矩・遘ｻ繧定｡後≧
+    // nextStateが"NONE"以外である場合、状態遷移を行う
     PlayerBehavior nextState = statePtr_->GetNextState();
     if (nextState != PlayerBehavior::NONE)
     {
-        // 譌｢蟄倥・state縺後≠繧後・邨ゆｺ・・逅・
+        // 既存のstateがあれば終了処理
         statePtr_->Exit();
-        // 荳頑嶌縺・
+        // 上書き
         statePtr_.reset();
         statePtr_ = stateFactory_.Create(playerPtr_, nextState);
-        // 蛻晄悄蛹門・逅・
+        // 初期化処理
         statePtr_->Entry();
 
-        // 縺昴ｌ縺槭ｌ縺ｮ縲・謖ｯ闊槭＞"縺ｫ蠢・ｦ√↑諠・ｱ繧偵≠縺ｦ縺後≧
+        // それぞれの、"振舞い"に必要な情報をあてがう
     }
 }
 
 //----------------------------------------------------------------------------------------
-//IDLE,       //
-//STOOP,      // 縺励ｃ縺後∩
+//IDLE,          //
+//STOOP,         // しゃがみ
 //
-//MOVE,       // 遘ｻ蜍・
-//MOVE_STOOP, // 縺励ｃ縺後∩遘ｻ蜍・
+//MOVE,          // 移動
+//MOVE_STOOP,    // しゃがみ移動
 //
-//JUMP,       // 繧ｸ繝｣繝ｳ繝・
-//JUMP_STOOP, // 縺倥ｃ縺後∩繧ｸ繝｣繝ｳ繝・
-//JUMP_REVERSE,  // 蜿崎ｻ｢繧ｸ繝｣繝ｳ繝・
-//JUMP_LONG,  // 蟷・ｷｳ縺ｳ
+//JUMP,          // ジャンプ
+//JUMP_STOOP,    // じゃがみジャンプ
+//JUMP_REVERSE,  // 反転ジャンプ
+//JUMP_LONG,     // 幅跳び
 
 void PlayerBehavior_Idle::Execute(void) // "IDLE"
 {
     debug_curState_ = PlayerBehavior::IDLE;
 
-    // 驥榊鴨
+    // 重力
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 遘ｻ蜍暮㍼ = 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
-    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle迥ｶ諷九・驥榊鴨莉･螟悶・遘ｻ蜍暮㍼縺ｯ逋ｺ逕溘＠縺ｪ縺・Φ螳・
+    // 移動量 = 上方向 * ジャンプ量
+    Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle状態は重力以外の移動量は発生しない想定
 
-    // 蠎ｧ讓呎峩譁ｰ
+    // 座標更新
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
 
-    // 蟋ｿ蜍｢蛻ｶ蠕｡
+    // 姿勢制御
     {
-        //// 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
+        //// 現在のプレイヤーの各軸情報
         //const Axis3& playerAxes = GetPlayerAxes();
 
-        //// 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
-        //Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
-        //Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
+        //// 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+        //Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+        //Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
         //SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
     }
 }
@@ -106,26 +106,26 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
-    // 蟾ｦ繧ｷ繝輔ヨ縺悟・蜉帙＆繧後※縺・ｋ
+    // 左シフトが入力されている
     if (isDown_LSHIFT)
     {
-        // PlayerState 繧・STOOP(縺励ｃ縺後∩)縺ｸ
+        // PlayerState を STOOP(しゃがみ)へ
         nextState_ = PlayerBehavior::STOOP;
         return;
     }
 
-    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
+    // 移動キーが入力されている
     if (isDown_anyWASD)
     {
-        // PlayerState 繧・MOVE(遘ｻ蜍・縺ｸ
+        // PlayerState を MOVE(移動)へ
         nextState_ = PlayerBehavior::MOVE;
         return;
     }
 
-    // SPACE縺悟・蜉帙＆繧後※縺・ｋ && 蝨ｰ髱｢縺ｫ雜ｳ縺後▽縺・※縺・ｋ
+    // SPACEが入力されている && 地面に足がついている
     if (isDown_SPACE && isLanding)
     {
-        // PlayerState 繧・JUMP(繧ｸ繝｣繝ｳ繝・縺ｸ
+        // PlayerState を JUMP(ジャンプ)へ
         nextState_ = PlayerBehavior::JUMP;
         return;
     }
@@ -135,13 +135,13 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 {
     debug_curState_ = PlayerBehavior::STOOP;
 
-    // 驥榊鴨
+    // 重力
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
 
-    // 遘ｻ蜍暮㍼ = 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
+    // 移動量 = 上方向 * ジャンプ量
     Vector3 velocity = GetPlayerAxes().up * GetPlayerJumpVecNorm(); // Idle迥ｶ諷九・驥榊鴨莉･螟悶・遘ｻ蜍暮㍼縺ｯ逋ｺ逕溘＠縺ｪ縺・Φ螳・
 
-    // 蠎ｧ讓呎峩譁ｰ
+    // 座標更新
     SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
     SetPlayerVelocity(velocity);
 
