@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "FrameWork.h"
 
 class GameSystem final :

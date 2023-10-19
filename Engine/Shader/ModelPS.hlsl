@@ -29,7 +29,8 @@ PSOutput main(VSOutput input)
             // ”½ŽËŒõƒxƒNƒgƒ‹
             float3 reflect = normalize(-dirLights[i].lightV + 2 * dotlightnormal * input.normal_);
             // ŠgŽU”½ŽËŒõ
-            float3 diffuse = dotlightnormal * mDiffuse;
+            //float3 diffuse = dotlightnormal * mDiffuse;
+            float3 diffuse = pow(0.5 * dotlightnormal + 0.5, 2) * mDiffuse;
             // ‹¾–Ê”½ŽËŒõ
             float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * mSpecular;
             
