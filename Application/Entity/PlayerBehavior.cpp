@@ -213,45 +213,55 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             SetPlayerCurrentRad(dist);
         }
 
-        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        Vector3 vec_cam2p = (GetPlayerTransform().position - GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos()).Normalize();
+
+        // プレイヤーの正面ベクトルと、カメラからプレイヤーへのベクトルの内積が -0.6f未満
+        if (GetPlayerAxes().forward.Dot(vec_cam2p) < -0.6f)
         {
-            // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
-            if (dist < GetPlayerCurrentRad())
-            {
-                // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
-                // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
-                //current_rad_ = dist;
-            }
         }
-        else
-        {
-            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-            {
-                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-            }
-            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-            {
-                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-            }
 
-            float theta = GetPlayerTheta();
-            float phi = GetPlayerPhi();
+        //// プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
+        //// 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        //if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        //{
+        //    // カメラとプレイヤーの距離
+        //    float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            theta += 0.02f * inputVec.y;
-            phi += 0.02f * inputVec.x;
-            Math::Function::Loop(theta, 0.f, 6.28319f);
-            Math::Function::Loop(phi, 0.f, 6.28319f);
+        //    // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+        //    if (dist < GetPlayerCurrentRad())
+        //    {
+        //        // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
+        //        // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+        //        //current_rad_ = dist;
+        //    }
+        //}
+        //else
+        //{
+        //    // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+        //    if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+        //    {
+        //        SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
+        //        //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+        //    }
+        //    else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+        //    {
+        //        SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+        //    }
 
-            SetPlayerTheta(theta);
-            SetPlayerPhi(phi);
-        }
+        //    float theta = GetPlayerTheta();
+        //    float phi = GetPlayerPhi();
+
+        //    theta += 0.02f * inputVec.y;
+        //    phi += 0.02f * inputVec.x;
+        //    Math::Function::Loop(theta, 0.f, 6.28319f);
+        //    Math::Function::Loop(phi, 0.f, 6.28319f);
+
+        //    SetPlayerTheta(theta);
+        //    SetPlayerPhi(phi);
+        //}
+
+
     }
 
     // 重力

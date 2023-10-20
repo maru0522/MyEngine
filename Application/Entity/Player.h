@@ -26,7 +26,7 @@ public:
     void Update(void);
     void Draw(void);
 
-    float default_rad_{ 65.f };
+    float default_rad_{ 40.f };
     float current_rad_{ default_rad_ };
     float theta_{ 0.85f };
     float phi_;
@@ -34,10 +34,8 @@ public:
     int32_t captureCount_rabbit; // 兎を捕まえた回数
     bool isFallHole1_;
     bool isFallHole2_;
-private:
-    void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
-    void SphericalCamera(Vector3& inputVec); // correct value for camera
 
+private:
     // callback
     void OnCollision(void);
     void OnTrigger(void);
