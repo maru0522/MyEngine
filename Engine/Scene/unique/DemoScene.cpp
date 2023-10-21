@@ -13,17 +13,32 @@ void DemoScene::Initialize(void)
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
-    // 使う
+    // 平行光源
     lightGroup_->SetDirLightActive(0, true);
     lightGroup_->SetDirLightColor(0, { 1,1,1 });
     lightGroup_->SetLightDir(0, { 0,-1,0 });
 
-    //lightGroup_->SetCircleShadowActive(0, true);
-    //lightGroup_->SetCircleShadowDir(0, { 0,-1,0 });
-    //lightGroup_->SetCircleShadowCasterPos(0, { 0,60,0 });
-    //lightGroup_->SetCircleShadowAtten(0, {0.5f,0.6f,0 });
-    //lightGroup_->SetCircleShadowFactorAngle(0, { 0.2f,0.5f });
-    //lightGroup_->SetCircleShadowDistanceCasterLight(0, 100.f);
+    // 点光源
+    //lightGroup_->SetPointLightActive(0, true);
+    //lightGroup_->SetPointLightColor(0, { 1,1,1 });
+    //lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
+    //lightGroup_->SetPointLightPos(0, { 0,70,0 });
+
+    // スポットライト
+    //lightGroup_->SetSpotLightActive(0, true);
+    //lightGroup_->SetSpotLightColor(0, { 1,1,1 });
+    //lightGroup_->SetSpotLightDir(0, { 0,-1,0 });
+    //lightGroup_->SetSpotLightFactorAngle(0, { 20.f,30.f });
+    //lightGroup_->SetSpotLightAtten(0, { 0,0,0 });
+    //lightGroup_->SetSpotLightPos(0, { 0,100,0 });
+
+    // 丸影
+    lightGroup_->SetCircleShadowActive(0, true);
+    lightGroup_->SetCircleShadowDir(0, { 0,-1,0 });
+    lightGroup_->SetCircleShadowCasterPos(0, { 0,80,0 });
+    lightGroup_->SetCircleShadowDistanceCasterLight(0, 5.f);
+    lightGroup_->SetCircleShadowAtten(0, { 0.1f,0.1f,0.1f });
+    lightGroup_->SetCircleShadowFactorAngle(0, { 15.f,25.f });
 
     // json読み込み&配置
     //lvdPtr_ = LevelData::Load("Resources/untitled.json");
@@ -51,7 +66,7 @@ void DemoScene::Initialize(void)
     pipe1_->SetRotation({ 0.497f,0.f,5.962f });
     pipe1_->SetPartnerPtr(pipe2_.get());
     pipe1_->GetColPushbackPtr()->SetID("pipe_enterInside1");
-    pipe2_->SetPosition({ -29.855f,-38.f ,-11.024f});
+    pipe2_->SetPosition({ -29.855f,-38.f ,-11.024f });
     pipe2_->SetRotation({ 3.465f,0.f,0.621f });
     pipe2_->SetPartnerPtr(pipe1_.get());
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
@@ -81,6 +96,42 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
+    //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
+    //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
+    //static Vector3 pl0Pos = { 0,100,0 };
+    //GUI::Begin("pointLight0");
+    //GUI::SliderFloat3(std::string{"pointLight0Attan"}, pl0Attan, 0.f, 1.f);
+    //GUI::SliderFloat3(std::string{"pointLight0Pos  "}, pl0Pos, -100.f, 100.f);
+    //GUI::End();
+    //lightGroup_->SetPointLightAtten(0, pl0Attan);
+    //lightGroup_->SetPointLightPos(0, pl0Pos);
+
+    //static Vector2 sl0FA = { 20.f,30.f };
+    //static Vector3 sl0Attan = { 0.f,0.f,0.f };
+    //static Vector3 sl0Pos = { 0,100,0 };
+    //GUI::Begin("spotLight0");
+    //GUI::SliderFloat3(std::string{"spotLight0Attan"}, sl0Attan, 0.f, 1.f);
+    //GUI::SliderFloat3(std::string{"spotLight0Pos  "}, sl0Pos, -100.f, 100.f);
+    //GUI::SliderFloat2(std::string{"spotLight0FactorAngle  "}, sl0FA, 0.f, 180.f);
+    //GUI::End();
+    //lightGroup_->SetSpotLightAtten(0, sl0Attan);
+    //lightGroup_->SetSpotLightPos(0, sl0Pos);
+    //lightGroup_->SetSpotLightFactorAngle(0, sl0FA);
+
+    static float cs0DistAtCaster = 5.f;
+    static Vector2 cs0FA = { 15.f,25.f };
+    static Vector3 cs0Attan = { 0.1f,0.1f,0.1f };
+    static Vector3 cs0Pos = { 0,50,0 };
+    GUI::SliderFloat3(std::string{"circleShadow0Attan"}, cs0Attan, 0.f, 1.f);
+    GUI::SliderFloat3(std::string{"circleShadow0Pos"}, cs0Pos, -100.f, 100.f);
+    GUI::SliderFloat2(std::string{"circleShadow0FactorAngle"}, cs0FA, 0.f, 180.f);
+    GUI::SliderFloat(std::string{"circleShadow0DistanceAtCaster"}, &cs0DistAtCaster, -100.f, 200.f);
+    GUI::End();
+    lightGroup_->SetCircleShadowAtten(0, cs0Attan);
+    lightGroup_->SetCircleShadowCasterPos(0, cs0Pos);
+    lightGroup_->SetCircleShadowFactorAngle(0, cs0FA);
+    lightGroup_->SetCircleShadowDistanceCasterLight(0, cs0DistAtCaster);
+
     //Vector3 p2p = (planet_->GetPosition() - player_->GetTransformPtr()->position).Normalize();
     //lightGroup_->SetCircleShadowDir(0, p2p);
     //lightGroup_->SetCircleShadowCasterPos(0, player_->GetTransformPtr()->position + p2p * 20.f);
@@ -91,7 +142,7 @@ void DemoScene::Update(void)
     png_backGround_->Update();
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
-    if(rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured()&& rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
+    if (rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured() && rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
 
     lightGroup_->Update();
     testP_->Update();
@@ -341,7 +392,7 @@ void DemoScene::Update(void)
         isBG_ ? isBG_ = false :
             isBG_ = true;
     }
-    
+
     GUI::End();
 }
 
@@ -404,7 +455,7 @@ void DemoScene::Draw2dFore(void)
 
 void DemoScene::Draw2dBack(void)
 {
-    if(isBG_) png_backGround_->Draw();
+    if (isBG_) png_backGround_->Draw();
 }
 
 void DemoScene::Finalize(void)

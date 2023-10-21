@@ -19,7 +19,7 @@ public:
     static constexpr uint32_t kDirLightNum_ = 3;
     static constexpr uint32_t kPointLightNum_ = 3;
     static constexpr uint32_t kSpotLightNum_ = 3;
-    static constexpr uint32_t kCircleShadowNum_ = 1;
+    static constexpr uint32_t kCircleShadowNum_ = 20;
 
     struct CBLightGroup_t
     {
