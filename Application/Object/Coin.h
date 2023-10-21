@@ -38,5 +38,6 @@ public:
     // getter
     const Vector3& GetPosition(void) { return transform_.position; }
     Transform* GetTransformPtr(void) { return &transform_; }
+    bool GetIsTaken(void) { return is_taken_; }
 };
 

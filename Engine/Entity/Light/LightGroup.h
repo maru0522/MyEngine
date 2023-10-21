@@ -19,7 +19,7 @@ public:
     static constexpr uint32_t kDirLightNum_ = 3;
     static constexpr uint32_t kPointLightNum_ = 3;
     static constexpr uint32_t kSpotLightNum_ = 3;
-    static constexpr uint32_t kCircleShadowNum_ = 20;
+    static constexpr uint32_t kCircleShadowNum_ = 19;
 
     struct CBLightGroup_t
     {
@@ -76,5 +76,7 @@ public:
     void SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight);
     void SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle);
     inline void SetCircleShadowActive(size_t index, bool isActive) { circleShadows_[index].SetIsActive(isActive); }
+
+    bool GetCircleShadowActive(size_t index) { return circleShadows_[index].GetIsActive(); }
 };
 
