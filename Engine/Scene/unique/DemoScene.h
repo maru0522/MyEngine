@@ -95,6 +95,10 @@ public:
     std::unique_ptr<Coin> coin18_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
     std::unique_ptr<Coin> coin19_{std::make_unique<Coin>(CollisionManager::GetInstance()) };
 
+    std::unique_ptr<Object3D> casterSphere_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
+
+    Vector3 aaaaaaaaaaaaaaaaa_;
+
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;

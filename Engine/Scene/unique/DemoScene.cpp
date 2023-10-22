@@ -87,7 +87,7 @@ void DemoScene::Initialize(void)
 
     // 丸影
     size_t num_ = 0;
-    float distAtCoin = 5.f;
+    float distAtCoin = 2.f;
     Vector3 pos_coin = coin1_->GetPosition();
     Vector3 vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
 #pragma region 丸影
@@ -95,12 +95,13 @@ void DemoScene::Initialize(void)
     num_ = 0;
     pos_coin = coin1_->GetPosition();
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
+    aaaaaaaaaaaaaaaaa_ = pos_coin + vec_coinTpPlanet;
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
     lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
-    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
-    lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
+    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.06f,0.01f });
+    lightGroup_->SetCircleShadowFactorAngle(num_, { 6.f,8.f });
 
     // コイン2
     num_ = 1;
@@ -110,30 +111,30 @@ void DemoScene::Initialize(void)
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
     lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
-    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
-    lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
+    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.06f,0.01f });
+    lightGroup_->SetCircleShadowFactorAngle(num_, { 6.f,8.f });
 
     // コイン3
-    num_ = 2;
+    //num_ = 2;
+    //pos_coin = coin3_->GetPosition();
+    //vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
+    //lightGroup_->SetCircleShadowActive(num_, true);
+    //lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
+    //lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    //lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
+    //lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.06f,0.01f });
+    //lightGroup_->SetCircleShadowFactorAngle(num_, { 6.f,8.f });
+
+    // コイン4
+    num_ = 3;
     pos_coin = coin3_->GetPosition();
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
     lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
-    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
-    lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
-
-    // コイン4
-    num_ = 3;
-    pos_coin = coin4_->GetPosition();
-    vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
-    lightGroup_->SetCircleShadowActive(num_, true);
-    lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
-    lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
-    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
-    lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
+    lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.06f,0.01f });
+    lightGroup_->SetCircleShadowFactorAngle(num_, { 6.f,8.f });
 
     // コイン5
     num_ = 4;
@@ -218,7 +219,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -229,7 +230,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -251,7 +252,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -262,7 +263,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -273,7 +274,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -284,7 +285,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -295,7 +296,7 @@ void DemoScene::Initialize(void)
     vec_coinTpPlanet = (planet_->GetPosition() - pos_coin).Normalize();
     lightGroup_->SetCircleShadowActive(num_, true);
     lightGroup_->SetCircleShadowDir(num_, vec_coinTpPlanet);
-    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin + vec_coinTpPlanet * distAtCoin);
+    lightGroup_->SetCircleShadowCasterPos(num_, pos_coin - vec_coinTpPlanet * distAtCoin);
     lightGroup_->SetCircleShadowDistanceCasterLight(num_, 1.f);
     lightGroup_->SetCircleShadowAtten(num_, { 0.02f,0.1f,0.07f });
     lightGroup_->SetCircleShadowFactorAngle(num_, { 15.f,20.f });
@@ -345,24 +346,24 @@ void DemoScene::Update(void)
     //lightGroup_->SetSpotLightPos(0, sl0Pos);
     //lightGroup_->SetSpotLightFactorAngle(0, sl0FA);
 
-    static float cs0DistAtCaster = 1.f;
-    static Vector2 cs0FA = { 15.f,20.f };
-    static Vector3 cs0Attan = { 0.02f,0.1f,0.07f };
-    static Vector3 cs0pos = { 0.f,70.f,0.f };
-    static Vector3 cs0dir = { 0,-1,0.f };
-    GUI::Begin("circleShadow4");
-    GUI::SliderFloat3(std::string{"circleShadow4Pos"}, cs0pos, -100.f, 100.f);
-    GUI::SliderFloat3(std::string{"circleShadow4Dir"}, cs0dir, -1.f, 1.f);
-    GUI::SliderFloat3(std::string{"circleShadow4Attan"}, cs0Attan, 0.f, 1.f);
-    GUI::SliderFloat2(std::string{"circleShadow4FactorAngle"}, cs0FA, 0.f, 180.f);
-    GUI::SliderFloat(std::string{"circleShadow04istanceAtCaster"}, & cs0DistAtCaster, -100.f, 200.f);
-    GUI::Text(lightGroup_->GetCircleShadowActive(2) ? "circleshadow[4] is true" : "circleshadow[0] is false");
-    GUI::End();
-    lightGroup_->SetCircleShadowAtten(3, cs0Attan);
-    lightGroup_->SetCircleShadowFactorAngle(3, cs0FA);
-    lightGroup_->SetCircleShadowDistanceCasterLight(3, cs0DistAtCaster);
-    lightGroup_->SetCircleShadowCasterPos(3, cs0pos);
-    lightGroup_->SetCircleShadowDir(3, cs0dir);
+    //static float cs0DistAtCaster = 1.f;
+    //static Vector2 cs0FA = { 6.f,8.f };
+    //static Vector3 cs0Attan = { 0.02f,0.06f,0.01f };
+    //static Vector3 cs0pos = aaaaaaaaaaaaaaaaa_;
+    ////static Vector3 cs0dir = { 0,-1,0.f };
+    //GUI::Begin("circleShadow0");
+    //GUI::SliderFloat3(std::string{"circleShadow0Pos"}, cs0pos, -100.f, 100.f);
+    ////GUI::SliderFloat3(std::string{"circleShadow0Dir"}, cs0dir, -1.f, 1.f);
+    //GUI::SliderFloat3(std::string{"circleShadow0Attan"}, cs0Attan, 0.f, 1.f);
+    //GUI::SliderFloat2(std::string{"circleShadow0FactorAngle"}, cs0FA, 0.f, 180.f);
+    //GUI::SliderFloat(std::string{"circleShadow00istanceAtCaster"}, & cs0DistAtCaster, -100.f, 200.f);
+    //GUI::Text(lightGroup_->GetCircleShadowActive(3) ? "circleshadow[4] is true" : "circleshadow[0] is false");
+    //GUI::End();
+    //lightGroup_->SetCircleShadowAtten(0, cs0Attan);
+    //lightGroup_->SetCircleShadowFactorAngle(0, cs0FA);
+    //lightGroup_->SetCircleShadowDistanceCasterLight(0, cs0DistAtCaster);
+    //lightGroup_->SetCircleShadowCasterPos(0, cs0pos);
+    ////lightGroup_->SetCircleShadowDir(0, cs0dir);
 
     //Vector3 p2p = (planet_->GetPosition() - player_->GetTransformPtr()->position).Normalize();
     //lightGroup_->SetCircleShadowDir(0, p2p);
@@ -693,7 +694,7 @@ void DemoScene::Draw3d(void)
     //coin17_->Draw();
     //coin18_->Draw();
     //coin19_->Draw();
-    skydome_->Draw();
+    skydome_->Draw("Resources/gray1x1.png");
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
