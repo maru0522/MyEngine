@@ -67,7 +67,7 @@ PSOutput main(VSOutput input)
     }
     
     // スポットライト
-    for (uint k = 0; k < kPointLightNum; k++)
+    for (uint k = 0; k < kSpotLightNum; k++)
     {
         if (spotLights[k].isActive)
         {
@@ -100,7 +100,7 @@ PSOutput main(VSOutput input)
     }
     
     // 丸影
-    for (uint l = 0; l < kPointLightNum; l++)
+    for (uint l = 0; l < kCircleShadowNum; l++)
     {
         if (circleShadows[l].isActive)
         {
