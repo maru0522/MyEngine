@@ -38,7 +38,6 @@ public:
 
 private:
     void TransferCB(void);
-    void DefaultLightSetting(void);
     void DebugImGui(void);
 
     //>> 変数

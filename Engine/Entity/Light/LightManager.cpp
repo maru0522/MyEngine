@@ -3,7 +3,6 @@
 
 LightManager::LightManager(void)
 {
-    DefaultLightSetting();
     cb_lightGroup_.Create();
     TransferCB();
 }
@@ -94,14 +93,6 @@ void LightManager::TransferCB(void)
         else {
             cb_lightGroup_.GetConstBuffMap()->spotLights[i].isActive = 0;
         }
-    }
-}
-
-void LightManager::DefaultLightSetting(void)
-{
-    for (auto& i : lights_directional_)
-    {
-
     }
 }
 

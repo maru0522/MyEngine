@@ -19,7 +19,7 @@ private:
     //>> 変数
     Vector3 position_{};
     Vector3 color_{};
-    Vector3 attan_{};
+    Vector3 atten_{};
     bool is_active_{};
 
 public:
@@ -27,11 +27,11 @@ public:
     void SetIsActive(bool arg_isActive) { is_active_ = arg_isActive; }
     void SetLightPos(const Vector3& arg_lightPos) { position_ = arg_lightPos; }
     void SetLightColor(const Vector3& arg_lightColor) { color_ = arg_lightColor; }
-    void SetLightAtten(const Vector3& arg_lightAtten) { attan_ = arg_lightAtten; }
+    void SetLightAtten(const Vector3& arg_lightAtten) { atten_ = arg_lightAtten; }
 
     bool GetIsActive(void) { return is_active_; }
     const Vector3& GetLightPos(void) { return position_; }
     const Vector3& GetLightColor(void) { return color_; }
-    const Vector3& GetLightAtten(void) { return attan_; }
+    const Vector3& GetLightAtten(void) { return atten_; }
 };
 
