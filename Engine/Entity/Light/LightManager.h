@@ -8,7 +8,7 @@
 #include "ImguiController.h"
 #include "DirectionalLight.h"
 
-class LightGroup final
+class LightManager final
 {
 private:
     // 定義
@@ -17,9 +17,9 @@ private:
 public:
     // 定数
     static constexpr uint32_t kDirLightNum_ = 3;
-    static constexpr uint32_t kPointLightNum_ = 3;
-    static constexpr uint32_t kSpotLightNum_ = 3;
-    static constexpr uint32_t kCircleShadowNum_ = 19;
+    static constexpr uint32_t kPointLightNum_ = 50;
+    static constexpr uint32_t kSpotLightNum_ = 50;
+    static constexpr uint32_t kCircleShadowNum_ = 50;
 
     struct CBLightGroup_t
     {
@@ -32,7 +32,7 @@ public:
     };
 
     // 関数
-    LightGroup(void);
+    LightManager(void);
     void Update(void);
     void Draw(void);
 

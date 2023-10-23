@@ -6,7 +6,7 @@
 #include "PSOManager.h"
 #include <filesystem>
 #include "Matrix4.h"
-#include "LightGroup.h"
+#include "LightManager.h"
 #include "Transform.h"
 
 class Object3D
@@ -55,14 +55,14 @@ protected:
     bool isInvisible_{};
     Model_t model_;
 
-    static LightGroup* sLightGroupPtr_;
+    static LightManager* sLightGroupPtr_;
     static ModelManager* sModelMPtr_;
     static TextureManager* sTexMPtr_;
     static ConstBuffer<CBMatViewPerse_t> sCbMatViewPerse_;
 
 public:
     // setter・getter
-    static inline void SetLightGroup(LightGroup* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
+    static inline void SetLightGroup(LightManager* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
     inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
     inline void SetCoordinate(const TransformMatrix& coordinate) { matTrans_ = coordinate; }

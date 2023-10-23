@@ -1,14 +1,14 @@
-#include "LightGroup.h"
+#include "LightManager.h"
 #include <imgui.h>
 
-LightGroup::LightGroup(void)
+LightManager::LightManager(void)
 {
     DefaultLightSetting();
     cbLightGroup_.Create();
     TransferCB();
 }
 
-void LightGroup::Update(void)
+void LightManager::Update(void)
 {
     // 値の更新があった時だけ定数バッファに転送する
     if (isDirty_) {
@@ -18,13 +18,13 @@ void LightGroup::Update(void)
     //DebugImGui();
 }
 
-void LightGroup::Draw(void)
+void LightManager::Draw(void)
 {
     InitDirectX::GetInstance()->GetCommandList()->
         SetGraphicsRootConstantBufferView(4, cbLightGroup_.GetBuffer()->GetGPUVirtualAddress());
 }
 
-void LightGroup::TransferCB(void)
+void LightManager::TransferCB(void)
 {
     // 環境光
     cbLightGroup_.GetConstBuffMap()->ambientColor = ambientColor_;
@@ -97,7 +97,7 @@ void LightGroup::TransferCB(void)
     }
 }
 
-void LightGroup::DefaultLightSetting(void)
+void LightManager::DefaultLightSetting(void)
 {
     //dirLights_[0].SetIsActive(true);
     //dirLights_[0].SetLightColor({ 1.f,1.f,1.f });
@@ -129,7 +129,7 @@ void LightGroup::DefaultLightSetting(void)
     circleShadows_[0].SetFactorAngle({0.f,0.5f});
 }
 
-void LightGroup::DebugImGui(void)
+void LightManager::DebugImGui(void)
 {
     ImGui::Begin("dirLights");
     static float ambientColor0[3]{ 1,1,1 };
@@ -141,97 +141,97 @@ void LightGroup::DebugImGui(void)
     ImGui::End();
 }
 
-void LightGroup::SetAmbientColor(const Vector3& color)
+void LightManager::SetAmbientColor(const Vector3& color)
 {
     ambientColor_ = color;
     isDirty_ = true;
 }
 
-void LightGroup::SetLightDir(size_t index, const Vector3& lightDir)
+void LightManager::SetLightDir(size_t index, const Vector3& lightDir)
 {
     dirLights_[index].SetLightDir(lightDir);
     isDirty_ = true;
 }
 
-void LightGroup::SetDirLightColor(size_t index, const Vector3& lightColor)
+void LightManager::SetDirLightColor(size_t index, const Vector3& lightColor)
 {
     dirLights_[index].SetLightColor(lightColor);
     isDirty_ = true;
 }
 
-void LightGroup::SetPointLightPos(size_t index, const Vector3& lightPos)
+void LightManager::SetPointLightPos(size_t index, const Vector3& lightPos)
 {
     pointLights_[index].SetLightPos(lightPos);
     isDirty_ = true;
 }
 
-void LightGroup::SetPointLightColor(size_t index, const Vector3& lightColor)
+void LightManager::SetPointLightColor(size_t index, const Vector3& lightColor)
 {
     pointLights_[index].SetLightColor(lightColor);
     isDirty_ = true;
 }
 
-void LightGroup::SetPointLightAtten(size_t index, const Vector3& lightAtten)
+void LightManager::SetPointLightAtten(size_t index, const Vector3& lightAtten)
 {
     pointLights_[index].SetLightAtten(lightAtten);
     isDirty_ = true;
 }
 
-void LightGroup::SetSpotLightDir(size_t index, const Vector3& lightDir)
+void LightManager::SetSpotLightDir(size_t index, const Vector3& lightDir)
 {
     spotLights_[index].SetLightDir(lightDir);
     isDirty_ = true;
 }
 
-void LightGroup::SetSpotLightPos(size_t index, const Vector3& lightPos)
+void LightManager::SetSpotLightPos(size_t index, const Vector3& lightPos)
 {
     spotLights_[index].SetLightPos(lightPos);
     isDirty_ = true;
 }
 
-void LightGroup::SetSpotLightColor(size_t index, const Vector3& lightColor)
+void LightManager::SetSpotLightColor(size_t index, const Vector3& lightColor)
 {
     spotLights_[index].SetLightColor(lightColor);
     isDirty_ = true;
 }
 
-void LightGroup::SetSpotLightAtten(size_t index, const Vector3& lightAtten)
+void LightManager::SetSpotLightAtten(size_t index, const Vector3& lightAtten)
 {
     spotLights_[index].SetLightAtten(lightAtten);
     isDirty_ = true;
 }
 
-void LightGroup::SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle)
+void LightManager::SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle)
 {
     spotLights_[index].SetLightFactorAngle(lightFactorAngle);
     isDirty_ = true;
 }
 
-void LightGroup::SetCircleShadowDir(size_t index, const Vector3& dir)
+void LightManager::SetCircleShadowDir(size_t index, const Vector3& dir)
 {
     circleShadows_[index].SetDir(dir);
     isDirty_ = true;
 }
 
-void LightGroup::SetCircleShadowAtten(size_t index, const Vector3& atten)
+void LightManager::SetCircleShadowAtten(size_t index, const Vector3& atten)
 {
     circleShadows_[index].SetAtten(atten);
     isDirty_ = true;
 }
 
-void LightGroup::SetCircleShadowCasterPos(size_t index, const Vector3& casterPos)
+void LightManager::SetCircleShadowCasterPos(size_t index, const Vector3& casterPos)
 {
     circleShadows_[index].SetCasterPos(casterPos);
     isDirty_ = true;
 }
 
-void LightGroup::SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight)
+void LightManager::SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight)
 {
     circleShadows_[index].SetDisctanceCasterLight(distanceCasterLight);
     isDirty_ = true;
 }
 
-void LightGroup::SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle)
+void LightManager::SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle)
 {
     circleShadows_[index].SetFactorAngle(factorAngle);
     isDirty_ = true;

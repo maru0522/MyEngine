@@ -22,9 +22,9 @@ cbuffer CBMaterial_t : register(b2)
 }
 
 static const uint kDirLightNum = 3;
-static const uint kPointLightNum = 3;
-static const uint kSpotLightNum = 3;
-static const uint kCircleShadowNum = 19;
+static const uint kPointLightNum = 50;
+static const uint kSpotLightNum = 50;
+static const uint kCircleShadowNum = 50;
 
 struct DirLight
 {

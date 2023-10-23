@@ -126,7 +126,7 @@
     <ClCompile Include="Engine\Base\InitDirectX.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Scene\common\IScene.cpp" />
-    <ClCompile Include="Engine\Entity\Light\LightGroup.cpp" />
+    <ClCompile Include="Engine\Entity\Light\LightManager.cpp" />
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -300,7 +300,7 @@
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Scene\common\IScene.h" />
     <ClInclude Include="Engine\Entity\Light\DirectionalLight.h" />
-    <ClInclude Include="Engine\Entity\Light\LightGroup.h" />
+    <ClInclude Include="Engine\Entity\Light\LightManager.h" />
     <ClInclude Include="Engine\Math\MathUtil.h" />
     <ClInclude Include="Engine\Math\Matrix4.h" />
     <ClInclude Include="Engine\Entity\3d\Mesh.h" />

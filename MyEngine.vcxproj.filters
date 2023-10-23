@@ -114,7 +114,7 @@
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp">
       <Filter>Engine\Entity\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Entity\Light\LightGroup.cpp">
+    <ClCompile Include="Engine\Entity\Light\LightManager.cpp">
       <Filter>Engine\Entity\Light</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Entity\PostEffect\PostEffect.cpp">
@@ -297,7 +297,7 @@
     <ClInclude Include="Engine\Entity\3d\BillBoard.h">
       <Filter>Engine\Entity\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Entity\Light\LightGroup.h">
+    <ClInclude Include="Engine\Entity\Light\LightManager.h">
       <Filter>Engine\Entity\Light</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Entity\Light\DirectionalLight.h">

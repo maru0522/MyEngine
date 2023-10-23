@@ -1,7 +1,7 @@
 #include "Object3D.h"
 #include "InitDirectX.h"
 
-LightGroup* Object3D::sLightGroupPtr_{ nullptr };
+LightManager* Object3D::sLightGroupPtr_{ nullptr };
 ModelManager* Object3D::sModelMPtr_{ nullptr };
 TextureManager* Object3D::sTexMPtr_{ nullptr };
 ConstBuffer<Object3D::CBMatViewPerse_t> Object3D::sCbMatViewPerse_{};

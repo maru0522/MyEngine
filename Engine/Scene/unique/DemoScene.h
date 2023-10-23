@@ -4,7 +4,7 @@
 #include "Sprite.h"
 #include "Object3D.h"
 #include "Sound.h"
-#include "LightGroup.h"
+#include "LightManager.h"
 #include "LevelData.h"
 #include "Player.h"
 #include "Planet.h"
@@ -106,6 +106,6 @@ public:
     std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
     std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
     std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
-    std::unique_ptr<LightGroup> lightGroup_{ std::make_unique<LightGroup>() };
+    std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
 };
 
