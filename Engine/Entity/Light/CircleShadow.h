@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Vector2.h"
 #include "Vector3.h"
 #include "MathUtil.h"
@@ -6,7 +6,7 @@
 class CircleShadow
 {
 private:
-    // 定義
+    //>> 定義
     typedef float (*mf)(float);
     const mf toRad = Math::Function::ToRadian;
 
@@ -25,27 +25,27 @@ public:
     };
 
 private:
-    // 変数
-    Vector3 dir_{ 1,0,0 };
-    Vector3 casterPos_{ 0,0,0 };
-    Vector3 atten_{ 0.5f,0.6f,0.f };
-    Vector2 factorAngleCos_{ 0.2f,0.5f };
-    float distanceCasterLight_{ 100.f };
-    bool isActive_{};
+    //>> 変数
+    Vector3 direction_{};
+    Vector3 position_caster_{};
+    Vector3 atten_{};
+    Vector2 factorAngleCos_{};
+    float distance_caster_{};
+    bool is_active_{};
 
 public:
     // setter・getter
-    inline void SetAtten(const Vector3& atten) { atten_ = atten; }
-    inline void SetIsActive(bool isActive) { isActive_ = isActive; }
-    inline void SetDir(const Vector3& dir) { dir_ = dir.Normalize(); }
-    inline void SetCasterPos(const Vector3& casterPos) { casterPos_ = casterPos; }
-    inline void SetDisctanceCasterLight(float distanceCasterLight) { distanceCasterLight_ = distanceCasterLight; }
-    inline void SetFactorAngle(const Vector2& factorAngle) { factorAngleCos_ = { std::cosf(toRad(factorAngle.x)), std::cosf(toRad(factorAngle.y)) }; }
+    inline void SetAtten(const Vector3& arg_atten) { atten_ = arg_atten; }
+    inline void SetIsActive(bool arg_isActive) { is_active_ = arg_isActive; }
+    inline void SetDir(const Vector3& arg_dir) { direction_ = arg_dir.Normalize(); }
+    inline void SetCasterPos(const Vector3& arg_casterPos) { position_caster_ = arg_casterPos; }
+    inline void SetDisctanceCasterLight(float arg_distanceCasterLight) { distance_caster_ = arg_distanceCasterLight; }
+    inline void SetFactorAngle(const Vector2& arg_factorAngle) { factorAngleCos_ = { std::cosf(toRad(arg_factorAngle.x)), std::cosf(toRad(arg_factorAngle.y)) }; }
 
-    inline bool GetIsActive(void) { return isActive_; }
-    inline const Vector3& GetDir(void) { return dir_; }
+    inline bool GetIsActive(void) { return is_active_; }
+    inline const Vector3& GetDir(void) { return direction_; }
     inline const Vector3& GetAtten(void) { return atten_; }
-    inline const Vector3& GetCasterPos(void) { return casterPos_; }
+    inline const Vector3& GetCasterPos(void) { return position_caster_; }
     inline const Vector2& GetFactorAngleCos(void) { return factorAngleCos_; }
-    inline float GetDistanceCasterLight(void) { return distanceCasterLight_; }
+    inline float GetDistanceCasterLight(void) { return distance_caster_; }
 };

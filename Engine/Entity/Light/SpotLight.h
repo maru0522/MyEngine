@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
 #include "Vector2.h"
 #include "Vector3.h"
@@ -7,7 +7,7 @@
 class SpotLight
 {
 private:
-    // 定義
+    //>> 定義
     typedef float (*mf)(float);
     const mf toRad = Math::Function::ToRadian;
 
@@ -28,28 +28,27 @@ public:
     };
 
 private:
-    // 変数
-    Vector3 lightDir_{ 1,0,0 };
-    Vector3 lightPos_{ 0,0,0 };
-    Vector3 lightColor_{ 1,1,1 };
-    Vector3 lightAtten_{ 1.f,1.f,1.f };
-    Vector2 lightFactorAngleCos_{ 0.5f,0.2f };
-
-    bool isActive_{};
+    //>> 変数
+    Vector3 direction_{};
+    Vector3 position_{};
+    Vector3 color_{};
+    Vector3 attan_{};
+    Vector2 factorAngleCos_{};
+    bool is_active_{};
 
 public:
-    // setter・getter
-    inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.Normalize(); }
-    inline void SetLightPos(const Vector3& lightPos) { lightPos_ = lightPos; }
-    inline void SetLightColor(const Vector3& lightcolor) { lightColor_ = lightcolor; }
-    inline void SetLightAtten(const Vector3& lightAtten) { lightAtten_ = lightAtten; }
-    inline void SetLightFactorAngle(const Vector2& lightFactorAngle) { lightFactorAngleCos_ = { std::cosf(toRad(lightFactorAngle.x)), std::cosf(toRad(lightFactorAngle.y)) }; }
-    inline void SetIsActive(bool isActive) { isActive_ = isActive; }
-    
-    inline const Vector3& GetLightDir(void) { return lightDir_; }
-    inline const Vector3& GetLightPos(void) { return lightPos_; }
-    inline const Vector3& GetLightColor(void) { return lightColor_; }
-    inline const Vector3& GetLightAtten(void) { return lightAtten_; }
-    inline const Vector2& GetLightFactorAngleCos(void) { return lightFactorAngleCos_; }
-    inline bool GetIsActive(void) { return isActive_; }
+    //>> setter・getter
+    void SetLightDir(const Vector3& arg_lightDir) { direction_ = arg_lightDir.Normalize(); }
+    void SetLightPos(const Vector3& arg_lightPos) { position_ = arg_lightPos; }
+    void SetLightColor(const Vector3& arg_lightColor) { color_ = arg_lightColor; }
+    void SetLightAtten(const Vector3& arg_lightAtten) { attan_ = arg_lightAtten; }
+    void SetLightFactorAngle(const Vector2& arg_lightFactorAngle) { factorAngleCos_ = { std::cosf(toRad(arg_lightFactorAngle.x)), std::cosf(toRad(arg_lightFactorAngle.y)) }; }
+    void SetIsActive(bool arg_isActive) { is_active_ = arg_isActive; }
+   
+    const Vector3& GetLightDir(void) { return direction_; }
+    const Vector3& GetLightPos(void) { return position_; }
+    const Vector3& GetLightColor(void) { return color_; }
+    const Vector3& GetLightAtten(void) { return attan_; }
+    const Vector2& GetLightFactorAngleCos(void) { return factorAngleCos_; }
+    bool GetIsActive(void) { return is_active_; }
 };

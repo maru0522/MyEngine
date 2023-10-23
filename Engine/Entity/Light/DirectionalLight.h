@@ -1,11 +1,11 @@
-﻿#pragma once
+#pragma once
 #include "Vector3.h"
 #include "ConstBuffer.h"
 
 class DirectionalLight
 {
 private:
-    // 定義
+    //>> 定義
     template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
@@ -18,20 +18,19 @@ public:
     };
 
 private:
-    // 変数
-    Vector3 lightDir_{ 1,0,0 };
-    Vector3 lightColor_{ 1,1,1 };
-
-    bool isActive_{};
+    //>> 変数
+    Vector3 direction_{};
+    Vector3 color_{};
+    bool is_active_{};
 
 public:
-    // setter・getter
-    inline void SetLightDir(const Vector3& lightDir) { lightDir_ = lightDir.Normalize(); }
-    inline void SetLightColor(const Vector3& lightColor) { lightColor_ = lightColor; }
-    inline void SetIsActive(bool isActive) { isActive_ = isActive; }
+    //>> setter・getter
+    void SetLightDir(const Vector3& arg_lightDir) { direction_ = arg_lightDir.Normalize(); }
+    void SetLightColor(const Vector3& arg_lightColor) { color_ = arg_lightColor; }
+    void SetIsActive(bool arg_isActive) { is_active_ = arg_isActive; }
 
-    inline const Vector3& GetLightDir(void) { return lightDir_; }
-    inline const Vector3& GetLightColor(void) { return lightColor_; }
-    inline bool GetIsActive(void) { return isActive_; }
+    const Vector3& GetLightDir(void) { return direction_; }
+    const Vector3& GetLightColor(void) { return color_; }
+    bool GetIsActive(void) { return is_active_; }
 };
 

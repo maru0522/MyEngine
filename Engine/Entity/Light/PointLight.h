@@ -1,10 +1,10 @@
-﻿#pragma once
+#pragma once
 #include "Vector3.h"
 
 class PointLight
 {
 public:
-    // 定義
+    //>> 定義
     struct CBPointLight_t
     {
         Vector3 lightPos;
@@ -16,22 +16,22 @@ public:
     };
 
 private:
-    // 変数
-    Vector3 lightPos_;
-    Vector3 lightColor_;
-    Vector3 lightAtten_;
-    bool isActive_{};
+    //>> 変数
+    Vector3 position_{};
+    Vector3 color_{};
+    Vector3 attan_{};
+    bool is_active_{};
 
 public:
-    // setter・getter
-    inline void SetIsActive(bool isActive) { isActive_ = isActive; }
-    inline void SetLightPos(const Vector3& lightpos) { lightPos_ = lightpos; }
-    inline void SetLightColor(const Vector3& lightcolor) { lightColor_ = lightcolor; }
-    inline void SetLightAtten(const Vector3& lightatten) { lightAtten_ = lightatten; }
+    //>> setter・getter
+    void SetIsActive(bool arg_isActive) { is_active_ = arg_isActive; }
+    void SetLightPos(const Vector3& arg_lightPos) { position_ = arg_lightPos; }
+    void SetLightColor(const Vector3& arg_lightColor) { color_ = arg_lightColor; }
+    void SetLightAtten(const Vector3& arg_lightAtten) { attan_ = arg_lightAtten; }
 
-    inline bool GetIsActive(void) { return isActive_; }
-    inline const Vector3& GetLightPos(void) { return lightPos_; }
-    inline const Vector3& GetLightColor(void) { return lightColor_; }
-    inline const Vector3& GetLightAtten(void) { return lightAtten_; }
+    bool GetIsActive(void) { return is_active_; }
+    const Vector3& GetLightPos(void) { return position_; }
+    const Vector3& GetLightColor(void) { return color_; }
+    const Vector3& GetLightAtten(void) { return attan_; }
 };
 
