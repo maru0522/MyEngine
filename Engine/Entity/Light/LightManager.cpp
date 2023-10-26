@@ -1,5 +1,6 @@
 #include "LightManager.h"
 #include <imgui.h>
+#include "Util.h"
 
 LightManager::LightManager(void)
 {
@@ -23,6 +24,47 @@ void LightManager::Draw(void)
         SetGraphicsRootConstantBufferView(4, cb_lightGroup_.GetBuffer()->GetGPUVirtualAddress());
 }
 
+int32_t LightManager::UsableRightNum(LightType arg_type)
+{
+    // 平行光源
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        for (int32_t i = 0; i < kDirLightNum_; i++)
+        {
+            if (lights_directional_[i].GetIsActive() == false) { return i; }
+        }
+    }
+
+    // 点光源
+    if (arg_type == LightType::POINT)
+    {
+        for (int32_t i = 0; i < kPointLightNum_; i++)
+        {
+            if (lights_point_[i].GetIsActive() == false) { return i; }
+        }
+    }
+
+    // スポットライト
+    if (arg_type == LightType::SPOT)
+    {
+        for (int32_t i = 0; i < kSpotLightNum_; i++)
+        {
+            if (lights_spot[i].GetIsActive() == false) { return i; }
+        }
+    }
+
+    // 丸影
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        for (int32_t i = 0; i < kCircleShadowNum_; i++)
+        {
+            if (lights_circleShadow_[i].GetIsActive() == false) { return i; }
+        }
+    }
+
+    return -1;
+}
+
 void LightManager::TransferCB(void)
 {
     // 環境光
@@ -39,7 +81,7 @@ void LightManager::TransferCB(void)
         }
         // ライトが無効なら転送しない。
         else {
-            cb_lightGroup_.GetConstBuffMap()->dirLights[i].isActive = 0;
+            cb_lightGroup_.GetConstBuffMap()->dirLights[i].isActive = false;
         }
     }
 
@@ -55,7 +97,7 @@ void LightManager::TransferCB(void)
         }
         // ライトが無効なら転送しない。
         else {
-            cb_lightGroup_.GetConstBuffMap()->pointLights[i].isActive = 0;
+            cb_lightGroup_.GetConstBuffMap()->pointLights[i].isActive = false;
         }
     }
 
@@ -73,7 +115,7 @@ void LightManager::TransferCB(void)
         }
         // ライトが無効なら転送しない。
         else {
-            cb_lightGroup_.GetConstBuffMap()->spotLights[i].isActive = 0;
+            cb_lightGroup_.GetConstBuffMap()->spotLights[i].isActive = false;
         }
     }
 
@@ -91,7 +133,7 @@ void LightManager::TransferCB(void)
         }
         // ライトが無効なら転送しない。
         else {
-            cb_lightGroup_.GetConstBuffMap()->spotLights[i].isActive = 0;
+            cb_lightGroup_.GetConstBuffMap()->spotLights[i].isActive = false;
         }
     }
 }
@@ -114,93 +156,285 @@ void LightManager::SetAmbientColor(const Vector3& color)
     is_dirty_ = true;
 }
 
-void LightManager::SetLightDir(size_t index, const Vector3& lightDir)
+void LightManager::SetLightActive(LightType arg_type, size_t arg_index, bool arg_isActive)
 {
-    lights_directional_[index].SetLightDir(lightDir);
-    is_dirty_ = true;
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // index番目の、平行光源の動作状況を設定
+        lights_directional_[arg_index].SetIsActive(arg_isActive);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // index番目の、点光源の動作状況を設定
+        lights_point_[arg_index].SetIsActive(arg_isActive);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // index番目の、スポットライトの動作状況を設定
+        lights_spot[arg_index].SetIsActive(arg_isActive);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // index番目の、丸影の動作状況を設定
+        lights_circleShadow_[arg_index].SetIsActive(arg_isActive);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
 }
 
-void LightManager::SetDirLightColor(size_t index, const Vector3& lightColor)
+void LightManager::SetLightPos(LightType arg_type, size_t arg_index, const Vector3& arg_pos)
 {
-    lights_directional_[index].SetLightColor(lightColor);
-    is_dirty_ = true;
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Directional_Lightは、メンバ変数にpositionを含んでいないため座標を指定できませんでした。");
+        return;
+    }
+
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // index番目の、点光源の座標を設定
+        lights_point_[arg_index].SetLightPos(arg_pos);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // index番目の、スポットライトの座標を設定
+        lights_spot[arg_index].SetLightPos(arg_pos);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // index番目の、丸影のキャスター座標を設定
+        lights_circleShadow_[arg_index].SetCasterPos(arg_pos);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
 }
 
-void LightManager::SetPointLightPos(size_t index, const Vector3& lightPos)
+void LightManager::SetLightDir(LightType arg_type, size_t arg_index, const Vector3& arg_dir)
 {
-    lights_point_[index].SetLightPos(lightPos);
-    is_dirty_ = true;
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // index番目の、平行光源の向きを設定
+        lights_directional_[arg_index].SetLightDir(arg_dir);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Point_Lightは、メンバ変数にdirectionを含んでいないため向きを指定できませんでした。");
+        return;
+    }
+
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // index番目の、スポットライトの向きを設定
+        lights_spot[arg_index].SetLightDir(arg_dir);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // index番目の、丸影の向きを設定
+        lights_circleShadow_[arg_index].SetDir(arg_dir);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
 }
 
-void LightManager::SetPointLightColor(size_t index, const Vector3& lightColor)
+void LightManager::SetLightColor(LightType arg_type, size_t arg_index, const Vector3& arg_color)
 {
-    lights_point_[index].SetLightColor(lightColor);
-    is_dirty_ = true;
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // index番目の、平行光源の色を設定
+        lights_directional_[arg_index].SetLightColor(arg_color);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // index番目の、点光源の色を設定
+        lights_point_[arg_index].SetLightColor(arg_color);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // index番目の、スポットライトの色を設定
+        lights_spot[arg_index].SetLightColor(arg_color);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Circle_Shadowは、メンバ変数にcolorを含んでいないため色を指定できませんでした。");
+        return;
+    }
 }
 
-void LightManager::SetPointLightAtten(size_t index, const Vector3& lightAtten)
+void LightManager::SetLightAtten(LightType arg_type, size_t arg_index, const Vector3& arg_atten)
 {
-    lights_point_[index].SetLightAtten(lightAtten);
-    is_dirty_ = true;
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Directional_Lightは、メンバ変数にattenuationを含んでいないため減衰値を指定できませんでした。");
+        return;
+    }
+
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // index番目の、点光源の減衰値を設定
+        lights_point_[arg_index].SetLightAtten(arg_atten);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // index番目の、スポットライトの減衰値を設定
+        lights_spot[arg_index].SetLightAtten(arg_atten);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // index番目の、丸影の減衰値を設定
+        lights_circleShadow_[arg_index].SetAtten(arg_atten);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
 }
 
-void LightManager::SetSpotLightDir(size_t index, const Vector3& lightDir)
+void LightManager::SetLightFactorAngle(LightType arg_type, size_t arg_index, const Vector2& arg_atten)
 {
-    lights_spot[index].SetLightDir(lightDir);
-    is_dirty_ = true;
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Directional_Lightは、メンバ変数にfactorAngleを含んでいないため減衰角度を指定できませんでした。");
+        return;
+    }
+
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Point_Lightは、メンバ変数にfactorAngleを含んでいないため減衰角度を指定できませんでした。");
+        return;
+    }
+
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // index番目の、スポットライトの減衰角度を設定
+        lights_spot[arg_index].SetLightFactorAngle(arg_atten);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
+
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // index番目の、丸影の減衰角度を設定
+        lights_circleShadow_[arg_index].SetFactorAngle(arg_atten);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
 }
 
-void LightManager::SetSpotLightPos(size_t index, const Vector3& lightPos)
+void LightManager::SetLightDistanceAtCaster(LightType arg_type, size_t arg_index, float arg_distanceAtCaster)
 {
-    lights_spot[index].SetLightPos(lightPos);
-    is_dirty_ = true;
-}
+    // 指定されたタイプが [平行光源]
+    if (arg_type == LightType::DIRECTIONAL)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Directional_Lightは、メンバ変数にdistanceCasterを含んでいないためキャスターまでの距離を指定できませんでした。");
+        return;
+    }
 
-void LightManager::SetSpotLightColor(size_t index, const Vector3& lightColor)
-{
-    lights_spot[index].SetLightColor(lightColor);
-    is_dirty_ = true;
-}
+    // 指定されたタイプが [点光源]
+    if (arg_type == LightType::POINT)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Point_Lightは、メンバ変数にdistanceCasterを含んでいないためキャスターまでの距離を指定できませんでした。");
+        return;
+    }
 
-void LightManager::SetSpotLightAtten(size_t index, const Vector3& lightAtten)
-{
-    lights_spot[index].SetLightAtten(lightAtten);
-    is_dirty_ = true;
-}
+    // 指定されたタイプが [スポットライト]
+    if (arg_type == LightType::SPOT)
+    {
+        // 設定出来ないのでログを出力
+        Util::Log::PrintOutputWindow("[LightManager] : Spot_Lightは、メンバ変数にdistanceCasterを含んでいないためキャスターまでの距離を指定できませんでした。");
+        return;
+    }
 
-void LightManager::SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle)
-{
-    lights_spot[index].SetLightFactorAngle(lightFactorAngle);
-    is_dirty_ = true;
+    // 指定されたタイプが [丸影]
+    if (arg_type == LightType::CIRCLE_SHADOW)
+    {
+        // index番目の、丸影のキャスターまでの距離を設定
+        lights_circleShadow_[arg_index].SetDisctanceCasterLight(arg_distanceAtCaster);
+        // 汚染フラグを立てる
+        is_dirty_ = true;
+        return;
+    }
 }
-
-void LightManager::SetCircleShadowDir(size_t index, const Vector3& dir)
-{
-    lights_circleShadow_[index].SetDir(dir);
-    is_dirty_ = true;
-}
-
-void LightManager::SetCircleShadowAtten(size_t index, const Vector3& atten)
-{
-    lights_circleShadow_[index].SetAtten(atten);
-    is_dirty_ = true;
-}
-
-void LightManager::SetCircleShadowCasterPos(size_t index, const Vector3& casterPos)
-{
-    lights_circleShadow_[index].SetCasterPos(casterPos);
-    is_dirty_ = true;
-}
-
-void LightManager::SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight)
-{
-    lights_circleShadow_[index].SetDisctanceCasterLight(distanceCasterLight);
-    is_dirty_ = true;
-}
-
-void LightManager::SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle)
-{
-    lights_circleShadow_[index].SetFactorAngle(factorAngle);
-    is_dirty_ = true;
-}
-

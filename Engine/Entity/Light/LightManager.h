@@ -8,6 +8,14 @@
 #include "ImguiController.h"
 #include "DirectionalLight.h"
 
+enum class LightType
+{
+    DIRECTIONAL,
+    POINT,
+    SPOT,
+    CIRCLE_SHADOW,
+};
+
 class LightManager final
 {
 private:
@@ -36,6 +44,8 @@ public:
     void Update(void);
     void Draw(void);
 
+    int32_t UsableRightNum(LightType arg_type);
+
 private:
     void TransferCB(void);
     void DebugImGui(void);
@@ -51,32 +61,18 @@ private:
     bool is_dirty_{};
 
 public:
-    //>> setter・getter
+    //>> setter
     void SetAmbientColor(const Vector3& color);
 
-    void SetLightDir(size_t index, const Vector3& lightDir);
-    void SetDirLightColor(size_t index, const Vector3& lightColor);
-    inline void SetDirLightActive(size_t index, bool isActive) { lights_directional_[index].SetIsActive(isActive); }
+    void SetLightActive(LightType arg_type, size_t arg_index, bool arg_isActive);
+    void SetLightPos(LightType arg_type, size_t arg_index, const Vector3& arg_pos);
+    void SetLightDir(LightType arg_type, size_t arg_index, const Vector3& arg_dir);
+    void SetLightColor(LightType arg_type, size_t arg_index, const Vector3& arg_color);
+    void SetLightAtten(LightType arg_type, size_t arg_index, const Vector3& arg_atten);
+    void SetLightFactorAngle(LightType arg_type, size_t arg_index, const Vector2& arg_atten);
+    void SetLightDistanceAtCaster(LightType arg_type, size_t arg_index, float arg_distanceAtCaster);
 
-    void SetPointLightPos(size_t index, const Vector3& lightPos);
-    void SetPointLightColor(size_t index, const Vector3& lightColor);
-    void SetPointLightAtten(size_t index, const Vector3& lightAtten);
-    inline void SetPointLightActive(size_t index, bool isActive) { lights_point_[index].SetIsActive(isActive); }
-
-    void SetSpotLightDir(size_t index, const Vector3& lightDir);
-    void SetSpotLightPos(size_t index, const Vector3& lightPos);
-    void SetSpotLightColor(size_t index, const Vector3& lightColor);
-    void SetSpotLightAtten(size_t index, const Vector3& lightAtten);
-    void SetSpotLightFactorAngle(size_t index, const Vector2& lightFactorAngle);
-    inline void SetSpotLightActive(size_t index, bool isActive) { lights_spot[index].SetIsActive(isActive); }
-
-    void SetCircleShadowDir(size_t index, const Vector3& dir);
-    void SetCircleShadowAtten(size_t index, const Vector3& atten);
-    void SetCircleShadowCasterPos(size_t index, const Vector3& casterPos);
-    void SetCircleShadowDistanceCasterLight(size_t index, float distanceCasterLight);
-    void SetCircleShadowFactorAngle(size_t index, const Vector2& factorAngle);
-    inline void SetCircleShadowActive(size_t index, bool isActive) { lights_circleShadow_[index].SetIsActive(isActive); }
-
+    //>> getter
     bool GetCircleShadowActive(size_t index) { return lights_circleShadow_[index].GetIsActive(); }
 };
 

@@ -63,3 +63,28 @@ void Coin::SetPosition(const Vector3& arg_pos)
     transform_.position = arg_pos;
     collision_contact_.center = arg_pos;
 }
+
+void Coin::SetupCircleShadows(Planet* arg_planetPtr, LightManager* arg_lightManagerPtr, const Vector3& arg_atten, const Vector2& arg_factorAngle, float arg_distAtCaster)
+{
+    // 使用可能な丸影の番号を取得
+    circleShadows_num_ = arg_lightManagerPtr->UsableRightNum(LightType::CIRCLE_SHADOW);
+
+    // 丸影が使用可能なら
+    if (circleShadows_num_ >= 0)
+    {
+        // LightManagerに渡す用のライトタイプ
+        LightType type = LightType::CIRCLE_SHADOW;
+
+        // キャスターの位置がコイン自体からどの程度離れているか
+        float distAtCoin = 1.5f;
+        // コインから星までのベクトル
+        Vector3 vec_coinTpPlanet = (arg_planetPtr->GetPosition() - GetPosition()).Normalize();
+
+        arg_lightManagerPtr->SetLightActive(type, circleShadows_num_, true);
+        arg_lightManagerPtr->SetLightDir(type, circleShadows_num_, vec_coinTpPlanet);
+        arg_lightManagerPtr->SetLightPos(type, circleShadows_num_, GetPosition() + vec_coinTpPlanet * distAtCoin);
+        arg_lightManagerPtr->SetLightDistanceAtCaster(type, circleShadows_num_, arg_distAtCaster);
+        arg_lightManagerPtr->SetLightAtten(type, circleShadows_num_, arg_atten);
+        arg_lightManagerPtr->SetLightFactorAngle(type, circleShadows_num_, arg_factorAngle);
+    }
+}
