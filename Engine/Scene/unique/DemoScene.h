@@ -47,11 +47,16 @@ public:
     bool debugSpherical_{ true }; // 球面座標系でカメラを管理する
 
     // 変数
-    std::unique_ptr<Player> player_{ std::make_unique<Player>(CameraManager::GetInstance()) };
-    std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>() };
-    std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>() };
-    std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>() };
+    std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
+    std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
+    std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
+    std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
+
     std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
+    std::unique_ptr<Player> player_{ std::make_unique<Player>(CameraManager::GetInstance()) };
+    std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     std::unique_ptr<Sprite> png_backGround_{ std::make_unique<Sprite>("Resources/BackGround.png") };
     bool isBG_;
@@ -80,10 +85,5 @@ public:
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
-
-    std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
-    std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
-    std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
-    std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
 };
 

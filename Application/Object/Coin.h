@@ -10,7 +10,7 @@ class Coin :
     public Object3D
 {
 public:
-    Coin(CollisionManager* colMPtr);
+    Coin(CollisionManager* arg_colMPtr);
     ~Coin(void) override;
 
     void Update(void) override;

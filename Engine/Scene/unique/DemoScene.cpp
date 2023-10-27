@@ -43,9 +43,6 @@ void DemoScene::Initialize(void)
     hole1_->transform_.position = { 0,0,-48 };
     hole2_->transform_.position = { 0,0,48 };
 
-    rabbit2_->GetTransformPtr()->position = { 10,60, 20 };
-    rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
-
     rock1_->TransformPtr()->position = { 48,18,9 };
     rock2_->TransformPtr()->position = { 49,-23,6 };
     rock3_->TransformPtr()->position = { 48,-6,24 };
@@ -103,6 +100,12 @@ void DemoScene::Initialize(void)
             coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get(), { 0.02f,0.1f,0.07f }, { 15.f,20.f });
         }
     }
+
+    rabbit1_->SetupLightCircleShadows();
+    rabbit2_->GetTransformPtr()->position = { 10,60, 20 };
+    rabbit2_->SetupLightCircleShadows();
+    rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
+    rabbit3_->SetupLightCircleShadows();
 }
 
 void DemoScene::Update(void)

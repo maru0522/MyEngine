@@ -1,8 +1,11 @@
 #pragma once
 #include "Transform.h"
 #include "CollisionPrimitive.h"
+#include "CollisionManager.h"
 #include <memory>
 #include "Object3D.h"
+#include "Planet.h"
+#include "LightManager.h"
 
 class Rabbit
 {
@@ -14,7 +17,7 @@ public:
     const float kGravity_{ 0.98f };
 
     // 関数
-    Rabbit(void);
+    Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
     ~Rabbit(void);
 
     void Update(void);
@@ -34,16 +37,25 @@ private:
     Transform transform_;
     Axis3 axes_;
 
+    CollisionManager* colMPtr_;
     CollisionPrimitive::SphereCollider sphereCollider_;
     CollisionPrimitive::SphereCollider detectPlayerCollider_;
 
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/rabbit/rabbit.obj") };
 
     float jumpVecNorm_{};
+    int32_t circleShadows_num_;
+    Planet* planetPtr_;
+    LightManager* lightManagerPtr_;
 
 public:
     // setter
     void SetIsCaptured(bool arg_isCaptured) { isCaptured_ = arg_isCaptured; }
+    void SetupLightCircleShadows(void) {
+        // 使用可能な丸影の番号を取得
+        circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
+        lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
+    }
 
     // getter
     Transform* GetTransformPtr(void) { return &transform_; }

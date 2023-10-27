@@ -1,11 +1,10 @@
 #include "Rabbit.h"
-#include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
-Rabbit::Rabbit(void)
+Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr) : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
-    CollisionManager::GetInstance()->Register(&sphereCollider_);
-    CollisionManager::GetInstance()->Register(&detectPlayerCollider_);
+    arg_colMPtr->Register(&sphereCollider_);
+    arg_colMPtr->Register(&detectPlayerCollider_);
 
     sphereCollider_.SetID("rabbit");
     detectPlayerCollider_.SetID("rabbit_detectPlayer");
@@ -27,56 +26,84 @@ Rabbit::Rabbit(void)
 
 Rabbit::~Rabbit(void)
 {
-    CollisionManager::GetInstance()->UnRegister(&sphereCollider_);
-    CollisionManager::GetInstance()->UnRegister(&detectPlayerCollider_);
+    colMPtr_->UnRegister(&sphereCollider_);
+    colMPtr_->UnRegister(&detectPlayerCollider_);
 }
 
 void Rabbit::Update(void)
 {
-    if (isCaptured_ == false)
+    // プレイヤーに触れられた後なら処理をスキップ
+    if (isCaptured_) { return; }
+
+
+    // 丸影が使用可能なら
+    if (circleShadows_num_ >= 0)
     {
-        // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-        appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
-        appearance_->Update();
+        // LightManagerに渡す用のライトタイプ
+        LightType type = LightType::CIRCLE_SHADOW;
 
-        static float sDetectRadius{ kDetectRadius_ };
-        GUI::Begin("Rabbit");
-        ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
-        detectPlayerCollider_.radius = sDetectRadius;
-        GUI::End();
+        // 自分自身の座標
+        const Vector3& pos_myself = transform_.position;
+        // コインから星までのベクトル
+        const Vector3& vec_coinTpPlanet = (planetPtr_->GetPosition() - pos_myself).Normalize();
 
-        // 移動量
-        Vector3 moveVec{};
-        Vector3 velocity{};
-        Move(moveVec, velocity); // 参照渡しで受け取る。
+        // キャスターとコイン自体の距離
+        float distAtCoin = 1.5f;
+        // 丸影用の光源とキャスターの距離
+        float distAtCaster = 1.f;
+        // ライトの減衰率の各値
+        Vector3 atten = { 0.02f,0.1f,0.07f };
+        // ライトの角度減衰の外値と内値
+        Vector2 factorAngle = { 15.f,20.f };
 
-        // 座標更新
-        Vector3 currentPos = transform_.position;
-        currentPos += velocity;
-        transform_.position = currentPos;
-
-        // コライダー更新
-        sphereCollider_.center = currentPos;
-        detectPlayerCollider_.center = currentPos;
-
-        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(), axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        axes_.right = rightFromOldAxis;
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(), axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-        axes_.forward = forwardFromOldAxis;
-
-        // 移動入力があった場合
-        if (moveVec.IsNonZero())
-        {
-            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-            axes_.right = rightFromMoveVec.Normalize();
-            axes_.forward = moveVec.Normalize();
-        }
-
-        coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, vec_coinTpPlanet);
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, pos_myself + vec_coinTpPlanet * distAtCoin);
+        lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, distAtCaster);
+        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, atten);
+        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, factorAngle);
     }
+
+    // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
+    appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
+    appearance_->Update();
+
+    static float sDetectRadius{ kDetectRadius_ };
+    GUI::Begin("Rabbit");
+    ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
+    detectPlayerCollider_.radius = sDetectRadius;
+    GUI::End();
+
+    // 移動量
+    Vector3 moveVec{};
+    Vector3 velocity{};
+    Move(moveVec, velocity); // 参照渡しで受け取る。
+
+    // 座標更新
+    Vector3 currentPos = transform_.position;
+    currentPos += velocity;
+    transform_.position = currentPos;
+
+    // コライダー更新
+    sphereCollider_.center = currentPos;
+    detectPlayerCollider_.center = currentPos;
+
+    // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+    Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(), axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+    axes_.right = rightFromOldAxis;
+    Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(), axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    axes_.forward = forwardFromOldAxis;
+
+    // 移動入力があった場合
+    if (moveVec.IsNonZero())
+    {
+        // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+        Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
+        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+        axes_.right = rightFromMoveVec.Normalize();
+        axes_.forward = moveVec.Normalize();
+    }
+
+    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
 }
 
 void Rabbit::Draw(void)

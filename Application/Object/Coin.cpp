@@ -1,10 +1,10 @@
 #include "Coin.h"
 #include "SimplifyImGui.h"
 
-Coin::Coin(CollisionManager* colMPtr) : Object3D("Resources/model/coin/coin.obj"), colMPtr_(colMPtr)
+Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.obj"), colMPtr_(arg_colMPtr)
 {
     // コイン用コライダーの登録
-    colMPtr->Register(&collision_contact_);
+    arg_colMPtr->Register(&collision_contact_);
     collision_contact_.SetID("coin_contact");
     collision_contact_.SetOnCollision(std::bind(&Coin::Collision_Contact, this));
     collision_contact_.radius = 1.f;
