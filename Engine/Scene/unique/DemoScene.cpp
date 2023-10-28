@@ -369,7 +369,11 @@ void DemoScene::Update(void)
     for (auto& coin : coins_)
     {
         coin->Update();
-        if (coin->GetIsTaken()) { coin->SetCircleShadowActive(lightGroup_.get(), false); }
+        if (coin->GetIsTaken())
+        {
+            //coin->SetCircleShadowActive(lightGroup_.get(), false);
+            coin->SetCircleShadowDistAtCaster(lightGroup_.get(), -100);
+        }
     }
 
     skydome_->Update();

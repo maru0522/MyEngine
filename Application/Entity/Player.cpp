@@ -3,11 +3,11 @@
 #include "Quaternion.h"
 #include "SimplifyImGui.h"
 #include "CollisionChecker.h"
-#include "CollisionManager.h"
 
-Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehavior::IDLE)
+Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
+    : camMPtr_(arg_camMPtr), colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr) ,pbm_(this,PlayerBehavior::IDLE)
 {
-    CollisionManager::GetInstance()->Register(&sphereCollider_);
+    arg_colMPtr->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
     sphereCollider_.SetOnCollision(std::bind(&Player::OnCollision, this));
     sphereCollider_.SetOnTrigger(std::bind(&Player::OnTrigger, this));
@@ -28,7 +28,7 @@ Player::Player(CameraManager* camMPtr) : camMPtr_(camMPtr),pbm_(this,PlayerBehav
 
 Player::~Player(void)
 {
-    CollisionManager::GetInstance()->UnRegister(&sphereCollider_);
+    colMPtr_->UnRegister(&sphereCollider_);
 }
 
 void Player::Update(void)
@@ -63,6 +63,37 @@ void Player::Update(void)
 
     // コライダー更新
     sphereCollider_.center = transform_.position;
+
+    // 丸影が使用可能なら
+    if (circleShadows_num_ >= 0)
+    {
+        // LightManagerに渡す用のライトタイプ
+        LightType type = LightType::CIRCLE_SHADOW;
+
+        // 自分自身の座標
+        const Vector3& pos_myself = transform_.position;
+        // プレイヤーから星までのベクトル
+        const Vector3& vec_playerTpPlanet = (planetPtr_->GetPosition() - pos_myself).Normalize();
+
+        // キャスターとプレイヤー自体の距離
+        float distAtPlayer = 15.f;
+        // 丸影用の光源とキャスターの距離
+        float distAtCaster = 3.f;
+        // ライトの減衰率の各値
+        static Vector3 atten = { 0.01f,0.02f,0.01f };
+        // ライトの角度減衰の外値と内値
+        Vector2 factorAngle = { 6.f,7.f };
+
+        GUI::Begin("player state");
+        GUI::SliderFloat3("atten", atten, 0, 1);
+        GUI::End();
+
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, vec_playerTpPlanet);
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, pos_myself - vec_playerTpPlanet * distAtPlayer);
+        lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, distAtCaster);
+        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, atten);
+        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, factorAngle);
+    }
 
     //// 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
     //Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up, axes_.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)

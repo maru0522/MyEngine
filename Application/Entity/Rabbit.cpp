@@ -1,7 +1,8 @@
 #include "Rabbit.h"
 #include "SimplifyImGui.h"
 
-Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr) : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
+Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr) 
+    : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
     arg_colMPtr->Register(&sphereCollider_);
     arg_colMPtr->Register(&detectPlayerCollider_);
@@ -44,20 +45,24 @@ void Rabbit::Update(void)
 
         // 自分自身の座標
         const Vector3& pos_myself = transform_.position;
-        // コインから星までのベクトル
-        const Vector3& vec_coinTpPlanet = (planetPtr_->GetPosition() - pos_myself).Normalize();
+        // 兎から星までのベクトル
+        const Vector3& vec_rabbitTpPlanet = (planetPtr_->GetPosition() - pos_myself).Normalize();
 
-        // キャスターとコイン自体の距離
-        float distAtCoin = 1.5f;
+        // キャスターと兎自体の距離
+        float distAtRabbit = 3.f;
         // 丸影用の光源とキャスターの距離
-        float distAtCaster = 1.f;
+        float distAtCaster = 3.f;
         // ライトの減衰率の各値
-        Vector3 atten = { 0.02f,0.1f,0.07f };
+        static Vector3 atten = { 0.1f,0.08f,0.075f };
         // ライトの角度減衰の外値と内値
-        Vector2 factorAngle = { 15.f,20.f };
+        Vector2 factorAngle = { 8.f,9.f };
 
-        lightManagerPtr_->SetLightDir(type, circleShadows_num_, vec_coinTpPlanet);
-        lightManagerPtr_->SetLightPos(type, circleShadows_num_, pos_myself + vec_coinTpPlanet * distAtCoin);
+        GUI::Begin("rabbit state");
+        GUI::SliderFloat3("atten", atten, 0, 1);
+        GUI::End();
+
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, vec_rabbitTpPlanet);
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, pos_myself - vec_rabbitTpPlanet * distAtRabbit);
         lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, distAtCaster);
         lightManagerPtr_->SetLightAtten(type, circleShadows_num_, atten);
         lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, factorAngle);
