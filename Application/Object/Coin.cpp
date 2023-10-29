@@ -6,7 +6,8 @@ Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.
     // コイン用コライダーの登録
     arg_colMPtr->Register(&collision_contact_);
     collision_contact_.SetID("coin_contact");
-    collision_contact_.SetOnCollision(std::bind(&Coin::Collision_Contact, this));
+    collision_contact_.SetCallback_onCollision(std::bind(&Coin::Collision_Contact, this));
+    collision_contact_.SetCallback_onTrigger(std::bind(&Coin::Collision_callback, this));
     collision_contact_.radius = 1.f;
 
     // 初期姿勢
@@ -32,17 +33,16 @@ void Coin::Update(void)
     GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
     GUI::End();
 
-    if (is_takenPre_ == false && is_taken_)
-    {
-        if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
-        se_getCoin_.Play();
-    }
-    is_takenPre_ = is_taken_;
+    //if (is_takenPre_ == false && is_taken_)
+    //{
+    //    if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
+    //    se_getCoin_.Play();
+    //}
+    //is_takenPre_ = is_taken_;
 
     transform_.rotation.y += 0.04f;
     matTrans_.mat_world = Math::Function::AffinTrans(transform_);
     Object3D::Update();
-
 }
 
 void Coin::Draw(void)
@@ -52,10 +52,20 @@ void Coin::Draw(void)
 
 void Coin::Collision_Contact(void)
 {
+    //if (collision_contact_.GetOther()->GetID() == "player")
+    //{
+    //    is_taken_ = true;
+    //}
+}
+
+void Coin::Collision_callback(void)
+{
     if (collision_contact_.GetOther()->GetID() == "player")
     {
-        is_taken_ = true;
+        if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
+        se_getCoin_.Play();
     }
+
 }
 
 void Coin::SetPosition(const Vector3& arg_pos)

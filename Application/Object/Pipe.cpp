@@ -7,12 +7,12 @@ Pipe::Pipe(CollisionManager* colMPtr) : Object3D("Resources/model/pipe/pipe.obj"
     // 押し戻し用コライダーの登録
     colMPtr->Register(&collision_pushback_);
     collision_pushback_.SetID("pipe_pushback");
-    collision_pushback_.SetOnCollision(std::bind(&Pipe::Collision_PushBack, this));
+    collision_pushback_.SetCallback_onCollision(std::bind(&Pipe::Collision_PushBack, this));
     collision_pushback_.radius = 2.8f;
     // 土管に入る時用のコライダーの登録
     colMPtr->Register(&collision_enterInside_);
     collision_enterInside_.SetID("pipe_enterInside");
-    collision_enterInside_.SetOnCollision(std::bind(&Pipe::Collision_EnterInside, this));
+    collision_enterInside_.SetCallback_onCollision(std::bind(&Pipe::Collision_EnterInside, this));
     collision_enterInside_.radius = 1.f;
 
     // スケール設定

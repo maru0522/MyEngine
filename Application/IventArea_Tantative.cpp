@@ -4,7 +4,7 @@ IventArea_Tantative::IventArea_Tantative(CollisionManager* colMPtr, const std::s
 {
     colMPtr->Register(&aabb_);
     aabb_.SetID(id);
-    aabb_.SetOnCollision(std::bind(&IventArea_Tantative::OnCollision, this));
+    aabb_.SetCallback_onCollision(std::bind(&IventArea_Tantative::OnCollision, this));
     aabb_.radius = kRadius_;
 
     transform_.position = { 0, 0, 0 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Object3D.h"
 #include "CollisionManager.h"
+#include "CollisionPrimitive.h"
 
 class StickyBall :
     public Object3D

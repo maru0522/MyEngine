@@ -18,6 +18,7 @@ public:
 
 private:
     void Collision_Contact(void);
+    void Collision_callback(void);
 
     //>> 変数
     Transform transform_;

@@ -1,7 +1,7 @@
 #pragma once
 #include <forward_list>
 #include <memory>
-#include "CollisionPrimitive.h"
+#include "ICollider.h"
 
 class CollisionManager final
 {

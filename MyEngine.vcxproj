@@ -102,6 +102,7 @@
     <ClCompile Include="Application\Object\Rock.cpp" />
     <ClCompile Include="Application\Object\StickyBall.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
     <ClCompile Include="Engine\Entity\Other\CameraManager.cpp" />
     <ClCompile Include="Application\Object\ColliderCamera.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="Application\Object\Pipe.h" />
     <ClInclude Include="Application\Object\Rock.h" />
     <ClInclude Include="Application\Object\StickyBall.h" />
+    <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h" />

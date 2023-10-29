@@ -3,7 +3,12 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include <functional>
+#include <forward_list>
 
+
+// 前方宣言
+class CollisionManager;
+// 前方宣言2
 namespace CollisionPrimitive
 {
     struct SphereCollider;
@@ -23,10 +28,67 @@ namespace CollisionPrimitive
     };
 }
 
-class ICollider
+
+class ColliderId
 {
 public:
-    // 関数
+    //>> 関数
+    ColliderId(void) = default;
+    virtual ~ColliderId(void) = default;
+
+    // 接触相手のidをfListに保存
+    void RecordIds(void);
+
+protected:
+    // 現在のリストに指定した名前があるか
+    bool IsExistSameId(const std::string& arg_id);
+    // 1Frame前のリストに指定した名前があるか
+    bool IsExistSameIdPre(const std::string& arg_idPre);
+    // 接触相手のidをリストに追加
+    void AddDetectId(const std::string& arg_id) { detect_ids_.push_front(arg_id); }
+
+    //>> 変数
+    std::string id_{};
+    std::forward_list<std::string> detect_ids_;
+    std::forward_list<std::string> detect_idsPre_;
+
+public:
+    //>> setter
+    void SetID(const std::string& arg_id) { id_ = arg_id; }
+
+    // getter
+    const std::string& GetID(void) { return id_; }
+};
+
+class ColliderCallBack
+{
+public:
+    //>> 関数
+    ColliderCallBack(void) = default;
+    virtual ~ColliderCallBack(void) = default;
+
+protected:
+    //>> 変数
+    std::function<void(void)> callback_onTrigger_;
+    std::function<void(void)> callback_onCollision_;
+    std::function<void(void)> callback_onRelease_;
+
+public:
+    //>> setter
+    void SetCallback_onTrigger(const std::function<void(void)>& arg_callback) { callback_onTrigger_ = arg_callback; }
+    void SetCallback_onCollision(const std::function<void(void)>& arg_callback) { callback_onCollision_ = arg_callback; }
+    void SetCallback_onRelease(const std::function<void(void)>& arg_callback) { callback_onRelease_ = arg_callback; }
+
+    // getter
+    const std::function<void(void)>& GetCallback_onTrigger(void) { return callback_onTrigger_; }
+    const std::function<void(void)>& GetCallback_onCollision(void) { return callback_onCollision_; }
+    const std::function<void(void)>& GetCallback_onRelease(void) { return callback_onRelease_; }
+};
+
+class ICollider : public ColliderId, public ColliderCallBack
+{
+public:
+    //>> 関数
     ICollider(void) = default;
     virtual ~ICollider(void) = default;
     virtual bool Dispatch(ICollider* other) = 0;
@@ -37,33 +99,24 @@ public:
     virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
     virtual bool Col(CollisionPrimitive::OBBCollider* arg_OBB) = 0;
 
-    // 1freme前の接触判定を残すのに使用する。
-    void ExecuteCollisionCallback(void);
+    // 触れた瞬間か確認し、trueならcallbackを実行
+    void Check_onTrigger(void);
+    // 離した瞬間か確認し、trueならcallbackを実行
+    void Check_onRelease(void);
 
 protected:
-    // 変数
-    std::string id_{};
-    ICollider* other_{};
-    CollisionPrimitive::Shape shape_{}; // 条件分岐時に、形状単位だと便利かも
+    bool IsTrigger(void);
+    bool IsRelease(void);
 
-    std::function<void(void)> onCollision_{};
-    std::function<void(void)> onTrigger_{};
-    std::function<void(void)> onRelease_{};
+    //>> 変数
+    ICollider* other_;
+    CollisionPrimitive::Shape shape_{};
 
 public:
-    // setter
-    void SetID(const std::string& id) { id_ = id; }
-    void SetOther(ICollider* col) { other_ = col; }
-    void SetOnCollision(const std::function<void(void)> callback_onCollision) { onCollision_ = callback_onCollision; }
-    void SetOnTrigger(const std::function<void(void)> callback_onTrigger) { onTrigger_ = callback_onTrigger; }
-    //inline void SetOnCollision(const std::function<void(void)> callback_onRelease) { onRelease_ = callback_onRelease; }
+    //>> setter
+    void SetOther(ICollider* arg_col);
 
-    // getter
-    const std::string& GetID(void) { return id_; }
+    //>> getter
     ICollider* GetOther(void) { return other_; }
     CollisionPrimitive::Shape GetShape(void) { return shape_; }
-    const std::function<void(void)>& GetOnCollision(void) { return onCollision_; }
-    const std::function<void(void)>& GetOnTrigger(void) { return onTrigger_; }
-    const std::function<void(void)>& GetOnRelease(void) { return onRelease_; }
-
 };

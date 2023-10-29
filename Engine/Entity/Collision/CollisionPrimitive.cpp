@@ -8,12 +8,13 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
 
     if (isHit)
     {
-        other_ = arg_Shpere;
+        // 接触相手のptrを保存
+        SetOther(arg_Shpere);
         arg_Shpere->SetOther(this);
 
-        // callback
-        ExecuteCollisionCallback();
-        arg_Shpere->ExecuteCollisionCallback();
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -26,12 +27,13 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
 
     if (isHit)
     {
-        other_ = arg_Plane;
+        // 接触相手のptrを保存
+        SetOther(arg_Plane);
         arg_Plane->SetOther(this);
 
-        // callback
-        ExecuteCollisionCallback();
-        arg_Plane->ExecuteCollisionCallback();
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Plane->GetCallback_onCollision()) { arg_Plane->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -43,12 +45,13 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
 
     if (isHit)
     {
-        other_ = arg_Point;
+        // 接触相手のptrを保存
+        SetOther(arg_Point);
         arg_Point->SetOther(this);
 
-        // callback
-        ExecuteCollisionCallback();
-        arg_Point->ExecuteCollisionCallback();
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Point->GetCallback_onCollision()) { arg_Point->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -60,15 +63,13 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* a
 
     if (isHit)
     {
-        other_ = arg_AABB;
+        // 接触相手のptrを保存
+        SetOther(arg_AABB);
         arg_AABB->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_AABB->GetOnCollision()) { arg_AABB->GetOnCollision()(); }
-        if (arg_AABB->GetOnTrigger()) { arg_AABB->GetOnTrigger()(); }
-        //if (arg_AABB->GetOnRelease()) { arg_AABB->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_AABB->GetCallback_onCollision()) { arg_AABB->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -89,16 +90,13 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* a
 
     if (isHit)
     {
-        other_ = arg_Plane;
+        // 接触相手のptrを保存
+        SetOther(arg_Plane);
         arg_Plane->SetOther(this);
 
-        // callback
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Plane->GetOnCollision()) { arg_Plane->GetOnCollision()(); }
-        if (arg_Plane->GetOnTrigger()) { arg_Plane->GetOnTrigger()(); }
-        //if (arg_Plane->GetOnRelease()) { arg_Plane->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Plane->GetCallback_onCollision()) { arg_Plane->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -110,16 +108,13 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* 
 
     if (isHit)
     {
-        other_ = arg_Shpere;
+        // 接触相手のptrを保存
+        SetOther(arg_Shpere);
         arg_Shpere->SetOther(this);
 
-        // callback
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
-        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
-        //if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -158,15 +153,13 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* a
 
     if (isHit)
     {
-        other_ = arg_Shpere;
+        // 接触相手のptrを保存
+        SetOther(arg_Shpere);
         arg_Shpere->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
-        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
-        //if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -187,15 +180,13 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PointCollider* ar
 
     if (isHit)
     {
-        other_ = arg_Point;
+        // 接触相手のptrを保存
+        SetOther(arg_Point);
         arg_Point->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Point->GetOnCollision()) { arg_Point->GetOnCollision()(); }
-        if (arg_Point->GetOnTrigger()) { arg_Point->GetOnTrigger()(); }
-        //if (arg_Point->GetOnRelease()) { arg_Point->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Point->GetCallback_onCollision()) { arg_Point->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -207,15 +198,13 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg
 
     if (isHit)
     {
-        other_ = arg_AABB;
+        // 接触相手のptrを保存
+        SetOther(arg_AABB);
         arg_AABB->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_AABB->GetOnCollision()) { arg_AABB->GetOnCollision()(); }
-        if (arg_AABB->GetOnTrigger()) { arg_AABB->GetOnTrigger()(); }
-        //if (arg_AABB->GetOnRelease()) { arg_AABB->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_AABB->GetCallback_onCollision()) { arg_AABB->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -236,15 +225,13 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* 
 
     if (isHit)
     {
-        other_ = arg_Shpere;
+        // 接触相手のptrを保存
+        SetOther(arg_Shpere);
         arg_Shpere->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_Shpere->GetOnCollision()) { arg_Shpere->GetOnCollision()(); }
-        if (arg_Shpere->GetOnTrigger()) { arg_Shpere->GetOnTrigger()(); }
-        //if (arg_Shpere->GetOnRelease()) { arg_Shpere->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
     }
 
     return isHit;
@@ -274,15 +261,13 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::AABBCollider* ar
 
     if (isHit)
     {
-        other_ = arg_AABB;
+        // 接触相手のptrを保存
+        SetOther(arg_AABB);
         arg_AABB->SetOther(this);
 
-        if (onCollision_) { onCollision_(); }
-        if (onTrigger_) { onTrigger_(); }
-        //if (onRelease_) { onRelease_(); }
-        if (arg_AABB->GetOnCollision()) { arg_AABB->GetOnCollision()(); }
-        if (arg_AABB->GetOnTrigger()) { arg_AABB->GetOnTrigger()(); }
-        //if (arg_AABB->GetOnRelease()) { arg_AABB->GetOnRelease()(); }
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_AABB->GetCallback_onCollision()) { arg_AABB->GetCallback_onCollision()(); }
     }
 
     return isHit;
