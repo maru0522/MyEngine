@@ -133,7 +133,7 @@ void LightManager::TransferCB(void)
         }
         // ライトが無効なら転送しない。
         else {
-            cb_lightGroup_.GetConstBuffMap()->spotLights[i].isActive = false;
+            cb_lightGroup_.GetConstBuffMap()->circleShadows[i].isActive = false;
         }
     }
 }

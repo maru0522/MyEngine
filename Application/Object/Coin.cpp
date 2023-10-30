@@ -6,8 +6,7 @@ Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.
     // コイン用コライダーの登録
     arg_colMPtr->Register(&collision_contact_);
     collision_contact_.SetID("coin_contact");
-    collision_contact_.SetCallback_onCollision(std::bind(&Coin::Collision_Contact, this));
-    collision_contact_.SetCallback_onTrigger(std::bind(&Coin::Collision_callback, this));
+    collision_contact_.SetCallback_onTrigger(std::bind(&Coin::Collision_onTrigger, this));
     collision_contact_.radius = 1.f;
 
     // 初期姿勢
@@ -22,7 +21,23 @@ Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.
 
 Coin::~Coin(void)
 {
+    // 登録を抹消
     colMPtr_->UnRegister(&collision_contact_);
+
+    // 丸影を使用している
+    if (circleShadows_num_ >= 0)
+    {
+        // LightManagerに渡す用のライトタイプ
+        LightType type = LightType::CIRCLE_SHADOW;
+
+        // 使用していた丸影を初期化
+        lightManagerPtr_->SetLightActive(type, circleShadows_num_, false);
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, {0,0,0});
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, {0,0,0});
+        lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, 0.f);
+        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, {0.f,0.f,0.f});
+        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, {0.f,0.f});
+    }
 }
 
 void Coin::Update(void)
@@ -47,25 +62,17 @@ void Coin::Update(void)
 
 void Coin::Draw(void)
 {
-    if (is_taken_ == false) { Object3D::Draw(); }
+    Object3D::Draw();
 }
 
-void Coin::Collision_Contact(void)
-{
-    //if (collision_contact_.GetOther()->GetID() == "player")
-    //{
-    //    is_taken_ = true;
-    //}
-}
-
-void Coin::Collision_callback(void)
+void Coin::Collision_onTrigger(void)
 {
     if (collision_contact_.GetOther()->GetID() == "player")
     {
+        is_taken_ = true;
         if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
         se_getCoin_.Play();
     }
-
 }
 
 void Coin::SetPosition(const Vector3& arg_pos)
@@ -76,6 +83,8 @@ void Coin::SetPosition(const Vector3& arg_pos)
 
 void Coin::SetupCircleShadows(Planet* arg_planetPtr, LightManager* arg_lightManagerPtr, const Vector3& arg_atten, const Vector2& arg_factorAngle, float arg_distAtCaster)
 {
+    // ライトマネージャーのポインタを保存
+    lightManagerPtr_ = arg_lightManagerPtr;
     // 使用可能な丸影の番号を取得
     circleShadows_num_ = arg_lightManagerPtr->UsableRightNum(LightType::CIRCLE_SHADOW);
 

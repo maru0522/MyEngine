@@ -48,8 +48,8 @@ public:
 
     // 変数
     std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
-    std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
-    std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>(CollisionManager::GetInstance()) };
+    std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>() };
+    std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>() };
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
 
     std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };

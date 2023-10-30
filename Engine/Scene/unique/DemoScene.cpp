@@ -40,6 +40,8 @@ void DemoScene::Initialize(void)
     //colCameraPtr->theta_ = 0.f;
     //colCameraPtr->phi_ = 0.f;
 
+    player_->SetupLightCircleShadows();
+
     hole1_->transform_.position = { 0,0,-48 };
     hole2_->transform_.position = { 0,0,48 };
 
@@ -282,7 +284,6 @@ void DemoScene::Update(void)
     rabbit3_->Update();
     planet_->Update();
 
-    camera_colPtr_->SetPlanetCenter(planet_->GetPosition());
     camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
 
     Matrix4 matWorld{ Math::Mat4::Identity() };
@@ -368,11 +369,11 @@ void DemoScene::Update(void)
 
     for (auto& coin : coins_)
     {
-        coin->Update();
-        if (coin->GetIsTaken())
+        // nullチェック
+        if (coin)
         {
-            //coin->SetCircleShadowActive(lightGroup_.get(), false);
-            coin->SetCircleShadowDistAtCaster(lightGroup_.get(), -100);
+            coin->Update();
+            if (coin->GetIsTaken()) { coin.reset(); }
         }
     }
 
@@ -414,7 +415,11 @@ void DemoScene::Draw3d(void)
 
     for (auto& coin : coins_)
     {
-        coin->Draw();
+        // nullチェック
+        if (coin)
+        {
+            coin->Draw();
+        }
     }
     skydome_->Draw("Resources/gray1x1.png");
 

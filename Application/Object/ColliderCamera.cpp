@@ -2,17 +2,12 @@
 #include "MathUtil.h"
 #include "WndAPI.h"
 
-ColliderCamera::ColliderCamera(CollisionManager* colMPtr) : colMPtr_(colMPtr)
+ColliderCamera::ColliderCamera(void)
 {
-    colMPtr->Register(&sphereCollider_);
-    sphereCollider_.SetID("colliderCamera");
-    sphereCollider_.SetCallback_onCollision(std::bind(&ColliderCamera::OnCollision, this));
-    sphereCollider_.radius = kColRadius_;
 }
 
 ColliderCamera::~ColliderCamera(void)
 {
-    colMPtr_->UnRegister(&sphereCollider_);
 }
 
 void ColliderCamera::Update(void)
@@ -31,24 +26,6 @@ void ColliderCamera::Update(void)
         // 射影行列
         matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
     }
-
-    sphereCollider_.center = transform_.position;
-}
-
-void ColliderCamera::OnCollision(void)
-{
-    //if (sphereCollider_.GetColInfo().id == "repelCameraArea")
-    //{
-    //    // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定
-    //    float diff = Vector3(sphereCollider_.center - sphereCollider_.GetColInfo().v).Length() - (sphereCollider_.GetColInfo().f + sphereCollider_.radius);
-
-    //    Vector3 currentPos = GetCoordinatePtr()->GetPosition();
-
-    //    // 正規化された、星からカメラへのベクトル * めり込み距離
-    //    currentPos += repelVec_ * -diff; // ここをマイナス符号で値反転
-
-    //    GetCoordinatePtr()->SetPosition(currentPos);
-    //}
 }
 
 void ColliderCamera::CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec)

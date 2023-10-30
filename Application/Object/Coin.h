@@ -17,15 +17,13 @@ public:
     void Draw(void) override;
 
 private:
-    void Collision_Contact(void);
-    void Collision_callback(void);
+    void Collision_onTrigger(void);
 
     //>> 変数
     Transform transform_;
     Axis3 axes_;
 
     bool is_taken_{};
-    bool is_takenPre_{};
 
     CollisionManager* colMPtr_{};
     CollisionPrimitive::SphereCollider collision_contact_; // 当たり判定
@@ -33,6 +31,7 @@ private:
     Sound se_getCoin_{ "Resources/sound/coin.wav" };
 
     int32_t circleShadows_num_;
+    LightManager* lightManagerPtr_;
 
 public:
     //>> setter
