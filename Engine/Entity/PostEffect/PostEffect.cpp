@@ -1,4 +1,4 @@
-﻿#include "Input.h"
+#include "Input.h"
 #include <d3dx12.h>
 #include "Sprite.h"
 #include "WndAPI.h"

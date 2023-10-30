@@ -9,7 +9,7 @@
 #include <memory>
 #include "ImguiController.h"
 #include "AudioManager.h"
-#include "PostEffect.h"
+#include "PostEffectManager.h"
 
 class FrameWork
 {
@@ -42,6 +42,6 @@ protected:
     std::unique_ptr<AudioManager> audioM_{ std::make_unique<AudioManager>() };                  // audioManager
     std::unique_ptr<ImGuiController> imguiController_{ std::make_unique<ImGuiController>() };   // imguiController
 
-    std::unique_ptr<PostEffect> postEffect_;
+    PostEffectManager* postEffectMPtr_{ PostEffectManager::GetInstance() };
 };
 

@@ -27,6 +27,7 @@ public:
     virtual ~PostEffect() = default;
 
     virtual void Initialize(void);
+    virtual void Update(void) {};
     virtual void PreDrawScene(void);
     virtual void PostDrawScene(void);
     virtual void Draw();
@@ -34,7 +35,6 @@ public:
 protected:
     inline void SetPSOName(const std::string psoName) { psoName_ = psoName; }
 
-private:
     // 変数
     Matrix4 matWorld_;
 

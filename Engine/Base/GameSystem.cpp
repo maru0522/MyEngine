@@ -13,13 +13,17 @@ void GameSystem::Update(void)
 {
     FrameWork::Update();
     CollisionManager::GetInstance()->Update();
+    if (postEffectMPtr_->GetPostEffectPtr())
+    {
+        postEffectMPtr_->GetPostEffectPtr()->Update();
+    }
 }
 
 void GameSystem::Draw(void)
 {
-    if (postEffect_.get()) {
+    if (postEffectMPtr_->GetPostEffectPtr()) {
         // -----レンダーテクスチャへ書き込み----- //
-        postEffect_->PreDrawScene();
+        postEffectMPtr_->Draw(PostEffectManager::Usage::PRE_DRAW);
         // --背景2DUIの描画-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dBack();
@@ -29,14 +33,14 @@ void GameSystem::Draw(void)
         Object3D::PreDraw();
         SceneManager::GetInstance()->Draw3d();
         // --3Dオブジェクトの描画-- //
-        postEffect_->PostDrawScene();
+        postEffectMPtr_->Draw(PostEffectManager::Usage::POST_DRAW);
         // -----レンダーテクスチャへ書き込み----- //
 
 
         // -----ポストエフェクトの描画----- //
         iDXPtr_->PreDraw();
 
-        postEffect_->Draw();
+        postEffectMPtr_->Draw(PostEffectManager::Usage::DRAW);
 
         // --前景2DUIの描画-- //
         Sprite::PreDraw();

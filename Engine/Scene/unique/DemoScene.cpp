@@ -421,7 +421,7 @@ void DemoScene::Draw3d(void)
             coin->Draw();
         }
     }
-    skydome_->Draw("Resources/gray1x1.png");
+    skydome_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

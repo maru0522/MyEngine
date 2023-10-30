@@ -1,6 +1,6 @@
-// 通常の2D描画
-cbuffer CBData2d_t : register(b0)
+cbuffer CBData_radialBlur_t : register(b0)
 {
+    float blur;
 }
 
 // 頂点シェーダの出力構造体

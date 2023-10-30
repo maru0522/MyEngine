@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "MathUtil.h"
 #include "SimplifyImGui.h"
+#include "PostEffectManager.h"
+#include "RadialBlur.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -508,6 +510,7 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
     {
         // PlayerState を JUMP_LONG(幅跳び)へ
         nextState_ = PlayerBehavior::JUMP_LONG;
+        PostEffectManager::GetInstance()->RequestChangePostEffect(PostEffectType::RADIALBLUR,0.4f);
         return;
     }
 }
@@ -770,6 +773,9 @@ void PlayerBehavior_JumpLong::Execute(void)
         }
     }
 
+    RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
+    radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
+
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
@@ -790,6 +796,7 @@ void PlayerBehavior_JumpLong::RequirementCheck(void)
         {
             // PlayerState をIdleへ
             nextState_ = PlayerBehavior::IDLE;
+            PostEffectManager::GetInstance()->RequestChangePostEffect(PostEffectType::NONE);
             return;
         }
 
@@ -797,6 +804,7 @@ void PlayerBehavior_JumpLong::RequirementCheck(void)
         if (isDown_anyWASD)
         {
             nextState_ = PlayerBehavior::MOVE;
+            PostEffectManager::GetInstance()->RequestChangePostEffect(PostEffectType::NONE);
             return;
         }
     }

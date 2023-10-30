@@ -218,6 +218,7 @@
     <ClCompile Include="Engine\Scene\common\SceneTransitionManager.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransitionFactory.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
+    <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -417,6 +418,7 @@
     <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
+    <ClInclude Include="Engine\Base\PostEffectManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

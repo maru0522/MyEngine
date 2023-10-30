@@ -12,7 +12,7 @@ float Gaussian(float2 drawUV, float2 pickUV, float sigma)
 float4 main(VSOutput input) : SV_TARGET
 {
     const int _RadialCount = 10;
-    float _Strength = 0.2;
+    float _Strength = blur;
     
     float4 col = 0;
     float2 symmetryUV = input.uv_ - 0.5;
