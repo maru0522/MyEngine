@@ -5,7 +5,7 @@
 #include "Timer.h"
 
 // 前方宣言
-class Player; // 苦肉
+class Player;
 
 // 振舞いを羅列するenumクラス
 enum class PlayerBehavior
@@ -47,6 +47,7 @@ protected:
     //>> 変数
     PlayerBehavior nextState_;
     PlayerBehavior debug_curState_;
+    bool is_resetCameraPos_;
 
 private:
     Player* playerPtr_;

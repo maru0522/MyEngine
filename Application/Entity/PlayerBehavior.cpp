@@ -97,6 +97,35 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
         //Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
         //SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
     }
+
+    // カメラ制御
+    {
+        // プレイヤーの座標
+        const Vector3& player_pos = GetPlayerTransform().position;
+        // プレイヤー追従カメラの座標
+        const Vector3& camera_pos = GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformPtr()->position;
+
+
+        // プレイヤーの正面ベクトル
+        const Vector3& vec_player_forward = GetPlayerAxes().forward.Normalize();
+        // カメラからプレイヤー方向へのベクトル
+        Vector3 vec_cameraToPlayer = (player_pos - camera_pos).Normalize();
+        // プレイヤーの正面ベクトルと、カメラからプレイヤーへの方向ベクトルの内積値
+        float dot_pf_c2p = Math::Vec3::Dot(vec_player_forward, vec_cameraToPlayer);
+        
+        // 内積値が0.6fより大きい
+        if (dot_pf_c2p > 0.6f)
+        {
+            // カメラ位置リセットを true
+            is_resetCameraPos_ = true;
+        }
+
+        // カメラの位置を初期化
+        if (is_resetCameraPos_)
+        {
+
+        }
+    }
 }
 
 void PlayerBehavior_Idle::RequirementCheck(void)
