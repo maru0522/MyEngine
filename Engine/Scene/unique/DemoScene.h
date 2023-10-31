@@ -8,7 +8,7 @@
 #include "LevelData.h"
 #include "Player.h"
 #include "Planet.h"
-#include "ColliderCamera.h"
+#include "SphericalCamera.h"
 #include "Rabbit.h"
 #include "Rock.h"
 #include "CollisionManager.h"
@@ -47,9 +47,6 @@ public:
     bool debugSpherical_{ true }; // 球面座標系でカメラを管理する
 
     // 変数
-    std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
-    std::unique_ptr<ColliderCamera> camera_colPtr_{ std::make_unique<ColliderCamera>() };
-    std::unique_ptr<ColliderCamera> camera_4Hole_{ std::make_unique<ColliderCamera>() };
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
 
     std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
@@ -63,6 +60,9 @@ public:
 
     std::unique_ptr<Object3D> skydome_{ std::make_unique<Object3D>("Resources/model/skydome/skydome.obj") };
 
+    std::unique_ptr<Camera> camera_debugPtr_{ std::make_unique<Camera>() };
+    std::unique_ptr<SphericalCamera> camera_colPtr_{ std::make_unique<SphericalCamera>(player_.get()) };
+    std::unique_ptr<SphericalCamera> camera_4Hole_{ std::make_unique<SphericalCamera>(player_.get()) };
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     //

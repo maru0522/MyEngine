@@ -25,10 +25,6 @@ void Camera::Update(void)
     Vector3 velocity = Move();
     Vector3 currentPos = transform_.position;
     Vector3 rotation = transform_.rotation;
-    // よく考えたらこれ1Frame前の姿勢じゃね？
-    Vector3 eyeDir = coordinate_.GetMatAxisZ();
-    Vector3 right = coordinate_.GetMatAxisX();
-    Vector3 up = coordinate_.GetMatAxisY();
 
     // debugCamera
     if (isDebugMode_) {
@@ -55,17 +51,21 @@ void Camera::Update(void)
         }
     }
 
+    // デバッグによって変更された値
     transform_.position = currentPos + velocity;
     transform_.rotation = rotation;
-    axes_.forward = eyeDir;
-    axes_.right = right;
-    axes_.up = up;
+    // position, rotation, scale の情報のみからワールド行列を生成
     coordinate_.mat_world = Math::Function::AffinTrans(transform_);
+
+    // 行列から各軸の向きを抽出し、それをカメラの向きとして適用
+    axes_.forward = coordinate_.GetMatAxisZ();
+    axes_.right = coordinate_.GetMatAxisX();
+    axes_.up = coordinate_.GetMatAxisY();
 
     // ビュー行列
     isFollow_ ?
         matView_ = Math::Mat4::ViewLookAtLH(transform_.position, *targetPtr_, coordinate_.GetMatAxisY()):
-        matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up = up);
+        matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up);
 
     // 射影行列
     matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);

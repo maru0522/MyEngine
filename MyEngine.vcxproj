@@ -106,7 +106,7 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
     <ClCompile Include="Engine\Entity\Other\CameraManager.cpp" />
-    <ClCompile Include="Application\Object\ColliderCamera.cpp" />
+    <ClCompile Include="Application\Object\SphericalCamera.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionChecker.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionManager.cpp" />
@@ -281,7 +281,7 @@
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
     <ClInclude Include="Engine\Entity\Other\CameraManager.h" />
     <ClInclude Include="Engine\Entity\Light\CircleShadow.h" />
-    <ClInclude Include="Application\Object\ColliderCamera.h" />
+    <ClInclude Include="Application\Object\SphericalCamera.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionChecker.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionManager.h" />

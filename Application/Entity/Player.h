@@ -34,6 +34,10 @@ public:
     float theta_{ 0.85f };
     float phi_;
 
+    Vector3 pos_backDiagonalAbove_; // プレイヤーの背後斜め上の点
+    Vector3 pos_withinRangeAtBGAPoint_; // プレイヤーの斜め上の点から、カメラが離れられる最大範囲のpos
+    float dist_maxRangeAtBGAPoint_; // プレイヤーの斜め上の点から、カメラが離れられる最大距離
+
     int32_t captureCount_rabbit; // 兎を捕まえた回数
     bool isFallHole1_;
     bool isFallHole2_;

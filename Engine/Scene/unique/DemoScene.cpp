@@ -108,10 +108,18 @@ void DemoScene::Initialize(void)
     rabbit2_->SetupLightCircleShadows();
     rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
     rabbit3_->SetupLightCircleShadows();
+
+    camera_colPtr_->playerPtr_ = player_.get();
 }
 
 void DemoScene::Update(void)
 {
+    GUI::Begin("spherical camera");
+    Axis3 spc_a3 = *camera_colPtr_->GetAxis3Ptr();
+    GUI::Text("axes_.forward: %f, %f, %f", spc_a3.forward.x, spc_a3.forward.y, spc_a3.forward.z);
+    GUI::Text("axes_.right:   %f, %f, %f", spc_a3.right.x, spc_a3.right.y, spc_a3.right.z);
+    GUI::Text("axes_.up:      %f, %f, %f", spc_a3.up.x, spc_a3.up.y, spc_a3.up.z);
+    GUI::End();
 
     //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
     //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
@@ -163,6 +171,7 @@ void DemoScene::Update(void)
     ImGui::SliderFloat("sPhi4Cam", &player_->phi_, 0.f, 6.28319f);
     // カメラを球面座標系で管理する
     Vector3 ppos = player_->GetTransformPtr()->position;
+    camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, Vector3{0,80,0}, ppos);
 
 
     // 遠目から惑星を見るカメラに切り替える処理
@@ -286,25 +295,28 @@ void DemoScene::Update(void)
 
     camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
 
-    Matrix4 matWorld{ Math::Mat4::Identity() };
-    {
-        using namespace Math;
+    //Matrix4 matWorld{ Math::Mat4::Identity() };
+    //{
+    //    using namespace Math;
 
-        matWorld *= Mat4::Translate(matWorld, { 0,0,-player_->current_rad_ });
+    //    // プレイヤーとの距離だけ、球面座標の中心点から下がらせる
+    //    matWorld *= Mat4::Translate(matWorld, { 0,0,-player_->current_rad_ });
 
-        Matrix4 matRotate{ Mat4::Identity() };
-        //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
-        matRotate = Mat4::RotationX(player_->theta_) * Mat4::RotationY(player_->phi_);
+    //    Matrix4 matRotate{ Mat4::Identity() };
+    //    //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
+    //    // 球面座標系の座標仕様に合わせて回転（移動）させる
+    //    matRotate = Mat4::RotationX(player_->theta_) * Mat4::RotationY(player_->phi_);
 
-        matWorld *= matRotate;
+    //    matWorld *= matRotate;
 
-        matWorld.m[3][0] += ppos.x;
-        matWorld.m[3][1] += ppos.y;
-        matWorld.m[3][2] += ppos.z;
-    }
+    //    // ワールド座標の位置に持っていく（原点での計算後、プレイヤーの座標へ移動）
+    //    matWorld.m[3][0] += ppos.x;
+    //    matWorld.m[3][1] += ppos.y;
+    //    matWorld.m[3][2] += ppos.z;
+    //}
 
-    camera_colPtr_->GetCoordinatePtr()->mat_world = matWorld;
-    testP_->GetCoordinatePtr()->mat_world = matWorld;
+    //camera_colPtr_->GetCoordinatePtr()->mat_world = matWorld;
+    //testP_->GetCoordinatePtr()->mat_world = matWorld;
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -449,7 +461,7 @@ void DemoScene::CameraSetUp(void)
     camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };          // プレイヤー用カメラの座標
     camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };            // 穴に落ちたとき用カメラの座標
     camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 }; // 穴に落ちたとき用カメラの回転
-    camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
+    //camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
 
 
     //>> カメラのデバッグカメラモードをON

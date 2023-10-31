@@ -203,7 +203,7 @@
     <ClCompile Include="Application\Object\StickyBall.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Object\ColliderCamera.cpp">
+    <ClCompile Include="Application\Object\SphericalCamera.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
     <ClCompile Include="Application\Entity\PlayerBehavior.cpp">
@@ -403,7 +403,7 @@
     <ClInclude Include="Application\Object\Rock.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Object\ColliderCamera.h">
+    <ClInclude Include="Application\Object\SphericalCamera.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
     <ClInclude Include="Application\Entity\PlayerBehavior.h">
