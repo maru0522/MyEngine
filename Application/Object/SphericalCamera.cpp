@@ -56,7 +56,6 @@ void SphericalCamera::Update(void)
     axes_.forward = pos_eyeDirection_;
     axes_.right = playerPtr_->GetAxis3Ptr()->up.Cross(pos_eyeDirection_).Normalize();
     axes_.up = pos_eyeDirection_.Cross(axes_.right).Normalize();
-    //axes_.right = axes_.up.Cross(axes_.forward).Normalize();
 
     //// なんでこれだとうまくいくんや？行列からの各軸抜き出しとの違いを出すべきかも。
     //axes_.forward = coordinate_.GetMatAxisZ().Normalize();
