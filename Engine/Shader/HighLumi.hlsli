@@ -1,6 +1,4 @@
-cbuffer ConstBufferData : register(b0) 
-{
-}
+
 
 //頂点シェーダの出力構造体
 //（頂点シェーダーからピクセルシェーダーへのやり取りに使用する）

@@ -174,7 +174,7 @@ void PostEffect::Draw(void)
     iDXPtr->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBuffer_.GetVbView());
 
     // 定数バッファビュー(CBV)の設定コマンド
-    iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cb_.GetBuffer()->GetGPUVirtualAddress());
+    //iDXPtr->GetCommandList()->SetGraphicsRootConstantBufferView(2, cb_.GetBuffer()->GetGPUVirtualAddress());
 
     // SRVヒープの先頭にあるSRVをルートパラメータ0番に設定
     //iDXPtr->GetCommandList()->SetGraphicsRootDescriptorTable(0, imagePtr_->srvGpuHandle);
