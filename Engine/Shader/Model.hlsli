@@ -3,6 +3,7 @@
 cbuffer CBData3d_t : register(b0)
 {
     matrix matWorld_;
+    bool isShadowFlash_;
 }
 
 cbuffer CBMatViewPerse_t : register(b1)

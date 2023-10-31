@@ -20,6 +20,7 @@ private:
     struct CBData3d_t // 定数バッファ用"データ"構造体
     {
         Matrix4 matWorld; // 3D行列変換
+        bool isShadowFlash;
     };
 
     struct CBMatViewPerse_t // 定数バッファ用"射影行列"構造体
@@ -53,6 +54,7 @@ protected:
     TransformMatrix matTrans_;
     ConstBuffer<CBData3d_t> cb_;
     bool isInvisible_{};
+    bool isShadowFlash_{};
     Model_t model_;
 
     static LightManager* sLightGroupPtr_;
@@ -62,11 +64,12 @@ protected:
 
 public:
     // setter・getter
-    static inline void SetLightGroup(LightManager* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
+    static void SetLightGroup(LightManager* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
-    inline void SetIsInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
-    inline void SetCoordinate(const TransformMatrix& coordinate) { matTrans_ = coordinate; }
+    void SetIsInvisible(bool arg_isInvisible) { isInvisible_ = arg_isInvisible; }
+    void SetCoordinate(const TransformMatrix& arg_coordinate) { matTrans_ = arg_coordinate; }
+    void SetIsShadowFlash(bool arg_isShadowFlash) { isShadowFlash_ = arg_isShadowFlash; }
 
-    inline TransformMatrix* GetCoordinatePtr(void) { return &matTrans_; }
+    TransformMatrix* GetCoordinatePtr(void) { return &matTrans_; }
 };
 

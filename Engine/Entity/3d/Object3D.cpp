@@ -72,6 +72,7 @@ void Object3D::Update(void)
 {
     // 座標計算と転送
     cb_.GetConstBuffMap()->matWorld = matTrans_.mat_world;
+    cb_.GetConstBuffMap()->isShadowFlash = isShadowFlash_;
     model_.UpdateCB();
 }
 

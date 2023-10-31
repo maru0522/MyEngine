@@ -27,6 +27,8 @@ Planet::Planet(void)
     surface_.radius = 1.f * kScale_;
     gravityArea_.radius = 1.f * kGravityArea_;
     repelCameraArea_.radius = 1.f * kRepelCameraArea_;
+
+    appearance_->SetIsShadowFlash(true);
 }
 
 Planet::~Planet(void)
