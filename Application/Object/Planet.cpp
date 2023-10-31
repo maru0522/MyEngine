@@ -28,6 +28,7 @@ Planet::Planet(void)
     gravityArea_.radius = 1.f * kGravityArea_;
     repelCameraArea_.radius = 1.f * kRepelCameraArea_;
 
+    // 丸影が投影される
     appearance_->SetIsShadowFlash(true);
 }
 
