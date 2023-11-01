@@ -76,6 +76,7 @@ protected:
     bool GetPlayerIsLanding(void);
     CameraManager* GetPlayerCamMPtr(void);
 
+
     //>> setter
     void SetPlayerMoveVec(const Vector3& arg_moveVec);
     void SetPlayerVelocity(const Vector3& arg_velocity);

@@ -8,20 +8,29 @@
 class SphericalCamera : public Camera
 {
 public:
+    //>> 定義
+    enum class Behavior
+    {
+        A, // プレイヤーが外向き（プレイヤーの正面ベクトルと、カメラの視点ベクトルの内積が、規定値X より大きい）
+        B, // プレイヤーが内向き（プレイヤーの正面ベクトルと、カメラの視点ベクトルの内積が、規定値Y より小さい）
+    };
+
     //>> 関数
-    SphericalCamera(Player* playerPtr);
+    SphericalCamera(void);
     ~SphericalCamera(void);
     void Update(void) override;
 
     float radius_; // 中心点からの距離
     float theta_; // 仰角
     float phi_; // 方位角
-    Vector3 pos_eyeDirection_; // 目線の先
+    Vector3 pos_target; // 目線の先
 
-    bool is_useAxesByCalcMat_;
-    Player* playerPtr_;
+    Behavior cameraWork_;
+    Vector3 vec_playerUp_;
 
 private:
+    void CameraBehavior(Behavior arg_camerawork);
+
     //>> 変数
 
 public:

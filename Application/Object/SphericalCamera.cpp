@@ -3,11 +3,10 @@
 #include "WndAPI.h"
 #include "SimplifyImGui.h"
 
-SphericalCamera::SphericalCamera(Player* playerPtr)
+SphericalCamera::SphericalCamera(void)
 {
     theta_ = 0.f;
     phi_ = 0.f;
-    playerPtr_ = playerPtr;
 }
 
 SphericalCamera::~SphericalCamera(void)
@@ -16,55 +15,87 @@ SphericalCamera::~SphericalCamera(void)
 
 void SphericalCamera::Update(void)
 {
+    CameraBehavior(cameraWork_);
+
+}
+
+void SphericalCamera::CameraBehavior(Behavior arg_camerawork)
+{
     using namespace Math;
 
+    if(arg_camerawork == Behavior::A)
     {
-        //// ビュー行列
-        //matView_ = Math::Mat4::Inverse(coordinate_.mat_world);
-
-        //// 射影行列
-        //matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
-
-        // position, rotation, scale の情報のみからワールド行列を生成
-        //coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        // 視線方向
+        Vector3 vec_eyeDirection = Vector3(pos_target - transform_.position).Normalize();
 
         // ビュー行列
         isFollow_ ?
             matView_ = Math::Mat4::ViewLookAtLH(transform_.position, *targetPtr_, coordinate_.GetMatAxisY()) :
-            matView_ = Math::Mat4::ViewLookToLH(transform_.position, pos_eyeDirection_, axes_.up);
+            matView_ = Math::Mat4::ViewLookToLH(transform_.position, vec_eyeDirection, axes_.up);
 
         // 射影行列
         matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
+
+        //## 球面座標処理込みの行列生成
+        Matrix4 matWorld = Mat4::Identity();
+        Matrix4 matRotate = Mat4::Identity();
+
+        // プレイヤーとの距離だけ、球面座標の中心点から下がらせる
+        matWorld *= Mat4::Translate(matWorld, { 0, 0, -radius_ });
+        // 球面座標系の座標仕様に合わせて回転（移動）させる
+        matRotate = Mat4::RotationX(theta_) * Mat4::RotationY(phi_);
+        matWorld *= matRotate;
+        // ワールド座標の位置に持っていく（原点での計算後、プレイヤーの座標へ移動）
+        matWorld.m[3][0] += transform_.position.x;
+        matWorld.m[3][1] += transform_.position.y;
+        matWorld.m[3][2] += transform_.position.z;
+
+        coordinate_.mat_world = matWorld;
+        //##
+
+        // カメラが見ている方向を正面ベクトルに設定
+        axes_.forward = vec_eyeDirection;
+        // プレイヤーの上ベクトルと、カメラの正面ベクトルから、カメラの右ベクトルを計算
+        axes_.right = vec_playerUp_.Cross(vec_eyeDirection).Normalize();
+        // カメラの正面ベクトルと、カメラの右ベクトルから、カメラの上ベクトルを計算
+        axes_.up = vec_eyeDirection.Cross(axes_.right).Normalize();
     }
+    else if(arg_camerawork == Behavior::B)
+    {
+        // ビュー行列
+        matView_ = Math::Mat4::Inverse(coordinate_.mat_world);
 
+        // 射影行列
+        matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 
-    Matrix4 matWorld = Mat4::Identity();
-    Matrix4 matRotate = Mat4::Identity();
+        //## 球面座標処理込みの行列生成
+        Matrix4 matWorld = Mat4::Identity();
+        Matrix4 matRotate = Mat4::Identity();
 
-    // プレイヤーとの距離だけ、球面座標の中心点から下がらせる
-    matWorld *= Mat4::Translate(matWorld, { 0, 0, -radius_ });
-    // 球面座標系の座標仕様に合わせて回転（移動）させる
-    matRotate = Mat4::RotationX(theta_) * Mat4::RotationY(phi_);
-    matWorld *= matRotate;
-    // ワールド座標の位置に持っていく（原点での計算後、プレイヤーの座標へ移動）
-    matWorld.m[3][0] += transform_.position.x;
-    matWorld.m[3][1] += transform_.position.y;
-    matWorld.m[3][2] += transform_.position.z;
+        // プレイヤーとの距離だけ、球面座標の中心点から下がらせる
+        matWorld *= Mat4::Translate(matWorld, { 0, 0, -radius_ });
+        // 球面座標系の座標仕様に合わせて回転（移動）させる
+        matRotate = Mat4::RotationX(theta_) * Mat4::RotationY(phi_);
+        matWorld *= matRotate;
+        // ワールド座標の位置に持っていく（原点での計算後、プレイヤーの座標へ移動）
+        matWorld.m[3][0] += transform_.position.x;
+        matWorld.m[3][1] += transform_.position.y;
+        matWorld.m[3][2] += transform_.position.z;
 
-    coordinate_.mat_world = matWorld;
+        coordinate_.mat_world = matWorld;
+        //##
 
-    axes_.forward = pos_eyeDirection_;
-    axes_.right = playerPtr_->GetAxis3Ptr()->up.Cross(pos_eyeDirection_).Normalize();
-    axes_.up = pos_eyeDirection_.Cross(axes_.right).Normalize();
-
-    //// なんでこれだとうまくいくんや？行列からの各軸抜き出しとの違いを出すべきかも。
-    //axes_.forward = coordinate_.GetMatAxisZ().Normalize();
-    //axes_.right = coordinate_.GetMatAxisX().Normalize();
-    //axes_.up = coordinate_.GetMatAxisY().Normalize();
+        // 姿勢の軸方向をそのまま 3つの軸から適用
+        axes_.forward = coordinate_.GetMatAxisZ().Normalize();
+        axes_.right = coordinate_.GetMatAxisX().Normalize();
+        axes_.up = coordinate_.GetMatAxisY().Normalize();
+    }
 }
 
 void SphericalCamera::CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec)
 {
+    vec_playerUp_ = pUpVec;
+
     axes_.forward = (playerPos - transform_.position).Normalize();
 
     // プレイヤーの上ベクトルとの外積でカメラの右向きベクトルを定義。
@@ -87,5 +118,5 @@ void SphericalCamera::Debug_need(const Vector3& arg_spherical, const Vector3& po
     phi_ = arg_spherical.z;
 
     transform_.position = pos;
-    pos_eyeDirection_ = (pos_eye - transform_.position).Normalize();
+    pos_target = pos_eye;
 }

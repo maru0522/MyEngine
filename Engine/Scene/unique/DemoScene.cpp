@@ -108,8 +108,6 @@ void DemoScene::Initialize(void)
     rabbit2_->SetupLightCircleShadows();
     rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
     rabbit3_->SetupLightCircleShadows();
-
-    camera_colPtr_->playerPtr_ = player_.get();
 }
 
 void DemoScene::Update(void)
@@ -171,8 +169,12 @@ void DemoScene::Update(void)
     ImGui::SliderFloat("sPhi4Cam", &player_->phi_, 0.f, 6.28319f);
     // カメラを球面座標系で管理する
     Vector3 ppos = player_->GetTransformPtr()->position;
-    camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, Vector3{0,80,0}, ppos);
-
+    //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, Vector3{0,80,0}, ppos);
+    //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, ppos, ppos);
+    GUI::Begin("player_behavior");
+    if (camera_colPtr_->cameraWork_ == SphericalCamera::Behavior::A)GUI::Text("Behavior::A");
+    if (camera_colPtr_->cameraWork_ == SphericalCamera::Behavior::B)GUI::Text("Behavior::B");
+    GUI::End();
 
     // 遠目から惑星を見るカメラに切り替える処理
     const Vector3 kPos_watch_planet = { 0,190,0 };  // 惑星を見るためのカメラの座標（固定）

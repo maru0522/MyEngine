@@ -1,12 +1,13 @@
 #include "PlayerBehavior.h"
 #include "Input.h"
 #include "Vector3.h"
-#include "CameraManager.h"
 #include "Player.h"
 #include "MathUtil.h"
 #include "SimplifyImGui.h"
 #include "PostEffectManager.h"
 #include "RadialBlur.h"
+#include "CameraManager.h"
+#include "SphericalCamera.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -232,67 +233,41 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // 移動ベクトル = 前後vec + 水平vec
     Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
-    // カメラ座標用の値を補正
+    // カメラ制御
     {
-        if (GetPlayerJumpVecNorm())
-        {
-            // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
 
-            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-            SetPlayerCurrentRad(dist);
-        }
-
-        Vector3 vec_cam2p = (GetPlayerTransform().position - GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos()).Normalize();
-
-        // プレイヤーの正面ベクトルと、カメラからプレイヤーへのベクトルの内積が -0.6f未満
-        if (GetPlayerAxes().forward.Dot(vec_cam2p) < -0.6f)
+        // プレイヤーが外向きである（プレイヤーの正面ベクトルと、カメラの視点ベクトルの内積が、0.7fより大きい）
+        if (Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye) > 0.7f)
         {
 
+            // 振る舞いパターンA
+            ptr_cam_spherical->cameraWork_ = SphericalCamera::Behavior::A;
+
+            Vector3 pos_player = GetPlayerTransform().position;
+            Vector3 vec_backDiagonalAbove = Vector3(GetPlayerAxes().up.Normalize() - GetPlayerAxes().forward.Normalize()).Normalize();
+            Vector3 pos_camera = pos_player + vec_backDiagonalAbove * 50.f;
+
+            //
+            ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, pos_camera, pos_player);
+
         }
+        // プレイヤーが内向きであるプレイヤーの正面ベクトルと、カメラの視点ベクトルの内積が、-0.7fより小さい）
+        else /*(Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye) < -0.7f)*/
+        {
+            // 振る舞いパターンB
+            ptr_cam_spherical->cameraWork_ = SphericalCamera::Behavior::B;
 
-        //// プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        //// 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        //if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
-        //{
-        //    // カメラとプレイヤーの距離
-        //    float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
-
-        //    // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
-        //    if (dist < GetPlayerCurrentRad())
-        //    {
-        //        // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
-        //        // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
-        //        //current_rad_ = dist;
-        //    }
-        //}
-        //else
-        //{
-        //    // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-        //    if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-        //    {
-        //        SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-        //        //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-        //    }
-        //    else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-        //    {
-        //        SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-        //    }
-
-        //    float theta = GetPlayerTheta();
-        //    float phi = GetPlayerPhi();
-
-        //    theta += 0.02f * inputVec.y;
-        //    phi += 0.02f * inputVec.x;
-        //    Math::Function::Loop(theta, 0.f, 6.28319f);
-        //    Math::Function::Loop(phi, 0.f, 6.28319f);
-
-        //    SetPlayerTheta(theta);
-        //    SetPlayerPhi(phi);
-        //}
-
-
+            Vector3 pos_player = GetPlayerTransform().position;
+            // 
+            ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi()}, pos_player, pos_player);
+        }
+        GUI::Begin("player_behavior");
+        GUI::Text("vec_sphericalEye: %f,%f,%f", vec_sphericalEye.x, vec_sphericalEye.y, vec_sphericalEye.z);
+        GUI::Text("dot(p.f,cm.fdir): %f", Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye));
+        GUI::End();
     }
 
     // 重力
