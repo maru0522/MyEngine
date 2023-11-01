@@ -43,11 +43,15 @@ public:
     // 他状態への遷移要件確認
     virtual void RequirementCheck(void) = 0;
 
+    Vector3 a;
+    Vector3 c;
+    float b;
 protected:
     //>> 変数
     PlayerBehavior nextState_;
     PlayerBehavior debug_curState_;
     bool is_resetCameraPos_;
+
 
 private:
     Player* playerPtr_;
@@ -212,12 +216,12 @@ public:
 
     void ManagementBehavior(void);
 
+    std::unique_ptr<IPlayerBehavior> statePtr_;
 private:
     // 状態遷移条件を満たしているか確認し、遷移する
     void NextStateCheck(void);
 
     //>> 変数
-    std::unique_ptr<IPlayerBehavior> statePtr_;
     PlayerBehaviorFactory stateFactory_;
     Player* playerPtr_;
 

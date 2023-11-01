@@ -103,31 +103,37 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
 
     // カメラ制御
     {
-        // プレイヤーの座標
-        const Vector3& player_pos = GetPlayerTransform().position;
-        // プレイヤー追従カメラの座標
-        const Vector3& camera_pos = GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformPtr()->position;
+        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
 
-
-        // プレイヤーの正面ベクトル
-        const Vector3& vec_player_forward = GetPlayerAxes().forward.Normalize();
-        // カメラからプレイヤー方向へのベクトル
-        Vector3 vec_cameraToPlayer = (player_pos - camera_pos).Normalize();
-        // プレイヤーの正面ベクトルと、カメラからプレイヤーへの方向ベクトルの内積値
-        float dot_pf_c2p = Math::Vec3::Dot(vec_player_forward, vec_cameraToPlayer);
-        
-        // 内積値が0.6fより大きい
-        if (dot_pf_c2p > 0.6f)
-        {
-            // カメラ位置リセットを true
-            is_resetCameraPos_ = true;
-        }
-
-        // カメラの位置を初期化
-        if (is_resetCameraPos_)
+        // プレイヤーが外向きである（プレイヤーの正面ベクトルと、カメラの視点ベクトルの内積が、0.7fより大きい）
+        if (Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye) > 0.7f)
         {
 
+            // 振る舞いパターンA
+            ptr_cam_spherical->cameraWork_ = SphericalCamera::Behavior::A;
+
+            Vector3 pos_player = GetPlayerTransform().position;
+            Vector3 vec_backDiagonalAbove = Vector3(GetPlayerAxes().up.Normalize() - GetPlayerAxes().forward.Normalize()).Normalize();
+            Vector3 pos_camera = pos_player + vec_backDiagonalAbove * 50.f;
+
+            //
+            ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, pos_camera, pos_player);
+
         }
+        // プレイヤーが内向きであるプレイヤーの正面ベクトルと、カメラの視点ベクトルの内積が、-0.7fより小さい）
+        else /*(Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye) < -0.7f)*/
+        {
+            // 振る舞いパターンB
+            ptr_cam_spherical->cameraWork_ = SphericalCamera::Behavior::B;
+
+            Vector3 pos_player = GetPlayerTransform().position;
+            // 
+            ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, pos_player, pos_player);
+        }
+        a = { vec_sphericalEye.x, vec_sphericalEye.y, vec_sphericalEye.z };
+        b = Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye);
     }
 }
 
@@ -264,10 +270,8 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             // 
             ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi()}, pos_player, pos_player);
         }
-        GUI::Begin("player_behavior");
-        GUI::Text("vec_sphericalEye: %f,%f,%f", vec_sphericalEye.x, vec_sphericalEye.y, vec_sphericalEye.z);
-        GUI::Text("dot(p.f,cm.fdir): %f", Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye));
-        GUI::End();
+        a = { vec_sphericalEye.x, vec_sphericalEye.y, vec_sphericalEye.z };
+        b = Math::Vec3::Dot(GetPlayerAxes().forward, vec_sphericalEye);
     }
 
     // 重力

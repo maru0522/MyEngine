@@ -88,5 +88,7 @@ public:
     Axis3* GetAxis3Ptr(void) { return &axes_; }
     inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
     inline const std::string& GetPartnerId(void) { return sphereCollider_.GetOther()->GetID(); }
+
+    PlayerBehaviorMachine* GetPBM(void) { return &pbm_; }
 };
 

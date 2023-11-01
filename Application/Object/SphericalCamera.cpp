@@ -51,6 +51,7 @@ void SphericalCamera::CameraBehavior(Behavior arg_camerawork)
         matWorld.m[3][2] += transform_.position.z;
 
         coordinate_.mat_world = matWorld;
+        transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
         //##
 
         // カメラが見ている方向を正面ベクトルに設定
@@ -83,6 +84,7 @@ void SphericalCamera::CameraBehavior(Behavior arg_camerawork)
         matWorld.m[3][2] += transform_.position.z;
 
         coordinate_.mat_world = matWorld;
+        transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
         //##
 
         // 姿勢の軸方向をそのまま 3つの軸から適用

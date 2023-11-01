@@ -174,6 +174,13 @@ void DemoScene::Update(void)
     GUI::Begin("player_behavior");
     if (camera_colPtr_->cameraWork_ == SphericalCamera::Behavior::A)GUI::Text("Behavior::A");
     if (camera_colPtr_->cameraWork_ == SphericalCamera::Behavior::B)GUI::Text("Behavior::B");
+    static Vector3 a_copy;
+    if (player_->GetPBM()->statePtr_->a.IsNonZero()) a_copy = player_->GetPBM()->statePtr_->a;
+    static float b_copy;
+    if (player_->GetPBM()->statePtr_->b != 0) b_copy = player_->GetPBM()->statePtr_->b;
+    GUI::Text("vec_sphericalEye: %f,%f,%f", a_copy.x, a_copy.y, a_copy.z);
+    GUI::Text("dot(p.f,cm.fdir): %f", b_copy);
+    GUI::Text("vec_pforward:     %f,%f,%f", player_->GetAxis3Ptr()->forward.x, player_->GetAxis3Ptr()->forward.y, player_->GetAxis3Ptr()->forward.z);
     GUI::End();
 
     // 遠目から惑星を見るカメラに切り替える処理
