@@ -252,45 +252,57 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
         }
 
-        //// プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        //// 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        //if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
-        //{
-        //    // カメラとプレイヤーの距離
-        //    float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
+        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        {
+            // カメラとプレイヤーの距離
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-        //    // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
-        //    if (dist < GetPlayerCurrentRad())
-        //    {
-        //        // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
-        //        // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
-        //        //current_rad_ = dist;
-        //    }
-        //}
-        //else
-        //{
-        //    // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-        //    if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-        //    {
-        //        SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-        //        //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-        //    }
-        //    else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-        //    {
-        //        SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-        //    }
+            // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
+            if (dist < GetPlayerCurrentRad())
+            {
+                // プレイヤーがカメラ側に向かって移動する際、カメラの座標を固定する意図
+                // しかし、現状だとカメラが遠ざかる処理が上手く機能していない為コメントアウト。
+                //current_rad_ = dist;
+            }
 
-        //    float theta = GetPlayerTheta();
-        //    float phi = GetPlayerPhi();
 
-        //    theta += 0.02f * inputVec.y;
-        //    phi += 0.02f * inputVec.x;
-        //    Math::Function::Loop(theta, 0.f, 6.28319f);
-        //    Math::Function::Loop(phi, 0.f, 6.28319f);
+            //float theta = GetPlayerTheta();
+            //float phi = GetPlayerPhi();
 
-        //    SetPlayerTheta(theta);
-        //    SetPlayerPhi(phi);
-        //}
+            //theta += 0.05f * inputVec.x;
+            //phi += 0.09f * inputVec.x;
+            //Math::Function::Loop(theta, 0.f, 6.28319f);
+            //Math::Function::Loop(phi, 0.f, 6.28319f);
+
+            //SetPlayerTheta(theta);
+            //SetPlayerPhi(phi);
+        }
+        else
+        {
+            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+            {
+                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
+                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+            }
+            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+            {
+                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+            }
+
+            float theta = GetPlayerTheta();
+            float phi = GetPlayerPhi();
+
+            theta += 0.02f * inputVec.y;
+            phi += 0.02f * inputVec.x;
+            Math::Function::Loop(theta, 0.f, 6.28319f);
+            Math::Function::Loop(phi, 0.f, 6.28319f);
+
+            SetPlayerTheta(theta);
+            SetPlayerPhi(phi);
+        }
 
 
     }
