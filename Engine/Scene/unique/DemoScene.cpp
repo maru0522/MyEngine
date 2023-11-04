@@ -172,8 +172,6 @@ void DemoScene::Update(void)
     //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, Vector3{0,80,0}, ppos);
     //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, ppos, ppos);
     GUI::Begin("player_behavior");
-    if (camera_colPtr_->cameraWork_ == SphericalCamera::Behavior::A)GUI::Text("Behavior::A");
-    if (camera_colPtr_->cameraWork_ == SphericalCamera::Behavior::B)GUI::Text("Behavior::B");
     static Vector3 a_copy;
     if (player_->GetPBM()->statePtr_->a.IsNonZero()) a_copy = player_->GetPBM()->statePtr_->a;
     static float b_copy;
@@ -302,7 +300,7 @@ void DemoScene::Update(void)
     rabbit3_->Update();
     planet_->Update();
 
-    camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
+    //camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
 
     //Matrix4 matWorld{ Math::Mat4::Identity() };
     //{
