@@ -171,110 +171,11 @@ void DemoScene::Update(void)
     Vector3 ppos = player_->GetTransformPtr()->position;
     //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, Vector3{0,80,0}, ppos);
     //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, ppos, ppos);
-    GUI::Begin("player_behavior");
-    static Vector3 a_copy;
-    if (player_->GetPBM()->statePtr_->a.IsNonZero()) a_copy = player_->GetPBM()->statePtr_->a;
-    static float b_copy;
-    if (player_->GetPBM()->statePtr_->b != 0) b_copy = player_->GetPBM()->statePtr_->b;
-    GUI::Text("vec_sphericalEye: %f,%f,%f", a_copy.x, a_copy.y, a_copy.z);
-    GUI::Text("dot(p.f,cm.fdir): %f", b_copy);
-    GUI::Text("vec_pforward:     %f,%f,%f", player_->GetAxis3Ptr()->forward.x, player_->GetAxis3Ptr()->forward.y, player_->GetAxis3Ptr()->forward.z);
-    GUI::End();
 
     // 遠目から惑星を見るカメラに切り替える処理
     const Vector3 kPos_watch_planet = { 0,190,0 };  // 惑星を見るためのカメラの座標（固定）
     static Vector3 pos_playerAtSwitching;           // カメラを切り替えたときの惑星を見るためのカメラの初期座標として切替時のプレイヤーの座標を入れておくもの
     static uint32_t phase_easingHoleCam;            // カメラのイージングの段階
-    // イージング用のタイマー
-    static FrameTimer phase0_timer_easingHoleCam;   // 初期座標から固定座標へのイージング用タイマー
-    static FrameTimer phase1_timer_easingHoleCam;   // 固定座標に滞在する用のタイマー
-    static FrameTimer phase2_timer_easingHoleCam;   // 固定座標から、転移先（プレイヤー追従カメラ）の座標へのイージング用タイマー
-
-    phase0_timer_easingHoleCam.Update();
-    phase1_timer_easingHoleCam.Update();
-    phase2_timer_easingHoleCam.Update();
-    float rate{};
-
-    switch (phase_easingHoleCam)
-    {
-    case 0:
-        if (phase0_timer_easingHoleCam.GetIsFinished())
-        {
-            phase_easingHoleCam++;
-            phase1_timer_easingHoleCam.Start(100);
-        }
-        else
-        {
-            rate = phase0_timer_easingHoleCam.GetTimeRate();
-        }
-        break;
-    case 1:
-        if (phase1_timer_easingHoleCam.GetIsFinished())
-        {
-            phase_easingHoleCam++;
-            phase2_timer_easingHoleCam.Start(50);
-        }
-        else
-        {
-            rate = phase1_timer_easingHoleCam.GetTimeRate();
-        }
-        break;
-    case 2:
-        if (phase2_timer_easingHoleCam.GetIsFinished())
-        {
-            phase_easingHoleCam = 3;
-        }
-        rate = phase2_timer_easingHoleCam.GetTimeRate();
-        break;
-    }
-
-    if (rate)
-    {
-        Vector3 pos_camera4Hole;
-        if (phase_easingHoleCam == 0)
-        {
-            pos_camera4Hole.x = Math::Ease::EaseInSine(rate, pos_playerAtSwitching.x, kPos_watch_planet.x);
-            pos_camera4Hole.y = Math::Ease::EaseInSine(rate, pos_playerAtSwitching.y, kPos_watch_planet.y);
-            pos_camera4Hole.z = Math::Ease::EaseInSine(rate, pos_playerAtSwitching.z, kPos_watch_planet.z);
-        }
-        else if (phase_easingHoleCam == 1)
-        {
-            pos_camera4Hole = kPos_watch_planet;
-        }
-        else if (phase_easingHoleCam == 2)
-        {
-            pos_camera4Hole.x = Math::Ease::EaseInSine(rate, kPos_watch_planet.x, camera_colPtr_->GetCoordinatePtr()->GetMatPos().x);
-            pos_camera4Hole.y = Math::Ease::EaseInSine(rate, kPos_watch_planet.y, camera_colPtr_->GetCoordinatePtr()->GetMatPos().y);
-            pos_camera4Hole.z = Math::Ease::EaseInSine(rate, kPos_watch_planet.z, camera_colPtr_->GetCoordinatePtr()->GetMatPos().z);
-        }
-        camera_4Hole_->GetTransformPtr()->position = pos_camera4Hole;
-    }
-
-    // プレイヤーが穴の当たり判定に触れたら
-    if (player_->isFallHole1_ || player_->isFallHole2_)
-    {
-        // イージング用タイマースタート
-        phase0_timer_easingHoleCam.Start(50);
-        // 穴用カメラの初期座標を、プレイヤー追従カメラの座標で記録
-        pos_playerAtSwitching = player_->GetTransformPtr()->position;
-        // マネージャーにセット
-        CameraManager::GetInstance()->SetCurrentCamera(camera_4Hole_.get());
-        phase_easingHoleCam = 0;
-    }
-
-    if (phase2_timer_easingHoleCam.GetIsFinished())
-    {
-        CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
-    }
-
-    if (KEYS::IsTrigger(DIK_7))
-    {
-        CameraManager::GetInstance()->SetCurrentCamera(camera_4Hole_.get());
-    }
-    if (KEYS::IsTrigger(DIK_6))
-    {
-        CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
-    }
 
     static bool isCamDebug{};
     GUI::Begin("debug tab maruyama");
@@ -359,14 +260,6 @@ void DemoScene::Update(void)
     ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);
     ImGui::Text("%f, %f, %f, %f", c2.m[3][0], c2.m[3][1], c2.m[3][2], c2.m[3][3]);
-
-    GUI::Space();
-    ImGui::Text("timer_easing");
-    GUI::Text("phase:%d", phase_easingHoleCam);
-    ImGui::Text("frame0:%f / %d", phase0_timer_easingHoleCam.GetFrameCurrent(), phase0_timer_easingHoleCam.GetFrameMax());
-    ImGui::Text("frame1:%f / %d", phase1_timer_easingHoleCam.GetFrameCurrent(), phase1_timer_easingHoleCam.GetFrameMax());
-    ImGui::Text("frame2:%f / %d", phase2_timer_easingHoleCam.GetFrameCurrent(), phase2_timer_easingHoleCam.GetFrameMax());
-    GUI::Space();
 
     GUI::End();
 

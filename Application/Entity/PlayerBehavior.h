@@ -43,9 +43,15 @@ public:
     // 他状態への遷移要件確認
     virtual void RequirementCheck(void) = 0;
 
-    Vector3 a;
-    Vector3 c;
-    float b;
+    float debug_aaaaa_;
+    float debug_bbbbb_;
+    float debug_ccccc_;
+    float debug_ddddd_;
+
+    Vector3 debug_eeeee_;
+    Vector3 debug_fffff_;
+    Vector3 debug_ggggg_;
+
 protected:
     //>> 変数
     PlayerBehavior nextState_;
@@ -216,12 +222,12 @@ public:
 
     void ManagementBehavior(void);
 
-    std::unique_ptr<IPlayerBehavior> statePtr_;
 private:
     // 状態遷移条件を満たしているか確認し、遷移する
     void NextStateCheck(void);
 
     //>> 変数
+    std::unique_ptr<IPlayerBehavior> statePtr_;
     PlayerBehaviorFactory stateFactory_;
     Player* playerPtr_;
 

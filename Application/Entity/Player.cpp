@@ -33,33 +33,37 @@ Player::~Player(void)
 
 void Player::Update(void)
 {
-    if (isFallHole1_)
-    {
-        transform_.position = { 0,-15,48 };
-        isFallHole1_ = false;
-    }
-    if (isFallHole2_)
-    {
-        transform_.position = { 0,15,-48 };
-        isFallHole2_ = false;
-    }
-
-    if (is_enterPipe1_)
-    {
-        transform_.position = { -35.855f,-42.f ,-21.024f };
-        is_enterPipe1_ = false;
-    }
-    if (is_enterPipe2_)
-    {
-        transform_.position = { 10.f,43.5f,14.f };
-        is_enterPipe2_ = false;
-    }
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
     appearance_->Update();
 
     pbm_.ManagementBehavior();
+    GUI::Begin("Debug");
+    static float da;
+    if (pbm_.GetStatePtr()->debug_aaaaa_) da = pbm_.GetStatePtr()->debug_aaaaa_;
+    GUI::Text("dot_pf2cf:       %f", da);
+    static float db;
+    if (pbm_.GetStatePtr()->debug_aaaaa_) db = pbm_.GetStatePtr()->debug_bbbbb_;
+    GUI::Text("dot_abs_pr2cf:   %f", db);
+    static float dc;
+    if (pbm_.GetStatePtr()->debug_aaaaa_) dc = pbm_.GetStatePtr()->debug_ccccc_;
+    GUI::Text("dot_pf2cf_2:     %f", dc);
+    static float dd;
+    if (pbm_.GetStatePtr()->debug_aaaaa_) dd = pbm_.GetStatePtr()->debug_ddddd_;
+    GUI::Text("dot_abs_pr2cf_2: %f", dd);
+
+    GUI::Space();
+    static Vector3 de;
+    if (pbm_.GetStatePtr()->debug_eeeee_.IsNonZero()) de = pbm_.GetStatePtr()->debug_eeeee_;
+    GUI::Text("vec_pf:          %f,%f,%f", de.x, de.y, de.z);
+    static Vector3 df;
+    if (pbm_.GetStatePtr()->debug_fffff_.IsNonZero()) df = pbm_.GetStatePtr()->debug_fffff_;
+    GUI::Text("vec_cf:          %f,%f,%f", df.x, df.y, df.z);
+    static Vector3 dg;
+    if (pbm_.GetStatePtr()->debug_ggggg_.IsNonZero()) dg = pbm_.GetStatePtr()->debug_ggggg_;
+    GUI::Text("vec_pr:          %f,%f,%f", dg.x, dg.y, dg.z);
+    GUI::End();
 
     // コライダー更新
     sphereCollider_.center = transform_.position;
@@ -236,14 +240,6 @@ void Player::OnCollision(void)
     {
         captureCount_rabbit++;
     }
-    if (sphereCollider_.GetOther()->GetID() == "tunnel1")
-    {
-        isFallHole1_ = true;
-    }
-    if (sphereCollider_.GetOther()->GetID() == "tunnel2")
-    {
-        isFallHole2_ = true;
-    }
     if (sphereCollider_.GetOther()->GetID() == "pipe_pushback")
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
@@ -267,14 +263,6 @@ void Player::OnCollision(void)
 
         // 補正された値で行列を生成
         matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
-    }
-    if (sphereCollider_.GetOther()->GetID() == "pipe_enterInside1")
-    {
-        is_enterPipe1_ = true;
-    }
-    if (sphereCollider_.GetOther()->GetID() == "pipe_enterInside2")
-    {
-        is_enterPipe2_ = true;
     }
 }
 

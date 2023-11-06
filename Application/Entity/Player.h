@@ -29,7 +29,7 @@ public:
     void Update(void);
     void Draw(void);
 
-    float default_rad_{ 40.f };
+    float default_rad_{ 50.f };
     float current_rad_{ default_rad_ };
     float theta_{ 0.85f };
     float phi_;
@@ -39,8 +39,6 @@ public:
     float dist_maxRangeAtBGAPoint_; // プレイヤーの斜め上の点から、カメラが離れられる最大距離
 
     int32_t captureCount_rabbit; // 兎を捕まえた回数
-    bool isFallHole1_;
-    bool isFallHole2_;
 
 private:
     // callback
@@ -57,8 +55,6 @@ private:
     float jumpVecNorm_{};
     bool isLanding_{};
 
-    bool is_enterPipe1_;
-    bool is_enterPipe2_;
     int32_t coinNum_;
 
     CollisionManager* colMPtr_;

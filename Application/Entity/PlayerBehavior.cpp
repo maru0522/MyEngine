@@ -225,65 +225,125 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
     // カメラ座標用の値を補正
     {
-        if (GetPlayerJumpVecNorm())
-        {
-            // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+        //if (GetPlayerJumpVecNorm())
+        //{
+        //    // カメラとプレイヤーの距離
+        //    float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
 
-            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-            SetPlayerCurrentRad(dist);
-        }
+        //    // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
+        //    // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+        //    SetPlayerCurrentRad(dist);
+        //}
 
 
         Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
         ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, GetPlayerTransform().position, GetPlayerTransform().position);
 
-        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+
+        debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward);
+        debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward));
+
+        if (debug_aaaaa_ < 0.7f)
         {
-
-            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
+            if (debug_bbbbb_ < 0.6f)
             {
-                float theta = GetPlayerTheta();
-                float phi = GetPlayerPhi();
+                //float theta = GetPlayerTheta();
+                //float phi = GetPlayerPhi();
 
-                theta += 0.005f * inputVec.x;
-                phi += 0.015f * inputVec.x;
+                //theta += 0.005f * inputVec.x;
+                //phi += 0.015f * inputVec.x;
+                //Math::Function::Loop(theta, 0.f, 6.28319f);
+                //Math::Function::Loop(phi, 0.f, 6.28319f);
+
+                //SetPlayerTheta(theta);
+                //SetPlayerPhi(phi);
+            }
+        }
+
+        const Axis3& axes_camera = *GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr();
+        const Axis3& axes_player = GetPlayerAxes();
+
+        float theta = GetPlayerTheta();
+        float phi = GetPlayerPhi();
+
+        // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満の時
+        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        float dot_pf2cf = Math::Vec3::Dot(axes_player.forward, axes_camera.forward);
+        debug_ccccc_ = dot_pf2cf;
+        debug_eeeee_ = axes_player.forward;
+        debug_fffff_ = axes_camera.forward;
+        GUI::Text("Debug");
+        if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
+        {
+            GUI::Text("if (dot_pf2cf < 0.7f) : true");
+            // プレイヤーの右方向とカメラの正面方向の内積が 0.7f 未満の時
+            float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
+            debug_ddddd_ = std::fabsf(dot_pr2cf);
+            debug_ggggg_ = axes_player.right;
+
+            if (std::fabsf(dot_pr2cf) > 0.7f)
+            {
+                GUI::Text("if (std::fabsf(dot_pr2cf) > 0.7f) : true");
+                theta -= 0.02f * inputVec.y;
+                //phi += 0.02f * inputVec.x;
+            }
+            else if (std::fabsf(dot_pr2cf) < 0.7f)
+            {
+                GUI::Text("else if (std::fabsf(dot_pr2cf) < 0.7f) : true");
+                theta = GetPlayerTheta();
+                phi = GetPlayerPhi();
+
+                theta += 0.007f * inputVec.x;
+                phi += 0.006f * inputVec.x;
                 Math::Function::Loop(theta, 0.f, 6.28319f);
                 Math::Function::Loop(phi, 0.f, 6.28319f);
 
-                SetPlayerTheta(theta);
-                SetPlayerPhi(phi);
             }
+
         }
         else
         {
-            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+            GUI::Text("if (dot_pf2cf < 0.7f) else : true");
+            //// 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+            //if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+            //{
+            //    SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
+            //    //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+            //}
+            //else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+            //{
+            //    SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+            //}
+
+            if (dot_pf2cf > 0.75f)
             {
-                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+                GUI::Text("if (dot_pf2cf > 0.75f) : true");
+                theta += 0.05f * inputVec.y;
+                phi += 0.02f * inputVec.x;
             }
-            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+            else
             {
-                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+                GUI::Text("if (dot_pf2cf > 0.75f) else : true");
+                theta += 0.02f * inputVec.y;
+                phi += 0.02f * inputVec.x;
             }
 
-            float theta = GetPlayerTheta();
-            float phi = GetPlayerPhi();
+            float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
+            if (dot_pr2cf > 0.7f)
+            {
+                GUI::Text("if (dot_pr2cf > 0.7f) : true");
+                theta -= 0.02f * inputVec.y;
+                //phi += 0.02f * inputVec.x;
+            }
 
-            theta += 0.02f * inputVec.y;
-            phi += 0.02f * inputVec.x;
             Math::Function::Loop(theta, 0.f, 6.28319f);
             Math::Function::Loop(phi, 0.f, 6.28319f);
 
-            SetPlayerTheta(theta);
-            SetPlayerPhi(phi);
         }
+
+        SetPlayerTheta(theta);
+        SetPlayerPhi(phi);
     }
 
     // 重力
