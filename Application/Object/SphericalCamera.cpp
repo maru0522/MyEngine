@@ -18,7 +18,6 @@ void SphericalCamera::Update(void)
 {
     using namespace Math;
 
-
     // ビュー行列
     matView_ = Math::Mat4::Inverse(coordinate_.mat_world);
 

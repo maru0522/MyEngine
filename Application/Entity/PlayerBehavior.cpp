@@ -275,35 +275,64 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         debug_eeeee_ = axes_player.forward;
         debug_fffff_ = axes_camera.forward;
         GUI::Text("Debug");
+
         if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
         {
-            GUI::Text("if (dot_pf2cf < 0.7f) : true");
-            // プレイヤーの右方向とカメラの正面方向の内積が 0.7f 未満の時
+            GUI::Text("分岐A");
+
             float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
             debug_ddddd_ = std::fabsf(dot_pr2cf);
             debug_ggggg_ = axes_player.right;
 
-            if (std::fabsf(dot_pr2cf) > 0.7f)
-            {
-                GUI::Text("if (std::fabsf(dot_pr2cf) > 0.7f) : true");
-                theta -= 0.02f * inputVec.y;
-                //phi += 0.02f * inputVec.x;
-            }
-            else if (std::fabsf(dot_pr2cf) < 0.7f)
-            {
-                GUI::Text("else if (std::fabsf(dot_pr2cf) < 0.7f) : true");
+            theta -= 0.0005f * inputVec.y;
+            theta += 0.01f * inputVec.x;
+            phi -= 0.01f * inputVec.x;
 
-                theta += 0.007f * inputVec.x;
-                phi += 0.006f * inputVec.x;
-                Math::Function::Loop(theta, 0.f, 6.28319f);
-                Math::Function::Loop(phi, 0.f, 6.28319f);
 
-            }
+
+            //// 縦方向に入力されている && ロール角が0以外
+            //if (inputVec.y && psi) // 縦方向に入力した際に、進行方向が歪まないようロール角を0にする
+            //{
+            //    GUI::Text("分岐A_1");
+            //    psi = 0.f;
+            //}
+
+            //// プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.7f より大きい
+            //if (std::fabsf(dot_pr2cf) > 0.7f)
+            //{
+            //    GUI::Text("分岐A_2");
+
+            //    theta -= 0.002f * inputVec.y;
+
+            //    // プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.8f 未満 （&& プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.7f より大きい）
+            //    if (std::fabsf(dot_pr2cf) < 0.79f)
+            //    {
+            //        GUI::Text("分岐A_2_a");
+            //        phi += 0.01f * inputVec.x;
+            //    }
+            //    // プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.8f より大きい
+            //    else
+            //    {
+            //        GUI::Text("分岐A_2_a-else");
+            //        theta -= 0.01f * inputVec.x;
+            //        phi -= 0.01f * inputVec.x;
+            //    }
+
+            //    //psi -= 0.005f * inputVec.x;
+            //}
+            //// プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.7f 未満
+            //else if (std::fabsf(dot_pr2cf) < 0.7f)
+            //{
+            //    GUI::Text("分岐A_2-else");
+
+            //    theta += 0.007f * inputVec.x;
+            //    phi += 0.006f * inputVec.x;
+            //}
 
         }
         else
         {
-            GUI::Text("if (dot_pf2cf < 0.7f) else : true");
+            GUI::Text("分岐A-else");
             //// 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
             //if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
             //{
@@ -317,13 +346,15 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
             if (dot_pf2cf > 0.75f)
             {
-                GUI::Text("if (dot_pf2cf > 0.75f) : true");
+                GUI::Text("分岐A-else_1");
+
                 theta += 0.05f * inputVec.y;
                 phi += 0.02f * inputVec.x;
             }
             else
             {
-                GUI::Text("if (dot_pf2cf > 0.75f) else : true");
+                GUI::Text("分岐A-else_1-else");
+
                 theta += 0.02f * inputVec.y;
                 phi += 0.02f * inputVec.x;
             }
@@ -331,15 +362,15 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
             if (dot_pr2cf > 0.7f)
             {
-                GUI::Text("if (dot_pr2cf > 0.7f) : true");
+                GUI::Text("分岐A-else_e");
                 theta -= 0.02f * inputVec.y;
                 //phi += 0.02f * inputVec.x;
             }
-
-            Math::Function::Loop(theta, 0.f, 6.28319f);
-            Math::Function::Loop(phi, 0.f, 6.28319f);
-
         }
+
+        Math::Function::Loop(theta, 0.f, 6.28319f);
+        Math::Function::Loop(phi, 0.f, 6.28319f);
+        Math::Function::Loop(psi, 0.f, 6.28319f);
         ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
@@ -461,9 +492,6 @@ void PlayerBehavior_MoveStoop::Execute(void)
             {
                 theta += 0.005f * inputVec.x;
                 phi += 0.015f * inputVec.x;
-                Math::Function::Loop(theta, 0.f, 6.28319f);
-                Math::Function::Loop(phi, 0.f, 6.28319f);
-
             }
         }
         else
@@ -481,11 +509,11 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
             theta += 0.02f * inputVec.y;
             phi += 0.02f * inputVec.x;
-            Math::Function::Loop(theta, 0.f, 6.28319f);
-            Math::Function::Loop(phi, 0.f, 6.28319f);
-
         }
 
+        Math::Function::Loop(theta, 0.f, 6.28319f);
+        Math::Function::Loop(phi, 0.f, 6.28319f);
+        Math::Function::Loop(psi, 0.f, 6.28319f);
         ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
@@ -644,10 +672,10 @@ void PlayerBehavior_Jump::Execute(void)
 
             theta += 0.02f * inputVec.y;
             phi += 0.02f * inputVec.x;
-            Math::Function::Loop(theta, 0.f, 6.28319f);
-            Math::Function::Loop(phi, 0.f, 6.28319f);
-
         }
+        Math::Function::Loop(theta, 0.f, 6.28319f);
+        Math::Function::Loop(phi, 0.f, 6.28319f);
+        Math::Function::Loop(psi, 0.f, 6.28319f);
         ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
@@ -779,8 +807,6 @@ void PlayerBehavior_JumpLong::Execute(void)
 
                 theta += 0.005f * inputVec.x;
                 phi += 0.015f * inputVec.x;
-                Math::Function::Loop(theta, 0.f, 6.28319f);
-                Math::Function::Loop(phi, 0.f, 6.28319f);
             }
         }
         else
@@ -798,9 +824,10 @@ void PlayerBehavior_JumpLong::Execute(void)
 
             theta += 0.02f * inputVec.y;
             phi += 0.02f * inputVec.x;
-            Math::Function::Loop(theta, 0.f, 6.28319f);
-            Math::Function::Loop(phi, 0.f, 6.28319f);
         }
+        Math::Function::Loop(theta, 0.f, 6.28319f);
+        Math::Function::Loop(phi, 0.f, 6.28319f);
+        Math::Function::Loop(psi, 0.f, 6.28319f);
         ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 

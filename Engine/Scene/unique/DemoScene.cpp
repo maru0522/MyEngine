@@ -119,6 +119,9 @@ void DemoScene::Update(void)
     GUI::Text("axes_.forward: %f, %f, %f", spc_a3.forward.x, spc_a3.forward.y, spc_a3.forward.z);
     GUI::Text("axes_.right:   %f, %f, %f", spc_a3.right.x, spc_a3.right.y, spc_a3.right.z);
     GUI::Text("axes_.up:      %f, %f, %f", spc_a3.up.x, spc_a3.up.y, spc_a3.up.z);
+    GUI::SliderFloat("theta_", &camera_colPtr_->theta_, 0.f, 6.28319f);
+    GUI::SliderFloat("phi_", &camera_colPtr_->phi_, 0.f, 6.28319f);
+    GUI::SliderFloat("psi_", &camera_colPtr_->psi_, 0.f, 6.28319f);
     GUI::End();
 
     //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
