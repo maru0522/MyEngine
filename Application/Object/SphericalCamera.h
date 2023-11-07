@@ -26,6 +26,7 @@ private:
 
 public:
     //>> setter
+    void SetSphericalRotate(float arg_theta, float arg_phi, float arg_psi);
 
     // プレイヤーの座標からプレイヤー方向へのベクトルを正面ベクトルとして算出する
     void CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec);
@@ -34,7 +35,8 @@ public:
 
     //void SetIsOldUpdateMethod(bool is_oldUpdateMethod) { is_oldUpdateMethod_ = is_oldUpdateMethod; }
 
-    void Debug_need(const Vector3& arg_spherical, const Vector3& pos,const Vector3& pos_eye);
+    void Debug_need(float arg_rad, const Vector3& arg_sphericalRotate, const Vector3& pos,const Vector3& pos_eye);
+    void Debug_need(float arg_rad, const Vector3& pos,const Vector3& pos_eye);
     void Debug_need2(float arg_psi);
 };
 

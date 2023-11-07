@@ -76,8 +76,6 @@ protected:
     float GetPlayerJumpVecNorm(void);
     float GetPlayerDefaultRad(void);
     float GetPlayerCurrentRad(void);
-    float GetPlayerTheta(void);
-    float GetPlayerPhi(void);
     float GetPlayerGravity(void);
     float GetPlayerJumpPower(void);
     float GetPlayerJumpLongPower(void);
@@ -93,8 +91,6 @@ protected:
     void SetPlayerAxes(const Axis3& arg_axes);
     void SetPlayerJumpVecNorm(float arg_jumpVecNorm);
     void SetPlayerCurrentRad(float arg_currentRad);
-    void SetPlayerTheta(float arg_theta);
-    void SetPlayerPhi(float arg_phi);
     void SetPlayerTransformPosition(const Vector3& arg_pos);
 };
 

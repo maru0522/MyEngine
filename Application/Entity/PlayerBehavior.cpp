@@ -106,7 +106,7 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
         Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
-        ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, GetPlayerTransform().position, GetPlayerTransform().position);
+        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
 
         //if (GetPlayerJumpVecNorm())
         //{
@@ -238,7 +238,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
         Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, GetPlayerTransform().position, GetPlayerTransform().position);
+        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
         if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
 
         debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward);
@@ -264,8 +264,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         const Axis3& axes_camera = *GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr();
         const Axis3& axes_player = GetPlayerAxes();
 
-        float theta = GetPlayerTheta();
-        float phi = GetPlayerPhi();
+        float theta = ptr_cam_spherical->theta_;
+        float phi = ptr_cam_spherical->phi_;
+        float psi = ptr_cam_spherical->psi_;
 
         // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満の時
         // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
@@ -291,8 +292,6 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             else if (std::fabsf(dot_pr2cf) < 0.7f)
             {
                 GUI::Text("else if (std::fabsf(dot_pr2cf) < 0.7f) : true");
-                theta = GetPlayerTheta();
-                phi = GetPlayerPhi();
 
                 theta += 0.007f * inputVec.x;
                 phi += 0.006f * inputVec.x;
@@ -341,10 +340,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             Math::Function::Loop(phi, 0.f, 6.28319f);
 
         }
-
-        SetPlayerTheta(theta);
-        SetPlayerPhi(phi);
+        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
+
 
     // 重力
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
@@ -448,7 +446,11 @@ void PlayerBehavior_MoveStoop::Execute(void)
         Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
-        ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, GetPlayerTransform().position, GetPlayerTransform().position);
+        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+
+        float theta = ptr_cam_spherical->theta_;
+        float phi = ptr_cam_spherical->phi_;
+        float psi = ptr_cam_spherical->psi_;
 
         // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
         // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
@@ -457,16 +459,11 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
             if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
             {
-                float theta = GetPlayerTheta();
-                float phi = GetPlayerPhi();
-
                 theta += 0.005f * inputVec.x;
                 phi += 0.015f * inputVec.x;
                 Math::Function::Loop(theta, 0.f, 6.28319f);
                 Math::Function::Loop(phi, 0.f, 6.28319f);
 
-                SetPlayerTheta(theta);
-                SetPlayerPhi(phi);
             }
         }
         else
@@ -482,17 +479,14 @@ void PlayerBehavior_MoveStoop::Execute(void)
                 SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
             }
 
-            float theta = GetPlayerTheta();
-            float phi = GetPlayerPhi();
-
             theta += 0.02f * inputVec.y;
             phi += 0.02f * inputVec.x;
             Math::Function::Loop(theta, 0.f, 6.28319f);
             Math::Function::Loop(phi, 0.f, 6.28319f);
 
-            SetPlayerTheta(theta);
-            SetPlayerPhi(phi);
         }
+
+        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
     // 驥榊鴨
@@ -600,6 +594,16 @@ void PlayerBehavior_Jump::Execute(void)
 
     // カメラ座標用の値を補正
     {
+        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+        if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
+
+        float theta = ptr_cam_spherical->theta_;
+        float phi = ptr_cam_spherical->phi_;
+        float psi = ptr_cam_spherical->psi_;
+
+
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
@@ -638,17 +642,13 @@ void PlayerBehavior_Jump::Execute(void)
                 SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
             }
 
-            float theta = GetPlayerTheta();
-            float phi = GetPlayerPhi();
-
             theta += 0.02f * inputVec.y;
             phi += 0.02f * inputVec.x;
             Math::Function::Loop(theta, 0.f, 6.28319f);
             Math::Function::Loop(phi, 0.f, 6.28319f);
 
-            SetPlayerTheta(theta);
-            SetPlayerPhi(phi);
         }
+        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
     // 重力
@@ -763,7 +763,11 @@ void PlayerBehavior_JumpLong::Execute(void)
         Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
-        ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, GetPlayerTransform().position, GetPlayerTransform().position);
+        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+
+        float theta = ptr_cam_spherical->theta_;
+        float phi = ptr_cam_spherical->phi_;
+        float psi = ptr_cam_spherical->psi_;
 
         // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
         // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
@@ -772,16 +776,11 @@ void PlayerBehavior_JumpLong::Execute(void)
 
             if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
             {
-                float theta = GetPlayerTheta();
-                float phi = GetPlayerPhi();
 
                 theta += 0.005f * inputVec.x;
                 phi += 0.015f * inputVec.x;
                 Math::Function::Loop(theta, 0.f, 6.28319f);
                 Math::Function::Loop(phi, 0.f, 6.28319f);
-
-                SetPlayerTheta(theta);
-                SetPlayerPhi(phi);
             }
         }
         else
@@ -797,17 +796,12 @@ void PlayerBehavior_JumpLong::Execute(void)
                 SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
             }
 
-            float theta = GetPlayerTheta();
-            float phi = GetPlayerPhi();
-
             theta += 0.02f * inputVec.y;
             phi += 0.02f * inputVec.x;
             Math::Function::Loop(theta, 0.f, 6.28319f);
             Math::Function::Loop(phi, 0.f, 6.28319f);
-
-            SetPlayerTheta(theta);
-            SetPlayerPhi(phi);
         }
+        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
     // 重力
@@ -917,16 +911,6 @@ float IPlayerBehavior::GetPlayerCurrentRad(void)
     return playerPtr_->current_rad_;
 }
 
-float IPlayerBehavior::GetPlayerTheta(void)
-{
-    return playerPtr_->theta_;
-}
-
-float IPlayerBehavior::GetPlayerPhi(void)
-{
-    return playerPtr_->phi_;
-}
-
 float IPlayerBehavior::GetPlayerGravity(void)
 {
     return playerPtr_->kGravity_;
@@ -985,16 +969,6 @@ void IPlayerBehavior::SetPlayerJumpVecNorm(float arg_jumpVecNorm)
 void IPlayerBehavior::SetPlayerCurrentRad(float arg_currentRad)
 {
     playerPtr_->current_rad_ = arg_currentRad;
-}
-
-void IPlayerBehavior::SetPlayerTheta(float arg_theta)
-{
-    playerPtr_->theta_ = arg_theta;
-}
-
-void IPlayerBehavior::SetPlayerPhi(float arg_phi)
-{
-    playerPtr_->phi_ = arg_phi;
 }
 
 void IPlayerBehavior::SetPlayerTransformPosition(const Vector3& arg_pos)

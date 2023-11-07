@@ -99,6 +99,13 @@ void SphericalCamera::Update(void)
 //    }
 //}
 
+void SphericalCamera::SetSphericalRotate(float arg_theta, float arg_phi, float arg_psi)
+{
+    theta_ = arg_theta;
+    phi_ = arg_phi;
+    psi_ = arg_psi;
+}
+
 void SphericalCamera::CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec)
 {
     vec_playerUp_ = pUpVec;
@@ -118,12 +125,20 @@ void SphericalCamera::CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec)
     //axes_.up = coordinate_.GetMatAxisY();
 }
 
-void SphericalCamera::Debug_need(const Vector3& arg_spherical, const Vector3& pos, const Vector3& pos_eye)
+void SphericalCamera::Debug_need(float arg_rad, const Vector3& arg_sphericalRotate, const Vector3& pos, const Vector3& pos_eye)
 {
-    radius_ = arg_spherical.x;
-    theta_ = arg_spherical.y;
-    phi_ = arg_spherical.z;
+    radius_ = arg_rad;
+    theta_ = arg_sphericalRotate.x;
+    phi_ = arg_sphericalRotate.y;
+    psi_ = arg_sphericalRotate.z;
 
+    transform_.position = pos;
+    pos_target = pos_eye;
+}
+
+void SphericalCamera::Debug_need(float arg_rad, const Vector3& pos, const Vector3& pos_eye)
+{
+    radius_ = arg_rad;
     transform_.position = pos;
     pos_target = pos_eye;
 }

@@ -163,13 +163,8 @@ void DemoScene::Update(void)
     //static float sPhi4Cam{ 0.f };
     //ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
 
-    ImGui::SliderFloat("sRadius4Cam", &player_->current_rad_, 0.f, 200.f);
-    ImGui::SliderFloat("sTheta4Cam", &player_->theta_, 0.f, 6.28319f);
-    ImGui::SliderFloat("sPhi4Cam", &player_->phi_, 0.f, 6.28319f);
     // カメラを球面座標系で管理する
     Vector3 ppos = player_->GetTransformPtr()->position;
-    //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, Vector3{0,80,0}, ppos);
-    //camera_colPtr_->Debug_need({ player_->current_rad_,player_->theta_,player_->phi_ }, ppos, ppos);
 
     // 遠目から惑星を見るカメラに切り替える処理
     const Vector3 kPos_watch_planet = { 0,190,0 };  // 惑星を見るためのカメラの座標（固定）
@@ -214,31 +209,6 @@ void DemoScene::Update(void)
     if (capturedRabbitCount == 3) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
 
     planet_->Update();
-
-    //camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
-
-    //Matrix4 matWorld{ Math::Mat4::Identity() };
-    //{
-    //    using namespace Math;
-
-    //    // プレイヤーとの距離だけ、球面座標の中心点から下がらせる
-    //    matWorld *= Mat4::Translate(matWorld, { 0,0,-player_->current_rad_ });
-
-    //    Matrix4 matRotate{ Mat4::Identity() };
-    //    //Matrix4 matRotate = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1 };
-    //    // 球面座標系の座標仕様に合わせて回転（移動）させる
-    //    matRotate = Mat4::RotationX(player_->theta_) * Mat4::RotationY(player_->phi_);
-
-    //    matWorld *= matRotate;
-
-    //    // ワールド座標の位置に持っていく（原点での計算後、プレイヤーの座標へ移動）
-    //    matWorld.m[3][0] += ppos.x;
-    //    matWorld.m[3][1] += ppos.y;
-    //    matWorld.m[3][2] += ppos.z;
-    //}
-
-    //camera_colPtr_->GetCoordinatePtr()->mat_world = matWorld;
-    //testP_->GetCoordinatePtr()->mat_world = matWorld;
 
     //for (auto& object : objects_) {
     //    object.second->Update();

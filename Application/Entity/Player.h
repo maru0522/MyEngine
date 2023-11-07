@@ -31,8 +31,6 @@ public:
 
     float default_rad_{ 50.f };
     float current_rad_{ default_rad_ };
-    float theta_{ 0.85f };
-    float phi_;
 
     Vector3 pos_backDiagonalAbove_; // プレイヤーの背後斜め上の点
     Vector3 pos_withinRangeAtBGAPoint_; // プレイヤーの斜め上の点から、カメラが離れられる最大範囲のpos
