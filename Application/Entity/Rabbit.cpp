@@ -29,6 +29,21 @@ Rabbit::~Rabbit(void)
 {
     colMPtr_->UnRegister(&sphereCollider_);
     colMPtr_->UnRegister(&detectPlayerCollider_);
+
+    // 丸影を使用している
+    if (circleShadows_num_ >= 0)
+    {
+        // LightManagerに渡す用のライトタイプ
+        LightType type = LightType::CIRCLE_SHADOW;
+
+        // 使用していた丸影を初期化
+        lightManagerPtr_->SetLightActive(type, circleShadows_num_, false);
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, { 0,0,0 });
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, { 0,0,0 });
+        lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, 0.f);
+        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, { 0.f,0.f,0.f });
+        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, { 0.f,0.f });
+    }
 }
 
 void Rabbit::Update(void)

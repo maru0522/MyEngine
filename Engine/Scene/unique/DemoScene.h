@@ -81,6 +81,7 @@ public:
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
 
     std::array<std::unique_ptr<Coin>, 19> coins_;
+    std::array<std::unique_ptr<Rabbit>, 3> rabbits_;
 
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;

@@ -103,11 +103,13 @@ void DemoScene::Initialize(void)
         }
     }
 
-    rabbit1_->SetupLightCircleShadows();
-    rabbit2_->GetTransformPtr()->position = { 10,60, 20 };
-    rabbit2_->SetupLightCircleShadows();
-    rabbit3_->GetTransformPtr()->position = { -10,60, 20 };
-    rabbit3_->SetupLightCircleShadows();
+    for (auto& rabbit : rabbits_)
+    {
+        rabbit = std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
+        rabbit->SetupLightCircleShadows();
+    }
+    rabbits_[1]->GetTransformPtr()->position = { 10,60, 20 };
+    rabbits_[2]->GetTransformPtr()->position = { -10,60, 20 };
 }
 
 void DemoScene::Update(void)
@@ -149,9 +151,6 @@ void DemoScene::Update(void)
     //lightGroup_->SetCircleShadowDistanceCasterLight(0, 100.f);
 
     png_backGround_->Update();
-
-    if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
-    if (rabbit1_->GetIsCaptured() && rabbit2_->GetIsCaptured() && rabbit3_->GetIsCaptured()) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
 
     lightGroup_->Update();
     testP_->Update();
@@ -196,9 +195,24 @@ void DemoScene::Update(void)
     }
 
     player_->Update();
-    rabbit1_->Update();
-    rabbit2_->Update();
-    rabbit3_->Update();
+
+    uint32_t capturedRabbitCount = 0;
+    for (auto& rabbit : rabbits_)
+    {
+        if(rabbit) 
+        { 
+            rabbit->Update();
+            if (rabbit->GetIsCaptured()) { rabbit.reset(); }
+        }
+        else
+        {
+            capturedRabbitCount++;
+        }
+    }
+
+    if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
+    if (capturedRabbitCount == 3) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
+
     planet_->Update();
 
     //camera_colPtr_->CalcAxis3(player_->GetTransformPtr()->position, player_->GetAxis3Ptr()->up.Normalize());
@@ -306,9 +320,10 @@ void DemoScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw();
-    rabbit1_->Draw();
-    rabbit2_->Draw();
-    rabbit3_->Draw();
+    for (auto& rabbit : rabbits_)
+    {
+        if (rabbit) { rabbit->Draw(); }
+    }
     if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
 
