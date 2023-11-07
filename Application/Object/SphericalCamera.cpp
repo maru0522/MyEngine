@@ -32,7 +32,7 @@ void SphericalCamera::Update(void)
     // プレイヤーとの距離だけ、球面座標の中心点から下がらせる
     matWorld *= Mat4::Translate(matWorld, { 0, 0, -radius_ });
     // 球面座標系の座標仕様に合わせて回転（移動）させる
-    matRotate = Mat4::RotationX(theta_) * Mat4::RotationY(phi_);
+    matRotate = Mat4::RotationZ(psi_) * Mat4::RotationX(theta_) * Mat4::RotationY(phi_);
     matWorld *= matRotate;
     // ワールド座標の位置に持っていく（原点での計算後、プレイヤーの座標へ移動）
     matWorld.m[3][0] += transform_.position.x;
@@ -40,9 +40,6 @@ void SphericalCamera::Update(void)
     matWorld.m[3][2] += transform_.position.z;
 
     coordinate_.mat_world = matWorld;
-
-    Matrix4 matRot4Roll = Math::QuaternionF::MakeRotateMatrix(Math::QuaternionF::MakeAxisAngle(axes_.up, psi_));
-    matWorld *= matRot4Roll;
 
     transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
     //##
