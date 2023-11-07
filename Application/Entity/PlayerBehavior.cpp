@@ -239,7 +239,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         ptr_cam_spherical->Debug_need({ GetPlayerCurrentRad(),GetPlayerTheta(),GetPlayerPhi() }, GetPlayerTransform().position, GetPlayerTransform().position);
-
+        if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
 
         debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward);
         debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward));

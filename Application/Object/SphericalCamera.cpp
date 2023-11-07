@@ -2,6 +2,7 @@
 #include "MathUtil.h"
 #include "WndAPI.h"
 #include "SimplifyImGui.h"
+#include "Quaternion.h"
 
 SphericalCamera::SphericalCamera(void)
 {
@@ -39,6 +40,10 @@ void SphericalCamera::Update(void)
     matWorld.m[3][2] += transform_.position.z;
 
     coordinate_.mat_world = matWorld;
+
+    Matrix4 matRot4Roll = Math::QuaternionF::MakeRotateMatrix(Math::QuaternionF::MakeAxisAngle(axes_.up, psi_));
+    matWorld *= matRot4Roll;
+
     transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
     //##
 
@@ -124,4 +129,9 @@ void SphericalCamera::Debug_need(const Vector3& arg_spherical, const Vector3& po
 
     transform_.position = pos;
     pos_target = pos_eye;
+}
+
+void SphericalCamera::Debug_need2(float arg_psi)
+{
+    psi_ = arg_psi;
 }

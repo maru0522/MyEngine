@@ -16,6 +16,7 @@ public:
     float radius_; // 中心点からの距離
     float theta_; // 仰角
     float phi_; // 方位角
+    float psi_; // ロール角
     Vector3 pos_target; // 目線の先
 
     Vector3 vec_playerUp_;
@@ -34,5 +35,6 @@ public:
     //void SetIsOldUpdateMethod(bool is_oldUpdateMethod) { is_oldUpdateMethod_ = is_oldUpdateMethod; }
 
     void Debug_need(const Vector3& arg_spherical, const Vector3& pos,const Vector3& pos_eye);
+    void Debug_need2(float arg_psi);
 };
 
