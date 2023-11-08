@@ -274,97 +274,71 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         debug_ccccc_ = dot_pf2cf;
         debug_eeeee_ = axes_player.forward;
         debug_fffff_ = axes_camera.forward;
+        float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
+        debug_ddddd_ = std::fabsf(dot_pr2cf);
+        debug_ggggg_ = axes_player.right;
+
         GUI::Text("Debug");
 
+        // プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
         if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
         {
-            GUI::Text("分岐A");
-
-            float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
-            debug_ddddd_ = std::fabsf(dot_pr2cf);
-            debug_ggggg_ = axes_player.right;
-
             theta -= 0.0005f * inputVec.y;
-            theta += 0.01f * inputVec.x;
-            phi -= 0.01f * inputVec.x;
-
-
-
-            //// 縦方向に入力されている && ロール角が0以外
-            //if (inputVec.y && psi) // 縦方向に入力した際に、進行方向が歪まないようロール角を0にする
-            //{
-            //    GUI::Text("分岐A_1");
-            //    psi = 0.f;
-            //}
-
-            //// プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.7f より大きい
-            //if (std::fabsf(dot_pr2cf) > 0.7f)
-            //{
-            //    GUI::Text("分岐A_2");
-
-            //    theta -= 0.002f * inputVec.y;
-
-            //    // プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.8f 未満 （&& プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.7f より大きい）
-            //    if (std::fabsf(dot_pr2cf) < 0.79f)
-            //    {
-            //        GUI::Text("分岐A_2_a");
-            //        phi += 0.01f * inputVec.x;
-            //    }
-            //    // プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.8f より大きい
-            //    else
-            //    {
-            //        GUI::Text("分岐A_2_a-else");
-            //        theta -= 0.01f * inputVec.x;
-            //        phi -= 0.01f * inputVec.x;
-            //    }
-
-            //    //psi -= 0.005f * inputVec.x;
-            //}
-            //// プレイヤーの右方向とカメラの正面方向の内積の絶対値が 0.7f 未満
-            //else if (std::fabsf(dot_pr2cf) < 0.7f)
-            //{
-            //    GUI::Text("分岐A_2-else");
-
-            //    theta += 0.007f * inputVec.x;
-            //    phi += 0.006f * inputVec.x;
-            //}
-
         }
         else
         {
-            GUI::Text("分岐A-else");
-            //// 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-            //if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-            //{
-            //    SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-            //    //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-            //}
-            //else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-            //{
-            //    SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-            //}
-
-            if (dot_pf2cf > 0.75f)
+            // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
+            if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
             {
-                GUI::Text("分岐A-else_1");
-
-                theta += 0.05f * inputVec.y;
-                phi += 0.02f * inputVec.x;
+                // 画角を早めに戻すように大きめに角度を変化させる
+                theta += 0.22f * inputVec.y; // 
             }
+            // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
             else
             {
-                GUI::Text("分岐A-else_1-else");
-
-                theta += 0.02f * inputVec.y;
-                phi += 0.02f * inputVec.x;
+                // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
+                if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+                {
+                    // 画角を早めに戻すように少し大きめに角度を変化させる
+                    theta += 0.0197f * inputVec.y; // 
+                }
+                // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
+                else
+                {
+                    theta += 0.01f * inputVec.y;
+                }
             }
+        }
 
-            float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
-            if (dot_pr2cf > 0.7f)
+
+        // プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
+        if (dot_pf2cf < 0.7f)
+        {
+
+            phi -= 0.0005f * inputVec.x;
+        }
+        else
+        {
+            // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
+            if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
             {
-                GUI::Text("分岐A-else_e");
-                theta -= 0.02f * inputVec.y;
-                //phi += 0.02f * inputVec.x;
+                // 画角を早めに戻すように大きめに角度を変化させる
+                phi -= 0.22f * inputVec.x; // 
+            }
+            // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
+            else
+            {
+                // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
+                if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+                {
+                    // 画角を早めに戻すように少し大きめに角度を変化させる
+                    phi -= 0.0197f * inputVec.x; // 
+                }
+                // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
+                else
+                {
+                    phi -= 0.01f * inputVec.x;
+                }
             }
         }
 
