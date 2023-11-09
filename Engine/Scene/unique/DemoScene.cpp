@@ -174,23 +174,7 @@ void DemoScene::Update(void)
     static Vector3 pos_playerAtSwitching;           // カメラを切り替えたときの惑星を見るためのカメラの初期座標として切替時のプレイヤーの座標を入れておくもの
     static uint32_t phase_easingHoleCam;            // カメラのイージングの段階
 
-    static bool isCamDebug{};
     GUI::Begin("debug tab maruyama");
-    if (GUI::ButtonTrg("switch camera"))
-    {
-        // デバッグ用のカメラと切替
-        if (isCamDebug)
-        {
-            isCamDebug = false;
-            CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
-        }
-        else
-        {
-            isCamDebug = true;
-            CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
-            camera_debugPtr_->SetIsDebugMode(true);
-        }
-    }
 
     player_->Update();
 
@@ -221,7 +205,6 @@ void DemoScene::Update(void)
     //    HotReload(lvdPtr_.get());
     //}
 
-    GUI::Text(isCamDebug ? "true" : "false");
     //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
     //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
     GUI::Space();
@@ -350,15 +333,6 @@ void DemoScene::CameraSetUp(void)
     camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };            // 穴に落ちたとき用カメラの座標
     camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 }; // 穴に落ちたとき用カメラの回転
     //camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
-
-
-    //>> カメラのデバッグカメラモードをON
-    camera_debugPtr_->SetIsDebugMode(true); // デバッグカメラ
-
-
-    //>> カメラをマネージャーにセット
-    /*CameraManager::GetInstance()->SetCurrentCamera(cameraPtr.get());*/
-    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get()); // プレイヤー用カメラを設定
 }
 
 //void DemoScene::DeployObj(LevelData* lvdPtr)

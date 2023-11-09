@@ -3,6 +3,8 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "Transform.h"
+#include <unordered_map>
+#include <string>
 
 class Camera
 {
@@ -15,9 +17,6 @@ public:
 
     //** cameraManager用
     void UpdateOrthoGraphic(void);
-
-private:
-    Vector3 Move(void);
 
 protected:
     // 変数
@@ -34,15 +33,12 @@ protected:
 
     Vector3* targetPtr_;
     bool isFollow_;
-
-    bool isDebugMode_{};
+    std::string id_;
 
 public:
     // setter
     void Follow(Vector3* targetPosPtr);
     void UnFollow(void);
-
-    inline void SetIsDebugMode(bool isDebug) { isDebugMode_ = isDebug; }
 
     // getter
     inline TransformMatrix* GetCoordinatePtr(void) { return &coordinate_; }
@@ -59,27 +55,58 @@ public:
     inline bool GetIsFollow(void) { return isFollow_; }
 };
 
+class DebugCamera final : public Camera
+{
+public:
+    //>> 関数
+    DebugCamera(void) : Camera() {}
+    DebugCamera(const Vector3& arg_pos) : Camera(arg_pos) {}
+    virtual ~DebugCamera(void) = default;
+    virtual void Update(void);
+};
+
 class CameraManager final
 {
 private:
-    // Singleton
-    CameraManager(void) : current_(nullptr) {};
+    //>> Singleton
+    CameraManager(void) : current_(nullptr), is_finalized_(false) {};
     ~CameraManager(void) {};
     CameraManager(const CameraManager&) = delete;
     CameraManager& operator=(const CameraManager&) = delete;
 
-    // 変数
-    Camera* current_;
+    //>> 定義
+    using KEY = std::string;
 
 public:
-    // 関数
+    //>> 関数
     static CameraManager* GetInstance(void);
-
+    
+    void Initialize(void);
     void Update(void);
+    void Finalize(void);
 
-    // setter
-    void SetCurrentCamera(Camera* cameraPtr);
+    // 一般的なカメラの登録
+    void Register(const std::string& arg_key, Camera* arg_cameraPtr);
+    void UnRegister(const std::string& arg_key);
+    // デバッグカメラの生成
+    void CreateDebugCamera(Camera* arg_cameraPtr);
+    void DestroyDebugCamera(const std::string& arg_key);
 
-    // getter
+private:
+    void RecursiveSearchKey(std::string& arg_key, int32_t& arg_duplicateNum);
+
+    //>> 変数
+    bool is_finalized_;
+    bool is_switchCameraByCreateDebugCam_;
+
+    Camera* current_;
+    std::unordered_map<KEY, Camera*> umap_cameras_;
+    std::unordered_map<KEY, std::unique_ptr<DebugCamera>> umap_debugCameras_;
+
+public:
+    //>> setter
+    void SetCurrentCamera(const std::string& arg_key);
+
+    //>> getter
     inline Camera* GetCurrentCamera(void) { return current_; }
 };

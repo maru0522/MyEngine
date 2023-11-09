@@ -7,6 +7,12 @@
 class UI
 {
 private:
+    //>> Singleton
+    UI(void) = default;
+    ~UI(void) = default;
+    UI(const UI&) = delete;
+    UI& operator=(const UI&) = delete;
+
     //>> 定義
     using KEY = std::string;
 
@@ -14,9 +20,6 @@ public:
     using fsPath = std::filesystem::path;
 
     //>> 関数
-    UI(void) = default;
-    ~UI(void) = default;
-
     static UI* GetInstance(void);
 
     void Initialize(void);
@@ -29,7 +32,7 @@ public:
 
     //>> 変数
     std::unordered_map<KEY, Sprite> umap_sprites_;
-    bool isFinalized_;
+    bool is_finalized_;
 
 };
 

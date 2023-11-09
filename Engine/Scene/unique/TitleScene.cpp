@@ -6,10 +6,7 @@
 
 void TitleScene::Initialize(void)
 {
-    //>> カメラのデバッグカメラモードをON
-    camera_debugPtr_->SetIsDebugMode(true); // デバッグカメラ
-
-    CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
+    //CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
 
     UI::GetInstance()->Register("png_titleLogo", "Resources/SUPER_MARUYAMA_GALAXY.png");
 }
