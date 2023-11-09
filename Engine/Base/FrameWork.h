@@ -10,6 +10,7 @@
 #include "ImguiController.h"
 #include "AudioManager.h"
 #include "PostEffectManager.h"
+#include "UI.h"
 
 class FrameWork
 {
@@ -35,6 +36,7 @@ protected:
     InitDirectX* iDXPtr_{ InitDirectX::GetInstance() };                                         // ptr_InitDirectX
     PSOManager* psoMPtr_{ PSOManager::GetInstance() };                                          // ptr_GraphicsPipeline
     CameraManager* camMPtr_{ CameraManager::GetInstance() };                                    // ptr_CameraManager
+    UI* uiPtr_{ UI::GetInstance() };
 
     std::unique_ptr<WndAPI> wnd_{ std::make_unique<WndAPI>() };                                 // WndAPI
     std::unique_ptr<TextureManager> texM_{ std::make_unique<TextureManager>() };                // textureManager

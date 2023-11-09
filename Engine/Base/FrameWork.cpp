@@ -56,6 +56,9 @@ void FrameWork::Initialize()
     // Sound初期化
     Sound::StaticInitalize(audioM_.get());
 
+    // UI初期化（Spriteより後で行わなければならない）
+    uiPtr_->Initialize();
+
     // SceneManager初期化
     SceneManager::GetInstance()->Initialize(SceneName::TITLE);
     // ImguiController初期化
@@ -86,6 +89,9 @@ void FrameWork::Update(void)
 
 void FrameWork::Finalize(void)
 {
+    // UI終了
+    uiPtr_->Finalize();
+
     // ウィンドウクラスを登録解除
     wnd_->Delete();
 }

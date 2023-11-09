@@ -101,6 +101,7 @@
     <ClCompile Include="Application\Object\Pipe.cpp" />
     <ClCompile Include="Application\Object\Rock.cpp" />
     <ClCompile Include="Application\Object\StickyBall.cpp" />
+    <ClCompile Include="Application\UI.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="Application\Object\Pipe.h" />
     <ClInclude Include="Application\Object\Rock.h" />
     <ClInclude Include="Application\Object\StickyBall.h" />
+    <ClInclude Include="Application\UI.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
