@@ -48,6 +48,7 @@ public:
 
     void SetAxis3(const Axis3& arg_axes) { axes_ = arg_axes; }
     void SetTransform(const Transform& arg_transform) { transform_ = arg_transform; }
+    void SetTransformMatrix(const TransformMatrix& arg_transMat) { transformMatrix = arg_transMat; }
 
     // getter
     const std::string& GetId(void) { return id_; }

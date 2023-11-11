@@ -108,14 +108,22 @@ void CameraManager::CreateDebugCamera(ICamera* arg_cameraPtr)
 
     // 登録
     vector_debugCameras_.emplace_back(std::make_unique<DebugCamera>(id));
+
+    const Vector3 pos = { arg_cameraPtr->GetTransformMatrix().mat_pos.m[3][0], arg_cameraPtr->GetTransformMatrix().mat_pos.m[3][1], arg_cameraPtr->GetTransformMatrix().mat_pos.m[3][2] };
+    const Vector3 rot = { 0.f,0.f,0.f };
+    const Vector3 sca= { 1.f,1.f,1.f };
+    const Transform copy = { pos,rot,sca };
+
     // 座標系を基になった、カメラと揃える
-    vector_debugCameras_.back()->SetTransform(arg_cameraPtr->GetTransformMatrix().);
+    vector_debugCameras_.back()->SetTransform(copy);
     // 姿勢を基になった、カメラと揃える
     vector_debugCameras_.back()->SetAxis3(arg_cameraPtr->GetAxis3());
     // 投影始端を基になった、カメラと揃える
     vector_debugCameras_.back()->SetNearZ(arg_cameraPtr->GetNearZ());
     // 投影終端を基になった、カメラと揃える
     vector_debugCameras_.back()->SetFarZ(arg_cameraPtr->GetFarZ());
+    // ワールド行列を基になった、カメラと揃える
+    vector_debugCameras_.back()->SetTransformMatrix(arg_cameraPtr->GetTransformMatrix());
 
     // デバッグカメラ生成時、使用するカメラも、そちらに切り替えるか
     if (is_switchCameraByCreateDebugCam_) { SetCurrentCamera(vector_debugCameras_.back()->GetId()); }

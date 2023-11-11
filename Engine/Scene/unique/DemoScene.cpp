@@ -217,7 +217,7 @@ void DemoScene::Update(void)
 
     GUI::BlankLine();
     ImGui::Text("followCamera matrix");
-    Matrix4 c = camera_colPtr_->GetCoordinate().mat_world;
+    Matrix4 c = camera_colPtr_->GetTransformMatrix().mat_world;
     ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);
@@ -225,7 +225,7 @@ void DemoScene::Update(void)
 
     GUI::BlankLine();
     ImGui::Text("holeCamera matrix");
-    Matrix4 c2 = camera_4Hole_->GetCoordinate().mat_world;
+    Matrix4 c2 = camera_4Hole_->GetTransformMatrix().mat_world;
     ImGui::Text("%f, %f, %f, %f", c2.m[0][0], c2.m[0][1], c2.m[0][2], c2.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);

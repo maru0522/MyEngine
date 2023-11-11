@@ -442,7 +442,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
 
             // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
             // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
@@ -613,7 +613,7 @@ void PlayerBehavior_Jump::Execute(void)
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
 
             // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
             // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
@@ -625,7 +625,7 @@ void PlayerBehavior_Jump::Execute(void)
         if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
 
             // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
             if (dist < GetPlayerCurrentRad())
@@ -758,7 +758,7 @@ void PlayerBehavior_JumpLong::Execute(void)
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
 
             // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
             // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
