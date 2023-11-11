@@ -3,10 +3,13 @@
 #include "SceneManager.h"
 #include "SimplifyImGui.h"
 #include "UI.h"
+#include "CameraManager.h"
 
 void TitleScene::Initialize(void)
 {
     //CameraManager::GetInstance()->SetCurrentCamera(camera_debugPtr_.get());
+    CameraManager::GetInstance()->Register(camera_title.get());
+    CameraManager::GetInstance()->SetCurrentCamera(camera_title.get());
 
     UI::GetInstance()->Register("png_titleLogo", "Resources/SUPER_MARUYAMA_GALAXY.png");
 }
@@ -40,4 +43,5 @@ void TitleScene::Draw2dBack(void)
 
 void TitleScene::Finalize(void)
 {
+    CameraManager::GetInstance()->UnRegister(camera_title.get());
 }

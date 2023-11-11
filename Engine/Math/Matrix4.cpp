@@ -1,4 +1,4 @@
-﻿#include "MathUtil.h"
+#include "MathUtil.h"
 #include "Matrix4.h"
 #include "Vector3.h"
 #include <cmath> // sin cos

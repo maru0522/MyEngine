@@ -15,10 +15,11 @@ namespace GUI
     // return bool
     bool ButtonTrg(const std::string& buttonName, const ImVec2& size = { 0,0 });
     bool DropDownTrg(const std::string& dropdownName, int* currentNum, const char* const* items, int arraySize);
+    bool DropDownTrg(const std::string& arg_label, std::string& arg_currentItem, const std::vector<std::string>& arg_list);
 
     void CheckBox(const std::string& checkboxName, bool* v);
     void Text(const char* fmt,...);
-    void Space(void);
+    void BlankLine(void);
 
     void SliderFloat(const std::string& arg_label, float* arg_value, float arg_value_min, float arg_value_max);
     void SliderFloat2(const std::string& arg_label, float arg_value[2], float arg_value_min, float arg_value_max);

@@ -1,69 +1,7 @@
 #pragma once
 #include <memory>
-#include "Vector3.h"
-#include "Matrix4.h"
-#include "Transform.h"
-#include <unordered_map>
-#include <string>
-
-class Camera
-{
-public:
-    // 関数
-    Camera(void) : Camera(Vector3{ 0.f,0.f,0.f }) {}
-    Camera(const Vector3& pos);
-    virtual ~Camera(void) = default;
-    virtual void Update(void);
-
-    //** cameraManager用
-    void UpdateOrthoGraphic(void);
-
-protected:
-    // 変数
-    TransformMatrix coordinate_;
-    Transform transform_;
-    Axis3 axes_;
-
-
-    Matrix4 matProj_OrthoGraphic_;
-    Matrix4 matProj_Perspective_;
-    Matrix4 matView_;
-    float nearZ_;
-    float farZ_;
-
-    Vector3* targetPtr_;
-    bool isFollow_;
-    std::string id_;
-
-public:
-    // setter
-    void Follow(Vector3* targetPosPtr);
-    void UnFollow(void);
-
-    // getter
-    inline TransformMatrix* GetCoordinatePtr(void) { return &coordinate_; }
-    Transform* GetTransformPtr(void) { return &transform_; }
-    Axis3* GetAxis3Ptr(void) { return &axes_; }
-
-    inline const Matrix4& GetMatProjOrthoGraphic(void) { return matProj_OrthoGraphic_; }
-    inline const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }
-    inline const Matrix4& GetMatView(void) { return matView_; }
-
-    inline float GetNearZ(void) { return nearZ_; }
-    inline float GetFarZ(void) { return farZ_; }
-
-    inline bool GetIsFollow(void) { return isFollow_; }
-};
-
-class DebugCamera final : public Camera
-{
-public:
-    //>> 関数
-    DebugCamera(void) : Camera() {}
-    DebugCamera(const Vector3& arg_pos) : Camera(arg_pos) {}
-    virtual ~DebugCamera(void) = default;
-    virtual void Update(void);
-};
+#include "ICamera.h"
+#include "DebugCamera.h"
 
 class CameraManager final
 {
@@ -74,9 +12,6 @@ private:
     CameraManager(const CameraManager&) = delete;
     CameraManager& operator=(const CameraManager&) = delete;
 
-    //>> 定義
-    using KEY = std::string;
-
 public:
     //>> 関数
     static CameraManager* GetInstance(void);
@@ -86,27 +21,40 @@ public:
     void Finalize(void);
 
     // 一般的なカメラの登録
-    void Register(const std::string& arg_key, Camera* arg_cameraPtr);
-    void UnRegister(const std::string& arg_key);
+    void Register(ICamera* arg_cameraPtr);
+    // 一般的なカメラの抹消
+    void UnRegister(ICamera* arg_cameraPtr);
+    void UnRegister(const std::string& arg_id);
     // デバッグカメラの生成
-    void CreateDebugCamera(Camera* arg_cameraPtr);
-    void DestroyDebugCamera(const std::string& arg_key);
+    void CreateDebugCamera(ICamera* arg_cameraPtr);
+    // デバッグカメラの削除
+    void DestroyDebugCamera(const std::string& arg_id);
 
 private:
-    void RecursiveSearchKey(std::string& arg_key, int32_t& arg_duplicateNum);
+    void DebugGui(void);
+
+    // ベクタ配列に登録されたカメラの名前に被りがあるか検索（カメラ用）
+    bool IsContainSameId_Camera(const std::string& arg_id);
+    // ベクタ配列に登録されたカメラの名前に被りがあるか検索（デバッグカメラ用）
+    bool IsContainSameId_DebugCamera(const std::string& arg_id);
+    // 再帰的に名前検索と末尾の数字加算を繰り返し、名前被り無く登録できるようにする（カメラ用）
+    void RecursiveSearchId_Camera(std::string& arg_id, int32_t& arg_duplicateNum);
+    // 再帰的に名前検索と末尾の数字加算を繰り返し、名前被り無く登録できるようにする（デバッグカメラ用）
+    void RecursiveSearchId_DebugCamera(std::string& arg_id, int32_t& arg_duplicateNum);
 
     //>> 変数
     bool is_finalized_;
     bool is_switchCameraByCreateDebugCam_;
 
-    Camera* current_;
-    std::unordered_map<KEY, Camera*> umap_cameras_;
-    std::unordered_map<KEY, std::unique_ptr<DebugCamera>> umap_debugCameras_;
+    ICamera* current_;
+    std::vector<ICamera*> vector_cameras_;
+    std::vector<std::unique_ptr<DebugCamera>> vector_debugCameras_;
 
 public:
     //>> setter
-    void SetCurrentCamera(const std::string& arg_key);
+    void SetCurrentCamera(ICamera* arg_cameraPtr);
+    void SetCurrentCamera(const std::string& arg_id);
 
     //>> getter
-    inline Camera* GetCurrentCamera(void) { return current_; }
+    inline ICamera* GetCurrentCamera(void) { return current_; }
 };

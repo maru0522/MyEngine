@@ -115,7 +115,7 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     GUI::Begin("spherical camera");
-    Axis3 spc_a3 = *camera_colPtr_->GetAxis3Ptr();
+    Axis3 spc_a3 = camera_colPtr_->GetAxis3();
     GUI::Text("axes_.forward: %f, %f, %f", spc_a3.forward.x, spc_a3.forward.y, spc_a3.forward.z);
     GUI::Text("axes_.right:   %f, %f, %f", spc_a3.right.x, spc_a3.right.y, spc_a3.right.z);
     GUI::Text("axes_.up:      %f, %f, %f", spc_a3.up.x, spc_a3.up.y, spc_a3.up.z);
@@ -207,7 +207,7 @@ void DemoScene::Update(void)
 
     //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
     //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
-    GUI::Space();
+    GUI::BlankLine();
     ImGui::Text("dummyp matrix");
     Matrix4 p = testP_->GetCoordinatePtr()->mat_world;
     ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
@@ -215,17 +215,17 @@ void DemoScene::Update(void)
     ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
 
-    GUI::Space();
+    GUI::BlankLine();
     ImGui::Text("followCamera matrix");
-    Matrix4 c = camera_colPtr_->GetCoordinatePtr()->mat_world;
+    Matrix4 c = camera_colPtr_->GetCoordinate().mat_world;
     ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);
     ImGui::Text("%f, %f, %f, %f", c.m[3][0], c.m[3][1], c.m[3][2], c.m[3][3]);
 
-    GUI::Space();
+    GUI::BlankLine();
     ImGui::Text("holeCamera matrix");
-    Matrix4 c2 = camera_4Hole_->GetCoordinatePtr()->mat_world;
+    Matrix4 c2 = camera_4Hole_->GetCoordinate().mat_world;
     ImGui::Text("%f, %f, %f, %f", c2.m[0][0], c2.m[0][1], c2.m[0][2], c2.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);
@@ -323,16 +323,24 @@ void DemoScene::Draw2dBack(void)
 
 void DemoScene::Finalize(void)
 {
+    //>> カメラの登録抹消
+    CameraManager::GetInstance()->UnRegister(camera_debugPtr_.get());
+    CameraManager::GetInstance()->UnRegister(camera_colPtr_.get());
+    CameraManager::GetInstance()->UnRegister(camera_4Hole_.get());
 }
 
 void DemoScene::CameraSetUp(void)
 {
     //>> カメラの座標設定
-    camera_debugPtr_->GetTransformPtr()->position = { 0,0,-70 };         // デバッグカメラの座標
-    camera_colPtr_->GetTransformPtr()->position = { 3,172,-3 };          // プレイヤー用カメラの座標
-    camera_4Hole_->GetTransformPtr()->position = { 0,190,0 };            // 穴に落ちたとき用カメラの座標
-    camera_4Hole_->GetTransformPtr()->rotation = { 1.5725f,-1.2175f,0 }; // 穴に落ちたとき用カメラの回転
+    CameraManager::GetInstance()->Register(camera_debugPtr_.get());
+    camera_debugPtr_->SetTransform(Transform{ { 0,0,-70 }, camera_debugPtr_->GetTransform().rotation, camera_debugPtr_->GetTransform().scale });   // デバッグカメラの座標
+    CameraManager::GetInstance()->Register(camera_colPtr_.get());
+    camera_colPtr_->SetTransform(Transform{ { 3,172,-3 }, camera_colPtr_->GetTransform().rotation, camera_colPtr_->GetTransform().scale });        // プレイヤー用カメラの座標
+    CameraManager::GetInstance()->Register(camera_4Hole_.get());
+    camera_4Hole_->SetTransform(Transform{ { 0, 190, 0 }, { 1.5725f,-1.2175f,0} , camera_4Hole_->GetTransform().scale });                          // 穴に落ちたとき用カメラの座標と回転
     //camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
+
+    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
 }
 
 //void DemoScene::DeployObj(LevelData* lvdPtr)

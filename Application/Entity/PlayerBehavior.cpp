@@ -103,9 +103,10 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
 
     // カメラ座標用の値を補正
     {
-        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
+        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
 
         //if (GetPlayerJumpVecNorm())
@@ -217,7 +218,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     inputVec = inputVec.Normalize();
 
     // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
     // 移動ベクトル = 前後vec + 水平vec
@@ -236,13 +237,14 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         //}
 
 
-        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
         if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
 
-        debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward);
-        debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward));
+        debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward);
+        debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward));
 
         if (debug_aaaaa_ < 0.7f)
         {
@@ -261,7 +263,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             }
         }
 
-        const Axis3& axes_camera = *GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr();
+        const Axis3& axes_camera = GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3();
         const Axis3& axes_player = GetPlayerAxes();
 
         float theta = ptr_cam_spherical->theta_;
@@ -429,7 +431,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
     inputVec = inputVec.Normalize();
 
     // 繧ｫ繝｡繝ｩ隕也せ縺ｮ繝励Ξ繧､繝､繝ｼ遘ｻ蜍輔・繧ｯ繝医Ν
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 豁｣髱｢Vec: cross(camera.rightVec, p.upVec)
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 豁｣髱｢Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 蜿ｳVec: cross(p.upVec, pForwardFromCamera)
 
     // 遘ｻ蜍輔・繧ｯ繝医Ν = 蜑榊ｾ計ec + 豌ｴ蟷ｳvec
@@ -440,7 +442,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
 
             // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
             // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
@@ -448,9 +450,10 @@ void PlayerBehavior_MoveStoop::Execute(void)
         }
 
 
-        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
+        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
 
         float theta = ptr_cam_spherical->theta_;
@@ -459,7 +462,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
         // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
         // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
         {
 
             if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
@@ -588,7 +591,7 @@ void PlayerBehavior_Jump::Execute(void)
     inputVec = inputVec.Normalize();
 
     // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
     // 移動ベクトル = 前後vec + 水平vec
@@ -596,7 +599,8 @@ void PlayerBehavior_Jump::Execute(void)
 
     // カメラ座標用の値を補正
     {
-        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
         if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
@@ -609,7 +613,7 @@ void PlayerBehavior_Jump::Execute(void)
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
 
             // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
             // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
@@ -618,10 +622,10 @@ void PlayerBehavior_Jump::Execute(void)
 
         // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
         // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
 
             // 該当距離が、本来設定されているプレイヤーとの距離より短い場合、該当距離を設定距離とする。
             if (dist < GetPlayerCurrentRad())
@@ -743,7 +747,7 @@ void PlayerBehavior_JumpLong::Execute(void)
     inputVec = inputVec.Normalize();
 
     // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
     // 移動ベクトル = 前後vec + 水平vec
@@ -754,7 +758,7 @@ void PlayerBehavior_JumpLong::Execute(void)
         if (GetPlayerJumpVecNorm())
         {
             // カメラとプレイヤーの距離
-            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
+            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinate().GetMatPos() - GetPlayerTransform().position).Length();
 
             // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
             // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
@@ -762,9 +766,10 @@ void PlayerBehavior_JumpLong::Execute(void)
         }
 
 
-        Camera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransformPtr()->position).Normalize();
+        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
 
         float theta = ptr_cam_spherical->theta_;
@@ -773,7 +778,7 @@ void PlayerBehavior_JumpLong::Execute(void)
 
         // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
         // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3Ptr()->forward) < 0.7f)
+        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
         {
 
             if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))

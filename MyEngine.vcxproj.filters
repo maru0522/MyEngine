@@ -203,9 +203,6 @@
     <ClCompile Include="Application\Object\StickyBall.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Object\SphericalCamera.cpp">
-      <Filter>Application\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Entity\PlayerBehavior.cpp">
       <Filter>Application\Entity</Filter>
     </ClCompile>
@@ -220,6 +217,15 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Application\UI.cpp" />
+    <ClCompile Include="Engine\Entity\Other\ICamera.cpp">
+      <Filter>Engine\Entity\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>Engine\Entity\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entity\Other\SphericalCamera.cpp">
+      <Filter>Engine\Entity\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -404,9 +410,6 @@
     <ClInclude Include="Application\Object\Rock.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Object\SphericalCamera.h">
-      <Filter>Application\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Entity\PlayerBehavior.h">
       <Filter>Application\Entity</Filter>
     </ClInclude>
@@ -421,6 +424,15 @@
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Application\UI.h" />
+    <ClInclude Include="Engine\Entity\Other\ICamera.h">
+      <Filter>Engine\Entity\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>Engine\Entity\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity\Other\SphericalCamera.h">
+      <Filter>Engine\Entity\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

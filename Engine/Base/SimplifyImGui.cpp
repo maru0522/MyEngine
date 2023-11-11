@@ -31,6 +31,40 @@ bool GUI::DropDownTrg(const std::string& dropdownName, int* currentNum, const ch
     return ImGui::Combo(dropdownName.c_str(), currentNum, items, arraySize);
 }
 
+bool GUI::DropDownTrg(const std::string& arg_label, std::string& arg_currentItem, const std::vector<std::string>& arg_list)
+{
+    // ドロップダウン内で、選択中のアイテムが変更されたか
+    bool is_change = false;
+    if (ImGui::BeginCombo(arg_label.c_str(), arg_currentItem.c_str()))
+    {
+        // 配列を全検索
+        for (auto& item : arg_list)
+        {
+            // 選択中のアイテムとして選んだ名前が、現在の要素と一致しているか
+            bool is_select = (arg_currentItem == item);
+
+            // 現在の要素を、ドロップダウンの表示項目として追加
+            if (ImGui::Selectable(item.c_str(), is_select))
+            {
+                // 現在の要素を選択中のアイテムとする
+                arg_currentItem = item;
+                // 選択中のアイテムが変更された
+                is_change = true;
+            }
+
+            // 選択中のアイテムとして指定した名前が、現在の要素と一致している場合
+            if (is_select)
+            { 
+                // 現在の要素を、ドロップダウンを畳んでいた際に、一番上に表示する。
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    return is_change;
+}
+
 void GUI::CheckBox(const std::string& checkboxName, bool* v)
 {
     ImGui::Checkbox(checkboxName.c_str(), v);
@@ -41,7 +75,7 @@ void GUI::Text(const char* fmt, ...)
     ImGui::Text(fmt);
 }
 
-void GUI::Space(void)
+void GUI::BlankLine(void)
 {
     ImGui::Spacing();
 }

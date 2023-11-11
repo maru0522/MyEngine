@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct Vector2 final
 {

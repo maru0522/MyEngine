@@ -1,15 +1,13 @@
 #pragma once
 #include "Vector3.h"
 #include "Player.h"
-#include "CameraManager.h"
-#include "CollisionManager.h"
-#include "CollisionPrimitive.h"
+#include <ICamera.h>
 
-class SphericalCamera : public Camera
+class SphericalCamera : public ICamera
 {
 public:
     //>> 関数
-    SphericalCamera(void);
+    SphericalCamera(const std::string& arg_id);
     ~SphericalCamera(void);
     void Update(void) override;
 

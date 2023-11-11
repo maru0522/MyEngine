@@ -53,7 +53,7 @@ void Player::Update(void)
     if (pbm_.GetStatePtr()->debug_aaaaa_) dd = pbm_.GetStatePtr()->debug_ddddd_;
     GUI::Text("dot_abs_pr2cf_2: %f", dd);
 
-    GUI::Space();
+    GUI::BlankLine();
     static Vector3 de;
     if (pbm_.GetStatePtr()->debug_eeeee_.IsNonZero()) de = pbm_.GetStatePtr()->debug_eeeee_;
     GUI::Text("vec_pf:          %f,%f,%f", de.x, de.y, de.z);
@@ -155,8 +155,8 @@ void Player::Update(void)
     //GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
     GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
     GUI::Text("kGravity:             [%f]", kGravity_);
-    GUI::Space();
-    GUI::Space();
+    GUI::BlankLine();
+    GUI::BlankLine();
     //GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
     //GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
 
@@ -169,7 +169,7 @@ void Player::Update(void)
     GUI::Text("pos(current):         [%f,%f,%f]", transform_.position.x, transform_.position.y, transform_.position.z);
     GUI::Text("rot(current):         [%f,%f,%f]", transform_.rotation.x, transform_.rotation.y, transform_.rotation.z);
     GUI::Text("sca(current):         [%f,%f,%f]", transform_.scale.x, transform_.scale.y, transform_.scale.z);
-    GUI::Space();
+    GUI::BlankLine();
     GUI::Text("forward(current):     [%f,%f,%f]", axes_.forward.x, axes_.forward.y, axes_.forward.z);
     GUI::Text("right(current):       [%f,%f,%f]", axes_.right.x, axes_.right.y, axes_.right.z);
     GUI::Text("up(current):          [%f,%f,%f]", axes_.up.x, axes_.up.y, axes_.up.z);

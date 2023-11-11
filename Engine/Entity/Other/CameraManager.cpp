@@ -4,57 +4,8 @@
 #include "WndAPI.h"
 #include "Sprite.h"
 #include "Input.h"
-
-using namespace Math;
-using namespace Input;
-
-Camera::Camera(const Vector3& pos) :
-    nearZ_(0.1f), farZ_(10000.f),
-    targetPtr_(nullptr), isFollow_(false)
-{
-    transform_.position = pos;
-
-    axes_.forward = { 0,0,1 };
-    axes_.right = { 1,0,0 };
-    axes_.up = { 0,1,0 };
-    UpdateOrthoGraphic();
-}
-
-void Camera::Update(void)
-{
-    // position, rotation, scale の情報のみからワールド行列を生成
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_);
-
-    // 行列から各軸の向きを抽出し、それをカメラの向きとして適用
-    axes_.forward = coordinate_.GetMatAxisZ();
-    axes_.right = coordinate_.GetMatAxisX();
-    axes_.up = coordinate_.GetMatAxisY();
-
-    // ビュー行列
-    isFollow_ ?
-        matView_ = Math::Mat4::ViewLookAtLH(transform_.position, *targetPtr_, coordinate_.GetMatAxisY()) :
-        matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up);
-
-    // 射影行列
-    matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
-}
-
-void Camera::UpdateOrthoGraphic(void)
-{
-    matProj_OrthoGraphic_ = Mat4::ProjectionOrthoGraphicLH(WndAPI::kWidth_, WndAPI::kHeight_);
-}
-
-void Camera::Follow(Vector3* p_target)
-{
-    isFollow_ = true;
-    targetPtr_ = p_target;
-}
-
-void Camera::UnFollow(void)
-{
-    isFollow_ = false;
-    targetPtr_ = nullptr;
-}
+#include <functional>
+#include "SimplifyImGui.h"
 
 CameraManager* CameraManager::GetInstance(void)
 {
@@ -71,8 +22,24 @@ void CameraManager::Update(void)
 {
     // 終了処理後ならスキップ
     if (is_finalized_) { return; }
+
+    DebugGui();
+
     // nullチェック
-    if (!current_) { return; }
+    if (!current_) // nullptrではない無効なアドレスかどうかを識別する方法を調べる
+    {
+        //// 破棄されたアドレスを参照していた場合に備え、nullptrを入れる。
+        //current_ = nullptr;
+        //// ベクタ配列を全検索する
+        //for (auto it = vector_cameras_.begin(); it != vector_cameras_.end(); it++)
+        //{
+        //    // nullptrになっている要素がある場合、削除する
+        //    if (*it == nullptr) { vector_cameras_.erase(it); }
+        //}
+
+        // 処理をスキップ
+        return;
+    }
 
     // 更新処理
     current_->Update();
@@ -86,115 +53,250 @@ void CameraManager::Finalize(void)
     current_ = nullptr;
 
     // umap配列を初期化
-    umap_cameras_.clear();
-    umap_debugCameras_.clear();
+    vector_cameras_.clear();
+    vector_debugCameras_.clear();
 }
 
-void CameraManager::Register(const std::string& arg_key, Camera* arg_cameraPtr)
+void CameraManager::Register(ICamera* arg_cameraPtr)
 {
     // 終了処理呼んだ後ならスキップ
     if (is_finalized_) { return; }
 
 
-    // KEYにcameraを足す
-    const std::string key("Camera_" + arg_key);
-    // umap配列に同名カメラptrが既に登録されているか
-    bool isContained = umap_cameras_.contains(arg_key);
-    // 登録されているならスキップ
-    if (isContained) { return; }
-
-
-    // 登録
-    umap_cameras_.insert({ arg_key, arg_cameraPtr });
-}
-
-void CameraManager::UnRegister(const std::string& arg_key)
-{
-    // 終了処理呼んだ後ならスキップ
-    if (is_finalized_) { return; }
-
-
-    // umap配列に存在するか
-    bool isContained = umap_cameras_.contains(arg_key);
-    // 存在しないならスキップ
-    if (isContained == false) { return; }
-
-
-    // 登録
-    umap_cameras_.erase(arg_key);
-}
-
-void CameraManager::CreateDebugCamera(Camera* arg_cameraPtr)
-{
-    // 終了処理呼んだ後ならスキップ
-    if (is_finalized_) { return; }
-
-
+    // 名前の末尾につける用の数字
     int32_t num{};
-    // KEYにdebugcameraを足す
-    std::string key("Debug" + arg_cameraPtr + std::to_string(num)); // <== DebugCamera_"key"0 からはじまる
-    // umap配列に同名のデバッグカメラがあるか検索し、ある場合は末尾の番号を1つずらす。
-    RecursiveSearchKey(key, num); // DebugCamera_"key"0 ~ ...
+    // 名前に数字を追加。
+    std::string id(arg_cameraPtr->GetId() + std::to_string(num)); // <== "id"0 に改名してから登録される
+    // ベクタ配列に同名のカメラがあるか検索し、ある場合は末尾の番号を1つずらす。
+    RecursiveSearchId_Camera(id, num); // "id"0 ~ ...
+
+
+    // 登録されるカメラの名前を、末尾に番号がつけられたものへ変更する
+    arg_cameraPtr->SetId(id);
+    // 登録
+    vector_cameras_.push_back(arg_cameraPtr);
+}
+
+void CameraManager::UnRegister(ICamera* arg_cameraPtr)
+{
+    UnRegister(arg_cameraPtr->GetId());
+}
+
+void CameraManager::UnRegister(const std::string& arg_id)
+{
+    // 終了処理呼んだ後ならスキップ
+    if (is_finalized_) { return; }
+
+    // カメラの名前が、arg_id と一致しているか判別する bool型関数
+    std::function<bool(ICamera*)> conditional = [&](ICamera* arg_icp) { return arg_icp->GetId() == arg_id; };
+    // カメラの名前が、arg_id と一致している場合、ベクタ配列から抹消
+    std::erase_if(vector_cameras_, conditional);
+}
+
+void CameraManager::CreateDebugCamera(ICamera* arg_cameraPtr)
+{
+    // 終了処理呼んだ後ならスキップ
+    if (is_finalized_) { return; }
+
+    // 名前の末尾につける用の数字
+    int32_t num{};
+    // 名前に数字を追加。
+    std::string id = arg_cameraPtr->GetId();
+    // ベクタ配列に同名のカメラがあるか検索し、ある場合は末尾の番号を1つずらす。
+    RecursiveSearchId_DebugCamera(id, num); // "id"0 ~ ...
 
 
     // 登録
-    umap_debugCameras_.insert({ arg_key, arg_cameraPtr });
+    vector_debugCameras_.emplace_back(std::make_unique<DebugCamera>(id));
+    // 座標系を基になった、カメラと揃える
+    vector_debugCameras_.back()->SetTransform(arg_cameraPtr->GetTransformMatrix().);
+    // 姿勢を基になった、カメラと揃える
+    vector_debugCameras_.back()->SetAxis3(arg_cameraPtr->GetAxis3());
+    // 投影始端を基になった、カメラと揃える
+    vector_debugCameras_.back()->SetNearZ(arg_cameraPtr->GetNearZ());
+    // 投影終端を基になった、カメラと揃える
+    vector_debugCameras_.back()->SetFarZ(arg_cameraPtr->GetFarZ());
 
     // デバッグカメラ生成時、使用するカメラも、そちらに切り替えるか
-    if(is_switchCameraByCreateDebugCam_) {SetCurrentCamera(arg_key) }
+    if (is_switchCameraByCreateDebugCam_) { SetCurrentCamera(vector_debugCameras_.back()->GetId()); }
 }
 
-void CameraManager::DestroyDebugCamera(const std::string& arg_key)
+void CameraManager::DestroyDebugCamera(const std::string& arg_id)
 {
     // 終了処理呼んだ後ならスキップ
     if (is_finalized_) { return; }
 
-
-    // umap配列に存在するか
-    bool isContained = umap_cameras_.contains(arg_key);
-    // 存在しないならスキップ
-    if (isContained == false) { return; }
-
-
-    // 登録
-    umap_cameras_.erase(arg_key);
+    // デバッグカメラの名前が、arg_id と一致しているか判別する bool型関数
+    std::function<bool(const std::unique_ptr<DebugCamera>&)> conditional = [&](const std::unique_ptr<DebugCamera>& arg_up_dc) { return arg_up_dc->GetId() == arg_id; };
+    // デバッグカメラの名前が、arg_id と一致している場合、ベクタ配列から抹消
+    std::erase_if(vector_debugCameras_, conditional);
 }
 
-void CameraManager::RecursiveSearchKey(std::string& arg_key, int32_t& arg_duplicateNum)
+void CameraManager::DebugGui(void)
 {
-    bool isContained = umap_debugCameras_.contains(arg_key);
-    if (isContained)
+    // ウィンドウ名
+    GUI::Begin("CameraManager");
+
+
+
+    // カメラ一覧用ベクタ配列
+    std::vector<std::string> cameraList;
+    // ベクタ配列を全検索してカメラの名前をコピー（一般カメラ配列）
+    for (auto& camera : vector_cameras_)
     {
-        arg_key.pop_back();
+        cameraList.emplace_back(camera->GetId());
+    }
+    // ベクタ配列を全検索してカメラの名前をコピー（デバッグカメラ配列）
+    for (auto& debugcamera : vector_debugCameras_)
+    {
+        cameraList.emplace_back(debugcamera->GetId());
+    }
 
+    // 現在選択しているカメラの名前
+    static std::string currentItem;
+    currentItem = current_->GetId();
+
+    // ドロップダウンの管理と選択中のカメラ名の表示
+    if (GUI::DropDownTrg("currentCamera", currentItem, cameraList))
+    {
+        // ドロップダウン内で別カメラが選択されたとき、使用しているカメラを変更する。
+        SetCurrentCamera(currentItem);
+    }
+    GUI::BlankLine(); // 1行あける
+
+
+
+    GUI::Text("Change CunnrentCamera at new DebugCamera");
+    GUI::CheckBox("is_switch", &is_switchCameraByCreateDebugCam_);
+    GUI::BlankLine(); // 1行あける
+
+    GUI::Text("Use part of CurrentCamera's id when Create new DebugCamera");
+    // デバッグカメラ生成用のボタン
+    if (GUI::ButtonTrg("Create", { 100,20 }))
+    {
+        CreateDebugCamera(current_);
+    }
+
+    GUI::End();
+}
+
+bool CameraManager::IsContainSameId_Camera(const std::string& arg_id)
+{
+    // 登録されたカメラ群を、全検索
+    for (auto& camera : vector_cameras_)
+    {
+        // 既に登録されたカメラ群に同名のカメラがあれば true
+        if (camera->GetId() == arg_id) { return true; }
+    }
+
+    // 既に登録されたカメラ群に同名のカメラがなければ false
+    return false;
+}
+
+bool CameraManager::IsContainSameId_DebugCamera(const std::string& arg_id)
+{
+    // 登録されたデバッグカメラ群を、全検索
+    for (auto& camera : vector_debugCameras_)
+    {
+        // 既に登録されたデバッグカメラ群に、同名のデバッグカメラ true
+        if (camera->GetId() == arg_id) { return true; }
+    }
+
+    // 既に登録されたデバッグカメラ群に、同名のデバッグカメラがなければ false
+    return false;
+}
+
+void CameraManager::RecursiveSearchId_Camera(std::string& arg_id, int32_t& arg_duplicateNum)
+{
+    // 登録されたベクタ配列に同名のカメラがあるか検索
+    bool isContain = IsContainSameId_Camera(arg_id);
+    if (isContain)
+    {
+        // 文字列の最後の数字を取り消す。
+        arg_id.pop_back();
+
+        // 文字列の最後に追加する数字を加算
         arg_duplicateNum++;
-        arg_key += std::to_string(arg_duplicateNum);
+        // 文字列の最後に数字を追加
+        arg_id += std::to_string(arg_duplicateNum);
 
-        RecursiveSearchKey(arg_key,arg_duplicateNum);
+        // 再帰的呼び出し
+        RecursiveSearchId_Camera(arg_id, arg_duplicateNum);
     }
 
     return;
 }
 
-void CameraManager::SetCurrentCamera(const std::string& arg_key)
+void CameraManager::RecursiveSearchId_DebugCamera(std::string& arg_id, int32_t& arg_duplicateNum)
+{
+    // カメラの名前が "DebugCamera_" から始まっているか検索
+    const bool is_startWith = arg_id.starts_with("DebugCamera_");
+    if (is_startWith)
+    {
+        arg_id.erase(0, 12);
+        // 文字列の最後に数字を追加
+        arg_id = arg_id + "-" + std::to_string(arg_duplicateNum);
+    }
+
+    // 登録されたベクタ配列に同名のカメラがあるかどうか
+    const bool is_contain = IsContainSameId_DebugCamera("DebugCamera_" + arg_id);
+
+    // 登録されたベクタ配列に同名のカメラがある場合
+    if (is_contain)
+    {
+        // 文字列の最後の数字を取り消す。
+        arg_id.pop_back();
+
+        // 文字列の最後に追加する数字を加算
+        arg_duplicateNum++;
+        // 文字列の最後に数字を追加
+        arg_id += std::to_string(arg_duplicateNum);
+
+        // 再帰的呼び出し
+        RecursiveSearchId_DebugCamera(arg_id, arg_duplicateNum);
+    }
+
+    return;
+}
+
+void CameraManager::SetCurrentCamera(ICamera* arg_cameraPtr)
+{
+    SetCurrentCamera(arg_cameraPtr->GetId());
+}
+
+void CameraManager::SetCurrentCamera(const std::string& arg_id)
 {
     // 終了処理呼んだ後ならスキップ
     if (is_finalized_) { return; }
 
 
-    // umap配列に存在するか（一般カメラ）
-    bool isContained_camera = umap_cameras_.contains(arg_key);
-    // umap配列に存在するか（デバッグカメラ）
-    bool isContained_debugCamera = umap_debugCameras_.contains(arg_key);
+    // ベクタ配列に存在するか（一般カメラ）
+    bool isContain_camera = IsContainSameId_Camera(arg_id);
+    // ベクタ配列に存在するか（デバッグカメラ）
+    bool isContain_debugCamera = IsContainSameId_DebugCamera(arg_id);
     // カメラクラスのポインタ
-    Camera* cameraPtr = nullptr;
+    ICamera* cameraPtr = nullptr;
 
 
-    // KEY がどちらにも存在しない場合、スキップ
-    if (isContained_camera == false && isContained_debugCamera == false) { return; }
-    // どちらか1つのみ、trueになる。（2つのumap配列で KEY の値が被ることは無い）
-    if (isContained_camera) { cameraPtr = umap_cameras_.at(arg_key); }
-    if (isContained_debugCamera) { cameraPtr = umap_debugCameras_.at(arg_key).get(); }
+    // どちらにも存在しない場合、スキップ
+    if (isContain_camera == false && isContain_debugCamera == false) { return; }
+    // どちらか1つのみ、trueになる。（2つのベクタ配列で id が被ることは無い）
+    if (isContain_camera)
+    {
+        for (auto& camera : vector_cameras_)
+        {
+            // 名前が一致したカメラのptrを受け取る
+            if (camera->GetId() == arg_id) { cameraPtr = camera; }
+        }
+    }
+    if (isContain_debugCamera)
+    {
+        for (auto& debugCamera : vector_debugCameras_)
+        {
+            // 名前が一致したカメラのptrを受け取る
+            if (debugCamera->GetId() == arg_id) { cameraPtr = debugCamera.get(); }
+        }
+    }
 
 
     // 新規カメラをセット
@@ -203,53 +305,4 @@ void CameraManager::SetCurrentCamera(const std::string& arg_key)
     current_->UpdateOrthoGraphic();
     Sprite::UpdateCBMatOrthoGraphic(this);
     Object3D::UpdateCBMatViewPerse(this);
-}
-
-void DebugCamera::Update(void)
-{
-    Vector3 velocity{};
-    Vector3 currentPos = transform_.position;
-    Vector3 rotation = transform_.rotation;
-
-    // debugCamera
-    const Vector2& mouseVelocity = Mouse::GetCursorVec();
-
-    // 回転
-    if (Mouse::IsDown(Mouse::Click::RIGHT)) { // 右クリ押してる
-        const float rotSpeed = 0.0025f;
-        rotation.x += Mouse::GetCursorVec().y * rotSpeed;
-        rotation.y += Mouse::GetCursorVec().x * rotSpeed;
-    }
-
-    // 平行移動
-    if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してる
-        const float moveSpeed = 0.05f;
-        velocity += coordinate_.GetMatAxisX().Normalize() * -mouseVelocity.x * moveSpeed;
-        velocity += coordinate_.GetMatAxisY().Normalize() * mouseVelocity.y * moveSpeed;
-    }
-
-    // 前後移動
-    if (!Mouse::IsDown(Mouse::Click::RIGHT) && !Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してない
-        const float moveSpeed = 0.01f;
-        velocity += coordinate_.GetMatAxisZ().Normalize() * Mouse::GetScroll() * moveSpeed;
-    }
-
-    // デバッグによって変更された値
-    transform_.position = currentPos + velocity;
-    transform_.rotation = rotation;
-    // position, rotation, scale の情報のみからワールド行列を生成
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_);
-
-    // 行列から各軸の向きを抽出し、それをカメラの向きとして適用
-    axes_.forward = coordinate_.GetMatAxisZ();
-    axes_.right = coordinate_.GetMatAxisX();
-    axes_.up = coordinate_.GetMatAxisY();
-
-    // ビュー行列
-    isFollow_ ?
-        matView_ = Math::Mat4::ViewLookAtLH(transform_.position, *targetPtr_, coordinate_.GetMatAxisY()) :
-        matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up);
-
-    // 射影行列
-    matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }

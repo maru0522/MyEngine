@@ -77,11 +77,11 @@ void FrameWork::Update(void)
     SceneManager::GetInstance()->Update();
     DebugGui();
 
-    // ImguiController更新終了
-    imguiController_->End();
-
     // CameraManager更新
     camMPtr_->Update();
+
+    // ImguiController更新終了
+    imguiController_->End();
 
     // カメラの透視投影行列をObject3D用の定数に送る
     Object3D::UpdateCBMatViewPerse(camMPtr_);
