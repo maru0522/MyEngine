@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
 #include <random>
 #include <numbers>
@@ -93,10 +93,10 @@ namespace Math {
         //Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
 
         // アフィン変換
-        Matrix4 AffinTrans(const Transform& transform);
-        Matrix4 AffinTrans(const Transform& transform, const Axis3& axes);
-        Matrix4 AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular);
-        Matrix4 AffinTrans(const Vector3& pos, const Vector3& scale, const Axis3& axes);
+        Matrix4 AffinTrans(const Transform& arg_transform, TransformMatrix* arg_transMatPtr = nullptr);
+        Matrix4 AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr = nullptr);
+        Matrix4 AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Vector3& arg_rotEular, TransformMatrix* arg_transMatPtr = nullptr);
+        Matrix4 AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr = nullptr);
     }
 
     namespace Ease {

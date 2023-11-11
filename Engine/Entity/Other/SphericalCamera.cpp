@@ -46,16 +46,17 @@ void SphericalCamera::Update(void)
     matWorld.m[3][1] += transform_.position.y;
     matWorld.m[3][2] += transform_.position.z;
 
-    transformMatrix.mat_world = matWorld;
-
     transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
+
+    transformMatrix.mat_pos = Mat4::Translation(transform_.position);
+    transformMatrix.mat_rot = matRotate;
+    transformMatrix.mat_world = matWorld;
     //##
 
     // 姿勢の軸方向をそのまま 3つの軸から適用
     axes_.forward = transformMatrix.GetMatAxisZ().Normalize();
     axes_.right = transformMatrix.GetMatAxisX().Normalize();
     axes_.up = transformMatrix.GetMatAxisY().Normalize();
-
 }
 
 //void SphericalCamera::CameraBehavior(Behavior arg_camerawork)

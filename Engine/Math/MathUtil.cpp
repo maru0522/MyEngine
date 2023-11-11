@@ -138,80 +138,112 @@ Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
     return result;
 }
 
-Matrix4 Math::Function::AffinTrans(const Transform& transform)
+Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, TransformMatrix* arg_transMatPtr)
 {
     Matrix4 matWorld{ Mat4::Identity() };
     Matrix4 matScale{ Mat4::Identity() };
     Matrix4 matRotate{ Mat4::Identity() };
 
-    matScale = Mat4::Scale(transform.scale);
+    matScale = Mat4::Scale(arg_transform.scale);
 
-    matRotate *= Mat4::RotationZ(transform.rotation.z);
-    matRotate *= Mat4::RotationX(transform.rotation.x);
-    matRotate *= Mat4::RotationY(transform.rotation.y);
+    matRotate *= Mat4::RotationZ(arg_transform.rotation.z);
+    matRotate *= Mat4::RotationX(arg_transform.rotation.x);
+    matRotate *= Mat4::RotationY(arg_transform.rotation.y);
 
     matWorld *= matScale;
     matWorld *= matRotate;
-    matWorld = Mat4::Translate(matWorld, transform.position);
+    matWorld = Mat4::Translate(matWorld, arg_transform.position);
+
+    if (arg_transMatPtr)
+    {
+        arg_transMatPtr->mat_world = matWorld;
+        arg_transMatPtr->mat_sca = matScale;
+        arg_transMatPtr->mat_rot = matRotate;
+        arg_transMatPtr->mat_pos = Mat4::Translation(arg_transform.position);
+    }
 
     return matWorld;
 }
 
-Matrix4 Math::Function::AffinTrans(const Transform& transform, const Axis3& axes)
+Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr)
 {
     Matrix4 matWorld{ Mat4::Identity() };
     Matrix4 matScale{ Mat4::Identity() };
     Matrix4 matRotate{ Mat4::Identity() };
 
-    matScale = Mat4::Scale(transform.scale);
+    matScale = Mat4::Scale(arg_transform.scale);
 
-    Vector3 forward = axes.forward.Normalize();
-    Vector3 right = axes.right.Normalize();
-    Vector3 up = axes.up.Normalize();
+    Vector3 forward = arg_axes.forward.Normalize();
+    Vector3 right = arg_axes.right.Normalize();
+    Vector3 up = arg_axes.up.Normalize();
     matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
 
     matWorld *= matScale;
     matWorld *= matRotate;
-    matWorld = Mat4::Translate(matWorld, transform.position);
+    matWorld = Mat4::Translate(matWorld, arg_transform.position);
+
+    if (arg_transMatPtr)
+    {
+        arg_transMatPtr->mat_world = matWorld;
+        arg_transMatPtr->mat_sca = matScale;
+        arg_transMatPtr->mat_rot = matRotate;
+        arg_transMatPtr->mat_pos = Mat4::Translation(arg_transform.position);
+    }
 
     return matWorld;
 }
 
-Matrix4 Math::Function::AffinTrans(const Vector3& pos, const Vector3& scale, const Vector3& rotEular)
+Matrix4 Math::Function::AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Vector3& arg_rotEular, TransformMatrix* arg_transMatPtr)
 {
     Matrix4 matWorld{ Mat4::Identity() };
     Matrix4 matScale{ Mat4::Identity() };
     Matrix4 matRotate{ Mat4::Identity() };
 
-    matScale = Mat4::Scale(scale);
+    matScale = Mat4::Scale(arg_scale);
 
-    matRotate *= Mat4::RotationZ(rotEular.z);
-    matRotate *= Mat4::RotationX(rotEular.x);
-    matRotate *= Mat4::RotationY(rotEular.y);
+    matRotate *= Mat4::RotationZ(arg_rotEular.z);
+    matRotate *= Mat4::RotationX(arg_rotEular.x);
+    matRotate *= Mat4::RotationY(arg_rotEular.y);
 
     matWorld *= matScale;
     matWorld *= matRotate;
-    matWorld = Mat4::Translate(matWorld, pos);
+    matWorld = Mat4::Translate(matWorld, arg_pos);
+
+    if (arg_transMatPtr)
+    {
+        arg_transMatPtr->mat_world = matWorld;
+        arg_transMatPtr->mat_sca = matScale;
+        arg_transMatPtr->mat_rot = matRotate;
+        arg_transMatPtr->mat_pos = Mat4::Translation(arg_pos);
+    }
 
     return matWorld;
 }
 
-Matrix4 Math::Function::AffinTrans(const Vector3& pos, const Vector3& scale, const Axis3& axes)
+Matrix4 Math::Function::AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr)
 {
     Matrix4 matWorld{ Mat4::Identity() };
     Matrix4 matScale{ Mat4::Identity() };
     Matrix4 matRotate{ Mat4::Identity() };
 
-    matScale = Mat4::Scale(scale);
+    matScale = Mat4::Scale(arg_scale);
 
-    Vector3 forward = axes.forward.Normalize();
-    Vector3 right = axes.right.Normalize();
-    Vector3 up = axes.up.Normalize();
+    Vector3 forward = arg_axes.forward.Normalize();
+    Vector3 right = arg_axes.right.Normalize();
+    Vector3 up = arg_axes.up.Normalize();
     matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
 
     matWorld *= matScale;
     matWorld *= matRotate;
-    matWorld = Mat4::Translate(matWorld, pos);
+    matWorld = Mat4::Translate(matWorld, arg_pos);
+
+    if (arg_transMatPtr)
+    {
+        arg_transMatPtr->mat_world = matWorld;
+        arg_transMatPtr->mat_sca = matScale;
+        arg_transMatPtr->mat_rot = matRotate;
+        arg_transMatPtr->mat_pos = Mat4::Translation(arg_pos);
+    }
 
     return matWorld;
 }

@@ -54,7 +54,7 @@ public:
 
     const Axis3& GetAxis3(void) { return axes_; }
     const Transform& GetTransform(void) { return transform_; }
-    const TransformMatrix& GetCoordinate(void) { return transformMatrix; }
+    const TransformMatrix& GetTransformMatrix(void) { return transformMatrix; }
 
     const Matrix4& GetMatView(void) { return matView_; }
     const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }
