@@ -102,13 +102,11 @@ void CameraManager::CreateDebugCamera(ICamera* arg_cameraPtr)
     int32_t num{};
     // 名前に数字を追加。
     std::string id = arg_cameraPtr->GetId();
-    // ベクタ配列に同名のカメラがあるか検索し、ある場合は末尾の番号を1つずらす。
-    RecursiveSearchId_DebugCamera(id, num); // "id"0 ~ ...
-
-
     // 接頭辞を除いた名前を抽出
     if (id.starts_with("ICamera_")) { id.erase(0, 8); }
     if (id.starts_with("SphericalCamera_")) { id.erase(0, 16); }
+    // ベクタ配列に同名のカメラがあるか検索し、ある場合は末尾の番号を1つずらす。
+    RecursiveSearchId_DebugCamera(id, num); // "id"0 ~ ...
 
 
     // 登録
