@@ -27,7 +27,7 @@ void SphericalCamera::Update(void)
     using namespace Math;
 
     // ビュー行列
-    matView_ = Math::Mat4::Inverse(transformMatrix.mat_world);
+    matView_ = Math::Mat4::Inverse(transformMatrix_.mat_world);
 
     // 射影行列
     matProj_Perspective_ = Mat4::ProjectionPerspectiveFovLH(Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
@@ -48,15 +48,15 @@ void SphericalCamera::Update(void)
 
     transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
 
-    transformMatrix.mat_pos = Mat4::Translation(transform_.position);
-    transformMatrix.mat_rot = matRotate;
-    transformMatrix.mat_world = matWorld;
+    transformMatrix_.mat_pos = Mat4::Translation(transform_.position);
+    transformMatrix_.mat_rot = matRotate;
+    transformMatrix_.mat_world = matWorld;
     //##
 
     // 姿勢の軸方向をそのまま 3つの軸から適用
-    axes_.forward = transformMatrix.GetMatAxisZ().Normalize();
-    axes_.right = transformMatrix.GetMatAxisX().Normalize();
-    axes_.up = transformMatrix.GetMatAxisY().Normalize();
+    axes_.forward = transformMatrix_.GetMatAxisZ().Normalize();
+    axes_.right = transformMatrix_.GetMatAxisX().Normalize();
+    axes_.up = transformMatrix_.GetMatAxisY().Normalize();
 }
 
 //void SphericalCamera::CameraBehavior(Behavior arg_camerawork)

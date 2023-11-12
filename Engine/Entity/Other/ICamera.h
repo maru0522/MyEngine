@@ -38,6 +38,7 @@ protected:
     Matrix4 matView_;
     Matrix4 matProj_Perspective_;
     Matrix4 matProj_OrthoGraphic_;
+    bool is_affinUseAxes_;
 
 public:
     // setter

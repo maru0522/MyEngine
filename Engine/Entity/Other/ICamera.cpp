@@ -15,19 +15,26 @@ ICamera::ICamera(const std::string& arg_id)
     axes_.Initialize();
     // 座標
     transform_.Initialize();
+    // アフィン変換計算に姿勢を使用するか（= rotは使わなくなる）
+    is_affinUseAxes_ = false;
 
+    // 更新処理を一度挟む
     UpdateOrthoGraphic();
 }
 
 void ICamera::Update(void)
 {
-    // position, rotation, scale の情報のみからワールド行列を生成
-    transformMatrix.mat_world = Math::Function::AffinTrans(transform_);
+    // アフィン変換計算にどちらを使用するか
+    is_affinUseAxes_ ?
+        // position, rotation, scale の情報からワールド行列を生成
+        transformMatrix_.mat_world = Math::Function::AffinTrans(transform_,&transformMatrix_) :
+        // position, axes の情報からワールド行列を生成
+        transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, axes_, &transformMatrix_);
 
     // 行列から各軸の向きを抽出し、それをカメラの向きとして適用
-    axes_.forward = transformMatrix.GetMatAxisZ();
-    axes_.right = transformMatrix.GetMatAxisX();
-    axes_.up = transformMatrix.GetMatAxisY();
+    axes_.forward = transformMatrix_.GetMatAxisZ();
+    axes_.right = transformMatrix_.GetMatAxisX();
+    axes_.up = transformMatrix_.GetMatAxisY();
 
     // ビュー行列
     matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up);

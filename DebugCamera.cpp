@@ -36,14 +36,14 @@ void DebugCamera::Update(void)
     // 平行移動
     if (!Mouse::IsDown(Mouse::Click::RIGHT) && Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してる
         const float moveSpeed = 0.05f;
-        velocity += transformMatrix.GetMatAxisX().Normalize() * -mouseVelocity.x * moveSpeed;
-        velocity += transformMatrix.GetMatAxisY().Normalize() * mouseVelocity.y * moveSpeed;
+        velocity += transformMatrix_.GetMatAxisX().Normalize() * -mouseVelocity.x * moveSpeed;
+        velocity += transformMatrix_.GetMatAxisY().Normalize() * mouseVelocity.y * moveSpeed;
     }
 
     // 前後移動
     if (!Mouse::IsDown(Mouse::Click::RIGHT) && !Mouse::IsDown(Mouse::Click::CENTER)) { // 右クリ押してない && ホイール押してない
         const float moveSpeed = 0.01f;
-        velocity += transformMatrix.GetMatAxisZ().Normalize() * Mouse::GetScroll() * moveSpeed;
+        velocity += transformMatrix_.GetMatAxisZ().Normalize() * Mouse::GetScroll() * moveSpeed;
     }
 
 
