@@ -16,7 +16,7 @@ private:
 
 public:
     //>> 関数
-    ICamera(void) : ICamera("ICamera") {};
+    ICamera(void) : ICamera("ICamera_") {};
     ICamera(const std::string& arg_id);
     virtual ~ICamera(void) = default;
     virtual void Update(void);
@@ -31,7 +31,7 @@ protected:
 
     Axis3 axes_; // 姿勢
     Transform transform_; // 座標など
-    TransformMatrix transformMatrix; // 行列化したtransform情報
+    TransformMatrix transformMatrix_; // 行列化したtransform情報
 
     float farZ_;
     float nearZ_;
@@ -49,14 +49,18 @@ public:
 
     void SetAxis3(const Axis3& arg_axes) { axes_ = arg_axes; }
     void SetTransform(const Transform& arg_transform) { transform_ = arg_transform; }
-    void SetTransformMatrix(const TransformMatrix& arg_transMat) { transformMatrix = arg_transMat; }
+    void SetTransformMatrix(const TransformMatrix& arg_transMat) { transformMatrix_ = arg_transMat; }
+
+    void SetIsAffinUseAxes(bool arg_isAffinUseAxes) { is_affinUseAxes_ = arg_isAffinUseAxes; }
 
     // getter
     const std::string& GetId(void) { return id_; }
 
     const Axis3& GetAxis3(void) { return axes_; }
     const Transform& GetTransform(void) { return transform_; }
-    const TransformMatrix& GetTransformMatrix(void) { return transformMatrix; }
+    const TransformMatrix& GetTransformMatrix(void) { return transformMatrix_; }
+
+    bool GetIsAffinUseAxes(void) { return is_affinUseAxes_; }
 
     const Matrix4& GetMatView(void) { return matView_; }
     const Matrix4& GetMatProjPerspective(void) { return matProj_Perspective_; }

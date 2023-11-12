@@ -193,6 +193,42 @@ Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, const Axis3& 
     return matWorld;
 }
 
+Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, const Vector3& arg_addRot, TransformMatrix* arg_transMatPtr)
+{
+    // const Vector3& arg_addRotは、そのフレームで加算したい分のrotをわたす必要がある
+
+    Matrix4 matWorld{ Mat4::Identity() };
+    Matrix4 matScale{ Mat4::Identity() };
+    Matrix4 matRotate{ Mat4::Identity() };
+    Matrix4 matRotate2{ Mat4::Identity() };
+
+    matScale = Mat4::Scale(arg_transform.scale);
+
+    Vector3 forward = arg_axes.forward.Normalize();
+    Vector3 right = arg_axes.right.Normalize();
+    Vector3 up = arg_axes.up.Normalize();
+    matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
+
+    matRotate2 *= Mat4::RotationZ(arg_addRot.z);
+    matRotate2 *= Mat4::RotationX(arg_addRot.x);
+    matRotate2 *= Mat4::RotationY(arg_addRot.y);
+    matRotate *= matRotate2;
+
+    matWorld *= matScale;
+    matWorld *= matRotate;
+    matWorld = Mat4::Translate(matWorld, arg_transform.position);
+
+    if (arg_transMatPtr)
+    {
+        arg_transMatPtr->mat_world = matWorld;
+        arg_transMatPtr->mat_sca = matScale;
+        arg_transMatPtr->mat_rot = matRotate;
+        arg_transMatPtr->mat_pos = Mat4::Translation(arg_transform.position);
+    }
+
+    return matWorld;
+}
+
 Matrix4 Math::Function::AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Vector3& arg_rotEular, TransformMatrix* arg_transMatPtr)
 {
     Matrix4 matWorld{ Mat4::Identity() };

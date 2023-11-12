@@ -53,5 +53,21 @@ void DebugCamera::Update(void)
     transform_.rotation += rotation;
 
     // 基底クラスの更新処理
-    ICamera::Update();
+        // アフィン変換計算にどちらを使用するか
+    is_affinUseAxes_ ?
+        // position, axes の情報からワールド行列を生成
+        transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, axes_, rotation, &transformMatrix_) :
+        // position, rotation, scale の情報からワールド行列を生成
+        transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, &transformMatrix_);
+
+    // 行列から各軸の向きを抽出し、それをカメラの向きとして適用
+    axes_.forward = transformMatrix_.GetMatAxisZ();
+    axes_.right = transformMatrix_.GetMatAxisX();
+    axes_.up = transformMatrix_.GetMatAxisY();
+
+    // ビュー行列
+    matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up);
+
+    // 射影行列
+    matProj_Perspective_ = Math::Mat4::ProjectionPerspectiveFovLH(Math::Function::ToRadian(45.f), WndAPI::kWidth_, WndAPI::kHeight_, nearZ_, farZ_);
 }

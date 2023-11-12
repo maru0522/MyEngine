@@ -95,6 +95,7 @@ namespace Math {
         // アフィン変換
         Matrix4 AffinTrans(const Transform& arg_transform, TransformMatrix* arg_transMatPtr = nullptr);
         Matrix4 AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr = nullptr);
+        Matrix4 AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, const Vector3& arg_addRot, TransformMatrix* arg_transMatPtr = nullptr);
         Matrix4 AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Vector3& arg_rotEular, TransformMatrix* arg_transMatPtr = nullptr);
         Matrix4 AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr = nullptr);
     }

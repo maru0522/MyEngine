@@ -106,6 +106,11 @@ void CameraManager::CreateDebugCamera(ICamera* arg_cameraPtr)
     RecursiveSearchId_DebugCamera(id, num); // "id"0 ~ ...
 
 
+    // 接頭辞を除いた名前を抽出
+    if (id.starts_with("ICamera_")) { id.erase(0, 8); }
+    if (id.starts_with("SphericalCamera_")) { id.erase(0, 16); }
+
+
     // 登録
     vector_debugCameras_.emplace_back(std::make_unique<DebugCamera>(id));
 
@@ -114,16 +119,18 @@ void CameraManager::CreateDebugCamera(ICamera* arg_cameraPtr)
     const Vector3 sca= { 1.f,1.f,1.f };
     const Transform copy = { pos,rot,sca };
 
-    // 座標系を基になった、カメラと揃える
+    // 座標系を、基になったカメラと揃える
     vector_debugCameras_.back()->SetTransform(copy);
-    // 姿勢を基になった、カメラと揃える
+    // 姿勢を、基になったカメラと揃える
     vector_debugCameras_.back()->SetAxis3(arg_cameraPtr->GetAxis3());
-    // 投影始端を基になった、カメラと揃える
+    // 投影始端を、基になったカメラと揃える
     vector_debugCameras_.back()->SetNearZ(arg_cameraPtr->GetNearZ());
-    // 投影終端を基になった、カメラと揃える
+    // 投影終端を、基になったカメラと揃える
     vector_debugCameras_.back()->SetFarZ(arg_cameraPtr->GetFarZ());
-    // ワールド行列を基になった、カメラと揃える
+    // ワールド行列を、基になったカメラと揃える
     vector_debugCameras_.back()->SetTransformMatrix(arg_cameraPtr->GetTransformMatrix());
+    // アフィン変換の計算方法を、基になったカメラと揃える
+    vector_debugCameras_.back()->SetIsAffinUseAxes(arg_cameraPtr->GetIsAffinUseAxes());
 
     // デバッグカメラ生成時、使用するカメラも、そちらに切り替えるか
     if (is_switchCameraByCreateDebugCam_) { SetCurrentCamera(vector_debugCameras_.back()->GetId()); }

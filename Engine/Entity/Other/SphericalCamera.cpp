@@ -16,6 +16,9 @@ SphericalCamera::SphericalCamera(const std::string& arg_id) : ICamera()
     theta_ = 0.f;
     phi_ = 0.f;
     psi_ = 0.f;
+
+    // アフィン変換に姿勢を使うか。
+    is_affinUseAxes_ = true; // このクラス自体が使うわけではないが、他のカメラクラスへの識別の一助として。
 }
 
 SphericalCamera::~SphericalCamera(void)
