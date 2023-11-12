@@ -25,6 +25,9 @@ void CameraManager::Update(void)
 
     DebugGui();
 
+    ImGui::ShowDemoWindow();
+
+
     // nullチェック
     if (!current_) // nullptrではない無効なアドレスかどうかを識別する方法を調べる
     {
@@ -188,6 +191,64 @@ void CameraManager::DebugGui(void)
     if (GUI::ButtonTrg("Create", { 100,20 }))
     {
         CreateDebugCamera(current_);
+    }
+
+    GUI::SearchList("CameraList", cameraList);
+
+    if (ImGui::TreeNode("Context menus"))
+    {
+        GUI::HelpMaker("\"Context\" functions are simple helpers to associate a Popup to a given Item or Window identifier.");
+
+        // BeginPopupContextItem() is a helper to provide common/simple popup behavior of essentially doing:
+        //     if (id == 0)
+        //         id = GetItemID(); // Use last item id
+        //     if (IsItemHovered() && IsMouseReleased(ImGuiMouseButton_Right))
+        //         OpenPopup(id);
+        //     return BeginPopup(id);
+        // For advanced advanced uses you may want to replicate and customize this code.
+        // See more details in BeginPopupContextItem().
+
+        // Example 1
+        // When used after an item that has an ID (e.g. Button), we can skip providing an ID to BeginPopupContextItem(),
+        // and BeginPopupContextItem() will use the last item ID as the popup ID.
+        {
+            //const char* names[5] = { "Label1", "Label2", "Label3", "Label4", "Label5" };
+            //for (int n = 0; n < 5; n++)
+            //{
+            //    ImGui::Selectable(names[n]);
+                if (ImGui::BeginMenu("Menu inside a regular window"))
+                {
+                    ImGui::MenuItem("(demo menu)", NULL, false, false);
+                    if (ImGui::MenuItem("New")) {}
+                    if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+                    if (ImGui::BeginMenu("Open Recent"))
+                    {
+                        ImGui::MenuItem("fish_hat.c");
+                        ImGui::MenuItem("fish_hat.inl");
+                        ImGui::MenuItem("fish_hat.h");
+                        if (ImGui::BeginMenu("More.."))
+                        {
+                            ImGui::MenuItem("Hello");
+                            ImGui::MenuItem("Sailor");
+                            ImGui::EndMenu();
+                        }
+                        ImGui::EndMenu();
+                    }
+                    ImGui::EndMenu();
+                }
+
+                //if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+                //{
+                //    ImGui::Text("This a popup for \"%s\"!", names[n]);
+                //    if (ImGui::Button("Close"))
+                //        ImGui::CloseCurrentPopup();
+                //    ImGui::EndPopup();
+                //}
+                //if (ImGui::IsItemHovered())
+                //    ImGui::SetTooltip("Right-click to open popup");
+            //}
+        }
+        ImGui::TreePop();
     }
 
     GUI::End();

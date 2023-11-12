@@ -21,6 +21,11 @@ namespace GUI
     void Text(const char* fmt,...);
     void BlankLine(void);
 
+    void List(const std::string& arg_label, const std::vector<std::string>& arg_list);
+    void SearchList(const std::string& arg_label, const std::vector<std::string>& arg_list);
+
+    void HelpMaker(const std::string& arg_string);
+
     void SliderFloat(const std::string& arg_label, float* arg_value, float arg_value_min, float arg_value_max);
     void SliderFloat2(const std::string& arg_label, float arg_value[2], float arg_value_min, float arg_value_max);
     void SliderFloat2(const std::string& arg_label, Vector2& arg_value, float arg_value_min, float arg_value_max);

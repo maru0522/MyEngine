@@ -54,7 +54,7 @@ bool GUI::DropDownTrg(const std::string& arg_label, std::string& arg_currentItem
 
             // 選択中のアイテムとして指定した名前が、現在の要素と一致している場合
             if (is_select)
-            { 
+            {
                 // 現在の要素を、ドロップダウンを畳んでいた際に、一番上に表示する。
                 ImGui::SetItemDefaultFocus();
             }
@@ -80,6 +80,53 @@ void GUI::BlankLine(void)
     ImGui::Spacing();
 }
 
+void GUI::List(const std::string& arg_label, const std::vector<std::string>& arg_list)
+{
+    // タブ
+    if (ImGui::CollapsingHeader(arg_label.c_str())) // 開かれてるかの有無
+    {
+        // リスト全検索
+        for (auto& elem : arg_list)
+        {
+            // テキストの羅列
+            ImGui::BulletText("%s", elem.c_str());
+        }
+    }
+}
+
+void GUI::SearchList(const std::string& arg_label, const std::vector<std::string>& arg_list)
+{
+    if (ImGui::CollapsingHeader(arg_label.c_str()))
+    {
+        static ImGuiTextFilter filter;
+        filter.Draw();
+
+        // リスト全検索
+        for (auto& elem : arg_list)
+        {
+            // 検索中の内容を考慮
+            if (filter.PassFilter(elem.c_str()))
+            {
+                // テキストの羅列
+                ImGui::BulletText("%s", elem.c_str());
+            }
+        }
+    }
+}
+
+void GUI::HelpMaker(const std::string& arg_string)
+{
+    ImGui::TextDisabled("(?)");
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(arg_string.c_str());
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+}
+
 void GUI::SliderFloat(const std::string& arg_label, float* arg_value, float arg_value_min, float arg_value_max)
 {
     ImGui::SliderFloat(arg_label.c_str(), arg_value, arg_value_min, arg_value_max);
@@ -103,7 +150,7 @@ void GUI::SliderFloat3(const std::string& arg_label, float arg_value[3], float a
 
 void GUI::SliderFloat3(const std::string& arg_label, Vector3& arg_value, float arg_value_min, float arg_value_max)
 {
-    float* v[3] = { &arg_value.x, &arg_value.y, &arg_value.z};
+    float* v[3] = { &arg_value.x, &arg_value.y, &arg_value.z };
     ImGui::SliderFloat3(arg_label.c_str(), *v, arg_value_min, arg_value_max);
 }
 
