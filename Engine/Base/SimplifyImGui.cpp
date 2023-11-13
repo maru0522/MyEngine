@@ -114,14 +114,14 @@ void GUI::SearchList(const std::string& arg_label, const std::vector<std::string
     }
 }
 
-void GUI::HelpMaker(const std::string& arg_string)
+void GUI::HelpMaker(const std::string& arg_helpMsg, const std::string& arg_Mark)
 {
-    ImGui::TextDisabled("(?)");
+    ImGui::TextDisabled(arg_Mark.c_str());
     if (ImGui::IsItemHovered())
     {
         ImGui::BeginTooltip();
         ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-        ImGui::TextUnformatted(arg_string.c_str());
+        ImGui::TextUnformatted(arg_helpMsg.c_str());
         ImGui::PopTextWrapPos();
         ImGui::EndTooltip();
     }

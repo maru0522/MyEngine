@@ -117,7 +117,7 @@ void CameraManager::CreateDebugCamera(ICamera* arg_cameraPtr)
 
     const Vector3 pos = { arg_cameraPtr->GetTransformMatrix().mat_pos.m[3][0], arg_cameraPtr->GetTransformMatrix().mat_pos.m[3][1], arg_cameraPtr->GetTransformMatrix().mat_pos.m[3][2] };
     const Vector3 rot = { 0.f,0.f,0.f };
-    const Vector3 sca= { 1.f,1.f,1.f };
+    const Vector3 sca = { 1.f,1.f,1.f };
     const Transform copy = { pos,rot,sca };
 
     // 座標系を、基になったカメラと揃える
@@ -172,81 +172,128 @@ void CameraManager::DebugGui(void)
     static std::string currentItem;
     currentItem = current_->GetId();
 
-    // ドロップダウンの管理と選択中のカメラ名の表示
-    if (GUI::DropDownTrg("currentCamera", currentItem, cameraList))
-    {
-        // ドロップダウン内で別カメラが選択されたとき、使用しているカメラを変更する。
-        SetCurrentCamera(currentItem);
-    }
+    GUI::Text("CurrentCamera : %s", currentItem.c_str());
+    ImGui::Separator();
+    GUI::BlankLine(); // 1行あける
     GUI::BlankLine(); // 1行あける
 
 
-
-    GUI::Text("Change CunnrentCamera at new DebugCamera");
     GUI::CheckBox("is_switch", &is_switchCameraByCreateDebugCam_);
+    ImGui::SameLine();
+    GUI::HelpMaker("Automatically switch the viewpoint to the new debug camera when a debug camera is generated");
+
+    ImGui::SameLine();
+    GUI::CheckBox("is_popupFront", &is_popupWindowMoveFront_);
+    ImGui::SameLine();
+    GUI::HelpMaker("When a pop-up window is generated, it comes to the forefront of the screen.");
+    GUI::BlankLine(); // 1行あける
+    GUI::BlankLine(); // 1行あける
     GUI::BlankLine(); // 1行あける
 
-    GUI::Text("Use part of CurrentCamera's id when Create new DebugCamera");
+
     // デバッグカメラ生成用のボタン
     if (GUI::ButtonTrg("Create", { 100,20 }))
     {
         CreateDebugCamera(current_);
     }
+    ImGui::SameLine();
+    GUI::HelpMaker("Use part of CurrentCamera's id when Create new DebugCamera");
 
-    GUI::SearchList("CameraList", cameraList);
 
-    if (ImGui::TreeNode("Context menus"))
+    // カメラリストの項目を生成
+    if (ImGui::TreeNode("Camera List"))
     {
-        GUI::HelpMaker("\"Context\" functions are simple helpers to associate a Popup to a given Item or Window identifier.");
+        // 任意のカメラを検索で絞り込む用のフィルター
+        static ImGuiTextFilter cameraFilter;
+        // フィルター（検索欄）を設置
+        cameraFilter.Draw();
+        ImGui::SameLine();
+        // ヘルパーの設置（フィルター/検索欄）
+        GUI::HelpMaker("The search field allows you to narrow down the cameras to be displayed.");
+        GUI::BlankLine();
 
-        // BeginPopupContextItem() is a helper to provide common/simple popup behavior of essentially doing:
-        //     if (id == 0)
-        //         id = GetItemID(); // Use last item id
-        //     if (IsItemHovered() && IsMouseReleased(ImGuiMouseButton_Right))
-        //         OpenPopup(id);
-        //     return BeginPopup(id);
-        // For advanced advanced uses you may want to replicate and customize this code.
-        // See more details in BeginPopupContextItem().
-
-        // Example 1
-        // When used after an item that has an ID (e.g. Button), we can skip providing an ID to BeginPopupContextItem(),
-        // and BeginPopupContextItem() will use the last item ID as the popup ID.
+        // ヘルパーの設置（カメラリスト）
+        GUI::HelpMaker("Double Left click for more information");
+        int32_t node_clicked = -1;
+        // カメラリスト用に、全てのカメラを検索
+        for (int32_t i = 0; i < cameraList.size(); i++)
         {
-            //const char* names[5] = { "Label1", "Label2", "Label3", "Label4", "Label5" };
-            //for (int n = 0; n < 5; n++)
-            //{
-            //    ImGui::Selectable(names[n]);
-                if (ImGui::BeginMenu("Menu inside a regular window"))
-                {
-                    ImGui::MenuItem("(demo menu)", NULL, false, false);
-                    if (ImGui::MenuItem("New")) {}
-                    if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-                    if (ImGui::BeginMenu("Open Recent"))
-                    {
-                        ImGui::MenuItem("fish_hat.c");
-                        ImGui::MenuItem("fish_hat.inl");
-                        ImGui::MenuItem("fish_hat.h");
-                        if (ImGui::BeginMenu("More.."))
-                        {
-                            ImGui::MenuItem("Hello");
-                            ImGui::MenuItem("Sailor");
-                            ImGui::EndMenu();
-                        }
-                        ImGui::EndMenu();
-                    }
-                    ImGui::EndMenu();
-                }
+            // 表示するカメラ名を、フィルター（検索欄）を考慮して絞り込みする。
+            if (cameraFilter.PassFilter(cameraList[i].c_str())) // 検索欄に何も入力していない場合関係ない
+            {
+                ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+                bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, cameraList[i].c_str());
+                if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) { node_clicked = i; }
 
-                //if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
-                //{
-                //    ImGui::Text("This a popup for \"%s\"!", names[n]);
-                //    if (ImGui::Button("Close"))
-                //        ImGui::CloseCurrentPopup();
-                //    ImGui::EndPopup();
-                //}
-                //if (ImGui::IsItemHovered())
-                //    ImGui::SetTooltip("Right-click to open popup");
-            //}
+                if (node_open)
+                {
+                    if (GUI::ButtonTrg("Set"))
+                    {
+                        if (cameraList[i] != currentItem)
+                        {
+                            SetCurrentCamera(cameraList[i]);
+                        }
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Information"))
+                    {
+                        ImGui::OpenPopup("another popup");
+                    }
+
+                    if (cameraList[i].starts_with("DebugCamera_"))
+                    {
+                        ImGui::SameLine();
+                        if (GUI::ButtonTrg("Delete"))
+                        {
+                            DestroyDebugCamera(cameraList[i]);
+                        }
+                    }
+
+                    bool is_beginPopup{};
+                    is_popupWindowMoveFront_ ?
+                        is_beginPopup = ImGui::BeginPopupModal("another popup", NULL, ImGuiWindowFlags_AlwaysAutoResize) :
+                        is_beginPopup = ImGui::BeginPopup("another popup");
+
+                    if (is_beginPopup)
+                    {
+                        ICamera* camPtr = GetCamera(cameraList[i]);
+                        GUI::Text("Axes");
+                        GUI::Text("forward :  %f,%f,%f", camPtr->axes_.forward.x, camPtr->axes_.forward.y, camPtr->axes_.forward.z);
+                        GUI::Text("right :    %f,%f,%f", camPtr->axes_.right.x, camPtr->axes_.right.y, camPtr->axes_.right.z);
+                        GUI::Text("up :       %f,%f,%f", camPtr->axes_.up.x, camPtr->axes_.up.y, camPtr->axes_.up.z);
+                        GUI::BlankLine();
+                        GUI::BlankLine();
+                        GUI::BlankLine();
+
+                        GUI::Text("Transform");
+                        GUI::Text("position : %f,%f,%f", camPtr->transform_.position.x, camPtr->transform_.position.y, camPtr->transform_.position.z);
+                        GUI::Text("rotation : %f,%f,%f", camPtr->transform_.rotation.x, camPtr->transform_.rotation.y, camPtr->transform_.rotation.z);
+                        GUI::Text("scale :    %f,%f,%f", camPtr->transform_.scale.x, camPtr->transform_.scale.y, camPtr->transform_.scale.z);
+                        GUI::BlankLine();
+                        GUI::BlankLine();
+                        GUI::BlankLine();
+
+                        GUI::Text("TransformMatrix - mat_world");
+                        const Matrix4& M = camPtr->transformMatrix_.mat_world;
+                        GUI::Text("%f,%f,%f,%f", M.m[0][0], M.m[0][1], M.m[0][2], M.m[0][3]);
+                        GUI::Text("%f,%f,%f,%f", M.m[1][0], M.m[1][1], M.m[1][2], M.m[1][3]);
+                        GUI::Text("%f,%f,%f,%f", M.m[2][0], M.m[2][1], M.m[2][2], M.m[2][3]);
+                        GUI::Text("%f,%f,%f,%f", M.m[3][0], M.m[3][1], M.m[3][2], M.m[3][3]);
+                        GUI::BlankLine();
+                        GUI::BlankLine();
+                        GUI::BlankLine();
+
+                        ImGui::Separator();
+                        if (ImGui::Button("Close"))
+                        {
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::EndPopup();
+                    }
+                    ImGui::TreePop();
+                }
+            }
         }
         ImGui::TreePop();
     }
@@ -379,4 +426,35 @@ void CameraManager::SetCurrentCamera(const std::string& arg_id)
     current_->UpdateOrthoGraphic();
     Sprite::UpdateCBMatOrthoGraphic(this);
     Object3D::UpdateCBMatViewPerse(this);
+}
+
+ICamera* CameraManager::GetCamera(const std::string& arg_cameraId)
+{
+    // ベクタ配列に存在するか（一般カメラ）
+    bool isContain_camera = IsContainSameId_Camera(arg_cameraId);
+    // ベクタ配列に存在するか（デバッグカメラ）
+    bool isContain_debugCamera = IsContainSameId_DebugCamera(arg_cameraId);
+
+
+    // どちらにも存在しない場合、スキップ
+    if (isContain_camera == false && isContain_debugCamera == false) { return nullptr; }
+    // どちらか1つのみ、trueになる。（2つのベクタ配列で id が被ることは無い）
+    if (isContain_camera)
+    {
+        for (auto& camera : vector_cameras_)
+        {
+            // 名前が一致したカメラのptrを受け取る
+            if (camera->GetId() == arg_cameraId) { return camera; }
+        }
+    }
+    if (isContain_debugCamera)
+    {
+        for (auto& debugCamera : vector_debugCameras_)
+        {
+            // 名前が一致したカメラのptrを受け取る
+            if (debugCamera->GetId() == arg_cameraId) { return debugCamera.get(); }
+        }
+    }
+
+    return nullptr;
 }

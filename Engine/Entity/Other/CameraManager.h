@@ -45,6 +45,7 @@ private:
     //>> 変数
     bool is_finalized_;
     bool is_switchCameraByCreateDebugCam_;
+    bool is_popupWindowMoveFront_;
 
     ICamera* current_;
     std::vector<ICamera*> vector_cameras_;
@@ -56,5 +57,6 @@ public:
     void SetCurrentCamera(const std::string& arg_id);
 
     //>> getter
-    inline ICamera* GetCurrentCamera(void) { return current_; }
+    ICamera* GetCurrentCamera(void) { return current_; }
+    ICamera* GetCamera(const std::string& arg_cameraId);
 };
