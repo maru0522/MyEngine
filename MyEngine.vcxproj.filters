@@ -229,6 +229,7 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="IPrimitive.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Plane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -442,6 +443,7 @@
     </ClInclude>
     <ClInclude Include="IPrimitive.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Plane.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

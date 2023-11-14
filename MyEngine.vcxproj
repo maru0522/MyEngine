@@ -160,6 +160,7 @@
     <ClCompile Include="Engine\Base\WndAPI.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
@@ -287,6 +288,7 @@
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition.h" />
     <ClInclude Include="IPrimitive.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transform.h" />
