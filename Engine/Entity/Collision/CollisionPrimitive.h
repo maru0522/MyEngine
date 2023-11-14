@@ -20,6 +20,7 @@ namespace CollisionPrimitive
         bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
         bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
         bool Col(CollisionPrimitive::OBBCollider* arg_OBB) override;
+        bool Col(CollisionPrimitive::RayCollider* arg_ray) override;
     };
 
     struct SphereCollider final : public ICollider
@@ -47,6 +48,7 @@ namespace CollisionPrimitive
         bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
         bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
         bool Col(CollisionPrimitive::OBBCollider* arg_OBB) override;
+        bool Col(CollisionPrimitive::RayCollider* arg_ray) override;
     };
 
     struct PlaneCollider final : public ICollider
@@ -66,6 +68,7 @@ namespace CollisionPrimitive
         bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
         bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
         bool Col(CollisionPrimitive::OBBCollider* arg_OBB) override;
+        bool Col(CollisionPrimitive::RayCollider* arg_ray) override;
     };
 
     struct AABBCollider final : public ICollider
@@ -86,6 +89,7 @@ namespace CollisionPrimitive
         bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
         bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
         bool Col(CollisionPrimitive::OBBCollider* arg_OBB) override;
+        bool Col(CollisionPrimitive::RayCollider* arg_ray) override;
     };
 
     struct OBBCollider final :public ICollider
@@ -107,5 +111,25 @@ namespace CollisionPrimitive
         bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
         bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
         bool Col(CollisionPrimitive::OBBCollider* arg_OBB) override;
+        bool Col(CollisionPrimitive::RayCollider* arg_ray) override;
+    };
+
+    struct RayCollider final : public ICollider
+    {
+        // 関数
+        RayCollider(void) noexcept = default;
+        inline bool Dispatch(ICollider* other) override { return other->Col(this); }
+
+        // 変数
+        Vector3 start{ 0, 0, 0 };
+        Vector3 dir{ 0, 0, 0 };
+
+    private: //4
+        bool Col(CollisionPrimitive::SphereCollider* arg_Shpere) override;
+        bool Col(CollisionPrimitive::PlaneCollider* arg_Plane) override;
+        bool Col(CollisionPrimitive::PointCollider* arg_Point) override;
+        bool Col(CollisionPrimitive::AABBCollider* arg_AABB) override;
+        bool Col(CollisionPrimitive::OBBCollider* arg_OBB) override;
+        bool Col(CollisionPrimitive::RayCollider* arg_ray) override;
     };
 }

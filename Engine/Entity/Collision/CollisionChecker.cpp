@@ -84,6 +84,26 @@ const bool CollisionChecker::SphereToOBB(const CollisionPrimitive::SphereCollide
            (s.center.z - nearest.z) * (s.center.z - nearest.z) <= s.radius * s.radius;
 }
 
+const bool CollisionChecker::SphereToRay(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::RayCollider& r, float* dist, Vector3* intersection)
+{
+    Vector3 m = Vector3(r.start - s.center).Normalize();
+    float b = Math::Vec3::Dot(m, r.dir);
+    float c = Math::Vec3::Dot(m, m) - s.radius * s.radius;
+
+    if (c > 0.f && b > 0.f) { return false; }
+
+    float discr = b * b - c;
+    if (discr < 0.f) { return false; }
+
+    float t = -b - std::sqrtf(discr);
+    if (t < 0.f) { t = 0.f; }
+    if (dist) { *dist = t; }
+
+    if (intersection) { *intersection = r.start + t * r.dir; }
+
+    return true;
+}
+
 const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2)
 {
     float dot = Math::Vec3::Dot(p1.normal, p2.normal);

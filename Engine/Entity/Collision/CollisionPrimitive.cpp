@@ -84,6 +84,15 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::OBBCollider* ar
     return false;
 }
 
+bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::RayCollider* arg_ray)
+{
+    if (arg_ray)
+    {
+
+    }
+    return false;
+}
+
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
 { // 平面と平面
     bool isHit = CollisionChecker::PlaneToPlane(*this, *arg_Plane);
@@ -141,6 +150,15 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::AABBCollider* ar
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
 {
     if (arg_OBB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::RayCollider* arg_ray)
+{
+    if (arg_ray)
     {
 
     }
@@ -219,6 +237,15 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::OBBCollider* arg_
     return false;
 }
 
+bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::RayCollider* arg_ray)
+{
+    if (arg_ray)
+    {
+
+    }
+    return false;
+}
+
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // 点と球
     bool isHit = CollisionChecker::SphereToPoint(*arg_Shpere, *this);
@@ -282,6 +309,15 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::OBBCollider* arg
     return false;
 }
 
+bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::RayCollider* arg_ray)
+{
+    if (arg_ray)
+    {
+
+    }
+    return false;
+}
+
 bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 {
     if (arg_Shpere)
@@ -321,6 +357,78 @@ bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::AABBCollider* arg_
 bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
 {
     if (arg_OBB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::RayCollider* arg_ray)
+{
+    if (arg_ray)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
+{
+    bool isHit = CollisionChecker::SphereToRay(*arg_Shpere, *this);
+
+    if (isHit)
+    {
+        // 接触相手のptrを保存
+        SetOther(arg_Shpere);
+        arg_Shpere->SetOther(this);
+
+        // nullチェックと衝突処理の実行
+        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
+        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
+    }
+
+    return isHit;
+}
+
+bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
+{
+    if (arg_Plane)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
+{
+    if (arg_Point)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
+{
+    if (arg_AABB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::OBBCollider* arg_OBB)
+{
+    if (arg_OBB)
+    {
+
+    }
+    return false;
+}
+
+bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::RayCollider* arg_ray)
+{
+    if (arg_ray)
     {
 
     }

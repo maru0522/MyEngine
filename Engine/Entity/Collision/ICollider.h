@@ -16,6 +16,7 @@ namespace CollisionPrimitive
     struct PointCollider;
     struct AABBCollider;
     struct OBBCollider;
+    struct RayCollider;
 
     enum class Shape
     {
@@ -25,6 +26,7 @@ namespace CollisionPrimitive
         POINT,   // 点
         AABB,    // XYZ軸に平行な直方体
         OBB,     // 分離軸に平行な直方体
+        RAY,     // 半直線
     };
 }
 
@@ -98,6 +100,7 @@ public:
     virtual bool Col(CollisionPrimitive::PointCollider* arg_Point) = 0;
     virtual bool Col(CollisionPrimitive::AABBCollider* arg_AABB) = 0;
     virtual bool Col(CollisionPrimitive::OBBCollider* arg_OBB) = 0;
+    virtual bool Col(CollisionPrimitive::RayCollider* arg_Ray) = 0;
 
     // 触れた瞬間か確認し、trueならcallbackを実行
     void Check_onTrigger(void);
