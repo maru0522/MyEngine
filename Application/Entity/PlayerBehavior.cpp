@@ -10,6 +10,7 @@
 #include "SphericalCamera.h"
 #include "WndAPI.h"
 #include "Screen.h"
+#include "CollisionPrimitive.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -214,27 +215,33 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     debug_curState_ = PlayerBehavior::MOVE;
 
     // 入力ベクトル
-    Vector3 inputVec{};
+    Vector2 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec = inputVec.Normalize();
 
     // 現在カメラのポインタ
     ICamera* curCam = GetPlayerCamMPtr()->GetCurrentCamera();
-    // スクリーンから見たときの最近点（画面中央）
-    const Vector3& point_nearest = curCam->GetScreen().ScreenToWorldPoint(Vector2{ WndAPI::kWidth_,WndAPI::kHeight_ }, 0.f);
-    // スクリーンから見たときの最遠点（画面中央）
-    const Vector3& point_farthest = curCam->GetScreen().ScreenToWorldPoint(Vector2{ WndAPI::kWidth_,WndAPI::kHeight_ }, 1.f);
-    // スクリーンから見たときの最近点（画面右端）
-    const Vector3& point_nearestRight = curCam->GetScreen().ScreenToWorldPoint(Vector2{ WndAPI::kWidth_,WndAPI::kHeight_ }, 1.f);
 
-    // スクリーンから見たときの各軸へのベクトル
-    Axis3 vec_byScreen;
-    vec_byScreen.forward = Vector3(point_farthest - point_nearest).Normalize();     // 正面
-    vec_byScreen.right = Vector3(point_nearestRight - point_nearest).Normalize();   // 右
-    vec_byScreen.up = Math::Vec3::Cross(vec_byScreen.forward, vec_byScreen.right);  // 上
+    // プレイヤーの行列系
+    const TransformMatrix& transMat = GetPlayerTransformMatrix();
+    // プレイヤーの座標をスクリーン座標に変換
+    Vector2 pos_screen = curCam->GetScreen().WorldToScreenPoint(transMat.mat_world);
+    // スクリーン座標 + 入力ベクトル * 大きさ
+    const float norm = 5.f;
+    pos_screen += inputVec * norm;
 
+    // スクリーン座標をワールド座標に変換
+    Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen, 0.f);
+    Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen, 1.f);
 
+    // 半直線の方向の計算
+    Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
+    CollisionPrimitive::RayCollider ray;
+    ray.start = pos_moved_nearest;
+    ray.dir = vec_moved_ray;
+
+    GetPlayerPlanetPtr()->
 
     //// カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -921,6 +928,11 @@ const Transform& IPlayerBehavior::GetPlayerTransform(void)
     return playerPtr_->transform_;
 }
 
+const TransformMatrix& IPlayerBehavior::GetPlayerTransformMatrix(void)
+{
+    return playerPtr_->matTrans_;
+}
+
 float IPlayerBehavior::GetPlayerJumpVecNorm(void)
 {
     return playerPtr_->jumpVecNorm_;
@@ -969,6 +981,11 @@ bool IPlayerBehavior::GetPlayerIsLanding(void)
 CameraManager* IPlayerBehavior::GetPlayerCamMPtr(void)
 {
     return playerPtr_->camMPtr_;
+}
+
+Planet* IPlayerBehavior::GetPlayerPlanetPtr(void)
+{
+    return playerPtr_->planetPtr_;
 }
 
 void IPlayerBehavior::SetPlayerMoveVec(const Vector3& arg_moveVec)

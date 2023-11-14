@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "CameraManager.h"
 #include "Timer.h"
+#include "Planet.h"
 
 // 前方宣言
 class Player;
@@ -73,6 +74,7 @@ protected:
     const Vector3& GetPlayerVelociy(void);
     const Axis3& GetPlayerAxes(void);
     const Transform& GetPlayerTransform(void);
+    const TransformMatrix& GetPlayerTransformMatrix(void);
     float GetPlayerJumpVecNorm(void);
     float GetPlayerDefaultRad(void);
     float GetPlayerCurrentRad(void);
@@ -83,6 +85,7 @@ protected:
     float GetPlayerMoveJumpLongSpeed(void);
     bool GetPlayerIsLanding(void);
     CameraManager* GetPlayerCamMPtr(void);
+    Planet* GetPlayerPlanetPtr(void);
 
 
     //>> setter
