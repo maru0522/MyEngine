@@ -106,10 +106,10 @@
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
-    <ClCompile Include="Engine\Entity\Other\ICamera.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\ICamera.cpp" />
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
-    <ClCompile Include="Engine\Entity\Other\CameraManager.cpp" />
-    <ClCompile Include="Engine\Entity\Other\SphericalCamera.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\CameraManager.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\SphericalCamera.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionChecker.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionManager.cpp" />
@@ -276,7 +276,7 @@
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
-    <ClInclude Include="Engine\Entity\Other\ICamera.h" />
+    <ClInclude Include="Engine\Entity\Camera\ICamera.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
     <ClInclude Include="Engine\Scene\common\SceneNameList.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
@@ -288,9 +288,9 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
-    <ClInclude Include="Engine\Entity\Other\CameraManager.h" />
+    <ClInclude Include="Engine\Entity\Camera\CameraManager.h" />
     <ClInclude Include="Engine\Entity\Light\CircleShadow.h" />
-    <ClInclude Include="Engine\Entity\Other\SphericalCamera.h" />
+    <ClInclude Include="Engine\Entity\Camera\SphericalCamera.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionChecker.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionManager.h" />

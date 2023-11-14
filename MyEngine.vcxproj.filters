@@ -90,8 +90,8 @@
     <ClCompile Include="Engine\Base\InitDirectX.cpp">
       <Filter>Engine\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Entity\Other\CameraManager.cpp">
-      <Filter>Engine\Entity\Other</Filter>
+    <ClCompile Include="Engine\Entity\Camera\CameraManager.cpp">
+      <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\common\IScene.cpp">
       <Filter>Engine\Scene\common</Filter>
@@ -217,14 +217,14 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Application\UI.cpp" />
-    <ClCompile Include="Engine\Entity\Other\ICamera.cpp">
-      <Filter>Engine\Entity\Other</Filter>
+    <ClCompile Include="Engine\Entity\Camera\ICamera.cpp">
+      <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
     <ClCompile Include="DebugCamera.cpp">
-      <Filter>Engine\Entity\Other</Filter>
+      <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Entity\Other\SphericalCamera.cpp">
-      <Filter>Engine\Entity\Other</Filter>
+    <ClCompile Include="Engine\Entity\Camera\SphericalCamera.cpp">
+      <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Screen.cpp" />
   </ItemGroup>
@@ -283,8 +283,8 @@
     <ClInclude Include="Engine\Base\InitDirectX.h">
       <Filter>Engine\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Entity\Other\CameraManager.h">
-      <Filter>Engine\Entity\Other</Filter>
+    <ClInclude Include="Engine\Entity\Camera\CameraManager.h">
+      <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\common\IScene.h">
       <Filter>Engine\Scene\common</Filter>
@@ -425,14 +425,14 @@
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Application\UI.h" />
-    <ClInclude Include="Engine\Entity\Other\ICamera.h">
-      <Filter>Engine\Entity\Other</Filter>
+    <ClInclude Include="Engine\Entity\Camera\ICamera.h">
+      <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
     <ClInclude Include="DebugCamera.h">
-      <Filter>Engine\Entity\Other</Filter>
+      <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Entity\Other\SphericalCamera.h">
-      <Filter>Engine\Entity\Other</Filter>
+    <ClInclude Include="Engine\Entity\Camera\SphericalCamera.h">
+      <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Engine\Scene\common\SceneNameList.h">
@@ -502,9 +502,6 @@
     <Filter Include="Engine\Entity\3D">
       <UniqueIdentifier>{b78fe4ab-857b-4c78-af56-549ee6359c19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Entity\Other">
-      <UniqueIdentifier>{be80ca21-6e4e-4a5a-ba10-9d145748f897}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Entity\Light">
       <UniqueIdentifier>{7ec3f73d-fe90-4793-a5fc-a1d4b09ce796}</UniqueIdentifier>
     </Filter>
@@ -525,6 +522,9 @@
     </Filter>
     <Filter Include="Application\Object">
       <UniqueIdentifier>{f7a7373e-fab5-46a9-b627-c976e2ddc765}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Entity\Camera">
+      <UniqueIdentifier>{be80ca21-6e4e-4a5a-ba10-9d145748f897}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
