@@ -17,10 +17,12 @@ public:
 
 // 代入演算子オーバーロード
 Matrix4& operator*=(Matrix4& m1, const Matrix4& m2);
+Vector4& operator*=(Vector4& v, const Matrix4& m);
 
 // 2項演算子オーバーロード
 const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2);
 const Vector3 operator*(const Vector3& v, const Matrix4& m);
+const Vector4 operator*(const Vector4& v, const Matrix4& m);
 
 namespace Math {
     namespace Mat4 {

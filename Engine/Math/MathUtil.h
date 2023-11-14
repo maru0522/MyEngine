@@ -92,6 +92,9 @@ namespace Math {
         Vector3 ToCartesian(float r, float theta, float phi);
         //Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);
 
+        Vector2 WorldToScreen(const Matrix4& arg_matWorld, int32_t arg_scW, int32_t arg_scH, const Matrix4& arg_view, const Matrix4& arg_prj);
+        Vector3 ScreenToWorld(const Vector2& arg_scPos, float arg_fZ, int32_t arg_scW, int32_t arg_scH, const Matrix4& arg_view, const Matrix4& arg_prj);
+
         // アフィン変換
         Matrix4 AffinTrans(const Transform& arg_transform, TransformMatrix* arg_transMatPtr = nullptr);
         Matrix4 AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr = nullptr);

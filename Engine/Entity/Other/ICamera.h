@@ -1,6 +1,8 @@
 #pragma once
 #include "Transform.h"
 #include <string>
+#include "SceneNameList.h"
+#include "Screen.h"
 
 // 前方宣言
 class CameraManager; // 前方宣言なのでファイル内に隠蔽
@@ -28,6 +30,7 @@ protected:
     //>> 変数
     std::string id_;
     Vector3 vec_target_;
+    SceneName birthScene_;
 
     Axis3 axes_; // 姿勢
     Transform transform_; // 座標など
@@ -39,6 +42,8 @@ protected:
     Matrix4 matProj_Perspective_;
     Matrix4 matProj_OrthoGraphic_;
     bool is_affinUseAxes_;
+
+    Screen screen_;
 
 public:
     // setter
@@ -68,5 +73,7 @@ public:
 
     float GetFarZ(void) { return farZ_; }
     float GetNearZ(void) { return nearZ_; }
+
+    const Screen& GetScreen(void) { return screen_; }
 };
 

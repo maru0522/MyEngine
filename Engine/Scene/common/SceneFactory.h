@@ -1,20 +1,11 @@
 #pragma once
 #include <memory>
+#include "SceneNameList.h"
 
 #include "DemoScene.h"
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "ResultScene.h"
-
-enum class SceneName
-{
-    NONE = -1,
-
-    DEMO,
-    TITLE,
-    GAME,
-    RESULT,
-};
 
 class SceneFactory
 {

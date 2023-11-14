@@ -8,6 +8,8 @@
 #include "RadialBlur.h"
 #include "CameraManager.h"
 #include "SphericalCamera.h"
+#include "WndAPI.h"
+#include "Screen.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -217,7 +219,24 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec = inputVec.Normalize();
 
-    // カメラ視点のプレイヤー移動ベクトル
+    // 現在カメラのポインタ
+    ICamera* curCam = GetPlayerCamMPtr()->GetCurrentCamera();
+    // スクリーンから見たときの最近点（画面中央）
+    const Vector3& point_nearest = curCam->GetScreen().ScreenToWorldPoint(Vector2{ WndAPI::kWidth_,WndAPI::kHeight_ }, 0.f);
+    // スクリーンから見たときの最遠点（画面中央）
+    const Vector3& point_farthest = curCam->GetScreen().ScreenToWorldPoint(Vector2{ WndAPI::kWidth_,WndAPI::kHeight_ }, 1.f);
+    // スクリーンから見たときの最近点（画面右端）
+    const Vector3& point_nearestRight = curCam->GetScreen().ScreenToWorldPoint(Vector2{ WndAPI::kWidth_,WndAPI::kHeight_ }, 1.f);
+
+    // スクリーンから見たときの各軸へのベクトル
+    Axis3 vec_byScreen;
+    vec_byScreen.forward = Vector3(point_farthest - point_nearest).Normalize();     // 正面
+    vec_byScreen.right = Vector3(point_nearestRight - point_nearest).Normalize();   // 右
+    vec_byScreen.up = Math::Vec3::Cross(vec_byScreen.forward, vec_byScreen.right);  // 上
+
+
+
+    //// カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 

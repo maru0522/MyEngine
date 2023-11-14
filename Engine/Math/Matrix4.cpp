@@ -311,6 +311,12 @@ Matrix4& operator*=(Matrix4& m1, const Matrix4& m2)
     return m1;
 }
 
+Vector4& operator*=(Vector4& v, const Matrix4& m)
+{
+    v = v * m;
+    return v;
+}
+
 // 2項演算子 * のオーバロード関数（行列と行列の積）
 const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2)
 {
@@ -322,5 +328,13 @@ const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2)
 const Vector3 operator*(const Vector3& v, const Matrix4& m)
 {
     return Math::Mat4::Transform(v, m);
+}
+
+const Vector4 operator*(const Vector4& v, const Matrix4& m)
+{
+    return Vector4( v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0],
+                    v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1],
+                    v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2],
+                    v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3]);
 }
 

@@ -138,6 +138,40 @@ Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
     return result;
 }
 
+Vector2 Math::Function::WorldToScreen(const Matrix4& arg_matWorld, int32_t arg_scW, int32_t arg_scH, const Matrix4& arg_view, const Matrix4& arg_prj)
+{
+    Matrix4 viewPort = Mat4::Identity();
+    viewPort.m[0][0] = arg_scW / 2.f;
+    viewPort.m[1][1] = -arg_scH / 2.f;
+    viewPort.m[3][0] = arg_scW / 2.f;
+    viewPort.m[3][1] = arg_scH / 2.f;
+
+    Vector4 p{};
+    p *= arg_matWorld;
+    p *= arg_view;
+    p *= arg_prj;
+    p *= viewPort;
+
+    return Vector2(p.x, p.y);
+}
+
+Vector3 Math::Function::ScreenToWorld(const Vector2& arg_scPos, float arg_fZ, int32_t arg_scW, int32_t arg_scH, const Matrix4& arg_view, const Matrix4& arg_prj)
+{
+    const Matrix4 inv_view = Mat4::Inverse(arg_view);
+    const Matrix4 inv_prj = Mat4::Inverse(arg_prj);
+
+    Matrix4 viewPort = Mat4::Identity();
+    viewPort.m[0][0] = arg_scW / 2.f;
+    viewPort.m[1][1] = -arg_scH / 2.f;
+    viewPort.m[3][0] = arg_scW / 2.f;
+    viewPort.m[3][1] = arg_scH / 2.f;
+    const Matrix4 inv_vp = Mat4::Inverse(viewPort);
+    
+    // 逆変換
+    Matrix4 temp = inv_vp * inv_prj * inv_view;
+    return Mat4::Transform({ arg_scPos.x,arg_scPos.y,arg_fZ }, temp);
+}
+
 Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, TransformMatrix* arg_transMatPtr)
 {
     Matrix4 matWorld{ Mat4::Identity() };

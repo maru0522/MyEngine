@@ -20,6 +20,9 @@ ICamera::ICamera(const std::string& arg_id)
 
     // 更新処理を一度挟む
     UpdateOrthoGraphic();
+
+    screen_.SetMatViewPtr(&matView_);
+    screen_.SetMatPrjPtr(&matProj_Perspective_);
 }
 
 void ICamera::Update(void)

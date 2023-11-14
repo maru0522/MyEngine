@@ -159,6 +159,7 @@
     <ClCompile Include="Engine\Base\WndAPI.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition.cpp" />
+    <ClCompile Include="Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\BloomPS.hlsl">
@@ -277,11 +278,13 @@
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Entity\Other\ICamera.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
+    <ClInclude Include="Engine\Scene\common\SceneNameList.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h" />
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition.h" />
+    <ClInclude Include="Screen.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
