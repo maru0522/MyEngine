@@ -1,5 +1,4 @@
-﻿#pragma once
-#include <DirectXMath.h>
+#pragma once
 
 struct Vector4 final
 {
