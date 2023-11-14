@@ -15,7 +15,7 @@ class IPrimitive
 {
 public:
     //>> 関数
-    IPrimitive(void) = default;
+    IPrimitive(Shape arg_shape) : shape_(arg_shape) {}
     virtual ~IPrimitive(void) = default;
 
 protected:

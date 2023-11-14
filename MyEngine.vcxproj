@@ -161,6 +161,7 @@
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\BloomPS.hlsl">
@@ -287,6 +288,7 @@
     <ClInclude Include="Engine\Scene\common\SceneTransition.h" />
     <ClInclude Include="IPrimitive.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
