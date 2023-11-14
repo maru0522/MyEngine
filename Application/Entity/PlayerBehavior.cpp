@@ -241,7 +241,6 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     ray.start = pos_moved_nearest;
     ray.dir = vec_moved_ray;
 
-    GetPlayerPlanetPtr()->
 
     //// カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
