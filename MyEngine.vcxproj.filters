@@ -227,6 +227,7 @@
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="IPrimitive.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -438,6 +439,7 @@
     <ClInclude Include="Engine\Scene\common\SceneNameList.h">
       <Filter>Engine\Scene\common</Filter>
     </ClInclude>
+    <ClInclude Include="IPrimitive.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

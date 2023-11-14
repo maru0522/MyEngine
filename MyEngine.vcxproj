@@ -134,6 +134,7 @@
     <ClCompile Include="Engine\Entity\Light\LightManager.cpp" />
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
+    <ClCompile Include="IPrimitive.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="Engine\Scene\unique\GameScene.h" />
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition.h" />
+    <ClInclude Include="IPrimitive.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
