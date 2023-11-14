@@ -6,6 +6,7 @@ namespace Primitive
 {
     class Plane : public IPrimitive
     {
+        //>> 関数
         Plane(void) : IPrimitive(Shape::PLANE) {}
         Plane(const Vector3& arg_normal, float arf_distance)
             : IPrimitive(Shape::PLANE), normal(arg_normal), distance(arf_distance) {}

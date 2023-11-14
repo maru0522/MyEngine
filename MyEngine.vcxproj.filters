@@ -230,6 +230,8 @@
     <ClCompile Include="IPrimitive.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Ray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -444,6 +446,8 @@
     <ClInclude Include="IPrimitive.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Ray.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
