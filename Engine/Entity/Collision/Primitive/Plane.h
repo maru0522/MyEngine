@@ -4,7 +4,7 @@
 
 namespace Primitive
 {
-    class Plane : public IPrimitive
+    struct Plane : public IPrimitive
     {
     public:
         //>> 関数
