@@ -10,7 +10,7 @@
 #include "SphericalCamera.h"
 #include "WndAPI.h"
 #include "Screen.h"
-#include "CollisionPrimitive.h"
+#include "CollisionChecker.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -235,19 +235,24 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen, 0.f);
     Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen, 1.f);
 
+
     // 半直線の方向の計算
     Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
-    CollisionPrimitive::RayCollider ray;
-    ray.start = pos_moved_nearest;
-    ray.dir = vec_moved_ray;
+    Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
+    Primitive::Sphere planet(GetPlayerPlanetPtr()->surface_.center, GetPlayerPlanetPtr()->surface_.radius);
+    Vector3 intersection;
+    const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
+
+    if (is_col == false) { intersection = pos_moved_farthest; }
+    const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
 
 
     //// カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    //Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    //Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
-    // 移動ベクトル = 前後vec + 水平vec
-    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+    //// 移動ベクトル = 前後vec + 水平vec
+    //Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
     // カメラ座標用の値を補正
     {
