@@ -4,7 +4,7 @@
 
 namespace Primitive
 {
-    class Ray : public IPrimitive
+    struct Ray : public IPrimitive
     {
         //>> 関数
         Ray(void) : IPrimitive(Shape::RAY) {}

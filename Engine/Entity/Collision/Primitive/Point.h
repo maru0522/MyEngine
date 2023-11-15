@@ -4,7 +4,7 @@
 
 namespace Primitive
 {
-    class Point : public IPrimitive
+    struct Point : public IPrimitive
     {
         //>> 関数
         Point(void) : IPrimitive(Shape::POINT) {}

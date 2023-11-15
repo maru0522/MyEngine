@@ -4,7 +4,7 @@
 
 namespace Primitive
 {
-    class OBB : public IPrimitive
+    struct OBB : public IPrimitive
     {
         //>> 関数
         OBB(void) : IPrimitive(Shape::OBB) {}

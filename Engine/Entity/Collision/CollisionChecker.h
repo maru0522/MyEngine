@@ -13,50 +13,50 @@
 namespace CollisionChecker
 {
     // 球と球
-    const bool SphereToSphere(const CollisionPrimitive::SphereCollider& s1, const CollisionPrimitive::SphereCollider& s2);
-    // 球と点
-    const bool SphereToPoint(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PointCollider& p);
+    const bool SphereToSphere(const Primitive::Sphere& s1, const Primitive::Sphere& s2);
+    // 球と点AABBCollider
+    const bool SphereToPoint(const Primitive::Sphere& s, const Primitive::Point& p);
     // 球と平面
-    const bool SphereToPlane(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PlaneCollider& p, Vector3* intersection = nullptr);
+    const bool SphereToPlane(const Primitive::Sphere& s, const Primitive::Plane& p, Vector3* intersection = nullptr);
     // 球とAABB
-    const bool SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection = nullptr);
+    const bool SphereToAABB(const Primitive::Sphere& s, const Primitive::AABB& a, Vector3* intersection = nullptr);
     // 球とOBB
-    const bool SphereToOBB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::OBBCollider& o, Vector3* intersection = nullptr);
+    const bool SphereToOBB(const Primitive::Sphere& s, const Primitive::OBB& o, Vector3* intersection = nullptr);
     // 球と線
-    const bool SphereToRay(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::RayCollider& r,float* dist = nullptr, Vector3* intersection = nullptr);
+    const bool SphereToRay(const Primitive::Sphere& s, const Primitive::Ray& r,float* dist = nullptr, Vector3* intersection = nullptr);
 
     // 平面と平面
-    const bool PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2);
+    const bool PlaneToPlane(const Primitive::Plane& p1, const Primitive::Plane& p2);
     // 平面と点
-    const bool PlaneToPoint(const CollisionPrimitive::PlaneCollider& pl, const CollisionPrimitive::PointCollider& po);
+    const bool PlaneToPoint(const Primitive::Plane& pl, const Primitive::Point& po);
     // 平面とAABB
-    const bool PlaneToAABB(const CollisionPrimitive::PlaneCollider& p, const CollisionPrimitive::AABBCollider& a);
+    const bool PlaneToAABB(const Primitive::Plane& p, const Primitive::AABB& a);
     // 平面とOBB
-    const bool PlaneToOBB(const CollisionPrimitive::PlaneCollider& p, const CollisionPrimitive::AABBCollider& a);
+    const bool PlaneToOBB(const Primitive::Plane& p, const Primitive::AABB& a);
     // 平面と線
-    const bool PlaneToRay(const CollisionPrimitive::PlaneCollider& p, const CollisionPrimitive::RayCollider& r);
+    const bool PlaneToRay(const Primitive::Plane& p, const Primitive::Ray& r);
 
     // AABBとAABB
-    const bool AABBToAABB(const CollisionPrimitive::AABBCollider& a1, const CollisionPrimitive::AABBCollider& a2);
+    const bool AABBToAABB(const Primitive::AABB& a1, const Primitive::AABB& a2);
     // AABBとOBB
-    const bool AABBToOBB(const CollisionPrimitive::AABBCollider& a, const CollisionPrimitive::OBBCollider& o);
+    const bool AABBToOBB(const Primitive::AABB& a, const Primitive::OBB& o);
     // AABBと点
-    const bool AABBToPoint(const CollisionPrimitive::AABBCollider& a, const CollisionPrimitive::PointCollider& p);
+    const bool AABBToPoint(const Primitive::AABB& a, const Primitive::Point& p);
     // AABBと線
-    const bool AABBToRay(const CollisionPrimitive::AABBCollider& a, const CollisionPrimitive::RayCollider& r);
+    const bool AABBToRay(const Primitive::AABB& a, const Primitive::Ray& r);
 
     // OBBとOBB
-    const bool OBBToOBB(const CollisionPrimitive::OBBCollider& o1, const CollisionPrimitive::OBBCollider& o2);
+    const bool OBBToOBB(const Primitive::OBB& o1, const Primitive::OBB& o2);
     // OBBと点
-    const bool OBBToPoint(const CollisionPrimitive::OBBCollider& o, const CollisionPrimitive::PointCollider& p);
+    const bool OBBToPoint(const Primitive::OBB& o, const Primitive::Point& p);
     // OBBと線
-    const bool OBBToRay(const CollisionPrimitive::OBBCollider& o, const CollisionPrimitive::RayCollider& r);
+    const bool OBBToRay(const Primitive::OBB& o, const Primitive::Ray& r);
 
     // 線と線
-    const bool RayToRay(const CollisionPrimitive::RayCollider& r1, const CollisionPrimitive::RayCollider& r2);
+    const bool RayToRay(const Primitive::Ray& r1, const Primitive::Ray& r2);
     // 線と点
-    const bool RayToPoint(const CollisionPrimitive::RayCollider& r, const CollisionPrimitive::PointCollider& p);
+    const bool RayToPoint(const Primitive::Ray& r, const Primitive::Point& p);
 
     // 点と点
-    const bool PointToPoint(const CollisionPrimitive::PointCollider& p1, const CollisionPrimitive::PointCollider& p2);
+    const bool PointToPoint(const Primitive::Point& p1, const Primitive::Point& p2);
 }

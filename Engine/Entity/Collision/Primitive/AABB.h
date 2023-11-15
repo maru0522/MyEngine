@@ -4,7 +4,7 @@
 
 namespace Primitive
 {
-    class AABB : public IPrimitive
+    struct AABB : public IPrimitive
     {
         //>> 関数
         AABB(void) : IPrimitive(Shape::AABB) {}

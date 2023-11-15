@@ -3,7 +3,7 @@
 #include "Matrix4.h"
 #include <cmath>
 
-const bool CollisionChecker::SphereToSphere(const CollisionPrimitive::SphereCollider& s1, const CollisionPrimitive::SphereCollider& s2)
+const bool CollisionChecker::SphereToSphere(const Primitive::Sphere& s1, const Primitive::Sphere& s2)
 {
     return (s2.center.x - s1.center.x) * (s2.center.x - s1.center.x) +
            (s2.center.y - s1.center.y) * (s2.center.y - s1.center.y) +
@@ -11,14 +11,14 @@ const bool CollisionChecker::SphereToSphere(const CollisionPrimitive::SphereColl
            (s2.radius + s1.radius) * (s2.radius + s1.radius);
 }
 
-const bool CollisionChecker::SphereToPoint(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PointCollider& p)
+const bool CollisionChecker::SphereToPoint(const Primitive::Sphere& s, const Primitive::Point& p)
 {
     return (s.center.x - p.pos.x) * (s.center.x - p.pos.x) +
            (s.center.y - p.pos.y) * (s.center.y - p.pos.y) +
            (s.center.z - p.pos.z) * (s.center.z - p.pos.z) <= s.radius * s.radius;
 }
 
-const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::PlaneCollider& p, Vector3* intersection)
+const bool CollisionChecker::SphereToPlane(const Primitive::Sphere& s, const Primitive::Plane& p, Vector3* intersection)
 {
     float distV = Math::Vec3::Dot(s.center, p.normal.Normalize());
     float dist = distV - p.distance;
@@ -32,7 +32,7 @@ const bool CollisionChecker::SphereToPlane(const CollisionPrimitive::SphereColli
     return true;
 }
 
-const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::AABBCollider& a, Vector3* intersection)
+const bool CollisionChecker::SphereToAABB(const Primitive::Sphere& s, const Primitive::AABB& a, Vector3* intersection)
 {
     // AABB内で最も球に近い点
     Vector3 nearest{};
@@ -50,7 +50,7 @@ const bool CollisionChecker::SphereToAABB(const CollisionPrimitive::SphereCollid
            (s.center.z - nearest.z) * (s.center.z - nearest.z) <= s.radius * s.radius;
 }
 
-const bool CollisionChecker::SphereToOBB(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::OBBCollider& o, Vector3* intersection)
+const bool CollisionChecker::SphereToOBB(const Primitive::Sphere& s, const Primitive::OBB& o, Vector3* intersection)
 {
     Matrix4 obbMat = { o.orientations[0].x,o.orientations[0].y,o.orientations[0].z,0,
                        o.orientations[1].x,o.orientations[1].y,o.orientations[1].z,0,
@@ -59,11 +59,11 @@ const bool CollisionChecker::SphereToOBB(const CollisionPrimitive::SphereCollide
 
     Matrix4 obbMatInverse = Math::Mat4::Inverse(obbMat);
 
-    CollisionPrimitive::AABBCollider obbLocal_aabb;
+    Primitive::AABB obbLocal_aabb;
     obbLocal_aabb.center = { 0,0,0 };
     obbLocal_aabb.radius = o.radius;
 
-    CollisionPrimitive::SphereCollider obbLocal_sphere;
+    Primitive::Sphere obbLocal_sphere;
     obbLocal_sphere.center = Math::Mat4::Transform(s.center, obbMatInverse);
     obbLocal_sphere.radius = s.radius;
 
@@ -84,7 +84,7 @@ const bool CollisionChecker::SphereToOBB(const CollisionPrimitive::SphereCollide
            (s.center.z - nearest.z) * (s.center.z - nearest.z) <= s.radius * s.radius;
 }
 
-const bool CollisionChecker::SphereToRay(const CollisionPrimitive::SphereCollider& s, const CollisionPrimitive::RayCollider& r, float* dist, Vector3* intersection)
+const bool CollisionChecker::SphereToRay(const Primitive::Sphere& s, const Primitive::Ray& r, float* dist, Vector3* intersection)
 {
     Vector3 m = Vector3(r.start - s.center).Normalize();
     float b = Math::Vec3::Dot(m, r.dir);
@@ -104,7 +104,7 @@ const bool CollisionChecker::SphereToRay(const CollisionPrimitive::SphereCollide
     return true;
 }
 
-const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollider& p1, const CollisionPrimitive::PlaneCollider& p2)
+const bool CollisionChecker::PlaneToPlane(const Primitive::Plane& p1, const Primitive::Plane& p2)
 {
     float dot = Math::Vec3::Dot(p1.normal, p2.normal);
 
@@ -118,7 +118,7 @@ const bool CollisionChecker::PlaneToPlane(const CollisionPrimitive::PlaneCollide
     return true;
 }
 
-const bool CollisionChecker::AABBToAABB(const CollisionPrimitive::AABBCollider& a1, const CollisionPrimitive::AABBCollider& a2)
+const bool CollisionChecker::AABBToAABB(const Primitive::AABB& a1, const Primitive::AABB& a2)
 {
     Vector3 a1_min = { a1.center.x - a1.radius.x, a1.center.y - a1.radius.y, a1.center.z - a1.radius.z };
     Vector3 a1_max = { a1.center.x + a1.radius.x, a1.center.y + a1.radius.y, a1.center.z + a1.radius.z };
@@ -133,14 +133,14 @@ const bool CollisionChecker::AABBToAABB(const CollisionPrimitive::AABBCollider& 
            a1_max.z >= a2_min.z;
 }
 
-const bool CollisionChecker::AABBToPoint(const CollisionPrimitive::AABBCollider& a, const CollisionPrimitive::PointCollider& p)
+const bool CollisionChecker::AABBToPoint(const Primitive::AABB& a, const Primitive::Point& p)
 {
     return (a.center.x - a.radius.x <= p.pos.x && p.pos.x <= a.center.x + a.radius.x) &&
            (a.center.y - a.radius.y <= p.pos.y && p.pos.y <= a.center.y + a.radius.y) &&
            (a.center.z - a.radius.z <= p.pos.z && p.pos.z <= a.center.z + a.radius.z);
 }
 
-const bool CollisionChecker::OBBToPoint(const CollisionPrimitive::OBBCollider& o, const CollisionPrimitive::PointCollider& p)
+const bool CollisionChecker::OBBToPoint(const Primitive::OBB& o, const Primitive::Point& p)
 {
     Matrix4 obbMat = { o.orientations[0].x,o.orientations[0].y,o.orientations[0].z,0,
                        o.orientations[1].x,o.orientations[1].y,o.orientations[1].z,0,
@@ -150,7 +150,7 @@ const bool CollisionChecker::OBBToPoint(const CollisionPrimitive::OBBCollider& o
     Matrix4 obbMatInverse = Math::Mat4::Inverse(obbMat);
     Vector3 obbLocal_pointPos = Math::Mat4::Transform(p.pos, obbMatInverse);
 
-    CollisionPrimitive::AABBCollider obbLocal_aabb;
+    Primitive::AABB obbLocal_aabb;
     obbLocal_aabb.center = { 0,0,0 };
     obbLocal_aabb.radius = o.radius;
 
@@ -159,7 +159,7 @@ const bool CollisionChecker::OBBToPoint(const CollisionPrimitive::OBBCollider& o
            (obbLocal_aabb.center.z - obbLocal_aabb.radius.z <= obbLocal_pointPos.z && obbLocal_pointPos.z <= obbLocal_aabb.center.z + obbLocal_aabb.radius.z);
 }
 
-const bool CollisionChecker::PointToPoint(const CollisionPrimitive::PointCollider& p1, const CollisionPrimitive::PointCollider& p2)
+const bool CollisionChecker::PointToPoint(const Primitive::Point& p1, const Primitive::Point& p2)
 {
     return p1.pos == p2.pos;
 }

@@ -112,7 +112,7 @@ protected:
     bool IsRelease(void);
 
     //>> 変数
-    ICollider* other_;
+    ICollider* other_{};
     CollisionPrimitive::Shape shape_{};
 
 public:
