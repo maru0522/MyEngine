@@ -4,7 +4,7 @@
 
 namespace CollisionPrimitive
 {
-    class OBBCollider : public ICollider, public Primitive::OBB
+    struct OBBCollider : public ICollider, public Primitive::OBB
     {
     public:
         //>> 関数

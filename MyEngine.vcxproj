@@ -59,7 +59,7 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Object\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Object\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\Primitive\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -81,7 +81,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableSpecificWarnings>4189;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Object\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Object\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\Primitive\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -94,6 +94,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\AABB.cpp" />
     <ClCompile Include="Application\IIvent.cpp" />
     <ClCompile Include="Application\IventArea_Tantative.cpp" />
     <ClCompile Include="Application\Entity\PlayerBehavior.cpp" />
@@ -110,7 +112,6 @@
     <ClCompile Include="Engine\Entity\PostEffect\Bloom.cpp" />
     <ClCompile Include="Engine\Entity\Camera\CameraManager.cpp" />
     <ClCompile Include="Engine\Entity\Camera\SphericalCamera.cpp" />
-    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionChecker.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\Other\Timer.cpp" />
@@ -134,7 +135,7 @@
     <ClCompile Include="Engine\Entity\Light\LightManager.cpp" />
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
-    <ClCompile Include="IPrimitive.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\IPrimitive.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -160,11 +161,17 @@
     <ClCompile Include="Engine\Base\WndAPI.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="Point.cpp" />
-    <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\OBB.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\Plane.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\Point.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\Ray.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\OBBCollider.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\PlaneCollider.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\PointCollider.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\RayCollider.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\Screen.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\Primitive\Sphere.cpp" />
+    <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\BloomPS.hlsl">
@@ -270,6 +277,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\AABB.h" />
     <ClInclude Include="Application\IIvent.h" />
     <ClInclude Include="Application\IventArea_Tantative.h" />
     <ClInclude Include="Application\Entity\PlayerBehavior.h" />
@@ -283,18 +292,25 @@
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Entity\Camera\ICamera.h" />
     <ClInclude Include="Engine\Other\Timer.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive.h" />
     <ClInclude Include="Engine\Scene\common\SceneNameList.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h" />
     <ClInclude Include="Engine\Scene\unique\ResultScene.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition.h" />
-    <ClInclude Include="IPrimitive.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="Point.h" />
-    <ClInclude Include="Ray.h" />
-    <ClInclude Include="Screen.h" />
-    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\IPrimitive.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\OBB.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\Plane.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\Point.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\Ray.h" />
+    <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\OBBCollider.h" />
+    <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\PlaneCollider.h" />
+    <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\PointCollider.h" />
+    <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\RayCollider.h" />
+    <ClInclude Include="Engine\Entity\Camera\Screen.h" />
+    <ClInclude Include="Engine\Entity\Collision\Primitive\Sphere.h" />
+    <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
