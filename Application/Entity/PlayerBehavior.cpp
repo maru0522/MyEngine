@@ -11,6 +11,7 @@
 #include "WndAPI.h"
 #include "Screen.h"
 #include "CollisionChecker.h"
+#include "UI.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -218,6 +219,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector2 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
     inputVec = inputVec.Normalize();
 
     // 現在カメラのポインタ
@@ -226,14 +228,14 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // プレイヤーの行列系
     const TransformMatrix& transMat = GetPlayerTransformMatrix();
     // プレイヤーの座標をスクリーン座標に変換
-    Vector2 pos_screen = curCam->GetScreen().WorldToScreenPoint(transMat.mat_world);
+    const Vector2 pos_screen = curCam->GetScreen().WorldToScreenPoint(transMat.mat_world);
     // スクリーン座標 + 入力ベクトル * 大きさ
     const float norm = 5.f;
-    pos_screen += inputVec * norm;
+    const Vector2 pos_screen_moved = pos_screen + inputVec * norm;
 
     // スクリーン座標をワールド座標に変換
-    Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen, 0.f);
-    Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen, 1.f);
+    Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
+    Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
 
 
     // 半直線の方向の計算
@@ -243,9 +245,17 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector3 intersection;
     const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
 
-    if (is_col == false) { intersection = pos_moved_farthest; }
+    if (is_col == false) 
+    {
+        intersection = pos_moved_farthest;
+    }
     const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
 
+    UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
+    UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
+    GUI::Begin("pb.move");
+    GUI::Text("screenToWorld: %f,%f,%f", intersection.x, intersection.y, intersection.z);
+    GUI::End();
 
     //// カメラ視点のプレイヤー移動ベクトル
     //Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)

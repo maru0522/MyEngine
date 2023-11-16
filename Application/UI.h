@@ -30,9 +30,14 @@ public:
     void Register(const std::string& arg_key, const std::string& arg_path);
     void UnRegister(const std::string& arg_key);
 
+private:
     //>> 変数
     std::unordered_map<KEY, Sprite> umap_sprites_;
-    bool is_finalized_;
+    bool is_finalized_{};
+
+public:
+    //>> getter
+    Sprite* GetUISpritePtr(const std::string& arg_key) { return &umap_sprites_.at(arg_key); }
 
 };
 

@@ -4,6 +4,7 @@
 #include "CollisionChecker.h"
 #include "Timer.h"
 #include "SceneManager.h"
+#include "UI.h"
 
 void DemoScene::Initialize(void)
 {
@@ -110,6 +111,9 @@ void DemoScene::Initialize(void)
     }
     rabbits_[1]->GetTransformPtr()->position = { 10,60, 20 };
     rabbits_[2]->GetTransformPtr()->position = { -10,60, 20 };
+
+    UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
+    UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
 }
 
 void DemoScene::Update(void)
@@ -269,6 +273,9 @@ void DemoScene::Update(void)
     }
 
     GUI::End();
+
+    UI::GetInstance()->Update("circle_red");
+    UI::GetInstance()->Update("circle_green");
 }
 
 void DemoScene::Draw3d(void)
@@ -314,6 +321,8 @@ void DemoScene::Draw3d(void)
 
 void DemoScene::Draw2dFore(void)
 {
+    UI::GetInstance()->Draw("circle_red");
+    UI::GetInstance()->Draw("circle_green");
 }
 
 void DemoScene::Draw2dBack(void)
