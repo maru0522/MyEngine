@@ -172,6 +172,7 @@
     <ClCompile Include="Engine\Entity\Camera\Screen.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.cpp" />
+    <ClCompile Include="PlayerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\BloomPS.hlsl">
@@ -311,6 +312,7 @@
     <ClInclude Include="Engine\Entity\Camera\Screen.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\Sphere.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.h" />
+    <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />

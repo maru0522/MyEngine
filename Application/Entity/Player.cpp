@@ -24,6 +24,9 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
     axes_.up = { 0,1,0 };
 
     moveVec_ = { 0,1,0 };
+
+    pui_.SetUIPtr(UI::GetInstance());
+    pui_.Initialize();
 }
 
 Player::~Player(void)
@@ -33,6 +36,7 @@ Player::~Player(void)
 
 void Player::Update(void)
 {
+    pui_.Update();
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
@@ -177,13 +181,18 @@ void Player::Update(void)
 #endif // _DEBUG
 }
 
-void Player::Draw(void)
+void Player::Draw3d(void)
 {
     // 赤色のテクスチャを適用。（クソ見辛い）
     //appearance_->Draw("Resources/red1x1.png");
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     if (pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::STOOP || pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::MOVE_STOOP) { appearance_->Draw("Resources/red1x1.png"); }
     else { appearance_->Draw(/*"Resources/red1x1.png"*/); }
+}
+
+void Player::Draw2dFore(void)
+{
+    pui_.Draw();
 }
 
 void Player::OnCollision(void)

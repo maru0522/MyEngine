@@ -265,6 +265,7 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp">
       <Filter>Engine\Entity\Collision\CollisionPrimitive</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -520,6 +521,7 @@
     <ClInclude Include="Engine\Entity\Collision\Primitive.h">
       <Filter>Engine\Entity\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

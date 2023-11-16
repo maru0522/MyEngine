@@ -4,9 +4,10 @@
 #include "CameraManager.h"
 #include "CollisionPrimitive.h"
 #include "CollisionManager.h"
-#include "PlayerBehavior.h"
 #include "Planet.h"
 #include "LightManager.h"
+#include "PlayerBehavior.h"
+#include "PlayerUI.h"
 
 class Player
 {
@@ -27,7 +28,8 @@ public:
     ~Player(void);
 
     void Update(void);
-    void Draw(void);
+    void Draw3d(void);
+    void Draw2dFore(void);
 
     float default_rad_{ 50.f };
     float current_rad_{ default_rad_ };
@@ -63,6 +65,7 @@ private:
     CameraManager* camMPtr_{};
 
     PlayerBehaviorMachine pbm_;
+    PlayerUI pui_;
 
     int32_t circleShadows_num_;
     Planet* planetPtr_;

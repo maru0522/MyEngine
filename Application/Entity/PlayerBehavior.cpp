@@ -219,7 +219,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector2 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-    inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
+    //inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
     inputVec = inputVec.Normalize();
 
     // 現在カメラのポインタ
@@ -238,31 +238,31 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
 
 
-    // 半直線の方向の計算
-    Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
-    Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
-    Primitive::Sphere planet(GetPlayerPlanetPtr()->surface_.center, GetPlayerPlanetPtr()->surface_.radius);
-    Vector3 intersection;
-    const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
+    //// 半直線の方向の計算
+    //Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
+    //Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
+    //Primitive::Sphere planet(GetPlayerPlanetPtr()->surface_.center, GetPlayerPlanetPtr()->surface_.radius);
+    //Vector3 intersection;
+    //const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
 
-    if (is_col == false) 
-    {
-        intersection = pos_moved_farthest;
-    }
-    const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
+    //if (is_col == false) 
+    //{
+    //    intersection = pos_moved_farthest;
+    //}
+    //const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
 
     UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
     UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
-    GUI::Begin("pb.move");
-    GUI::Text("screenToWorld: %f,%f,%f", intersection.x, intersection.y, intersection.z);
-    GUI::End();
+    //GUI::Begin("pb.move");
+    //GUI::Text("screenToWorld: %f,%f,%f", intersection.x, intersection.y, intersection.z);
+    //GUI::End();
 
-    //// カメラ視点のプレイヤー移動ベクトル
-    //Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    //Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // カメラ視点のプレイヤー移動ベクトル
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
-    //// 移動ベクトル = 前後vec + 水平vec
-    //Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+    // 移動ベクトル = 前後vec + 水平vec
+    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
     // カメラ座標用の値を補正
     {

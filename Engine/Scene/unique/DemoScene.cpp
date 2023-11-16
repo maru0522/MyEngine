@@ -282,7 +282,7 @@ void DemoScene::Draw3d(void)
 {
     lightGroup_->Draw();
 
-    player_->Draw();
+    player_->Draw3d();
     for (auto& rabbit : rabbits_)
     {
         if (rabbit) { rabbit->Draw(); }
@@ -323,6 +323,7 @@ void DemoScene::Draw2dFore(void)
 {
     UI::GetInstance()->Draw("circle_red");
     UI::GetInstance()->Draw("circle_green");
+    player_->Draw2dFore();
 }
 
 void DemoScene::Draw2dBack(void)
