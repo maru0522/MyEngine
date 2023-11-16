@@ -161,7 +161,7 @@ float FrameTimer::GetTimeRate(bool is_clamp0To1)
 float DeltaTimer::DeltaTime(int32_t arg_past_milliSeconds, int32_t arg_current_milliSeconds)
 {
     // ミリ秒数をint型で取得している前提なので、1000で割って秒数に戻す
-    return (arg_past_milliSeconds - arg_current_milliSeconds) / 1000.f;
+    return (arg_current_milliSeconds - arg_past_milliSeconds) / 1000.f;
 }
 
 void DeltaTimer::Start(void)
@@ -183,6 +183,8 @@ void DeltaTimer::Start(void)
 
     // 加算
     sec_current_ += 0.00001f; // 連続フレームでの使用はだめ
+    // 初期化時点で
+    milliSec_past_ = GetNowCount<milliseconds>();
 }
 
 void DeltaTimer::Start(float sec_max)

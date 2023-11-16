@@ -1,5 +1,6 @@
 #pragma once
 #include "UI.h"
+#include "Timer.h"
 
 class PlayerUI
 {
@@ -19,7 +20,14 @@ private:
     //>> 変数
     UI* uiPtr_;
     bool is_visible_{};
+    bool is_visiblePre_{};
     bool is_end_{};
+
+    DeltaTimer easeTimer_;
+
+    bool IsTrigger(void) { return is_visible_ && is_visiblePre_ == false; }
+    bool IsExecute(void) { return is_visible_; }
+    bool IsRelease(void) { return is_visible_ == false && is_visiblePre_; }
 
 public:
     //>> setter
