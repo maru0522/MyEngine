@@ -17,17 +17,6 @@ namespace CollisionPrimitive
     struct AABBCollider;
     struct OBBCollider;
     struct RayCollider;
-
-    enum class Shape
-    {
-        UNKNOWN, // 未定義
-        SPHERE,  // 球
-        PLANE,   // 平面
-        POINT,   // 点
-        AABB,    // XYZ軸に平行な直方体
-        OBB,     // 分離軸に平行な直方体
-        RAY,     // 半直線
-    };
 }
 
 
@@ -113,7 +102,6 @@ protected:
 
     //>> 変数
     ICollider* other_{};
-    CollisionPrimitive::Shape shape_{};
 
 public:
     //>> setter
@@ -121,5 +109,4 @@ public:
 
     //>> getter
     ICollider* GetOther(void) { return other_; }
-    CollisionPrimitive::Shape GetShape(void) { return shape_; }
 };
