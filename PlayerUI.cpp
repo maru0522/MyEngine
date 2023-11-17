@@ -153,7 +153,7 @@ void PlayerUI::EaseUI(void)
         const Vector2& remain_defPos = { 35.f ,640.f };
         const float remain_posX = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), remain_defPos.x, remain_defPos.x - 115.f);
         uiPtr_->GetUISpritePtr("playerUI_remain")->SetPosition(Vector2{ remain_posX,remain_defPos.y });
-        const float remain_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate());
+        const float remain_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), 1.f, 0.f);
         uiPtr_->GetUISpritePtr("playerUI_remain")->SetAlpha(remain_alpha);
 
         // HPの画像
