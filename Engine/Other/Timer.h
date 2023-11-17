@@ -48,7 +48,7 @@ public:
 
 protected:
     //>> 変数
-    float gameSpeed_{1.f};
+    float gameSpeed_{ 1.f };
 
 public:
     //>> setter
@@ -170,15 +170,17 @@ public:
 private:
     //>> 変数
     int32_t milliSec_past_{}; // 前回時のミリ秒数
-    float sec_current_{};   // 現在秒数
-    float sec_max_{};       // 最大秒数
-    bool is_pause_{};       // ポーズ中か否か
-    bool is_loop_{};        // ループするか
+    float addSpeed_{ 1.f };   // 実際の何倍で進むか
+    float sec_current_{};     // 現在秒数
+    float sec_max_{};         // 最大秒数
+    bool is_pause_{};         // ポーズ中か否か
+    bool is_loop_{};          // ループするか
 
 public:
     //>> setter
-    void SetMaxFrame(float frame_max) { sec_max_ = frame_max; }
-    void SetIsLoop(bool is_loop) { is_loop_ = is_loop; }
+    void SetMaxFrame(float arg_frameMax) { sec_max_ = arg_frameMax; }
+    void SetAddSpeed(float arg_addSpeed) { addSpeed_ = arg_addSpeed; }
+    void SetIsLoop(bool arg_isLoop) { is_loop_ = arg_isLoop; }
 
     //>> getter
     bool GetIsLoop(void) { return is_loop_; }

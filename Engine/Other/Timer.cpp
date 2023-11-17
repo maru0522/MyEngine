@@ -202,7 +202,7 @@ void DeltaTimer::Update(void)
         if (sec_current_ >= sec_max_ && is_loop_) { sec_current_ = 0; }
 
         // 現在値 += 加算値 * ゲームスピード
-        sec_current_ += DeltaTime(milliSec_past_, GetNowCount<milliseconds>()) * gameSpeed_;
+        sec_current_ += DeltaTime(milliSec_past_, GetNowCount<milliseconds>()) * gameSpeed_ * addSpeed_;
     }
 
     // 前フレームのミリ秒数を記録しておく
@@ -227,7 +227,7 @@ void DeltaTimer::Finish(void)
 bool DeltaTimer::GetIsFinished(void)
 {
     // ゼロ除算回避
-    if (sec_max_ == 0) { return false; }
+    if (sec_max_ == 0) { return true; }
 
     return sec_current_ / sec_max_ >= 1.f;
 }
@@ -235,7 +235,7 @@ bool DeltaTimer::GetIsFinished(void)
 float DeltaTimer::GetTimeRate(bool is_clamp0To1)
 {
     // ゼロ除算回避
-    if (sec_max_ == 0) { return 0; }
+    if (sec_max_ == 0) { return 1; }
 
     // 結果が 0~1 の時clampするか
     if (is_clamp0To1) { return std::clamp(sec_current_ / sec_max_, 0.f, 1.f); }

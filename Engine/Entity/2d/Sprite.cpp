@@ -161,6 +161,11 @@ void Sprite::UpdateMatrix(void)
     cb_.GetConstBuffMap()->matWorld = matWorld_;
 }
 
+void Sprite::SetAlpha(float arg_alpha)
+{
+    cb_.GetConstBuffMap()->color.w = std::clamp<float>(arg_alpha, 0.f, 1.f);
+}
+
 void Sprite::SetColor(const Vector4& rgba)
 {
     Vector4 lrgba = rgba;

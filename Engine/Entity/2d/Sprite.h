@@ -113,6 +113,7 @@ public:
     inline void SetFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
     inline void SetInvisible(bool isInvisible) { isInvisible_ = isInvisible; }
 
+    void SetAlpha(float arg_alpha);
     void SetColor(const Vector4& rgba);
     void SetColor255(const Vector4& rgba);
 };
