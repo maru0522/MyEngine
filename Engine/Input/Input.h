@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #define DIRECTINPUT_VERSION 0x0800
 #include <array>
 #include <dinput.h>
@@ -20,14 +20,15 @@ namespace Input {
         static void Update(void);
 
         // 押した瞬間
-        static inline bool IsTrigger(uint8_t key) { return !sKeysPre_[key] && sKeys_[key]; }
+        static bool IsTrigger(uint8_t key) { return !sKeysPre_[key] && sKeys_[key]; }
 
         // 押されている時
-        static inline bool IsDown(uint8_t key) { return sKeys_[key]; }
+        static bool IsDown(uint8_t key) { return sKeys_[key]; }
 
         // 離された瞬間
-        static inline bool IsReleased(uint8_t key) { return sKeysPre_[key] && !sKeys_[key]; }
+        static bool IsReleased(uint8_t key) { return sKeysPre_[key] && !sKeys_[key]; }
 
+        static bool IsSomeDown(void);
     private:
         // 変数
         // キーボードデバイス
@@ -82,13 +83,15 @@ namespace Input {
         static void Update(void);
 
         // 押した瞬間
-        static inline bool IsTrigger(uint16_t button) { return sXStatePre_.Gamepad.wButtons != button && sXState_.Gamepad.wButtons == button; }
+        static bool IsTrigger(uint16_t button) { return sXStatePre_.Gamepad.wButtons != button && sXState_.Gamepad.wButtons == button; }
 
         // 押されている時
-        static inline bool IsDown(uint16_t button) { return sXState_.Gamepad.wButtons == button; }
+        static bool IsDown(uint16_t button) { return sXState_.Gamepad.wButtons == button; }
 
         // 離された瞬間
-        static inline bool IsReleased(uint16_t button) { return sXStatePre_.Gamepad.wButtons == button && sXState_.Gamepad.wButtons != button; }
+        static bool IsReleased(uint16_t button) { return sXStatePre_.Gamepad.wButtons == button && sXState_.Gamepad.wButtons != button; }
+
+        static bool IsSomeDown(void);
 
         static const Vector2 GetLStick(void);
         static const Vector2 GetLStickRaw(void);
@@ -98,17 +101,17 @@ namespace Input {
         static const Vector2 GetRStickRaw(void);
         static const Vector2 GetRStickCustom(void);
 
-        static inline bool IsTriggerLT(void) { return sXState_.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD; }
-        static inline uint8_t GetLT(void) { return sXState_.Gamepad.bLeftTrigger; }
+        static bool IsTriggerLT(void) { return sXState_.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD; }
+        static uint8_t GetLT(void) { return sXState_.Gamepad.bLeftTrigger; }
 
-        static inline bool IsTriggerRT(void) { return sXState_.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD; }
-        static inline uint8_t GetRT(void) { return sXState_.Gamepad.bRightTrigger; }
+        static bool IsTriggerRT(void) { return sXState_.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD; }
+        static uint8_t GetRT(void) { return sXState_.Gamepad.bRightTrigger; }
 
         static void Vibrate(int32_t lPower = 0, int32_t rPower = 0); // 引数なしで振動停止
 
         //setter
         static void SetDeadZone(const Vector2& leftValueXY, const Vector2& rightValueXY);
-        static inline void SetDeadZone(const CustomDeadZone& deadzone) { sDeadZone_ = deadzone; }
+        static void SetDeadZone(const CustomDeadZone& deadzone) { sDeadZone_ = deadzone; }
 
     private:
         // 変数

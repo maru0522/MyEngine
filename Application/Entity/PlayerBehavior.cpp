@@ -921,6 +921,11 @@ void PlayerBehavior_JumpLong::RequirementCheck(void)
     }
 }
 
+IPlayerBehavior::IPlayerBehavior(Player* arg_playerPtr)
+    : nextState_(PlayerBehavior::NONE), playerPtr_(arg_playerPtr)
+{
+}
+
 //----------------------------------------------------------------------------------------
 const Vector3& IPlayerBehavior::GetPlayerMoveVec(void)
 {

@@ -5,7 +5,7 @@
 #include "CollisionChecker.h"
 
 Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
-    : camMPtr_(arg_camMPtr), colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr) ,pbm_(this,PlayerBehavior::IDLE)
+    : camMPtr_(arg_camMPtr), colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr), pbm_(this, PlayerBehavior::IDLE)
 {
     arg_colMPtr->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
@@ -25,8 +25,8 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
 
     moveVec_ = { 0,1,0 };
 
-    pui_.SetUIPtr(UI::GetInstance());
-    pui_.Initialize();
+    playerUI_.SetUIPtr(UI::GetInstance());
+    playerUI_.Initialize();
 }
 
 Player::~Player(void)
@@ -36,7 +36,8 @@ Player::~Player(void)
 
 void Player::Update(void)
 {
-    pui_.Update();
+    ControlUI();
+    playerUI_.Update();
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
@@ -192,7 +193,53 @@ void Player::Draw3d(void)
 
 void Player::Draw2dFore(void)
 {
-    pui_.Draw();
+    playerUI_.Draw();
+}
+
+void Player::ControlUI(void)
+{
+    // プレイヤーの正面ベクトル
+    const Vector3& vec_pForward = axes_.forward;
+    // カメラの正面ベクトル
+    const Vector3& vec_cForward = camMPtr_->GetCurrentCamera()->GetAxis3().forward;
+
+    const float a = vec_pForward.Dot(vec_cForward);
+    const bool is_dotValue_smaller_07f = a < 0.7f;
+
+    static int32_t ftimer{};
+    if (is_dotValue_smaller_07f)
+    {
+        // 何かキー入力を行っているか
+        if (Input::Keyboard::IsSomeDown())
+        {
+            // ftimerの値が0より大きいなら、0にする。
+            ftimer = (std::min)(ftimer, 0);
+            // ftimerの値を減らす。
+            ftimer--;
+        }
+        else
+        {
+            // ftimerの値が0より小さいなら、0にする
+            ftimer = (std::max)(ftimer, 0);
+            // ftimerの値を増やす
+            ftimer++;
+        }
+    }
+
+    if (ftimer > 40)
+    {
+        playerUI_.SetIsVisible(true);
+    }
+    else if(ftimer < 0)
+    {
+        playerUI_.SetIsVisible(false);
+    }
+
+    GUI::Begin("PlayerUIDEBUG");
+    GUI::Text("dot :    %f", a);
+    GUI::Text("ftimer : %d", ftimer);
+    GUI::Text(playerUI_.GetIsEnd() ? "bool UI : true" : "bool UI : false");
+    GUI::End();
 }
 
 void Player::OnCollision(void)

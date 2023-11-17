@@ -30,8 +30,7 @@ class IPlayerBehavior
 {
 public:
     //>> 関数
-    IPlayerBehavior(Player* arg_playerPtr) :
-        nextState_(PlayerBehavior::NONE), playerPtr_(arg_playerPtr) {};
+    IPlayerBehavior(Player* arg_playerPtr);
     virtual ~IPlayerBehavior(void) = default;
 
     // 状態遷移時の初期化処理
@@ -58,7 +57,6 @@ protected:
     PlayerBehavior nextState_;
     PlayerBehavior debug_curState_;
     bool is_resetCameraPos_;
-
 
 private:
     Player* playerPtr_;

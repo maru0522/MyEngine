@@ -126,6 +126,7 @@ private:
     float frame_current_{}; // 現在値
     int32_t frame_max_{};     // 最大値
     int32_t value_add_{};     // 毎フレーム、幾つ加算するか
+    bool is_execute_{};       // 起動の有無
     bool is_pause_{};         // ポーズ中か否か
     bool is_loop_{};          // ループするか
 

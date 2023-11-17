@@ -1,4 +1,4 @@
-﻿#include "Input.h"
+#include "Input.h"
 #include <cassert>
 
 #pragma comment(lib,"dinput8.lib")
@@ -73,6 +73,18 @@ void Input::Keyboard::Update(void)
     sKeyboard_->GetDeviceState((DWORD)size(sKeys_), sKeys_.data());
 }
 
+bool Input::Keyboard::IsSomeDown(void)
+{
+    for (auto& k : sKeys_)
+    {
+        // 何か1つでもキー入力があれば true
+        if (k) { return true; }
+    }
+
+    // なければ false
+    return false;
+}
+
 //void Input::DIPad::Initialize(WndAPI* p_wndapi)
 //{
 //    HRESULT hr = S_FALSE;
@@ -135,6 +147,24 @@ void Input::XPad::Update(void)
     else {
         sIsConnect_ = false;
     }
+}
+
+bool Input::XPad::IsSomeDown(void)
+{
+    // 入力の合計値
+    uint32_t dword{};
+    dword += sXState_.Gamepad.bLeftTrigger;
+    dword += sXState_.Gamepad.bRightTrigger;
+    dword += sXState_.Gamepad.sThumbLX;
+    dword += sXState_.Gamepad.sThumbLY;
+    dword += sXState_.Gamepad.sThumbRX;
+    dword += sXState_.Gamepad.sThumbRY;
+    dword += sXState_.Gamepad.wButtons;
+
+    // 何かしらの入力があれば（入力の合計値が0意外なら）trueを返す
+    if (dword) { return true; }
+    // 入力がなければ　false
+    return false;
 }
 
 const Vector2 Input::XPad::GetLStick(void)

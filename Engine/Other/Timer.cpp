@@ -98,8 +98,7 @@ void FrameTimer::Start(void)
         frame_current_ = 0;
     }
 
-    // 加算
-    frame_current_ += value_add_; // 連続フレームでの使用はだめ
+    is_execute_ = true;
 }
 
 void FrameTimer::Start(int32_t frame_max)
@@ -111,12 +110,23 @@ void FrameTimer::Start(int32_t frame_max)
 void FrameTimer::Update(void)
 {
     // フレームのカウントが始まっている && ポーズ中ではない
-    if (frame_current_ && (is_pause_ == false))
+    if (is_execute_ && (is_pause_ == false))
     {
-        // フレームのカウントが最大値以上である && ループする
-        if (frame_current_ >= frame_max_ && is_loop_) 
-        { 
-            frame_current_ = 0;
+        // フレームのカウントが最大値以上である 
+        if (frame_current_ >= frame_max_)
+        {
+            // ループする
+            if (is_loop_)
+            {
+                // フレームカウントを初期化
+                frame_current_ = 0;
+            }
+            // ループしない
+            else
+            {
+                // 起動フラグを、false
+                is_execute_ = false;
+            }
         }
 
         // 現在値 += 加算値 * ゲームスピード

@@ -21,7 +21,6 @@ private:
     UI* uiPtr_;
     bool is_visible_{};
     bool is_visiblePre_{};
-    bool is_end_{};
 
     DeltaTimer easeTimer_;
 
@@ -33,4 +32,7 @@ public:
     //>> setter
     void SetUIPtr(UI* arg_uiPtr) { uiPtr_ = arg_uiPtr; }
     void SetIsVisible(bool arg_isVisible) { is_visible_ = arg_isVisible; }
+
+    //>> getter
+    bool GetIsEnd(void) { return easeTimer_.GetIsFinished(); }
 };

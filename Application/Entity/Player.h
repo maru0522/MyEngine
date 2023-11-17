@@ -41,6 +41,8 @@ public:
     int32_t captureCount_rabbit; // 兎を捕まえた回数
 
 private:
+    void ControlUI(void);
+
     // callback
     void OnCollision(void);
     void OnTrigger(void);
@@ -65,7 +67,7 @@ private:
     CameraManager* camMPtr_{};
 
     PlayerBehaviorMachine pbm_;
-    PlayerUI pui_;
+    PlayerUI playerUI_;
 
     int32_t circleShadows_num_;
     Planet* planetPtr_;

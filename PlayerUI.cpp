@@ -57,8 +57,14 @@ void PlayerUI::Initialize(void)
 
 void PlayerUI::Update(void)
 {
-    // フラグ更新
-    is_visiblePre_ = is_visible_;
+    // imgui
+    //GUI::Begin("PlayerUI");
+    //GUI::CheckBox("is_visible_", &is_visible_);
+    //GUI::Text("rate:  %f", easeTimer_.GetTimeRate());
+    //GUI::Text("frame: %f", easeTimer_.GetFrameCurrent());
+    //GUI::End();
+
+    EaseUI();
 
     // nullチェック
     if (!uiPtr_) { return; }
@@ -69,14 +75,8 @@ void PlayerUI::Update(void)
     uiPtr_->Update("playerUI_remain");
     uiPtr_->Update("playerUI_life");
 
-    // imgui
-    GUI::Begin("PlayerUI");
-    GUI::CheckBox("is_visible_", &is_visible_);
-    GUI::Text("rate:  %f", easeTimer_.GetTimeRate());
-    GUI::Text("frame: %f", easeTimer_.GetFrameCurrent());
-    GUI::End();
-
-    EaseUI();
+    // フラグ更新
+    is_visiblePre_ = is_visible_;
 }
 
 void PlayerUI::Draw(void)
