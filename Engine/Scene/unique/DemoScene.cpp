@@ -128,6 +128,10 @@ void DemoScene::Update(void)
     GUI::SliderFloat("psi_", &camera_colPtr_->psi_, 0.f, 6.28319f);
     GUI::End();
 
+    const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
+    lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
+
+
     //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
     //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
     //static Vector3 pl0Pos = { 0,100,0 };
