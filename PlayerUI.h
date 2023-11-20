@@ -4,6 +4,12 @@
 
 class PlayerUI
 {
+private:
+    //>> 定義
+    const float kDefPos_right_ = 1230.f;
+    const float kDefPos_left_ = -80.f;
+    const float kMoveDist_ = 115.f;
+
 public:
     //>> 関数
     PlayerUI(void) = default;
