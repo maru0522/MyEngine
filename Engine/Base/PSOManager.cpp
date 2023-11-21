@@ -190,7 +190,7 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC HelperGraphicPipeline::CreatePipelineDesc(Blo
     pipelineDesc.InputLayout.NumElements = (UINT)inputLayoutRef.size();
 
     // 図形の形状設定
-    pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE; // TODO: LINEと、preDraw
 
     // その他の設定
     pipelineDesc.NumRenderTargets = 2; // 描画対象は1つ

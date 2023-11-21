@@ -2,6 +2,7 @@
 #include <memory>
 #include "Object3D.h"
 #include "CollisionPrimitive.h"
+#include "TerrainSurfaceCollider.h"
 
 class Planet
 {
@@ -29,8 +30,10 @@ private:
 
     // 変数
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/planet/planet.obj") };
+    std::array<std::unique_ptr<TerrainSurfaceCollider>,3> addCols_;
 
 public:
     // getter
     const Vector3& GetPosition(void) { return transform_.position; }
+
 };

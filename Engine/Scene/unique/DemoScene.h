@@ -86,5 +86,6 @@ public:
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
+
 };
 
