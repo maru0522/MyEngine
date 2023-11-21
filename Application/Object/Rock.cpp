@@ -5,7 +5,7 @@ Rock::Rock(CollisionManager* colMPtr) : Object3D("Resources/model/cube/cube.obj"
 {
     colMPtr->Register(&collision_aabb_);
     collision_aabb_.SetID("rock");
-    collision_aabb_.SetCallback_onCollision(std::bind(&Rock::OnCollision, this));
+    collision_aabb_.callback_onCollision_ = std::bind(&Rock::OnCollision, this);
     collision_aabb_.radius = kRadius_;
     transform_.scale = kRadius_; // cubeのxyzが全て1だから可能な文
 

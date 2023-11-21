@@ -70,7 +70,7 @@ void ICollider::Check_onTrigger(void)
     if (IsTrigger())
     {
         // nullチェックとonTriggerのCallback実行
-        if (GetCallback_onTrigger()) { GetCallback_onTrigger()(); }
+        if (callback_onTrigger_) { callback_onTrigger_(); }
     }
 }
 
@@ -80,6 +80,6 @@ void ICollider::Check_onRelease(void)
     if (IsRelease())
     {
         // nullチェックとonReleaseのCallback実行
-        if(GetCallback_onRelease()) { GetCallback_onRelease()(); }
+        if(callback_onRelease_) { callback_onRelease_(); }
     }
 }

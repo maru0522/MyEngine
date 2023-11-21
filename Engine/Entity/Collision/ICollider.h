@@ -51,29 +51,17 @@ public:
     const std::string& GetID(void) { return id_; }
 };
 
-class ColliderCallBack
+struct ColliderCallBack
 {
 public:
     //>> 関数
     ColliderCallBack(void) = default;
     virtual ~ColliderCallBack(void) = default;
 
-protected:
     //>> 変数
     std::function<void(void)> callback_onTrigger_;
     std::function<void(void)> callback_onCollision_;
     std::function<void(void)> callback_onRelease_;
-
-public:
-    //>> setter
-    void SetCallback_onTrigger(const std::function<void(void)>& arg_callback) { callback_onTrigger_ = arg_callback; }
-    void SetCallback_onCollision(const std::function<void(void)>& arg_callback) { callback_onCollision_ = arg_callback; }
-    void SetCallback_onRelease(const std::function<void(void)>& arg_callback) { callback_onRelease_ = arg_callback; }
-
-    // getter
-    const std::function<void(void)>& GetCallback_onTrigger(void) { return callback_onTrigger_; }
-    const std::function<void(void)>& GetCallback_onCollision(void) { return callback_onCollision_; }
-    const std::function<void(void)>& GetCallback_onRelease(void) { return callback_onRelease_; }
 };
 
 class ICollider : public ColliderId, public ColliderCallBack

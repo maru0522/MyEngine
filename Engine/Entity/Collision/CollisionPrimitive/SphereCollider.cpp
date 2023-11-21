@@ -22,8 +22,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
         arg_Shpere->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Shpere->callback_onCollision_) { arg_Shpere->callback_onCollision_(); }
     }
 
     return isHit;
@@ -44,8 +44,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
         arg_Plane->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Plane->GetCallback_onCollision()) { arg_Plane->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Plane->callback_onCollision_) { arg_Plane->callback_onCollision_(); }
     }
 
     return isHit;
@@ -66,8 +66,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
         arg_Point->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Point->GetCallback_onCollision()) { arg_Point->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Point->callback_onCollision_) { arg_Point->callback_onCollision_(); }
     }
 
     return isHit;
@@ -88,8 +88,8 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* a
         arg_AABB->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_AABB->GetCallback_onCollision()) { arg_AABB->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_AABB->callback_onCollision_) { arg_AABB->callback_onCollision_(); }
     }
 
     return isHit;

@@ -15,9 +15,9 @@ Planet::Planet(void)
     repelCameraArea_.SetID("repelCameraArea");
 
     // OnCollisionの設定
-    surface_.SetCallback_onCollision(std::bind(&Planet::OnCollision, this));
-    gravityArea_.SetCallback_onCollision(std::bind(&Planet::OnCollision, this));
-    repelCameraArea_.SetCallback_onCollision(std::bind(&Planet::OnCollision, this));
+    surface_.callback_onCollision_ = std::bind(&Planet::OnCollision, this);
+    gravityArea_.callback_onCollision_ = std::bind(&Planet::OnCollision, this);
+    repelCameraArea_.callback_onCollision_ = std::bind(&Planet::OnCollision, this);
 
     // 星自体の座標とスケールの設定
     transform_.position = { 0,0,0 };

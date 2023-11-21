@@ -9,8 +9,8 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
 {
     arg_colMPtr->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
-    sphereCollider_.SetCallback_onCollision(std::bind(&Player::OnCollision, this));
-    sphereCollider_.SetCallback_onTrigger(std::bind(&Player::OnTrigger, this));
+    sphereCollider_.callback_onCollision_ = std::bind(&Player::OnCollision, this);
+    sphereCollider_.callback_onTrigger_ = std::bind(&Player::OnTrigger, this);
 
     sphereCollider_.radius = kRadius_;
 

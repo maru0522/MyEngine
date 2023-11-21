@@ -22,8 +22,8 @@ bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::SphereCollider* ar
         arg_Shpere->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Shpere->callback_onCollision_) { arg_Shpere->callback_onCollision_(); }
     }
 
     return isHit;

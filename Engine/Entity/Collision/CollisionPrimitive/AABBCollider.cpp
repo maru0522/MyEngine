@@ -22,8 +22,8 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::SphereCollider* a
         arg_Shpere->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Shpere->callback_onCollision_) { arg_Shpere->callback_onCollision_(); }
     }
 
     return isHit;
@@ -53,8 +53,8 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::PointCollider* ar
         arg_Point->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Point->GetCallback_onCollision()) { arg_Point->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Point->callback_onCollision_) { arg_Point->callback_onCollision_(); }
     }
 
     return isHit;
@@ -75,8 +75,8 @@ bool CollisionPrimitive::AABBCollider::Col(CollisionPrimitive::AABBCollider* arg
         arg_AABB->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_AABB->GetCallback_onCollision()) { arg_AABB->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_AABB->callback_onCollision_) { arg_AABB->callback_onCollision_(); }
     }
 
     return isHit;

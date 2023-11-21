@@ -10,8 +10,8 @@ Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr,
     sphereCollider_.SetID("rabbit");
     detectPlayerCollider_.SetID("rabbit_detectPlayer");
 
-    sphereCollider_.SetCallback_onCollision(std::bind(&Rabbit::OnCollision, this));
-    detectPlayerCollider_.SetCallback_onCollision(std::bind(&Rabbit::OnDetectPlayer, this));
+    sphereCollider_.callback_onCollision_ = std::bind(&Rabbit::OnCollision, this);
+    detectPlayerCollider_.callback_onCollision_ = std::bind(&Rabbit::OnDetectPlayer, this);
 
     sphereCollider_.radius = kRadius_;
     sphereCollider_.center = { 0,60,20 };

@@ -15,7 +15,7 @@ StickyBall::StickyBall(CollisionManager* colMPtr) : Object3D("Resources/model/sp
     // コライダー設定
     colMPtr->Register(&collision_sphere_); // マネージャーに登録
     collision_sphere_.SetID("sticky_ball"); // tag設定
-    collision_sphere_.SetCallback_onCollision(std::bind(&StickyBall::OnCollision, this)); // 衝突時のcallback用関数の設定
+    collision_sphere_.callback_onCollision_ = std::bind(&StickyBall::OnCollision, this); // 衝突時のcallback用関数の設定
     collision_sphere_.radius = kRadius_; // 球の初期半径 = 規定値
     collision_sphere_.center = transform_.position + axes_.up * kDistance_to_root_; // 球の初期座標 = 根元の座標 + 上向きベクトル * 規定値
 }

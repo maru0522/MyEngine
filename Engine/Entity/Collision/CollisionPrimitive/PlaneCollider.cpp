@@ -22,8 +22,8 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* a
         arg_Plane->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Plane->GetCallback_onCollision()) { arg_Plane->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Plane->callback_onCollision_) { arg_Plane->callback_onCollision_(); }
     }
 
     return isHit;
@@ -44,8 +44,8 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* 
         arg_Shpere->SetOther(this);
 
         // nullチェックと衝突処理の実行
-        if (GetCallback_onCollision()) { GetCallback_onCollision()(); }
-        if (arg_Shpere->GetCallback_onCollision()) { arg_Shpere->GetCallback_onCollision()(); }
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Shpere->callback_onCollision_) { arg_Shpere->callback_onCollision_(); }
     }
 
     return isHit;

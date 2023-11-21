@@ -6,7 +6,7 @@ Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.
     // コイン用コライダーの登録
     arg_colMPtr->Register(&collision_contact_);
     collision_contact_.SetID("coin_contact");
-    collision_contact_.SetCallback_onTrigger(std::bind(&Coin::Collision_onTrigger, this));
+    collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);
     collision_contact_.radius = 1.f;
 
     // 初期姿勢
