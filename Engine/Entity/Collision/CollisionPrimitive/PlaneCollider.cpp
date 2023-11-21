@@ -9,6 +9,10 @@ CollisionPrimitive::PlaneCollider::PlaneCollider(const std::string& arg_id)
 
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
 { // 平面と平面
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Plane->InitOther();
     bool isHit = CollisionChecker::PlaneToPlane(*this, *arg_Plane);
 
     if (isHit)
@@ -27,6 +31,10 @@ bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::PlaneCollider* a
 
 bool CollisionPrimitive::PlaneCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // 平面と球
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Shpere->InitOther();
     bool isHit = CollisionChecker::SphereToPlane(*arg_Shpere, *this);
 
     if (isHit)

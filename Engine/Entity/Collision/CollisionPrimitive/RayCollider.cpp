@@ -9,6 +9,10 @@ CollisionPrimitive::RayCollider::RayCollider(const std::string& arg_id)
 
 bool CollisionPrimitive::RayCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 {
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Shpere->InitOther();
     bool isHit = CollisionChecker::SphereToRay(*arg_Shpere, *this);
 
     if (isHit)

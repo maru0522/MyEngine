@@ -9,6 +9,10 @@ CollisionPrimitive::PointCollider::PointCollider(const std::string& arg_id)
 
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // 点と球
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Shpere->InitOther();
     bool isHit = CollisionChecker::SphereToPoint(*arg_Shpere, *this);
 
     if (isHit)
@@ -45,6 +49,10 @@ bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::PointCollider* a
 
 bool CollisionPrimitive::PointCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
 { // 点と直方体
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_AABB->InitOther();
     bool isHit = CollisionChecker::AABBToPoint(*arg_AABB, *this);
 
     if (isHit)

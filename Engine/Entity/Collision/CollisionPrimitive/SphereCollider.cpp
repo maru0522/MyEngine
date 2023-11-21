@@ -10,6 +10,9 @@ CollisionPrimitive::SphereCollider::SphereCollider(const std::string& arg_id)
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
 { // 球と球
 
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Shpere->InitOther();
     bool isHit = CollisionChecker::SphereToSphere(*this, *arg_Shpere);
 
     if (isHit)
@@ -29,6 +32,9 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::SphereCollider*
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)
 { // 球と平面
 
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Plane->InitOther();
     bool isHit = CollisionChecker::SphereToPlane(*this, *arg_Plane);
 
     if (isHit)
@@ -47,6 +53,10 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PlaneCollider* 
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* arg_Point)
 { // 球と点
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Point->InitOther();
     bool isHit = CollisionChecker::SphereToPoint(*this, *arg_Point);
 
     if (isHit)
@@ -65,6 +75,10 @@ bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::PointCollider* 
 
 bool CollisionPrimitive::SphereCollider::Col(CollisionPrimitive::AABBCollider* arg_AABB)
 { // 球と直方体
+
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_AABB->InitOther();
     bool isHit = CollisionChecker::SphereToAABB(*this, *arg_AABB, &arg_AABB->inter);
 
     if (isHit)

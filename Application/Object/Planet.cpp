@@ -62,7 +62,7 @@ void Planet::Draw(void)
 {
     appearance_->Draw("Resources/planet.png");
 
-    addCols_[0]->Draw();
-    addCols_[1]->Draw();
-    addCols_[2]->Draw();
+    //addCols_[0]->Draw();
+    //addCols_[1]->Draw();
+    //addCols_[2]->Draw();
 }

@@ -67,10 +67,16 @@ void Coin::Draw(void)
 
 void Coin::Collision_onTrigger(void)
 {
+    // nullチェック
+    if (!collision_contact_.GetOther()) { return; }
+
     if (collision_contact_.GetOther()->GetID() == "player")
     {
         is_taken_ = true;
-        if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
+        if (se_getCoin_.GetPlaying())
+        {
+            se_getCoin_.Stop();
+        }
         se_getCoin_.Play();
     }
 }

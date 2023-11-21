@@ -1,4 +1,5 @@
 #include "ICollider.h"
+#include "Util.h"
 
 void ColliderId::RecordIds(void)
 {
@@ -31,6 +32,9 @@ bool ColliderId::IsExistSameIdPre(const std::string& arg_idPre)
 
 bool ICollider::IsTrigger(void)
 {
+    // nullチェック
+    if (!other_) { return false; }
+
     // 接触相手のid
     const std::string& id = other_->GetID();
     // 接触した瞬間かどうか
@@ -41,6 +45,9 @@ bool ICollider::IsTrigger(void)
 
 bool ICollider::IsRelease(void)
 {
+    // nullチェック
+    if (!other_) { return false; }
+
     // 接触相手のid
     const std::string& id = other_->GetID();
     // 離した瞬間かどうか

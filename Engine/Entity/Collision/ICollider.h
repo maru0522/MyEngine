@@ -96,6 +96,9 @@ public:
     // 離した瞬間か確認し、trueならcallbackを実行
     void Check_onRelease(void);
 
+    // 接触判定時に、互いに接触相手をリセットするための関数
+    void InitOther(void) { other_ = nullptr; } // リセットしないと前回時の接触相手で、トリガとリリースの判定を行ってしまう。
+
 protected:
     bool IsTrigger(void);
     bool IsRelease(void);
