@@ -44,7 +44,7 @@ void FrameWork::Initialize()
     modelM_->LoadOBJ("Resources/model/skydome/skydome.obj",true);
     modelM_->LoadOBJ("Resources/model/character/chr_sword.obj",false);
     modelM_->LoadOBJ("Resources/model/rabbit/rabbit.obj",false);
-    modelM_->LoadOBJ("Resources/model/planet/planet.obj",true);
+    modelM_->LoadOBJ("Resources/model/planet/planet2.obj",true);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化

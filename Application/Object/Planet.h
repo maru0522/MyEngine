@@ -29,7 +29,7 @@ private:
     void OnCollision(void) {}
 
     // 変数
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/planet/planet.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/planet/planet2.obj") };
     std::array<std::unique_ptr<TerrainSurfaceCollider>,3> addCols_;
 
 public:
