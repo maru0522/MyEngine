@@ -31,11 +31,11 @@ Planet::Planet(void)
     // 丸影が投影される
     appearance_->SetIsShadowFlash(true);
 
-    Vector3 pos0 = transform_.position + Vector3{0.f, 39.f, 0.f};
+    Vector3 pos0 = transform_.position + Vector3{0.f, -39.f, 0.f};
     addCols_[0] = std::make_unique<TerrainSurfaceCollider>(CollisionManager::GetInstance(), pos0, 16.f);
-    Vector3 pos1 = transform_.position + Vector3{0.f, -35.f, 0.f};
+    Vector3 pos1 = transform_.position + Vector3{0.f, 35.f, 0.f};
     addCols_[1] = std::make_unique<TerrainSurfaceCollider>(CollisionManager::GetInstance(), pos1, 18.f);
-    Vector3 pos2 = transform_.position + Vector3{7.f, -2.f, 33.f};
+    Vector3 pos2 = transform_.position + Vector3{7.f, 2.f, -33.f};
     addCols_[2] = std::make_unique<TerrainSurfaceCollider>(CollisionManager::GetInstance(), pos2, 18.f);
 }
 
