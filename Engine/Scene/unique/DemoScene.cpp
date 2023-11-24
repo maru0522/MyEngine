@@ -118,6 +118,8 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
+    a_.Execute();
+
     GUI::Begin("spherical camera");
     Axis3 spc_a3 = camera_colPtr_->GetAxis3();
     GUI::Text("axes_.forward: %f, %f, %f", spc_a3.forward.x, spc_a3.forward.y, spc_a3.forward.z);
@@ -328,6 +330,8 @@ void DemoScene::Draw2dFore(void)
     UI::GetInstance()->Draw("circle_red");
     UI::GetInstance()->Draw("circle_green");
     player_->Draw2dFore();
+
+    a_.Draw();
 }
 
 void DemoScene::Draw2dBack(void)

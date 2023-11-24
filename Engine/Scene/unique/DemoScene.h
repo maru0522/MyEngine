@@ -16,6 +16,7 @@
 #include "StickyBall.h"
 #include "Pipe.h"
 #include "Coin.h"
+#include "Event_StartTutorial.h"
 
 class DemoScene final :
     public IScene
@@ -87,5 +88,6 @@ public:
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
 
+    Event_StartTutorial a_;
 };
 

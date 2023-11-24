@@ -269,6 +269,7 @@
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Event_StartTutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -528,6 +529,7 @@
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Event_StartTutorial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
