@@ -19,7 +19,7 @@ private:
     const float kDef_closeTimer_ = 6.f;
     const float kDef_waitTimer_ = 5.f;
     const float kDef_leaveTimer_ = 8.f;
-    const float kDef_wait2Timer_ = 6.f;
+    const float kDef_wait2Timer_ = 4.f;
 
 public:
     //>> 関数

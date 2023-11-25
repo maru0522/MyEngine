@@ -24,7 +24,7 @@ Event_StartTutorial::Event_StartTutorial(void)
     }
 
     const Vector2 sbgSize{ 530.f,70.f };
-    const Vector4 sbgColor = { 0.f,0.f,0.f,0.4f };
+    const Vector4 sbgColor = { 0.f,0.f,0.f,0.f };
     // 文字用背景の生成と設定
     for (size_t i = 0; i < stringBackGrounds_.size(); i++)
     {
@@ -42,6 +42,7 @@ Event_StartTutorial::Event_StartTutorial(void)
     string_ = std::make_unique<Sprite>("Resources/string_takeRabbit.png");
     string_->SetAnchorPoint(Vector2{ 0.5,0.5 });
     string_->SetPosition(Vector2{ 640,360 });
+    string_->SetAlpha(0.f);
 
     camera_ = std::make_unique<NormalCamera>("event_tutorial");
     CameraManager::GetInstance()->Register(camera_.get());
@@ -99,12 +100,19 @@ void Event_StartTutorial::Execute(void)
 
 void Event_StartTutorial::Draw(void)
 {
-    for (size_t i = 0; i < 2; i++)
+    for (auto& sprite : cinemas_)
     {
-        cinemas_[i]->Draw();
-        stringBackGrounds_[i]->Draw();
+        sprite->Draw();
     }
-    string_->Draw();
+
+    if (cameraState_ == CameraState::WAIT1)
+    {
+        for (auto& sbg : stringBackGrounds_)
+        {
+            sbg->Draw();
+        }
+        string_->Draw();
+    }
 }
 
 void Event_StartTutorial::Update_CloseCam(void)
@@ -149,6 +157,21 @@ void Event_StartTutorial::Update_WaitCam(void)
     timer_waitCam_.Update();
     const float rate = timer_waitCam_.GetTimeRate(true);
     GUI::Text("waitCam : %f", rate);
+
+
+    // 文字背景
+    float rate_forSbg = std::clamp(rate * 2.f, 0.f, 0.4f);
+    if (rate >= 0.8f)
+    {
+        rate_forSbg = 2.f - rate * 2;
+    }
+    for (auto& sbg : stringBackGrounds_)
+    {
+        sbg->SetAlpha(rate_forSbg);
+    }
+    // 文字
+    float rate_forStr = std::clamp(rate_forSbg / 0.4f, 0.f, 1.f);
+    string_->SetAlpha(rate_forStr);
 
 
     // タイマーが完了しているか
@@ -201,7 +224,7 @@ void Event_StartTutorial::Update_WaitCam2(void)
 {
     timer_waitCam2_.Update();
     const float rate = timer_waitCam2_.GetTimeRate(true);
-    GUI::Text("waitCam : %f", rate);
+    GUI::Text("waitCam2 : %f", rate);
 
 
     // タイマーが完了しているか
