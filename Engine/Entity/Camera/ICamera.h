@@ -13,7 +13,7 @@ private:
     //>> 定義
     friend CameraManager;
 
-    const float kDef_farZ_ = 10000.f;
+    const float kDef_farZ_ = 15000.f;
     const float kDef_nearZ_ = 0.1f;
 
 public:

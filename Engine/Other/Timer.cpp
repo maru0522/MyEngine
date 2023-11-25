@@ -229,9 +229,13 @@ void DeltaTimer::Resume(void)
     is_pause_ = false;
 }
 
-void DeltaTimer::Finish(void)
+void DeltaTimer::Finish(bool arg_isResetCurrent)
 {
     sec_current_ = sec_max_;
+    if (arg_isResetCurrent)
+    {
+        sec_current_ = 0.f;
+    }
 }
 
 bool DeltaTimer::GetIsFinished(void)

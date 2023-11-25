@@ -166,7 +166,7 @@ public:
     // 再開
     void Resume(void);
     // 終了
-    void Finish(void);
+    void Finish(bool arg_isResetCurrent = false);
 
 private:
     //>> 変数

@@ -270,6 +270,9 @@
       <Filter>Application\Object</Filter>
     </ClCompile>
     <ClCompile Include="Event_StartTutorial.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp">
+      <Filter>Engine\Entity\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -530,6 +533,9 @@
       <Filter>Application\Object</Filter>
     </ClInclude>
     <ClInclude Include="Event_StartTutorial.h" />
+    <ClInclude Include="Engine\Entity\Camera\NormalCamera.h">
+      <Filter>Engine\Entity\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">

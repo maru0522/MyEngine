@@ -8,7 +8,7 @@ SphericalCamera::SphericalCamera(const std::string& arg_id) : ICamera()
 {
     // id として、"ICamera" が既に入っているので初期化
     id_.clear();
-    // デバッグカメラだと識別できるよう固有idを追加
+    // 球面カメラだと識別できるよう固有idを追加
     std::string id("SphericalCamera_" + arg_id);
     // 新規idを代入
     id_ = id;

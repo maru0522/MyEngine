@@ -358,7 +358,7 @@ void DemoScene::CameraSetUp(void)
     camera_4Hole_->SetTransform(Transform{ { 0, 190, 0 }, { 1.5725f,-1.2175f,0} , camera_4Hole_->GetTransform().scale });                          // 穴に落ちたとき用カメラの座標と回転
     //camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
 
-    CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
+    //CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
 }
 
 //void DemoScene::DeployObj(LevelData* lvdPtr)

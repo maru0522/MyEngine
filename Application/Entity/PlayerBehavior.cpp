@@ -108,7 +108,7 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
     // カメラ座標用の値を補正
     {
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
+        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
@@ -278,7 +278,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
 
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
+        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
         if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
@@ -491,7 +491,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
 
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
+        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
@@ -640,7 +640,7 @@ void PlayerBehavior_Jump::Execute(void)
     // カメラ座標用の値を補正
     {
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
+        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
         if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
@@ -807,7 +807,7 @@ void PlayerBehavior_JumpLong::Execute(void)
 
 
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("DebugCamera_")) { return; }
+        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
         SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);

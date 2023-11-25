@@ -95,6 +95,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\AABB.cpp" />
     <ClCompile Include="Application\IIvent.cpp" />
@@ -281,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h" />
+    <ClInclude Include="Engine\Entity\Camera\NormalCamera.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\AABB.h" />
     <ClInclude Include="Application\IIvent.h" />
