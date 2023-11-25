@@ -37,6 +37,8 @@ private:
 
     //>> 変数
     std::array<std::unique_ptr<Sprite>,2> cinemas_;
+    std::array<std::unique_ptr<Sprite>,2> stringBackGrounds_;
+    std::unique_ptr<Sprite> string_;
     std::unique_ptr<NormalCamera> camera_;
     CameraState cameraState_;
 

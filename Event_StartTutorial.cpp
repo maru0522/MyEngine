@@ -11,6 +11,7 @@ Event_StartTutorial::Event_StartTutorial(void)
     // 画像の位置
     Vector2 position{ 0.f,0.f };
 
+    // 上下の黒枠の生成と設定
     for (size_t i = 0; i < cinemas_.size(); i++)
     {
         cinemas_[i] = std::make_unique<Sprite>("Resources/white1x1.png");
@@ -21,6 +22,26 @@ Event_StartTutorial::Event_StartTutorial(void)
         position = { 0.f, 660.f * i }; // 2つ目は画面の下の位置へ
         cinemas_[i]->SetPosition(position);
     }
+
+    const Vector2 sbgSize{ 530.f,70.f };
+    const Vector4 sbgColor = { 0.f,0.f,0.f,0.4f };
+    // 文字用背景の生成と設定
+    for (size_t i = 0; i < stringBackGrounds_.size(); i++)
+    {
+        stringBackGrounds_[i] = std::make_unique<Sprite>("Resources/white1x1.png");
+
+        const Vector2 addSize = { 10.f * i,10.f * i };
+        const Vector4 addColor = { 1.f * i, 1.f * i, 1.f * i, 0.f };
+        stringBackGrounds_[i]->SetSize(sbgSize + addSize);
+        stringBackGrounds_[i]->SetColor(sbgColor + addColor);
+        stringBackGrounds_[i]->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+        stringBackGrounds_[i]->SetPosition(Vector2{ 640.f,360.f });
+    }
+
+    // 文字の生成と設定
+    string_ = std::make_unique<Sprite>("Resources/string_takeRabbit.png");
+    string_->SetAnchorPoint(Vector2{ 0.5,0.5 });
+    string_->SetPosition(Vector2{ 640,360 });
 
     camera_ = std::make_unique<NormalCamera>("event_tutorial");
     CameraManager::GetInstance()->Register(camera_.get());
@@ -41,10 +62,12 @@ Event_StartTutorial::~Event_StartTutorial(void)
 
 void Event_StartTutorial::Execute(void)
 {
-    for (auto& sprite : cinemas_)
+    for (size_t i = 0; i < 2; i++)
     {
-        sprite->Update();
+        cinemas_[i]->Update();
+        stringBackGrounds_[i]->Update();
     }
+    string_->Update();
 
     GUI::Begin("event_startTutorial");
 
@@ -76,10 +99,12 @@ void Event_StartTutorial::Execute(void)
 
 void Event_StartTutorial::Draw(void)
 {
-    for (auto& sprite : cinemas_)
+    for (size_t i = 0; i < 2; i++)
     {
-        sprite->Draw();
+        cinemas_[i]->Draw();
+        stringBackGrounds_[i]->Draw();
     }
+    string_->Draw();
 }
 
 void Event_StartTutorial::Update_CloseCam(void)
