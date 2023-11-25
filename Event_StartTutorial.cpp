@@ -28,7 +28,7 @@ Event_StartTutorial::Event_StartTutorial(void)
     Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
 
-    timer_closeCam_.Start(6.f);
+    timer_closeCam_.Start(kDef_closeTimer_);
     timer_closeCam_.SetAddSpeed(2.f);
 
     cameraState_ = CameraState::CLOSE;
@@ -63,6 +63,7 @@ void Event_StartTutorial::Execute(void)
         break;
 
     case Event_StartTutorial::CameraState::WAIT2:
+        Update_WaitCam2();
         break;
 
     default:
@@ -102,7 +103,7 @@ void Event_StartTutorial::Update_CloseCam(void)
         camera_->SetTransform(transform);
 
         // 次のタイマーを起動。
-        timer_waitCam_.Start(5.f);
+        timer_waitCam_.Start(kDef_waitTimer_);
         // 今のタイマーを停止
         timer_closeCam_.Finish(true);
 
@@ -129,7 +130,7 @@ void Event_StartTutorial::Update_WaitCam(void)
     if (rate >= 1.f)
     {
         // 次のタイマーを起動。
-        timer_leaveCam_.Start(8.f);
+        timer_leaveCam_.Start(kDef_leaveTimer_);
         timer_leaveCam_.SetAddSpeed(1.2f);
         // 今のタイマーを停止
         timer_waitCam_.Finish(true);
@@ -159,10 +160,33 @@ void Event_StartTutorial::Update_LeaveCam(void)
     // タイマーが完了しているか
     if (rate >= 1.f)
     {
+        // 次のタイマーを起動。
+        timer_waitCam2_.Start(kDef_wait2Timer_);
         // 今のタイマーを停止
         timer_leaveCam_.Finish(true);
 
         cameraState_ = CameraState::WAIT2;
+
+        // 関数を抜ける
+        return;
+    }
+}
+
+void Event_StartTutorial::Update_WaitCam2(void)
+{
+    timer_waitCam2_.Update();
+    const float rate = timer_waitCam2_.GetTimeRate(true);
+    GUI::Text("waitCam : %f", rate);
+
+
+    // タイマーが完了しているか
+    if (rate >= 1.f)
+    {
+        // 今のタイマーを停止
+        timer_waitCam2_.Finish(true);
+
+        cameraState_ = CameraState::FINISH;
+        CameraManager::GetInstance()->SetCurrentCamera("SphericalCamera_follow_player0");
 
         // 関数を抜ける
         return;
