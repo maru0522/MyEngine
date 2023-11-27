@@ -13,6 +13,7 @@ private:
 public:
     //>> 関数
     RadialBlur(float arg_blur);
+    ~RadialBlur(void) override = default;
 
     void Initialize(void) override;
     void Update(void) override;

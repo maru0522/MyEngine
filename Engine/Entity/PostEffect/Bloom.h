@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "PostEffect.h"
 #include "HighLumi.h"
 class Bloom :
@@ -6,6 +6,7 @@ class Bloom :
 {
 public:
     Bloom(void);
+    ~Bloom(void) override = default;
 
     void Initialize(void) override;
     void PreDrawScene(void) override;

@@ -273,6 +273,7 @@
     <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp">
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="BackGroundTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -536,6 +537,7 @@
     <ClInclude Include="Engine\Entity\Camera\NormalCamera.h">
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="BackGroundTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
