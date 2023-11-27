@@ -5,7 +5,7 @@
 Event_StartTutorial::Event_StartTutorial(void)
 {
     // 画像サイズ
-    const Vector2 size{ 1280.f,60.f };
+    const Vector2 size{ 1280.f,80.f };
     // 画像の色
     const Vector4 color{ 0.f,0.f,0.f,1.f };
     // 画像の位置
@@ -19,7 +19,7 @@ Event_StartTutorial::Event_StartTutorial(void)
         cinemas_[i]->SetSize(size);
         cinemas_[i]->SetColor(color);
 
-        position = { 0.f, 660.f * i }; // 2つ目は画面の下の位置へ
+        position = { 0.f, (720.f - size.y) * i }; // 2つ目は画面の下の位置へ
         cinemas_[i]->SetPosition(position);
     }
 
@@ -226,6 +226,12 @@ void Event_StartTutorial::Update_WaitCam2(void)
     const float rate = timer_waitCam2_.GetTimeRate(true);
     GUI::Text("waitCam2 : %f", rate);
 
+    // 上下の黒枠の生成と設定
+    const float moveValue = Math::Ease::EaseOutSine(rate, 0.f, 90.f);
+    const Vector2 pos0 = { 0.f,0.f - moveValue };
+    const Vector2 pos1 = { 0.f,640.f + moveValue };
+    cinemas_[0]->SetPosition(pos0);
+    cinemas_[1]->SetPosition(pos1);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
