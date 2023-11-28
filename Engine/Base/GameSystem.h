@@ -1,5 +1,6 @@
 #pragma once
 #include "FrameWork.h"
+#include "BackGroundTexture.h"
 
 class GameSystem final :
     public FrameWork

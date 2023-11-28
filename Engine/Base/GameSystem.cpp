@@ -3,16 +3,19 @@
 #include "GameSystem.h"
 #include "Object3D.h"
 #include "Sprite.h"
+#include "BackGroundTexture.h"
 
 void GameSystem::Initialize()
 {
     FrameWork::Initialize();
+    BackGroundTexture::GetInstance()->Initialize();
 }
 
 void GameSystem::Update(void)
 {
     FrameWork::Update();
     CollisionManager::GetInstance()->Update();
+    BackGroundTexture::GetInstance()->Update();
     if (postEffectMPtr_->GetPostEffectPtr())
     {
         postEffectMPtr_->GetPostEffectPtr()->Update();
@@ -21,6 +24,11 @@ void GameSystem::Update(void)
 
 void GameSystem::Draw(void)
 {
+    //BackGroundTexture::GetInstance()->BeginWrite();
+    //Object3D::PreDraw();
+    //BackGroundTexture::GetInstance()->ExecuteWrite();
+    //BackGroundTexture::GetInstance()->EndWrite();
+
     if (postEffectMPtr_->GetPostEffectPtr()) {
         // -----レンダーテクスチャへ書き込み----- //
         postEffectMPtr_->Draw(PostEffectManager::Usage::PRE_DRAW);
@@ -39,6 +47,7 @@ void GameSystem::Draw(void)
 
         // -----ポストエフェクトの描画----- //
         iDXPtr_->PreDraw();
+        //BackGroundTexture::GetInstance()->Draw();
 
         postEffectMPtr_->Draw(PostEffectManager::Usage::DRAW);
 
@@ -54,6 +63,8 @@ void GameSystem::Draw(void)
     }
     else {
         iDXPtr_->PreDraw();
+        //BackGroundTexture::GetInstance()->Draw();
+
         // --背景2DUIの描画-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dBack();

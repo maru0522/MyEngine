@@ -5,9 +5,13 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "UI.h"
+#include "BackGroundTexture.h"
 
 void DemoScene::Initialize(void)
 {
+    const auto func_bgt = std::bind(&DemoScene::DrawBackGround, this);
+    BackGroundTexture::GetInstance()->Set(func_bgt);
+
     // カメラの設定
     CameraSetUp();
 
@@ -317,7 +321,6 @@ void DemoScene::Draw3d(void)
             coin->Draw();
         }
     }
-    skydome_->Draw();
 
     //for (auto& object : objects_) {
     //    object.second->Draw();
@@ -345,6 +348,11 @@ void DemoScene::Finalize(void)
     CameraManager::GetInstance()->UnRegister(camera_debugPtr_.get());
     CameraManager::GetInstance()->UnRegister(camera_colPtr_.get());
     CameraManager::GetInstance()->UnRegister(camera_4Hole_.get());
+}
+
+void DemoScene::DrawBackGround(void)
+{
+    skydome_->Draw();
 }
 
 void DemoScene::CameraSetUp(void)

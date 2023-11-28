@@ -17,6 +17,7 @@
 #include "Pipe.h"
 #include "Coin.h"
 #include "Event_StartTutorial.h"
+#include "BackGroundTexture.h"
 
 class DemoScene final :
     public IScene
@@ -35,6 +36,8 @@ public:
     void Draw2dFore(void) override;
     void Draw2dBack(void) override;
     void Finalize(void) override;
+
+    void DrawBackGround(void);
 
     void DeployObj(LevelData* lvdPtr);
     void HotReload(LevelData* lvdPtr);
@@ -89,5 +92,6 @@ public:
     std::unique_ptr<LevelData> lvdPtr_;
 
     Event_StartTutorial a_;
+    
 };
 
