@@ -63,7 +63,7 @@ void GameSystem::Draw(void)
     }
     else {
         iDXPtr_->PreDraw();
-        //BackGroundTexture::GetInstance()->Draw();
+        //BackGroundTexture::GetInstance()->Draw();                                                     
 
         // --背景2DUIの描画-- //
         Sprite::PreDraw();
