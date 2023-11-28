@@ -141,7 +141,7 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
 
 void PlayerBehavior_Idle::RequirementCheck(void)
 {
-    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
 
@@ -202,7 +202,7 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 
 void PlayerBehavior_Stoop::RequirementCheck(void)
 {
-    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
 
@@ -417,8 +417,8 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
         Vector2 inputVecR = XPAD::GetRStick();
         inputVecR = inputVecR.Normalize();
-        theta += 0.15f * inputVecR.y;
-        phi += 0.15f * inputVecR.x;
+        theta -= 0.06f * inputVecR.y;
+        phi += 0.06f * inputVecR.x;
 
         Math::Function::Loop(theta, 0.f, 6.28319f);
         Math::Function::Loop(phi, 0.f, 6.28319f);
@@ -466,7 +466,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
 void PlayerBehavior_Move::RequirementCheck(void)
 {
-    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
 
@@ -618,7 +618,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)
 {
-    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
     const bool isTrigger_AorB = XPAD::IsTrigger(XPAD::Button::A) || XPAD::IsTrigger(XPAD::Button::B);
@@ -795,7 +795,7 @@ void PlayerBehavior_Jump::Execute(void)
 
 void PlayerBehavior_Jump::RequirementCheck(void)
 {
-    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
 
     const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));

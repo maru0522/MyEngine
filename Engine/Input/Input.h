@@ -87,8 +87,6 @@ namespace Input {
             BACK = 0x0020,
             LB = 0x0040,
             RB = 0x0080,
-            LT = 0x0100,
-            RT = 0x0200,
             A = 0x1000,
             B = 0x2000,
             X = 0x4000,
