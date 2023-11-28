@@ -253,6 +253,10 @@ void DemoScene::Update(void)
     house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
     house_->Update();
 
+    // z にちょっと、xにすこし
+    //skyDivide_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0, 80, 1000), Vector3(1000, 1, 1000), Vector3(0.1f, 0, -0.3f));
+    skyDivide_->Update();
+
     rock1_->Update();
     rock2_->Update();
     rock3_->Update();
@@ -325,6 +329,8 @@ void DemoScene::Draw3d(void)
     //for (auto& object : objects_) {
     //    object.second->Draw();
     //}
+    skydome_->Draw();
+    skyDivide_->Draw();
 }
 
 
