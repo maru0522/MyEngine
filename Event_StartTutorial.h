@@ -16,10 +16,14 @@ private:
         FINISH,
     };
 
-    const float kDef_closeTimer_ = 6.f;
-    const float kDef_waitTimer_ = 5.f;
-    const float kDef_leaveTimer_ = 8.f;
-    const float kDef_wait2Timer_ = 4.f;
+    const float kCloseTimer_ = 2.f;
+    const float kColseAddSpeed_ = 2.f;
+    const float kWaitTimer_ = 1.f;
+    const float kWaitAddSpeed_ = 1.f;
+    const float kLeaveTimer_ = 3.f;
+    const float kLeaveAddSpeed_ = 1.2f;
+    const float kWait2Timer_ = 1.f;
+    const float kWait2AddSpeed_ = 1.f;
 
 public:
     //>> 関数

@@ -50,8 +50,8 @@ Event_StartTutorial::Event_StartTutorial(void)
     Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
 
-    timer_closeCam_.Start(kDef_closeTimer_);
-    timer_closeCam_.SetAddSpeed(2.f);
+    timer_closeCam_.Start(kCloseTimer_);
+    timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
 
     cameraState_ = CameraState::CLOSE;
 }
@@ -136,7 +136,8 @@ void Event_StartTutorial::Update_CloseCam(void)
         camera_->SetTransform(transform);
 
         // 次のタイマーを起動。
-        timer_waitCam_.Start(kDef_waitTimer_);
+        timer_waitCam_.Start(kWaitTimer_);
+        timer_waitCam_.SetAddSpeed(kWaitAddSpeed_);
         // 今のタイマーを停止
         timer_closeCam_.Finish(true);
 
@@ -178,8 +179,8 @@ void Event_StartTutorial::Update_WaitCam(void)
     if (rate >= 1.f)
     {
         // 次のタイマーを起動。
-        timer_leaveCam_.Start(kDef_leaveTimer_);
-        timer_leaveCam_.SetAddSpeed(1.2f);
+        timer_leaveCam_.Start(kLeaveTimer_);
+        timer_leaveCam_.SetAddSpeed(kLeaveAddSpeed_);
         // 今のタイマーを停止
         timer_waitCam_.Finish(true);
 
@@ -209,7 +210,8 @@ void Event_StartTutorial::Update_LeaveCam(void)
     if (rate >= 1.f)
     {
         // 次のタイマーを起動。
-        timer_waitCam2_.Start(kDef_wait2Timer_);
+        timer_waitCam2_.Start(kWait2Timer_);
+        timer_waitCam2_.SetAddSpeed(kWait2AddSpeed_);
         // 今のタイマーを停止
         timer_leaveCam_.Finish(true);
 

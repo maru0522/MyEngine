@@ -113,6 +113,19 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
         Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
 
+        float theta = ptr_cam_spherical->theta_;
+        float phi = ptr_cam_spherical->phi_;
+        float psi = ptr_cam_spherical->psi_;
+        Vector2 inputVecR = XPAD::GetRStick();
+        inputVecR = inputVecR.Normalize();
+        theta -= 0.06f * inputVecR.y;
+        phi += 0.06f * inputVecR.x;
+
+        Math::Function::Loop(theta, 0.f, 6.28319f);
+        Math::Function::Loop(phi, 0.f, 6.28319f);
+        Math::Function::Loop(psi, 0.f, 6.28319f);
+        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+
         //if (GetPlayerJumpVecNorm())
         //{
         //    // カメラとプレイヤーの距離
@@ -128,13 +141,21 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
 
 void PlayerBehavior_Idle::RequirementCheck(void)
 {
-    bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
-    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
-    bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
+    const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
+
+    const bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+    const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    const bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+
+    const bool isStoop = isDown_LT + isDown_LSHIFT;
+    const bool isMove = isDown_LStick + isDown_anyWASD;
+    const bool isJump = isDown_AorB + isDown_SPACE;
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 左シフトが入力されている
-    if (isDown_LSHIFT)
+    if (isStoop)
     {
         // PlayerState を STOOP(しゃがみ)へ
         nextState_ = PlayerBehavior::STOOP;
@@ -142,7 +163,7 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     }
 
     // 移動キーが入力されている
-    if (isDown_anyWASD)
+    if (isMove)
     {
         // PlayerState を MOVE(移動)へ
         nextState_ = PlayerBehavior::MOVE;
@@ -150,7 +171,7 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     }
 
     // SPACEが入力されている && 地面に足がついている
-    if (isDown_SPACE && isLanding)
+    if (isJump && isLanding)
     {
         // PlayerState を JUMP(ジャンプ)へ
         nextState_ = PlayerBehavior::JUMP;
@@ -181,13 +202,21 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 
 void PlayerBehavior_Stoop::RequirementCheck(void)
 {
-    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
-    bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
-    bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
+    const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
+
+    const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    const bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+    const bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+
+    const bool isStoop = isDown_LT + isDown_LSHIFT;
+    const bool isMove = isDown_LStick + isDown_anyWASD;
+    const bool isJump = isDown_AorB + isDown_SPACE;
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
-    if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
+    if (isStoop == false && isMove == false && isJump == false)
     {
         // PlayerState を Idleへ
         nextState_ = PlayerBehavior::IDLE;
@@ -195,7 +224,7 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
     }
 
     // 左SHIFTが入力されている && 移動キーが入力されている
-    if (isDown_anyWASD) // ここを通っている時点で、実質左SHIFTが入力されている
+    if (isMove) // ここを通っている時点で、実質左SHIFTが入力されている
     {
         // PlayerState を MOVE_STOOP(しゃがみ移動)へ
         nextState_ = PlayerBehavior::MOVE_STOOP;
@@ -203,7 +232,7 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
     }
 
     // SPACEが入力されている && 地面に足がついている
-    if (isDown_SPACE && isLanding)
+    if (isJump && isLanding)
     {
         // PlayerState を JUMP_STOOP(しゃがみジャンプ)へ
         nextState_ = PlayerBehavior::JUMP_STOOP;
@@ -219,6 +248,8 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector2 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec += XPAD::GetLStick();
+
     //inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
     inputVec = inputVec.Normalize();
 
@@ -384,6 +415,11 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
             }
         }
 
+        Vector2 inputVecR = XPAD::GetRStick();
+        inputVecR = inputVecR.Normalize();
+        theta += 0.15f * inputVecR.y;
+        phi += 0.15f * inputVecR.x;
+
         Math::Function::Loop(theta, 0.f, 6.28319f);
         Math::Function::Loop(phi, 0.f, 6.28319f);
         Math::Function::Loop(psi, 0.f, 6.28319f);
@@ -430,13 +466,21 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
 void PlayerBehavior_Move::RequirementCheck(void)
 {
-    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
-    bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
-    bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
+    const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
+
+    const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    const bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+    const bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+
+    const bool isStoop = isDown_LT + isDown_LSHIFT;
+    const bool isMove = isDown_LStick + isDown_anyWASD;
+    const bool isJump = isDown_AorB + isDown_SPACE;
     bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・&& 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・&& SPACE縺悟・蜉帙＆繧後※縺・ｋ
-    if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
+    if (isStoop == false && isMove == false && isJump == false)
     {
         // PlayerState 繧・IDLE縺ｸ
         nextState_ = PlayerBehavior::IDLE;
@@ -444,7 +488,7 @@ void PlayerBehavior_Move::RequirementCheck(void)
     }
 
     // 蟾ｦ繧ｷ繝輔ヨ縺悟・蜉帙＆繧後※縺・ｋ
-    if (isDown_LSHIFT) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
+    if (isStoop) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
     {
         // PlayerState 繧・MOVE_STOOP(縺励ｃ縺後∩遘ｻ蜍・縺ｸ
         nextState_ = PlayerBehavior::MOVE_STOOP;
@@ -452,7 +496,7 @@ void PlayerBehavior_Move::RequirementCheck(void)
     }
 
     // SPACE縺悟・蜉帙＆繧後※縺・ｋ && 蝨ｰ髱｢縺ｫ雜ｳ縺後▽縺・※縺・ｋ
-    if (isDown_SPACE && isLanding)
+    if (isJump && isLanding)
     {
         // PlayerState 繧・JUMP(繧ｸ繝｣繝ｳ繝・縺ｸ
         nextState_ = PlayerBehavior::JUMP;
@@ -468,6 +512,7 @@ void PlayerBehavior_MoveStoop::Execute(void)
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
     inputVec = inputVec.Normalize();
 
     // 繧ｫ繝｡繝ｩ隕也せ縺ｮ繝励Ξ繧､繝､繝ｼ遘ｻ蜍輔・繧ｯ繝医Ν
@@ -573,14 +618,24 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)
 {
-    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
-    bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
-    bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
-    bool isTrigger_SPACE = KEYS::IsTrigger(DIK_SPACE);
-    bool isLanding = GetPlayerIsLanding();
+    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
+    const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
+    const bool isTrigger_AorB = XPAD::IsTrigger(XPAD::Button::A) || XPAD::IsTrigger(XPAD::Button::B);
+
+    const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    const bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+    const bool isDown_SPACE = KEYS::IsDown(DIK_SPACE);
+    const bool isTrigger_SPACE = KEYS::IsTrigger(DIK_SPACE);
+
+    const bool isStoop = isDown_LT + isDown_LSHIFT;
+    const bool isMove = isDown_LStick + isDown_anyWASD;
+    const bool isJump = isDown_AorB + isDown_SPACE;
+    const bool isJumpTrigger = isTrigger_AorB + isTrigger_SPACE;
+    bool isLanding = GetPlayerJumpVecNorm() == 0.f;
 
     // 左SHIFTが入力されていない && 移動キーが入力されていない && SPACEが入力されている
-    if (isDown_LSHIFT == false && isDown_anyWASD == false && isDown_SPACE == false)
+    if (isStoop == false && isMove == false && isJump == false)
     {
         // PlayerState を Idleへ
         nextState_ = PlayerBehavior::IDLE;
@@ -588,7 +643,7 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
     }
 
     // 左SHIFTが入力されていない
-    if (isDown_LSHIFT == false)
+    if (isStoop == false)
     {
         // PlayerState を MOVE(移動)へ
         nextState_ = PlayerBehavior::MOVE;
@@ -596,7 +651,7 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
     }
 
     // 移動キーが入力されていない
-    if (isDown_anyWASD == false)
+    if (isMove == false)
     {
         // PlayerState を STOOP(しゃがみ)へ
         nextState_ = PlayerBehavior::STOOP;
@@ -606,7 +661,7 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
 
 
     // 着地している && 移動キーが入力された
-    if (isLanding && isTrigger_SPACE) // ここを通っている時点で、実質左SHIFTが入力されている
+    if (isLanding && isJumpTrigger) // ここを通っている時点で、実質左SHIFTが入力されている
     {
         // PlayerState を JUMP_LONG(幅跳び)へ
         nextState_ = PlayerBehavior::JUMP_LONG;
@@ -628,6 +683,7 @@ void PlayerBehavior_Jump::Execute(void)
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
     inputVec = inputVec.Normalize();
 
     // カメラ視点のプレイヤー移動ベクトル
@@ -739,15 +795,21 @@ void PlayerBehavior_Jump::Execute(void)
 
 void PlayerBehavior_Jump::RequirementCheck(void)
 {
-    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
-    bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+    const bool isDown_LT = XPAD::IsDown(XPAD::Button::LT);
+    const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
+
+    const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    const bool isDown_LSHIFT = KEYS::IsDown(DIK_LSHIFT);
+
+    const bool isStoop = isDown_LT + isDown_LSHIFT;
+    const bool isMove = isDown_LStick + isDown_anyWASD;
     bool isLanding = GetPlayerIsLanding();
 
     // 着地している
     if (isLanding)
     {
         // 移動キーを押していない && 左SHIFTを押していない
-        if (isDown_anyWASD == false && isDown_LSHIFT == false)
+        if (isMove == false && isStoop == false)
         {
             // PlayerState をIdleへ
             nextState_ = PlayerBehavior::IDLE;
@@ -755,7 +817,7 @@ void PlayerBehavior_Jump::RequirementCheck(void)
         }
 
         // 移動キーを押している && 左SHIFTを押していない
-        if (isDown_anyWASD && isDown_LSHIFT == false)
+        if (isMove && isStoop == false)
         {
             nextState_ = PlayerBehavior::MOVE;
             return;
@@ -763,8 +825,7 @@ void PlayerBehavior_Jump::RequirementCheck(void)
     }
 
     // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ && 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ
-    if (KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S) != 0 &&
-        KEYS::IsDown(DIK_LSHIFT))
+    if (isMove && isStoop)
     {
         nextState_ = PlayerBehavior::STOOP;
         return;
@@ -784,6 +845,7 @@ void PlayerBehavior_JumpLong::Execute(void)
     Vector3 inputVec{};
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
     inputVec = inputVec.Normalize();
 
     // カメラ視点のプレイヤー移動ベクトル
@@ -896,14 +958,17 @@ void PlayerBehavior_JumpLong::Execute(void)
 
 void PlayerBehavior_JumpLong::RequirementCheck(void)
 {
-    bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+    const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
+    const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
+
+    const bool isMove = isDown_LStick + isDown_anyWASD;
     bool isLanding = GetPlayerIsLanding();
 
     // 着地している
     if (isLanding)
     {
         // 移動キーを押していない
-        if (isDown_anyWASD == false)
+        if (isMove == false)
         {
             // PlayerState をIdleへ
             nextState_ = PlayerBehavior::IDLE;
@@ -912,7 +977,7 @@ void PlayerBehavior_JumpLong::RequirementCheck(void)
         }
 
         // 移動キーを押している
-        if (isDown_anyWASD)
+        if (isMove)
         {
             nextState_ = PlayerBehavior::MOVE;
             PostEffectManager::GetInstance()->RequestChangePostEffect(PostEffectType::NONE);

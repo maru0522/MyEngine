@@ -77,19 +77,40 @@ namespace Input {
             uint16_t xRightValueY{};
         };
 
+        enum class Button
+        {
+            TOP = 0x0001,
+            BOTTOM = 0x0002,
+            LEFT = 0x0004,
+            RIGHT = 0x0008,
+            START = 0x0010,
+            BACK = 0x0020,
+            LB = 0x0040,
+            RB = 0x0080,
+            LT = 0x0100,
+            RT = 0x0200,
+            A = 0x1000,
+            B = 0x2000,
+            X = 0x4000,
+            Y = 0x8000,
+        };
+
     public:
         // 関数
         static void Initialize(void);
         static void Update(void);
 
         // 押した瞬間
-        static bool IsTrigger(uint16_t button) { return sXStatePre_.Gamepad.wButtons != button && sXState_.Gamepad.wButtons == button; }
+        static bool IsTrigger(uint16_t arg_bit) { return sXStatePre_.Gamepad.wButtons != arg_bit && sXState_.Gamepad.wButtons == arg_bit; }
+        static bool IsTrigger(Button arg_button) { return sXStatePre_.Gamepad.wButtons != (uint16_t)arg_button && sXState_.Gamepad.wButtons == (uint16_t)arg_button; }
 
         // 押されている時
-        static bool IsDown(uint16_t button) { return sXState_.Gamepad.wButtons == button; }
+        static bool IsDown(uint16_t arg_bit) { return sXState_.Gamepad.wButtons == arg_bit; }
+        static bool IsDown(Button arg_button) { return sXState_.Gamepad.wButtons == (uint16_t)arg_button; }
 
         // 離された瞬間
-        static bool IsReleased(uint16_t button) { return sXStatePre_.Gamepad.wButtons == button && sXState_.Gamepad.wButtons != button; }
+        static bool IsReleased(uint16_t arg_bit) { return sXStatePre_.Gamepad.wButtons == arg_bit && sXState_.Gamepad.wButtons != arg_bit; }
+        static bool IsReleased(Button arg_button) { return sXStatePre_.Gamepad.wButtons == (uint16_t)arg_button && sXState_.Gamepad.wButtons != (uint16_t)arg_button; }
 
         static bool IsSomeDown(void);
 
