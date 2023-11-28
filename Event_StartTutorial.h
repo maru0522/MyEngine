@@ -22,7 +22,7 @@ private:
     const float kWaitAddSpeed_ = 1.f;
     const float kLeaveTimer_ = 3.f;
     const float kLeaveAddSpeed_ = 1.2f;
-    const float kWait2Timer_ = 1.f;
+    const float kWait2Timer_ = 6.f;
     const float kWait2AddSpeed_ = 1.f;
 
 public:
