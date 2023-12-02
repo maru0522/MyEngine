@@ -199,9 +199,12 @@ void Event_StartTutorial::Update_LeaveCam(void)
     if (rate > 0.2f) { timer_leaveCam_.SetAddSpeed(rate + 1.2f); }
 
     Vector3 pos;
-    pos.x = Math::Ease::EaseInCubic(rate, 0.f, 86.f);
-    pos.y = Math::Ease::EaseInCubic(rate, 53.f, 54.f);
-    pos.z = Math::Ease::EaseInCubic(rate, -23.f, -382.f);
+    //pos.x = Math::Ease::EaseInCubic(rate, 0.f, 86.f);
+    //pos.y = Math::Ease::EaseInCubic(rate, 53.f, 54.f);
+    //pos.z = Math::Ease::EaseInCubic(rate, -23.f, -382.f);
+    pos.x = Math::Ease::EaseInCubic(rate, 0.f, 0.f);
+    pos.y = Math::Ease::EaseInCubic(rate, 53.f, 7.f);
+    pos.z = Math::Ease::EaseInCubic(rate, -23.f, -210.f);
 
     Transform transform(pos, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
