@@ -12,6 +12,9 @@ PlayerUI::~PlayerUI(void)
     uiPtr_->UnRegister("playerUI_starDustCount");
     uiPtr_->UnRegister("playerUI_remain");
     uiPtr_->UnRegister("playerUI_life");
+    uiPtr_->UnRegister("playerUI_figures");
+    uiPtr_->UnRegister("playerUI_figures2");
+    uiPtr_->UnRegister("playerUI_slash");
 }
 
 void PlayerUI::Initialize(void)
@@ -53,6 +56,34 @@ void PlayerUI::Initialize(void)
     uiPtr_->GetUISpritePtr("playerUI_life")->SetScale(Vector2{ 1.f,1.f });
     uiPtr_->GetUISpritePtr("playerUI_life")->SetPosition(Vector2{ kDefPos_right_, 50.f });
     uiPtr_->GetUISpritePtr("playerUI_life")->SetAlpha(0.f);
+
+    // 数字
+    uiPtr_->Register("playerUI_figures", "Resources/figures.png");
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetScale(Vector2{ 1.f,1.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetSize(Vector2{ 32.f,32.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetPosition(Vector2{ WndAPI::kWidth_ / 2 - 30, 100.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetAlpha(1.f);
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetCutStartPoint(Vector2{ 0.f,0.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetCutLength(Vector2{ 32.f,32.f });
+
+    // 数字2
+    uiPtr_->Register("playerUI_figures2", "Resources/figures.png");
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetScale(Vector2{ 1.f,1.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetSize(Vector2{ 32.f,32.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetPosition(Vector2{ WndAPI::kWidth_ / 2 + 30, 100.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetAlpha(1.f);
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetCutStartPoint(Vector2{ 96.f,0.f });
+    uiPtr_->GetUISpritePtr("playerUI_figures2")->SetCutLength(Vector2{ 32.f,32.f });
+
+    // スラッシュ
+    uiPtr_->Register("playerUI_slash", "Resources/slash.png");
+    uiPtr_->GetUISpritePtr("playerUI_slash")->SetScale(Vector2{ 1.f,1.f });
+    uiPtr_->GetUISpritePtr("playerUI_slash")->SetSize(Vector2{ 32.f,32.f });
+    uiPtr_->GetUISpritePtr("playerUI_slash")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("playerUI_slash")->SetPosition(Vector2{ WndAPI::kWidth_ / 2, 100.f });
+    uiPtr_->GetUISpritePtr("playerUI_slash")->SetAlpha(1.f);
 }
 
 void PlayerUI::Update(void)
@@ -64,6 +95,11 @@ void PlayerUI::Update(void)
     //GUI::Text("frame: %f", easeTimer_.GetFrameCurrent());
     //GUI::End();
 
+    const float rabbitNum = (float)*rabbitCount_;
+    const Vector2 point = { 32.f * rabbitNum, 0.f};
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetCutStartPoint(point);
+
+
     EaseUI();
 
     // nullチェック
@@ -74,6 +110,9 @@ void PlayerUI::Update(void)
     uiPtr_->Update("playerUI_starDustCount");
     uiPtr_->Update("playerUI_remain");
     uiPtr_->Update("playerUI_life");
+    uiPtr_->Update("playerUI_figures");
+    uiPtr_->Update("playerUI_figures2");
+    uiPtr_->Update("playerUI_slash");
 
     // フラグ更新
     is_visiblePre_ = is_visible_;
@@ -89,6 +128,9 @@ void PlayerUI::Draw(void)
     uiPtr_->Draw("playerUI_starDustCount");
     uiPtr_->Draw("playerUI_remain");
     uiPtr_->Draw("playerUI_life");
+    uiPtr_->Draw("playerUI_figures");
+    uiPtr_->Draw("playerUI_figures2");
+    uiPtr_->Draw("playerUI_slash");
 }
 
 void PlayerUI::EaseUI(void)
@@ -139,7 +181,7 @@ void PlayerUI::EaseUI(void)
         const Vector2& starCount_defPos = { kDefPos_left_ + kMoveDist_, 40.f }; // 右 -> 左
         const float starCount_posX = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), starCount_defPos.x, starCount_defPos.x - kMoveDist_);
         uiPtr_->GetUISpritePtr("playerUI_starCount")->SetPosition(Vector2{ starCount_posX,starCount_defPos.y });
-        const float starCount_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(),1.f,0.f);
+        const float starCount_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), 1.f, 0.f);
         uiPtr_->GetUISpritePtr("playerUI_starCount")->SetAlpha(starCount_alpha);
 
         // コインの数の画像

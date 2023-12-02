@@ -27,6 +27,7 @@ private:
     UI* uiPtr_;
     bool is_visible_{};
     bool is_visiblePre_{};
+    int32_t* rabbitCount_;
 
     DeltaTimer easeTimer_;
 
@@ -38,6 +39,7 @@ public:
     //>> setter
     void SetUIPtr(UI* arg_uiPtr) { uiPtr_ = arg_uiPtr; }
     void SetIsVisible(bool arg_isVisible) { is_visible_ = arg_isVisible; }
+    void SetRabbitCountPtr(int32_t* arg_rabbitPtr) { rabbitCount_ = arg_rabbitPtr; }
 
     //>> getter
     bool GetIsEnd(void) { return easeTimer_.GetIsFinished(); }

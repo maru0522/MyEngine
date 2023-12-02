@@ -26,6 +26,7 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
     moveVec_ = { 0,1,0 };
 
     playerUI_.SetUIPtr(UI::GetInstance());
+    playerUI_.SetRabbitCountPtr(&captureCount_rabbit);
     playerUI_.Initialize();
 }
 
@@ -292,10 +293,6 @@ void Player::OnCollision(void)
         // 補正された値で行列を生成
         matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     }
-    if (sphereCollider_.GetOther()->GetID() == "rabbit")
-    {
-        captureCount_rabbit++;
-    }
     if (sphereCollider_.GetOther()->GetID() == "pipe_pushback")
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
@@ -327,5 +324,9 @@ void Player::OnTrigger(void)
     if (sphereCollider_.GetOther()->GetID() == "coin_contact")
     {
         coinNum_++;
+    }
+    if (sphereCollider_.GetOther()->GetID() == "rabbit")
+    {
+        captureCount_rabbit++;
     }
 }

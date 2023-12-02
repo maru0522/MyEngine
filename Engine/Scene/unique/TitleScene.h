@@ -22,5 +22,6 @@ private:
     std::unique_ptr<ICamera> camera_title{ std::make_unique<ICamera>("titleScene") };
     DeltaTimer dTimer_ease_logoUpScale_;
     DeltaTimer dTimer_ease_WhitelogoDownScale_;
+    DeltaTimer dTimer_ease_pressAStrAlpha_;
 };
 

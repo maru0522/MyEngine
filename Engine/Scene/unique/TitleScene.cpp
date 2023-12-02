@@ -28,9 +28,16 @@ void TitleScene::Initialize(void)
     UI::GetInstance()->GetUISpritePtr("png_titleKana")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
     UI::GetInstance()->GetUISpritePtr("png_titleKana")->SetPosition(Vector2{ 640.f,360.f });
 
+    UI::GetInstance()->Register("png_titlePressA", "Resources/title_press_A.png");
+    UI::GetInstance()->GetUISpritePtr("png_titlePressA")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    UI::GetInstance()->GetUISpritePtr("png_titlePressA")->SetPosition(Vector2{ 640.f,660.f });
+    UI::GetInstance()->GetUISpritePtr("png_titlePressA")->SetAlpha(0.f);
+
     //
     dTimer_ease_logoUpScale_.Start(1.f);
     dTimer_ease_logoUpScale_.SetAddSpeed(2.f);
+    dTimer_ease_pressAStrAlpha_.Start(4.f);
+    dTimer_ease_pressAStrAlpha_.SetAddSpeed(2.f);
 }
 
 void TitleScene::Update(void)
@@ -43,6 +50,7 @@ void TitleScene::Update(void)
     UI::GetInstance()->Update("png_titleLogo-White");
     UI::GetInstance()->Update("png_titleLogo");
     UI::GetInstance()->Update("png_titleKana");
+    UI::GetInstance()->Update("png_titlePressA");
 
     dTimer_ease_logoUpScale_.Update();
     const float rate = dTimer_ease_logoUpScale_.GetTimeRate();
@@ -66,6 +74,11 @@ void TitleScene::Update(void)
         UI::GetInstance()->GetUISpritePtr("png_titleLogo-White")->SetAlpha(newScale);
     }
 
+    dTimer_ease_pressAStrAlpha_.Update();
+    const float alpha_rate = dTimer_ease_pressAStrAlpha_.GetTimeRate();
+    const float alpha_pressA = Math::Ease::EaseInSine(alpha_rate);
+    UI::GetInstance()->GetUISpritePtr("png_titlePressA")->SetAlpha(alpha_pressA);
+
     GUI::Begin("Title_logo");
     GUI::Text("rate:  %f", rate);
     GUI::Text("scale: %f", scale);
@@ -84,6 +97,7 @@ void TitleScene::Draw2dFore(void)
     UI::GetInstance()->Draw("png_titleKana");
     UI::GetInstance()->Draw("png_titleLogo");
     UI::GetInstance()->Draw("png_titleLogo-White");
+    UI::GetInstance()->Draw("png_titlePressA");
 }
 
 void TitleScene::Draw2dBack(void)
