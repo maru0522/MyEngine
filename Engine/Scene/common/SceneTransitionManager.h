@@ -13,20 +13,25 @@ public:
     void Update(void);
     void Draw(void);
 
-    void PlaySceneTransition(SceneTransitionName arg_sceneName);
+    void PlaySceneTransition(void);
     void StopSceneTransition(void);
+    void ResumeSceneTransition(void);
 
 private:
-    //>> 変数
-    bool is_playingAnimation_;
+    void CheckPhase(void);
+    void ExecutePhase(void);
 
-    std::unique_ptr<ISceneTransition> sceneTransitionPtr_;
+    //>> 変数
+    std::array<std::unique_ptr<ISceneTransition>,3> sceneTransitionPtr_;
     SceneTransitionFactory sceneTransitionFactory_;
+    TransitionType currentPhase_;
+    bool is_playingAnimation_;
 
 public:
     //>> setter
 
     //>> getter
     bool IsPlayingAnimation(void) { return is_playingAnimation_; }
+    bool IsChngeableScene(void) { return currentPhase_ == TransitionType::MIDDLE; }
 };
 

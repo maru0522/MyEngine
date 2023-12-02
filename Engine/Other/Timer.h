@@ -137,6 +137,7 @@ public:
     void SetIsLoop(bool is_loop) { is_loop_ = is_loop; }
 
     //>> getter
+    bool GetIsExecuted(void) { return is_execute_; }
     bool GetIsLoop(void) { return is_loop_; }
     bool GetIsFinished(void);
     bool GetIsPause(void) { return is_pause_; }

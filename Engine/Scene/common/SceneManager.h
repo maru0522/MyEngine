@@ -11,7 +11,7 @@ public:
     //>> 関数
     static SceneManager* GetInstance(void);
 
-    void RequestChangeScene(SceneName arg_nextScene, int32_t arg_waitFrame = 100);
+    void RequestChangeScene(SceneName arg_nextScene);
 
     void Initialize(SceneName firstScene = SceneName::DEMO);
     void Update(void);
@@ -21,17 +21,17 @@ public:
 
 private:
     // シーンを変更する必要があるかチェック
-    bool IsNeedSceneChange(void);
+    bool IsNeededSceneChange(void);
     // シーンを変更する
     void ChangeScene(void);
 
     //>> 変数
     std::unique_ptr<IScene> currentScene_{ nullptr };
     SceneName next_SceneName_;
-    FrameTimer timer_waitChangeScene_;
 
     SceneFactory sceneFactory_;
     SceneTransitionManager sceneTransitionManager_;
+    bool is_lodingData_;
 
     //>> singleton
     SceneManager(void);

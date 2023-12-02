@@ -182,9 +182,6 @@
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp">
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Scene\common\SceneTransition.cpp">
-      <Filter>Engine\Scene\common</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Entity\Player.cpp">
       <Filter>Application\Entity</Filter>
     </ClCompile>
@@ -209,8 +206,6 @@
     <ClCompile Include="Application\Object\Coin.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Scene\common\SceneTransitionManager.cpp" />
-    <ClCompile Include="Engine\Scene\common\SceneTransitionFactory.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Application\UI.cpp" />
@@ -274,6 +269,18 @@
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
     <ClCompile Include="BackGroundTexture.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition.cpp">
+      <Filter>Engine\Scene\Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\common\SceneTransitionFactory.cpp">
+      <Filter>Engine\Scene\Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\common\SceneTransitionManager.cpp">
+      <Filter>Engine\Scene\Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTransition_FadeIn.cpp" />
+    <ClCompile Include="SceneTransition_Middle.cpp" />
+    <ClCompile Include="SceneTransition_FadeOut.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -440,9 +447,6 @@
     <ClInclude Include="Engine\Scene\unique\GameScene.h">
       <Filter>Engine\Scene\unique</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Scene\common\SceneTransition.h">
-      <Filter>Engine\Scene\common</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Entity\Rabbit.h">
       <Filter>Application\Entity</Filter>
     </ClInclude>
@@ -467,8 +471,6 @@
     <ClInclude Include="Application\Object\Coin.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h" />
-    <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Application\UI.h" />
@@ -538,6 +540,18 @@
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
     <ClInclude Include="BackGroundTexture.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h">
+      <Filter>Engine\Scene\Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\common\SceneTransition.h">
+      <Filter>Engine\Scene\Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h">
+      <Filter>Engine\Scene\Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTransition_FadeIn.h" />
+    <ClInclude Include="SceneTransition_Middle.h" />
+    <ClInclude Include="SceneTransition_FadeOut.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
@@ -631,6 +645,9 @@
     </Filter>
     <Filter Include="Engine\Entity\Collision\CollisionPrimitive">
       <UniqueIdentifier>{a97fb944-c8cf-4cd7-9ba4-4664ba635d4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\Transition">
+      <UniqueIdentifier>{e6cead2d-5d78-4cd9-92b5-016dd231d308}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

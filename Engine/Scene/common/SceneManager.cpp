@@ -19,14 +19,12 @@ SceneManager* SceneManager::GetInstance(void)
     return &instatnce;
 }
 
-void SceneManager::RequestChangeScene(SceneName arg_nextScene, int32_t arg_waitFrame)
+void SceneManager::RequestChangeScene(SceneName arg_nextScene)
 {
     // 次のシーン名を設定
     next_SceneName_ = arg_nextScene;
-    // シーンを変更するまでの時間を設定（arg_waitFrame後、シーンが切り替わる）
-    timer_waitChangeScene_.Start(arg_waitFrame);
     // シーン遷移の再生
-    sceneTransitionManager_.PlaySceneTransition(SceneTransitionName::FADEINOUT);
+    sceneTransitionManager_.PlaySceneTransition();
 }
 
 void SceneManager::Initialize(SceneName firstScene)
@@ -38,23 +36,36 @@ void SceneManager::Initialize(SceneName firstScene)
 
 void SceneManager::Update(void)
 {
-    // 現在シーンの更新処理
-    currentScene_->Update();
-
     // シーン遷移が再生中である
     if (sceneTransitionManager_.IsPlayingAnimation())
     {
-        // シーンが変更するまでのカウント
-        timer_waitChangeScene_.Update();
         // シーン遷移の更新処理
         sceneTransitionManager_.Update();
+
+        // シーン変更が求められている場合 && シーンを変更してよいタイミングの場合
+        if (IsNeededSceneChange() && sceneTransitionManager_.IsChngeableScene())
+        {
+            // シーンを変更
+            ChangeScene();
+            // 現在シーンの更新処理を1回だけ呼ぶ
+            currentScene_->Update();
+            // ローディングを開始
+            is_lodingData_ = true;
+        }
+    }
+    else
+    {
+        // 現在シーンの更新処理
+        currentScene_->Update();
     }
 
-    // シーンを変更すべきである && シーン変更までの時間が経過している
-    if (IsNeedSceneChange() && timer_waitChangeScene_.GetIsFinished())
+    // データの読み込み可能
+    if (is_lodingData_)
     {
-        // シーンを変更
-        ChangeScene();
+        // データの読み込み処理と完了
+        //if ~~
+        is_lodingData_ = false;
+        sceneTransitionManager_.ResumeSceneTransition();
     }
 }
 
@@ -78,7 +89,7 @@ void SceneManager::Draw2dBack(void)
     currentScene_->Draw2dBack();
 }
 
-bool SceneManager::IsNeedSceneChange(void)
+bool SceneManager::IsNeededSceneChange(void)
 {
     // 次のシーン名が "NONE" 以外である
     if (next_SceneName_ != SceneName::NONE) { return true; }

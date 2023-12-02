@@ -6,7 +6,9 @@ enum class SceneTransitionName
 {
     NONE = -1,
 
-    FADEINOUT,
+    FADEIN,
+    MIDDLE,
+    FADEOUT,
 };
 
 class SceneTransitionFactory

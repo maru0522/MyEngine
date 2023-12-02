@@ -177,6 +177,9 @@
     <ClCompile Include="Engine\Entity\Collision\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.cpp" />
     <ClCompile Include="PlayerUI.cpp" />
+    <ClCompile Include="SceneTransition_FadeIn.cpp" />
+    <ClCompile Include="SceneTransition_FadeOut.cpp" />
+    <ClCompile Include="SceneTransition_Middle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\BloomPS.hlsl">
@@ -321,6 +324,9 @@
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.h" />
     <ClInclude Include="Event_StartTutorial.h" />
     <ClInclude Include="PlayerUI.h" />
+    <ClInclude Include="SceneTransition_FadeIn.h" />
+    <ClInclude Include="SceneTransition_FadeOut.h" />
+    <ClInclude Include="SceneTransition_Middle.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
