@@ -34,17 +34,17 @@ void SceneTransitionManager::Draw(void)
     }
 }
 
-void SceneTransitionManager::PlaySceneTransition(void)
+void SceneTransitionManager::PlaySceneTransition(bool arg_isStopMiddle)
 {
-    for (auto& transition : sceneTransitionPtr_)
+    for (size_t i = 0; i < 3; i++)
     {
         // シーン遷移演出が格納された変数をまとめて初期化。
-        transition.reset();
+        sceneTransitionPtr_[i].reset();
+        // シーン遷移演出を生成
+        const auto name = (SceneTransitionName)i;
+        sceneTransitionPtr_[i] = sceneTransitionFactory_.Create(name);
     }
-    // シーン遷移演出を生成
-    sceneTransitionPtr_[0] = sceneTransitionFactory_.Create(SceneTransitionName::FADEIN); // FADEIN
-    sceneTransitionPtr_[1] = sceneTransitionFactory_.Create(SceneTransitionName::MIDDLE); // MIDDLE
-    sceneTransitionPtr_[2] = sceneTransitionFactory_.Create(SceneTransitionName::FADEOUT); // FADEOUT
+
     // シーン遷移演出の再生開始
     sceneTransitionPtr_[0]->Start();
 
@@ -52,6 +52,7 @@ void SceneTransitionManager::PlaySceneTransition(void)
     currentPhase_ = TransitionType::FADEIN;
     // 再生中フラグを true
     is_playingAnimation_ = true;
+    is_stopMiddle_ = arg_isStopMiddle;
 }
 
 void SceneTransitionManager::StopSceneTransition(void)
@@ -61,6 +62,9 @@ void SceneTransitionManager::StopSceneTransition(void)
 
 void SceneTransitionManager::ResumeSceneTransition(void)
 {
+    // 止まらない設定の場合、不要なのでスキップ
+    if (is_stopMiddle_ == false) { return; }
+
     // 遷移フェーズがMIDDLE以外ならスキップ
     if (currentPhase_ != TransitionType::MIDDLE) { return; }
     // MIDDLEのタイマーが完遂していないならスキップ
@@ -93,6 +97,16 @@ void SceneTransitionManager::CheckPhase(void)
         break;
 
     case TransitionType::MIDDLE:
+        // trueなら、シーンフェーズ移行処理をスキップする。
+        if (is_stopMiddle_) { break; }
+
+        // 遷移フェーズをFADEOUTへ変更
+        currentPhase_ = TransitionType::FADEOUT;
+        // シーン遷移演出の停止
+        sceneTransitionPtr_[1]->Finish();
+        // 次のシーン遷移演出の再生開始
+        sceneTransitionPtr_[2]->Start();
+
         // タイマーの終了処理と遷移フェーズの変更は、ResumeSceneTransition()で行う
         break;
 

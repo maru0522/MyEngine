@@ -24,7 +24,7 @@ void SceneManager::RequestChangeScene(SceneName arg_nextScene)
     // 次のシーン名を設定
     next_SceneName_ = arg_nextScene;
     // シーン遷移の再生
-    sceneTransitionManager_.PlaySceneTransition();
+    sceneTransitionManager_.PlaySceneTransition(false);
 }
 
 void SceneManager::Initialize(SceneName firstScene)

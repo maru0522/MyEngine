@@ -109,4 +109,9 @@ void TitleScene::Finalize(void)
     CameraManager::GetInstance()->UnRegister(camera_title.get());
     UI::GetInstance()->UnRegister("png_titleLogo");
     UI::GetInstance()->UnRegister("png_titleKana");
+
+    // タイマーの停止
+    dTimer_ease_logoUpScale_.Finish();
+    dTimer_ease_WhitelogoDownScale_.Finish();
+    dTimer_ease_pressAStrAlpha_.Finish();
 }

@@ -13,7 +13,7 @@ public:
     void Update(void);
     void Draw(void);
 
-    void PlaySceneTransition(void);
+    void PlaySceneTransition(bool arg_isStopMiddle = true);
     void StopSceneTransition(void);
     void ResumeSceneTransition(void);
 
@@ -26,6 +26,7 @@ private:
     SceneTransitionFactory sceneTransitionFactory_;
     TransitionType currentPhase_;
     bool is_playingAnimation_;
+    bool is_stopMiddle_;
 
 public:
     //>> setter
