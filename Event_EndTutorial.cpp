@@ -1,9 +1,9 @@
-#include "Event_StartTutorial.h"
-#include "MathUtil.h"
+#include "Event_EndTutorial.h"
 #include "SimplifyImGui.h"
+#include "MathUtil.h"
+#include "SceneManager.h"
 
-
-Event_StartTutorial::Event_StartTutorial(void)
+Event_EndTutorial::Event_EndTutorial(void)
 {
     // 画像サイズ
     const Vector2 size{ 1280.f,80.f };
@@ -40,12 +40,12 @@ Event_StartTutorial::Event_StartTutorial(void)
     }
 
     // 文字の生成と設定
-    string_ = std::make_unique<Sprite>("Resources/string_takeRabbit.png");
+    string_ = std::make_unique<Sprite>("Resources/string_clear!.png");
     string_->SetAnchorPoint(Vector2{ 0.5,0.5 });
     string_->SetPosition(Vector2{ 640,360 });
     string_->SetAlpha(0.f);
 
-    camera_ = std::make_unique<NormalCamera>("event_startTutorial");
+    camera_ = std::make_unique<NormalCamera>("event_endTutorial");
     CameraManager::GetInstance()->Register(camera_.get());
     Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
@@ -53,20 +53,19 @@ Event_StartTutorial::Event_StartTutorial(void)
     cameraState_ = CameraState::CLOSE;
 }
 
-Event_StartTutorial::~Event_StartTutorial(void)
+Event_EndTutorial::~Event_EndTutorial(void)
 {
     CameraManager::GetInstance()->UnRegister(camera_.get());
 }
 
-void Event_StartTutorial::Initialize(void)
+void Event_EndTutorial::Initialize(void)
 {
     CameraManager::GetInstance()->SetCurrentCamera(camera_.get());
-
     timer_closeCam_.Start(kCloseTimer_);
     timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
 }
 
-void Event_StartTutorial::Execute(void)
+void Event_EndTutorial::Execute(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
@@ -82,24 +81,17 @@ void Event_StartTutorial::Execute(void)
 
     switch (cameraState_)
     {
-    case Event_StartTutorial::CameraState::CLOSE:
+    case Event_EndTutorial::CameraState::CLOSE:
         Update_CloseCam();
         break;
 
-    case Event_StartTutorial::CameraState::WAIT1:
+    case Event_EndTutorial::CameraState::WAIT1:
         Update_WaitCam();
         break;
 
-    case Event_StartTutorial::CameraState::LEAVE:
-        Update_LeaveCam();
-        break;
-
-    case Event_StartTutorial::CameraState::WAIT2:
-        Update_WaitCam2();
-        break;
-
-    case Event_StartTutorial::CameraState::FINISH:
+    case Event_EndTutorial::CameraState::FINISH:
         is_execute_ = false;
+        SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE);
         break;
 
     default:
@@ -110,7 +102,7 @@ void Event_StartTutorial::Execute(void)
     GUI::End();
 }
 
-void Event_StartTutorial::Draw(void)
+void Event_EndTutorial::Draw(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
@@ -130,7 +122,7 @@ void Event_StartTutorial::Draw(void)
     }
 }
 
-void Event_StartTutorial::Update_CloseCam(void)
+void Event_EndTutorial::Update_CloseCam(void)
 {
     timer_closeCam_.Update();
     const float rate = timer_closeCam_.GetTimeRate(true);
@@ -168,7 +160,7 @@ void Event_StartTutorial::Update_CloseCam(void)
     camera_->SetTransform(transform);
 }
 
-void Event_StartTutorial::Update_WaitCam(void)
+void Event_EndTutorial::Update_WaitCam(void)
 {
     timer_waitCam_.Update();
     const float rate = timer_waitCam_.GetTimeRate(true);
@@ -193,71 +185,8 @@ void Event_StartTutorial::Update_WaitCam(void)
     // タイマーが完了しているか
     if (rate >= 1.f)
     {
-        // 次のタイマーを起動。
-        timer_leaveCam_.Start(kLeaveTimer_);
-        timer_leaveCam_.SetAddSpeed(kLeaveAddSpeed_);
         // 今のタイマーを停止
         timer_waitCam_.Finish(true);
-
-        cameraState_ = CameraState::LEAVE;
-
-        // 関数を抜ける
-        return;
-    }
-}
-
-void Event_StartTutorial::Update_LeaveCam(void)
-{
-    timer_leaveCam_.Update();
-    const float rate = timer_leaveCam_.GetTimeRate();
-    GUI::Text("pukkCam : %f", rate);
-    if (rate > 0.2f) { timer_leaveCam_.SetAddSpeed(rate + 1.2f); }
-
-    Vector3 pos;
-    //pos.x = Math::Ease::EaseInCubic(rate, 0.f, 86.f);
-    //pos.y = Math::Ease::EaseInCubic(rate, 53.f, 54.f);
-    //pos.z = Math::Ease::EaseInCubic(rate, -23.f, -382.f);
-    pos.x = Math::Ease::EaseInCubic(rate, 0.f, 0.f);
-    pos.y = Math::Ease::EaseInCubic(rate, 53.f, 7.f);
-    pos.z = Math::Ease::EaseInCubic(rate, -23.f, -210.f);
-
-    Transform transform(pos, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
-    camera_->SetTransform(transform);
-
-    // タイマーが完了しているか
-    if (rate >= 1.f)
-    {
-        // 次のタイマーを起動。
-        timer_waitCam2_.Start(kWait2Timer_);
-        timer_waitCam2_.SetAddSpeed(kWait2AddSpeed_);
-        // 今のタイマーを停止
-        timer_leaveCam_.Finish(true);
-
-        cameraState_ = CameraState::WAIT2;
-
-        // 関数を抜ける
-        return;
-    }
-}
-
-void Event_StartTutorial::Update_WaitCam2(void)
-{
-    timer_waitCam2_.Update();
-    const float rate = timer_waitCam2_.GetTimeRate(true);
-    GUI::Text("waitCam2 : %f", rate);
-
-    // 上下の黒枠の生成と設定
-    const float moveValue = Math::Ease::EaseOutSine(rate, 0.f, 90.f);
-    const Vector2 pos0 = { 0.f,0.f - moveValue };
-    const Vector2 pos1 = { 0.f,640.f + moveValue };
-    cinemas_[0]->SetPosition(pos0);
-    cinemas_[1]->SetPosition(pos1);
-
-    // タイマーが完了しているか
-    if (rate >= 1.f)
-    {
-        // 今のタイマーを停止
-        timer_waitCam2_.Finish(true);
 
         cameraState_ = CameraState::FINISH;
         CameraManager::GetInstance()->SetCurrentCamera("SphericalCamera_follow_player0");
@@ -267,7 +196,7 @@ void Event_StartTutorial::Update_WaitCam2(void)
     }
 }
 
-void Event_StartTutorial::SetIsExecute(bool arg_isExecute)
+void Event_EndTutorial::SetIsExecute(bool arg_isExecute)
 {
     is_execute_ = arg_isExecute;
     if (is_execute_) { Initialize(); }

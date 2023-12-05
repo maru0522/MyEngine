@@ -17,6 +17,7 @@
 #include "Pipe.h"
 #include "Coin.h"
 #include "Event_StartTutorial.h"
+#include "Event_EndTutorial.h"
 #include "BackGroundTexture.h"
 
 class DemoScene final :
@@ -92,6 +93,7 @@ public:
     std::unique_ptr<LevelData> lvdPtr_;
 
     Event_StartTutorial a_;
+    Event_EndTutorial b_;
 
     std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };

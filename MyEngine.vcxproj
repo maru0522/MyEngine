@@ -139,6 +139,7 @@
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\IPrimitive.cpp" />
+    <ClCompile Include="Event_EndTutorial.cpp" />
     <ClCompile Include="Event_StartTutorial.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="Engine\Entity\Camera\Screen.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\Sphere.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.h" />
+    <ClInclude Include="Event_EndTutorial.h" />
     <ClInclude Include="Event_StartTutorial.h" />
     <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="SceneTransition_FadeIn.h" />

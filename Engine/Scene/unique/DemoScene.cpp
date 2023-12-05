@@ -9,6 +9,8 @@
 
 void DemoScene::Initialize(void)
 {
+    a_.SetIsExecute(true);
+
     const auto func_bgt = std::bind(&DemoScene::DrawBackGround, this);
     BackGroundTexture::GetInstance()->Set(func_bgt);
 
@@ -123,6 +125,7 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     a_.Execute();
+    b_.Execute();
 
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
@@ -197,7 +200,7 @@ void DemoScene::Update(void)
     }
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
-    if (capturedRabbitCount == 3) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
+    if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
 
     planet_->Update();
 
@@ -331,6 +334,7 @@ void DemoScene::Draw2dFore(void)
     player_->Draw2dFore();
 
     a_.Draw();
+    b_.Draw();
 }
 
 void DemoScene::Draw2dBack(void)

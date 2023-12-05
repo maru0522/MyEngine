@@ -281,6 +281,7 @@
     <ClCompile Include="SceneTransition_FadeIn.cpp" />
     <ClCompile Include="SceneTransition_Middle.cpp" />
     <ClCompile Include="SceneTransition_FadeOut.cpp" />
+    <ClCompile Include="Event_EndTutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -552,6 +553,7 @@
     <ClInclude Include="SceneTransition_FadeIn.h" />
     <ClInclude Include="SceneTransition_Middle.h" />
     <ClInclude Include="SceneTransition_FadeOut.h" />
+    <ClInclude Include="Event_EndTutorial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
