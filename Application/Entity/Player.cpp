@@ -211,7 +211,7 @@ void Player::ControlUI(void)
     if (is_dotValue_smaller_07f)
     {
         // 何かキー入力を行っているか
-        if (Input::Keyboard::IsSomeDown())
+        if (Input::Keyboard::IsSomeDown() || Input::XPad::GetLStick().Length())
         {
             // ftimerの値が0より大きいなら、0にする。
             ftimer = (std::min)(ftimer, 0);
