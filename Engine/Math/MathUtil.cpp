@@ -243,9 +243,12 @@ Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, const Axis3& 
     Vector3 up = arg_axes.up.Normalize();
     matRotate = Math::Mat4::RotMatFromAxes3(forward, right, up);
 
-    matRotate2 *= Mat4::RotationZ(arg_addRot.z);
-    matRotate2 *= Mat4::RotationX(arg_addRot.x);
-    matRotate2 *= Mat4::RotationY(arg_addRot.y);
+    Quaternion axisRightRotation = QuaternionF::MakeAxisAngle(arg_axes.right, arg_addRot.x);
+    Matrix4 matRot_eularX = QuaternionF::MakeRotateMatrix(axisRightRotation);
+    Quaternion axisUpRotation = QuaternionF::MakeAxisAngle(arg_axes.up, arg_addRot.y);
+    Matrix4 matRot_eularY = QuaternionF::MakeRotateMatrix(axisUpRotation);
+    matRotate2 *= matRot_eularX;
+    matRotate2 *= matRot_eularY;
     matRotate *= matRotate2;
 
     matWorld *= matScale;

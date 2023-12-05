@@ -276,13 +276,19 @@ void CameraManager::DebugGui(void)
 
                         GUI::Text("TransformMatrix - mat_world");
                         const Matrix4& M = camPtr->transformMatrix_.mat_world;
-                        GUI::Text("%f,%f,%f,%f", M.m[0][0], M.m[0][1], M.m[0][2], M.m[0][3]);
-                        GUI::Text("%f,%f,%f,%f", M.m[1][0], M.m[1][1], M.m[1][2], M.m[1][3]);
-                        GUI::Text("%f,%f,%f,%f", M.m[2][0], M.m[2][1], M.m[2][2], M.m[2][3]);
-                        GUI::Text("%f,%f,%f,%f", M.m[3][0], M.m[3][1], M.m[3][2], M.m[3][3]);
+                        // 可変長引数の関係でラップ関数を呼べない。 // TODO: いつか直す
+                        ImGui::Text("%f,%f,%f,%f", M.m[0][0], M.m[0][1], M.m[0][2], M.m[0][3]);
+                        ImGui::Text("%f,%f,%f,%f", M.m[1][0], M.m[1][1], M.m[1][2], M.m[1][3]);
+                        ImGui::Text("%f,%f,%f,%f", M.m[2][0], M.m[2][1], M.m[2][2], M.m[2][3]);
+                        ImGui::Text("%f,%f,%f,%f", M.m[3][0], M.m[3][1], M.m[3][2], M.m[3][3]);
                         GUI::BlankLine();
                         GUI::BlankLine();
                         GUI::BlankLine();
+
+                        static Transform transform;
+                        transform = camPtr->GetTransform();
+                        GUI::SliderFloat3("rotation", transform.rotation, 0.f, 6.28319f);
+                        camPtr->SetTransform(transform);
 
                         ImGui::Separator();
                         if (ImGui::Button("Close"))

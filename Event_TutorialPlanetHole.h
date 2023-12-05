@@ -37,12 +37,12 @@ public:
 
 private:
     void Initialize(void);
-    void Update_CloseCam(void);
-    void Update_WaitCam(void);
     void Update_LeaveCam(void);
-    void Update_WaitCam2(void);
+    void Update_WaitCam(void);
+    void Update_ApproachCam(void);
 
-    void OnTrigger(void);
+    void OnTrigger_Hole0(void);
+    void OnTrigger_Hole1(void);
 
     //>> 変数
     // カメラ達
@@ -62,12 +62,5 @@ private:
     std::array<CollisionPrimitive::SphereCollider, 2> entrances_;
 
     bool is_execute_;
-
-public:
-    //>> setter
-    void SetIsExecute(bool arg_isExecute);
-
-    //>> getter
-    bool GetIsExecite(void) { return is_execute_; }
 };
 

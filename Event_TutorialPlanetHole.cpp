@@ -1,5 +1,6 @@
 #include "Event_TutorialPlanetHole.h"
 #include "CameraManager.h"
+#include "SimplifyImGui.h"
 
 Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr) : colMPtr_(arg_colMPtr)
 {
@@ -9,8 +10,6 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     CameraManager::GetInstance()->Register(camera_leave_.get());
     CameraManager::GetInstance()->Register(camera_wait_.get());
     CameraManager::GetInstance()->Register(camera_approach_.get());
-    Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
-    camera_leave_->SetTransform(transform);
 
     cameraState_ = CameraState::LEAVE;
 
@@ -18,13 +17,14 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     colMPtr_->Register(&entrances_[0]);
     colMPtr_->Register(&entrances_[1]);
     // コライダーの名前を設定
-    entrances_[0].SetID("tutorialPlanet_hole1_");
-    entrances_[1].SetID("tutorialPlanet_hole2_");
+    entrances_[0].SetID("tutorialPlanet_hole0_");
+    entrances_[1].SetID("tutorialPlanet_hole1_");
     // OnTriggerの設定
-    entrances_[0].callback_onCollision_ = std::bind(&Event_TutorialPlanetHole::OnTrigger, this);
-    entrances_[1].callback_onCollision_ = std::bind(&Event_TutorialPlanetHole::OnTrigger, this);
+    entrances_[0].callback_onTrigger_ = std::bind(&Event_TutorialPlanetHole::OnTrigger_Hole0, this);
+    entrances_[1].callback_onTrigger_ = std::bind(&Event_TutorialPlanetHole::OnTrigger_Hole1, this);
     // 各コライダーの半径を設定
     entrances_[0].radius = 1.f * kScaleEntranceSphere;
+    entrances_[1].radius = 1.f * kScaleEntranceSphere;
     //entrances_[0].centers = 1.f * kScaleEntranceSphere;
 }
 
@@ -37,6 +37,31 @@ Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
 
 void Event_TutorialPlanetHole::Execute(void)
 {
+    // 起動していないならスキップ
+    if (is_execute_ == false) { return; }
+
+    switch (cameraState_)
+    {
+    case Event_TutorialPlanetHole::CameraState::LEAVE:
+        Update_LeaveCam();
+        break;
+
+    case Event_TutorialPlanetHole::CameraState::WAIT:
+        Update_WaitCam();
+        break;
+
+    case Event_TutorialPlanetHole::CameraState::APPROACH:
+        Update_ApproachCam();
+        break;
+
+    case Event_TutorialPlanetHole::CameraState::FINISH:
+        is_execute_ = false;
+        //SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE);
+        break;
+
+    default:
+        break;
+    }
 }
 
 void Event_TutorialPlanetHole::Draw(void)
@@ -45,17 +70,59 @@ void Event_TutorialPlanetHole::Draw(void)
 
 void Event_TutorialPlanetHole::Initialize(void)
 {
+    // マネージャーに遠のくカメラをセット
     CameraManager::GetInstance()->SetCurrentCamera(camera_leave_.get());
+    // 遠のくカメラのイージング用タイマー開始
     timer_leaveCam_.Start(kLeaveTimer_);
+    // タイマーの加算量
     timer_leaveCam_.SetAddSpeed(kLeaveAddSpeed_);
 }
 
-void Event_TutorialPlanetHole::OnTrigger(void)
+void Event_TutorialPlanetHole::Update_LeaveCam(void)
 {
 }
 
-void Event_TutorialPlanetHole::SetIsExecute(bool arg_isExecute)
+void Event_TutorialPlanetHole::Update_WaitCam(void)
 {
-    is_execute_ = arg_isExecute;
-    if (arg_isExecute) { Initialize(); }
+}
+
+void Event_TutorialPlanetHole::Update_ApproachCam(void)
+{
+}
+
+void Event_TutorialPlanetHole::OnTrigger_Hole0(void)
+{
+    // nullチェック
+    if (!entrances_[0].GetOther()) { return; }
+
+    // プレイヤーと触れた場合
+    if (entrances_[0].GetOther()->GetID() == "player")
+    {
+        // イベントを起動
+        is_execute_ = true;
+        // 共通初期化処理
+        Initialize();
+
+        // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
+        Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
+        camera_leave_->SetTransform(transform);
+    }
+}
+
+void Event_TutorialPlanetHole::OnTrigger_Hole1(void)
+{
+    // nullチェック
+    if (!entrances_[1].GetOther()) { return; }
+
+    if (entrances_[1].GetOther()->GetID() == "player")
+    {
+        // イベントを起動
+        is_execute_ = true;
+        // 共通初期化処理
+        Initialize();
+
+        // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
+        Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
+        camera_leave_->SetTransform(transform);
+    }
 }
