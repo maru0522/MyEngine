@@ -15,7 +15,7 @@ ICamera::ICamera(const std::string& arg_id)
     axes_.Initialize();
     // 座標
     transform_.Initialize();
-    // アフィン変換計算に姿勢を使用するか（= rotは使わなくなる）
+    // アフィン変換計算に姿勢を使用するか（true = rotは使わなくなる）
     is_affinUseAxes_ = false;
 
     // 更新処理を一度挟む
@@ -38,6 +38,15 @@ void ICamera::Update(void)
     axes_.forward = transformMatrix_.GetMatAxisZ();
     axes_.right = transformMatrix_.GetMatAxisX();
     axes_.up = transformMatrix_.GetMatAxisY();
+
+    // ターゲットが設定されている場合
+    if (vec_target_.IsNonZero())
+    {
+        // ターゲットへの方向を正面として設定
+        axes_.forward = vec_target_ - transform_.position;
+        // 正規化
+        axes_.forward = axes_.forward.Normalize();
+    }
 
     // ビュー行列
     matView_ = Math::Mat4::ViewLookToLH(transform_.position, axes_.forward, axes_.up);

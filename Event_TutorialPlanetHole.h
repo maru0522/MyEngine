@@ -29,7 +29,7 @@ private:
 
 public:
     //>> 関数
-    Event_TutorialPlanetHole(CollisionManager* arg_colMPtr);
+    Event_TutorialPlanetHole(CollisionManager* arg_colMPtr,Vector3* arg_playerPosPtr);
     ~Event_TutorialPlanetHole(void);
 
     void Execute(void);
@@ -60,6 +60,7 @@ private:
     // 
     CollisionManager* colMPtr_;
     std::array<CollisionPrimitive::SphereCollider, 2> entrances_;
+    Vector3* playerPosPtr_;
 
     bool is_execute_;
 };

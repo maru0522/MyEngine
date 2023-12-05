@@ -53,8 +53,10 @@ public:
     void SetNearZ(float arg_nearZ) { nearZ_ = arg_nearZ; }
 
     void SetAxis3(const Axis3& arg_axes) { axes_ = arg_axes; }
+    void SetPosition(const Vector3& arg_pos) { transform_.position = arg_pos; }
     void SetTransform(const Transform& arg_transform) { transform_ = arg_transform; }
     void SetTransformMatrix(const TransformMatrix& arg_transMat) { transformMatrix_ = arg_transMat; }
+    void SetTargetPos(const Vector3& arg_targetPos) { vec_target_ = arg_targetPos; }
 
     void SetIsAffinUseAxes(bool arg_isAffinUseAxes) { is_affinUseAxes_ = arg_isAffinUseAxes; }
 

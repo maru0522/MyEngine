@@ -126,6 +126,7 @@ void DemoScene::Update(void)
 {
     a_.Execute();
     b_.Execute();
+    c_.Execute();
 
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);

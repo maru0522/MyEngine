@@ -18,6 +18,7 @@
 #include "Coin.h"
 #include "Event_StartTutorial.h"
 #include "Event_EndTutorial.h"
+#include "Event_TutorialPlanetHole.h"
 #include "BackGroundTexture.h"
 
 class DemoScene final :
@@ -94,6 +95,7 @@ public:
 
     Event_StartTutorial a_;
     Event_EndTutorial b_;
+    Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),&player_->GetTransformPtr()->position};
 
     std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };

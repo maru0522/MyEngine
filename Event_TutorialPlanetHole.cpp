@@ -2,7 +2,7 @@
 #include "CameraManager.h"
 #include "SimplifyImGui.h"
 
-Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr) : colMPtr_(arg_colMPtr)
+Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr, Vector3* arg_playerPosPtr) : colMPtr_(arg_colMPtr), playerPosPtr_(arg_playerPosPtr)
 {
     camera_leave_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_leave");
     camera_wait_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_wait");
@@ -26,6 +26,12 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     entrances_[0].radius = 1.f * kScaleEntranceSphere;
     entrances_[1].radius = 1.f * kScaleEntranceSphere;
     //entrances_[0].centers = 1.f * kScaleEntranceSphere;
+
+    // experiment
+    // カメラを指定の座標へセット
+    camera_leave_->SetPosition(Vector3{ 0.f,7.f,-210.f });
+    camera_leave_->SetTargetPos(*playerPosPtr_);
+    is_execute_ = true;
 }
 
 Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
@@ -39,6 +45,8 @@ void Event_TutorialPlanetHole::Execute(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
+
+    camera_leave_->SetTargetPos(*playerPosPtr_);
 
     switch (cameraState_)
     {
@@ -104,8 +112,8 @@ void Event_TutorialPlanetHole::OnTrigger_Hole0(void)
         Initialize();
 
         // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
-        Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
-        camera_leave_->SetTransform(transform);
+        Transform transform(Vector3{ 0.f,7.f,-210.f }, Vector3{ 2.32129f,-1.897498f,0.f }, Vector3{ 1.f,1.f,1.f });
+        camera_wait_->SetTransform(transform);
     }
 }
 
@@ -123,6 +131,6 @@ void Event_TutorialPlanetHole::OnTrigger_Hole1(void)
 
         // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
         Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
-        camera_leave_->SetTransform(transform);
+        camera_wait_->SetTransform(transform);
     }
 }
