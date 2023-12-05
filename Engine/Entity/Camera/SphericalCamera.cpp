@@ -29,6 +29,17 @@ void SphericalCamera::Update(void)
 {
     using namespace Math;
 
+    GUI::Begin("spherical camera");
+    Axis3 spc_a3 = GetAxis3();
+    GUI::Text("axes_.forward: %f, %f, %f", spc_a3.forward.x, spc_a3.forward.y, spc_a3.forward.z);
+    GUI::Text("axes_.right:   %f, %f, %f", spc_a3.right.x, spc_a3.right.y, spc_a3.right.z);
+    GUI::Text("axes_.up:      %f, %f, %f", spc_a3.up.x, spc_a3.up.y, spc_a3.up.z);
+    GUI::SliderFloat("theta_", &theta_, 0.f, 6.28319f);
+    GUI::SliderFloat("phi_", &phi_, 0.f, 6.28319f);
+    GUI::SliderFloat("psi_", &psi_, 0.f, 6.28319f);
+    GUI::SliderFloat("rad_", &radius_, 0.f, 200.f);
+    GUI::End();
+
     // ビュー行列
     matView_ = Math::Mat4::Inverse(transformMatrix_.mat_world);
 
@@ -49,7 +60,7 @@ void SphericalCamera::Update(void)
     matWorld.m[3][1] += transform_.position.y;
     matWorld.m[3][2] += transform_.position.z;
 
-    transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
+    //transform_.position = { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
 
     transformMatrix_.mat_pos = Mat4::Translation(transform_.position);
     transformMatrix_.mat_rot = matRotate;

@@ -17,11 +17,11 @@ public:
 
     //>> 定数
     const float kRadius_{ 1.f };
-    const float kJumpPower_{ 1.3f };
+    const float kJumpPower_{ 0.75f };
     const float kJumpLongPower_{ 1.3f };
     const float kMoveSpeed_{ 1.f };
     const float kMoveJumpLongSpeed_{ 2.f };
-    const float kGravity_{ 0.1f };
+    const float kGravity_{ 0.03f };
 
     //>> 関数
     Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);

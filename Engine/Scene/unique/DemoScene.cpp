@@ -124,16 +124,6 @@ void DemoScene::Update(void)
 {
     a_.Execute();
 
-    GUI::Begin("spherical camera");
-    Axis3 spc_a3 = camera_colPtr_->GetAxis3();
-    GUI::Text("axes_.forward: %f, %f, %f", spc_a3.forward.x, spc_a3.forward.y, spc_a3.forward.z);
-    GUI::Text("axes_.right:   %f, %f, %f", spc_a3.right.x, spc_a3.right.y, spc_a3.right.z);
-    GUI::Text("axes_.up:      %f, %f, %f", spc_a3.up.x, spc_a3.up.y, spc_a3.up.z);
-    GUI::SliderFloat("theta_", &camera_colPtr_->theta_, 0.f, 6.28319f);
-    GUI::SliderFloat("phi_", &camera_colPtr_->phi_, 0.f, 6.28319f);
-    GUI::SliderFloat("psi_", &camera_colPtr_->psi_, 0.f, 6.28319f);
-    GUI::End();
-
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
 
