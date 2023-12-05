@@ -45,6 +45,7 @@ void TitleScene::Update(void)
     if (KEYS::IsTrigger(DIK_SPACE) || XPAD::IsTrigger(XPAD::Button::A))
     {
         SceneManager::GetInstance()->RequestChangeScene(SceneName::DEMO);
+        return;
     }
 
     UI::GetInstance()->Update("png_titleLogo-White");
@@ -108,6 +109,8 @@ void TitleScene::Finalize(void)
 {
     CameraManager::GetInstance()->UnRegister(camera_title.get());
     UI::GetInstance()->UnRegister("png_titleLogo");
+    UI::GetInstance()->UnRegister("png_titleKana");
+    UI::GetInstance()->UnRegister("png_titleKana");
     UI::GetInstance()->UnRegister("png_titleKana");
 
     // タイマーの停止
