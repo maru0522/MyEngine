@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "Sprite.h"
 #include "NormalCamera.h"
 #include "Timer.h"
