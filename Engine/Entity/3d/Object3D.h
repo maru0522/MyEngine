@@ -67,8 +67,9 @@ public:
     static void SetLightGroup(LightManager* lightGroupPtr) { sLightGroupPtr_ = lightGroupPtr; }
 
     void SetIsInvisible(bool arg_isInvisible) { isInvisible_ = arg_isInvisible; }
-    void SetCoordinate(const TransformMatrix& arg_coordinate) { matTrans_ = arg_coordinate; }
+    void SetTransformMatrix(const TransformMatrix& arg_coordinate) { matTrans_ = arg_coordinate; }
     void SetIsShadowFlash(bool arg_isShadowFlash) { isShadowFlash_ = arg_isShadowFlash; }
+    void SetMatWorld(const Matrix4& arg_matWorld) { matTrans_.mat_world = arg_matWorld; }
 
     TransformMatrix* GetCoordinatePtr(void) { return &matTrans_; }
 };
