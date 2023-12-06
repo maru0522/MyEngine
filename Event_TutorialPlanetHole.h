@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include "SphereCollider.h"
 #include "CollisionManager.h"
+#include "Object3D.h"
 
 class Event_TutorialPlanetHole
 {
@@ -17,6 +18,9 @@ private:
         FINISH,
     };
 
+    //const Vector3 kDist_fromPlanetCenter_ = { 43.f,25.5f,9.f };
+    const Vector3 kDist_fromPlanetCenter_ = { 41.f,24.f,9.f };
+
     const float kLeaveTimer_ = 3.f;
     const float kLeaveAddSpeed_ = 2.f;
     const float kWaitTimer_ = 3.f;
@@ -25,7 +29,7 @@ private:
     const float kApproachAddSpeed_ = 1.2f;
 
     // 穴の入口にセットするイベントエリアの半径（球状)
-    const float kScaleEntranceSphere = 1.f;
+    const float kScaleEntranceSphere = 10.6f;
 
 public:
     //>> 関数
@@ -62,6 +66,11 @@ private:
     std::array<CollisionPrimitive::SphereCollider, 2> entrances_;
     Vector3* playerPosPtr_;
 
+    // 星の中心点
+    Vector3 planetPos_; // 基本的にこれを基準に当たり判定の位置を決める。
+    std::array<std::unique_ptr<Object3D>, 2> sphere_checkColRanges_;
+
     bool is_execute_;
+    bool is_showHoleCollision_;
 };
 

@@ -1,6 +1,7 @@
 #include "Event_TutorialPlanetHole.h"
 #include "CameraManager.h"
 #include "SimplifyImGui.h"
+#include "MathUtil.h"
 
 Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr, Vector3* arg_playerPosPtr) : colMPtr_(arg_colMPtr), playerPosPtr_(arg_playerPosPtr)
 {
@@ -23,15 +24,17 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     entrances_[0].callback_onTrigger_ = std::bind(&Event_TutorialPlanetHole::OnTrigger_Hole0, this);
     entrances_[1].callback_onTrigger_ = std::bind(&Event_TutorialPlanetHole::OnTrigger_Hole1, this);
     // 各コライダーの半径を設定
-    entrances_[0].radius = 1.f * kScaleEntranceSphere;
-    entrances_[1].radius = 1.f * kScaleEntranceSphere;
+    entrances_[0].radius = kScaleEntranceSphere;
+    entrances_[1].radius = kScaleEntranceSphere;
+    // 座標
+    entrances_[0].center = planetPos_ + kDist_fromPlanetCenter_;
+    entrances_[1].center = planetPos_ - kDist_fromPlanetCenter_;
     //entrances_[0].centers = 1.f * kScaleEntranceSphere;
 
-    // experiment
-    // カメラを指定の座標へセット
-    camera_leave_->SetPosition(Vector3{ 0.f,7.f,-210.f });
-    camera_leave_->SetTargetPos(*playerPosPtr_);
-    is_execute_ = true;
+    for (auto& sphere : sphere_checkColRanges_)
+    {
+        sphere = std::make_unique<Object3D>("Resources/model/sphere/sphere.obj");
+    }
 }
 
 Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
@@ -39,12 +42,14 @@ Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
     CameraManager::GetInstance()->UnRegister(camera_leave_.get());
     CameraManager::GetInstance()->UnRegister(camera_wait_.get());
     CameraManager::GetInstance()->UnRegister(camera_approach_.get());
+    colMPtr_->UnRegister(&entrances_[0]);
+    colMPtr_->UnRegister(&entrances_[1]);
 }
 
 void Event_TutorialPlanetHole::Execute(void)
 {
     // 起動していないならスキップ
-    if (is_execute_ == false) { return; }
+    //if (is_execute_ == false) { return; }
 
     camera_leave_->SetTargetPos(*playerPosPtr_);
 
@@ -70,10 +75,35 @@ void Event_TutorialPlanetHole::Execute(void)
     default:
         break;
     }
+
+
+    // 穴の判定可視化していないならスキップ
+    if (is_showHoleCollision_ == false) { return; }
+
+    Transform trans;
+    trans.position = planetPos_ + kDist_fromPlanetCenter_;
+    trans.rotation = { 0.f,0.f,0.f };
+    trans.scale = { kScaleEntranceSphere,kScaleEntranceSphere,kScaleEntranceSphere };
+
+    // 座標 = 星の中心点 + 距離
+    sphere_checkColRanges_[0]->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(trans);
+    sphere_checkColRanges_[0]->Update();
+
+    // 座標 = 星の中心点 - 距離
+    trans.position = planetPos_ - kDist_fromPlanetCenter_;
+    sphere_checkColRanges_[1]->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(trans);
+    sphere_checkColRanges_[1]->Update();
 }
 
 void Event_TutorialPlanetHole::Draw(void)
 {
+    // 穴の判定可視化していないならスキップ
+    if (is_showHoleCollision_ == false) { return; }
+
+    for (auto& sphere : sphere_checkColRanges_)
+    {
+        sphere->Draw("Resources/red1x1.png");
+    }
 }
 
 void Event_TutorialPlanetHole::Initialize(void)
@@ -112,8 +142,9 @@ void Event_TutorialPlanetHole::OnTrigger_Hole0(void)
         Initialize();
 
         // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
-        Transform transform(Vector3{ 0.f,7.f,-210.f }, Vector3{ 2.32129f,-1.897498f,0.f }, Vector3{ 1.f,1.f,1.f });
-        camera_wait_->SetTransform(transform);
+        const Vector3 pos = planetPos_ + kDist_fromPlanetCenter_;
+        camera_wait_->SetPosition(pos);
+        camera_wait_->SetTargetPos(*playerPosPtr_);
     }
 }
 
@@ -130,7 +161,8 @@ void Event_TutorialPlanetHole::OnTrigger_Hole1(void)
         Initialize();
 
         // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
-        Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
-        camera_wait_->SetTransform(transform);
+        const Vector3 pos = planetPos_ - kDist_fromPlanetCenter_;
+        camera_wait_->SetPosition(pos);
+        camera_wait_->SetTargetPos(*playerPosPtr_);
     }
 }

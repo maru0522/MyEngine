@@ -325,6 +325,7 @@ void DemoScene::Draw3d(void)
     //}
     skydome_->Draw();
     skyDivide_->Draw();
+    c_.Draw();
 }
 
 
