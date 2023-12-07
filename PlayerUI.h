@@ -42,5 +42,5 @@ public:
     void SetRabbitCountPtr(int32_t* arg_rabbitPtr) { rabbitCount_ = arg_rabbitPtr; }
 
     //>> getter
-    bool GetIsEnd(void) { return easeTimer_.GetIsFinished(); }
+    bool GetIsEnd(void) { return easeTimer_.GetIsExecute(); }
 };

@@ -23,14 +23,15 @@ private:
     //const Vector3 kDist_fromPlanetCenter_ = { 43.f,25.5f,9.f };
     const Vector3 kHolePos_relativePlanetCenter = { 41.f,24.f,9.f }; // 穴の判定座標（星の中心点からの相対位置）
     const Vector3 kPlayerPos_Hole0_end = { 41.f,24.f,9.f };          // hole0から出てきた時の、着地座標
-    const Vector3 kPlayerPos_Hole1_end = { 41.f,24.f,9.f };          // hole1から出てきた時の、着地座標
+    //const Vector3 kPlayerPos_Hole1_end = { -41.f,-24.f,-9.f };          // hole1から出てきた時の、着地座標
+    const Vector3 kPlayerPos_Hole1_end = { -49.4f,-12.1f,3.7f };          // hole1から出てきた時の、着地座標
 
     const Vector3 kCameraPos_leave_start = { 72.f,15.f,-12.f };     // cam_leaveの初期座標（星の中心点からの相対位置）
     const Vector3 kCameraPos_wait = { 0.f,0.f,-210.f };             // cam_waitの座標（星の中心点からの相対位置）
     const Vector3 kCameraPos_approach_end = { 72.f,15.f,-12.f };    // cam_approachの終了座標（星の中心点からの相対位置）
 
-    const float kLeaveTimer_ = 10.f;
-    const float kWaitTimer_ = 3.f;
+    const float kLeaveTimer_ = 3.f;
+    const float kWaitTimer_ = 5.f;
     const float kApproachTimer_ = 4.f;
     const float kCommonAddSpeed_ = 2.f;
 
@@ -70,6 +71,7 @@ private:
 
     // イージング用の初期座標
     Vector3 pos_leaveCamStart_;
+    Vector3 pos_approachCamEnd_;
     Vector3 pos_playerStart_;   // 穴に入った時のスタート地点
     Vector3 pos_playerEnd_;     // 穴に入った時のゴール地点
 

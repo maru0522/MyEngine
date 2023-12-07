@@ -175,6 +175,7 @@ private:
     float addSpeed_{ 1.f };   // 実際の何倍で進むか
     float sec_current_{};     // 現在秒数
     float sec_max_{};         // 最大秒数
+    bool is_execute_{};       // 起動中か否か
     bool is_pause_{};         // ポーズ中か否か
     bool is_loop_{};          // ループするか
 
@@ -186,7 +187,7 @@ public:
 
     //>> getter
     bool GetIsLoop(void) { return is_loop_; }
-    bool GetIsFinished(void);
+    bool GetIsExecute(void) { return is_execute_; }
     bool GetIsPause(void) { return is_pause_; }
     float GetTimeRate(bool is_clamp0To1 = true);
     float GetFrameCurrent(void) { return sec_current_; }

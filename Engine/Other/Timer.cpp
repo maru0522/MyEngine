@@ -184,15 +184,16 @@ void DeltaTimer::Start(void)
         return;
     }
 
-    // 既にタイマーが終了していたら
-    if (GetIsFinished())
+    // 起動済み
+    if (is_execute_)
     {
-        // 値を初期化
-        sec_current_ = 0;
+        // ログ出して棄却
+        Util::Log::PrintOutputWindow("[FrameTimer]: \"Start()\'' could not be executed because it is already started.");
+        return;
     }
 
-    // 加算
-    sec_current_ += 0.00001f; // 連続フレームでの使用はだめ
+    // 起動
+    is_execute_ = true;
     // 初期化時点で
     milliSec_past_ = GetNowCount<milliseconds>();
 }
@@ -205,15 +206,36 @@ void DeltaTimer::Start(float sec_max)
 
 void DeltaTimer::Update(void)
 {
-    // 秒数カウントが始まっている ポーズ中ではない
-    if (sec_current_ && (is_pause_ == false))
-    {
-        // 秒数カウントが最大秒数を超えている
-        if (sec_current_ >= sec_max_ && is_loop_) { sec_current_ = 0; }
+    // 起動していないならスキップ
+    if (is_execute_ == false) { return; }
+    // ポーズ中ならスキップ
+    if (is_pause_) { return; }
 
-        // 現在値 += 加算値 * ゲームスピード
-        sec_current_ += DeltaTime(milliSec_past_, GetNowCount<milliseconds>()) * gameSpeed_ * addSpeed_;
+    // 秒数カウントが最大秒数を超えている
+    float diff{};
+    if (sec_current_ >= sec_max_)
+    {
+        // ループフラグ: true
+        if (is_loop_)
+        {
+            // 最大値を何秒超えたかを記録
+            diff = sec_current_ - sec_max_;
+            // 現在カウントを初期化
+            sec_current_ = 0;
+        }
+        // ループフラグ: false
+        else
+        {
+            // 停止
+            Finish();
+            return;
+        }
     }
+
+    // 現在カウント += 最大値を超えた差分
+    sec_current_ += diff;
+    // 現在カウント += 加算値 * ゲームスピード
+    sec_current_ += DeltaTime(milliSec_past_, GetNowCount<milliseconds>()) * gameSpeed_ * addSpeed_;
 
     // 前フレームのミリ秒数を記録しておく
     milliSec_past_ = GetNowCount<milliseconds>();
@@ -231,19 +253,10 @@ void DeltaTimer::Resume(void)
 
 void DeltaTimer::Finish(bool arg_isResetCurrent)
 {
+    is_execute_ = false;
     sec_current_ = sec_max_;
-    if (arg_isResetCurrent)
-    {
-        sec_current_ = 0.f;
-    }
-}
 
-bool DeltaTimer::GetIsFinished(void)
-{
-    // ゼロ除算回避
-    if (sec_max_ == 0) { return true; }
-
-    return sec_current_ / sec_max_ >= 1.f;
+    if (arg_isResetCurrent) { sec_current_ = 0.f; }
 }
 
 float DeltaTimer::GetTimeRate(bool is_clamp0To1)
