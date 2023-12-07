@@ -44,7 +44,8 @@ void Player::Update(void)
     appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
     appearance_->Update();
 
-    pbm_.ManagementBehavior();
+    if(eventState_ == EventState::NONE) { pbm_.ManagementBehavior(); }
+    
     GUI::Begin("Debug");
     static float da;
     if (pbm_.GetStatePtr()->debug_aaaaa_) da = pbm_.GetStatePtr()->debug_aaaaa_;

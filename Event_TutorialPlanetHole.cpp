@@ -75,16 +75,20 @@ void Event_TutorialPlanetHole::Execute(void)
         break;
     }
 
-    if (timer_player_.GetTimeRate() > 1.f) { return; }
+    if (timer_player_.GetTimeRate() > 1.f) { timer_player_.Finish(); return; }
     // プレイヤーの座標を、穴を通り抜けるように更新し続ける。
     timer_player_.Update();
     const float rate_player = timer_player_.GetTimeRate();
     Vector3 pos_player{};
-    pos_player.x = Math::Ease::EaseInOutSine(rate_player, pos_playerStart_.x, pos_playerEnd_.x);
-    pos_player.y = Math::Ease::EaseInOutSine(rate_player, pos_playerStart_.y, pos_playerEnd_.y);
-    pos_player.z = Math::Ease::EaseInOutSine(rate_player, pos_playerStart_.z, pos_playerEnd_.z);
+    pos_player.x = Math::Ease::EaseOutSine(rate_player, pos_playerStart_.x, pos_playerEnd_.x);
+    pos_player.y = Math::Ease::EaseOutSine(rate_player, pos_playerStart_.y, pos_playerEnd_.y);
+    pos_player.z = Math::Ease::EaseOutSine(rate_player, pos_playerStart_.z, pos_playerEnd_.z);
     playerPtr_->SetPosition(pos_player);
 
+    GUI::Begin("EventState_Hole");
+    ImGui::Text("rate:%f", rate_player);
+    ImGui::Text("p.x:%f, p.y:%f, p.z:%f", pos_player.x, pos_player.y, pos_player.z);
+    GUI::End();
 
     // 穴の判定可視化していないならスキップ
     if (is_showHoleCollision_ == false) { return; }
@@ -140,7 +144,7 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
         // camera_waitを指定の座標へセット（ Hole0用 ）
         const Vector3 pos_camWait = planetPos_ + kCameraPos_wait;
         camera_wait_->SetPosition(pos_camWait);
-        
+
         // 穴に入って反対側まで行けるよう、スタート地点とゴール地点を設定
         pos_playerStart_ = planetPos_ + kHolePos_relativePlanetCenter;
         pos_playerEnd_ = planetPos_ - kHolePos_relativePlanetCenter;
@@ -191,6 +195,12 @@ void Event_TutorialPlanetHole::Update_LeaveCam(void)
     //axes.right = axes.up.Cross(axes.forward).Normalize();
     //camera_leave_->SetAxis3(axes);
 
+    Axis3 axes{};
+    axes.forward = Vector3(0,0,1);
+    axes.right = Vector3(1, 0, 0);
+    axes.up = Vector3(0, 1, 0);
+    camera_leave_->SetAxis3(axes);
+
     // タイマーが完了しているか
     if (rate >= 1.f)
     {
@@ -216,13 +226,19 @@ void Event_TutorialPlanetHole::Update_WaitCam(void)
     transform.position = kCameraPos_wait;
     camera_wait_->SetTransform(transform);
     //camera_wait_->SetTargetPos(playerPtr_->GetTransform().position);
-    
+
     // SetTargetPosがダメだったので、各軸方向をこちらで全て指定して、カメラがバグらないかテスト
     //Axis3 axes{};
     //axes.forward = (playerPtr_->GetTransform().position - transform.position).Normalize();
     //axes.up = { 0,1,0 };
     //axes.right = axes.up.Cross(axes.forward).Normalize();
     //camera_leave_->SetAxis3(axes);
+
+    Axis3 axes{};
+    axes.forward = Vector3(0, 0, 1);
+    axes.right = Vector3(1, 0, 0);
+    axes.up = Vector3(0, 1, 0);
+    camera_leave_->SetAxis3(axes);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
