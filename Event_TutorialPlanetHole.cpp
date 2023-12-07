@@ -3,7 +3,8 @@
 #include "SimplifyImGui.h"
 #include "MathUtil.h"
 
-Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr, Vector3* arg_playerPosPtr) : colMPtr_(arg_colMPtr), playerPosPtr_(arg_playerPosPtr)
+Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr, CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
+    : colMPtr_(arg_colMPtr), cameraMPtr_(arg_cameraMPtr), playerPtr_(arg_playerPtr)
 {
     camera_leave_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_leave");
     camera_wait_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_wait");
@@ -27,8 +28,8 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     entrances_[0].radius = kScaleEntranceSphere;
     entrances_[1].radius = kScaleEntranceSphere;
     // 座標
-    entrances_[0].center = planetPos_ + kDist_fromPlanetCenter_;
-    entrances_[1].center = planetPos_ - kDist_fromPlanetCenter_;
+    entrances_[0].center = planetPos_ + kHolePos_relativePlanetCenter;
+    entrances_[1].center = planetPos_ - kHolePos_relativePlanetCenter;
     //entrances_[0].centers = 1.f * kScaleEntranceSphere;
 
     for (auto& sphere : sphere_checkColRanges_)
@@ -49,9 +50,7 @@ Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
 void Event_TutorialPlanetHole::Execute(void)
 {
     // 起動していないならスキップ
-    //if (is_execute_ == false) { return; }
-
-    camera_leave_->SetTargetPos(*playerPosPtr_);
+    if (is_execute_ == false) { return; }
 
     switch (cameraState_)
     {
@@ -76,12 +75,22 @@ void Event_TutorialPlanetHole::Execute(void)
         break;
     }
 
+    if (timer_player_.GetTimeRate() > 1.f) { return; }
+    // プレイヤーの座標を、穴を通り抜けるように更新し続ける。
+    timer_player_.Update();
+    const float rate_player = timer_player_.GetTimeRate();
+    Vector3 pos_player{};
+    pos_player.x = Math::Ease::EaseInOutSine(rate_player, pos_playerStart_.x, pos_playerEnd_.x);
+    pos_player.y = Math::Ease::EaseInOutSine(rate_player, pos_playerStart_.y, pos_playerEnd_.y);
+    pos_player.z = Math::Ease::EaseInOutSine(rate_player, pos_playerStart_.z, pos_playerEnd_.z);
+    playerPtr_->SetPosition(pos_player);
+
 
     // 穴の判定可視化していないならスキップ
     if (is_showHoleCollision_ == false) { return; }
 
     Transform trans;
-    trans.position = planetPos_ + kDist_fromPlanetCenter_;
+    trans.position = planetPos_ + kHolePos_relativePlanetCenter;
     trans.rotation = { 0.f,0.f,0.f };
     trans.scale = { kScaleEntranceSphere,kScaleEntranceSphere,kScaleEntranceSphere };
 
@@ -90,7 +99,7 @@ void Event_TutorialPlanetHole::Execute(void)
     sphere_checkColRanges_[0]->Update();
 
     // 座標 = 星の中心点 - 距離
-    trans.position = planetPos_ - kDist_fromPlanetCenter_;
+    trans.position = planetPos_ - kHolePos_relativePlanetCenter;
     sphere_checkColRanges_[1]->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(trans);
     sphere_checkColRanges_[1]->Update();
 }
@@ -106,22 +115,115 @@ void Event_TutorialPlanetHole::Draw(void)
     }
 }
 
-void Event_TutorialPlanetHole::Initialize(void)
+void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
 {
+    // イベントを起動
+    is_execute_ = true;
+    // プレイヤー用タイマーを起動
+    timer_player_.Start(kLeaveTimer_ + kWaitTimer_ + kApproachTimer_);
+    timer_player_.Start(kCommonAddSpeed_);
+    // プレイヤーのeventStateを設定
+    playerPtr_->SetEventState(Player::EventState::PLANET_HOLE);
+
     // マネージャーに遠のくカメラをセット
     CameraManager::GetInstance()->SetCurrentCamera(camera_leave_.get());
     // 遠のくカメラのイージング用タイマー開始
     timer_leaveCam_.Start(kLeaveTimer_);
     // タイマーの加算量
-    timer_leaveCam_.SetAddSpeed(kLeaveAddSpeed_);
+    timer_leaveCam_.SetAddSpeed(kCommonAddSpeed_);
+
+    // カメラの最初の座標をプレイヤーのカメラの座標に合わせる。
+    if (arg_isHole0)
+    {
+        // camera_leaveを指定の座標へセット（ Hole0用 )
+        pos_leaveCamStart_ = planetPos_ + kCameraPos_leave_start;
+        // camera_waitを指定の座標へセット（ Hole0用 ）
+        const Vector3 pos_camWait = planetPos_ + kCameraPos_wait;
+        camera_wait_->SetPosition(pos_camWait);
+        
+        // 穴に入って反対側まで行けるよう、スタート地点とゴール地点を設定
+        pos_playerStart_ = planetPos_ + kHolePos_relativePlanetCenter;
+        pos_playerEnd_ = planetPos_ - kHolePos_relativePlanetCenter;
+    }
+    else
+    {
+        // camera_leaveを指定の座標へセット（ Hole0用 )
+        pos_leaveCamStart_ = planetPos_ - kCameraPos_leave_start;
+        // カメラを指定の座標へセット（ Hole1用 ）
+        const Vector3 pos = planetPos_ - kCameraPos_wait;
+        camera_wait_->SetPosition(pos);
+        //camera_wait_->SetTargetPos(*playerPosPtr_);
+
+        // 穴に入って反対側まで行けるよう、スタート地点とゴール地点を設定
+        pos_playerStart_ = planetPos_ - kHolePos_relativePlanetCenter;
+        pos_playerEnd_ = planetPos_ + kHolePos_relativePlanetCenter;
+    }
 }
 
 void Event_TutorialPlanetHole::Update_LeaveCam(void)
 {
+    timer_leaveCam_.Update();
+    const float rate = timer_leaveCam_.GetTimeRate(true);
+    //const float pos_z = Math::Ease::EaseInCirc(rate, -50.f, -23.f);
+
+    // Initialize()実行時の、プレイヤー追従カメラの座標を、スタート地点とする
+    const Vector3 start = pos_leaveCamStart_;
+    // 次の見下ろしカメラの座標を、エンド地点とする
+    const Vector3 end = camera_wait_->GetTransform().position;
+
+    // カメラの座標
+    Vector3 pos{};
+    // イージングする
+    pos.x = Math::Ease::EaseInOutSine(rate, start.x, end.x);
+    pos.y = Math::Ease::EaseInOutSine(rate, start.y, end.y);
+    pos.z = Math::Ease::EaseInOutSine(rate, start.z, end.z);
+
+    //Transform transform(Vector3{ 0.f,53.f, pos_z }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
+    Transform transform;
+    transform.position = pos;
+    camera_leave_->SetTransform(transform);
+    camera_leave_->SetTargetPos(playerPtr_->GetTransform().position);
+
+    // タイマーが完了しているか
+    if (rate >= 1.f)
+    {
+        // 次のタイマーを起動。
+        timer_waitCam_.Start(kWaitTimer_);
+        timer_waitCam_.SetAddSpeed(kCommonAddSpeed_);
+        // 今のタイマーを停止
+        timer_leaveCam_.Finish(true);
+        // カメラの状態を変更
+        cameraState_ = CameraState::WAIT;
+
+        // 関数を抜ける
+        return;
+    }
 }
 
 void Event_TutorialPlanetHole::Update_WaitCam(void)
 {
+    timer_waitCam_.Update();
+    const float rate = timer_waitCam_.GetTimeRate(true);
+
+    Transform transform;
+    transform.position = kCameraPos_wait;
+    camera_wait_->SetTransform(transform);
+    camera_wait_->SetTargetPos(playerPtr_->GetTransform().position);
+
+    // タイマーが完了しているか
+    if (rate >= 1.f)
+    {
+        // 次のタイマーを起動。
+        timer_approachCam_.Start(kApproachTimer_);
+        timer_approachCam_.SetAddSpeed(kCommonAddSpeed_);
+        // 今のタイマーを停止
+        timer_waitCam_.Finish(true);
+        // カメラの状態を変更
+        cameraState_ = CameraState::APPROACH;
+
+        // 関数を抜ける
+        return;
+    }
 }
 
 void Event_TutorialPlanetHole::Update_ApproachCam(void)
@@ -136,15 +238,9 @@ void Event_TutorialPlanetHole::OnTrigger_Hole0(void)
     // プレイヤーと触れた場合
     if (entrances_[0].GetOther()->GetID() == "player")
     {
-        // イベントを起動
-        is_execute_ = true;
-        // 共通初期化処理
-        Initialize();
-
-        // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
-        const Vector3 pos = planetPos_ + kDist_fromPlanetCenter_;
-        camera_wait_->SetPosition(pos);
-        camera_wait_->SetTargetPos(*playerPosPtr_);
+        // triggerがHole0用か
+        const bool isHole0 = true;
+        Initialize(isHole0);
     }
 }
 
@@ -155,14 +251,8 @@ void Event_TutorialPlanetHole::OnTrigger_Hole1(void)
 
     if (entrances_[1].GetOther()->GetID() == "player")
     {
-        // イベントを起動
-        is_execute_ = true;
-        // 共通初期化処理
-        Initialize();
-
-        // カメラを指定の座標へセット（Hole0とHole1で座標は違う。）
-        const Vector3 pos = planetPos_ - kDist_fromPlanetCenter_;
-        camera_wait_->SetPosition(pos);
-        camera_wait_->SetTargetPos(*playerPosPtr_);
+        // triggerがHole0用か
+        const bool isHole0 = false;
+        Initialize(isHole0);
     }
 }

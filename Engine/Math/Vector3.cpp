@@ -175,25 +175,3 @@ const Vector3 Math::Vec3::bezier3(const Vector3& start, const Vector3& controlPo
         lerp(lerp(controlPoint1, controlPoint2, t), lerp(controlPoint2, end, t), t),	// end	
         t);
 }
-
-Vector3 Math::Vec3::splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t)
-{
-    size_t n = points.size() - 2;
-
-    if (startIndex > n) return points[n];
-    if (startIndex < 1) return points[1];
-
-    Vector3 p0 = points[startIndex - 1];
-    Vector3 p1 = points[startIndex];
-    Vector3 p2 = points[startIndex + 1];
-    Vector3 p3 = points[startIndex + 2];
-
-    Vector3 position = (
-        p1 * 2 +
-        (-p0 + p2) * t +
-        (p0 * 2 - p1 * 5 + p2 * 4 - p3) * std::powf(t, 2) +
-        (-p0 + p1 * 3 - p2 * 3 + p3) * std::powf(t, 3)
-        ) * 0.5f;
-
-    return position;
-}

@@ -320,3 +320,23 @@ Matrix4 Math::Function::AffinTrans(const Vector3& arg_pos, const Vector3& arg_sc
 
     return matWorld;
 }
+
+Vector3 Math::Function::Spline(const std::vector<Vector3>& arg_points, size_t startIndex, float timeRate)
+{
+    size_t n = arg_points.size() - 2;
+
+    if (startIndex > n) return arg_points[n];
+    if (startIndex < 1) return arg_points[1];
+
+    Vector3 p0 = arg_points[startIndex - 1];
+    Vector3 p1 = arg_points[startIndex];
+    Vector3 p2 = arg_points[startIndex + 1];
+    Vector3 p3 = arg_points[startIndex + 2];
+
+    const float pow2_timeRate = timeRate * timeRate;
+    const float pow3_timeRate = timeRate * timeRate * timeRate;
+
+    Vector3 position = (p1 * 2 + (-p0 + p2) * timeRate + (p0 * 2 - p1 * 5 + p2 * 4 - p3) * pow2_timeRate + (-p0 + p1 * 3 - p2 * 3 + p3) * pow3_timeRate) * 0.5f;
+
+    return position;
+}

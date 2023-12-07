@@ -101,6 +101,9 @@ namespace Math {
         Matrix4 AffinTrans(const Transform& arg_transform, const Axis3& arg_axes, const Vector3& arg_addRot, TransformMatrix* arg_transMatPtr = nullptr);
         Matrix4 AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Vector3& arg_rotEular, TransformMatrix* arg_transMatPtr = nullptr);
         Matrix4 AffinTrans(const Vector3& arg_pos, const Vector3& arg_scale, const Axis3& arg_axes, TransformMatrix* arg_transMatPtr = nullptr);
+
+        // スプライン曲線
+        Vector3 Spline(const std::vector<Vector3>& arg_points, size_t startIndex, float timeRate);
     }
 
     namespace Ease {

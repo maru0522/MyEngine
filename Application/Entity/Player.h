@@ -15,6 +15,12 @@ public:
     //>> 定義
     friend IPlayerBehavior;
 
+    enum class EventState
+    {
+        NONE,
+        PLANET_HOLE,
+    };
+
     //>> 定数
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 0.75f };
@@ -73,6 +79,8 @@ private:
     Planet* planetPtr_;
     LightManager* lightManagerPtr_;
 
+    EventState eventState_;
+
 public:
     //>> setter
     void SetupLightCircleShadows(void) {
@@ -80,13 +88,16 @@ public:
         circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
         lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
     }
+    void SetPosition(const Vector3& arg_pos) { transform_.position = arg_pos; }
+    void SetEventState(EventState arg_eventState) { eventState_ = arg_eventState; }
 
     //>> getter
-    inline TransformMatrix* GetTransMatPtr(void) { return &matTrans_; }
+    TransformMatrix* GetTransMatPtr(void) { return &matTrans_; }
     Transform* GetTransformPtr(void) { return &transform_; }
+    const Transform GetTransform(void) { return transform_; }
     Axis3* GetAxis3Ptr(void) { return &axes_; }
-    inline const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
-    inline const std::string& GetPartnerId(void) { return sphereCollider_.GetOther()->GetID(); }
+    const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
+    const std::string& GetPartnerId(void) { return sphereCollider_.GetOther()->GetID(); }
 
     PlayerBehaviorMachine* GetPBM(void) { return &pbm_; }
 };

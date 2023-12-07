@@ -245,6 +245,9 @@ void Player::ControlUI(void)
 
 void Player::OnCollision(void)
 {
+    // イベント中は当たり判定スキップ
+    if (eventState_ == EventState::PLANET_HOLE) { return; }
+
     if (sphereCollider_.GetOther()->GetID() == "gravityArea")
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());

@@ -56,8 +56,6 @@ namespace Math {
         const Vector3 bezier2(const Vector3& start, const Vector3& controlPoint, const Vector3& end, const float t); // ベジエ（2次関数補完）
         const Vector3 bezier3(const Vector3& start, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& end, const float t); // ベジエ（3次関数補完）
 
-        Vector3 splinePosition(const std::vector<Vector3>& points, size_t startIndex, float_t t);
-
         inline const Vector3 AxisXIdentity(void) { return Vector3(1, 0, 0); }
         inline const Vector3 AxisYIdentity(void) { return Vector3(0, 1, 0); }
         inline const Vector3 AxisZIdentity(void) { return Vector3(0, 0, 1); }
