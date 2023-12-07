@@ -185,11 +185,11 @@ void Event_TutorialPlanetHole::Update_LeaveCam(void)
     //camera_leave_->SetTargetPos(playerPtr_->GetTransform().position);
 
     // SetTargetPosがダメだったので、各軸方向をこちらで全て指定して、カメラがバグらないかテスト
-    Axis3 axes{};
-    axes.forward = (playerPtr_->GetTransform().position - transform.position).Normalize();
-    axes.up = { 0,1,0 };
-    axes.right = axes.up.Cross(axes.forward).Normalize();
-    camera_leave_->SetAxis3(axes);
+    //Axis3 axes{};
+    //axes.forward = (playerPtr_->GetTransform().position - transform.position).Normalize();
+    //axes.up = { 0,1,0 };
+    //axes.right = axes.up.Cross(axes.forward).Normalize();
+    //camera_leave_->SetAxis3(axes);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
@@ -218,11 +218,11 @@ void Event_TutorialPlanetHole::Update_WaitCam(void)
     //camera_wait_->SetTargetPos(playerPtr_->GetTransform().position);
     
     // SetTargetPosがダメだったので、各軸方向をこちらで全て指定して、カメラがバグらないかテスト
-    Axis3 axes{};
-    axes.forward = (playerPtr_->GetTransform().position - transform.position).Normalize();
-    axes.up = { 0,1,0 };
-    axes.right = axes.up.Cross(axes.forward).Normalize();
-    camera_leave_->SetAxis3(axes);
+    //Axis3 axes{};
+    //axes.forward = (playerPtr_->GetTransform().position - transform.position).Normalize();
+    //axes.up = { 0,1,0 };
+    //axes.right = axes.up.Cross(axes.forward).Normalize();
+    //camera_leave_->SetAxis3(axes);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
