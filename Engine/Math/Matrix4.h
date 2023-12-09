@@ -50,6 +50,7 @@ namespace Math {
 
         // 座標変換
         Vector3 Transform(const Vector3& v, const Matrix4& m);
+        Vector4 Transform(const Vector4& v, const Matrix4& m);
 
         Matrix4 RotMatFromAxes3(const Vector3& forward, const Vector3& right, const Vector3& up);
 

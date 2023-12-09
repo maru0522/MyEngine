@@ -140,14 +140,39 @@ Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
 
 Vector2 Math::Function::WorldToScreen(const Matrix4& arg_matWorld, int32_t arg_scW, int32_t arg_scH, const Matrix4& arg_view, const Matrix4& arg_prj)
 {
-    Matrix4 viewPort = Mat4::Identity();
+    
+
+    Matrix4 viewPort = arg_matWorld;
+    viewPort = arg_view;
+    viewPort = arg_prj;
+
+    Matrix4 matW = Mat4::Identity();
+    Matrix4 matV = Mat4::Identity();
+    matV.m[3][2] = 3;
+    Matrix4 matP = Mat4::Identity();
+    matP.m[3][2] = -1;
+    matP.m[2][3] = 1;
+    matP.m[0][0] = 0.75;
+
+    viewPort = Mat4::Identity();
     viewPort.m[0][0] = arg_scW / 2.f;
     viewPort.m[1][1] = -arg_scH / 2.f;
     viewPort.m[3][0] = arg_scW / 2.f;
     viewPort.m[3][1] = arg_scH / 2.f;
+    viewPort.m[0][0] = 320;
+    viewPort.m[1][1] = -240;
+    viewPort.m[3][0] = 320;
+    viewPort.m[3][1] = 240;
 
-    const Vector3 worldPos = { arg_matWorld.m[3][0], arg_matWorld.m[3][1], arg_matWorld.m[3][2] };
-    Vector3 temp = worldPos;
+    Vector4 v = { -2,2,0,1 };
+    v = Math::Mat4::Transform(v, matW);
+    v = Math::Mat4::Transform(v, matV);
+    v = Math::Mat4::Transform(v, matP);
+    v = Math::Mat4::Transform(v, viewPort);
+
+    //const Vector3 worldPos = { arg_matWorld.m[3][0], arg_matWorld.m[3][1], arg_matWorld.m[3][2] };
+    Vector3 temp = { 0,0,0 };
+    temp = Math::Mat4::Transform(temp, arg_matWorld);
     temp = Math::Mat4::Transform(temp, arg_view);
     temp = Math::Mat4::Transform(temp, arg_prj);
     temp /= temp.z;

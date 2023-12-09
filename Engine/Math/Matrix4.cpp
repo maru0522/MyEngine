@@ -9,9 +9,9 @@ Matrix4 Math::Mat4::Identity()
     static const Matrix4 result
     {
         1.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f,
     };
     return result;
 }
@@ -199,6 +199,20 @@ Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
     return result;
 }
 
+Vector4 Math::Mat4::Transform(const Vector4& v, const Matrix4& m)
+{
+    float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3];
+
+    Vector4 result
+    {
+        (v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0]) / w,
+        (v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1]) / w,
+        (v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2]) / w,
+        (v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3]) / w,
+    };
+    return result;
+}
+
 Matrix4 Math::Mat4::RotMatFromAxes3(const Vector3& forward, const Vector3& right, const Vector3& up)
 {
     Vector3 nForward = forward.Normalize();
@@ -332,9 +346,9 @@ const Vector3 operator*(const Vector3& v, const Matrix4& m)
 
 const Vector4 operator*(const Vector4& v, const Matrix4& m)
 {
-    return Vector4( v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0],
-                    v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1],
-                    v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2],
-                    v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3]);
+        return Vector4(v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0],
+                       v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1],
+                       v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2],
+                       v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3]);
 }
 
