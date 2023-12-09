@@ -253,22 +253,6 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     //inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
     inputVec = inputVec.Normalize();
 
-    // 現在カメラのポインタ
-    ICamera* curCam = GetPlayerCamMPtr()->GetCurrentCamera();
-
-    // プレイヤーの行列系
-    const TransformMatrix& transMat = GetPlayerTransformMatrix();
-    // プレイヤーの座標をスクリーン座標に変換
-    const Vector2 pos_screen = curCam->GetScreen().WorldToScreenPoint(transMat.mat_world);
-    // スクリーン座標 + 入力ベクトル * 大きさ
-    const float norm = 5.f;
-    const Vector2 pos_screen_moved = pos_screen + inputVec * norm;
-
-    // スクリーン座標をワールド座標に変換
-    Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
-    Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
-
-
     //// 半直線の方向の計算
     //Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
     //Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
@@ -282,8 +266,6 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     //}
     //const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
 
-    UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
-    UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
     //GUI::Begin("pb.move");
     //GUI::Text("screenToWorld: %f,%f,%f", intersection.x, intersection.y, intersection.z);
     //GUI::End();

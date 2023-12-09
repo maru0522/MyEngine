@@ -146,13 +146,13 @@ Vector2 Math::Function::WorldToScreen(const Matrix4& arg_matWorld, int32_t arg_s
     viewPort.m[3][0] = arg_scW / 2.f;
     viewPort.m[3][1] = arg_scH / 2.f;
 
-    Vector4 p{};
-    p *= arg_matWorld;
-    p *= arg_view;
-    p *= arg_prj;
-    p *= viewPort;
-
-    return Vector2(p.x, p.y);
+    const Vector3 worldPos = { arg_matWorld.m[3][0], arg_matWorld.m[3][1], arg_matWorld.m[3][2] };
+    Vector3 temp = worldPos;
+    temp = Math::Mat4::Transform(temp, arg_view);
+    temp = Math::Mat4::Transform(temp, arg_prj);
+    temp /= temp.z;
+    const Vector3 screenPos = Math::Mat4::Transform(temp, viewPort);
+    return Vector2(screenPos.x, screenPos.y);
 }
 
 Vector3 Math::Function::ScreenToWorld(const Vector2& arg_scPos, float arg_fZ, int32_t arg_scW, int32_t arg_scH, const Matrix4& arg_view, const Matrix4& arg_prj)
@@ -166,7 +166,7 @@ Vector3 Math::Function::ScreenToWorld(const Vector2& arg_scPos, float arg_fZ, in
     viewPort.m[3][0] = arg_scW / 2.f;
     viewPort.m[3][1] = arg_scH / 2.f;
     const Matrix4 inv_vp = Mat4::Inverse(viewPort);
-    
+
     // 逆変換
     Matrix4 temp = inv_vp * inv_prj * inv_view;
     return Mat4::Transform({ arg_scPos.x,arg_scPos.y,arg_fZ }, temp);

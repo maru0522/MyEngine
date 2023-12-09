@@ -45,7 +45,22 @@ void Player::Update(void)
     appearance_->Update();
 
     if(eventState_ == EventState::NONE) { pbm_.ManagementBehavior(); }
-    
+
+    // プレイヤーの行列系
+    const TransformMatrix& transMat = matTrans_;
+    // プレイヤーの座標をスクリーン座標に変換
+    const Vector2 pos_screen = camMPtr_->GetCurrentCamera()->GetScreen().WorldToScreenPoint(transMat.mat_world);
+    //// スクリーン座標 + 入力ベクトル * 大きさ
+    //const float norm = 5.f;
+    //const Vector2 pos_screen_moved = pos_screen + inputVec * norm;
+
+    // スクリーン座標をワールド座標に変換
+    //Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
+    //Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
+
+    UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
+    //UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
+
     GUI::Begin("Debug");
     static float da;
     if (pbm_.GetStatePtr()->debug_aaaaa_) da = pbm_.GetStatePtr()->debug_aaaaa_;
