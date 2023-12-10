@@ -37,6 +37,8 @@ Player::~Player(void)
 
 void Player::Update(void)
 {
+    UI::GetInstance()->GetUISpritePtr("circle_red")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+
     ControlUI();
     playerUI_.Update();
 
