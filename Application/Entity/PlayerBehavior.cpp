@@ -253,6 +253,22 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     //inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
     inputVec = inputVec.Normalize();
 
+    // プレイヤーの行列系
+    const TransformMatrix& transMat = GetPlayerTransformMatrix();
+    // プレイヤーの座標をスクリーン座標に変換
+    const Vector2 pos_screen = GetPlayerCamMPtr()->GetCurrentCamera()->GetScreen().WorldToScreenPoint(transMat.mat_world);
+    // スクリーン座標 + 入力ベクトル * 大きさ
+    const float norm = 10.f;
+    const Vector2 invarsYInput = { inputVec.x,-inputVec.y };
+    const Vector2 pos_screen_moved = pos_screen + invarsYInput * norm;
+
+    // スクリーン座標をワールド座標に変換
+    //Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
+    //Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
+
+    UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
+    UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
+
     //// 半直線の方向の計算
     //Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
     //Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
@@ -270,12 +286,37 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     //GUI::Text("screenToWorld: %f,%f,%f", intersection.x, intersection.y, intersection.z);
     //GUI::End();
 
+
+    // 前のフレームの軸を記録
+    moveAxes_old_ = moveAxes_current_;
+
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
+    moveAxes_current_.forward = pForwardFromCamera;
+    moveAxes_current_.right = redefinitionPRightFromCamera;
+    moveAxes_current_.up = GetPlayerAxes().up;
+
+    // 前フレームの軸に値が記録されている（≒初期状態ではない）か？
+    const bool is_recorded = moveAxes_old_.forward.IsNonZero() || moveAxes_old_.right.IsNonZero() || moveAxes_old_.up.IsNonZero();
+
+    if (is_recorded)
+    {
+        // もし、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（正面ベクトル）
+        if (Math::Vec3::Dot(moveAxes_current_.forward, moveAxes_old_.forward) <= -0.9f)
+        {
+            // さらに、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（右ベクトル）
+            if (Math::Vec3::Dot(moveAxes_current_.right, moveAxes_old_.right) <= -0.9f)
+            {
+                // 軸が反転してしまったと推測し、1フレーム前の値を使い続ける。
+                moveAxes_current_ = moveAxes_old_;
+            }
+        }
+    }
+
     // 移動ベクトル = 前後vec + 水平vec
-    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+    Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
 
     // カメラ座標用の値を補正
     {

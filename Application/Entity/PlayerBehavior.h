@@ -58,6 +58,11 @@ protected:
     PlayerBehavior debug_curState_;
     bool is_resetCameraPos_;
 
+    //  1フレーム前の進行方向を表す各軸
+    Axis3 moveAxes_old_;
+    // 現在フレームの進行方向を表す各軸
+    Axis3 moveAxes_current_;
+
 private:
     Player* playerPtr_;
 
