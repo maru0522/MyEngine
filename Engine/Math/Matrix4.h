@@ -48,7 +48,7 @@ namespace Math {
         // 逆行列
         Matrix4 Inverse(const Matrix4& m);
 
-        // 座標変換
+        // 座標変換: 掛け算 + w除算
         Vector3 Transform(const Vector3& v, const Matrix4& m);
         Vector4 Transform(const Vector4& v, const Matrix4& m);
 

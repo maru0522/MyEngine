@@ -188,9 +188,8 @@ Matrix4 Math::Mat4::Inverse(const Matrix4& m)
 // 座標変換（ベクトル行列の掛け算）を行うTransform 関数を作成する。　（透視変換にも対応している）
 Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 {
-    float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
-
-    Vector3 result
+    const float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
+    const Vector3 result
     {
         (v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + m.m[3][0]) / w,
         (v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1]) / w,
@@ -201,9 +200,8 @@ Vector3 Math::Mat4::Transform(const Vector3& v, const Matrix4& m)
 
 Vector4 Math::Mat4::Transform(const Vector4& v, const Matrix4& m)
 {
-    float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3];
-
-    Vector4 result
+    const float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + m.m[3][3];
+    const Vector4 result
     {
         (v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0]) / w,
         (v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1]) / w,
@@ -341,14 +339,21 @@ const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2)
 // 2項演算子 * の　オーバロード関数（ベクトルと行列の積）
 const Vector3 operator*(const Vector3& v, const Matrix4& m)
 {
-    return Math::Mat4::Transform(v, m);
+    return Vector3{
+        (v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + m.m[3][0]),
+        (v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1]),
+        (v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + m.m[3][2]),
+    };
+
 }
 
 const Vector4 operator*(const Vector4& v, const Matrix4& m)
 {
-        return Vector4(v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0],
-                       v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1],
-                       v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2],
-                       v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3]);
+    return Vector4{
+        (v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + v.w * m.m[3][0]),
+        (v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + v.w * m.m[3][1]),
+        (v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + v.w * m.m[3][2]),
+        (v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + v.w * m.m[3][3]),
+    };
 }
 
