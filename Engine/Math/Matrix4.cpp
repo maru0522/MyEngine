@@ -336,6 +336,14 @@ const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2)
     return result *= m2;
 }
 
+const Vector2 operator*(const Vector2& v, const Matrix4& m)
+{
+    return Vector2{
+        (v.x * m.m[0][0] + v.y * m.m[1][0] + m.m[3][0]),
+        (v.x * m.m[0][1] + v.y * m.m[1][1] + m.m[3][1]),
+    };
+}
+
 // 2項演算子 * の　オーバロード関数（ベクトルと行列の積）
 const Vector3 operator*(const Vector3& v, const Matrix4& m)
 {
@@ -344,7 +352,6 @@ const Vector3 operator*(const Vector3& v, const Matrix4& m)
         (v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1]),
         (v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + m.m[3][2]),
     };
-
 }
 
 const Vector4 operator*(const Vector4& v, const Matrix4& m)

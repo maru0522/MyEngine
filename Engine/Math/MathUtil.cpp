@@ -177,7 +177,11 @@ Vector3 Math::Function::ScreenToWorld(const Vector2& arg_scPos, float arg_fZ, in
 
     // 逆変換
     Matrix4 temp = inv_vp * inv_prj * inv_view;
-    return Mat4::Transform({ arg_scPos.x,arg_scPos.y,arg_fZ }, temp);
+    Vector2 vec2_temp = arg_scPos;
+    vec2_temp = vec2_temp * inv_vp;
+    vec2_temp = vec2_temp * inv_prj;
+    vec2_temp = vec2_temp * inv_view;
+    return Vector3(vec2_temp.x, vec2_temp.y, arg_fZ);
 }
 
 Matrix4 Math::Function::AffinTrans(const Transform& arg_transform, TransformMatrix* arg_transMatPtr)

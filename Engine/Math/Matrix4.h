@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -22,6 +23,7 @@ Vector4& operator*=(Vector4& v, const Matrix4& m);
 
 // 2項演算子オーバーロード
 const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2);
+const Vector2 operator*(const Vector2& v, const Matrix4& m);
 const Vector3 operator*(const Vector3& v, const Matrix4& m);
 const Vector4 operator*(const Vector4& v, const Matrix4& m);
 

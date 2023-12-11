@@ -263,23 +263,24 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     const Vector2 pos_screen_moved = pos_screen + invarsYInput * norm;
 
     // スクリーン座標をワールド座標に変換
-    //Vector3 pos_moved_nearest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
-    //Vector3 pos_moved_farthest = curCam->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
+    Vector3 pos_moved_nearest = GetPlayerCamMPtr()->GetCurrentCamera()->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
+    Vector3 pos_moved_farthest = GetPlayerCamMPtr()->GetCurrentCamera()->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
 
     UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
     UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
 
     //// 半直線の方向の計算
-    //Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
-    //Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
-    //Primitive::Sphere planet(GetPlayerPlanetPtr()->surface_.center, GetPlayerPlanetPtr()->surface_.radius);
-    //Vector3 intersection;
-    //const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
+    Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
+    Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
+    Primitive::Sphere planet(GetPlayerPlanetPtr()->surface_.center, GetPlayerPlanetPtr()->surface_.radius);
+    Vector3 intersection;
+    // ここのintersectionの値がおかしいかも
+    const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
 
-    //if (is_col == false) 
-    //{
-    //    intersection = pos_moved_farthest;
-    //}
+    if (is_col == false) 
+    {
+        intersection = pos_moved_farthest;
+    }
     //const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
 
     //GUI::Begin("pb.move");
