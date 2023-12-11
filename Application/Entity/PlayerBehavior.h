@@ -89,6 +89,7 @@ protected:
     bool GetPlayerIsLanding(void);
     CameraManager* GetPlayerCamMPtr(void);
     Planet* GetPlayerPlanetPtr(void);
+    const Vector2& GetPlayerDirection(void);
 
 
     //>> setter
@@ -98,6 +99,8 @@ protected:
     void SetPlayerJumpVecNorm(float arg_jumpVecNorm);
     void SetPlayerCurrentRad(float arg_currentRad);
     void SetPlayerTransformPosition(const Vector3& arg_pos);
+    void SetPlayerDirection(const Vector2& arg_direction);
+    void SetPlayerRot(float arg_rot);
 };
 
 

@@ -27,7 +27,7 @@ public:
     void SetSphericalRotate(float arg_theta, float arg_phi, float arg_psi);
 
     // プレイヤーの座標からプレイヤー方向へのベクトルを正面ベクトルとして算出する
-    void CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec);
+    //void CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec);
 
     void SetViewMat(const Matrix4& viewMat) { matView_ = viewMat; }
 

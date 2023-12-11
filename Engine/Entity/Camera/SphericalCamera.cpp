@@ -68,9 +68,9 @@ void SphericalCamera::Update(void)
     //##
 
     // 姿勢の軸方向をそのまま 3つの軸から適用
-    axes_.forward = transformMatrix_.GetMatAxisZ().Normalize();
-    axes_.right = transformMatrix_.GetMatAxisX().Normalize();
-    axes_.up = transformMatrix_.GetMatAxisY().Normalize();
+    //axes_.forward = transformMatrix_.GetMatAxisZ().Normalize();
+    //axes_.right = transformMatrix_.GetMatAxisX().Normalize();
+    //axes_.up = transformMatrix_.GetMatAxisY().Normalize();
 }
 
 //void SphericalCamera::CameraBehavior(Behavior arg_camerawork)
@@ -128,24 +128,24 @@ void SphericalCamera::SetSphericalRotate(float arg_theta, float arg_phi, float a
     psi_ = arg_psi;
 }
 
-void SphericalCamera::CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec)
-{
-    vec_playerUp_ = pUpVec;
-
-    axes_.forward = (playerPos - transform_.position).Normalize();
-
-    // プレイヤーの上ベクトルとの外積でカメラの右向きベクトルを定義。
-    // カメラ位置が、プレイヤー上ベクトルのラインより下なら、正しく右向きが出る。
-    axes_.right = pUpVec.Cross(axes_.forward).Normalize();
-
-    // 右向きベクトルが反転してると下向きベクトルになってしまうから注意。
-    axes_.up = axes_.forward.Cross(axes_.right).Normalize();
-
-    //// なんでこれだとうまくいくんや？行列からの各軸抜き出しとの違いを出すべきかも。
-    //axes_.forward = coordinate_.GetMatAxisZ();
-    //axes_.right = coordinate_.GetMatAxisX();
-    //axes_.up = coordinate_.GetMatAxisY();
-}
+//void SphericalCamera::CalcAxis3(const Vector3& playerPos, const Vector3& pUpVec)
+//{
+//    vec_playerUp_ = pUpVec;
+//
+//    axes_.forward = (playerPos - transform_.position).Normalize();
+//
+//    // プレイヤーの上ベクトルとの外積でカメラの右向きベクトルを定義。
+//    // カメラ位置が、プレイヤー上ベクトルのラインより下なら、正しく右向きが出る。
+//    axes_.right = pUpVec.Cross(axes_.forward).Normalize();
+//
+//    // 右向きベクトルが反転してると下向きベクトルになってしまうから注意。
+//    axes_.up = axes_.forward.Cross(axes_.right).Normalize();
+//
+//    //// なんでこれだとうまくいくんや？行列からの各軸抜き出しとの違いを出すべきかも。
+//    //axes_.forward = coordinate_.GetMatAxisZ();
+//    //axes_.right = coordinate_.GetMatAxisX();
+//    //axes_.up = coordinate_.GetMatAxisY();
+//}
 
 void SphericalCamera::Debug_need(float arg_rad, const Vector3& arg_sphericalRotate, const Vector3& pos, const Vector3& pos_eye)
 {

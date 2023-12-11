@@ -249,47 +249,24 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
     inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
     inputVec += XPAD::GetLStick();
-
-    //inputVec.y = -inputVec.y; // 2dでまず受け取るため、反転。
     inputVec = inputVec.Normalize();
 
-    // プレイヤーの行列系
-    const TransformMatrix& transMat = GetPlayerTransformMatrix();
-    // プレイヤーの座標をスクリーン座標に変換
-    const Vector2 pos_screen = GetPlayerCamMPtr()->GetCurrentCamera()->GetScreen().WorldToScreenPoint(transMat.mat_world);
-    // スクリーン座標 + 入力ベクトル * 大きさ
-    const float norm = 10.f;
-    const Vector2 invarsYInput = { inputVec.x,-inputVec.y };
-    const Vector2 pos_screen_moved = pos_screen + invarsYInput * norm;
-
-    // スクリーン座標をワールド座標に変換
-    Vector3 pos_moved_nearest = GetPlayerCamMPtr()->GetCurrentCamera()->GetScreen().ScreenToWorldPoint(pos_screen_moved, 0.f);
-    Vector3 pos_moved_farthest = GetPlayerCamMPtr()->GetCurrentCamera()->GetScreen().ScreenToWorldPoint(pos_screen_moved, 1.f);
-
-    UI::GetInstance()->GetUISpritePtr("circle_red")->SetPosition(pos_screen);
-    UI::GetInstance()->GetUISpritePtr("circle_green")->SetPosition(pos_screen_moved);
-
-    //// 半直線の方向の計算
-    Vector3 vec_moved_ray = Vector3(pos_moved_farthest - pos_moved_nearest).Normalize();
-    Primitive::Ray ray(pos_moved_nearest, vec_moved_ray);
-    Primitive::Sphere planet(GetPlayerPlanetPtr()->surface_.center, GetPlayerPlanetPtr()->surface_.radius);
-    Vector3 intersection;
-    // ここのintersectionの値がおかしいかも
-    const bool is_col = CollisionChecker::SphereToRay(planet, ray, nullptr, &intersection);
-
-    if (is_col == false) 
-    {
-        intersection = pos_moved_farthest;
-    }
-    //const Vector3 moveVec = Vector3(intersection - GetPlayerTransform().position).Normalize();
-
-    //GUI::Begin("pb.move");
-    //GUI::Text("screenToWorld: %f,%f,%f", intersection.x, intersection.y, intersection.z);
-    //GUI::End();
+    // 角度算出
+    const float rot = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
+    SetPlayerRot(rot);
+    // 今回のベクトルを記録
+    SetPlayerDirection(inputVec);
+    
+    /// test
+    const Axis3& pAxes = GetPlayerAxes();
+    const Vector3& pPos = GetPlayerTransform().position;
+    Vector3 pos_playerBack = pPos - pAxes.forward * 10.f;
+    pos_playerBack = pos_playerBack + pAxes.up * 10.f;
 
 
-    // 前のフレームの軸を記録
-    moveAxes_old_ = moveAxes_current_;
+
+    //// 前のフレームの軸を記録
+    //moveAxes_old_ = moveAxes_current_;
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -299,22 +276,22 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     moveAxes_current_.right = redefinitionPRightFromCamera;
     moveAxes_current_.up = GetPlayerAxes().up;
 
-    // 前フレームの軸に値が記録されている（≒初期状態ではない）か？
-    const bool is_recorded = moveAxes_old_.forward.IsNonZero() || moveAxes_old_.right.IsNonZero() || moveAxes_old_.up.IsNonZero();
+    //// 前フレームの軸に値が記録されている（≒初期状態ではない）か？
+    //const bool is_recorded = moveAxes_old_.forward.IsNonZero() || moveAxes_old_.right.IsNonZero() || moveAxes_old_.up.IsNonZero();
 
-    if (is_recorded)
-    {
-        // もし、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（正面ベクトル）
-        if (Math::Vec3::Dot(moveAxes_current_.forward, moveAxes_old_.forward) <= -0.9f)
-        {
-            // さらに、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（右ベクトル）
-            if (Math::Vec3::Dot(moveAxes_current_.right, moveAxes_old_.right) <= -0.9f)
-            {
-                // 軸が反転してしまったと推測し、1フレーム前の値を使い続ける。
-                moveAxes_current_ = moveAxes_old_;
-            }
-        }
-    }
+    //if (is_recorded)
+    //{
+    //    // もし、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（正面ベクトル）
+    //    if (Math::Vec3::Dot(moveAxes_current_.forward, moveAxes_old_.forward) <= -0.9f)
+    //    {
+    //        // さらに、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（右ベクトル）
+    //        if (Math::Vec3::Dot(moveAxes_current_.right, moveAxes_old_.right) <= -0.9f)
+    //        {
+    //            // 軸が反転してしまったと推測し、1フレーム前の値を使い続ける。
+    //            moveAxes_current_ = moveAxes_old_;
+    //        }
+    //    }
+    //}
 
     // 移動ベクトル = 前後vec + 水平vec
     Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
@@ -338,25 +315,16 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
         if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
 
+        if (KEYS::IsTrigger(DIK_P))
+        {
+            Axis3 pAxes2 = GetPlayerAxes();
+            pAxes2.forward = GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position;
+            pAxes2.forward = pAxes2.forward.Normalize();
+            ptr_cam_spherical->SetAxis3(pAxes2);
+        }
+
         debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward);
         debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward));
-
-        if (debug_aaaaa_ < 0.7f)
-        {
-            if (debug_bbbbb_ < 0.6f)
-            {
-                //float theta = GetPlayerTheta();
-                //float phi = GetPlayerPhi();
-
-                //theta += 0.005f * inputVec.x;
-                //phi += 0.015f * inputVec.x;
-                //Math::Function::Loop(theta, 0.f, 6.28319f);
-                //Math::Function::Loop(phi, 0.f, 6.28319f);
-
-                //SetPlayerTheta(theta);
-                //SetPlayerPhi(phi);
-            }
-        }
 
         const Axis3& axes_camera = GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3();
         const Axis3& axes_player = GetPlayerAxes();
@@ -377,72 +345,73 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
         GUI::Text("Debug");
 
-        // プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
-        if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
-        {
-            theta -= 0.0005f * inputVec.y;
-        }
-        else
-        {
-            // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
-            if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-            {
-                // 画角を早めに戻すように大きめに角度を変化させる
-                theta += 0.22f * inputVec.y; // 
-            }
-            // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
-            else
-            {
-                // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
-                if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-                {
-                    // 画角を早めに戻すように少し大きめに角度を変化させる
-                    theta += 0.0197f * inputVec.y; // 
-                }
-                // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
-                else
-                {
-                    theta += 0.01f * inputVec.y;
-                }
-            }
-        }
+        //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
+        //if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
+        //{
+        //    theta -= 0.0005f * inputVec.y;
+        //}
+        //else
+        //{
+        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
+        //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    {
+        //        // 画角を早めに戻すように大きめに角度を変化させる
+        //        theta += 0.22f * inputVec.y; // 
+        //    }
+        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
+        //    else
+        //    {
+        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
+        //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //        {
+        //            // 画角を早めに戻すように少し大きめに角度を変化させる
+        //            theta += 0.0197f * inputVec.y; // 
+        //        }
+        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
+        //        else
+        //        {
+        //            theta += 0.01f * inputVec.y;
+        //        }
+        //    }
+        //}
 
+        //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
+        //if (dot_pf2cf < 0.7f)
+        //{
 
-        // プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
-        if (dot_pf2cf < 0.7f)
-        {
-
-            phi -= 0.0005f * inputVec.x;
-        }
-        else
-        {
-            // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
-            if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-            {
-                // 画角を早めに戻すように大きめに角度を変化させる
-                phi -= 0.22f * inputVec.x; // 
-            }
-            // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
-            else
-            {
-                // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
-                if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-                {
-                    // 画角を早めに戻すように少し大きめに角度を変化させる
-                    phi -= 0.0197f * inputVec.x; // 
-                }
-                // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
-                else
-                {
-                    phi -= 0.01f * inputVec.x;
-                }
-            }
-        }
+        //    phi -= 0.0005f * inputVec.x;
+        //}
+        //else
+        //{
+        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
+        //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    {
+        //        // 画角を早めに戻すように大きめに角度を変化させる
+        //        phi -= 0.22f * inputVec.x; // 
+        //    }
+        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
+        //    else
+        //    {
+        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
+        //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //        {
+        //            // 画角を早めに戻すように少し大きめに角度を変化させる
+        //            phi -= 0.0197f * inputVec.x; // 
+        //        }
+        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
+        //        else
+        //        {
+        //            phi -= 0.01f * inputVec.x;
+        //        }
+        //    }
+        //}
 
         Vector2 inputVecR = XPAD::GetRStick();
         inputVecR = inputVecR.Normalize();
         theta -= 0.06f * inputVecR.y;
         phi += 0.06f * inputVecR.x;
+        theta += 0.01f * inputVec.y;
+        phi += 0.01f * inputVec.x;
 
         Math::Function::Loop(theta, 0.f, 6.28319f);
         Math::Function::Loop(phi, 0.f, 6.28319f);
@@ -1096,6 +1065,11 @@ Planet* IPlayerBehavior::GetPlayerPlanetPtr(void)
     return playerPtr_->planetPtr_;
 }
 
+const Vector2& IPlayerBehavior::GetPlayerDirection(void)
+{
+    return playerPtr_->vec2_direction_;
+}
+
 void IPlayerBehavior::SetPlayerMoveVec(const Vector3& arg_moveVec)
 {
     playerPtr_->moveVec_ = arg_moveVec;
@@ -1124,4 +1098,14 @@ void IPlayerBehavior::SetPlayerCurrentRad(float arg_currentRad)
 void IPlayerBehavior::SetPlayerTransformPosition(const Vector3& arg_pos)
 {
     playerPtr_->transform_.position = arg_pos;
+}
+
+void IPlayerBehavior::SetPlayerDirection(const Vector2& arg_direction)
+{
+    playerPtr_->vec2_direction_ = arg_direction;
+}
+
+void IPlayerBehavior::SetPlayerRot(float arg_rot)
+{
+    playerPtr_->rot_playerVector_ = arg_rot;
 }

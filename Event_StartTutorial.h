@@ -53,6 +53,7 @@ private:
     DeltaTimer timer_waitCam2_;
 
     bool is_execute_;
+    bool is_skip_debug_ = true;
 
 public:
     //>> setter

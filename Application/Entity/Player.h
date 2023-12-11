@@ -80,7 +80,11 @@ private:
     LightManager* lightManagerPtr_;
 
     EventState eventState_;
-
+    
+    Vector2 vec2_direction_ = { 0,1 };
+    // プレイヤーが初期姿勢: Axis3({0,0,1},{1,0,0},{0,1,0}) ※(正面,右,上)から、
+    // 上ベクトルを軸として何度回転したか、(正面と右を回転させる）
+    float rot_playerVector_;
 public:
     //>> setter
     void SetupLightCircleShadows(void) {

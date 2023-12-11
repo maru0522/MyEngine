@@ -283,6 +283,7 @@
     <ClCompile Include="SceneTransition_FadeOut.cpp" />
     <ClCompile Include="Event_EndTutorial.cpp" />
     <ClCompile Include="Event_TutorialPlanetHole.cpp" />
+    <ClCompile Include="BehindCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -556,6 +557,7 @@
     <ClInclude Include="SceneTransition_FadeOut.h" />
     <ClInclude Include="Event_EndTutorial.h" />
     <ClInclude Include="Event_TutorialPlanetHole.h" />
+    <ClInclude Include="BehindCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shader\Model.hlsli">
