@@ -349,6 +349,7 @@ void DemoScene::Finalize(void)
     //>> カメラの登録抹消
     CameraManager::GetInstance()->UnRegister(camera_debugPtr_.get());
     CameraManager::GetInstance()->UnRegister(camera_colPtr_.get());
+    CameraManager::GetInstance()->UnRegister(camera_behind_.get());
     CameraManager::GetInstance()->UnRegister(camera_4Hole_.get());
 }
 
