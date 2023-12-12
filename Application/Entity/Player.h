@@ -67,7 +67,8 @@ private:
 
     CollisionManager* colMPtr_;
     CollisionPrimitive::SphereCollider sphereCollider_;
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };
+    //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/character/chr_sword.obj") };
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };
 
     CameraManager* camMPtr_{};

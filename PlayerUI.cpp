@@ -137,6 +137,7 @@ void PlayerUI::EaseUI(void)
 {
     if (IsTrigger() || IsRelease())
     {
+        easeTimer_.Finish(true);
         easeTimer_.Start(0.6f);
         easeTimer_.SetAddSpeed(2.f);
     }
