@@ -6,7 +6,7 @@ public:
     //>> 関数
     BehindCamera(const std::string& arg_id);
     virtual ~BehindCamera(void) = default;
-    void Update(void);
+    void Update(void) override;
 
     //>> 変数
     Vector3 pos_player_;

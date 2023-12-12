@@ -261,6 +261,7 @@ void Event_StartTutorial::Update_WaitCam2(void)
 
         cameraState_ = CameraState::FINISH;
         CameraManager::GetInstance()->SetCurrentCamera("SphericalCamera_follow_player0");
+        CameraManager::GetInstance()->SetCurrentCamera("BehindCamera_follow_player0");
 
         // 関数を抜ける
         return;

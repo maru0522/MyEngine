@@ -6,7 +6,7 @@ public:
     //>> 関数
     NormalCamera(const std::string& arg_id);
     virtual ~NormalCamera(void) = default;
-    void Update(void);
+    void Update(void) override;
 
     //>> 変数
 

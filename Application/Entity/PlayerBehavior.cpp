@@ -12,6 +12,7 @@
 #include "Screen.h"
 #include "CollisionChecker.h"
 #include "UI.h"
+#include "BehindCamera.h"
 
 //----------------------------------------------------------------------------------------
 std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playerPtr, PlayerBehavior arg_state)
@@ -108,23 +109,27 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
     // カメラ座標用の値を補正
     {
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
-        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+        if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+        //SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+        //Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
+        //ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
 
-        float theta = ptr_cam_spherical->theta_;
-        float phi = ptr_cam_spherical->phi_;
-        float psi = ptr_cam_spherical->psi_;
-        Vector2 inputVecR = XPAD::GetRStick();
-        inputVecR = inputVecR.Normalize();
-        theta -= 0.06f * inputVecR.y;
-        phi += 0.06f * inputVecR.x;
+        //float theta = ptr_cam_spherical->theta_;
+        //float phi = ptr_cam_spherical->phi_;
+        //float psi = ptr_cam_spherical->psi_;
+        //Vector2 inputVecR = XPAD::GetRStick();
+        //inputVecR = inputVecR.Normalize();
+        //theta -= 0.06f * inputVecR.y;
+        //phi += 0.06f * inputVecR.x;
 
-        Math::Function::Loop(theta, 0.f, 6.28319f);
-        Math::Function::Loop(phi, 0.f, 6.28319f);
-        Math::Function::Loop(psi, 0.f, 6.28319f);
-        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+        //Math::Function::Loop(theta, 0.f, 6.28319f);
+        //Math::Function::Loop(phi, 0.f, 6.28319f);
+        //Math::Function::Loop(psi, 0.f, 6.28319f);
+        //ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+
+        BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+        ptr_cam_behind->axes_player_ = GetPlayerAxes();
+        ptr_cam_behind->pos_player_ = GetPlayerTransform().position;
 
         //if (GetPlayerJumpVecNorm())
         //{
@@ -251,12 +256,19 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     inputVec += XPAD::GetLStick();
     inputVec = inputVec.Normalize();
 
+
+    // ## test2
     // 角度算出
     const float rot = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
-    SetPlayerRot(rot);
+    const float max_rot = 90.f;
+    std::fabsf(rot) > Math::Function::ToRadian(max_rot) ?
+        SetPlayerRot(max_rot) :
+        SetPlayerRot(rot);
     // 今回のベクトルを記録
     SetPlayerDirection(inputVec);
-    
+
+
+
     /// test
     const Axis3& pAxes = GetPlayerAxes();
     const Vector3& pPos = GetPlayerTransform().position;
@@ -310,114 +322,119 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
 
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-        if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
+        if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+        BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+        ptr_cam_behind->axes_player_ = GetPlayerAxes();
+        ptr_cam_behind->pos_player_ = GetPlayerTransform().position;
+        //    if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
+        //    SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+        //    ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+        //    if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
 
-        if (KEYS::IsTrigger(DIK_P))
-        {
-            Axis3 pAxes2 = GetPlayerAxes();
-            pAxes2.forward = GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position;
-            pAxes2.forward = pAxes2.forward.Normalize();
-            ptr_cam_spherical->SetAxis3(pAxes2);
-        }
-
-        debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward);
-        debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward));
-
-        const Axis3& axes_camera = GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3();
-        const Axis3& axes_player = GetPlayerAxes();
-
-        float theta = ptr_cam_spherical->theta_;
-        float phi = ptr_cam_spherical->phi_;
-        float psi = ptr_cam_spherical->psi_;
-
-        // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満の時
-        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        float dot_pf2cf = Math::Vec3::Dot(axes_player.forward, axes_camera.forward);
-        debug_ccccc_ = dot_pf2cf;
-        debug_eeeee_ = axes_player.forward;
-        debug_fffff_ = axes_camera.forward;
-        float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
-        debug_ddddd_ = std::fabsf(dot_pr2cf);
-        debug_ggggg_ = axes_player.right;
-
-        GUI::Text("Debug");
-
-        //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
-        //if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
-        //{
-        //    theta -= 0.0005f * inputVec.y;
-        //}
-        //else
-        //{
-        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
-        //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    if (KEYS::IsTrigger(DIK_P))
         //    {
-        //        // 画角を早めに戻すように大きめに角度を変化させる
-        //        theta += 0.22f * inputVec.y; // 
+        //        Axis3 pAxes2 = GetPlayerAxes();
+        //        pAxes2.forward = GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position;
+        //        pAxes2.forward = pAxes2.forward.Normalize();
+        //        ptr_cam_spherical->SetAxis3(pAxes2);
         //    }
-        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
-        //    else
-        //    {
-        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
-        //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //        {
-        //            // 画角を早めに戻すように少し大きめに角度を変化させる
-        //            theta += 0.0197f * inputVec.y; // 
-        //        }
-        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
-        //        else
-        //        {
-        //            theta += 0.01f * inputVec.y;
-        //        }
-        //    }
-        //}
 
-        //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
-        //if (dot_pf2cf < 0.7f)
-        //{
+        //    debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward);
+        //    debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward));
 
-        //    phi -= 0.0005f * inputVec.x;
-        //}
-        //else
-        //{
-        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
-        //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //    {
-        //        // 画角を早めに戻すように大きめに角度を変化させる
-        //        phi -= 0.22f * inputVec.x; // 
-        //    }
-        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
-        //    else
-        //    {
-        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
-        //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //        {
-        //            // 画角を早めに戻すように少し大きめに角度を変化させる
-        //            phi -= 0.0197f * inputVec.x; // 
-        //        }
-        //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
-        //        else
-        //        {
-        //            phi -= 0.01f * inputVec.x;
-        //        }
-        //    }
-        //}
+        //    const Axis3& axes_camera = GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3();
+        //    const Axis3& axes_player = GetPlayerAxes();
 
-        Vector2 inputVecR = XPAD::GetRStick();
-        inputVecR = inputVecR.Normalize();
-        theta -= 0.06f * inputVecR.y;
-        phi += 0.06f * inputVecR.x;
-        theta += 0.01f * inputVec.y;
-        phi += 0.01f * inputVec.x;
+        //    float theta = ptr_cam_spherical->theta_;
+        //    float phi = ptr_cam_spherical->phi_;
+        //    float psi = ptr_cam_spherical->psi_;
 
-        Math::Function::Loop(theta, 0.f, 6.28319f);
-        Math::Function::Loop(phi, 0.f, 6.28319f);
-        Math::Function::Loop(psi, 0.f, 6.28319f);
-        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満の時
+        //    // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+        //    float dot_pf2cf = Math::Vec3::Dot(axes_player.forward, axes_camera.forward);
+        //    debug_ccccc_ = dot_pf2cf;
+        //    debug_eeeee_ = axes_player.forward;
+        //    debug_fffff_ = axes_camera.forward;
+        //    float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
+        //    debug_ddddd_ = std::fabsf(dot_pr2cf);
+        //    debug_ggggg_ = axes_player.right;
+
+        //    GUI::Text("Debug");
+
+        //    //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
+        //    //if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
+        //    //{
+        //    //    theta -= 0.0005f * inputVec.y;
+        //    //}
+        //    //else
+        //    //{
+        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
+        //    //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    //    {
+        //    //        // 画角を早めに戻すように大きめに角度を変化させる
+        //    //        theta += 0.22f * inputVec.y; // 
+        //    //    }
+        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
+        //    //    else
+        //    //    {
+        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
+        //    //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    //        {
+        //    //            // 画角を早めに戻すように少し大きめに角度を変化させる
+        //    //            theta += 0.0197f * inputVec.y; // 
+        //    //        }
+        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
+        //    //        else
+        //    //        {
+        //    //            theta += 0.01f * inputVec.y;
+        //    //        }
+        //    //    }
+        //    //}
+
+        //    //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
+        //    //if (dot_pf2cf < 0.7f)
+        //    //{
+
+        //    //    phi -= 0.0005f * inputVec.x;
+        //    //}
+        //    //else
+        //    //{
+        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
+        //    //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    //    {
+        //    //        // 画角を早めに戻すように大きめに角度を変化させる
+        //    //        phi -= 0.22f * inputVec.x; // 
+        //    //    }
+        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
+        //    //    else
+        //    //    {
+        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
+        //    //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
+        //    //        {
+        //    //            // 画角を早めに戻すように少し大きめに角度を変化させる
+        //    //            phi -= 0.0197f * inputVec.x; // 
+        //    //        }
+        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
+        //    //        else
+        //    //        {
+        //    //            phi -= 0.01f * inputVec.x;
+        //    //        }
+        //    //    }
+        //    //}
+
+        //    Vector2 inputVecR = XPAD::GetRStick();
+        //    inputVecR = inputVecR.Normalize();
+        //    theta -= 0.06f * inputVecR.y;
+        //    phi += 0.06f * inputVecR.x;
+        //    theta += 0.01f * inputVec.y;
+        //    phi += 0.01f * inputVec.x;
+
+        //    Math::Function::Loop(theta, 0.f, 6.28319f);
+        //    Math::Function::Loop(phi, 0.f, 6.28319f);
+        //    Math::Function::Loop(psi, 0.f, 6.28319f);
+        //    ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
+
 
 
     // 重力
@@ -444,9 +461,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         if (moveVec.IsNonZero())
         {
             // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
+            //Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
+            //Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+            //SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
         }
     }
 

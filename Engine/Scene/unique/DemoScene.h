@@ -20,6 +20,7 @@
 #include "Event_EndTutorial.h"
 #include "Event_TutorialPlanetHole.h"
 #include "BackGroundTexture.h"
+#include "BehindCamera.h"
 
 class DemoScene final :
     public IScene
@@ -68,6 +69,7 @@ public:
 
     std::unique_ptr<ICamera> camera_debugPtr_{ std::make_unique<ICamera>() };
     std::unique_ptr<SphericalCamera> camera_colPtr_{ std::make_unique<SphericalCamera>("follow_player") };
+    std::unique_ptr<BehindCamera> camera_behind_{ std::make_unique<BehindCamera>("follow_player") };
     std::unique_ptr<SphericalCamera> camera_4Hole_{ std::make_unique<SphericalCamera>("hole_planet") };
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
