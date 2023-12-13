@@ -16,7 +16,7 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
 
     // 初期位置
     transform_.position = { 0,60,-10 };
-    //transform_.scale = { 3,3,3 };
+    transform_.scale = { 3,3,3 };
 
     // 初期姿勢
     axes_.forward = { 0,0,1 };
