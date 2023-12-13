@@ -72,10 +72,6 @@ void Rabbit::Update(void)
         // ライトの角度減衰の外値と内値
         Vector2 factorAngle = { 8.f,9.f };
 
-        GUI::Begin("rabbit state");
-        GUI::SliderFloat3("atten", atten, 0, 1);
-        GUI::End();
-
         lightManagerPtr_->SetLightDir(type, circleShadows_num_, vec_rabbitTpPlanet);
         lightManagerPtr_->SetLightPos(type, circleShadows_num_, pos_myself - vec_rabbitTpPlanet * distAtRabbit);
         lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, distAtCaster);
@@ -86,12 +82,6 @@ void Rabbit::Update(void)
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
     appearance_->Update();
-
-    static float sDetectRadius{ kDetectRadius_ };
-    GUI::Begin("Rabbit");
-    ImGui::SliderFloat("detectRadius", &sDetectRadius, 0.f, 200.f);
-    detectPlayerCollider_.radius = sDetectRadius;
-    GUI::End();
 
     // 移動量
     Vector3 moveVec{};

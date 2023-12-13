@@ -98,10 +98,6 @@ void Player::Update(void)
         // ライトの角度減衰の外値と内値
         Vector2 factorAngle = { 6.f,7.f };
 
-        GUI::Begin("player state");
-        GUI::SliderFloat3("atten", atten, 0, 1);
-        GUI::End();
-
         lightManagerPtr_->SetLightDir(type, circleShadows_num_, vec_playerTpPlanet);
         lightManagerPtr_->SetLightPos(type, circleShadows_num_, pos_myself - vec_playerTpPlanet * distAtPlayer);
         lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, distAtCaster);
@@ -133,10 +129,6 @@ void Player::Update(void)
     isLanding_ = false;
 
 #ifdef _DEBUG
-    GUI::Begin("Control");
-    GUI::Text("Move:WASD");
-    GUI::Text("Jump:SPACE");
-    GUI::End();
 
     GUI::Begin("player");
 

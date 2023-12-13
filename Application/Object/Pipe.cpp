@@ -34,14 +34,14 @@ Pipe::~Pipe(void)
 
 void Pipe::Update(void)
 {
-    GUI::Begin("pipe");
-    GUI::Text("pos:(%f,%f,%f)", transform_.position.x, transform_.position.y, transform_.position.z);
-    GUI::SliderFloat3("transform_pos", transform_.position, -200.f, 200.f);
-    GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
-    //GUI::SliderFloat3("axis_forward", axes_.forward, -1.f, 1.f);
-    //GUI::SliderFloat3("axis_right", axes_.right, -1.f, 1.f);
-    //GUI::SliderFloat3("axis_up", axes_.up, -1.f, 1.f);
-    GUI::End();
+    //GUI::Begin("pipe");
+    //GUI::Text("pos:(%f,%f,%f)", transform_.position.x, transform_.position.y, transform_.position.z);
+    //GUI::SliderFloat3("transform_pos", transform_.position, -200.f, 200.f);
+    //GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
+    ////GUI::SliderFloat3("axis_forward", axes_.forward, -1.f, 1.f);
+    ////GUI::SliderFloat3("axis_right", axes_.right, -1.f, 1.f);
+    ////GUI::SliderFloat3("axis_up", axes_.up, -1.f, 1.f);
+    //GUI::End();
     //matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
     matTrans_.mat_world = Math::Function::AffinTrans(transform_);
     Object3D::Update();
