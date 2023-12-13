@@ -57,6 +57,7 @@ private:
     TransformMatrix matTrans_;
     Transform transform_;
     Axis3 axes_;
+    Axis3 axes_4model_;
 
     Vector3 moveVec_;
     Vector3 velocity_; // めり込んだ時に押し戻せるように
@@ -82,10 +83,13 @@ private:
 
     EventState eventState_;
     
+    bool is_startRotate_;
     Vector2 vec2_direction_ = { 0,1 };
+    Vector2 vec2_rotateDirection_start_ = { 0,0 };
     // プレイヤーが初期姿勢: Axis3({0,0,1},{1,0,0},{0,1,0}) ※(正面,右,上)から、
     // 上ベクトルを軸として何度回転したか、(正面と右を回転させる）
-    float rot_playerVector_;
+    float rotateDirection_max_;
+    float rotateDirection_total_; // 合計何度回転したか。
 public:
     //>> setter
     void SetupLightCircleShadows(void) {

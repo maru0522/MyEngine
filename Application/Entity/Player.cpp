@@ -44,7 +44,7 @@ void Player::Update(void)
     playerUI_.Update();
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->mat_world = matTrans_.mat_world;
+    appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_, axes_4model_);
     appearance_->Update();
 
     if(eventState_ == EventState::NONE) { pbm_.ManagementBehavior(); }

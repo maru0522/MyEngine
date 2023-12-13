@@ -1,4 +1,4 @@
-﻿#include "Quaternion.h"
+#include "Quaternion.h"
 #include <cmath>
 
 Quaternion Quaternion::Conjugate() const
@@ -97,12 +97,17 @@ const Quaternion operator-(const Quaternion& q1, const Quaternion& q2)
 
 const Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
 {
-    Quaternion q{};
-    q.x = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-    q.y = q1.y * q2.z - q1.z * q2.y + q2.w * q1.x + q1.w * q2.x;
-    q.z = q1.z * q2.x - q1.x * q2.z + q2.w * q1.y + q1.w * q2.y;
-    q.w = q1.x * q2.y - q1.y * q2.x + q2.w * q1.z + q1.w * q2.z;
-    return q;
+    //float x = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
+    //float y = q1.y * q2.z - q1.z * q2.y + q2.w * q1.x + q1.w * q2.x;
+    //float z = q1.z * q2.x - q1.x * q2.z + q2.w * q1.y + q1.w * q2.y;
+    //float w = q1.x * q2.y - q1.y * q2.x + q2.w * q1.z + q1.w * q2.z;
+    //return Quaternion(x, y, z, w);
+
+    float x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
+    float y = q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x;
+    float z = q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w;
+    float w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
+    return Quaternion(x, y, z, w);
 }
 
 const Quaternion operator*(const Quaternion& q, float s)

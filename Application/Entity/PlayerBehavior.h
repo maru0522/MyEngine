@@ -90,17 +90,25 @@ protected:
     CameraManager* GetPlayerCamMPtr(void);
     Planet* GetPlayerPlanetPtr(void);
     const Vector2& GetPlayerDirection(void);
+    const Vector2& GetPlayerRotateDirectionStart(void);
+    float GetPlayerRotDirectionMax(void);
+    float GetPlayerRotDirectionTotal(void);
+    bool GetPlayerIsStartRotate(void);
 
 
     //>> setter
     void SetPlayerMoveVec(const Vector3& arg_moveVec);
     void SetPlayerVelocity(const Vector3& arg_velocity);
     void SetPlayerAxes(const Axis3& arg_axes);
+    void SetPlayerAxesModel(const Axis3& arg_axes);
     void SetPlayerJumpVecNorm(float arg_jumpVecNorm);
     void SetPlayerCurrentRad(float arg_currentRad);
     void SetPlayerTransformPosition(const Vector3& arg_pos);
     void SetPlayerDirection(const Vector2& arg_direction);
-    void SetPlayerRot(float arg_rot);
+    void SetPlayerDirectionStart(const Vector2& arg_directionStart);
+    void SetPlayerRotMax(float arg_rot);
+    void SetPlayerRotTotal(float arg_total);
+    void SetPlayerIsStartRotate(bool arg_isStartRotate);
 };
 
 

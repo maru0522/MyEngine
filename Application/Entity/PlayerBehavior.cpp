@@ -259,14 +259,63 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
     // ## test2
     // 角度算出
-    const float rot = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
-    const float max_rot = 90.f;
-    std::fabsf(rot) > Math::Function::ToRadian(max_rot) ?
-        SetPlayerRot(max_rot) :
-        SetPlayerRot(rot);
-    // 今回のベクトルを記録
-    SetPlayerDirection(inputVec);
+    {
+        // 1F前と現在Fの、inputVecを比較して、プレイヤーが何度回転すべきなのかを算出
+        const float radian_temp = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
+        // acosだと、0~πの範囲までしか無理なので、inputVec.xの値が"マイナス"なら回転角を反転し、0~2π分の範囲を回転できるように
+        const float radian_rotate = radian_temp * inputVec.x;
+        //const float rot_divide = Math::Function::ToRadian(0.06f); // 360の6000等分
 
+        //// 今回の差分角度が rot_checkの値を超えている場合
+        //if (rot >= 1.5708f)
+        //{
+        //    // 回転開始フラグをtrue
+        //    SetPlayerIsStartRotate(true);
+        //    // 何度回転するか設定
+        //    SetPlayerRotMax(rot);
+        //    // 今回のベクトルを回転する前のスタート時ベクトルとして記録
+        //    SetPlayerDirectionStart(inputVec);
+
+        //    // 途中の場合に備えて、合計回転角は初期化
+        //    SetPlayerRotTotal(0.f);
+        //}
+        //// 今回のベクトルを記録
+        //SetPlayerDirection(inputVec);
+
+        //const bool isStartRotate = GetPlayerIsStartRotate();
+        //if (isStartRotate)
+        //{
+        //    // 入力0F目から回転は始まる。
+
+        //    const float rot_max = GetPlayerRotDirectionMax();
+        //    const float rot_total = GetPlayerRotDirectionTotal();
+
+        //    // 合計値が、最大値以上かチェック
+        //    if (rot_total >= rot_max)
+        //    {
+        //        // 回転開始フラグをfalse
+        //        SetPlayerIsStartRotate(false);
+        //    }
+
+        //    // 現在の合計値 + 加算 の合計が、最大値を超えていないかチェック
+        //    if (rot_total + rot_divide > rot_max)
+        //    {
+        //        // 超えていたら、超えないようにする
+        //        const float rot_result = rot_total + (rot_max - rot_total);
+        //        SetPlayerRotTotal(rot_result);
+        //    }
+
+            // プレイヤーの3つの軸をコピー
+        const Axis3& pAxes = GetPlayerAxes();
+        // プレイヤーの上ベクトルを軸として、rot_total分だけ、回転させるクオータニオンを生成
+        Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, radian_rotate);
+        // クオータニオンを使って、正面ベクトルと右ベクトルを
+        const Vector3 vec_rotatedForward = Math::QuaternionF::RotateVector(pAxes.forward, rot_quaternion);
+        const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(pAxes.right, rot_quaternion);
+
+        const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
+        SetPlayerAxesModel(modelAxes);
+    }
 
 
     /// test
@@ -307,6 +356,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
     // 移動ベクトル = 前後vec + 水平vec
     Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
+    //Vector3 moveVec = moveAxes_current_.forward * inputVec.Length(); // 常にプレイヤーの正面ベクトルを回転させるなら、正面に該当する方向 * 1でおｋじゃね？
 
     // カメラ座標用の値を補正
     {
@@ -1087,6 +1137,26 @@ const Vector2& IPlayerBehavior::GetPlayerDirection(void)
     return playerPtr_->vec2_direction_;
 }
 
+const Vector2& IPlayerBehavior::GetPlayerRotateDirectionStart(void)
+{
+    return playerPtr_->vec2_rotateDirection_start_;
+}
+
+float IPlayerBehavior::GetPlayerRotDirectionMax(void)
+{
+    return playerPtr_->rotateDirection_max_;
+}
+
+float IPlayerBehavior::GetPlayerRotDirectionTotal(void)
+{
+    return playerPtr_->rotateDirection_total_;
+}
+
+bool IPlayerBehavior::GetPlayerIsStartRotate(void)
+{
+    return playerPtr_->is_startRotate_;
+}
+
 void IPlayerBehavior::SetPlayerMoveVec(const Vector3& arg_moveVec)
 {
     playerPtr_->moveVec_ = arg_moveVec;
@@ -1100,6 +1170,11 @@ void IPlayerBehavior::SetPlayerVelocity(const Vector3& arg_velocity)
 void IPlayerBehavior::SetPlayerAxes(const Axis3& arg_axes)
 {
     playerPtr_->axes_ = arg_axes;
+}
+
+void IPlayerBehavior::SetPlayerAxesModel(const Axis3& arg_axes)
+{
+    playerPtr_->axes_4model_ = arg_axes;
 }
 
 void IPlayerBehavior::SetPlayerJumpVecNorm(float arg_jumpVecNorm)
@@ -1122,7 +1197,22 @@ void IPlayerBehavior::SetPlayerDirection(const Vector2& arg_direction)
     playerPtr_->vec2_direction_ = arg_direction;
 }
 
-void IPlayerBehavior::SetPlayerRot(float arg_rot)
+void IPlayerBehavior::SetPlayerDirectionStart(const Vector2& arg_directionStart)
 {
-    playerPtr_->rot_playerVector_ = arg_rot;
+    playerPtr_->vec2_rotateDirection_start_ = arg_directionStart;
+}
+
+void IPlayerBehavior::SetPlayerRotMax(float arg_rot)
+{
+    playerPtr_->rotateDirection_max_ = arg_rot;
+}
+
+void IPlayerBehavior::SetPlayerRotTotal(float arg_total)
+{
+    playerPtr_->rotateDirection_total_ = arg_total;
+}
+
+void IPlayerBehavior::SetPlayerIsStartRotate(bool arg_isStartRotate)
+{
+    playerPtr_->is_startRotate_ = arg_isStartRotate;
 }
