@@ -25,8 +25,6 @@ void CameraManager::Update(void)
 
     DebugGui();
 
-    ImGui::ShowDemoWindow();
-
 
     // nullチェック
     if (!current_) // nullptrではない無効なアドレスかどうかを識別する方法を調べる

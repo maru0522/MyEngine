@@ -273,14 +273,14 @@ void DemoScene::Update(void)
 
     skydome_->Update();
 
-    GUI::Begin("backGround");
-    if (GUI::ButtonTrg("bg_switch"))
-    {
-        isBG_ ? isBG_ = false :
-            isBG_ = true;
-    }
+    //GUI::Begin("backGround");
+    //if (GUI::ButtonTrg("bg_switch"))
+    //{
+    //    isBG_ ? isBG_ = false :
+    //        isBG_ = true;
+    //}
 
-    GUI::End();
+    //GUI::End();
 
     UI::GetInstance()->Update("circle_red");
     UI::GetInstance()->Update("circle_green");

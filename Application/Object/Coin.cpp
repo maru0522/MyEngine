@@ -42,11 +42,11 @@ Coin::~Coin(void)
 
 void Coin::Update(void)
 {
-    GUI::Begin("coin");
-    GUI::Text("pos:(%f,%f,%f)", transform_.position.x, transform_.position.y, transform_.position.z);
-    GUI::SliderFloat3("transform_pos", transform_.position, -200.f, 200.f);
-    GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
-    GUI::End();
+    //GUI::Begin("coin");
+    //GUI::Text("pos:(%f,%f,%f)", transform_.position.x, transform_.position.y, transform_.position.z);
+    //GUI::SliderFloat3("transform_pos", transform_.position, -200.f, 200.f);
+    //GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
+    //GUI::End();
 
     //if (is_takenPre_ == false && is_taken_)
     //{

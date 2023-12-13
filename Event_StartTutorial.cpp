@@ -78,7 +78,7 @@ void Event_StartTutorial::Execute(void)
     }
     string_->Update();
 
-    GUI::Begin("event_startTutorial");
+    //GUI::Begin("event_startTutorial");
 
     switch (cameraState_)
     {
@@ -106,8 +106,8 @@ void Event_StartTutorial::Execute(void)
         break;
     }
 
-    GUI::Text("camera : [%f,%f,%f]", camera_->GetTransform().position.x, camera_->GetTransform().position.y, camera_->GetTransform().position.z);
-    GUI::End();
+    //GUI::Text("camera : [%f,%f,%f]", camera_->GetTransform().position.x, camera_->GetTransform().position.y, camera_->GetTransform().position.z);
+    //GUI::End();
 }
 
 void Event_StartTutorial::Draw(void)
@@ -139,9 +139,6 @@ void Event_StartTutorial::Update_CloseCam(void)
     Vector3 pos(0.f, 53.f, -50.f);
     pos.z = Math::Ease::EaseInCirc(rate, -50.f, -23.f);
 
-    GUI::Text("closeCam : %f", rate);
-    GUI::Text("closeCam_posz : %f", pos.z);
-
     // タイマーが完了しているか
     if (rate >= 1.f)
     {
@@ -172,7 +169,6 @@ void Event_StartTutorial::Update_WaitCam(void)
 {
     timer_waitCam_.Update();
     const float rate = timer_waitCam_.GetTimeRate(true);
-    GUI::Text("waitCam : %f", rate);
 
 
     // 文字背景
@@ -210,7 +206,6 @@ void Event_StartTutorial::Update_LeaveCam(void)
 {
     timer_leaveCam_.Update();
     const float rate = timer_leaveCam_.GetTimeRate();
-    GUI::Text("pukkCam : %f", rate);
     if (rate > 0.2f) { timer_leaveCam_.SetAddSpeed(rate + 1.2f); }
 
     Vector3 pos;
@@ -244,7 +239,6 @@ void Event_StartTutorial::Update_WaitCam2(void)
 {
     timer_waitCam2_.Update();
     const float rate = timer_waitCam2_.GetTimeRate(true);
-    GUI::Text("waitCam2 : %f", rate);
 
     // 上下の黒枠の生成と設定
     const float moveValue = Math::Ease::EaseOutSine(rate, 0.f, 90.f);

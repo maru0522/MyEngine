@@ -54,24 +54,24 @@ void StickyBall::Update(void)
     }
 
     // 見た目弄る用
-    GUI::Begin("sticky");
-    GUI::Text("other");
-    GUI::Text("def_sticPos: %f,%f,%f", default_stickyPos.x, default_stickyPos.y, default_stickyPos.z);
-    GUI::Text("dist_2_defPos: %f", distance_to_defPos_);
-    GUI::Text("a: %f", a);
-    GUI::BlankLine();
-    GUI::Text("info at root");
-    GUI::Text("pos:%f,%f,%f", transform_.position.x, transform_.position.y, transform_.position.z);
-    GUI::Text("info at sphere");
-    GUI::Text("pos:%f,%f,%f", collision_sphere_.center.x, collision_sphere_.center.y, collision_sphere_.center.z);
-    GUI::Text("sca:%f,%f,%f", transform_.scale.x, transform_.scale.y, transform_.scale.z);
-    GUI::Text("rot:%f,%f,%f", transform_.rotation.x, transform_.rotation.y, transform_.rotation.z);
-    GUI::BlankLine();
-    GUI::Text("scale");
-    ImGui::SliderFloat("x", &transform_.scale.x, 1.f, 10.f);
-    ImGui::SliderFloat("y", &transform_.scale.y, 1.f, 10.f);
-    ImGui::SliderFloat("z", &transform_.scale.z, 1.f, 10.f);
-    GUI::End();
+    //GUI::Begin("sticky");
+    //GUI::Text("other");
+    //GUI::Text("def_sticPos: %f,%f,%f", default_stickyPos.x, default_stickyPos.y, default_stickyPos.z);
+    //GUI::Text("dist_2_defPos: %f", distance_to_defPos_);
+    //GUI::Text("a: %f", a);
+    //GUI::BlankLine();
+    //GUI::Text("info at root");
+    //GUI::Text("pos:%f,%f,%f", transform_.position.x, transform_.position.y, transform_.position.z);
+    //GUI::Text("info at sphere");
+    //GUI::Text("pos:%f,%f,%f", collision_sphere_.center.x, collision_sphere_.center.y, collision_sphere_.center.z);
+    //GUI::Text("sca:%f,%f,%f", transform_.scale.x, transform_.scale.y, transform_.scale.z);
+    //GUI::Text("rot:%f,%f,%f", transform_.rotation.x, transform_.rotation.y, transform_.rotation.z);
+    //GUI::BlankLine();
+    //GUI::Text("scale");
+    //ImGui::SliderFloat("x", &transform_.scale.x, 1.f, 10.f);
+    //ImGui::SliderFloat("y", &transform_.scale.y, 1.f, 10.f);
+    //ImGui::SliderFloat("z", &transform_.scale.z, 1.f, 10.f);
+    //GUI::End();
 
     matTrans_.mat_world = Math::Function::AffinTrans(collision_sphere_.center, transform_.scale, axes_);
 }
