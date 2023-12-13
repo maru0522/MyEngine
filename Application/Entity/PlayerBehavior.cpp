@@ -750,20 +750,30 @@ void PlayerBehavior_Jump::Execute(void)
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
+    moveAxes_current_.forward = pForwardFromCamera;
+    moveAxes_current_.right = redefinitionPRightFromCamera;
+    moveAxes_current_.up = GetPlayerAxes().up;
+
     // 移動ベクトル = 前後vec + 水平vec
-    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+    Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
 
     // カメラ座標用の値を補正
     {
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-        if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
+        if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+        BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+        ptr_cam_behind->axes_player_ = GetPlayerAxes();
+        ptr_cam_behind->pos_player_ = GetPlayerTransform().position;
 
-        float theta = ptr_cam_spherical->theta_;
-        float phi = ptr_cam_spherical->phi_;
-        float psi = ptr_cam_spherical->psi_;
+        //ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+        //if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
+        //SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+        //ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+        //if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
+
+        //float theta = ptr_cam_spherical->theta_;
+        //float phi = ptr_cam_spherical->phi_;
+        //float psi = ptr_cam_spherical->psi_;
 
 
         if (GetPlayerJumpVecNorm())
@@ -804,13 +814,13 @@ void PlayerBehavior_Jump::Execute(void)
                 SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
             }
 
-            theta += 0.02f * inputVec.y;
-            phi += 0.02f * inputVec.x;
+        //    theta += 0.02f * inputVec.y;
+        //    phi += 0.02f * inputVec.x;
         }
-        Math::Function::Loop(theta, 0.f, 6.28319f);
-        Math::Function::Loop(phi, 0.f, 6.28319f);
-        Math::Function::Loop(psi, 0.f, 6.28319f);
-        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+        //Math::Function::Loop(theta, 0.f, 6.28319f);
+        //Math::Function::Loop(phi, 0.f, 6.28319f);
+        //Math::Function::Loop(psi, 0.f, 6.28319f);
+        //ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
 
     // 重力
@@ -837,13 +847,13 @@ void PlayerBehavior_Jump::Execute(void)
         Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
         SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
         // 移動入力があった場合
-        if (moveVec.IsNonZero())
-        {
-            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
-        }
+        //if (moveVec.IsNonZero())
+        //{
+        //    // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+        //    Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
+        //    Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+        //    SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
+        //}
     }
 
 #ifdef _DEBUG
