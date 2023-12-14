@@ -300,7 +300,8 @@ void Event_TutorialPlanetHole::Update_ApproachCam(void)
 
         // カメラの状態を変更
         cameraState_ = CameraState::FINISH;
-        cameraMPtr_->SetCurrentCamera("SphericalCamera_follow_player0");
+        //cameraMPtr_->SetCurrentCamera("SphericalCamera_follow_player0");
+        cameraMPtr_->SetCurrentCamera("BehindCamera_follow_player0");
 
         // 関数を抜ける
         return;
