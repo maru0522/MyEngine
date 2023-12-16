@@ -261,9 +261,17 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // 角度算出
     {
         // 1F前と現在Fの、inputVecを比較して、プレイヤーが何度回転すべきなのかを算出
-        const float radian_temp = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
+        const float radian_rotate2 = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
+        float radian_rotate{};
+        radian_rotate = radian_rotate2;
+        if (inputVec.x < 0) 
+        {
+            radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
+        }
+
         // acosだと、0~πの範囲までしか無理なので、inputVec.xの値が"マイナス"なら回転角を反転し、0~2π分の範囲を回転できるように
-        const float radian_rotate = radian_temp * inputVec.x;
+        //const float radian_rotate2 = radian_temp * inputVec.x;
+        //const float radian_rotate = radian_rotate2 * inputVec.y;
         //const float rot_divide = Math::Function::ToRadian(0.06f); // 360の6000等分
 
         //// 今回の差分角度が rot_checkの値を超えている場合
@@ -315,8 +323,12 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
         const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
         SetPlayerAxesModel(modelAxes);
-    }
 
+        GUI::Begin("Debug_Move");
+        GUI::Text("inputVec : %f,%f", inputVec.x, inputVec.y);
+        GUI::Text("radian : %f", radian_rotate);
+        GUI::End();
+    }
 
     /// test
     const Axis3& pAxes = GetPlayerAxes();
