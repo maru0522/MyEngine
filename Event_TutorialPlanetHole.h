@@ -36,7 +36,7 @@ private:
     const float kCommonAddSpeed_ = 2.f;
 
     // 穴の入口にセットするイベントエリアの半径（球状)
-    const float kScaleEntranceSphere = 10.6f;
+    const float kScaleEntranceSphere = 9.8f;
 
 public:
     //>> 関数
@@ -88,6 +88,6 @@ private:
     Player* playerPtr_;
 
     bool is_execute_{};
-    bool is_showHoleCollision_{};
+    bool is_showHoleCollision_{true};
 };
 
