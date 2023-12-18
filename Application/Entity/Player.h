@@ -97,6 +97,7 @@ public:
         circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
         lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
     }
+    void SetAxes(const Axis3& arg_axes) { axes_ = arg_axes; }
     void SetPosition(const Vector3& arg_pos) { transform_.position = arg_pos; }
     void SetEventState(EventState arg_eventState) { eventState_ = arg_eventState; }
 

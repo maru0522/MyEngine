@@ -65,18 +65,21 @@ void Event_TutorialPlanetHole::Execute(void)
     {
     case Event_TutorialPlanetHole::CameraState::LEAVE:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 1, timer_leaveCam_.GetTimeRate());
+        playerPtr_->SetPosition(pos_player);
         ImGui::Text("CameraState: Leave");
         Update_LeaveCam();
         break;
 
     case Event_TutorialPlanetHole::CameraState::WAIT:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 2, timer_waitCam_.GetTimeRate());
+        playerPtr_->SetPosition(pos_player);
         ImGui::Text("CameraState: WAIT");
         Update_WaitCam();
         break;
 
     case Event_TutorialPlanetHole::CameraState::APPROACH:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 3, timer_approachCam_.GetTimeRate());
+        playerPtr_->SetPosition(pos_player);
         ImGui::Text("CameraState: Approach");
         Update_ApproachCam();
         break;
@@ -91,8 +94,6 @@ void Event_TutorialPlanetHole::Execute(void)
     default:
         break;
     }
-
-    playerPtr_->SetPosition(pos_player);
 
     ImGui::Text("rate:%f", rate_player);
     ImGui::Text("current:%f", timer_player_.GetFrameCurrent());
@@ -324,6 +325,9 @@ void Event_TutorialPlanetHole::Update_ApproachCam(void)
         cameraState_ = CameraState::FINISH;
         //cameraMPtr_->SetCurrentCamera("SphericalCamera_follow_player0");
         cameraMPtr_->SetCurrentCamera("BehindCamera_follow_player0");
+
+        const Axis3 axes = { {0.243741f,-0.926397f,0.287016f},{-0.019059f,0.291309f,0.956439f},{-0.97268f,-0.222932f,0.064765f} };
+        playerPtr_->SetAxes(axes);
 
         // 関数を抜ける
         return;

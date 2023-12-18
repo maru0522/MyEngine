@@ -168,6 +168,7 @@ void Player::Update(void)
     ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
+    GUI::Text("pos(collision):       [%f,%f,%f]", sphereCollider_.center.x, sphereCollider_.center.y, sphereCollider_.center.z);
     GUI::Text("pos(current):         [%f,%f,%f]", transform_.position.x, transform_.position.y, transform_.position.z);
     GUI::Text("rot(current):         [%f,%f,%f]", transform_.rotation.x, transform_.rotation.y, transform_.rotation.z);
     GUI::Text("sca(current):         [%f,%f,%f]", transform_.scale.x, transform_.scale.y, transform_.scale.z);
@@ -241,8 +242,6 @@ void Player::ControlUI(void)
 
 void Player::OnCollision(void)
 {
-    // イベント中は当たり判定スキップ
-    if (eventState_ == EventState::PLANET_HOLE) { return; }
 
     if (sphereCollider_.GetOther()->GetID() == "gravityArea")
     {
@@ -253,6 +252,10 @@ void Player::OnCollision(void)
         Vector3 center2PlayerVec = sphereCollider_.center - other->center;
         axes_.up = center2PlayerVec.Normalize();
     }
+
+    // イベント中は当たり判定スキップ
+    if (eventState_ == EventState::PLANET_HOLE) { return; }
+
     if (sphereCollider_.GetOther()->GetID() == "terrainSurface")
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
