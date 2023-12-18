@@ -211,9 +211,12 @@ void DeltaTimer::Update(void)
     // ポーズ中ならスキップ
     if (is_pause_) { return; }
 
-    // 秒数カウントが最大秒数を超えている
+    // 最大秒数を何秒超えたかの記録用
     float diff{};
-    if (sec_current_ >= sec_max_)
+
+    // 秒数カウントが最大秒数を超えているか？
+    const bool isOver = sec_current_ >= sec_max_;
+    if (isOver)
     {
         // ループフラグ: true
         if (is_loop_)

@@ -53,28 +53,31 @@ void Event_TutorialPlanetHole::Execute(void)
     // プレイヤーの座標を、穴を通り抜けるように更新し続ける。
     timer_player_.Update();
     const float rate_player = timer_player_.GetTimeRate();
-    Vector3 pos_player{};
-    pos_player.x = Math::Ease::EaseOutSine(rate_player, pos_playerStart_.x, pos_playerEnd_.x);
-    pos_player.y = Math::Ease::EaseOutSine(rate_player, pos_playerStart_.y, pos_playerEnd_.y);
-    pos_player.z = Math::Ease::EaseOutSine(rate_player, pos_playerStart_.z, pos_playerEnd_.z);
-    playerPtr_->SetPosition(pos_player);
 
+    Vector3 pos_player{};
     if (timer_player_.GetIsExecute() == false)
     {
         playerPtr_->SetPosition(kPlayerPos_Hole1_end);
     }
+    GUI::Begin("EventState_Hole");
 
     switch (cameraState_)
     {
     case Event_TutorialPlanetHole::CameraState::LEAVE:
+        pos_player = Math::Function::Spline(points_playerSplineHole_, 1, timer_leaveCam_.GetTimeRate());
+        ImGui::Text("CameraState: Leave");
         Update_LeaveCam();
         break;
 
     case Event_TutorialPlanetHole::CameraState::WAIT:
+        pos_player = Math::Function::Spline(points_playerSplineHole_, 2, timer_waitCam_.GetTimeRate());
+        ImGui::Text("CameraState: WAIT");
         Update_WaitCam();
         break;
 
     case Event_TutorialPlanetHole::CameraState::APPROACH:
+        pos_player = Math::Function::Spline(points_playerSplineHole_, 3, timer_approachCam_.GetTimeRate());
+        ImGui::Text("CameraState: Approach");
         Update_ApproachCam();
         break;
 
@@ -89,7 +92,8 @@ void Event_TutorialPlanetHole::Execute(void)
         break;
     }
 
-    GUI::Begin("EventState_Hole");
+    playerPtr_->SetPosition(pos_player);
+
     ImGui::Text("rate:%f", rate_player);
     ImGui::Text("current:%f", timer_player_.GetFrameCurrent());
     ImGui::Text("p.x:%f, p.y:%f, p.z:%f", pos_player.x, pos_player.y, pos_player.z);
@@ -167,8 +171,26 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
         camera_wait_->SetPosition(pos_camWait);
 
         // 穴に入って反対側まで行けるよう、スタート地点とゴール地点を設定
+        const Vector3& pos_HoleStart = planetPos_ + kHolePos_relativePlanetCenter;
+        const Vector3& pos_HoleEnd = planetPos_ - kHolePos_relativePlanetCenter;
+
         pos_playerStart_ = planetPos_ + kHolePos_relativePlanetCenter;
         pos_playerEnd_ = planetPos_ - kHolePos_relativePlanetCenter;
+
+        // イベントトリガーに触れた瞬間のプレイヤーの座標
+        const Vector3& pos_contactTrigger = playerPtr_->GetTransform().position;
+        // プレイヤーが通る座標 (start)
+        points_playerSplineHole_.push_back(pos_contactTrigger); // 関数の仕様上、スタート地点とゴール地点は2回入力する必要がある。 // TODO: スプライン曲線の関数見直し。
+        // プレイヤーが通る座標 1番目
+        points_playerSplineHole_.push_back(pos_contactTrigger);
+        // プレイヤーが通る座標 2番目
+        points_playerSplineHole_.push_back(pos_HoleStart);
+        // プレイヤーが通る座標 3番目
+        points_playerSplineHole_.push_back(pos_HoleEnd);
+        // プレイヤーが通る座標 4番目
+        points_playerSplineHole_.push_back(kPlayerPos_Hole1_end);
+        // プレイヤーが通る座標 (goal)
+        points_playerSplineHole_.push_back(kPlayerPos_Hole1_end);
     }
     else
     {
