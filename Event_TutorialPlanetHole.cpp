@@ -88,7 +88,7 @@ void Event_TutorialPlanetHole::Execute(void)
         // 起動フラグをfalse
         is_execute_ = false;
         // プレイヤーのeventStateを設定
-        playerPtr_->SetEventState(Player::EventState::NONE);
+        playerPtr_->SetEventState(PlayerEventState::NONE);
         break;
 
     default:
@@ -150,7 +150,7 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
     timer_player_.Start(totalTime);
     timer_player_.SetAddSpeed(kCommonAddSpeed_);
     // プレイヤーのeventStateを設定
-    playerPtr_->SetEventState(Player::EventState::PLANET_HOLE);
+    playerPtr_->SetEventState(PlayerEventState::PLANET_HOLE);
 
     // イージング開始（leaveCam用）
     timer_leaveCam_.Start(kLeaveTimer_);

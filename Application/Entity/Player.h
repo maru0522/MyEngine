@@ -8,26 +8,13 @@
 #include "LightManager.h"
 #include "PlayerBehavior.h"
 #include "PlayerUI.h"
+#include "PlayerCommonInfomation.h"
 
 class Player
 {
 public:
     //>> 定義
     friend IPlayerBehavior;
-
-    enum class EventState
-    {
-        NONE,
-        PLANET_HOLE,
-    };
-
-    //>> 定数
-    const float kRadius_{ 1.f };
-    const float kJumpPower_{ 0.75f };
-    const float kJumpLongPower_{ 1.3f };
-    const float kMoveSpeed_{ 1.f };
-    const float kMoveJumpLongSpeed_{ 2.f };
-    const float kGravity_{ 0.03f };
 
     //>> 関数
     Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
@@ -36,9 +23,6 @@ public:
     void Update(void);
     void Draw3d(void);
     void Draw2dFore(void);
-
-    float default_rad_{ 50.f };
-    float current_rad_{ default_rad_ };
 
     Vector3 pos_backDiagonalAbove_; // プレイヤーの背後斜め上の点
     Vector3 pos_withinRangeAtBGAPoint_; // プレイヤーの斜め上の点から、カメラが離れられる最大範囲のpos
@@ -54,15 +38,7 @@ private:
     void OnTrigger(void);
 
     //>> 変数
-    TransformMatrix matTrans_;
-    Transform transform_;
-    Axis3 axes_;
-    Axis3 axes_4model_;
-
-    Vector3 moveVec_;
-    Vector3 velocity_; // めり込んだ時に押し戻せるように
-    float jumpVecNorm_{};
-    bool isLanding_{};
+    std::shared_ptr<Player_CommonInfomation> commonInfo_;
 
     int32_t coinNum_;
 
@@ -72,8 +48,6 @@ private:
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/character/chr_sword.obj") };
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };
 
-    CameraManager* camMPtr_{};
-
     PlayerBehaviorMachine pbm_;
     PlayerUI playerUI_;
 
@@ -81,15 +55,6 @@ private:
     Planet* planetPtr_;
     LightManager* lightManagerPtr_;
 
-    EventState eventState_;
-    
-    bool is_startRotate_;
-    Vector2 vec2_direction_ = { 0,1 };
-    Vector2 vec2_rotateDirection_start_ = { 0,0 };
-    // プレイヤーが初期姿勢: Axis3({0,0,1},{1,0,0},{0,1,0}) ※(正面,右,上)から、
-    // 上ベクトルを軸として何度回転したか、(正面と右を回転させる）
-    float rotateDirection_max_;
-    float rotateDirection_total_; // 合計何度回転したか。
 public:
     //>> setter
     void SetupLightCircleShadows(void) {
@@ -97,15 +62,15 @@ public:
         circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
         lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
     }
-    void SetAxes(const Axis3& arg_axes) { axes_ = arg_axes; }
-    void SetPosition(const Vector3& arg_pos) { transform_.position = arg_pos; }
-    void SetEventState(EventState arg_eventState) { eventState_ = arg_eventState; }
+    void SetAxes(const Axis3& arg_axes) { commonInfo_->axes_ = arg_axes; }
+    void SetPosition(const Vector3& arg_pos) { commonInfo_->transform_.position = arg_pos; }
+    void SetEventState(PlayerEventState arg_eventState) { commonInfo_->eventState_ = arg_eventState; }
 
     //>> getter
-    TransformMatrix* GetTransMatPtr(void) { return &matTrans_; }
-    Transform* GetTransformPtr(void) { return &transform_; }
-    const Transform GetTransform(void) { return transform_; }
-    Axis3* GetAxis3Ptr(void) { return &axes_; }
+    TransformMatrix* GetTransMatPtr(void) { return &commonInfo_->matTrans_; }
+    Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
+    const Transform GetTransform(void) { return commonInfo_->transform_; }
+    Axis3* GetAxis3Ptr(void) { return &commonInfo_->axes_; }
     const CollisionPrimitive::SphereCollider& GetSphereCollider(void) { return sphereCollider_; }
     const std::string& GetPartnerId(void) { return sphereCollider_.GetOther()->GetID(); }
 

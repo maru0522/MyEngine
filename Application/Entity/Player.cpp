@@ -5,25 +5,30 @@
 #include "CollisionChecker.h"
 
 Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
-    : camMPtr_(arg_camMPtr), colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr), pbm_(this, PlayerBehavior::IDLE)
+    : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr), pbm_(this, PlayerBehavior::IDLE)
 {
+    // 共通の情報を生成
+    commonInfo_ = std::make_shared<Player_CommonInfomation>();
+    commonInfo_->camMPtr_ = arg_camMPtr;
+    pbm_.GetStatePtr()->CopySharedCommonInfo(commonInfo_);
+
     arg_colMPtr->Register(&sphereCollider_);
     sphereCollider_.SetID("player");
     sphereCollider_.callback_onCollision_ = std::bind(&Player::OnCollision, this);
     sphereCollider_.callback_onTrigger_ = std::bind(&Player::OnTrigger, this);
 
-    sphereCollider_.radius = kRadius_;
+    sphereCollider_.radius = commonInfo_->kRadius_;
 
     // 初期位置
-    transform_.position = { 0,60,-10 };
-    transform_.scale = { 2.2f,2.2f,2.2f };
+    commonInfo_->transform_.position = { 0,60,-10 };
+    commonInfo_->transform_.scale = { 2.2f,2.2f,2.2f };
 
     // 初期姿勢
-    axes_.forward = { 0,0,1 };
-    axes_.right = { 1,0,0 };
-    axes_.up = { 0,1,0 };
+    commonInfo_->axes_.forward = { 0,0,1 };
+    commonInfo_->axes_.right = { 1,0,0 };
+    commonInfo_->axes_.up = { 0,1,0 };
 
-    moveVec_ = { 0,1,0 };
+    commonInfo_->moveVec_ = { 0,1,0 };
 
     playerUI_.SetUIPtr(UI::GetInstance());
     playerUI_.SetRabbitCountPtr(&captureCount_rabbit);
@@ -40,14 +45,17 @@ void Player::Update(void)
     UI::GetInstance()->GetUISpritePtr("circle_red")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
     UI::GetInstance()->GetUISpritePtr("circle_green")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
 
+
     ControlUI();
     playerUI_.Update();
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_, axes_4model_);
+    appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_4model_);
     appearance_->Update();
 
-    if(eventState_ == EventState::NONE) { pbm_.ManagementBehavior(); }
+    // 新規姿勢の上ベクトルを代入
+    commonInfo_->axes_.up = commonInfo_->vec3_newUp_;
+    if (commonInfo_->eventState_ == PlayerEventState::NONE) { pbm_.ManagementBehavior(); }
 
     GUI::Begin("Debug");
     static float da;
@@ -76,7 +84,7 @@ void Player::Update(void)
     GUI::End();
 
     // コライダー更新
-    sphereCollider_.center = transform_.position;
+    sphereCollider_.center = commonInfo_->transform_.position;
 
     // 丸影が使用可能なら
     if (circleShadows_num_ >= 0)
@@ -85,7 +93,7 @@ void Player::Update(void)
         LightType type = LightType::CIRCLE_SHADOW;
 
         // 自分自身の座標
-        const Vector3& pos_myself = transform_.position;
+        const Vector3& pos_myself = commonInfo_->transform_.position;
         // プレイヤーから星までのベクトル
         const Vector3& vec_playerTpPlanet = (planetPtr_->GetPosition() - pos_myself).Normalize();
 
@@ -123,10 +131,10 @@ void Player::Update(void)
 
     // 現在の座標で行列を生成（重力によってめり込んでいる。）　-> めり込み補正はOnCollision()に引継ぎ
     // 計算量を減らしたい場合、コミットID a02ba1f80360bda078a7dbb7ea2e8447064e6e9d を参照
-    matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    commonInfo_->matTrans_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
 
     // 着地フラグは毎フレームfalseになるが、着地してるならOnCollisionでtrueになる。
-    isLanding_ = false;
+    commonInfo_->isLanding_ = false;
 
 #ifdef _DEBUG
 
@@ -155,27 +163,27 @@ void Player::Update(void)
     }
     //GUI::Text("pos(current):         [%f,%f,%f]", currentPos.x, currentPos.y, currentPos.z);
     //GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-    GUI::Text("jumpVecNorm:          [%f]", jumpVecNorm_);
-    GUI::Text("kGravity:             [%f]", kGravity_);
+    GUI::Text("jumpVecNorm:          [%f]", commonInfo_->jumpVecNorm_);
+    GUI::Text("kGravity:             [%f]", commonInfo_->kGravity_);
     GUI::BlankLine();
     GUI::BlankLine();
     //GUI::Text("forward(current):     [%f,%f,%f]", forwardFromOldAxis.x, forwardFromOldAxis.y, forwardFromOldAxis.z);
     //GUI::Text("right(current):       [%f,%f,%f]", rightFromOldAxis.x, rightFromOldAxis.y, rightFromOldAxis.z);
 
     ImGui::Text("matrix");
-    Matrix4 p = matTrans_.mat_world;
+    Matrix4 p = commonInfo_->matTrans_.mat_world;
     ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
     ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
     GUI::Text("pos(collision):       [%f,%f,%f]", sphereCollider_.center.x, sphereCollider_.center.y, sphereCollider_.center.z);
-    GUI::Text("pos(current):         [%f,%f,%f]", transform_.position.x, transform_.position.y, transform_.position.z);
-    GUI::Text("rot(current):         [%f,%f,%f]", transform_.rotation.x, transform_.rotation.y, transform_.rotation.z);
-    GUI::Text("sca(current):         [%f,%f,%f]", transform_.scale.x, transform_.scale.y, transform_.scale.z);
+    GUI::Text("pos(current):         [%f,%f,%f]", commonInfo_->transform_.position.x, commonInfo_->transform_.position.y, commonInfo_->transform_.position.z);
+    GUI::Text("rot(current):         [%f,%f,%f]", commonInfo_->transform_.rotation.x, commonInfo_->transform_.rotation.y, commonInfo_->transform_.rotation.z);
+    GUI::Text("sca(current):         [%f,%f,%f]", commonInfo_->transform_.scale.x, commonInfo_->transform_.scale.y, commonInfo_->transform_.scale.z);
     GUI::BlankLine();
-    GUI::Text("forward(current):     [%f,%f,%f]", axes_.forward.x, axes_.forward.y, axes_.forward.z);
-    GUI::Text("right(current):       [%f,%f,%f]", axes_.right.x, axes_.right.y, axes_.right.z);
-    GUI::Text("up(current):          [%f,%f,%f]", axes_.up.x, axes_.up.y, axes_.up.z);
+    GUI::Text("forward(current):     [%f,%f,%f]", commonInfo_->axes_.forward.x, commonInfo_->axes_.forward.y, commonInfo_->axes_.forward.z);
+    GUI::Text("right(current):       [%f,%f,%f]", commonInfo_->axes_.right.x, commonInfo_->axes_.right.y, commonInfo_->axes_.right.z);
+    GUI::Text("up(current):          [%f,%f,%f]", commonInfo_->axes_.up.x, commonInfo_->axes_.up.y, commonInfo_->axes_.up.z);
     GUI::End();
 #endif // _DEBUG
 }
@@ -197,9 +205,9 @@ void Player::Draw2dFore(void)
 void Player::ControlUI(void)
 {
     // プレイヤーの正面ベクトル
-    const Vector3& vec_pForward = axes_.forward;
+    const Vector3& vec_pForward = commonInfo_->axes_.forward;
     // カメラの正面ベクトル
-    const Vector3& vec_cForward = camMPtr_->GetCurrentCamera()->GetAxis3().forward;
+    const Vector3& vec_cForward = commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().forward;
 
     const float a = vec_pForward.Dot(vec_cForward);
     const bool is_dotValue_smaller_07f = a < 0.7f;
@@ -228,7 +236,7 @@ void Player::ControlUI(void)
     {
         playerUI_.SetIsVisible(true);
     }
-    else if(ftimer < 0)
+    else if (ftimer < 0)
     {
         playerUI_.SetIsVisible(false);
     }
@@ -250,50 +258,50 @@ void Player::OnCollision(void)
         // 本来は球状重力エリア内に入ってる場合に行う処理。
         //Vector3 center2PlayerVec = sphereCollider_.center - sphereCollider_.GetColInfo().v;
         Vector3 center2PlayerVec = sphereCollider_.center - other->center;
-        axes_.up = center2PlayerVec.Normalize();
+        commonInfo_->vec3_newUp_ = center2PlayerVec.Normalize();
     }
 
     // イベント中は当たり判定スキップ
-    if (eventState_ == EventState::PLANET_HOLE) { return; }
+    if (commonInfo_->eventState_ == PlayerEventState::PLANET_HOLE) { return; }
 
     if (sphereCollider_.GetOther()->GetID() == "terrainSurface")
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
         // ジャンプする量
-        jumpVecNorm_ = 0.f;
-        isLanding_ = true;
+        commonInfo_->jumpVecNorm_ = 0.f;
+        commonInfo_->isLanding_ = true;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
 
-        Vector3 currentPos = transform_.position;
+        Vector3 currentPos = commonInfo_->transform_.position;
         //currentPos += player->body_->matTrans_.GetUpVec().ExtractVector3();
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-        currentPos += axes_.up * -diff; // ここをマイナス符号で値反転
+        currentPos += commonInfo_->axes_.up * -diff; // ここをマイナス符号で値反転
 
         // 座標を補正
-        transform_.position = currentPos;
+        commonInfo_->transform_.position = currentPos;
 
         // 補正された値で行列を生成
-        matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        commonInfo_->matTrans_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
     }
     if (sphereCollider_.GetOther()->GetID() == "rock")
     {
         // めり込み距離の算出方法が分からん。AABB側の半径どうやって算出するんや。
 
         // 現在座標
-        Vector3 currentPos = transform_.position;
+        Vector3 currentPos = commonInfo_->transform_.position;
 
         // 移動した分だけ押し戻すようにする。
-        currentPos -= moveVec_;
+        currentPos -= commonInfo_->moveVec_;
 
         // 座標を補正
-        transform_.position = currentPos;
+        commonInfo_->transform_.position = currentPos;
 
         // 補正された値で行列を生成
-        matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        commonInfo_->matTrans_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
     }
     if (sphereCollider_.GetOther()->GetID() == "pipe_pushback")
     {
@@ -302,10 +310,10 @@ void Player::OnCollision(void)
         // プレイヤーから土管方向へのベクトル
         Vector3 vec_player2pipe = (other->center - sphereCollider_.center).Normalize();
         // プレイヤーの座標
-        Vector3 currentPos = transform_.position;
-        currentPos -= velocity_;
-        transform_.position = currentPos;
-        sphereCollider_.center = transform_.position;
+        Vector3 currentPos = commonInfo_->transform_.position;
+        currentPos -= commonInfo_->velocity_;
+        commonInfo_->transform_.position = currentPos;
+        sphereCollider_.center = commonInfo_->transform_.position;
 
         // めり込み距離を出す
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
@@ -314,10 +322,10 @@ void Player::OnCollision(void)
         currentPos += -vec_player2pipe * -diff;
 
         // 座標を補正
-        transform_.position = currentPos;
+        commonInfo_->transform_.position = currentPos;
 
         // 補正された値で行列を生成
-        matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+        commonInfo_->matTrans_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
     }
 }
 
