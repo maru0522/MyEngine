@@ -1,46 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="Engine\Shader\ModelVS.hlsl">
+    <FxCompile Include="Resources\Shader\ModelVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\ModelPS.hlsl">
+    <FxCompile Include="Resources\Shader\ModelPS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\SpriteVS.hlsl">
+    <FxCompile Include="Resources\Shader\SpriteVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\SpritePS.hlsl">
+    <FxCompile Include="Resources\Shader\SpritePS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\PostEffectVS.hlsl">
+    <FxCompile Include="Resources\Shader\PostEffectVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\PostEffectPS.hlsl">
+    <FxCompile Include="Resources\Shader\PostEffectPS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\GaussianBlurVS.hlsl">
+    <FxCompile Include="Resources\Shader\GaussianBlurVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\GaussianBlurPS.hlsl">
+    <FxCompile Include="Resources\Shader\GaussianBlurPS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\BloomVS.hlsl">
+    <FxCompile Include="Resources\Shader\BloomVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\BloomPS.hlsl">
+    <FxCompile Include="Resources\Shader\BloomPS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\HighLumiVS.hlsl">
+    <FxCompile Include="Resources\Shader\HighLumiVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\HighLumiPS.hlsl">
+    <FxCompile Include="Resources\Shader\HighLumiPS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\RadialBlurVS.hlsl">
+    <FxCompile Include="Resources\Shader\RadialBlurVS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\RadialBlurPS.hlsl">
+    <FxCompile Include="Resources\Shader\RadialBlurPS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -562,25 +562,25 @@
     <ClInclude Include="PlayerCommonInfomation.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Engine\Shader\Model.hlsli">
+    <None Include="Resources\Shader\Model.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
-    <None Include="Engine\Shader\Sprite.hlsli">
+    <None Include="Resources\Shader\Sprite.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
-    <None Include="Engine\Shader\PostEffect.hlsli">
+    <None Include="Resources\Shader\PostEffect.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
-    <None Include="Engine\Shader\GaussianBlur.hlsli">
+    <None Include="Resources\Shader\GaussianBlur.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
-    <None Include="Engine\Shader\Bloom.hlsli">
+    <None Include="Resources\Shader\Bloom.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
-    <None Include="Engine\Shader\HighLumi.hlsli">
+    <None Include="Resources\Shader\HighLumi.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
-    <None Include="Engine\Shader\RadialBlur.hlsli">
+    <None Include="Resources\Shader\RadialBlur.hlsli">
       <Filter>Engine\Shader</Filter>
     </None>
   </ItemGroup>
