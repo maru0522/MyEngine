@@ -38,7 +38,7 @@ struct Player_CommonInfomation
     Axis3 axes_4model_;
 
     // 入力
-    Vector2 vec2_direction_;
+    Vector2 vec2_direction_{ 0,1 };
 
     // 進行方向
     Vector3 moveVec_;
