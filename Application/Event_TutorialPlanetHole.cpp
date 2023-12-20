@@ -34,6 +34,11 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     {
         sphere = std::make_unique<Object3D>("Resources/model/sphere/sphere.obj");
     }
+
+#ifdef _DEBUG
+    is_showHoleCollision_ = true;
+#endif // _DEBUG
+
 }
 
 Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)

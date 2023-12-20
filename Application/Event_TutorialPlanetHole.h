@@ -89,6 +89,6 @@ private:
     Player* playerPtr_;
 
     bool is_execute_{};
-    bool is_showHoleCollision_{true};
+    bool is_showHoleCollision_{false};
 };
 
