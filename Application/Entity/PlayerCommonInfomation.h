@@ -18,7 +18,7 @@ struct Player_CommonInfomation
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 0.75f };
     const float kJumpLongPower_{ 1.3f };
-    const float kMoveSpeed_{ 1.f };
+    const float kMoveSpeed_{ 0.4f };
     const float kMoveJumpLongSpeed_{ 2.f };
     const float kGravity_{ 0.03f };
 
