@@ -182,7 +182,6 @@ void DemoScene::Update(void)
     static Vector3 pos_playerAtSwitching;           // カメラを切り替えたときの惑星を見るためのカメラの初期座標として切替時のプレイヤーの座標を入れておくもの
     static uint32_t phase_easingHoleCam;            // カメラのイージングの段階
 
-    GUI::Begin("debug tab maruyama");
 
     player_->Update();
 
@@ -213,6 +212,8 @@ void DemoScene::Update(void)
     //    HotReload(lvdPtr_.get());
     //}
 
+#ifdef _DEBUG
+    GUI::Begin("debug tab maruyama");
     //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
     //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
     GUI::BlankLine();
@@ -240,6 +241,7 @@ void DemoScene::Update(void)
     ImGui::Text("%f, %f, %f, %f", c2.m[3][0], c2.m[3][1], c2.m[3][2], c2.m[3][3]);
 
     GUI::End();
+#endif // _DEBUG
 
     //hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
     hole1_->Update();
@@ -331,8 +333,8 @@ void DemoScene::Draw3d(void)
 
 void DemoScene::Draw2dFore(void)
 {
-    UI::GetInstance()->Draw("circle_red");
-    UI::GetInstance()->Draw("circle_green");
+    //UI::GetInstance()->Draw("circle_red");
+    //UI::GetInstance()->Draw("circle_green");
     player_->Draw2dFore();
 
     a_.Draw();

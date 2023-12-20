@@ -80,10 +80,12 @@ void TitleScene::Update(void)
     const float alpha_pressA = Math::Ease::EaseInSine(alpha_rate);
     UI::GetInstance()->GetUISpritePtr("png_titlePressA")->SetAlpha(alpha_pressA);
 
+#ifdef _DEBUG
     GUI::Begin("Title_logo");
     GUI::Text("rate:  %f", rate);
     GUI::Text("scale: %f", scale);
     GUI::End();
+#endif
 
     // 1frame前の値として記録
     pre_rate = rate;

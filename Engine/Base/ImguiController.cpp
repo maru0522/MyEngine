@@ -64,6 +64,7 @@ void ImGuiController::Draw(void)
 
 void ImGuiController::Settings(void)
 {
+#ifdef _DEBUG
     GUI::Begin("ImGuiSetting", ImVec2(300,100));
     static int current = (int)style_;
     const char* styles[] = { "CLASSIC", "DARK", "CUSTOM_SONICRIDERS", "CUSTOM_CHERRY", "CUSTOM_CRYSTALDEVIL", "CUSTOM_ENEMYMOUSE" };
@@ -73,6 +74,7 @@ void ImGuiController::Settings(void)
         SetColorScheme();
     }
     GUI::End();
+#endif // _DEBUG
 }
 
 void ImGuiController::SetColorScheme(void)

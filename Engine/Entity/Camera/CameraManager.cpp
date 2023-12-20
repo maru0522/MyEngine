@@ -148,6 +148,7 @@ void CameraManager::DestroyDebugCamera(const std::string& arg_id)
 
 void CameraManager::DebugGui(void)
 {
+#ifdef _DEBUG
     // ウィンドウ名
     GUI::Begin("CameraManager");
 
@@ -303,6 +304,7 @@ void CameraManager::DebugGui(void)
     }
 
     GUI::End();
+#endif // _DEBUG
 }
 
 bool CameraManager::IsContainSameId_Camera(const std::string& arg_id)

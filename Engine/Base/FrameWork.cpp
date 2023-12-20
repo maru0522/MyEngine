@@ -41,11 +41,11 @@ void FrameWork::Initialize()
     modelM_->LoadOBJ("Resources/model/sphere/sphere.obj", true);
     modelM_->LoadOBJ("Resources/model/pipe/pipe.obj", false);
     modelM_->LoadOBJ("Resources/model/coin/coin.obj", false);
-    modelM_->LoadOBJ("Resources/model/skydome/skydome.obj",true);
-    modelM_->LoadOBJ("Resources/model/character/chr_sword.obj",false);
-    modelM_->LoadOBJ("Resources/model/rabbit/rabbit.obj",false);
-    modelM_->LoadOBJ("Resources/model/planet/planet2.obj",true);
-    modelM_->LoadOBJ("Resources/model/plane/plane.obj",false);
+    modelM_->LoadOBJ("Resources/model/skydome/skydome.obj", true);
+    modelM_->LoadOBJ("Resources/model/character/chr_sword.obj", false);
+    modelM_->LoadOBJ("Resources/model/rabbit/rabbit.obj", false);
+    modelM_->LoadOBJ("Resources/model/planet/planet2.obj", true);
+    modelM_->LoadOBJ("Resources/model/plane/plane.obj", false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化
@@ -105,6 +105,7 @@ bool FrameWork::EndRequest(void)
 
 void FrameWork::DebugGui(void)
 {
+#ifdef _DEBUG
     GUI::Begin("postEffect Settings", { 200,100 });
 
     static int current = 0;
@@ -114,4 +115,5 @@ void FrameWork::DebugGui(void)
         postEffectMPtr_->RequestChangePostEffect((PostEffectType)current);
     }
     GUI::End();
+#endif // _DEBUG
 }

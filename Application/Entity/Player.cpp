@@ -57,6 +57,7 @@ void Player::Update(void)
     commonInfo_->axes_.up = commonInfo_->vec3_newUp_;
     if (commonInfo_->eventState_ == PlayerEventState::NONE) { pbm_.ManagementBehavior(); }
 
+#ifdef _DEBUG
     GUI::Begin("Debug");
     static float da;
     if (pbm_.GetStatePtr()->debug_aaaaa_) da = pbm_.GetStatePtr()->debug_aaaaa_;
@@ -82,6 +83,7 @@ void Player::Update(void)
     if (pbm_.GetStatePtr()->debug_ggggg_.IsNonZero()) dg = pbm_.GetStatePtr()->debug_ggggg_;
     GUI::Text("vec_pr:          %f,%f,%f", dg.x, dg.y, dg.z);
     GUI::End();
+#endif // _DEBUG
 
     // コライダー更新
     sphereCollider_.center = commonInfo_->transform_.position;
@@ -241,11 +243,13 @@ void Player::ControlUI(void)
         playerUI_.SetIsVisible(false);
     }
 
+#ifdef _DEBUG
     GUI::Begin("PlayerUIDEBUG");
     GUI::Text("dot :    %f", a);
     GUI::Text("ftimer : %d", ftimer);
     GUI::Text(playerUI_.GetIsEnd() ? "bool UI : true" : "bool UI : false");
     GUI::End();
+#endif // _DEBUG
 }
 
 void Player::OnCollision(void)

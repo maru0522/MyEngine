@@ -59,28 +59,28 @@ void Event_TutorialPlanetHole::Execute(void)
     {
         playerPtr_->SetPosition(kPlayerPos_Hole1_end);
     }
-    GUI::Begin("EventState_Hole");
+
 
     switch (cameraState_)
     {
     case Event_TutorialPlanetHole::CameraState::LEAVE:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 1, timer_leaveCam_.GetTimeRate());
         playerPtr_->SetPosition(pos_player);
-        ImGui::Text("CameraState: Leave");
+        //ImGui::Text("CameraState: Leave");
         Update_LeaveCam();
         break;
 
     case Event_TutorialPlanetHole::CameraState::WAIT:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 2, timer_waitCam_.GetTimeRate());
         playerPtr_->SetPosition(pos_player);
-        ImGui::Text("CameraState: WAIT");
+        //ImGui::Text("CameraState: WAIT");
         Update_WaitCam();
         break;
 
     case Event_TutorialPlanetHole::CameraState::APPROACH:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 3, timer_approachCam_.GetTimeRate());
         playerPtr_->SetPosition(pos_player);
-        ImGui::Text("CameraState: Approach");
+        //ImGui::Text("CameraState: Approach");
         Update_ApproachCam();
         break;
 
@@ -95,10 +95,13 @@ void Event_TutorialPlanetHole::Execute(void)
         break;
     }
 
+#ifdef _DEBUG
+    GUI::Begin("EventState_Hole");
     ImGui::Text("rate:%f", rate_player);
     ImGui::Text("current:%f", timer_player_.GetFrameCurrent());
     ImGui::Text("p.x:%f, p.y:%f, p.z:%f", pos_player.x, pos_player.y, pos_player.z);
     GUI::End();
+#endif // _DEBUG
 
     // 穴の判定可視化していないならスキップ
     if (is_showHoleCollision_ == false) { return; }

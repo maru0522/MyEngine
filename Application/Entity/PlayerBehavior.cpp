@@ -276,10 +276,12 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
         commonInfo_->axes_4model_ = modelAxes;
 
+#ifdef DEBUG
         GUI::Begin("Debug_Move");
         GUI::Text("inputVec : %f,%f", inputVec.x, inputVec.y);
         GUI::Text("radian : %f", radian_rotate);
         GUI::End();
+#endif // DEBUG
     commonInfo_->vec2_direction_ = inputVec;
     }
 
