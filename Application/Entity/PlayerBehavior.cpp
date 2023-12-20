@@ -256,8 +256,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // ## test2
     // 角度算出
     {
-        // 1F前と現在Fの、inputVecを比較して、プレイヤーが何度回転すべきなのかを算出
-        const float radian_rotate2 = std::acosf(Math::Vec2::Dot(commonInfo_->vec2_direction_, inputVec));
+        // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
+        // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
+        const float radian_rotate2 = std::acosf(Math::Vec2::Dot({0,1}, inputVec));
         float radian_rotate{};
         radian_rotate = radian_rotate2;
         if (inputVec.x < 0)
