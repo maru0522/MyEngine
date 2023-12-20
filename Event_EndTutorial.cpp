@@ -77,7 +77,7 @@ void Event_EndTutorial::Execute(void)
     }
     string_->Update();
 
-    GUI::Begin("event_startTutorial");
+    //GUI::Begin("event_endTutorial");
 
     switch (cameraState_)
     {
@@ -98,8 +98,8 @@ void Event_EndTutorial::Execute(void)
         break;
     }
 
-    GUI::Text("camera : [%f,%f,%f]", camera_->GetTransform().position.x, camera_->GetTransform().position.y, camera_->GetTransform().position.z);
-    GUI::End();
+    //GUI::Text("camera : [%f,%f,%f]", camera_->GetTransform().position.x, camera_->GetTransform().position.y, camera_->GetTransform().position.z);
+    //GUI::End();
 }
 
 void Event_EndTutorial::Draw(void)
@@ -131,8 +131,8 @@ void Event_EndTutorial::Update_CloseCam(void)
     Vector3 pos(0.f, 53.f, -50.f);
     pos.z = Math::Ease::EaseInCirc(rate, -50.f, -23.f);
 
-    GUI::Text("closeCam : %f", rate);
-    GUI::Text("closeCam_posz : %f", pos.z);
+    //GUI::Text("closeCam : %f", rate);
+    //GUI::Text("closeCam_posz : %f", pos.z);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
@@ -164,7 +164,7 @@ void Event_EndTutorial::Update_WaitCam(void)
 {
     timer_waitCam_.Update();
     const float rate = timer_waitCam_.GetTimeRate(true);
-    GUI::Text("waitCam : %f", rate);
+    //GUI::Text("waitCam : %f", rate);
 
 
     // 文字背景
