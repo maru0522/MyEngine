@@ -264,56 +264,12 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         const float radian_rotate2 = std::acosf(Math::Vec2::Dot(GetPlayerDirection(), inputVec));
         float radian_rotate{};
         radian_rotate = radian_rotate2;
-        if (inputVec.x < 0) 
+        if (inputVec.x < 0)
         {
             radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
         }
 
-        // acosだと、0~πの範囲までしか無理なので、inputVec.xの値が"マイナス"なら回転角を反転し、0~2π分の範囲を回転できるように
-        //const float radian_rotate2 = radian_temp * inputVec.x;
-        //const float radian_rotate = radian_rotate2 * inputVec.y;
-        //const float rot_divide = Math::Function::ToRadian(0.06f); // 360の6000等分
-
-        //// 今回の差分角度が rot_checkの値を超えている場合
-        //if (rot >= 1.5708f)
-        //{
-        //    // 回転開始フラグをtrue
-        //    SetPlayerIsStartRotate(true);
-        //    // 何度回転するか設定
-        //    SetPlayerRotMax(rot);
-        //    // 今回のベクトルを回転する前のスタート時ベクトルとして記録
-        //    SetPlayerDirectionStart(inputVec);
-
-        //    // 途中の場合に備えて、合計回転角は初期化
-        //    SetPlayerRotTotal(0.f);
-        //}
-        //// 今回のベクトルを記録
-        //SetPlayerDirection(inputVec);
-
-        //const bool isStartRotate = GetPlayerIsStartRotate();
-        //if (isStartRotate)
-        //{
-        //    // 入力0F目から回転は始まる。
-
-        //    const float rot_max = GetPlayerRotDirectionMax();
-        //    const float rot_total = GetPlayerRotDirectionTotal();
-
-        //    // 合計値が、最大値以上かチェック
-        //    if (rot_total >= rot_max)
-        //    {
-        //        // 回転開始フラグをfalse
-        //        SetPlayerIsStartRotate(false);
-        //    }
-
-        //    // 現在の合計値 + 加算 の合計が、最大値を超えていないかチェック
-        //    if (rot_total + rot_divide > rot_max)
-        //    {
-        //        // 超えていたら、超えないようにする
-        //        const float rot_result = rot_total + (rot_max - rot_total);
-        //        SetPlayerRotTotal(rot_result);
-        //    }
-
-            // プレイヤーの3つの軸をコピー
+        // プレイヤーの3つの軸をコピー
         const Axis3& pAxes = GetPlayerAxes();
         // プレイヤーの上ベクトルを軸として、rot_total分だけ、回転させるクオータニオンを生成
         Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, radian_rotate);
@@ -336,11 +292,6 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Vector3 pos_playerBack = pPos - pAxes.forward * 10.f;
     pos_playerBack = pos_playerBack + pAxes.up * 10.f;
 
-
-
-    //// 前のフレームの軸を記録
-    //moveAxes_old_ = moveAxes_current_;
-
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
@@ -349,155 +300,18 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     moveAxes_current_.right = redefinitionPRightFromCamera;
     moveAxes_current_.up = GetPlayerAxes().up;
 
-    //// 前フレームの軸に値が記録されている（≒初期状態ではない）か？
-    //const bool is_recorded = moveAxes_old_.forward.IsNonZero() || moveAxes_old_.right.IsNonZero() || moveAxes_old_.up.IsNonZero();
-
-    //if (is_recorded)
-    //{
-    //    // もし、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（正面ベクトル）
-    //    if (Math::Vec3::Dot(moveAxes_current_.forward, moveAxes_old_.forward) <= -0.9f)
-    //    {
-    //        // さらに、現在フレームと1フレーム前とで、ほぼ正反対の向きを示していたら（右ベクトル）
-    //        if (Math::Vec3::Dot(moveAxes_current_.right, moveAxes_old_.right) <= -0.9f)
-    //        {
-    //            // 軸が反転してしまったと推測し、1フレーム前の値を使い続ける。
-    //            moveAxes_current_ = moveAxes_old_;
-    //        }
-    //    }
-    //}
-
     // 移動ベクトル = 前後vec + 水平vec
     Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
     //Vector3 moveVec = moveAxes_current_.forward * inputVec.Length(); // 常にプレイヤーの正面ベクトルを回転させるなら、正面に該当する方向 * 1でおｋじゃね？
 
     // カメラ座標用の値を補正
     {
-        //if (GetPlayerJumpVecNorm())
-        //{
-        //    // カメラとプレイヤーの距離
-        //    float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetCoordinatePtr()->GetMatPos() - GetPlayerTransform().position).Length();
-
-        //    // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-        //    // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-        //    SetPlayerCurrentRad(dist);
-        //}
-
-
         ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
         if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
         BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
         ptr_cam_behind->axes_player_ = GetPlayerAxes();
         ptr_cam_behind->pos_player_ = GetPlayerTransform().position;
-        //    if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-        //    SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-        //    ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-        //    if (KEYS::IsDown(DIK_O)) ptr_cam_spherical->Debug_need2(0.35f);
-
-        //    if (KEYS::IsTrigger(DIK_P))
-        //    {
-        //        Axis3 pAxes2 = GetPlayerAxes();
-        //        pAxes2.forward = GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position;
-        //        pAxes2.forward = pAxes2.forward.Normalize();
-        //        ptr_cam_spherical->SetAxis3(pAxes2);
-        //    }
-
-        //    debug_aaaaa_ = GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward);
-        //    debug_bbbbb_ = std::fabsf(GetPlayerAxes().right.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward));
-
-        //    const Axis3& axes_camera = GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3();
-        //    const Axis3& axes_player = GetPlayerAxes();
-
-        //    float theta = ptr_cam_spherical->theta_;
-        //    float phi = ptr_cam_spherical->phi_;
-        //    float psi = ptr_cam_spherical->psi_;
-
-        //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満の時
-        //    // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-        //    float dot_pf2cf = Math::Vec3::Dot(axes_player.forward, axes_camera.forward);
-        //    debug_ccccc_ = dot_pf2cf;
-        //    debug_eeeee_ = axes_player.forward;
-        //    debug_fffff_ = axes_camera.forward;
-        //    float dot_pr2cf = Math::Vec3::Dot(axes_player.right, axes_camera.forward);
-        //    debug_ddddd_ = std::fabsf(dot_pr2cf);
-        //    debug_ggggg_ = axes_player.right;
-
-        //    GUI::Text("Debug");
-
-        //    //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
-        //    //if (dot_pf2cf < 0.7f) // カメラから見て外側向きに向いていることが条件なので、絶対値はダメ
-        //    //{
-        //    //    theta -= 0.0005f * inputVec.y;
-        //    //}
-        //    //else
-        //    //{
-        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
-        //    //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //    //    {
-        //    //        // 画角を早めに戻すように大きめに角度を変化させる
-        //    //        theta += 0.22f * inputVec.y; // 
-        //    //    }
-        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
-        //    //    else
-        //    //    {
-        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
-        //    //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //    //        {
-        //    //            // 画角を早めに戻すように少し大きめに角度を変化させる
-        //    //            theta += 0.0197f * inputVec.y; // 
-        //    //        }
-        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
-        //    //        else
-        //    //        {
-        //    //            theta += 0.01f * inputVec.y;
-        //    //        }
-        //    //    }
-        //    //}
-
-        //    //// プレイヤーの正面とカメラの正面の内積が "0.7f" 未満
-        //    //if (dot_pf2cf < 0.7f)
-        //    //{
-
-        //    //    phi -= 0.0005f * inputVec.x;
-        //    //}
-        //    //else
-        //    //{
-        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" より大きい
-        //    //    if (dot_pf2cf > 0.8f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //    //    {
-        //    //        // 画角を早めに戻すように大きめに角度を変化させる
-        //    //        phi -= 0.22f * inputVec.x; // 
-        //    //    }
-        //    //    // プレイヤーの正面とカメラの正面の内積が "0.8f" 未満
-        //    //    else
-        //    //    {
-        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" より大きい |0.73f < 内積値 < 0.8f|
-        //    //        if (dot_pf2cf > 0.73f) // 内積値が正常な閾値（0.72f)に近づく程、角度の変化量も小さく
-        //    //        {
-        //    //            // 画角を早めに戻すように少し大きめに角度を変化させる
-        //    //            phi -= 0.0197f * inputVec.x; // 
-        //    //        }
-        //    //        // プレイヤーの正面とカメラの正面の内積が "0.73f" 未満
-        //    //        else
-        //    //        {
-        //    //            phi -= 0.01f * inputVec.x;
-        //    //        }
-        //    //    }
-        //    //}
-
-        //    Vector2 inputVecR = XPAD::GetRStick();
-        //    inputVecR = inputVecR.Normalize();
-        //    theta -= 0.06f * inputVecR.y;
-        //    phi += 0.06f * inputVecR.x;
-        //    theta += 0.01f * inputVec.y;
-        //    phi += 0.01f * inputVec.x;
-
-        //    Math::Function::Loop(theta, 0.f, 6.28319f);
-        //    Math::Function::Loop(phi, 0.f, 6.28319f);
-        //    Math::Function::Loop(psi, 0.f, 6.28319f);
-        //    ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
     }
-
-
 
     // 重力
     SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
@@ -826,8 +640,8 @@ void PlayerBehavior_Jump::Execute(void)
                 SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
             }
 
-        //    theta += 0.02f * inputVec.y;
-        //    phi += 0.02f * inputVec.x;
+            //    theta += 0.02f * inputVec.y;
+            //    phi += 0.02f * inputVec.x;
         }
         //Math::Function::Loop(theta, 0.f, 6.28319f);
         //Math::Function::Loop(phi, 0.f, 6.28319f);
