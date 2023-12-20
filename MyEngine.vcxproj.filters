@@ -212,7 +212,7 @@
     <ClCompile Include="Engine\Entity\Camera\ICamera.cpp">
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="DebugCamera.cpp">
+    <ClCompile Include="Engine\Entity\Camera\DebugCamera.cpp">
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Entity\Camera\SphericalCamera.cpp">
@@ -260,15 +260,15 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp">
       <Filter>Engine\Entity\Collision\CollisionPrimitive</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerUI.cpp" />
+    <ClCompile Include="Application\Entity\PlayerUI.cpp" />
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Event_StartTutorial.cpp" />
+    <ClCompile Include="Application\Event_StartTutorial.cpp" />
     <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp">
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="BackGroundTexture.cpp" />
+    <ClCompile Include="Engine\Entity\2d\BackGroundTexture.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition.cpp">
       <Filter>Engine\Scene\Transition</Filter>
     </ClCompile>
@@ -278,13 +278,13 @@
     <ClCompile Include="Engine\Scene\common\SceneTransitionManager.cpp">
       <Filter>Engine\Scene\Transition</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTransition_FadeIn.cpp" />
-    <ClCompile Include="SceneTransition_Middle.cpp" />
-    <ClCompile Include="SceneTransition_FadeOut.cpp" />
-    <ClCompile Include="Event_EndTutorial.cpp" />
-    <ClCompile Include="Event_TutorialPlanetHole.cpp" />
-    <ClCompile Include="BehindCamera.cpp" />
-    <ClCompile Include="PlayerCommonInfomation.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition_FadeIn.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
+    <ClCompile Include="Application\Event_EndTutorial.cpp" />
+    <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
+    <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -434,10 +434,10 @@
     <ClInclude Include="Application\LevelData.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="json.hpp">
+    <ClInclude Include="Engine\Other\json.hpp">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Engine\Other\Transform.h" />
     <ClInclude Include="Application\IIvent.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -481,7 +481,7 @@
     <ClInclude Include="Engine\Entity\Camera\ICamera.h">
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="DebugCamera.h">
+    <ClInclude Include="Engine\Entity\Camera\DebugCamera.h">
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Entity\Camera\SphericalCamera.h">
@@ -535,15 +535,15 @@
     <ClInclude Include="Engine\Entity\Collision\Primitive.h">
       <Filter>Engine\Entity\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerUI.h" />
+    <ClInclude Include="Application\Entity\PlayerUI.h" />
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Event_StartTutorial.h" />
+    <ClInclude Include="Application\Event_StartTutorial.h" />
     <ClInclude Include="Engine\Entity\Camera\NormalCamera.h">
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="BackGroundTexture.h" />
+    <ClInclude Include="Engine\Entity\2d\BackGroundTexture.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransitionManager.h">
       <Filter>Engine\Scene\Transition</Filter>
     </ClInclude>
@@ -553,13 +553,13 @@
     <ClInclude Include="Engine\Scene\common\SceneTransitionFactory.h">
       <Filter>Engine\Scene\Transition</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTransition_FadeIn.h" />
-    <ClInclude Include="SceneTransition_Middle.h" />
-    <ClInclude Include="SceneTransition_FadeOut.h" />
-    <ClInclude Include="Event_EndTutorial.h" />
-    <ClInclude Include="Event_TutorialPlanetHole.h" />
-    <ClInclude Include="BehindCamera.h" />
-    <ClInclude Include="PlayerCommonInfomation.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition_FadeIn.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition_Middle.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition_FadeOut.h" />
+    <ClInclude Include="Application\Event_EndTutorial.h" />
+    <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
+    <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
+    <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

@@ -95,8 +95,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp" />
-    <ClCompile Include="BackGroundTexture.cpp" />
-    <ClCompile Include="BehindCamera.cpp" />
+    <ClCompile Include="Engine\Entity\2d\BackGroundTexture.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
     <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\AABB.cpp" />
@@ -108,7 +108,7 @@
     <ClCompile Include="Application\Object\Rock.cpp" />
     <ClCompile Include="Application\Object\StickyBall.cpp" />
     <ClCompile Include="Application\UI.cpp" />
-    <ClCompile Include="DebugCamera.cpp" />
+    <ClCompile Include="Engine\Entity\Camera\DebugCamera.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
@@ -140,9 +140,9 @@
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\IPrimitive.cpp" />
-    <ClCompile Include="Event_EndTutorial.cpp" />
-    <ClCompile Include="Event_StartTutorial.cpp" />
-    <ClCompile Include="Event_TutorialPlanetHole.cpp" />
+    <ClCompile Include="Application\Event_EndTutorial.cpp" />
+    <ClCompile Include="Application\Event_StartTutorial.cpp" />
+    <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -179,11 +179,11 @@
     <ClCompile Include="Engine\Entity\Camera\Screen.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.cpp" />
-    <ClCompile Include="PlayerCommonInfomation.cpp" />
-    <ClCompile Include="PlayerUI.cpp" />
-    <ClCompile Include="SceneTransition_FadeIn.cpp" />
-    <ClCompile Include="SceneTransition_FadeOut.cpp" />
-    <ClCompile Include="SceneTransition_Middle.cpp" />
+    <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
+    <ClCompile Include="Application\Entity\PlayerUI.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition_FadeIn.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
+    <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\BloomPS.hlsl">
@@ -290,8 +290,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h" />
-    <ClInclude Include="BackGroundTexture.h" />
-    <ClInclude Include="BehindCamera.h" />
+    <ClInclude Include="Engine\Entity\2d\BackGroundTexture.h" />
+    <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
     <ClInclude Include="Engine\Entity\Camera\NormalCamera.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\AABB.h" />
@@ -303,7 +303,7 @@
     <ClInclude Include="Application\Object\Rock.h" />
     <ClInclude Include="Application\Object\StickyBall.h" />
     <ClInclude Include="Application\UI.h" />
-    <ClInclude Include="DebugCamera.h" />
+    <ClInclude Include="Engine\Entity\Camera\DebugCamera.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Entity\Camera\ICamera.h" />
@@ -327,15 +327,15 @@
     <ClInclude Include="Engine\Entity\Camera\Screen.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\Sphere.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.h" />
-    <ClInclude Include="Event_EndTutorial.h" />
-    <ClInclude Include="Event_StartTutorial.h" />
-    <ClInclude Include="Event_TutorialPlanetHole.h" />
-    <ClInclude Include="PlayerCommonInfomation.h" />
-    <ClInclude Include="PlayerUI.h" />
-    <ClInclude Include="SceneTransition_FadeIn.h" />
-    <ClInclude Include="SceneTransition_FadeOut.h" />
-    <ClInclude Include="SceneTransition_Middle.h" />
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Application\Event_EndTutorial.h" />
+    <ClInclude Include="Application\Event_StartTutorial.h" />
+    <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
+    <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
+    <ClInclude Include="Application\Entity\PlayerUI.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition_FadeIn.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition_FadeOut.h" />
+    <ClInclude Include="Engine\Scene\common\SceneTransition_Middle.h" />
+    <ClInclude Include="Engine\Other\Transform.h" />
     <ClInclude Include="Engine\Entity\3d\BillBoard.h" />
     <ClInclude Include="Engine\Entity\PostEffect\Bloom.h" />
     <ClInclude Include="Engine\Entity\Camera\CameraManager.h" />
@@ -352,7 +352,7 @@
     <ClInclude Include="Engine\Entity\PostEffect\GaussianBlur.h" />
     <ClInclude Include="Engine\Entity\PostEffect\HighLumi.h" />
     <ClInclude Include="Engine\Entity\Collision\ICollider.h" />
-    <ClInclude Include="json.hpp" />
+    <ClInclude Include="Engine\Other\json.hpp" />
     <ClInclude Include="Application\LevelData.h" />
     <ClInclude Include="Application\Object\Planet.h" />
     <ClInclude Include="Application\Entity\Player.h" />
