@@ -62,7 +62,9 @@ protected:
     // 重力処理を行う
     void Process_Gravity(void);
     // 座標更新処理を行う。
-    void Process_Transform(const Vector3& velocity);
+    void Process_Transform(const Vector3& arg_velocity);
+
+    void Process_CalculateModelAxes(const Vector2& arg_input);
 
     //>> 変数
     PlayerBehavior nextState_;

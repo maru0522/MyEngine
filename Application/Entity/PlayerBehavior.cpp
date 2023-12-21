@@ -83,6 +83,10 @@ void PlayerBehaviorMachine::NextStateCheck(void)
 
 void PlayerBehavior_Idle::Execute(void) // "IDLE"
 {
+    // 1フレーム前の3軸を記録
+    commonInfo_->axes_old_ = commonInfo_->axes_;
+
+    // ステート確認用
     debug_curState_ = PlayerBehavior::IDLE;
 
     // 重力
@@ -147,6 +151,10 @@ void PlayerBehavior_Idle::RequirementCheck(void)
 
 void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 {
+    // 1フレーム前の3軸を記録
+    commonInfo_->axes_old_ = commonInfo_->axes_;
+
+    // ステート確認用
     debug_curState_ = PlayerBehavior::STOOP;
 
     // 重力
@@ -155,6 +163,18 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
     // 移動量 = 上方向 * ジャンプ量
     const Vector3 velocity = commonInfo_->axes_.up * commonInfo_->jumpVecNorm_; // stoop状態は重力以外の移動量は発生しない想定（ただその場でしゃがんでるだけだから）
     Process_Transform(velocity);
+
+    // カメラのptrをカメラマネージャーから取得
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    // カメラIDの接頭辞が、"BehindCamera_"以外なら、スキップ
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+
+    // カメラのptrを基底クラスのptr[ICamera]から、[BehindCamera]にキャスト
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    // カメラの姿勢を、プレイヤーの姿勢を利用して設定。
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    // カメラの中心点を、プレイヤーの座標として入力。
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
 #ifdef _DEBUG
     GUI::Begin("player");
@@ -214,37 +234,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // 入力ベクトルの取得。
     Vector2 vec2_input = Process_GetInput();
 
+
     // モデル用のaxes計算
-    {
-        // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
-        // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
-        const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, vec2_input));
-        float radian_rotate{};
-        radian_rotate = radian_rotate2;
-        if (vec2_input.x < 0)
-        {
-            radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
-        }
-
-        // プレイヤーの3つの軸をコピー
-        const Axis3& pAxes = commonInfo_->axes_;
-        // プレイヤーの上ベクトルを軸として、rot_total分だけ、回転させるクオータニオンを生成
-        Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, radian_rotate);
-        // クオータニオンを使って、正面ベクトルと右ベクトルを
-        const Vector3 vec_rotatedForward = Math::QuaternionF::RotateVector(pAxes.forward, rot_quaternion);
-        const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(pAxes.right, rot_quaternion);
-
-        const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
-        commonInfo_->axes_4model_ = modelAxes;
-
-#ifdef _DEBUG
-        GUI::Begin("Debug_Move");
-        GUI::Text("inputVec : %f,%f", inputVec.x, inputVec.y);
-        GUI::Text("radian : %f", radian_rotate);
-        GUI::End();
-#endif // DEBUG
-    }
-
+    Process_CalculateModelAxes(vec2_input);
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -324,114 +316,47 @@ void PlayerBehavior_Move::RequirementCheck(void)
 
 void PlayerBehavior_MoveStoop::Execute(void)
 {
+    // 1フレーム前の3軸を記録
+    commonInfo_->axes_old_ = commonInfo_->axes_;
+
+    // ステート確認用
     debug_curState_ = PlayerBehavior::MOVE_STOOP;
 
-    // 蜈･蜉帙・繧ｯ繝医Ν
-    Vector3 inputVec{};
-    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
-    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
-    inputVec = inputVec.Normalize();
+    // 入力ベクトルの取得。
+    Vector2 vec2_input = Process_GetInput();
 
-    // 繧ｫ繝｡繝ｩ隕也せ縺ｮ繝励Ξ繧､繝､繝ｼ遘ｻ蜍輔・繧ｯ繝医Ν
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 豁｣髱｢Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 蜿ｳVec: cross(p.upVec, pForwardFromCamera)
+    // モデル用のaxes計算
+    Process_CalculateModelAxes(vec2_input);
 
-    // 遘ｻ蜍輔・繧ｯ繝医Ν = 蜑榊ｾ計ec + 豌ｴ蟷ｳvec
-    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+    // カメラ視点のプレイヤー移動ベクトル
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 定義した値等を現在の姿勢として記録
+    commonInfo_->axes_.forward = pForwardFromCamera;
+    commonInfo_->axes_.right = redefinitionPRightFromCamera;
+    commonInfo_->axes_.up = commonInfo_->axes_.up;
 
-    //    // カメラ座標用の値を補正
-    //    {
-    //        if (commonInfo_->jumpVecNorm_)
-    //        {
-    //            // カメラとプレイヤーの距離
-    //            float dist = (commonInfo_->camMPtr_->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - commonInfo_->transform_.position).Length();
-    //
-    //            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-    //            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-    //            commonInfo_->current_rad_ = dist;
-    //        }
-    //
-    //
-    //        ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-    //        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-    //        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-    //        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
-    //        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-    //
-    //        float theta = ptr_cam_spherical->theta_;
-    //        float phi = ptr_cam_spherical->phi_;
-    //        float psi = ptr_cam_spherical->psi_;
-    //
-    //        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-    //        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-    //        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
-    //        {
-    //
-    //            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
-    //            {
-    //                theta += 0.005f * inputVec.x;
-    //                phi += 0.015f * inputVec.x;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-    //            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-    //            {
-    //                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-    //                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-    //            }
-    //            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-    //            {
-    //                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-    //            }
-    //
-    //            theta += 0.02f * inputVec.y;
-    //            phi += 0.02f * inputVec.x;
-    //        }
-    //
-    //        Math::Function::Loop(theta, 0.f, 6.28319f);
-    //        Math::Function::Loop(phi, 0.f, 6.28319f);
-    //        Math::Function::Loop(psi, 0.f, 6.28319f);
-    //        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
-    //    }
-    //
-    //    // 驥榊鴨
-    //    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
-    //
-    //    // 遘ｻ蜍暮㍼ = 遘ｻ蜍夫ec * 遘ｻ蜍暮溷ｺｦ + 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
-    //    Vector3 velocity = (moveVec.Normalize() * (GetPlayerMoveSpeed() / 2)) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
-    //
-    //    // 蠎ｧ讓呎峩譁ｰ
-    //    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
-    //    SetPlayerVelocity(velocity);
-    //    SetPlayerMoveVec(moveVec);
-    //
-    //    // 蟋ｿ蜍｢蛻ｶ蠕｡
-    //    {
-    //        // 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
-    //        const Axis3& playerAxes = GetPlayerAxes();
-    //
-    //        // 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
-    //        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
-    //        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
-    //        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-    //        // 遘ｻ蜍募・蜉帙′縺ゅ▲縺溷ｴ蜷・
-    //        if (moveVec.IsNonZero())
-    //        {
-    //            // 遘ｻ蜍墓婿蜷代ｒ蜷代￥繧医≧縺ｪ縲∫ｧｻ蜍墓婿蜷代↓蜷医ｏ縺帙◆蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ蜿ｳ蜷代″繝吶け繝医Ν繧貞・險育ｮ・
-    //            Vector3 upFromAxis = playerAxes.up; // 荳翫・繧ｯ繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν繧貞叙蠕暦ｼ・
-    //            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 遘ｻ蜍輔・繧ｯ繝医Ν・育ｧｻ蜍墓婿蜷・竕・豁｣髱｢繝吶け繝医Ν))
-    //            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
-    //        }
-    //    }
-    //
-    //#ifdef _DEBUG
-    //    GUI::Begin("player");
-    //    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-    //    GUI::End();
-    //#endif // _DEBUG
+    // 重力 ※ジャンプ量に加算してる
+    Process_Gravity();
+    // 移動vec = (前後vec * 入力vec.y) + (水平vec * 入力vec.y)
+    Vector3 moveVec = (commonInfo_->axes_.forward * vec2_input.y) + (commonInfo_->axes_.right * vec2_input.x);
+    // 移動速度除算値
+    const float divedeSpeed = 3.f;
+    // 移動量 = 移動vec * (移動速度 / 規定割合) + 上方向 * ジャンプ量
+    Vector3 velocity = (moveVec.Normalize() * (commonInfo_->kMoveSpeed_ / divedeSpeed)) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
+    // 座標更新
+    Process_Transform(velocity);
+
+    // カメラ座標用の値を補正
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
+
+
+    // 1フレーム前の入力ベクトルを記録
+    commonInfo_->vec2_input_old_ = vec2_input;
 }
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)
@@ -504,37 +429,9 @@ void PlayerBehavior_Jump::Execute(void)
     // 入力ベクトルの取得。
     Vector2 vec2_input = Process_GetInput();
 
+
     // モデル用のaxes計算
-    {
-        // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
-        // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
-        const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, vec2_input));
-        float radian_rotate{};
-        radian_rotate = radian_rotate2;
-        if (vec2_input.x < 0)
-        {
-            radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
-        }
-
-        // プレイヤーの3つの軸をコピー
-        const Axis3& pAxes = commonInfo_->axes_;
-        // プレイヤーの上ベクトルを軸として、rot_total分だけ、回転させるクオータニオンを生成
-        Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, radian_rotate);
-        // クオータニオンを使って、正面ベクトルと右ベクトルを
-        const Vector3 vec_rotatedForward = Math::QuaternionF::RotateVector(pAxes.forward, rot_quaternion);
-        const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(pAxes.right, rot_quaternion);
-
-        const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
-        commonInfo_->axes_4model_ = modelAxes;
-
-#ifdef _DEBUG
-        GUI::Begin("Debug_Move");
-        GUI::Text("inputVec : %f,%f", inputVec.x, inputVec.y);
-        GUI::Text("radian : %f", radian_rotate);
-        GUI::End();
-#endif // DEBUG
-    }
-
+    Process_CalculateModelAxes(vec2_input);
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -799,13 +696,37 @@ void IPlayerBehavior::Process_Gravity(void)
     commonInfo_->jumpVecNorm_ = jumpVecNorm;
 }
 
-void IPlayerBehavior::Process_Transform(const Vector3& velocity)
+void IPlayerBehavior::Process_Transform(const Vector3& arg_velocity)
 {
     // どれだけ移動したのかを記録
-    commonInfo_->velocity_ = velocity;
+    commonInfo_->velocity_ = arg_velocity;
 
     // 新規座標
-    const Vector3 position = commonInfo_->transform_.position + velocity;
+    const Vector3 position = commonInfo_->transform_.position + arg_velocity;
     // 座標を更新
     commonInfo_->transform_.position = position;
+}
+
+void IPlayerBehavior::Process_CalculateModelAxes(const Vector2& arg_input)
+{
+    // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
+    // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
+    const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, arg_input));
+    float radian_rotate{};
+    radian_rotate = radian_rotate2;
+    if (arg_input.x < 0)
+    {
+        radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
+    }
+
+    // プレイヤーの3つの軸をコピー
+    const Axis3& pAxes = commonInfo_->axes_;
+    // プレイヤーの上ベクトルを軸として、rot_total分だけ、回転させるクオータニオンを生成
+    Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, radian_rotate);
+    // クオータニオンを使って、正面ベクトルと右ベクトルを
+    const Vector3 vec_rotatedForward = Math::QuaternionF::RotateVector(pAxes.forward, rot_quaternion);
+    const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(pAxes.right, rot_quaternion);
+
+    const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
+    commonInfo_->axes_4model_ = modelAxes;
 }
