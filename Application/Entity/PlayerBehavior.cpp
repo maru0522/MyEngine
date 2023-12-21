@@ -92,56 +92,17 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
     const Vector3 velocity = commonInfo_->axes_.up * commonInfo_->jumpVecNorm_; // Idle状態は重力以外の移動量は発生しない想定
     Process_Transform(velocity);
 
-    // 姿勢制御
-    {
-        //// 各軸全て、初期値（姿勢が初期状態）かどうか。
-        //const bool is_default = !commonInfo_->axes_old_.forward.IsNonZero() && !commonInfo_->axes_old_.right.IsNonZero() && !commonInfo_->axes_old_.up.IsNonZero();
-        //// 初期状態ならスキップ
-        //if (is_default) { return; }
+    // カメラのptrをカメラマネージャーから取得
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    // カメラIDの接頭辞が、"BehindCamera_"以外なら、スキップ
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
 
-
-        //const float deg = 15.f;
-        //const float rad = Math::Function::ToRadian(deg);
-        //// "deg"度分の内積値
-        //const float dot_deg = std::cosf(rad);
-        //// 1F前の上ベクトルと新規上ベクトルの内積値
-        //const float dot_up = Math::Vec3::Dot(commonInfo_->axes_old_.up, commonInfo_->vec3_newUp_);
-        //// 内積値が、"dot_deg"の値より大きいかどうか
-        //const bool is_bigger = dot_up > dot_deg;
-        //// 小さいならスキップ
-        //if (is_bigger == false) { return; }
-
-        //// 姿勢を再計算
-        //Axis3 axes{};
-        //// 新規上ベクトル x 現在の正面ベクトル = 新規右ベクトル ※新規上ベクトルは、Player.cppのOnCollision内で毎フレーム定義されている
-        //Vector3 newRight = Math::Vec3::Cross(commonInfo_->vec3_newUp_, commonInfo_->axes_.forward).Normalize();
-        //axes.right = newRight;
-        //// 新規右ベクトル x 新規上ベクトル = 新規正面ベクトル
-        //Vector3 newForward = Math::Vec3::Cross(newRight, commonInfo_->vec3_newUp_).Normalize();
-        //axes.forward = newForward;
-        //// 新規姿勢の上ベクトルを代入
-        //axes.up = commonInfo_->vec3_newUp_;
-
-        //// 1F前として記録
-        //commonInfo_->axes_old_ = commonInfo_->axes_;
-        //// 現在の姿勢として設定。
-        //commonInfo_->axes_ = axes;
-    }
-
-    // カメラ座標用の値を補正
-    {
-        // カメラのptrをカメラマネージャーから取得
-        ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-        // カメラIDの接頭辞が、"BehindCamera_"以外なら、スキップ
-        if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
-
-        // カメラのptrを基底クラスのptr[ICamera]から、[BehindCamera]にキャスト
-        BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
-        // カメラの姿勢を、プレイヤーの姿勢を利用して設定。
-        ptr_cam_behind->axes_player_ = commonInfo_->axes_;
-        // カメラの中心点を、プレイヤーの座標として入力。
-        ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
-    }
+    // カメラのptrを基底クラスのptr[ICamera]から、[BehindCamera]にキャスト
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    // カメラの姿勢を、プレイヤーの姿勢を利用して設定。
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    // カメラの中心点を、プレイヤーの座標として入力。
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 }
 
 void PlayerBehavior_Idle::RequirementCheck(void)
