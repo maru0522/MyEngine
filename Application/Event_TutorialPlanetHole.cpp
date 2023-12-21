@@ -148,6 +148,9 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
     pos_approachCamEnd_ = {};
     pos_playerStart_ = {};
     pos_playerEnd_ = {};
+    // 通過点初期化
+    points_playerSplineHole_.clear();
+
 
     // イベントを起動
     is_execute_ = true;

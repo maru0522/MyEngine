@@ -38,13 +38,10 @@ struct Player_CommonInfomation
     Axis3 axes_4model_;
 
     // 入力
-    Vector2 vec2_direction_{ 0,1 };
-
-    // 進行方向
-    Vector3 moveVec_;
+    Vector2 vec2_input_old_{ 0,1 };
     // 移動量
     Vector3 velocity_; // めり込んだ時に押し戻せるように
-
+    // 
     float jumpVecNorm_{};
     bool isLanding_{};
 

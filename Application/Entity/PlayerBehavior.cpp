@@ -244,24 +244,23 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
 
 void PlayerBehavior_Move::Execute(void) // "MOVE"
 {
+    // 1フレーム前の3軸を記録
+    commonInfo_->axes_old_ = commonInfo_->axes_;
+
+    // ステート確認用
     debug_curState_ = PlayerBehavior::MOVE;
 
-    // 入力ベクトル
-    Vector2 inputVec{};
-    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
-    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-    inputVec += XPAD::GetLStick();
-    inputVec = inputVec.Normalize();
+    // 入力ベクトルの取得。
+    Vector2 vec2_input = Process_GetInput();
 
-    // ## test2
-    // 角度算出
+    // モデル用のaxes計算
     {
         // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
         // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
-        const float radian_rotate2 = std::acosf(Math::Vec2::Dot({0,1}, inputVec));
+        const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, vec2_input));
         float radian_rotate{};
         radian_rotate = radian_rotate2;
-        if (inputVec.x < 0)
+        if (vec2_input.x < 0)
         {
             radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
         }
@@ -283,62 +282,38 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
         GUI::Text("radian : %f", radian_rotate);
         GUI::End();
 #endif // DEBUG
-    commonInfo_->vec2_direction_ = inputVec;
     }
 
-    //// 前のフレームの軸を記録
-    moveAxes_old_ = moveAxes_current_;
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 定義した値等を現在の姿勢として記録
+    commonInfo_->axes_.forward = pForwardFromCamera;
+    commonInfo_->axes_.right = redefinitionPRightFromCamera;
+    commonInfo_->axes_.up = commonInfo_->axes_.up;
 
-    moveAxes_current_.forward = pForwardFromCamera;
-    moveAxes_current_.right = redefinitionPRightFromCamera;
-    moveAxes_current_.up = commonInfo_->axes_.up;
 
-    // 移動ベクトル = 前後vec + 水平vec
-    Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
-
-    // カメラ座標用の値を補正
-    {
-        ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
-        BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
-        ptr_cam_behind->axes_player_ = commonInfo_->axes_;
-        ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
-    }
-
-    // 重力
+    // 重力 ※ジャンプ量に加算してる
     Process_Gravity();
-
+    // 移動vec = (前後vec * 入力vec.y) + (水平vec * 入力vec.y)
+    Vector3 moveVec = (commonInfo_->axes_.forward * vec2_input.y) + (commonInfo_->axes_.right * vec2_input.x);
     // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
     Vector3 velocity = (moveVec.Normalize() * commonInfo_->kMoveSpeed_) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
-
     // 座標更新
     Process_Transform(velocity);
 
-    // 姿勢制御
-    {
-        // 現在のプレイヤーの各軸情報
-        const Axis3& playerAxes = commonInfo_->axes_;
 
-        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    // カメラ座標用の値を補正
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
-        commonInfo_->axes_ = { forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up };
 
-        // 移動入力があった場合
-        if (moveVec.IsNonZero())
-        {
-            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-            //Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-            //Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-            //SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
-        }
-    }
-
+    // 1フレーム前の入力ベクトルを記録
+    commonInfo_->vec2_input_old_ = vec2_input;
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
@@ -404,98 +379,98 @@ void PlayerBehavior_MoveStoop::Execute(void)
     // 遘ｻ蜍輔・繧ｯ繝医Ν = 蜑榊ｾ計ec + 豌ｴ蟷ｳvec
     Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
 
-//    // カメラ座標用の値を補正
-//    {
-//        if (commonInfo_->jumpVecNorm_)
-//        {
-//            // カメラとプレイヤーの距離
-//            float dist = (commonInfo_->camMPtr_->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - commonInfo_->transform_.position).Length();
-//
-//            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-//            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-//            commonInfo_->current_rad_ = dist;
-//        }
-//
-//
-//        ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-//        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-//        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-//        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
-//        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-//
-//        float theta = ptr_cam_spherical->theta_;
-//        float phi = ptr_cam_spherical->phi_;
-//        float psi = ptr_cam_spherical->psi_;
-//
-//        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-//        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-//        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
-//        {
-//
-//            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
-//            {
-//                theta += 0.005f * inputVec.x;
-//                phi += 0.015f * inputVec.x;
-//            }
-//        }
-//        else
-//        {
-//            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-//            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-//            {
-//                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-//                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-//            }
-//            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-//            {
-//                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-//            }
-//
-//            theta += 0.02f * inputVec.y;
-//            phi += 0.02f * inputVec.x;
-//        }
-//
-//        Math::Function::Loop(theta, 0.f, 6.28319f);
-//        Math::Function::Loop(phi, 0.f, 6.28319f);
-//        Math::Function::Loop(psi, 0.f, 6.28319f);
-//        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
-//    }
-//
-//    // 驥榊鴨
-//    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
-//
-//    // 遘ｻ蜍暮㍼ = 遘ｻ蜍夫ec * 遘ｻ蜍暮溷ｺｦ + 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
-//    Vector3 velocity = (moveVec.Normalize() * (GetPlayerMoveSpeed() / 2)) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
-//
-//    // 蠎ｧ讓呎峩譁ｰ
-//    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
-//    SetPlayerVelocity(velocity);
-//    SetPlayerMoveVec(moveVec);
-//
-//    // 蟋ｿ蜍｢蛻ｶ蠕｡
-//    {
-//        // 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
-//        const Axis3& playerAxes = GetPlayerAxes();
-//
-//        // 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
-//        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
-//        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
-//        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-//        // 遘ｻ蜍募・蜉帙′縺ゅ▲縺溷ｴ蜷・
-//        if (moveVec.IsNonZero())
-//        {
-//            // 遘ｻ蜍墓婿蜷代ｒ蜷代￥繧医≧縺ｪ縲∫ｧｻ蜍墓婿蜷代↓蜷医ｏ縺帙◆蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ蜿ｳ蜷代″繝吶け繝医Ν繧貞・險育ｮ・
-//            Vector3 upFromAxis = playerAxes.up; // 荳翫・繧ｯ繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν繧貞叙蠕暦ｼ・
-//            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 遘ｻ蜍輔・繧ｯ繝医Ν・育ｧｻ蜍墓婿蜷・竕・豁｣髱｢繝吶け繝医Ν))
-//            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
-//        }
-//    }
-//
-//#ifdef _DEBUG
-//    GUI::Begin("player");
-//    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-//    GUI::End();
-//#endif // _DEBUG
+    //    // カメラ座標用の値を補正
+    //    {
+    //        if (commonInfo_->jumpVecNorm_)
+    //        {
+    //            // カメラとプレイヤーの距離
+    //            float dist = (commonInfo_->camMPtr_->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - commonInfo_->transform_.position).Length();
+    //
+    //            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
+    //            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+    //            commonInfo_->current_rad_ = dist;
+    //        }
+    //
+    //
+    //        ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    //        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
+    //        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+    //        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
+    //        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+    //
+    //        float theta = ptr_cam_spherical->theta_;
+    //        float phi = ptr_cam_spherical->phi_;
+    //        float psi = ptr_cam_spherical->psi_;
+    //
+    //        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
+    //        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+    //        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
+    //        {
+    //
+    //            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
+    //            {
+    //                theta += 0.005f * inputVec.x;
+    //                phi += 0.015f * inputVec.x;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+    //            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+    //            {
+    //                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
+    //                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+    //            }
+    //            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+    //            {
+    //                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+    //            }
+    //
+    //            theta += 0.02f * inputVec.y;
+    //            phi += 0.02f * inputVec.x;
+    //        }
+    //
+    //        Math::Function::Loop(theta, 0.f, 6.28319f);
+    //        Math::Function::Loop(phi, 0.f, 6.28319f);
+    //        Math::Function::Loop(psi, 0.f, 6.28319f);
+    //        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+    //    }
+    //
+    //    // 驥榊鴨
+    //    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
+    //
+    //    // 遘ｻ蜍暮㍼ = 遘ｻ蜍夫ec * 遘ｻ蜍暮溷ｺｦ + 荳頑婿蜷・* 繧ｸ繝｣繝ｳ繝鈴㍼
+    //    Vector3 velocity = (moveVec.Normalize() * (GetPlayerMoveSpeed() / 2)) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
+    //
+    //    // 蠎ｧ讓呎峩譁ｰ
+    //    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
+    //    SetPlayerVelocity(velocity);
+    //    SetPlayerMoveVec(moveVec);
+    //
+    //    // 蟋ｿ蜍｢蛻ｶ蠕｡
+    //    {
+    //        // 迴ｾ蝨ｨ縺ｮ繝励Ξ繧､繝､繝ｼ縺ｮ蜷・ｻｸ諠・ｱ
+    //        const Axis3& playerAxes = GetPlayerAxes();
+    //
+    //        // 逅・擇縺ｮ縺ｩ縺ｮ菴咲ｽｮ縺ｫ縺・ｋ縺九↓蠢懊§縺ｦ縲∵ｭ｣縺励＞蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ3霆ｸ繧貞・險育ｮ・
+    //        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 蜿､縺・ｭ｣髱｢繝吶け繝医Ν)
+    //        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 豁｣髱｢繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺溷承繝吶け繝医Ν x 譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν)
+    //        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
+    //        // 遘ｻ蜍募・蜉帙′縺ゅ▲縺溷ｴ蜷・
+    //        if (moveVec.IsNonZero())
+    //        {
+    //            // 遘ｻ蜍墓婿蜷代ｒ蜷代￥繧医≧縺ｪ縲∫ｧｻ蜍墓婿蜷代↓蜷医ｏ縺帙◆蟋ｿ蜍｢縺ｫ縺吶ｋ縺溘ａ縺ｫ蜿ｳ蜷代″繝吶け繝医Ν繧貞・險育ｮ・
+    //            Vector3 upFromAxis = playerAxes.up; // 荳翫・繧ｯ繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν繧貞叙蠕暦ｼ・
+    //            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 蜿ｳ繝吶け繝医Ν・・譖ｴ譁ｰ縺輔ｌ縺滉ｸ翫・繧ｯ繝医Ν x 遘ｻ蜍輔・繧ｯ繝医Ν・育ｧｻ蜍墓婿蜷・竕・豁｣髱｢繝吶け繝医Ν))
+    //            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
+    //        }
+    //    }
+    //
+    //#ifdef _DEBUG
+    //    GUI::Begin("player");
+    //    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    //    GUI::End();
+    //#endif // _DEBUG
 }
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)
@@ -572,12 +547,12 @@ void PlayerBehavior_Jump::Execute(void)
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
 
-    moveAxes_current_.forward = pForwardFromCamera;
-    moveAxes_current_.right = redefinitionPRightFromCamera;
-    moveAxes_current_.up = commonInfo_->axes_.up;
+    commonInfo_->axes_.forward = pForwardFromCamera;
+    commonInfo_->axes_.right = redefinitionPRightFromCamera;
+    commonInfo_->axes_.up = commonInfo_->axes_.up;
 
     // 移動ベクトル = 前後vec + 水平vec
-    Vector3 moveVec = (moveAxes_current_.forward * inputVec.y) + (moveAxes_current_.right * inputVec.x);
+    Vector3 moveVec = (commonInfo_->axes_.forward * inputVec.y) + (commonInfo_->axes_.right * inputVec.x);
 
     // カメラ座標用の値を補正
     {
@@ -664,121 +639,121 @@ void PlayerBehavior_JumpLong::Entry(void)
 
 void PlayerBehavior_JumpLong::Execute(void)
 {
-//    debug_curState_ = PlayerBehavior::JUMP_LONG;
-//
-//    // 入力ベクトル
-//    Vector3 inputVec{};
-//    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
-//    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-//    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
-//    inputVec = inputVec.Normalize();
-//
-//    // カメラ視点のプレイヤー移動ベクトル
-//    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-//    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
-//
-//    // 移動ベクトル = 前後vec + 水平vec
-//    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
-//
-//    // カメラ座標用の値を補正
-//    {
-//        if (GetPlayerJumpVecNorm())
-//        {
-//            // カメラとプレイヤーの距離
-//            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
-//
-//            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-//            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-//            SetPlayerCurrentRad(dist);
-//        }
-//
-//
-//        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-//        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-//        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-//        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
-//        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-//
-//        float theta = ptr_cam_spherical->theta_;
-//        float phi = ptr_cam_spherical->phi_;
-//        float psi = ptr_cam_spherical->psi_;
-//
-//        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-//        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-//        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
-//        {
-//
-//            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
-//            {
-//
-//                theta += 0.005f * inputVec.x;
-//                phi += 0.015f * inputVec.x;
-//            }
-//        }
-//        else
-//        {
-//            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-//            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-//            {
-//                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-//                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-//            }
-//            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-//            {
-//                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-//            }
-//
-//            theta += 0.02f * inputVec.y;
-//            phi += 0.02f * inputVec.x;
-//        }
-//        Math::Function::Loop(theta, 0.f, 6.28319f);
-//        Math::Function::Loop(phi, 0.f, 6.28319f);
-//        Math::Function::Loop(psi, 0.f, 6.28319f);
-//        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
-//    }
-//
-//    // 重力
-//    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
-//
-//    //// 移動量 = 移動vec * (移動速度 / 規定割合) + 上方向 * ジャンプ量
-//    //Vector3 velocity = ((habatobiVec.Normalize() * (GetPlayerMoveSpeed() + 5)) - (inputMoveVec.Normalize() * GetPlayerMoveSpeed())) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
-//
-//    // 移動量 = 移動vec * (移動速度 + 5) + 上方向 * ジャンプ量
-//    Vector3 velocity = (moveVec.Normalize() * GetPlayerMoveJumpLongSpeed()) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
-//
-//
-//    // 座標更新
-//    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
-//    SetPlayerVelocity(velocity);
-//    SetPlayerMoveVec(moveVec);
-//
-//    // 姿勢制御
-//    {
-//        // 現在のプレイヤーの各軸情報
-//        const Axis3& playerAxes = GetPlayerAxes();
-//
-//        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-//        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-//        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-//        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-//        // 移動入力があった場合
-//        if (moveVec.IsNonZero())
-//        {
-//            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-//            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-//            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-//            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
-//        }
-//    }
-//
-//    RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
-//    radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
-//
-//#ifdef _DEBUG
-//    GUI::Begin("player");
-//    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-//    GUI::End();
-//#endif // _DEBUG
+    //    debug_curState_ = PlayerBehavior::JUMP_LONG;
+    //
+    //    // 入力ベクトル
+    //    Vector3 inputVec{};
+    //    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
+    //    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    //    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
+    //    inputVec = inputVec.Normalize();
+    //
+    //    // カメラ視点のプレイヤー移動ベクトル
+    //    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    //    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    //
+    //    // 移動ベクトル = 前後vec + 水平vec
+    //    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
+    //
+    //    // カメラ座標用の値を補正
+    //    {
+    //        if (GetPlayerJumpVecNorm())
+    //        {
+    //            // カメラとプレイヤーの距離
+    //            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
+    //
+    //            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
+    //            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
+    //            SetPlayerCurrentRad(dist);
+    //        }
+    //
+    //
+    //        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
+    //        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
+    //        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
+    //        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
+    //        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
+    //
+    //        float theta = ptr_cam_spherical->theta_;
+    //        float phi = ptr_cam_spherical->phi_;
+    //        float psi = ptr_cam_spherical->psi_;
+    //
+    //        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
+    //        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
+    //        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
+    //        {
+    //
+    //            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
+    //            {
+    //
+    //                theta += 0.005f * inputVec.x;
+    //                phi += 0.015f * inputVec.x;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
+    //            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
+    //            {
+    //                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
+    //                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
+    //            }
+    //            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
+    //            {
+    //                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
+    //            }
+    //
+    //            theta += 0.02f * inputVec.y;
+    //            phi += 0.02f * inputVec.x;
+    //        }
+    //        Math::Function::Loop(theta, 0.f, 6.28319f);
+    //        Math::Function::Loop(phi, 0.f, 6.28319f);
+    //        Math::Function::Loop(psi, 0.f, 6.28319f);
+    //        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
+    //    }
+    //
+    //    // 重力
+    //    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
+    //
+    //    //// 移動量 = 移動vec * (移動速度 / 規定割合) + 上方向 * ジャンプ量
+    //    //Vector3 velocity = ((habatobiVec.Normalize() * (GetPlayerMoveSpeed() + 5)) - (inputMoveVec.Normalize() * GetPlayerMoveSpeed())) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
+    //
+    //    // 移動量 = 移動vec * (移動速度 + 5) + 上方向 * ジャンプ量
+    //    Vector3 velocity = (moveVec.Normalize() * GetPlayerMoveJumpLongSpeed()) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
+    //
+    //
+    //    // 座標更新
+    //    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
+    //    SetPlayerVelocity(velocity);
+    //    SetPlayerMoveVec(moveVec);
+    //
+    //    // 姿勢制御
+    //    {
+    //        // 現在のプレイヤーの各軸情報
+    //        const Axis3& playerAxes = GetPlayerAxes();
+    //
+    //        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
+    //        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
+    //        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    //        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
+    //        // 移動入力があった場合
+    //        if (moveVec.IsNonZero())
+    //        {
+    //            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
+    //            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
+    //            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
+    //            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
+    //        }
+    //    }
+    //
+    //    RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
+    //    radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
+    //
+    //#ifdef _DEBUG
+    //    GUI::Begin("player");
+    //    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
+    //    GUI::End();
+    //#endif // _DEBUG
 }
 
 void PlayerBehavior_JumpLong::RequirementCheck(void)
@@ -823,6 +798,18 @@ void IPlayerBehavior::CopySharedCommonInfo(const std::shared_ptr<Player_CommonIn
     commonInfo_ = arg_shared;
 }
 
+const Vector2 IPlayerBehavior::Process_GetInput(void)
+{
+    // 入力ベクトル
+    Vector2 inputVec{};
+    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
+    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
+    inputVec += XPAD::GetLStick();
+    inputVec = inputVec.Normalize();
+
+    return inputVec;
+}
+
 void IPlayerBehavior::Process_Gravity(void)
 {
     // 重力
@@ -833,7 +820,7 @@ void IPlayerBehavior::Process_Gravity(void)
 void IPlayerBehavior::Process_Transform(const Vector3& velocity)
 {
     // どれだけ移動したのかを記録
-    commonInfo_->moveVec_ = velocity;
+    commonInfo_->velocity_ = velocity;
 
     // 新規座標
     const Vector3 position = commonInfo_->transform_.position + velocity;

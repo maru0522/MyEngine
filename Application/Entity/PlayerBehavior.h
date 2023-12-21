@@ -57,7 +57,11 @@ public:
 
 
 protected:
+    // 正規化済みの入力ベクトル（2次元）を返す
+    const Vector2 Process_GetInput(void);
+    // 重力処理を行う
     void Process_Gravity(void);
+    // 座標更新処理を行う。
     void Process_Transform(const Vector3& velocity);
 
     //>> 変数
@@ -65,10 +69,6 @@ protected:
     PlayerBehavior debug_curState_;
     bool is_resetCameraPos_;
 
-    //  1フレーム前の進行方向を表す各軸
-    Axis3 moveAxes_old_;
-    // 現在フレームの進行方向を表す各軸
-    Axis3 moveAxes_current_;
     std::shared_ptr<Player_CommonInfomation> commonInfo_;
 
 private:
@@ -151,7 +151,7 @@ class PlayerBehavior_Jump final : public IPlayerBehavior
 {
 private:
     //>> 定義
-    const float kMove_divide_{ 2.f }; // 空中で移動速度を元の何分の1にするか
+    const float kMove_divide_{ 1.5f }; // 空中で移動速度を元の何分の1にするか
 
 public:
     //>> 関数

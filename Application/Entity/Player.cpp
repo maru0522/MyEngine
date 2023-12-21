@@ -28,8 +28,6 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
     commonInfo_->axes_.right = { 1,0,0 };
     commonInfo_->axes_.up = { 0,1,0 };
 
-    commonInfo_->moveVec_ = { 0,1,0 };
-
     playerUI_.SetUIPtr(UI::GetInstance());
     playerUI_.SetRabbitCountPtr(&captureCount_rabbit);
     playerUI_.Initialize();
@@ -299,7 +297,7 @@ void Player::OnCollision(void)
         Vector3 currentPos = commonInfo_->transform_.position;
 
         // 移動した分だけ押し戻すようにする。
-        currentPos -= commonInfo_->moveVec_;
+        currentPos -= commonInfo_->velocity_;
 
         // 座標を補正
         commonInfo_->transform_.position = currentPos;
