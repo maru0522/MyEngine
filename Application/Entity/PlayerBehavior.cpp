@@ -534,58 +534,79 @@ void PlayerBehavior_Jump::Entry(void) // JUMP
 
 void PlayerBehavior_Jump::Execute(void)
 {
+    // 1フレーム前の3軸を記録
+    commonInfo_->axes_old_ = commonInfo_->axes_;
+
+    // ステート確認用
     debug_curState_ = PlayerBehavior::JUMP;
 
-    // 入力ベクトル
-    Vector3 inputVec{};
-    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
-    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
-    inputVec = inputVec.Normalize();
+    // 入力ベクトルの取得。
+    Vector2 vec2_input = Process_GetInput();
+
+    // モデル用のaxes計算
+    {
+        // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
+        // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
+        const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, vec2_input));
+        float radian_rotate{};
+        radian_rotate = radian_rotate2;
+        if (vec2_input.x < 0)
+        {
+            radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
+        }
+
+        // プレイヤーの3つの軸をコピー
+        const Axis3& pAxes = commonInfo_->axes_;
+        // プレイヤーの上ベクトルを軸として、rot_total分だけ、回転させるクオータニオンを生成
+        Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, radian_rotate);
+        // クオータニオンを使って、正面ベクトルと右ベクトルを
+        const Vector3 vec_rotatedForward = Math::QuaternionF::RotateVector(pAxes.forward, rot_quaternion);
+        const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(pAxes.right, rot_quaternion);
+
+        const Axis3 modelAxes{ vec_rotatedForward,vec_rotatedRight,pAxes.up };
+        commonInfo_->axes_4model_ = modelAxes;
+
+#ifdef _DEBUG
+        GUI::Begin("Debug_Move");
+        GUI::Text("inputVec : %f,%f", inputVec.x, inputVec.y);
+        GUI::Text("radian : %f", radian_rotate);
+        GUI::End();
+#endif // DEBUG
+    }
+
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
-
+    // 定義した値等を現在の姿勢として記録
     commonInfo_->axes_.forward = pForwardFromCamera;
     commonInfo_->axes_.right = redefinitionPRightFromCamera;
     commonInfo_->axes_.up = commonInfo_->axes_.up;
 
-    // 移動ベクトル = 前後vec + 水平vec
-    Vector3 moveVec = (commonInfo_->axes_.forward * inputVec.y) + (commonInfo_->axes_.right * inputVec.x);
 
-    // カメラ座標用の値を補正
-    {
-        ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-        if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
-        BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
-        ptr_cam_behind->axes_player_ = commonInfo_->axes_;
-        ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
-    }
-
-    // 重力
+    // 重力 ※ジャンプ量に加算してる
     Process_Gravity();
-
+    // 移動vec = (前後vec * 入力vec.y) + (水平vec * 入力vec.y)
+    Vector3 moveVec = (commonInfo_->axes_.forward * vec2_input.y) + (commonInfo_->axes_.right * vec2_input.x);
+    // 規定割合のコピーと0除算チェック
     float moveSpeedDived = kMove_divide_;
     if (moveSpeedDived == 0.f) moveSpeedDived = 1.f; // 0除算チェック
-
     // 移動量 = 移動vec * (移動速度 / 規定割合) + 上方向 * ジャンプ量
     Vector3 velocity = (moveVec.Normalize() * (commonInfo_->kMoveSpeed_ / moveSpeedDived)) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
     // 座標更新
     Process_Transform(velocity);
 
-    // 姿勢制御
-    {
-        // 現在のプレイヤーの各軸情報
-        const Axis3& playerAxes = commonInfo_->axes_;
 
-        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
+    // カメラ座標用の値を補正
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
-        commonInfo_->axes_ = { forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up };
-    }
 
+    // 1フレーム前の入力ベクトルを記録
+    commonInfo_->vec2_input_old_ = vec2_input;
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
