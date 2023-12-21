@@ -44,6 +44,8 @@ public:
     // 他状態への遷移要件確認
     virtual void RequirementCheck(void) = 0;
 
+    // プレイヤーのメンバ変数として生成された状態では、まだプレイヤー側でもsharedがnullptr。つまり、コンストラクタのコピーが無意味。
+    // よって、初期生成時のみプレイヤーのコンストラクタでこの関数呼び出し、もう一度コピーさせることで正常化を図る。効率的なやり方知りたい。
     void CopySharedCommonInfo(const std::shared_ptr<Player_CommonInfomation>& arg_shared);
 
     float debug_aaaaa_;
@@ -63,7 +65,7 @@ protected:
     void Process_Gravity(void);
     // 座標更新処理を行う。
     void Process_Transform(const Vector3& arg_velocity);
-
+    // モデル用のaxes計算を行う。
     void Process_CalculateModelAxes(const Vector2& arg_input);
 
     //>> 変数
