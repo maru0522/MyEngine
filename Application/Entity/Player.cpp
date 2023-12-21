@@ -53,7 +53,8 @@ void Player::Update(void)
 
     // 新規姿勢の上ベクトルを代入
     commonInfo_->axes_.up = commonInfo_->vec3_newUp_;
-    if (commonInfo_->eventState_ == PlayerEventState::NONE) { pbm_.ManagementBehavior(); }
+    //if (commonInfo_->eventState_ == PlayerEventState::NONE) { pbm_.ManagementBehavior(); }
+    pbm_.ManagementBehavior();
 
 #ifdef _DEBUG
     GUI::Begin("Debug");
