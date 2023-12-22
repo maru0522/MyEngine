@@ -337,7 +337,7 @@ Vector3 Math::Function::Spline(const std::vector<Vector3>& arg_points, size_t st
 {
     size_t n = arg_points.size() - 2;
 
-    if (n < 0) return Vector3(0.f, 0.f, 0.f);
+    if (arg_points.size() <= 2) return Vector3(0.f, 0.f, 0.f);
     if (startIndex > n) return arg_points[n];
     if (startIndex < 1) return arg_points[1];
 

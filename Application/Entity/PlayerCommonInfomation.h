@@ -17,9 +17,9 @@ struct Player_CommonInfomation
     //>> 定数
     const float kRadius_{ 1.f };
     const float kJumpPower_{ 0.75f };
-    const float kJumpLongPower_{ 1.3f };
+    const float kJumpLongPower_{ 0.85f };
     const float kMoveSpeed_{ 0.4f };
-    const float kMoveJumpLongSpeed_{ 2.f };
+    const float kMoveJumpLongSpeed_{ 0.75f };
     const float kGravity_{ 0.03f };
 
     // 球面カメラの距離

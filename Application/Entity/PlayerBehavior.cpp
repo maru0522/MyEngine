@@ -514,120 +514,55 @@ void PlayerBehavior_Jump::RequirementCheck(void)
 void PlayerBehavior_JumpLong::Entry(void)
 {
     commonInfo_->jumpVecNorm_ = commonInfo_->kJumpLongPower_;
+    vec2_entryInput_ = Process_GetInput();
 }
 
 void PlayerBehavior_JumpLong::Execute(void)
 {
-    //    debug_curState_ = PlayerBehavior::JUMP_LONG;
-    //
-    //    // 入力ベクトル
-    //    Vector3 inputVec{};
-    //    inputVec.x = (float)KEYS::IsDown(DIK_D) - KEYS::IsDown(DIK_A);
-    //    inputVec.y = (float)KEYS::IsDown(DIK_W) - KEYS::IsDown(DIK_S);
-    //    inputVec += Vector3(XPAD::GetLStick().x, XPAD::GetLStick().y, 0.f);
-    //    inputVec = inputVec.Normalize();
-    //
-    //    // カメラ視点のプレイヤー移動ベクトル
-    //    Vector3 pForwardFromCamera = Math::Vec3::Cross(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().right, GetPlayerAxes().up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    //    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(GetPlayerAxes().up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
-    //
-    //    // 移動ベクトル = 前後vec + 水平vec
-    //    Vector3 moveVec = (pForwardFromCamera * inputVec.y) + (redefinitionPRightFromCamera * inputVec.x);
-    //
-    //    // カメラ座標用の値を補正
-    //    {
-    //        if (GetPlayerJumpVecNorm())
-    //        {
-    //            // カメラとプレイヤーの距離
-    //            float dist = (GetPlayerCamMPtr()->GetCurrentCamera()->GetTransformMatrix().GetMatPos() - GetPlayerTransform().position).Length();
-    //
-    //            // ジャンプ時にカメラの追従が軽減 ≒ 画面の揺れを抑制する目的
-    //            // 内積が規定値未満の時ジャンプを繰り返すとカメラ距離どんどん遠くなっていく不具合が出てる
-    //            SetPlayerCurrentRad(dist);
-    //        }
-    //
-    //
-    //        ICamera* ptr_cam = GetPlayerCamMPtr()->GetCurrentCamera();
-    //        if (ptr_cam->GetId().starts_with("SphericalCamera_") == false) { return; }
-    //        SphericalCamera* ptr_cam_spherical = static_cast<SphericalCamera*>(ptr_cam);
-    //        Vector3 vec_sphericalEye = Vector3(GetPlayerTransform().position - ptr_cam_spherical->GetTransform().position).Normalize();
-    //        ptr_cam_spherical->Debug_need(GetPlayerDefaultRad(), GetPlayerTransform().position, GetPlayerTransform().position);
-    //
-    //        float theta = ptr_cam_spherical->theta_;
-    //        float phi = ptr_cam_spherical->phi_;
-    //        float psi = ptr_cam_spherical->psi_;
-    //
-    //        // プレイヤーの正面とカメラの正面の内積が "規定値" 未満の時
-    //        // 規定値の値を小さくするほど、プレイヤーが画面中央に近い位置で、カメラの挙動が切り替わる。
-    //        if (GetPlayerAxes().forward.Dot(GetPlayerCamMPtr()->GetCurrentCamera()->GetAxis3().forward) < 0.7f)
-    //        {
-    //
-    //            if (std::fabsf(GetPlayerAxes().right.Dot(vec_sphericalEye) < 0.6f))
-    //            {
-    //
-    //                theta += 0.005f * inputVec.x;
-    //                phi += 0.015f * inputVec.x;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // 現在距離(cureent_rad_)が、初期距離(default_rad_)より小さい値なら、現在距離を補正する。
-    //            if (GetPlayerCurrentRad() < GetPlayerDefaultRad())
-    //            {
-    //                SetPlayerCurrentRad(GetPlayerCurrentRad() + 0.1f);
-    //                //current_rad_ = Math::Ease::EaseInSine(current_rad_, current_rad_, default_rad_);
-    //            }
-    //            else if (GetPlayerCurrentRad() > GetPlayerDefaultRad())
-    //            {
-    //                SetPlayerCurrentRad(GetPlayerCurrentRad() - 0.1f);
-    //            }
-    //
-    //            theta += 0.02f * inputVec.y;
-    //            phi += 0.02f * inputVec.x;
-    //        }
-    //        Math::Function::Loop(theta, 0.f, 6.28319f);
-    //        Math::Function::Loop(phi, 0.f, 6.28319f);
-    //        Math::Function::Loop(psi, 0.f, 6.28319f);
-    //        ptr_cam_spherical->SetSphericalRotate(theta, phi, psi);
-    //    }
-    //
-    //    // 重力
-    //    SetPlayerJumpVecNorm(GetPlayerJumpVecNorm() - GetPlayerGravity());
-    //
-    //    //// 移動量 = 移動vec * (移動速度 / 規定割合) + 上方向 * ジャンプ量
-    //    //Vector3 velocity = ((habatobiVec.Normalize() * (GetPlayerMoveSpeed() + 5)) - (inputMoveVec.Normalize() * GetPlayerMoveSpeed())) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
-    //
-    //    // 移動量 = 移動vec * (移動速度 + 5) + 上方向 * ジャンプ量
-    //    Vector3 velocity = (moveVec.Normalize() * GetPlayerMoveJumpLongSpeed()) + (GetPlayerAxes().up * GetPlayerJumpVecNorm());
-    //
-    //
-    //    // 座標更新
-    //    SetPlayerTransformPosition(GetPlayerTransform().position + velocity);
-    //    SetPlayerVelocity(velocity);
-    //    SetPlayerMoveVec(moveVec);
-    //
-    //    // 姿勢制御
-    //    {
-    //        // 現在のプレイヤーの各軸情報
-    //        const Axis3& playerAxes = GetPlayerAxes();
-    //
-    //        // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-    //        Vector3 rightFromOldAxis = Math::Vec3::Cross(playerAxes.up, playerAxes.forward); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-    //        Vector3 forwardFromOldAxis = Math::Vec3::Cross(rightFromOldAxis.Normalize(), playerAxes.up); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-    //        SetPlayerAxes({ forwardFromOldAxis.Normalize(),rightFromOldAxis.Normalize(),playerAxes.up });
-    //        // 移動入力があった場合
-    //        if (moveVec.IsNonZero())
-    //        {
-    //            // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-    //            Vector3 upFromAxis = playerAxes.up; // 上ベクトル：(更新された上ベクトルを取得）
-    //            Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-    //            SetPlayerAxes({ moveVec.Normalize(),rightFromMoveVec.Normalize(), playerAxes.up });
-    //        }
-    //    }
-    //
-    //    RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
-    //    radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
-    //
+    // 1フレーム前の3軸を記録
+    commonInfo_->axes_old_ = commonInfo_->axes_;
+
+    // ステート確認用
+    debug_curState_ = PlayerBehavior::JUMP_LONG;
+
+    // 入力ベクトルは、幅跳び使用時の入力固定
+    Vector2 vec2_input = vec2_entryInput_;
+    // 固定とは別で入力ベクトルをとって、固定されてるベクトルに影響を与える（固定入力ベクトルによる移動を軽減する）
+    Vector2 effect_input = Process_GetInput() / 1.f; // 入力値の
+    vec2_input += effect_input;          // 加算
+    vec2_input = vec2_input.Normalize(); // 正規化
+
+    // モデル用のaxes計算
+    Process_CalculateModelAxes(vec2_input);
+
+    // カメラ視点のプレイヤー移動ベクトル
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 定義した値等を現在の姿勢として記録
+    commonInfo_->axes_.forward = pForwardFromCamera;
+    commonInfo_->axes_.right = redefinitionPRightFromCamera;
+    commonInfo_->axes_.up = commonInfo_->axes_.up;
+
+    // 重力 ※ジャンプ量に加算してる
+    Process_Gravity();
+    // 移動vec = (前後vec * 入力vec.y) + (水平vec * 入力vec.y)
+    Vector3 moveVec = (commonInfo_->axes_.forward * vec2_input.y) + (commonInfo_->axes_.right * vec2_input.x);
+    // 移動量 = 移動vec * 幅跳び用移動速度 + 上方向 * ジャンプ量
+    Vector3 velocity = (moveVec.Normalize() * commonInfo_->kMoveJumpLongSpeed_) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
+    // 座標更新
+    Process_Transform(velocity);
+
+    // カメラ座標用の値を補正
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
+
+    // ラジアルブラーを使用する。段々と小さくなる
+    RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
+    radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
+
     //#ifdef _DEBUG
     //    GUI::Begin("player");
     //    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);

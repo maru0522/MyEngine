@@ -184,6 +184,9 @@ public:
 
 private:
     void RequirementCheck(void) override;
+
+    // 変数
+    Vector2 vec2_entryInput_;
 };
 
 //----------------------------------------------------------------------------------------
