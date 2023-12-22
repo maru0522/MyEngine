@@ -428,10 +428,14 @@ void PlayerBehavior_Jump::Execute(void)
 
     // 入力ベクトルの取得。
     Vector2 vec2_input = Process_GetInput();
-
+    // 入力ベクトルが0かどうか
+    const bool isZeroInput = vec2_input.IsNonZero() == false;
 
     // モデル用のaxes計算
-    Process_CalculateModelAxes(vec2_input);
+    isZeroInput ?
+        Process_CalculateModelAxes(commonInfo_->vec2_input_old_) :
+        Process_CalculateModelAxes(vec2_input);
+
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -464,7 +468,9 @@ void PlayerBehavior_Jump::Execute(void)
 
 
     // 1フレーム前の入力ベクトルを記録
-    commonInfo_->vec2_input_old_ = vec2_input;
+    isZeroInput ?
+        commonInfo_->vec2_input_old_ = commonInfo_->vec2_input_old_ :
+        commonInfo_->vec2_input_old_ = vec2_input;
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
@@ -528,7 +534,9 @@ void PlayerBehavior_JumpLong::Execute(void)
     // 入力ベクトルは、幅跳び使用時の入力固定
     Vector2 vec2_input = vec2_entryInput_;
     // 固定とは別で入力ベクトルをとって、固定されてるベクトルに影響を与える（固定入力ベクトルによる移動を軽減する）
-    Vector2 effect_input = Process_GetInput() / 1.f; // 入力値の
+    Vector2 effect_input = Process_GetInput() / 1.f;
+    // 入力値0なら、1F前と同じ入力を使う。
+    if (effect_input.IsNonZero() == false) { effect_input = commonInfo_->vec2_input_old_; }
     vec2_input += effect_input;          // 加算
     vec2_input = vec2_input.Normalize(); // 正規化
 
@@ -563,6 +571,8 @@ void PlayerBehavior_JumpLong::Execute(void)
     RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
     radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
 
+    // 1フレーム前の入力ベクトルを記録 ※ここだけ、記録するのはeffect_input
+    commonInfo_->vec2_input_old_ = effect_input;
     //#ifdef _DEBUG
     //    GUI::Begin("player");
     //    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
