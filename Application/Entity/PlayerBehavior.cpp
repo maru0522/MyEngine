@@ -534,14 +534,14 @@ void PlayerBehavior_JumpLong::Execute(void)
     // 入力ベクトルは、幅跳び使用時の入力固定
     Vector2 vec2_input = vec2_entryInput_;
     // 固定とは別で入力ベクトルをとって、固定されてるベクトルに影響を与える（固定入力ベクトルによる移動を軽減する）
-    Vector2 effect_input = Process_GetInput() / 2.f;
+    Vector2 effect_input = Process_GetInput() / 2.2f;
     // 入力値0なら、1F前と同じ入力を使う。
     if (effect_input.IsNonZero() == false) { effect_input = commonInfo_->vec2_input_old_; }
     vec2_input += effect_input;          // 加算
-    //vec2_input = vec2_input.Normalize(); // 正規化
+    vec2_input = vec2_input.Normalize(); // 正規化
 
     // モデル用のaxes計算
-    Process_CalculateModelAxes(vec2_input.Normalize());
+    Process_CalculateModelAxes(vec2_input);
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
