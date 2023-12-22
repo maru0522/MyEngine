@@ -19,6 +19,9 @@ namespace Math {
         inline constexpr float ToRadian(float fDegrees) { return fDegrees * Math::kPI / 180.0f; }
         inline constexpr float ToDegree(float fRadians) { return fRadians * 180.0f / Math::kPI; }
 
+        // xとy、それぞれでより値の小さい方を選択した、Vector2を返す
+        const Vector2 Min(const Vector2& v1, const Vector2& v2);
+
         template<typename T>
         inline void LoopIncrement(T& value, T min, T max) {
             value++;

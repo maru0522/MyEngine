@@ -403,8 +403,8 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
 
 
 
-    // 着地している && 移動キーが入力された
-    if (isLanding && isJumpTrigger) // ここを通っている時点で、実質左SHIFTが入力されている
+    // 着地している && ジャンプキーが入力された
+    if (isLanding && isJumpTrigger) // ここを通っている時点で、[左SHIFT] + [移動キー]は入力されている
     {
         // PlayerState を JUMP_LONG(幅跳び)へ
         nextState_ = PlayerBehavior::JUMP_LONG;
@@ -534,14 +534,14 @@ void PlayerBehavior_JumpLong::Execute(void)
     // 入力ベクトルは、幅跳び使用時の入力固定
     Vector2 vec2_input = vec2_entryInput_;
     // 固定とは別で入力ベクトルをとって、固定されてるベクトルに影響を与える（固定入力ベクトルによる移動を軽減する）
-    Vector2 effect_input = Process_GetInput() / 1.f;
+    Vector2 effect_input = Process_GetInput() / 2.f;
     // 入力値0なら、1F前と同じ入力を使う。
     if (effect_input.IsNonZero() == false) { effect_input = commonInfo_->vec2_input_old_; }
     vec2_input += effect_input;          // 加算
-    vec2_input = vec2_input.Normalize(); // 正規化
+    //vec2_input = vec2_input.Normalize(); // 正規化
 
     // モデル用のaxes計算
-    Process_CalculateModelAxes(vec2_input);
+    Process_CalculateModelAxes(vec2_input.Normalize());
 
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
@@ -573,11 +573,13 @@ void PlayerBehavior_JumpLong::Execute(void)
 
     // 1フレーム前の入力ベクトルを記録 ※ここだけ、記録するのはeffect_input
     commonInfo_->vec2_input_old_ = effect_input;
-    //#ifdef _DEBUG
-    //    GUI::Begin("player");
-    //    GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
-    //    GUI::End();
-    //#endif // _DEBUG
+    #ifdef _DEBUG
+        GUI::Begin("playerBehavior_JumpLong");
+        GUI::Text("vec2_entryInput_:   [%f,%f]", vec2_entryInput_.x, vec2_entryInput_.y);
+        GUI::Text("effect_input:       [%f,%f]", effect_input.x, effect_input.y);
+        GUI::Text("vec2_input:         [%f,%f]", vec2_input.x, vec2_input.y);
+        GUI::End();
+    #endif // _DEBUG
 }
 
 void PlayerBehavior_JumpLong::RequirementCheck(void)

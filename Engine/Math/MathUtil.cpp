@@ -126,6 +126,14 @@ float Math::Ease::EaseInOutElastic(float t, float start, float end)
 //    return result;
 //}
 
+const Vector2 Math::Function::Min(const Vector2& v1, const Vector2& v2)
+{
+    const float x = std::min(v1.x, v2.x);
+    const float y = std::min(v1.y, v2.y);
+
+    return Vector2(x, y);
+}
+
 Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
 {
     // r:動径r, theta:緯度θ, phi:経度φ
