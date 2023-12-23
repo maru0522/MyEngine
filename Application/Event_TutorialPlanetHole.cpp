@@ -36,7 +36,7 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
     }
 
 #ifdef _DEBUG
-    is_showHoleCollision_ = true;
+    //is_showHoleCollision_ = true;
 #endif // _DEBUG
 }
 
@@ -59,10 +59,10 @@ void Event_TutorialPlanetHole::Execute(void)
     const float rate_player = timer_player_.GetTimeRate();
 
     Vector3 pos_player{};
-    if (timer_player_.GetIsExecute() == false)
-    {
-        playerPtr_->SetPosition(kPlayerPos_Hole1_end);
-    }
+    //if (timer_player_.GetIsExecute() == false)
+    //{
+    //    playerPtr_->SetPosition(kPlayerPos_Hole1_end);
+    //}
 
 
     switch (cameraState_)
@@ -146,8 +146,6 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
     // 各座標の初期化
     pos_leaveCamStart_ = {};
     pos_approachCamEnd_ = {};
-    pos_playerStart_ = {};
-    pos_playerEnd_ = {};
     // 通過点初期化
     points_playerSplineHole_.clear();
 
@@ -176,7 +174,7 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
     {
         // camera_leaveを指定の座標へセット（ Hole0用 )
         pos_leaveCamStart_ = planetPos_ + kCameraPos_leave_start;
-        pos_approachCamEnd_ = planetPos_ - kCameraPos_leave_start;
+        pos_approachCamEnd_ = planetPos_ + kCameraPos_approach_end;
         // camera_waitを指定の座標へセット（ Hole0用 ）
         const Vector3 pos_camWait = planetPos_ + kCameraPos_wait;
         camera_wait_->SetPosition(pos_camWait);
@@ -184,9 +182,6 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
         // 穴に入って反対側まで行けるよう、スタート地点とゴール地点を設定
         const Vector3& pos_HoleStart = planetPos_ + kHolePos_relativePlanetCenter;
         const Vector3& pos_HoleEnd = planetPos_ - kHolePos_relativePlanetCenter;
-
-        pos_playerStart_ = planetPos_ + kHolePos_relativePlanetCenter;
-        pos_playerEnd_ = planetPos_ - kHolePos_relativePlanetCenter;
 
         // イベントトリガーに触れた瞬間のプレイヤーの座標
         const Vector3& pos_contactTrigger = playerPtr_->GetTransform().position;
@@ -207,15 +202,29 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
     {
         // camera_leaveを指定の座標へセット（ Hole0用 )
         pos_leaveCamStart_ = planetPos_ - kCameraPos_leave_start;
-        pos_approachCamEnd_ = planetPos_ + kCameraPos_leave_start;
-        // カメラを指定の座標へセット（ Hole1用 ）
-        const Vector3 pos = planetPos_ - kCameraPos_wait;
-        camera_wait_->SetPosition(pos);
-        //camera_wait_->SetTargetPos(*playerPosPtr_);
+        pos_approachCamEnd_ = planetPos_ - kCameraPos_approach_end;
+        // camera_waitを指定の座標へセット（ Hole0用 ）
+        const Vector3 pos_camWait = planetPos_ + kCameraPos_wait;
+        camera_wait_->SetPosition(pos_camWait);
 
         // 穴に入って反対側まで行けるよう、スタート地点とゴール地点を設定
-        pos_playerStart_ = planetPos_ - kHolePos_relativePlanetCenter;
-        pos_playerEnd_ = planetPos_ + kHolePos_relativePlanetCenter;
+        const Vector3& pos_HoleStart = planetPos_ - kHolePos_relativePlanetCenter;
+        const Vector3& pos_HoleEnd = planetPos_ + kHolePos_relativePlanetCenter;
+
+        // イベントトリガーに触れた瞬間のプレイヤーの座標
+        const Vector3& pos_contactTrigger = playerPtr_->GetTransform().position;
+        // プレイヤーが通る座標 (start)
+        points_playerSplineHole_.push_back(pos_contactTrigger); // 関数の仕様上、スタート地点とゴール地点は2回入力する必要がある。 // TODO: スプライン曲線の関数見直し。
+        // プレイヤーが通る座標 1番目
+        points_playerSplineHole_.push_back(pos_contactTrigger);
+        // プレイヤーが通る座標 2番目
+        points_playerSplineHole_.push_back(pos_HoleStart);
+        // プレイヤーが通る座標 3番目
+        points_playerSplineHole_.push_back(pos_HoleEnd);
+        // プレイヤーが通る座標 4番目
+        points_playerSplineHole_.push_back(kPlayerPos_Hole0_end);
+        // プレイヤーが通る座標 (goal)
+        points_playerSplineHole_.push_back(kPlayerPos_Hole0_end);
     }
 }
 
@@ -336,8 +345,8 @@ void Event_TutorialPlanetHole::Update_ApproachCam(void)
         //cameraMPtr_->SetCurrentCamera("SphericalCamera_follow_player0");
         cameraMPtr_->SetCurrentCamera("BehindCamera_follow_player0");
 
-        const Axis3 axes = { {0.243741f,-0.926397f,0.287016f},{-0.019059f,0.291309f,0.956439f},{-0.97268f,-0.222932f,0.064765f} };
-        playerPtr_->SetAxes(axes);
+        //const Axis3 axes = { {0.243741f,-0.926397f,0.287016f},{-0.019059f,0.291309f,0.956439f},{-0.97268f,-0.222932f,0.064765f} };
+        //playerPtr_->SetAxes(axes);
 
         // 関数を抜ける
         return;
