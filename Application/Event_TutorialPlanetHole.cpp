@@ -7,14 +7,16 @@
 Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr, CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
     : colMPtr_(arg_colMPtr), cameraMPtr_(arg_cameraMPtr), playerPtr_(arg_playerPtr)
 {
+    camera_interpolation1_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_interpolation_first");
     camera_leave_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_leave");
     camera_wait_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_wait");
     camera_approach_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_approach");
-    camera_interpolation_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_interpolation");
+    camera_interpolation2_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_interpolation_last");
+    cameraMPtr_->Register(camera_interpolation1_.get());
     cameraMPtr_->Register(camera_leave_.get());
     cameraMPtr_->Register(camera_wait_.get());
     cameraMPtr_->Register(camera_approach_.get());
-    cameraMPtr_->Register(camera_interpolation_.get());
+    cameraMPtr_->Register(camera_interpolation2_.get());
 
     // マネージャーに登録
     colMPtr_->Register(&entrances_[0]);
@@ -45,10 +47,11 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
 
 Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
 {
+    cameraMPtr_->UnRegister(camera_interpolation1_.get());
     cameraMPtr_->UnRegister(camera_leave_.get());
     cameraMPtr_->UnRegister(camera_wait_.get());
     cameraMPtr_->UnRegister(camera_approach_.get());
-    cameraMPtr_->UnRegister(camera_interpolation_.get());
+    cameraMPtr_->UnRegister(camera_interpolation2_.get());
     colMPtr_->UnRegister(&entrances_[0]);
     colMPtr_->UnRegister(&entrances_[1]);
 }
@@ -65,6 +68,12 @@ void Event_TutorialPlanetHole::Execute(void)
 
     switch (cameraState_)
     {
+    case Event_TutorialPlanetHole::CameraState::INTERPOLATION1:
+        pos_player = points_playerSplineHole_.front();
+        playerPtr_->SetPosition(pos_player);
+        Update_InterpolationCam1();
+        break;
+
     case Event_TutorialPlanetHole::CameraState::LEAVE:
         pos_player = Math::Function::Spline(points_playerSplineHole_, 1, timer_leaveCam_.GetTimeRate());
         playerPtr_->SetPosition(pos_player);
@@ -86,13 +95,13 @@ void Event_TutorialPlanetHole::Execute(void)
         Update_ApproachCam();
         break;
 
-    case Event_TutorialPlanetHole::CameraState::INTERPOLATION:
+    case Event_TutorialPlanetHole::CameraState::INTERPOLATION2:
         // 通過点の最後の座標にプレイヤーを移動し続けて、とどめる。
         // 今のやり方だと座標指定が無い場合、プレイヤーのUpdate()で重力がかかり続けるけど、押し戻しは停止し続けてるので、星の中央に囚われ続けてしまう。
         // 改善にはリファクタリングほぼ必須なので、最も安牌な選択肢である「ここでいるべき座標を指定し続ける」を実行。
         pos_player = points_playerSplineHole_.back();
         playerPtr_->SetPosition(pos_player);
-        Update_InterpolationCam();
+        Update_InterpolationCam2();
         break;
 
     case Event_TutorialPlanetHole::CameraState::FINISH:
@@ -147,14 +156,15 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
 {
     // カメラの初期化
     const Axis3 axesInit = Axis3::Initialize();
-    camera_interpolation_->SetAxis3(axesInit); // 唯一forward以外の軸を変更しているため初期化。
+    camera_interpolation2_->SetAxis3(axesInit); // 唯一forward以外の軸を変更しているため初期化。
 
     // タイマーの初期化
     timer_player_.Finish(true);
+    timer_interpolation1_.Finish(true);
     timer_leaveCam_.Finish(true);
     timer_waitCam_.Finish(true);
     timer_approachCam_.Finish(true);
-    timer_interpolation_.Finish(true);
+    timer_interpolation2_.Finish(true);
     // 各座標の初期化
     pos_leaveCamStart_ = {};
     pos_approachCamEnd_ = {};
@@ -176,10 +186,10 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
     timer_leaveCam_.Start(kLeaveTimer_);
     timer_leaveCam_.SetAddSpeed(kCommonAddSpeed_);
     // マネージャーにleaveCamをセット
-    cameraMPtr_->SetCurrentCamera(camera_leave_.get());
+    cameraMPtr_->SetCurrentCamera(camera_interpolation1_.get());
 
     // カメラの状態をLEAVEへ変更
-    cameraState_ = CameraState::LEAVE;
+    cameraState_ = CameraState::INTERPOLATION1;
 
     // カメラの最初の座標をプレイヤーのカメラの座標に合わせる。
     if (arg_isHole0)
@@ -237,6 +247,53 @@ void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
         points_playerSplineHole_.push_back(kPlayerPos_Hole0_end);
         // プレイヤーが通る座標 (goal)
         points_playerSplineHole_.push_back(kPlayerPos_Hole0_end);
+    }
+}
+
+void Event_TutorialPlanetHole::Update_InterpolationCam1(void)
+{
+    timer_interpolation1_.Update();
+    const float rate = timer_interpolation1_.GetTimeRate(true);
+    //const float pos_z = Math::Ease::EaseInCirc(rate, -50.f, -23.f);
+
+    // Initialize()で定義した、pos_leaveCamStart_を、スタート地点とする
+    const Vector3 start = points_playerSplineHole_.front();
+    // camera_waitの座標を、エンド地点とする
+    const Vector3 end = pos_leaveCamStart_;
+
+    // カメラの座標
+    Vector3 pos{};
+    // イージングする
+    pos.x = Math::Ease::EaseOutSine(rate, start.x, end.x);
+    pos.y = Math::Ease::EaseOutSine(rate, start.y, end.y);
+    pos.z = Math::Ease::EaseOutSine(rate, start.z, end.z);
+
+    Transform transform;
+    transform.position = pos;
+    camera_interpolation1_->SetTransform(transform);
+    camera_interpolation1_->SetTargetPos(playerPtr_->GetTransform().position);
+
+    // タイマーが完了しているか
+    if (rate >= 1.f)
+    {
+        // 次のタイマーを起動。
+        timer_leaveCam_.Start(kLeaveTimer_);
+        timer_leaveCam_.SetAddSpeed(kCommonAddSpeed_);
+        // 今のタイマーを停止
+        timer_interpolation1_.Finish(true);
+
+        // 次のカメラの初期情報をセット
+        Transform transform_next;
+        transform_next.position = kCameraPos_leave_start;
+        camera_leave_->SetTransform(transform_next);
+        camera_leave_->SetTargetPos(playerPtr_->GetTransform().position);
+        // カメラの状態を変更
+        cameraState_ = CameraState::LEAVE;
+        // カメラを設定
+        cameraMPtr_->SetCurrentCamera(camera_leave_.get());
+
+        // 関数を抜ける
+        return;
     }
 }
 
@@ -347,8 +404,8 @@ void Event_TutorialPlanetHole::Update_ApproachCam(void)
     if (rate >= 1.f)
     {
         // 次のタイマーを起動。
-        timer_interpolation_.Start(kApproachTimer_);
-        timer_interpolation_.SetAddSpeed(kCommonAddSpeed_);
+        timer_interpolation2_.Start(kApproachTimer_);
+        timer_interpolation2_.SetAddSpeed(kCommonAddSpeed_);
         // 今のタイマーを停止
         timer_approachCam_.Finish(true);
 
@@ -360,22 +417,22 @@ void Event_TutorialPlanetHole::Update_ApproachCam(void)
         // 次のカメラの初期情報をセット
         Transform transform_next;
         transform_next.position = pos_approachCamEnd_;
-        camera_interpolation_->SetTransform(transform_next);
-        camera_interpolation_->SetTargetPos(playerPtr_->GetTransform().position);
+        camera_interpolation2_->SetTransform(transform_next);
+        camera_interpolation2_->SetTargetPos(playerPtr_->GetTransform().position);
         // カメラの状態を変更
-        cameraState_ = CameraState::INTERPOLATION;
+        cameraState_ = CameraState::INTERPOLATION2;
         // カメラを設定
-        cameraMPtr_->SetCurrentCamera(camera_interpolation_.get());
+        cameraMPtr_->SetCurrentCamera(camera_interpolation2_.get());
 
         // 関数を抜ける
         return;
     }
 }
 
-void Event_TutorialPlanetHole::Update_InterpolationCam(void)
+void Event_TutorialPlanetHole::Update_InterpolationCam2(void)
 {
-    timer_interpolation_.Update();
-    const float rate = timer_interpolation_.GetTimeRate(true);
+    timer_interpolation2_.Update();
+    const float rate = timer_interpolation2_.GetTimeRate(true);
 
     // camera_approachの最終位置を、スタート地点とする
     const Vector3 start = pos_approachCamEnd_;
@@ -394,7 +451,7 @@ void Event_TutorialPlanetHole::Update_InterpolationCam(void)
     Transform transform;
     transform.position = pos;
     // カメラに設定
-    camera_interpolation_->SetTransform(transform);
+    camera_interpolation2_->SetTransform(transform);
 
     // カメラの軸
     Axis3 axes;
@@ -413,17 +470,17 @@ void Event_TutorialPlanetHole::Update_InterpolationCam(void)
     axes.up.y = Math::Ease::EaseOutSine(rate, u.y, behind_axes.up.y);
     axes.up.z = Math::Ease::EaseOutSine(rate, u.z, behind_axes.up.z);
     // カメラに設定
-    camera_interpolation_->SetAxis3(axes);
+    camera_interpolation2_->SetAxis3(axes);
 
 
     //
-    //camera_interpolation_->SetTargetPos(playerPtr_->GetTransform().position);
+    //camera_interpolation2_->SetTargetPos(playerPtr_->GetTransform().position);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
     {
         // 今のタイマーを停止
-        timer_interpolation_.Finish(true);
+        timer_interpolation2_.Finish(true);
 
         // カメラの状態を変更
         cameraState_ = CameraState::FINISH;

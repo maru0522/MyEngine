@@ -14,10 +14,11 @@ private:
     //>> 定義
     enum class CameraState
     {
+        INTERPOLATION1,
         LEAVE,
         WAIT,
         APPROACH,
-        INTERPOLATION,
+        INTERPOLATION2,
         FINISH,
     };
 
@@ -30,10 +31,11 @@ private:
     const Vector3 kCameraPos_wait = { 0.f,0.f,-210.f };             // cam_waitの座標（星の中心点からの相対位置）
     const Vector3 kCameraPos_approach_end = { -105.f, -26.f, 26.f };    // cam_approachの終了座標（星の中心点からの相対位置）
 
+    const float kInterpolation1Timer_ = 1.5f;
     const float kLeaveTimer_ = 2.2f;
     const float kWaitTimer_ = 4.2f;
     const float kApproachTimer_ = 2.5f;
-    const float kInterpolationTimer_ = 2.5f;
+    const float kInterpolation2Timer_ = 2.5f;
     const float kCommonAddSpeed_ = 2.f;
 
     // 穴の入口にセットするイベントエリアの半径（球状)
@@ -49,29 +51,32 @@ public:
 
 private:
     void Initialize(bool arg_isHole0);
+    void Update_InterpolationCam1(void);
     void Update_LeaveCam(void);
     void Update_WaitCam(void);
     void Update_ApproachCam(void);
-    void Update_InterpolationCam(void);
+    void Update_InterpolationCam2(void);
 
     void OnTrigger_Hole0(void);
     void OnTrigger_Hole1(void);
 
     //>> 変数
     // カメラ達
-    std::unique_ptr<NormalCamera> camera_leave_;         // 離れる
-    std::unique_ptr<NormalCamera> camera_wait_;          // 中間
-    std::unique_ptr<NormalCamera> camera_approach_;      // 近づく
-    std::unique_ptr<NormalCamera> camera_interpolation_; // 最後の補間
+    std::unique_ptr<NormalCamera> camera_interpolation1_; // 最初の補間
+    std::unique_ptr<NormalCamera> camera_leave_;          // 離れる
+    std::unique_ptr<NormalCamera> camera_wait_;           // 中間
+    std::unique_ptr<NormalCamera> camera_approach_;       // 近づく
+    std::unique_ptr<NormalCamera> camera_interpolation2_; // 最後の補間
     // イベントが管理する、カメラの状況
     CameraState cameraState_;
 
     // タイーマ
     DeltaTimer timer_player_;
+    DeltaTimer timer_interpolation1_;
     DeltaTimer timer_leaveCam_;
     DeltaTimer timer_waitCam_;
     DeltaTimer timer_approachCam_;
-    DeltaTimer timer_interpolation_;
+    DeltaTimer timer_interpolation2_;
 
     // イージング用の初期座標
     Vector3 pos_leaveCamStart_;
