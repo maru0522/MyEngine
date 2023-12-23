@@ -30,10 +30,10 @@ private:
     const Vector3 kCameraPos_wait = { 0.f,0.f,-210.f };             // cam_waitの座標（星の中心点からの相対位置）
     const Vector3 kCameraPos_approach_end = { -105.f, -26.f, 26.f };    // cam_approachの終了座標（星の中心点からの相対位置）
 
-    const float kLeaveTimer_ = 3.f;
-    const float kWaitTimer_ = 5.f;
-    const float kApproachTimer_ = 4.f;
-    const float kInterpolationTimer_ = 300.f;
+    const float kLeaveTimer_ = 2.2f;
+    const float kWaitTimer_ = 4.2f;
+    const float kApproachTimer_ = 2.5f;
+    const float kInterpolationTimer_ = 2.5f;
     const float kCommonAddSpeed_ = 2.f;
 
     // 穴の入口にセットするイベントエリアの半径（球状)

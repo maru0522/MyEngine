@@ -145,6 +145,10 @@ void Event_TutorialPlanetHole::Draw(void)
 
 void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
 {
+    // カメラの初期化
+    const Axis3 axesInit = Axis3::Initialize();
+    camera_interpolation_->SetAxis3(axesInit); // 唯一forward以外の軸を変更しているため初期化。
+
     // タイマーの初期化
     timer_player_.Finish(true);
     timer_leaveCam_.Finish(true);
@@ -412,7 +416,7 @@ void Event_TutorialPlanetHole::Update_InterpolationCam(void)
     camera_interpolation_->SetAxis3(axes);
 
 
-    
+    //
     //camera_interpolation_->SetTargetPos(playerPtr_->GetTransform().position);
 
     // タイマーが完了しているか

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Vector3.h"
 #include "Matrix4.h"
 
@@ -63,11 +63,14 @@ struct TransformMatrix final
 
 struct Axis3 final
 {
+public:
+    // 変数
     Vector3 forward;
     Vector3 right;
     Vector3 up;
 
-    Axis3(void) { Initialize(); }
+    // 関数
+    Axis3(void) { *this = Initialize(); }
     Axis3(const Vector3& forward, const Vector3& right, const Vector3& up)
     {
         this->forward = forward;
@@ -75,11 +78,10 @@ struct Axis3 final
         this->up = up;
     }
 
-    void Initialize(void)
+    // 静的関数
+    static const Axis3 Initialize(void)
     {
-        forward = { 0,0,1 };
-        right = { 1,0,0 };
-        up = { 0,1,0 };
+        return Axis3{ { 0,0,1 }, { 1,0,0 }, { 0,1,0 } };
     }
 };
 
