@@ -379,17 +379,41 @@ void Event_TutorialPlanetHole::Update_InterpolationCam(void)
     // Update_ApproachCam()の、タイマー完了時処理で呼び出しているプレイヤーの更新処理で、決定されたカメラの座標がエンド地点である。
     const Vector3 end = cameraMPtr_->GetCamera("BehindCamera_follow_player0")->GetTransform().position;
 
+
     // カメラの座標
     Vector3 pos{};
     // イージングする
     pos.x = Math::Ease::EaseOutSine(rate, start.x, end.x);
     pos.y = Math::Ease::EaseOutSine(rate, start.y, end.y);
     pos.z = Math::Ease::EaseOutSine(rate, start.z, end.z);
-
+    // 構造体に定義
     Transform transform;
     transform.position = pos;
+    // カメラに設定
     camera_interpolation_->SetTransform(transform);
-    camera_interpolation_->SetTargetPos(playerPtr_->GetTransform().position);
+
+    // カメラの軸
+    Axis3 axes;
+    // 参照用の軸。最終的にこれと同じになる。
+    const Axis3& behind_axes = cameraMPtr_->GetCamera("BehindCamera_follow_player0")->GetAxis3();
+    // イージングなし。正面はプレイヤーの方向なので、そのまま使う。
+    axes.forward = cameraMPtr_->GetCurrentCamera()->GetAxis3().forward;
+    // イージング: right
+    const Vector3 r = { 1.f,0.f,0.f }; // 仮想の右方向固定なので、それがスタート地点。
+    axes.right.x = Math::Ease::EaseOutSine(rate, r.x, behind_axes.right.x);
+    axes.right.y = Math::Ease::EaseOutSine(rate, r.y, behind_axes.right.y);
+    axes.right.z = Math::Ease::EaseOutSine(rate, r.z, behind_axes.right.z);
+    // イージング: up
+    const Vector3 u = { 0.f,1.f,0.f }; // 仮想の上方向固定なので、それがスタート地点。
+    axes.up.x = Math::Ease::EaseOutSine(rate, u.x, behind_axes.up.x);
+    axes.up.y = Math::Ease::EaseOutSine(rate, u.y, behind_axes.up.y);
+    axes.up.z = Math::Ease::EaseOutSine(rate, u.z, behind_axes.up.z);
+    // カメラに設定
+    camera_interpolation_->SetAxis3(axes);
+
+
+    
+    //camera_interpolation_->SetTargetPos(playerPtr_->GetTransform().position);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
