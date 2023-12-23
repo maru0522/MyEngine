@@ -30,6 +30,9 @@ public:
 
     int32_t captureCount_rabbit; // 兎を捕まえた回数
 
+    // イベントでカメラを動かし終えた後、追従カメラに遷移する際に、その肝心の追従カメラがプレイヤーの上にいなかったら困るので、
+    // きちんとプレイヤーの上にいさせる為に座標を渡す関数。
+    void HandOverToBehindCamera(const std::string& arg_camId);
 private:
     void ControlUI(void);
 

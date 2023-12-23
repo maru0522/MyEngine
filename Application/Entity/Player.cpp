@@ -3,6 +3,7 @@
 #include "Quaternion.h"
 #include "SimplifyImGui.h"
 #include "CollisionChecker.h"
+#include "BehindCamera.h"
 
 Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
     : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr), pbm_(this, PlayerBehavior::IDLE)
@@ -201,6 +202,18 @@ void Player::Draw3d(void)
 void Player::Draw2dFore(void)
 {
     playerUI_.Draw();
+}
+
+void Player::HandOverToBehindCamera(const std::string& arg_camId)
+{
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCamera(arg_camId);
+    // カメラが適切か確認
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+
+    // キャスト
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 }
 
 void Player::ControlUI(void)

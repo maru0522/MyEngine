@@ -17,6 +17,7 @@ private:
         LEAVE,
         WAIT,
         APPROACH,
+        INTERPOLATION,
         FINISH,
     };
 
@@ -32,6 +33,7 @@ private:
     const float kLeaveTimer_ = 3.f;
     const float kWaitTimer_ = 5.f;
     const float kApproachTimer_ = 4.f;
+    const float kInterpolationTimer_ = 300.f;
     const float kCommonAddSpeed_ = 2.f;
 
     // 穴の入口にセットするイベントエリアの半径（球状)
@@ -50,23 +52,26 @@ private:
     void Update_LeaveCam(void);
     void Update_WaitCam(void);
     void Update_ApproachCam(void);
+    void Update_InterpolationCam(void);
 
     void OnTrigger_Hole0(void);
     void OnTrigger_Hole1(void);
 
     //>> 変数
     // カメラ達
-    std::unique_ptr<NormalCamera> camera_leave_;
-    std::unique_ptr<NormalCamera> camera_wait_;
-    std::unique_ptr<NormalCamera> camera_approach_;
+    std::unique_ptr<NormalCamera> camera_leave_;         // 離れる
+    std::unique_ptr<NormalCamera> camera_wait_;          // 中間
+    std::unique_ptr<NormalCamera> camera_approach_;      // 近づく
+    std::unique_ptr<NormalCamera> camera_interpolation_; // 最後の補間
     // イベントが管理する、カメラの状況
     CameraState cameraState_;
 
     // タイーマ
+    DeltaTimer timer_player_;
     DeltaTimer timer_leaveCam_;
     DeltaTimer timer_waitCam_;
     DeltaTimer timer_approachCam_;
-    DeltaTimer timer_player_;
+    DeltaTimer timer_interpolation_;
 
     // イージング用の初期座標
     Vector3 pos_leaveCamStart_;
