@@ -23,7 +23,6 @@ private:
     //const Vector3 kDist_fromPlanetCenter_ = { 43.f,25.5f,9.f };
     const Vector3 kHolePos_relativePlanetCenter = { 41.f,24.f,9.f }; // 穴の判定座標（星の中心点からの相対位置）
     const Vector3 kPlayerPos_Hole0_end = { 44.f,24.f,-10.5f };          // hole0から出てきた時の、着地座標
-    //const Vector3 kPlayerPos_Hole1_end = { -41.f,-24.f,-9.f };          // hole1から出てきた時の、着地座標
     const Vector3 kPlayerPos_Hole1_end = { -56.f,-9.f, 5.f };          // hole1から出てきた時の、着地座標
 
     const Vector3 kCameraPos_leave_start = { 72.f,15.f,-12.f };     // cam_leaveの初期座標（星の中心点からの相対位置）
