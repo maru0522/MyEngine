@@ -10,6 +10,12 @@ class Coin :
     public Object3D
 {
 public:
+    //>> 定義
+    const float kRadius_{ 1.3f };           // コインの半径
+    const float kRotationRadian_{ 0.04f };  // コインを回転させるときの角速度（ラジアン）
+    const Vector3 kRotateBaseAxis_{ 0.f,1.f,0.f };  // コインを回転させるときの軸
+
+    //>> 関数
     Coin(CollisionManager* arg_colMPtr);
     ~Coin(void) override;
 
@@ -18,11 +24,15 @@ public:
 
 private:
     void Collision_onTrigger(void);
+    void Collision_onCollision(void);
 
     //>> 変数
     Transform transform_;
     Axis3 axes_;
+    Vector3 vec3_newUp_; // 新規上ベクトル
+    float radian_;       // どんくらい回転してるか
 
+    // 回収されたか
     bool is_taken_{};
 
     CollisionManager* colMPtr_{};

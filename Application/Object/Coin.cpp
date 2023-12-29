@@ -6,8 +6,9 @@ Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.
     // コイン用コライダーの登録
     arg_colMPtr->Register(&collision_contact_);
     collision_contact_.SetID("coin_contact");
-    collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);
-    collision_contact_.radius = 1.f;
+    collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);     // trigger
+    collision_contact_.callback_onCollision_ = std::bind(&Coin::Collision_onCollision, this); // collision
+    collision_contact_.radius = kRadius_;
 
     // 初期姿勢
     axes_.forward = { 0,0,1 };
@@ -16,6 +17,7 @@ Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.
 
     collision_contact_.center = { 3000,3000,3000 };
 
+    // コインSEの音量調整
     se_getCoin_.SetVolume(0.3f);
 }
 
@@ -32,11 +34,11 @@ Coin::~Coin(void)
 
         // 使用していた丸影を初期化
         lightManagerPtr_->SetLightActive(type, circleShadows_num_, false);
-        lightManagerPtr_->SetLightDir(type, circleShadows_num_, {0,0,0});
-        lightManagerPtr_->SetLightPos(type, circleShadows_num_, {0,0,0});
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, { 0,0,0 });
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, { 0,0,0 });
         lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, 0.f);
-        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, {0.f,0.f,0.f});
-        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, {0.f,0.f});
+        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, { 0.f,0.f,0.f });
+        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, { 0.f,0.f });
     }
 }
 
@@ -55,8 +57,25 @@ void Coin::Update(void)
     //}
     //is_takenPre_ = is_taken_;
 
-    transform_.rotation.y += 0.04f;
-    matTrans_.mat_world = Math::Function::AffinTrans(transform_);
+    // 姿勢（axes_)の要素が全て0ではない
+    const bool isNonZeroAll = axes_.forward.IsNonZero() && axes_.right.IsNonZero() && vec3_newUp_.IsNonZero();
+
+    // 姿勢の調整
+    axes_.up = vec3_newUp_; // 新規上ベクトルの設定。 vec3_newUpの更新は"Collision_onCollision()"内にて
+    if (isNonZeroAll)
+    {
+        axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 新規右ベクトルの設定。
+        axes_.forward = Math::Vec3::Cross(axes_.right, axes_.up).Normalize(); // 新規正面ベクトルの設定
+    }
+
+    // 上ベクトルを軸に"raddian_"だけ回転させた状態を表すクオータニオン
+    Quaternion rotateQ = Math::QuaternionF::MakeAxisAngle(axes_.up, kRotationRadian_);
+    // クオータニオンを用いて正面と右方向のベクトルを回転
+    axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotateQ);
+    axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotateQ);
+
+    matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_, &matTrans_);
+
     Object3D::Update();
 }
 
@@ -78,6 +97,22 @@ void Coin::Collision_onTrigger(void)
             se_getCoin_.Stop();
         }
         se_getCoin_.Play();
+    }
+}
+
+void Coin::Collision_onCollision(void)
+{
+    // nullチェック
+    if (!collision_contact_.GetOther()) { return; }
+
+    if (collision_contact_.GetOther()->GetID() == "gravityArea")
+    {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(collision_contact_.GetOther());
+
+        // 球状重力エリア内に入ってる場合に行う処理。
+        const Vector3 planet2Coin = Vector3(collision_contact_.center - other->center).Normalize(); // 星の中心からコインまでのベクトル
+        // 新しい上ベクトル用に保存。
+        vec3_newUp_ = planet2Coin;
     }
 }
 
