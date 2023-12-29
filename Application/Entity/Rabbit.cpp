@@ -4,18 +4,18 @@
 Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
     : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
-    arg_colMPtr->Register(&sphereCollider_);
-    arg_colMPtr->Register(&detectPlayerCollider_);
+    arg_colMPtr->Register(&sphere_collision_);
+    arg_colMPtr->Register(&sphere_detectPlayer_);
 
-    sphereCollider_.SetID("rabbit");
-    detectPlayerCollider_.SetID("rabbit_detectPlayer");
+    sphere_collision_.SetID("rabbit");
+    sphere_detectPlayer_.SetID("rabbit_detectPlayer");
 
-    sphereCollider_.callback_onCollision_ = std::bind(&Rabbit::OnCollision, this);
-    detectPlayerCollider_.callback_onCollision_ = std::bind(&Rabbit::OnDetectPlayer, this);
+    sphere_collision_.callback_onCollision_ = std::bind(&Rabbit::OnCollision, this);
+    sphere_detectPlayer_.callback_onCollision_ = std::bind(&Rabbit::OnDetectPlayer, this);
 
-    sphereCollider_.radius = kRadius_;
-    sphereCollider_.center = { 0,60,20 };
-    detectPlayerCollider_.radius = kDetectRadius_;
+    sphere_collision_.radius = kRadius_;
+    sphere_collision_.center = { 0,60,20 };
+    sphere_detectPlayer_.radius = kDetectRadius_;
 
     // 初期位置
     transform_.position = { 0,60,20 };
@@ -27,8 +27,8 @@ Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr,
 
 Rabbit::~Rabbit(void)
 {
-    colMPtr_->UnRegister(&sphereCollider_);
-    colMPtr_->UnRegister(&detectPlayerCollider_);
+    colMPtr_->UnRegister(&sphere_collision_);
+    colMPtr_->UnRegister(&sphere_detectPlayer_);
 
     // 丸影を使用している
     if (circleShadows_num_ >= 0)
@@ -71,8 +71,8 @@ void Rabbit::Update(void)
     Move();
 
     // コライダー更新
-    sphereCollider_.center = transform_.position;
-    detectPlayerCollider_.center = transform_.position;
+    sphere_collision_.center = transform_.position;
+    sphere_detectPlayer_.center = transform_.position;
 
     // 現在の上ベクトルと右ベクトルから正面ベクトルを再定義
     // 正面ベクトルが、プレイヤーを検知した瞬間のままだと、移動するにつれ兎がつぶれる（姿勢が正常ではないため）
@@ -159,24 +159,24 @@ void Rabbit::Process_CircleShadow(void)
 
 void Rabbit::OnCollision(void)
 {
-    if (sphereCollider_.GetOther()->GetID() == "gravityArea")
+    if (sphere_collision_.GetOther()->GetID() == "gravityArea")
     {
-        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
 
         // 球状重力エリア内に入ってる場合に行う処理。
-        Vector3 center2PlayerVec = sphereCollider_.center - other->center; // 星の中心からプレイヤーまでのベクトル
+        Vector3 center2PlayerVec = sphere_collision_.center - other->center; // 星の中心からプレイヤーまでのベクトル
         // 新しい上ベクトル用に保存。
         vec3_newUp_ = center2PlayerVec.Normalize();
     }
-    if (sphereCollider_.GetOther()->GetID() == "terrainSurface")
+    if (sphere_collision_.GetOther()->GetID() == "terrainSurface")
     {
-        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
 
         // ジャンプ量
         velocity_vertical_ = 0.f;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
+        float diff = Vector3(sphere_collision_.center - other->center).Length() - (other->radius + sphere_collision_.radius);
 
         Vector3 currentPos = transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
@@ -186,7 +186,7 @@ void Rabbit::OnCollision(void)
 
         transform_.position = currentPos;
     }
-    if (sphereCollider_.GetOther()->GetID() == "player")
+    if (sphere_collision_.GetOther()->GetID() == "player")
     {
         // 捕獲されたフラグをtrue
         isCaptured_ = true;
@@ -195,14 +195,28 @@ void Rabbit::OnCollision(void)
 
 void Rabbit::OnDetectPlayer(void)
 {
-    if (detectPlayerCollider_.GetOther()->GetID() == "player")
+    if (sphere_detectPlayer_.GetOther()->GetID() == "player")
     {
         // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
-        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(detectPlayerCollider_.GetOther());
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detectPlayer_.GetOther());
+        // (兎の座標 - プレイヤーの座標）
+        const Vector3 player2Rabbit = transform_.position - other->center;
 
-        // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
-        vec3_moveDirection_ = Vector3(transform_.position - other->center).Normalize(); // (兎の座標 - プレイヤーの座標）
-        // 検知した地点を原点としてどの程度移動するかを設定
-        moveDist_ = kMoveDist_;
+        // 移動可能距離が0以下
+        const bool isZeroMoveDist = moveDist_ <= 0.f;
+        if (isZeroMoveDist) 
+        {
+            // 検知したプレイヤーの方を向く。（↓マイナスで、"プレイヤーから兎"のベクトルを反転している）
+            vec3_moveDirection_ = -player2Rabbit.Normalize(); // ※検知している段階ではプレイヤーの方を向いているが、さらに近づいてきたら逃げる。
+        }
+
+        // プレイヤーから兎までの距離が、"kDetectRadius_escape_"以下である
+        if (player2Rabbit.Length() <= kDetectRadius_escape_)
+        {
+            // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
+            vec3_moveDirection_ = player2Rabbit.Normalize();
+            // 検知した地点を原点としてどの程度移動するかを設定
+            moveDist_ = kMoveDist_;
+        }
     }
 }

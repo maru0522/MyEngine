@@ -10,12 +10,13 @@
 class Rabbit
 {
 public:
-    const float kRadius_{ 1.f };        // 当たり判定の半径
-    const float kDetectRadius_{ 10.f }; // プレイヤー検知の半径
-    const float kJumpPower_{ 7.f };     // ジャンプ力
-    const float kMoveSpeed_{ 0.2f };    // 移動速度
-    const float kGravity_{ 0.98f };     // かかる重力値
-    const float kMoveDist_{ 30.f };     // プレイヤーを検知した地点からどのくらいの距離移動するのか。
+    const float kRadius_{ 1.f };                // 当たり判定の半径
+    const float kDetectRadius_{ 40.f };         // プレイヤー検知の半径
+    const float kDetectRadius_escape_{ 10.f };  // さらにこの半径内に入ったら、遠ざかる挙動
+    const float kJumpPower_{ 2.f };             // ジャンプ力
+    const float kMoveSpeed_{ 0.2f };            // 移動速度
+    const float kGravity_{ 0.98f };             // かかる重力値
+    const float kMoveDist_{ 30.f };             // プレイヤーを検知した地点からどのくらいの距離移動するのか。
 
     // 関数
     Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
@@ -46,8 +47,8 @@ private:
     Vector3 vec3_moveDirection_; // 移動する方向。
 
     CollisionManager* colMPtr_;
-    CollisionPrimitive::SphereCollider sphereCollider_;
-    CollisionPrimitive::SphereCollider detectPlayerCollider_;
+    CollisionPrimitive::SphereCollider sphere_collision_;
+    CollisionPrimitive::SphereCollider sphere_detectPlayer_;
 
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/rabbit/rabbit.obj") };
 
