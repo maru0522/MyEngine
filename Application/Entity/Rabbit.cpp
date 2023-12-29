@@ -1,7 +1,7 @@
 #include "Rabbit.h"
 #include "SimplifyImGui.h"
 
-Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr) 
+Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
     : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
     arg_colMPtr->Register(&sphereCollider_);
@@ -51,7 +51,73 @@ void Rabbit::Update(void)
     // プレイヤーに触れられた後なら処理をスキップ
     if (isCaptured_) { return; }
 
+    // 丸影処理
+    Process_CircleShadow();
 
+    // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
+    appearance_->GetCoordinatePtr()->mat_world = transformMatrix_.mat_world;
+    appearance_->Update();
+
+    // 1F前の姿勢として記録
+    axes_old_ = axes_;
+    // 新規上ベクトルの設定
+    axes_.up = vec3_newUp_;
+    // 移動する方向を正面ベクトルとして設定
+    axes_.forward = vec3_moveDirection_;
+    // 新規の上 x 正面のベクトルで右ベクトルを計算
+    axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 姿勢を正常に保つため && あとで、正面ベクトルを再定義するため。
+
+    // 移動
+    Move();
+
+    // コライダー更新
+    sphereCollider_.center = transform_.position;
+    detectPlayerCollider_.center = transform_.position;
+
+    // 現在の上ベクトルと右ベクトルから正面ベクトルを再定義
+    // 正面ベクトルが、プレイヤーを検知した瞬間のままだと、移動するにつれ兎がつぶれる（姿勢が正常ではないため）
+    const Vector3 forward = Math::Vec3::Cross(axes_.right, axes_.up);
+    // 移動する方向を正面ベクトルとして設定
+    axes_.forward = forward;
+    
+    vec3_moveDirection_ = forward;
+
+    transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+}
+
+void Rabbit::Draw(void)
+{
+    // 赤色のテクスチャを適用。（クソ見辛い）
+    if (isCaptured_ == false) { appearance_->Draw(); }
+    // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
+    //appearance_->Draw(/*"Resources/red1x1.png"*/);
+}
+
+void Rabbit::Move(void)
+{
+    // 移動ベクトル
+    //moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
+    //moveVec += redefinitionPRightFromCamera * inputVec.x;
+
+    // [メモ]プレイヤーの向きと兎の向きを内積でとって、直角に近いほど速度をある程度減速させれば、ターンしたときでも捕まえやすくなるのでは？
+
+    // 重力
+    velocity_vertical_ -= kGravity_;
+
+    // 垂直方向の移動量
+    const Vector3 velocity_vertical = axes_.up * velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
+    // 水平方向の移動量
+    const Vector3 velocity_horizontal = vec3_moveDirection_ * kMoveSpeed_;
+    // 合計の移動量
+    const Vector3 velocity_total = velocity_vertical + velocity_horizontal;
+
+    // 座標更新
+    const Vector3 pos = transform_.position + velocity_total;
+    transform_.position = pos;
+}
+
+void Rabbit::Process_CircleShadow(void)
+{
     // 丸影が使用可能なら
     if (circleShadows_num_ >= 0)
     {
@@ -78,72 +144,6 @@ void Rabbit::Update(void)
         lightManagerPtr_->SetLightAtten(type, circleShadows_num_, atten);
         lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, factorAngle);
     }
-
-    // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->mat_world = coordinate_.mat_world;
-    appearance_->Update();
-
-    // 移動量
-    Vector3 moveVec{};
-    Vector3 velocity{};
-    Move(moveVec, velocity); // 参照渡しで受け取る。
-
-    // 座標更新
-    Vector3 currentPos = transform_.position;
-    currentPos += velocity;
-    transform_.position = currentPos;
-
-    // コライダー更新
-    sphereCollider_.center = currentPos;
-    detectPlayerCollider_.center = currentPos;
-
-    // 球面のどの位置にいるかに応じて、正しい姿勢にするために3軸を再計算
-    Vector3 rightFromOldAxis = Math::Vec3::Cross(axes_.up.Normalize(), axes_.forward.Normalize()); // 右ベクトル：(更新された上ベクトル x 古い正面ベクトル)
-    axes_.right = rightFromOldAxis;
-    Vector3 forwardFromOldAxis = Math::Vec3::Cross(axes_.right.Normalize(), axes_.up.Normalize()); // 正面ベクトル：(更新された右ベクトル x 更新された上ベクトル)
-    axes_.forward = forwardFromOldAxis;
-
-    // 移動入力があった場合
-    if (moveVec.IsNonZero())
-    {
-        // 移動方向を向くような、移動方向に合わせた姿勢にするために右向きベクトルを再計算
-        Vector3 upFromAxis = axes_.up; // 上ベクトル：(更新された上ベクトルを取得）
-        Vector3 rightFromMoveVec = Math::Vec3::Cross(upFromAxis.Normalize(), moveVec.Normalize()); // 右ベクトル：(更新された上ベクトル x 移動ベクトル（移動方向 ≒ 正面ベクトル))
-        axes_.right = rightFromMoveVec.Normalize();
-        axes_.forward = moveVec.Normalize();
-    }
-
-    coordinate_.mat_world = Math::Function::AffinTrans(transform_, axes_);
-}
-
-void Rabbit::Draw(void)
-{
-    // 赤色のテクスチャを適用。（クソ見辛い）
-    if (isCaptured_ == false) { appearance_->Draw(); }
-    // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
-    //appearance_->Draw(/*"Resources/red1x1.png"*/);
-}
-
-void Rabbit::Move(Vector3& moveVec, Vector3& velocity)
-{
-    // 移動ベクトル
-    //moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
-    //moveVec += redefinitionPRightFromCamera * inputVec.x;
-
-    // プレイヤから兎方向へのベクトルをそのまま移動ベクトルとして起用する（仮）
-    // [メモ]プレイヤーの向きと兎の向きを内積でとって、直角に近いほど速度をある程度減速させれば、ターンしたときでも捕まえやすくなるのでは？
-    moveVec = (transform_.position - pPos_).Normalize();
-
-    // 重力
-    jumpVecNorm_ -= kGravity_;
-
-    // ジャンプベクトル
-    Vector3 jumpVec{};
-    jumpVec += axes_.up.Normalize() * jumpVecNorm_;
-
-    // 移動量
-    velocity += moveVec.Normalize() * kMoveSpeed_;
-    velocity += jumpVec;
 }
 
 void Rabbit::OnCollision(void)
@@ -153,15 +153,16 @@ void Rabbit::OnCollision(void)
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
         // 球状重力エリア内に入ってる場合に行う処理。
-        Vector3 center2PlayerVec = sphereCollider_.center - other->center;
-        axes_.up = center2PlayerVec.Normalize();
+        Vector3 center2PlayerVec = sphereCollider_.center - other->center; // 星の中心からプレイヤーまでのベクトル
+        // 新しい上ベクトル用に保存。
+        vec3_newUp_ = center2PlayerVec.Normalize();
     }
     if (sphereCollider_.GetOther()->GetID() == "terrainSurface")
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphereCollider_.GetOther());
 
         // ジャンプ量
-        jumpVecNorm_ = 0.f;
+        velocity_vertical_ = 0.f;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphereCollider_.center - other->center).Length() - (other->radius + sphereCollider_.radius);
@@ -176,6 +177,7 @@ void Rabbit::OnCollision(void)
     }
     if (sphereCollider_.GetOther()->GetID() == "player")
     {
+        // 捕獲されたフラグをtrue
         isCaptured_ = true;
     }
 }
@@ -184,9 +186,12 @@ void Rabbit::OnDetectPlayer(void)
 {
     if (detectPlayerCollider_.GetOther()->GetID() == "player")
     {
+        // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(detectPlayerCollider_.GetOther());
 
-        // 検知したプレイヤの座標を記録する。
-        pPos_ = other->center;
+        // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
+        vec3_moveDirection_ = Vector3(transform_.position - other->center).Normalize(); // (兎の座標 - プレイヤーの座標）
+        // 検知した地点を原点としてどの程度移動するかを設定
+        moveDist_ = kMoveDist_;
     }
 }
