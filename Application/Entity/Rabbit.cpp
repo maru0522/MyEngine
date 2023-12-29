@@ -101,19 +101,30 @@ void Rabbit::Move(void)
 
     // [メモ]プレイヤーの向きと兎の向きを内積でとって、直角に近いほど速度をある程度減速させれば、ターンしたときでも捕まえやすくなるのでは？
 
+    // 移動可能距離が、移動速度よりも大きいか
+    const bool isBiggerDist = moveDist_ > kMoveSpeed_;
+
     // 重力
     velocity_vertical_ -= kGravity_;
 
     // 垂直方向の移動量
     const Vector3 velocity_vertical = axes_.up * velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
     // 水平方向の移動量
-    const Vector3 velocity_horizontal = vec3_moveDirection_ * kMoveSpeed_;
+    Vector3 velocity_horizontal{};
+    isBiggerDist ?
+        velocity_horizontal = vec3_moveDirection_ * kMoveSpeed_ : // 移動可能距離が、移動速度より小さいなら
+        velocity_horizontal = vec3_moveDirection_ * moveDist_;    // 移動可能距離を超えて移動することは出来ない。
+
     // 合計の移動量
     const Vector3 velocity_total = velocity_vertical + velocity_horizontal;
-
     // 座標更新
     const Vector3 pos = transform_.position + velocity_total;
     transform_.position = pos;
+
+    // 移動可能距離を減らす（既に移動する処理は済ませたので）
+    moveDist_ -= kMoveSpeed_;
+    // 移動可能距離（変数: moveDist_の値は0未満にならない）
+    moveDist_ = (std::max)(moveDist_, 0.f);
 }
 
 void Rabbit::Process_CircleShadow(void)
