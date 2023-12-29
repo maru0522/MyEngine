@@ -49,8 +49,8 @@ void DemoScene::Initialize(void)
 
     player_->SetupLightCircleShadows();
 
-    hole1_->transform_.position = { 0,0,-48 };
-    hole2_->transform_.position = { 0,0,48 };
+    //hole1_->transform_.position = { 0,0,-48 };
+    //hole2_->transform_.position = { 0,0,48 };
 
     rock1_->TransformPtr()->position = { 48,18,9 };
     rock2_->TransformPtr()->position = { 49,-23,6 };
@@ -58,7 +58,7 @@ void DemoScene::Initialize(void)
     rock4_->TransformPtr()->position = { 49,10,-20 };
     rock5_->TransformPtr()->position = { 48,-12,-15 };
 
-    sticky1_->SetRoot({ 0,50.f,0 });
+    //sticky1_->SetRoot({ 0,50.f,0 });
 
     pipe1_->SetPosition({ 16,42.5f,20.f });
     pipe1_->SetRotation({ 0.497f,0.f,5.962f });
@@ -164,7 +164,7 @@ void DemoScene::Update(void)
     png_backGround_->Update();
 
     lightGroup_->Update();
-    testP_->Update();
+    //testP_->Update();
 
     //static float sRadius4Cam{};
     //ImGui::SliderFloat("sRadius4Cam", &sRadius4Cam, 0.f, 200.f);
@@ -217,12 +217,12 @@ void DemoScene::Update(void)
     //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
     //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
     GUI::BlankLine();
-    ImGui::Text("dummyp matrix");
-    Matrix4 p = testP_->GetCoordinatePtr()->mat_world;
-    ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
-    ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
-    ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
-    ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
+    //ImGui::Text("dummyp matrix");
+    //Matrix4 p = testP_->GetCoordinatePtr()->mat_world;
+    //ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
+    //ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
+    //ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
+    //ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
 
     GUI::BlankLine();
     ImGui::Text("followCamera matrix");
@@ -244,14 +244,14 @@ void DemoScene::Update(void)
 #endif // _DEBUG
 
     //hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
-    hole1_->Update();
-    hole2_->Update();
-    house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
-    house_->Update();
+    //hole1_->Update();
+    //hole2_->Update();
+    //house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
+    //house_->Update();
 
     // z にちょっと、xにすこし
     //skyDivide_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0, 80, 1000), Vector3(1000, 1, 1000), Vector3(0.1f, 0, -0.3f));
-    skyDivide_->Update();
+    //skyDivide_->Update();
 
     rock1_->Update();
     rock2_->Update();
@@ -259,7 +259,7 @@ void DemoScene::Update(void)
     rock4_->Update();
     rock5_->Update();
 
-    sticky1_->Update();
+    //sticky1_->Update();
     pipe1_->Update();
     pipe2_->Update();
 
@@ -300,16 +300,16 @@ void DemoScene::Draw3d(void)
     if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
 
-    hole1_->Draw();
-    hole2_->Draw();
-    house_->Draw();
+    //hole1_->Draw();
+    //hole2_->Draw();
+    //house_->Draw();
     rock1_->Draw();
     rock2_->Draw();
     rock3_->Draw();
     rock4_->Draw();
     rock5_->Draw();
 
-    sticky1_->Draw();
+    //sticky1_->Draw();
     pipe1_->Draw();
     pipe2_->Draw();
 
@@ -326,7 +326,7 @@ void DemoScene::Draw3d(void)
     //    object.second->Draw();
     //}
     skydome_->Draw();
-    skyDivide_->Draw();
+    //skyDivide_->Draw();
     c_.Draw();
 }
 

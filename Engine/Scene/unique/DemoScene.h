@@ -61,7 +61,7 @@ public:
     std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
+    //std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     std::unique_ptr<Sprite> png_backGround_{ std::make_unique<Sprite>("Resources/BackGround.png") };
     bool isBG_;
 
@@ -75,15 +75,15 @@ public:
 
     //
     //std::unique_ptr<Object3D> hole_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
-    std::unique_ptr<IventArea_Tantative> hole1_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel1") };
-    std::unique_ptr<IventArea_Tantative> hole2_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel2") };
-    std::unique_ptr<Object3D> house_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
+    //std::unique_ptr<IventArea_Tantative> hole1_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel1") };
+    //std::unique_ptr<IventArea_Tantative> hole2_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel2") };
+    //std::unique_ptr<Object3D> house_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
     std::unique_ptr<Rock> rock1_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock2_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock3_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock4_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock5_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
-    std::unique_ptr<StickyBall> sticky1_{std::make_unique<StickyBall>(CollisionManager::GetInstance()) };
+    //std::unique_ptr<StickyBall> sticky1_{std::make_unique<StickyBall>(CollisionManager::GetInstance()) };
 
     std::unique_ptr<Pipe> pipe1_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
@@ -99,6 +99,6 @@ public:
     Event_EndTutorial b_;
     Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),CameraManager::GetInstance(),player_.get()};
 
-    std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
+    //std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };
 
