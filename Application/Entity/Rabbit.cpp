@@ -77,9 +77,9 @@ void Rabbit::Update(void)
     // 現在の上ベクトルと右ベクトルから正面ベクトルを再定義
     // 正面ベクトルが、プレイヤーを検知した瞬間のままだと、移動するにつれ兎がつぶれる（姿勢が正常ではないため）
     const Vector3 forward = Math::Vec3::Cross(axes_.right, axes_.up);
-    // 移動する方向を正面ベクトルとして設定
+    // 再定義したベクトルを正面ベクトルに設定
     axes_.forward = forward;
-    
+    // 再定義したベクトルを移動方向ベクトルに設定。
     vec3_moveDirection_ = forward;
 
     transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, axes_);
