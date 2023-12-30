@@ -28,6 +28,7 @@ public:
     CollisionPrimitive::SphereCollider surface_;
     CollisionPrimitive::SphereCollider gravityArea_;
     CollisionPrimitive::SphereCollider repelCameraArea_;
+    bool isUV_;
 
 private:
     void OnCollision(void) {}

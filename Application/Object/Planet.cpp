@@ -56,11 +56,17 @@ void Planet::Update(void)
     addCols_[0]->Update();
     addCols_[1]->Update();
     addCols_[2]->Update();
+
+    GUI::Begin("Planet");
+    GUI::CheckBox("useUVChecker", &isUV_);
+    GUI::End();
 }
 
 void Planet::Draw(void)
 {
-    appearance_->Draw("Resources/planet.png");
+    isUV_ ?
+        appearance_->Draw("Resources/uvchecker.jpg") :
+        appearance_->Draw("Resources/planet4.png");
 
     //addCols_[0]->Draw();
     //addCols_[1]->Draw();
