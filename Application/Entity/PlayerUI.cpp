@@ -128,7 +128,7 @@ void PlayerUI::Draw(void)
     uiPtr_->Draw("playerUI_starCount");
     uiPtr_->Draw("playerUI_coinCount");
     uiPtr_->Draw("playerUI_starDustCount");
-    uiPtr_->Draw("playerUI_remain");
+    //uiPtr_->Draw("playerUI_remain");
     uiPtr_->Draw("playerUI_life");
     uiPtr_->Draw("playerUI_figures");
     uiPtr_->Draw("playerUI_figures2");
