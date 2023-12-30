@@ -252,7 +252,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // 移動vec = (前後vec * 入力vec.y) + (水平vec * 入力vec.y)
     Vector3 moveVec = (commonInfo_->axes_.forward * vec2_input.y) + (commonInfo_->axes_.right * vec2_input.x);
     // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
-    Vector3 velocity = (moveVec.Normalize() * commonInfo_->kMoveSpeed_) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
+    Vector3 velocity = (moveVec.Normalize() * (commonInfo_->kMoveSpeed_ + commonInfo_->coinNum_ * 0.01f * commonInfo_->kMoveSpeed_)) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
     // 座標更新
     Process_Transform(velocity);
 

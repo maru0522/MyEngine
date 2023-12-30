@@ -48,8 +48,6 @@ private:
     //>> 変数
     std::shared_ptr<Player_CommonInfomation> commonInfo_;
 
-    int32_t coinNum_;
-
     CollisionManager* colMPtr_;
     CollisionPrimitive::SphereCollider sphereCollider_;
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };

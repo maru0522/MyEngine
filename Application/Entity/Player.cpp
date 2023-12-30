@@ -349,7 +349,7 @@ void Player::OnTrigger(void)
 {
     if (sphereCollider_.GetOther()->GetID() == "coin_contact")
     {
-        coinNum_++;
+        commonInfo_->coinNum_++;
     }
     if (sphereCollider_.GetOther()->GetID() == "rabbit")
     {

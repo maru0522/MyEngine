@@ -49,6 +49,8 @@ struct Player_CommonInfomation
     float jumpVecNorm_{};
     bool isLanding_{};
 
+    int32_t coinNum_;
+
     PlayerEventState eventState_{};
 
     CameraManager* camMPtr_{};
