@@ -29,8 +29,10 @@ void PlayerUI::Initialize(void)
     if (!uiPtr_) { return; }
 
     // 星の数の画像
-    uiPtr_->Register("playerUI_starCount", "Resources/starCount.png");
-    uiPtr_->GetUISpritePtr("playerUI_starCount")->SetScale(Vector2{ 0.4f,0.4f });
+    //uiPtr_->Register("playerUI_starCount", "Resources/starCount.png");
+    uiPtr_->Register("playerUI_starCount", "Resources/RStick.png");
+    //uiPtr_->GetUISpritePtr("playerUI_starCount")->SetScale(Vector2{ 0.4f,0.4f });
+    uiPtr_->GetUISpritePtr("playerUI_starCount")->SetScale(Vector2{ 0.9f,0.9f });
     uiPtr_->GetUISpritePtr("playerUI_starCount")->SetPosition(Vector2{ kDefPos_left_ ,40.f });
     uiPtr_->GetUISpritePtr("playerUI_starCount")->SetAlpha(0.f);
 
