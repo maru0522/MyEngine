@@ -8,6 +8,10 @@
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
+/**
+ * @file AudioManager.h
+ * @brief 各音源のロードやptr保持を行うクラス
+ */
 
 class AudioManager final
 {

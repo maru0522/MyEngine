@@ -8,6 +8,10 @@
 #include <vector>
 #include "Util.h"
 #include <wrl.h>
+/**
+ * @file VertexBuffer.h
+ * @brief 頂点バッファをラップしたクラスが宣言されたファイル
+ */
 
 template<class T> class VertexBuffer
 {

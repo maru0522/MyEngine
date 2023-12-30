@@ -9,6 +9,10 @@
 #pragma warning(pop)
 
 #include "InitDirectX.h"
+/**
+ * @file TextureManager.h
+ * @brief 画像を保持したり、各画像とニックネームを保持したりするマネージャークラスが宣言されたファイル
+ */
 
 class TextureManager final
 {

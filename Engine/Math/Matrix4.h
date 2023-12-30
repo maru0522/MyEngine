@@ -2,6 +2,10 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
+/**
+ * @file Matrix4.h
+ * @brief 4x4行列についてのクラスが宣言されたファイル
+ */
 
 struct Matrix4 final
 {

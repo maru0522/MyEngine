@@ -1,5 +1,9 @@
 #pragma once
 #include "ICamera.h"
+/**
+ * @file DebugCamera.h
+ * @brief デバッグ用のカメラクラスが宣言されたファイル
+ */
 
 class DebugCamera final : public ICamera
 {

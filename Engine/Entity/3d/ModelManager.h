@@ -18,6 +18,10 @@
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Mesh.h"
+/**
+ * @file ModelManager.h
+ * @brief モデルについての情報を含むModel_t構造体や、ModelManager等が宣言されたファイル
+ */
 
 struct Model_t final
 {

@@ -3,6 +3,10 @@
 #include "Object3D.h"
 #include "CollisionPrimitive.h"
 #include "TerrainSurfaceCollider.h"
+/**
+ * @file Planet.h
+ * @brief チュートリアル用の島クラス
+ */
 
 class Planet
 {

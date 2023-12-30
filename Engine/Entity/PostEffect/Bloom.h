@@ -1,6 +1,12 @@
 #pragma once
 #include "PostEffect.h"
 #include "HighLumi.h"
+/**
+ * @file Bloom.h
+ * @brief ポストエフェクトのBloomについてのクラスが宣言されたファイル
+ */
+
+
 class Bloom :
     public PostEffect/*, public HighLumi*/
 {

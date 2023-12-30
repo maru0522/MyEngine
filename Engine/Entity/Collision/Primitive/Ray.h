@@ -1,6 +1,10 @@
 #pragma once
 #include "IPrimitive.h"
 #include "Vector3.h"
+/**
+ * @file Ray.h
+ * @brief Rayについてのクラスが宣言されたファイル
+ */
 
 namespace Primitive
 {

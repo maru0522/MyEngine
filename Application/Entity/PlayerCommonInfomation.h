@@ -1,6 +1,10 @@
 #pragma once
 #include "Transform.h"
 #include "CameraManager.h"
+/**
+ * @file Player_CommonInfomation.h
+ * @brief Player.hとPlayerBehaviorが共通して管理したい情報を保持する構造体が宣言されたファイル
+ */
 
 enum class PlayerEventState
 {

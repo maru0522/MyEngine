@@ -1,6 +1,10 @@
 #pragma once
 #include "IPrimitive.h"
 #include "Vector3.h"
+/**
+ * @file Sphere.h
+ * @brief Sphereについてのクラスが宣言されたファイル
+ */
 
 namespace Primitive
 {

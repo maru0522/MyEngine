@@ -1,6 +1,10 @@
 #pragma once
 #include "ICollider.h"
 #include "Ray.h"
+/**
+ * @file RayCollider.h
+ * @brief Rayコライダーについてのクラスが宣言されたファイル
+ */
 
 namespace CollisionPrimitive
 {

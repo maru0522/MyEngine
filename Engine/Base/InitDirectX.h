@@ -10,6 +10,10 @@
 
 #include "WndAPI.h"
 #include "FPSController.h"
+/**
+ * @file InitDirectX.h
+ * @brief DirectXを使用するために、諸々の初期化処理やその後のptr保持を行うクラス。
+ */
 
 class InitDirectX final
 {

@@ -5,6 +5,10 @@
 #include "Timer.h"
 #include "Planet.h"
 #include "PlayerCommonInfomation.h"
+/**
+ * @file PlayerBehavior.h
+ * @brief プレイヤーの挙動全般を管理
+ */
 
 // 前方宣言
 class Player;

@@ -1,7 +1,11 @@
-﻿#pragma once
+#pragma once
 #include <Windows.h>
 #include <cstdint>
 #include <string>
+/**
+ * @file WndAPI.h
+ * @brief ウィンドウを使いやすくするためのクラスが書かれたファイル。
+ */
 
 class WndAPI final
 {

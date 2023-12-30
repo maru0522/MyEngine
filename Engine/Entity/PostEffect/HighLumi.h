@@ -1,5 +1,10 @@
 #pragma once
 #include "PostEffect.h"
+/**
+ * @file HighLumi.h
+ * @brief ポストエフェクトのHighLumiについてのクラスが宣言されたファイル
+ */
+
 class HighLumi :
     public PostEffect
 {

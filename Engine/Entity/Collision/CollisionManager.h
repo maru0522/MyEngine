@@ -2,6 +2,10 @@
 #include <forward_list>
 #include <memory>
 #include "ICollider.h"
+/**
+ * @file CollisionManager.h
+ * @brief 当たり判定管理を行うクラスが宣言されたファイル
+ */
 
 class CollisionManager final
 {

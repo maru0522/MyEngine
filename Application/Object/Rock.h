@@ -1,7 +1,11 @@
-﻿#pragma once
+#pragma once
 #include "Object3D.h"
 #include "CollisionManager.h"
 #include "CollisionPrimitive.h"
+/**
+ * @file Rock.h
+ * @brief チュートリアル島に設置する尖った岩
+ */
 
 class Rock :
     public Object3D

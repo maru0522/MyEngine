@@ -2,6 +2,10 @@
 #include <cstdint>
 #include "Timer.h"
 #include "Sprite.h"
+/**
+ * @file SceneTransition.h
+ * @brief シーン遷移クラスの基底となるクラスが宣言されたファイル
+ */
 
 enum class TransitionType
 {

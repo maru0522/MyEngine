@@ -8,6 +8,10 @@
 #include <vector>
 #include "Util.h"
 #include <wrl.h>
+/**
+ * @file Index.h
+ * @brief インデックスバッファ保持するクラスが宣言されたファイル
+ */
 
 class IndexBuffer
 {

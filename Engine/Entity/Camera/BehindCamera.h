@@ -1,5 +1,10 @@
 #pragma once
 #include "ICamera.h"
+/**
+ * @file BehindCamera.h
+ * @brief プレイヤーの頭上から追従するクラスが宣言されたファイル
+ */
+
 class BehindCamera : public ICamera
 {
 public:

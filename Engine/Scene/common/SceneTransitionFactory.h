@@ -1,6 +1,10 @@
 #pragma once
 #include "SceneTransition.h"
 #include <memory>
+/**
+ * @file SceneTransitionFactory.h
+ * @brief シーン遷移クラスを生成するクラスが宣言されたファイル
+ */
 
 enum class SceneTransitionName
 {

@@ -1,6 +1,10 @@
 #pragma once
 #include "Vector3.h"
 #include "ConstBuffer.h"
+/**
+ * @file DirectionalLight.h
+ * @brief 平行光源についてのクラスが宣言されたファイル
+ */
 
 class DirectionalLight
 {

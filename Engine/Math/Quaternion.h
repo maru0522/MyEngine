@@ -1,6 +1,10 @@
 #pragma once
 #include "Vector3.h"
 #include "Matrix4.h"
+/**
+ * @file Quaternion.h
+ * @brief クオータニオンについてのクラスが宣言されたファイル
+ */
 
 class Quaternion
 {

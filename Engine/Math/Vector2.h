@@ -1,4 +1,8 @@
 #pragma once
+/**
+ * @file Vector2.h
+ * @brief 二次元ベクトルについてのクラスが宣言されたファイル
+ */
 
 struct Vector2 final
 {

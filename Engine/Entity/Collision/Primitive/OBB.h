@@ -1,6 +1,10 @@
 #pragma once
 #include "IPrimitive.h"
 #include "Vector3.h"
+/**
+ * @file OBB.h
+ * @brief OBBについてのクラスが宣言されたファイル
+ */
 
 namespace Primitive
 {

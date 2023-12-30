@@ -1,6 +1,10 @@
 #pragma once
 #include "Matrix4.h"
 #include "Vector2.h"
+/**
+ * @file Screen.h
+ * @brief カメラの情報から、スクリーン座標とワールド座標を変換するクラスが宣言されたファイル
+ */
 
 class Screen
 {

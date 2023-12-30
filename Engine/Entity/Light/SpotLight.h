@@ -3,6 +3,10 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "MathUtil.h"
+/**
+ * @file SpotLight.h
+ * @brief SpotLightについてのクラスが宣言されたファイル
+ */
 
 class SpotLight
 {

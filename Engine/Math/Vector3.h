@@ -1,5 +1,9 @@
 #pragma once
 #include <vector>
+/**
+ * @file Vector3.h
+ * @brief 三次元ベクトルについてのクラスが宣言されたファイル
+ */
 
 struct Vector3 final
 {

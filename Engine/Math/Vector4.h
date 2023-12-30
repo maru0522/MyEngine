@@ -1,4 +1,8 @@
 #pragma once
+/**
+ * @file Vector4.h
+ * @brief 四次元ベクトルについてのクラスが宣言されたファイル
+ */
 
 struct Vector4 final
 {

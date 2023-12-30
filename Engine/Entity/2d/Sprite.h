@@ -19,6 +19,10 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 #include "WndAPI.h"
+/**
+ * @file Sprite.h
+ * @brief 画像を張り付けるポリゴンを生成するクラスが宣言されたファイル
+ */
 
 class Sprite
 {

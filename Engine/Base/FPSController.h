@@ -1,5 +1,9 @@
-﻿#pragma once
+#pragma once
 #include <chrono>
+/**
+ * @file FPSController.h
+ * @brief frame/secondを指定した値以下になるよう調整するクラス。
+ */
 
 class FPSController final
 {

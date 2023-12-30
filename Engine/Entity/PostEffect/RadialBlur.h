@@ -1,5 +1,10 @@
 #pragma once
 #include "PostEffect.h"
+/**
+ * @file RadialBlur.h
+ * @brief ポストエフェクトのRadialBlurについてのクラスが宣言されたファイル
+ */
+
 class RadialBlur :
     public PostEffect
 {

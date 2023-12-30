@@ -4,7 +4,10 @@
 #include "Vector3.h"
 #include <functional>
 #include <forward_list>
-
+/**
+ * @file ICollider.h
+ * @brief 矩形コライダーの基底となるクラスが宣言されたファイル
+ */
 
 // 前方宣言
 class CollisionManager;

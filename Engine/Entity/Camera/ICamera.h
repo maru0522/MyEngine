@@ -3,6 +3,10 @@
 #include <string>
 #include "SceneNameList.h"
 #include "Screen.h"
+/**
+ * @file ICamera.h
+ * @brief 様々なカメラクラスの基底となるカメラクラスが宣言されたファイル
+ */
 
 // 前方宣言
 class CameraManager; // 前方宣言なのでファイル内に隠蔽

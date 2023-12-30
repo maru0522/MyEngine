@@ -1,9 +1,13 @@
-﻿#pragma once
+#pragma once
 #include <string>
 #include "json.hpp"
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "ModelManager.h"
+/**
+ * @file LevelData.h
+ * @brief Blenderからオブジェクトを配置する際に経由するクラス。
+ */
 
 class LevelData
 {

@@ -2,6 +2,11 @@
 #include <string>
 #include <filesystem>
 #include <typeinfo>
+/**
+ * @file Util.h
+ * @brief QOLが上がるような自作クラスが宣言されたファイル
+ */
+
 
 namespace Util {
 

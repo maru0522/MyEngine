@@ -4,6 +4,10 @@
 #pragma warning(disable:4820)
 #include <d3d12.h>
 #pragma warning(pop)
+/**
+ * @file RenderTexture.h
+ * @brief スクリーンを描画するテクスチャクラスが宣言されたファイル
+ */
 
 class RenderTexture final
 {

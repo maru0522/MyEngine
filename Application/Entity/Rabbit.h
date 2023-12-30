@@ -6,6 +6,10 @@
 #include "Object3D.h"
 #include "Planet.h"
 #include "LightManager.h"
+/**
+ * @file Rabbit.h
+ * @brief 兎クラス
+ */
 
 class Rabbit
 {

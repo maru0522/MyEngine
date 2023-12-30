@@ -5,6 +5,10 @@
 #include "Sound.h"
 #include "Planet.h"
 #include "LightManager.h"
+/**
+ * @file Coin.h
+ * @brief コインクラス
+ */
 
 class Coin :
     public Object3D

@@ -1,5 +1,10 @@
 #pragma once
 #include "PostEffect.h"
+/**
+ * @file GaussianBlur.h
+ * @brief ポストエフェクトのガウシアンブラーについてのクラスが宣言されたファイル
+ */
+
 class GaussianBlur :
     public PostEffect
 {

@@ -5,6 +5,10 @@
 #include <filesystem>
 #include "Vector3.h"
 #include "Vector2.h"
+/**
+ * @file Mesh.h
+ * @brief モデル用の頂点や、インデックスをまとめて保持するクラスが宣言されたファイル
+ */
 
 class Mesh
 {

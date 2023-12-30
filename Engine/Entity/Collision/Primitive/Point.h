@@ -1,6 +1,10 @@
 #pragma once
 #include "IPrimitive.h"
 #include "Vector3.h"
+/**
+ * @file Point.h
+ * @brief Pointについてのクラスが宣言されたファイル
+ */
 
 namespace Primitive
 {

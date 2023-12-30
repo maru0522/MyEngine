@@ -1,6 +1,10 @@
 #pragma once
 #include "IPrimitive.h"
 #include "Vector3.h"
+/**
+ * @file Plane.h
+ * @brief Planeについてのクラスが宣言されたファイル
+ */
 
 namespace Primitive
 {

@@ -2,6 +2,10 @@
 #include "Vector3.h"
 #include "Player.h"
 #include <ICamera.h>
+/**
+ * @file SphericalCamera.h
+ * @brief 球面座標で座標更新を行うカメラクラスが宣言されたファイル
+ */
 
 class SphericalCamera : public ICamera
 {

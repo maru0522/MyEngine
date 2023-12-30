@@ -1,6 +1,10 @@
 #pragma once
 #include "ICollider.h"
 #include "OBB.h"
+/**
+ * @file OBBCollider.h
+ * @brief OBBコライダーについてのクラスが宣言されたファイル
+ */
 
 namespace CollisionPrimitive
 {

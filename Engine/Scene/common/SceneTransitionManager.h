@@ -2,6 +2,10 @@
 #include <memory>
 #include "SceneTransition.h"
 #include "SceneTransitionFactory.h"
+/**
+ * @file SceneTransitionManager.h
+ * @brief 各シーン遷移クラスを管理するクラスが宣言されたファイル
+ */
 
 class SceneTransitionManager
 {

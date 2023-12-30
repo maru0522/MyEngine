@@ -2,6 +2,10 @@
 #include <wrl.h>
 #include "WndAPI.h"
 #include "Vector4.h"
+/**
+ * @file ImguiController.h
+ * @brief ImGuiを使用する上での初期化処理や管理全般を行うクラス。
+ */
 
 class ImGuiController final
 {

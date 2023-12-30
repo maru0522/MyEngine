@@ -1,6 +1,10 @@
 #pragma once
 #include "IPrimitive.h"
 #include "Vector3.h"
+/**
+ * @file AABB.h
+ * @brief AABBについてのクラスが宣言されたファイル
+ */
 
 namespace Primitive
 {

@@ -1,6 +1,10 @@
 #pragma once
 #include "FrameWork.h"
 #include "BackGroundTexture.h"
+/**
+ * @file GameSystem.h
+ * @brief FrameWorkに次いで、ゲームの核となるクラス。アプリケーション特有のマネージャークラスの更新処理はこちらで実行する。
+ */
 
 class GameSystem final :
     public FrameWork

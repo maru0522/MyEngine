@@ -1,5 +1,11 @@
 #pragma once
 #include "ICamera.h"
+/**
+ * @file NormalCamera.h
+ * @brief 最もベーシックなカメラのクラスが宣言されたファイル
+ */
+
+
 class NormalCamera : public ICamera
 {
 public:

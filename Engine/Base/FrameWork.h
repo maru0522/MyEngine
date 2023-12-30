@@ -11,6 +11,10 @@
 #include "AudioManager.h"
 #include "PostEffectManager.h"
 #include "UI.h"
+/**
+ * @file FrameWork.h
+ * @brief 各マネージャークラスの更新処理等を実行する、エンジンの核となるクラス。
+ */
 
 class FrameWork
 {

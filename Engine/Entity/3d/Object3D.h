@@ -8,6 +8,10 @@
 #include "Matrix4.h"
 #include "LightManager.h"
 #include "Transform.h"
+/**
+ * @file Object3D.h
+ * @brief 保持するワールド行列通りに、モデルを描画するクラス。
+ */
 
 class Object3D
 {

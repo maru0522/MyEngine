@@ -4,6 +4,10 @@
 #include "SceneFactory.h"
 #include "SceneTransitionManager.h"
 #include "Timer.h"
+/**
+ * @file SceneManager.h
+ * @brief シーンを管理するクラスが宣言されたファイル
+ */
 
 class SceneManager
 {

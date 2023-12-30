@@ -1,6 +1,10 @@
 #pragma once
 #include "UI.h"
 #include "Timer.h"
+/**
+ * @file Player_UI.h
+ * @brief プレイヤー用のUIに関する処理を纏めたクラスが宣言されたファイル
+ */
 
 class PlayerUI
 {

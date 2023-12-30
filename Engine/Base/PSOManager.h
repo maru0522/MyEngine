@@ -8,6 +8,10 @@
 #include <d3d12.h>
 #pragma warning(pop)
 #include <d3dx12.h>
+/**
+ * @file PSOManager.h
+ * @brief GraphicsPipelineを管理するクラスやHelperクラス等が書かれたファイル
+ */
 
 class HelperGraphicPipeline
 {

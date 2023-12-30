@@ -1,5 +1,9 @@
 #pragma once
 #include <chrono>
+/**
+ * @file Timer.h
+ * @brief タイマーについてのクラス群が羅列して宣言されたファイル
+ */
 
 class ITimer
 {

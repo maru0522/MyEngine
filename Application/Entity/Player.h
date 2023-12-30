@@ -10,6 +10,11 @@
 #include "PlayerUI.h"
 #include "PlayerCommonInfomation.h"
 
+/**
+ * @file Player.h
+ * @brief Playerクラスのヘッダー
+ */
+
 class Player
 {
 public:

@@ -1,6 +1,10 @@
 #pragma once
 #include "ICollider.h"
 #include "Plane.h"
+/**
+ * @file PlaneCollider.h
+ * @brief Planeコライダーについてのクラスが宣言されたファイル
+ */
 
 namespace CollisionPrimitive
 {

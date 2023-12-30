@@ -2,6 +2,10 @@
 #include "Object3D.h"
 #include "CollisionManager.h"
 #include "CollisionPrimitive.h"
+/**
+ * @file Sticky.h
+ * @brief 緑色のぶよぶよした植物
+ */
 
 class StickyBall :
     public Object3D

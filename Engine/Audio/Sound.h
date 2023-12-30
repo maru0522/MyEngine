@@ -3,6 +3,10 @@
 #include <filesystem>
 #include "AudioManager.h"
 #include <xaudio2.h>
+/**
+ * @file Sound.h
+ * @brief 音源に対して音量やピッチの調整を行うクラス。AudioManagerからptrをコピーして使用する。
+ */
 
 class Sound final
 {

@@ -2,6 +2,10 @@
 #include "Object3D.h"
 #include "CollisionPrimitive.h"
 #include "CollisionManager.h"
+/**
+ * @file Pipe.h
+ * @brief 土管クラス
+ */
 
 class Pipe final : public Object3D
 {

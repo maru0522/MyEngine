@@ -11,6 +11,10 @@
 #include "ConstBuffer.h"
 #include "VertexBuffer.h"
 #include "RenderTexture.h"
+/**
+ * @file PostEffect.h
+ * @brief 各ポストエフェクト用のクラスの基底となるクラスが宣言されたファイル
+ */
 
 class PostEffect
 {

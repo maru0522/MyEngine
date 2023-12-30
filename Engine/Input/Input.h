@@ -7,6 +7,10 @@
 
 #include "WndAPI.h"
 #include "Vector2.h"
+/**
+ * @file Input.h
+ * @brief キーボードやコントローラーなどの入力を検知したかどうか返す関数が宣言されたファイル
+ */
 
 namespace Input {
     void InitializeAll(WndAPI* p_wndapi);

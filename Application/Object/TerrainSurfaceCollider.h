@@ -2,6 +2,10 @@
 #include "CollisionManager.h"
 #include "SphereCollider.h"
 #include "Object3D.h"
+/**
+ * @file TerrainSurfaceCollider.h
+ * @brief チュートリアル島の凹凸用簡易当たり判定球
+ */
 
 class TerrainSurfaceCollider : public Object3D
 {

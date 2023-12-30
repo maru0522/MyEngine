@@ -10,6 +10,10 @@
 #pragma warning(pop)
 
 #include "InitDirectX.h"
+/**
+ * @file ConstBuffer.h
+ * @brief 定数バッファラップしたテンプレートクラスが宣言されたファイル
+ */
 
 template<typename T> class ConstBuffer
 {

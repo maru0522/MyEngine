@@ -1,6 +1,10 @@
 #pragma once
 #include "ICollider.h"
 #include "Point.h"
+/**
+ * @file PointCollider.h
+ * @brief Pointコライダーについてのクラスが宣言されたファイル
+ */
 
 namespace CollisionPrimitive
 {

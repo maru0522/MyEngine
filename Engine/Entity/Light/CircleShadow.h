@@ -2,6 +2,10 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "MathUtil.h"
+/**
+ * @file CircleShadow.h
+ * @brief 丸影についてのクラスが宣言されたファイル
+ */
 
 class CircleShadow
 {

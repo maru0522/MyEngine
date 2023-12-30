@@ -2,6 +2,10 @@
 #include <memory>
 #include "ICamera.h"
 #include "DebugCamera.h"
+/**
+ * @file CameraManager.h
+ * @brief カメラを管理し、切り替えたりするマネージャークラスが宣言されたファイル
+ */
 
 class CameraManager final
 {

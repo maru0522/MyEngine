@@ -7,6 +7,10 @@
 #include "CircleShadow.h"
 #include "ImguiController.h"
 #include "DirectionalLight.h"
+/**
+ * @file LightManager.h
+ * @brief 各ライトを管理するクラスが宣言されたファイル
+ */
 
 enum class LightType
 {

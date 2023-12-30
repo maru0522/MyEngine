@@ -8,6 +8,10 @@
 #include "Matrix4.h"
 #include "Transform.h"
 #include "Quaternion.h"
+/**
+ * @file MathUtil.h
+ * @brief 自作数学関数が羅列して宣言されたファイル
+ */
 
 static std::random_device sSeed_gen;
 static std::mt19937 sEngine(sSeed_gen());

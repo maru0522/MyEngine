@@ -1,4 +1,8 @@
 #pragma once
+/**
+ * @file IPrimitive.h
+ * @brief 各矩形クラスの基底となるクラスが宣言されたファイル
+ */
 
 enum class Shape
 {

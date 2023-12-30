@@ -1,6 +1,10 @@
 #pragma once
 #include "ICollider.h"
 #include "Sphere.h"
+/**
+ * @file SphereCollider.h
+ * @brief Sphereコライダーについてのクラスが宣言されたファイル
+ */
 
 namespace CollisionPrimitive
 {

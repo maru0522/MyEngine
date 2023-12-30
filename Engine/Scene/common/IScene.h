@@ -1,4 +1,9 @@
-﻿#pragma once
+#pragma once
+/**
+ * @file Scene.h
+ * @brief 各シーンの基底となるクラスが宣言されたファイル
+ */
+
 class IScene
 {
 public:

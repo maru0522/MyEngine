@@ -1,5 +1,9 @@
 #pragma once
 #include "Vector3.h"
+/**
+ * @file PointLight.h
+ * @brief 点光源についてのクラスが宣言されたファイル
+ */
 
 class PointLight
 {

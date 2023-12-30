@@ -3,6 +3,10 @@
 #include <imgui.h>
 #include "Vector2.h"
 #include "Vector3.h"
+/**
+ * @file SimplifyImGui.h
+ * @brief ImGuiの関数を自分用に、使いやすく/分かりやすく するためのラッパー関数が宣言されているファイル
+ */
 
 namespace GUI
 {
