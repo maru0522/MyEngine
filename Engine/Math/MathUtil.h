@@ -113,7 +113,7 @@ namespace Math {
         Vector3 Spline(const std::vector<Vector3>& arg_points, size_t startIndex, float timeRate);
     }
 
-    namespace Ease {
+    namespace Ease { // float用
         // In
         float EaseInSine(float t, float start = 0.f, float end = 1.f);
         float EaseInCubic(float t, float start = 0.f, float end = 1.f);
@@ -134,5 +134,14 @@ namespace Math {
         float EaseInOutQuint(float t, float start = 0.f, float end = 1.f);
         float EaseInOutCirc(float t, float start = 0.f, float end = 1.f);
         float EaseInOutElastic(float t, float start = 0.f, float end = 1.f);
+    }
+
+    namespace Ease3 { // Vector3用
+        // In
+        Vector3 EaseInSin(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
+        Vector3 EaseInCubic(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
+
+        // InOut
+        Vector3 EaseInOutCubic(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
     }
 }

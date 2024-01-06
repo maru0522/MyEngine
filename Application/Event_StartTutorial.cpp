@@ -3,7 +3,8 @@
 #include "SimplifyImGui.h"
 
 
-Event_StartTutorial::Event_StartTutorial(void)
+Event_StartTutorial::Event_StartTutorial(CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
+    : cameraMPtr_(arg_cameraMPtr), playerPtr_(arg_playerPtr)
 {
     // 画像サイズ
     const Vector2 size{ 1280.f,80.f };
@@ -45,8 +46,9 @@ Event_StartTutorial::Event_StartTutorial(void)
     string_->SetPosition(Vector2{ 640,360 });
     string_->SetAlpha(0.f);
 
-    camera_ = std::make_unique<NormalCamera>("event_startTutorial");
-    CameraManager::GetInstance()->Register(camera_.get());
+    // カメラの生成と初期設定。
+    camera_ = std::make_unique<NormalCamera>("event_startTutorial");                         // イベントカメラ
+    cameraMPtr_->Register(camera_.get());
     Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
 
@@ -55,12 +57,12 @@ Event_StartTutorial::Event_StartTutorial(void)
 
 Event_StartTutorial::~Event_StartTutorial(void)
 {
-    CameraManager::GetInstance()->UnRegister(camera_.get());
+    cameraMPtr_->UnRegister(camera_.get());
 }
 
 void Event_StartTutorial::Initialize(void)
 {
-    CameraManager::GetInstance()->SetCurrentCamera(camera_.get());
+    cameraMPtr_->SetCurrentCamera(camera_.get());
 
     timer_closeCam_.Start(kCloseTimer_);
     timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
@@ -96,6 +98,10 @@ void Event_StartTutorial::Execute(void)
 
     case Event_StartTutorial::CameraState::WAIT2:
         Update_WaitCam2();
+        break;
+
+    case Event_StartTutorial::CameraState::INTERPOLATE:
+        Update_Interpolate();
         break;
 
     case Event_StartTutorial::CameraState::FINISH:
@@ -137,7 +143,7 @@ void Event_StartTutorial::Update_CloseCam(void)
     //const float pos_z = Math::Ease::EaseInCirc(rate, -50.f, -23.f);
 
     Vector3 pos(0.f, 53.f, -50.f);
-    pos.z = Math::Ease::EaseInCirc(rate, -50.f, -23.f);
+    pos.z = Math::Ease::EaseInOutCubic(rate, -50.f, -23.f);
 
     // タイマーが完了しているか
     if (rate >= 1.f)
@@ -212,9 +218,9 @@ void Event_StartTutorial::Update_LeaveCam(void)
     //pos.x = Math::Ease::EaseInCubic(rate, 0.f, 86.f);
     //pos.y = Math::Ease::EaseInCubic(rate, 53.f, 54.f);
     //pos.z = Math::Ease::EaseInCubic(rate, -23.f, -382.f);
-    pos.x = Math::Ease::EaseInCubic(rate, 0.f, 0.f);
-    pos.y = Math::Ease::EaseInCubic(rate, 53.f, 7.f);
-    pos.z = Math::Ease::EaseInCubic(rate, -23.f, -210.f);
+    pos.x = Math::Ease::EaseInOutCubic(rate, 0.f, 0.f);
+    pos.y = Math::Ease::EaseInOutCubic(rate, 53.f, 7.f);
+    pos.z = Math::Ease::EaseInOutCubic(rate, -23.f, -210.f);
 
     Transform transform(pos, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
@@ -250,16 +256,80 @@ void Event_StartTutorial::Update_WaitCam2(void)
     // タイマーが完了しているか
     if (rate >= 1.f)
     {
+        // 次のタイマーを起動。
+        timer_interpolate_pos_.Start(kInterpolate_posTimer_);
+        timer_interpolate_pos_.SetAddSpeed(kInterpolate_posAddSpeed_);
+        timer_interpolate_axes_.Start(kInterpolate_axesTimer_);
+        timer_interpolate_axes_.SetAddSpeed(kInterpolate_axesAddSpeed_);
         // 今のタイマーを停止
         timer_waitCam2_.Finish(true);
 
-        cameraState_ = CameraState::FINISH;
-        CameraManager::GetInstance()->SetCurrentCamera("SphericalCamera_follow_player0");
-        CameraManager::GetInstance()->SetCurrentCamera("BehindCamera_follow_player0");
+        cameraState_ = CameraState::INTERPOLATE;
+        //CameraManager::GetInstance()->SetCurrentCamera("SphericalCamera_follow_player0");
+        //CameraManager::GetInstance()->SetCurrentCamera("BehindCamera_follow_player0");
+
+        // きちんとイベント終了後、違和感なく遷移させるために必要な事。
+        // 追従カメラがきちんとプレイヤーの真上にいさせる為に情報渡したり、追従カメラ自体にも更新をかけて情報通りの場所に移動させたり。
+        playerPtr_->HandOverToBehindCamera("BehindCamera_follow_player0");
+        cameraMPtr_->GetCamera("BehindCamera_follow_player0")->Update();
+        //cameraMPtr_->SetCurrentCamera(camera_interpolate_.get());
+
+        // 座標
+        pos_interpolate_start_ = Vector3(0.f, 7.f, -210.f);
+        pos_interpolate_end_ = cameraMPtr_->GetCamera("BehindCamera_follow_player0")->GetTransform().position;
+        // 姿勢
+        axes_interpolate_start_ = cameraMPtr_->GetCamera(camera_->GetId())->GetAxis3();
+        axes_interpolate_end_ = cameraMPtr_->GetCamera("BehindCamera_follow_player0")->GetAxis3();
 
         // 関数を抜ける
         return;
     }
+}
+
+void Event_StartTutorial::Update_Interpolate(void)
+{
+    timer_interpolate_pos_.Update();
+    timer_interpolate_axes_.Update();
+    const float rate_pos = timer_interpolate_pos_.GetTimeRate();
+    const float rate_axes = timer_interpolate_axes_.GetTimeRate();
+
+    const float axes_speed = timer_interpolate_axes_.GetAddSpeed();
+    if (rate_axes >= 0.53f) { timer_interpolate_axes_.SetAddSpeed(axes_speed + 0.7f); }
+
+    // camera_interpolateの最終位置を、スタート地点とする
+    const Vector3 start = pos_interpolate_start_;
+    // プレイヤーに追従するBehindCameraの位置を、エンド地点とする ※BehindCameraは、プレイヤーのUpdate()で渡された値を基に、座標を計算している。
+    // camera_interpolateの、タイマー完了時処理で呼び出しているプレイヤーの更新処理で、決定されたカメラの座標がエンド地点である。
+    const Vector3 end = pos_interpolate_end_;
+
+    Vector3 pos = Math::Ease3::EaseInOutCubic(rate_pos, start, end);
+    Transform transform(pos, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
+    camera_->SetTransform(transform);
+
+    Axis3 axes;
+    axes.forward = Math::Ease3::EaseInCubic(rate_axes, axes_interpolate_start_.forward, axes_interpolate_end_.forward);
+    axes.right = Math::Ease3::EaseInCubic(rate_axes, axes_interpolate_start_.right, axes_interpolate_end_.right);
+    axes.up = Math::Ease3::EaseInCubic(rate_axes, axes_interpolate_start_.up, axes_interpolate_end_.up);
+    camera_->SetAxis3(axes);
+
+    // タイマーが完了しているか
+    if (rate_pos >= 1.f && rate_axes >= 1.f)
+    {
+        // 今のタイマーを停止
+        timer_interpolate_pos_.Finish(true);
+        timer_interpolate_axes_.Finish(true);
+
+        cameraState_ = CameraState::FINISH;
+        cameraMPtr_->SetCurrentCamera("BehindCamera_follow_player0");
+
+        // 関数を抜ける
+        return;
+    }
+
+    GUI::Begin("aasasasasasa");
+    ImGui::Text(rate_pos >= 1.f ? "rate_pos: end" : "rate_pos: not end");
+    ImGui::Text(rate_axes >= 1.f ? "rate_axes: end" : "rate_axes: not end");
+    GUI::End();
 }
 
 void Event_StartTutorial::SetIsExecute(bool arg_isExecute)

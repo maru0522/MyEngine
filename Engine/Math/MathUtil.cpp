@@ -38,8 +38,9 @@ float Math::Ease::EaseOutSine(float t, float start, float end)
 
 float Math::Ease::EaseOutCubic(float t, float start, float end)
 {
-    float time{ 1.f - t * t * t };
-    return start * (1.f - time) + end * time;
+    float f{ 1.f - t };
+    float time{ 1.f - f * f * f };
+    return start + (end - start) * time;
 }
 
 float Math::Ease::EaseOutQuint(float t, float start, float end)
@@ -360,4 +361,40 @@ Vector3 Math::Function::Spline(const std::vector<Vector3>& arg_points, size_t st
     Vector3 position = (p1 * 2 + (-p0 + p2) * timeRate + (p0 * 2 - p1 * 5 + p2 * 4 - p3) * pow2_timeRate + (-p0 + p1 * 3 - p2 * 3 + p3) * pow3_timeRate) * 0.5f;
 
     return position;
+}
+
+Vector3 Math::Ease3::EaseInSin(float t, const Vector3& start, const Vector3& end)
+{
+    const float f = 1.f - std::cosf(t * (Math::kPI / 2.f));
+
+    float x = start.x + (end.x - start.x) * f;
+    float y = start.y + (end.y - start.y) * f;
+    float z = start.z + (end.z - start.z) * f;
+    return Vector3(x, y, z);
+}
+
+Vector3 Math::Ease3::EaseInCubic(float t, const Vector3& start, const Vector3& end)
+{
+    const float t3 = t * t * t;
+
+    float x = start.x + (end.x - start.x) * t3;
+    float y = start.y + (end.y - start.y) * t3;
+    float z = start.z + (end.z - start.z) * t3;
+    return Vector3(x, y, z);
+}
+
+Vector3 Math::Ease3::EaseInOutCubic(float t, const Vector3& start, const Vector3& end)
+{
+    float time;
+    t < 0.5f ?
+        time = 4.f * t * t * t :
+        time = 1.f - powf(-2.f * t + 2.f, 3.f) / 2.f;
+
+    float timeInv = 1.f - time;
+
+
+    float x = start.x * timeInv + end.x * time;
+    float y = start.y * timeInv + end.y * time;
+    float z = start.z * timeInv + end.z * time;
+    return Vector3(x, y, z);
 }

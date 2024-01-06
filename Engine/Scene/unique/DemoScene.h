@@ -95,7 +95,7 @@ public:
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
 
-    Event_StartTutorial a_;
+    Event_StartTutorial a_{CameraManager::GetInstance(),player_.get() };
     Event_EndTutorial b_;
     Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),CameraManager::GetInstance(),player_.get()};
 

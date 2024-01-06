@@ -2,6 +2,8 @@
 #include "Sprite.h"
 #include "NormalCamera.h"
 #include "Timer.h"
+#include "Player.h"
+#include "CameraManager.h"
 
 class Event_StartTutorial
 {
@@ -13,21 +15,26 @@ private:
         WAIT1,
         LEAVE,
         WAIT2,
+        INTERPOLATE,
         FINISH,
     };
 
     const float kCloseTimer_ = 3.f;
-    const float kColseAddSpeed_ = 2.f;
-    const float kWaitTimer_ = 3.f;
+    const float kColseAddSpeed_ = 1.5f;
+    const float kWaitTimer_ = 2.f;
     const float kWaitAddSpeed_ = 1.f;
     const float kLeaveTimer_ = 4.f;
-    const float kLeaveAddSpeed_ = 1.2f;
-    const float kWait2Timer_ = 1.5f;
+    const float kLeaveAddSpeed_ = 1.3f;
+    const float kWait2Timer_ = 1.3f;
     const float kWait2AddSpeed_ = 1.f;
+    const float kInterpolate_posTimer_ = 4.f;
+    const float kInterpolate_posAddSpeed_ = 1.f;
+    const float kInterpolate_axesTimer_ = 8.f;
+    const float kInterpolate_axesAddSpeed_ = 1.f;
 
 public:
     //>> 関数
-    Event_StartTutorial(void);
+    Event_StartTutorial(CameraManager* arg_cameraMPtr, Player* arg_playerPtr);
     ~Event_StartTutorial(void);
 
     void Execute(void);
@@ -39,6 +46,7 @@ private:
     void Update_WaitCam(void);
     void Update_LeaveCam(void);
     void Update_WaitCam2(void);
+    void Update_Interpolate(void);
 
     //>> 変数
     std::array<std::unique_ptr<Sprite>,2> cinemas_;
@@ -51,6 +59,16 @@ private:
     DeltaTimer timer_waitCam_;
     DeltaTimer timer_leaveCam_;
     DeltaTimer timer_waitCam2_;
+    DeltaTimer timer_interpolate_pos_;
+    DeltaTimer timer_interpolate_axes_;
+
+    Vector3 pos_interpolate_start_;
+    Vector3 pos_interpolate_end_;
+    Axis3 axes_interpolate_start_;
+    Axis3 axes_interpolate_end_;
+
+    Player* playerPtr_;
+    CameraManager* cameraMPtr_;
 
     bool is_execute_;
     bool is_skip_debug_ = true;
