@@ -13,13 +13,21 @@
 
 class Rabbit
 {
+private:
+    //>> 定義
+    enum class CorrectionDirection // ジャンプする際に左右どちらにぶれるのか表す列挙型
+    {
+        RIGHT,
+        LEFT,
+    };
+
 public:
     const float kRadius_{ 1.f };                // 当たり判定の半径
     const float kDetectRadius_{ 40.f };         // プレイヤー検知の半径
     const float kDetectRadius_escape_{ 10.f };  // さらにこの半径内に入ったら、遠ざかる挙動
-    const float kJumpPower_{ 2.f };             // ジャンプ力
-    const float kMoveSpeed_{ 0.2f };            // 移動速度
-    const float kGravity_{ 0.98f };             // かかる重力値
+    const float kJumpPower_{ 0.4f };             // ジャンプ力
+    const float kMoveSpeed_{ 0.38f };            // 移動速度
+    const float kGravity_{ 0.025f };             // かかる重力値
     const float kMoveDist_{ 30.f };             // プレイヤーを検知した地点からどのくらいの距離移動するのか。
 
     // 関数
@@ -47,8 +55,10 @@ private:
     Axis3 axes_old_;                  // 1F前の姿勢
     Vector3 vec3_newUp_;              // 新規姿勢の上ベクトル
 
-    float moveDist_; // 移動する距離。
+    bool is_landing_;
+    CorrectionDirection shakeDirection_; // 移動する際に、左右どちらにぶれるか
     Vector3 vec3_moveDirection_; // 移動する方向。
+    float moveDist_; // 移動する距離。
 
     CollisionManager* colMPtr_;
     CollisionPrimitive::SphereCollider sphere_collision_;

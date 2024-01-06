@@ -63,16 +63,12 @@ void OperateGuideUI::Update(const Matrix4& arg_playerMatW)
     // どれかに一瞬でも触れたとき
     else
     {
-        const float rate_invisible = timer_invisibleEase_.GetTimeRate();
-        if (rate_invisible >= 1.f)
-        {
             // 描画フラグfalse
             is_visible_ = false;
 
             // 初期化して起動
             timer_noOperate_.Finish(true);
             timer_noOperate_.Start(kTimer_noOperate_);
-        }
     }
 
 

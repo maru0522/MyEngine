@@ -60,12 +60,15 @@ void Rabbit::Update(void)
 
     // 1F前の姿勢として記録
     axes_old_ = axes_;
-    // 新規上ベクトルの設定
-    axes_.up = vec3_newUp_;
-    // 移動する方向を正面ベクトルとして設定
-    axes_.forward = vec3_moveDirection_;
-    // 新規の上 x 正面のベクトルで右ベクトルを計算
-    axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 姿勢を正常に保つため && あとで、正面ベクトルを再定義するため。
+    if (is_landing_) // 飛び跳ねて移動するようになったので、着地しているときだけ向きを変えられる
+    {
+        // 新規上ベクトルの設定
+        axes_.up = vec3_newUp_;
+        // 移動する方向を正面ベクトルとして設定
+        axes_.forward = vec3_moveDirection_;
+        // 新規の上 x 正面のベクトルで右ベクトルを計算
+        axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 姿勢を正常に保つため && あとで、正面ベクトルを再定義するため。
+    }
 
     // 移動
     Move();
@@ -83,6 +86,9 @@ void Rabbit::Update(void)
     vec3_moveDirection_ = forward;
 
     transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+
+    // 毎フレーム着地フラグをfalseにする。けど着地していたら、ここの処理を通るまではtrueになってる。
+    is_landing_ = false;
 }
 
 void Rabbit::Draw(void)
@@ -103,6 +109,28 @@ void Rabbit::Move(void)
 
     // 移動可能距離が、移動速度よりも大きいか
     const bool isBiggerDist = moveDist_ > kMoveSpeed_;
+    // 移動可能 && 着地している場合、ジャンプする
+    if (isBiggerDist && is_landing_) 
+    { 
+        // 縦方向の移動量にじゃんぷぱわーを代入
+        velocity_vertical_ = kJumpPower_;
+
+        // ジャンプ時のぶれを加算する。
+        if (shakeDirection_ == CorrectionDirection::RIGHT) // ぶれる方向が右
+        {
+            Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, 0.279253f);
+            axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
+            axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
+            shakeDirection_ = CorrectionDirection::LEFT;
+        }
+        else // ぶれる方向がそれ以外（左）
+        {
+            Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, -0.279253f);
+            axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
+            axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
+            shakeDirection_ = CorrectionDirection::RIGHT;
+        }
+    }
 
     // 重力
     velocity_vertical_ -= kGravity_;
@@ -111,9 +139,19 @@ void Rabbit::Move(void)
     const Vector3 velocity_vertical = axes_.up * velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
     // 水平方向の移動量
     Vector3 velocity_horizontal{};
-    isBiggerDist ?
-        velocity_horizontal = vec3_moveDirection_ * kMoveSpeed_ : // 移動可能距離が、移動速度より小さいなら
-        velocity_horizontal = vec3_moveDirection_ * moveDist_;    // 移動可能距離を超えて移動することは出来ない。
+    // 着地している場合
+    if (is_landing_)
+    {
+        isBiggerDist ?
+            velocity_horizontal = axes_.forward * kMoveSpeed_ : // 移動可能距離が、移動速度より小さいなら
+            velocity_horizontal = axes_.forward * moveDist_;    // 移動可能距離を超えて移動することは出来ない。
+    }
+    // 空中にいるのなら
+    else
+    {
+        //移動可能距離を超えて移動する。※空中で停止するのは不自然なため。
+        velocity_horizontal = axes_.forward * kMoveSpeed_;
+    }
 
     // 合計の移動量
     const Vector3 velocity_total = velocity_vertical + velocity_horizontal;
@@ -170,6 +208,8 @@ void Rabbit::OnCollision(void)
     }
     if (sphere_collision_.GetOther()->GetID() == "terrainSurface")
     {
+        is_landing_ = true;
+
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
 
         // ジャンプ量
@@ -204,7 +244,7 @@ void Rabbit::OnDetectPlayer(void)
 
         // 移動可能距離が0以下
         const bool isZeroMoveDist = moveDist_ <= 0.f;
-        if (isZeroMoveDist) 
+        if (isZeroMoveDist)
         {
             // 検知したプレイヤーの方を向く。（↓マイナスで、"プレイヤーから兎"のベクトルを反転している）
             vec3_moveDirection_ = -player2Rabbit.Normalize(); // ※検知している段階ではプレイヤーの方を向いているが、さらに近づいてきたら逃げる。
