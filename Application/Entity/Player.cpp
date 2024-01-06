@@ -54,6 +54,7 @@ void Player::Update(void)
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_4model_);
+    //appearance_->GetCoordinatePtr()->mat_world *= Math::Mat4::Inverse(commonInfo_->camMPtr_->GetCurrentCamera()->GetMatView());
     appearance_->Update();
 
     // 新規姿勢の上ベクトルを代入
