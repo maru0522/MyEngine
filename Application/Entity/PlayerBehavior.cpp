@@ -232,7 +232,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     debug_curState_ = PlayerBehavior::MOVE;
 
     // 入力ベクトルの取得。
-    Vector2 vec2_input = Process_GetInput();
+    Vector2 vec2_input{};
+    // イベント中じゃなければ移動可！
+    if(commonInfo_->eventState_ == PlayerEventState::NONE) { vec2_input = Process_GetInput(); }
 
 
     // モデル用のaxes計算

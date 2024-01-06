@@ -9,7 +9,8 @@
 enum class PlayerEventState
 {
     NONE,
-    PLANET_HOLE,
+    TUTORIAL_EVENT_ORDER, // 兎を捕まえろ！のやつ
+    PLANET_HOLE,          // チュートリアル島の穴くぐってるやつ
 };
 
 struct Player_CommonInfomation

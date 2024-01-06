@@ -106,6 +106,7 @@ void Event_StartTutorial::Execute(void)
 
     case Event_StartTutorial::CameraState::FINISH:
         is_execute_ = false;
+        playerPtr_->SetEventState(PlayerEventState::NONE);
         break;
 
     default:
@@ -335,5 +336,7 @@ void Event_StartTutorial::Update_Interpolate(void)
 void Event_StartTutorial::SetIsExecute(bool arg_isExecute)
 {
     is_execute_ = arg_isExecute;
-    if (is_execute_) { Initialize(); }
+    if (is_execute_ == false) { return; }
+    Initialize();
+    playerPtr_->SetEventState(PlayerEventState::TUTORIAL_EVENT_ORDER);
 }
