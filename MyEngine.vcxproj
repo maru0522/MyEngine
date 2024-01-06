@@ -184,6 +184,7 @@
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeIn.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
+    <ClCompile Include="OperateGuideUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\BloomPS.hlsl">
@@ -390,6 +391,7 @@
     <ClInclude Include="Engine\Math\Vector4.h" />
     <ClInclude Include="Engine\Base\WndAPI.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
+    <ClInclude Include="OperateGuideUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

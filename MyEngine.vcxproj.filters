@@ -285,6 +285,7 @@
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
     <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
+    <ClCompile Include="OperateGuideUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -560,6 +561,7 @@
     <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
     <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
+    <ClInclude Include="OperateGuideUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

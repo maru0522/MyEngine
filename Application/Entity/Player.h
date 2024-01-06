@@ -9,6 +9,7 @@
 #include "PlayerBehavior.h"
 #include "PlayerUI.h"
 #include "PlayerCommonInfomation.h"
+#include "OperateGuideUI.h"
 
 /**
  * @file Player.h
@@ -56,6 +57,7 @@ private:
 
     PlayerBehaviorMachine pbm_;
     PlayerUI playerUI_;
+    OperateGuideUI operateGuideUI_;
 
     int32_t circleShadows_num_;
     Planet* planetPtr_;

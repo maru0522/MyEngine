@@ -32,6 +32,9 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
     playerUI_.SetUIPtr(UI::GetInstance());
     playerUI_.SetRabbitCountPtr(&captureCount_rabbit);
     playerUI_.Initialize();
+    operateGuideUI_.SetUIPtr(UI::GetInstance());
+    operateGuideUI_.SetCamMPtr(commonInfo_->camMPtr_);
+    operateGuideUI_.Initialize();
 }
 
 Player::~Player(void)
@@ -47,6 +50,7 @@ void Player::Update(void)
 
     ControlUI();
     playerUI_.Update();
+    operateGuideUI_.Update(commonInfo_->matTrans_.mat_world);
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
     appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_4model_);
@@ -202,6 +206,7 @@ void Player::Draw3d(void)
 void Player::Draw2dFore(void)
 {
     playerUI_.Draw();
+    operateGuideUI_.Draw();
 }
 
 void Player::HandOverToBehindCamera(const std::string& arg_camId)

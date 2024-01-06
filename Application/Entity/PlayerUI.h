@@ -31,7 +31,7 @@ private:
     UI* uiPtr_;
     bool is_visible_{};
     bool is_visiblePre_{};
-    int32_t* rabbitCount_;
+    int32_t* rabbitCount_{};
 
     DeltaTimer easeTimer_;
 
