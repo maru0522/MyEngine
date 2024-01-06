@@ -118,16 +118,20 @@ void Rabbit::Move(void)
         // ジャンプ時のぶれを加算する。
         if (shakeDirection_ == CorrectionDirection::RIGHT) // ぶれる方向が右
         {
+            // 姿勢の上方向を軸に16°くらい回転する
             Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, 0.279253f);
             axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
             axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
+            // 次のぶれる方向を左にする
             shakeDirection_ = CorrectionDirection::LEFT;
         }
         else // ぶれる方向がそれ以外（左）
         {
+            // 姿勢の上方向を軸に16°くらい回転する
             Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, -0.279253f);
             axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
             axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
+            // 次のぶれる方向を右にする
             shakeDirection_ = CorrectionDirection::RIGHT;
         }
     }
