@@ -327,10 +327,12 @@ void Event_StartTutorial::Update_Interpolate(void)
         return;
     }
 
+#ifdef _DEBUG
     GUI::Begin("aasasasasasa");
     ImGui::Text(rate_pos >= 1.f ? "rate_pos: end" : "rate_pos: not end");
     ImGui::Text(rate_axes >= 1.f ? "rate_axes: end" : "rate_axes: not end");
     GUI::End();
+#endif // _DEBUG
 }
 
 void Event_StartTutorial::SetIsExecute(bool arg_isExecute)

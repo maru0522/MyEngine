@@ -57,9 +57,11 @@ void Planet::Update(void)
     addCols_[1]->Update();
     addCols_[2]->Update();
 
+#ifdef _DEBUG
     GUI::Begin("Planet");
     GUI::CheckBox("useUVChecker", &isUV_);
     GUI::End();
+#endif // _DEBUG
 }
 
 void Planet::Draw(void)

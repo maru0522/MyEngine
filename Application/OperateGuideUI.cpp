@@ -46,6 +46,7 @@ void OperateGuideUI::Update(const Matrix4& arg_playerMatW)
     //const bool isDownSomeButton = XPAD::IsSomeDown();
     const bool isOperateLStick = XPAD::GetLStick().IsNonZero();
 
+#ifdef _DEBUG
     GUI::Begin("OperateGuideUI");
     GUI::Text("timer_noOp: [ %f / %f ] - (%f)", timer_noOperate_.GetFrameCurrent(), timer_noOperate_.GetFrameMax(), timer_noOperate_.GetTimeRate());
     GUI::Text(is_visible_ ? "is_visible_ : true" : "is_visible_ : false");
@@ -53,6 +54,7 @@ void OperateGuideUI::Update(const Matrix4& arg_playerMatW)
     GUI::Text("timer_viea: [ %f / %f ] - (%f)", timer_visibleEase_.GetFrameCurrent(), timer_visibleEase_.GetFrameMax(), timer_visibleEase_.GetTimeRate());
     GUI::Text("pos: [%f,%f]", uiPtr_->GetUISpritePtr("playerUI_operateGuide_LStick")->GetPosition().x, uiPtr_->GetUISpritePtr("playerUI_operateGuide_LStick")->GetPosition().y);
     GUI::End();
+#endif // _DEBUG
 
     // 何も触っていない時
     if (isDownSomeKey == false /*&& isDownSomeButton == false*/ && isOperateLStick == false)
