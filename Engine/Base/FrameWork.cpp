@@ -46,6 +46,7 @@ void FrameWork::Initialize()
     modelM_->LoadOBJ("Resources/model/rabbit/rabbit.obj", false);
     modelM_->LoadOBJ("Resources/model/planet/planet2.obj", true);
     modelM_->LoadOBJ("Resources/model/plane/plane.obj", false);
+    modelM_->LoadOBJ("Resources/model/exclamationMark/exclamationMark.obj", false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化
