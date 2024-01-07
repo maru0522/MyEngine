@@ -143,7 +143,7 @@
     <ClCompile Include="Application\Event_EndTutorial.cpp" />
     <ClCompile Include="Application\Event_StartTutorial.cpp" />
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
-    <ClCompile Include="ExclamationMark.cpp" />
+    <ClCompile Include="Application\ExclamationMark.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -185,7 +185,7 @@
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeIn.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
-    <ClCompile Include="OperateGuideUI.cpp" />
+    <ClCompile Include="Application\OperateGuideUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\BloomPS.hlsl">
@@ -392,8 +392,8 @@
     <ClInclude Include="Engine\Math\Vector4.h" />
     <ClInclude Include="Engine\Base\WndAPI.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
-    <ClInclude Include="ExclamationMark.h" />
-    <ClInclude Include="OperateGuideUI.h" />
+    <ClInclude Include="Application\ExclamationMark.h" />
+    <ClInclude Include="Application\OperateGuideUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

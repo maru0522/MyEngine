@@ -285,8 +285,8 @@
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
     <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
-    <ClCompile Include="OperateGuideUI.cpp" />
-    <ClCompile Include="ExclamationMark.cpp" />
+    <ClCompile Include="Application\OperateGuideUI.cpp" />
+    <ClCompile Include="Application\ExclamationMark.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -562,8 +562,8 @@
     <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
     <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
-    <ClInclude Include="OperateGuideUI.h" />
-    <ClInclude Include="ExclamationMark.h" />
+    <ClInclude Include="Application\OperateGuideUI.h" />
+    <ClInclude Include="Application\ExclamationMark.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">
