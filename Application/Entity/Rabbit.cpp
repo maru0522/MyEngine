@@ -23,6 +23,8 @@ Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr,
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
     axes_.up = { 0,1,0 };
+
+    exclamationMark_ = std::make_unique<ExclamationMark>();
 }
 
 Rabbit::~Rabbit(void)
@@ -70,6 +72,22 @@ void Rabbit::Update(void)
         axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 姿勢を正常に保つため && あとで、正面ベクトルを再定義するため。
     }
 
+    exclamationMark_->SetNewUp(vec3_newUp_);
+    Transform exclamationTransform = exclamationMark_->GetTransform();
+    exclamationTransform.position = transform_.position + axes_.up * 2.2f;
+    exclamationMark_->SetTransform(exclamationTransform);
+    exclamationMark_->Update();
+    if (is_detect_)
+    {
+        timer_visibleExclamationMark_.Update();
+        const float rate = timer_visibleExclamationMark_.GetTimeRate();
+
+        if (rate >= 1.f)
+        {
+            is_detect_ = false;
+        }
+    }
+
     // 移動
     Move();
 
@@ -97,6 +115,7 @@ void Rabbit::Draw(void)
     if (isCaptured_ == false) { appearance_->Draw(); }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
+    if (is_detect_) { exclamationMark_->Draw(); }
 }
 
 void Rabbit::Move(void)
@@ -110,8 +129,8 @@ void Rabbit::Move(void)
     // 移動可能距離が、移動速度よりも大きいか
     const bool isBiggerDist = moveDist_ > kMoveSpeed_;
     // 移動可能 && 着地している場合、ジャンプする
-    if (isBiggerDist && is_landing_) 
-    { 
+    if (isBiggerDist && is_landing_)
+    {
         // 縦方向の移動量にじゃんぷぱわーを代入
         velocity_vertical_ = kJumpPower_;
 
@@ -241,6 +260,7 @@ void Rabbit::OnDetectPlayer(void)
 {
     if (sphere_detectPlayer_.GetOther()->GetID() == "player")
     {
+
         // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detectPlayer_.GetOther());
         // (兎の座標 - プレイヤーの座標）
@@ -257,6 +277,21 @@ void Rabbit::OnDetectPlayer(void)
         // プレイヤーから兎までの距離が、"kDetectRadius_escape_"以下である
         if (player2Rabbit.Length() <= kDetectRadius_escape_)
         {
+            is_detect_ = true;
+            timer_visibleExclamationMark_.Finish(true);
+            timer_visibleExclamationMark_.Start(3.f);
+            //if (timer_visibleExclamationMark_.GetIsExecute())
+            //{
+            //    const float timerMaxFrame = timer_visibleExclamationMark_.GetFrameMax();
+            //    // さらに上乗せ
+            //    timer_visibleExclamationMark_.SetMaxFrame(timerMaxFrame + 0.03f);
+            //}
+            //else
+            //{
+            //    timer_visibleExclamationMark_.Finish(true);
+            //    timer_visibleExclamationMark_.Start(3.f);
+            //}
+
             // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
             vec3_moveDirection_ = player2Rabbit.Normalize();
             // 検知した地点を原点としてどの程度移動するかを設定

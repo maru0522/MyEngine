@@ -6,6 +6,8 @@
 #include "Object3D.h"
 #include "Planet.h"
 #include "LightManager.h"
+#include "ExclamationMark.h"
+#include "Timer.h"
 /**
  * @file Rabbit.h
  * @brief 兎クラス
@@ -65,6 +67,9 @@ private:
     CollisionPrimitive::SphereCollider sphere_detectPlayer_;
 
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/rabbit/rabbit.obj") };
+    std::unique_ptr<ExclamationMark> exclamationMark_;
+    DeltaTimer timer_visibleExclamationMark_; //
+    bool is_detect_; // プレイヤーを検知したか
 
     float velocity_vertical_{};
     int32_t circleShadows_num_;
