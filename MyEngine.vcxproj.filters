@@ -286,6 +286,7 @@
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
     <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
     <ClCompile Include="OperateGuideUI.cpp" />
+    <ClCompile Include="ExclamationMark.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -562,6 +563,7 @@
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
     <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
     <ClInclude Include="OperateGuideUI.h" />
+    <ClInclude Include="ExclamationMark.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

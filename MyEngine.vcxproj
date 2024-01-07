@@ -143,6 +143,7 @@
     <ClCompile Include="Application\Event_EndTutorial.cpp" />
     <ClCompile Include="Application\Event_StartTutorial.cpp" />
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
+    <ClCompile Include="ExclamationMark.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -391,6 +392,7 @@
     <ClInclude Include="Engine\Math\Vector4.h" />
     <ClInclude Include="Engine\Base\WndAPI.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
+    <ClInclude Include="ExclamationMark.h" />
     <ClInclude Include="OperateGuideUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
