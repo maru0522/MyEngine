@@ -18,7 +18,7 @@ public:
     //>> 定義
     const float kRadius_{ 1.3f };           // コインの半径
     const float kRotationRadian_{ 0.04f };  // コインを回転させるときの角速度（ラジアン）
-    const Vector3 kRotateBaseAxis_{ 0.f,1.f,0.f };  // コインを回転させるときの軸
+    const float kRePopTime_{ 20.f };        // コインが復活するまでの時間（秒)
 
     //>> 関数
     Coin(CollisionManager* arg_colMPtr);
