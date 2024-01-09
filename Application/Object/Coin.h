@@ -1,10 +1,11 @@
 #pragma once
-#include "Object3D.h"
-#include "CollisionPrimitive.h"
-#include "CollisionManager.h"
 #include "Sound.h"
 #include "Planet.h"
+#include "Object3D.h"
 #include "LightManager.h"
+#include "CollisionManager.h"
+#include "CollisionPrimitive.h"
+
 /**
  * @file Coin.h
  * @brief コインクラス
@@ -23,6 +24,7 @@ public:
     Coin(CollisionManager* arg_colMPtr);
     ~Coin(void) override;
 
+    void Initialize(const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false);
     void Update(void) override;
     void Draw(void) override;
 
@@ -31,13 +33,14 @@ private:
     void Collision_onCollision(void);
 
     //>> 変数
-    Transform transform_;
     Axis3 axes_;
-    Vector3 vec3_newUp_; // 新規上ベクトル
-    float radian_;       // どんくらい回転してるか
+    float radian_;         // どんくらい回転してるか
+    Vector3 vec3_newUp_;   // 新規上ベクトル
+    bool is_adaptPosture_; // 姿勢を惑星から見た位置に自動で適応するか。
 
-    // 回収されたか
-    bool is_taken_{};
+    Transform transform_;  // 座標等
+    bool is_taken_{};      // 回収されたか
+    bool is_rePop_{};      // リポップするか
 
     CollisionManager* colMPtr_{};
     CollisionPrimitive::SphereCollider collision_contact_; // 当たり判定

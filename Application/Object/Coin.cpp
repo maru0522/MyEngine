@@ -42,6 +42,14 @@ Coin::~Coin(void)
     }
 }
 
+void Coin::Initialize(const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop)
+{
+    axes_ = arg_posture;
+    transform_ = arg_transform;
+    is_adaptPosture_ = arg_adaptPosture;
+    is_rePop_ = arg_rePop;
+}
+
 void Coin::Update(void)
 {
     //GUI::Begin("coin");
