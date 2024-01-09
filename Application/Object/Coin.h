@@ -5,6 +5,7 @@
 #include "LightManager.h"
 #include "CollisionManager.h"
 #include "CollisionPrimitive.h"
+#include "Timer.h"
 
 /**
  * @file Coin.h
@@ -34,13 +35,14 @@ private:
 
     //>> 変数
     Axis3 axes_;
-    float radian_;         // どんくらい回転してるか
-    Vector3 vec3_newUp_;   // 新規上ベクトル
-    bool is_adaptPosture_; // 姿勢を惑星から見た位置に自動で適応するか。
+    float radian_;           // どんくらい回転してるか
+    Vector3 vec3_newUp_;     // 新規上ベクトル
+    bool is_adaptPosture_;   // 姿勢を惑星から見た位置に自動で適応するか。
 
-    Transform transform_;  // 座標等
-    bool is_taken_{};      // 回収されたか
-    bool is_rePop_{};      // リポップするか
+    Transform transform_;    // 座標等
+    bool is_taken_{};        // 回収されたか
+    bool is_rePop_{};        // リポップするか
+    DeltaTimer timer_repop_; // リポップするときの時間計測
 
     CollisionManager* colMPtr_{};
     CollisionPrimitive::SphereCollider collision_contact_; // 当たり判定

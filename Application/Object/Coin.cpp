@@ -58,12 +58,19 @@ void Coin::Update(void)
     //GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
     //GUI::End();
 
-    //if (is_takenPre_ == false && is_taken_)
-    //{
-    //    if (se_getCoin_.GetPlaying()) se_getCoin_.Stop();
-    //    se_getCoin_.Play();
-    //}
-    //is_takenPre_ = is_taken_;
+    // 取得済みフラグ && リポップフラグが有効かどうか
+    if (is_taken_ && is_rePop_) // 変更が少ないフラグから、チェックすることで処理軽減
+    {
+        // リポップタイマーを更新
+        timer_repop_.Update();
+
+        const float rate = timer_repop_.GetTimeRate();
+        if (rate >= 1.f)
+        {
+            is_taken_ = false;
+        }
+    }
+
 
     // 姿勢（axes_)の要素が全て0ではない
     const bool isNonZeroAll = axes_.forward.IsNonZero() && axes_.right.IsNonZero() && vec3_newUp_.IsNonZero();
@@ -99,11 +106,24 @@ void Coin::Collision_onTrigger(void)
 
     if (collision_contact_.GetOther()->GetID() == "player")
     {
+        // 取得済みかどうかのフラグをtrue
         is_taken_ = true;
+        // リポップフラグがtrueなら
+        if (is_rePop_)
+        {
+            // リポップするまでのタイマーを初期化
+            timer_repop_.Finish(true);
+            // リポップするまでのタイマーを起動
+            timer_repop_.Start(kRePopTime_);
+        }
+
+        // コイン取得のSEが再生中かどうか
         if (se_getCoin_.GetPlaying())
         {
+            // 再生を停止する。
             se_getCoin_.Stop();
         }
+        // コイン取得のSEを鳴らす。
         se_getCoin_.Play();
     }
 }
