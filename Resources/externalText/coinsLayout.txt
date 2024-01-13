@@ -1,0 +1,1 @@
+#NAME:basic1#POSTURE:{}#TRANS:{20,55,0}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:

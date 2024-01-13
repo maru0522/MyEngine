@@ -95,6 +95,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp" />
+    <ClCompile Include="CoinList.cpp" />
     <ClCompile Include="Engine\Entity\2d\BackGroundTexture.cpp" />
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
     <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp" />
@@ -292,6 +293,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h" />
+    <ClInclude Include="CoinList.h" />
     <ClInclude Include="Engine\Entity\2d\BackGroundTexture.h" />
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
     <ClInclude Include="Engine\Entity\Camera\NormalCamera.h" />

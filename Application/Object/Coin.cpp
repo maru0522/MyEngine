@@ -1,15 +1,8 @@
 #include "Coin.h"
 #include "SimplifyImGui.h"
 
-Coin::Coin(CollisionManager* arg_colMPtr) : Object3D("Resources/model/coin/coin.obj"), colMPtr_(arg_colMPtr)
+Coin::Coin(void) : Object3D("Resources/model/coin/coin.obj")
 {
-    // コイン用コライダーの登録
-    arg_colMPtr->Register(&collision_contact_);
-    collision_contact_.SetID("coin_contact");
-    collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);     // trigger
-    collision_contact_.callback_onCollision_ = std::bind(&Coin::Collision_onCollision, this); // collision
-    collision_contact_.radius = kRadius_;
-
     // 初期姿勢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };
@@ -42,8 +35,16 @@ Coin::~Coin(void)
     }
 }
 
-void Coin::Initialize(const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop)
+void Coin::SetUp(CollisionManager* arg_colMPtr, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop)
 {
+    // コイン用コライダーの登録
+    arg_colMPtr->Register(&collision_contact_);
+    collision_contact_.SetID("coin_contact");
+    collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);     // trigger
+    collision_contact_.callback_onCollision_ = std::bind(&Coin::Collision_onCollision, this); // collision
+    collision_contact_.radius = kRadius_;
+
+    id_ = arg_id;
     axes_ = arg_posture;
     transform_ = arg_transform;
     is_adaptPosture_ = arg_adaptPosture;

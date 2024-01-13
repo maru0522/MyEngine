@@ -21,6 +21,7 @@
 #include "Event_TutorialPlanetHole.h"
 #include "BackGroundTexture.h"
 #include "BehindCamera.h"
+#include "CoinList.h"
 
 class DemoScene final :
     public IScene
@@ -88,7 +89,8 @@ public:
     std::unique_ptr<Pipe> pipe1_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
 
-    std::array<std::unique_ptr<Coin>, 19> coins_;
+    //std::array<std::unique_ptr<Coin>, 19> coins_;
+    std::unique_ptr<CoinList> coinList_;
     std::array<std::unique_ptr<Rabbit>, 3> rabbits_;
 
     // json読み込み&配置用

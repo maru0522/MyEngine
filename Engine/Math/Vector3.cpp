@@ -56,6 +56,14 @@ Vector3& Vector3::operator=(const Vector3& v)
     return *this;
 }
 
+Vector3& Vector3::operator=(float arr[3])
+{
+    x = arr[0];
+    y = arr[1];
+    z = arr[2];
+    return *this;
+}
+
 // 代入演算子 +=
 Vector3& Vector3::operator+=(const Vector3& v)
 {

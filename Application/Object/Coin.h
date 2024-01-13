@@ -22,10 +22,10 @@ public:
     const float kRePopTime_{ 20.f };        // コインが復活するまでの時間（秒)
 
     //>> 関数
-    Coin(CollisionManager* arg_colMPtr);
+    Coin(void);
     ~Coin(void) override;
 
-    void Initialize(const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false);
+    void SetUp(CollisionManager* arg_colMPtr, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false);
     void Update(void) override;
     void Draw(void) override;
 
@@ -34,6 +34,7 @@ private:
     void Collision_onCollision(void);
 
     //>> 変数
+    std::string id_;
     Axis3 axes_;
     float radian_;           // どんくらい回転してるか
     Vector3 vec3_newUp_;     // 新規上ベクトル
@@ -61,9 +62,11 @@ public:
     void SetCircleShadowActive(LightManager* arg_lightManagerPtr, bool arg_isActive) { arg_lightManagerPtr->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_isActive); }
     void SetCircleShadowDistAtCaster(LightManager* arg_lightManagerPtr, float arg_dist) { arg_lightManagerPtr->SetLightDistanceAtCaster(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_dist); }
 
-    // getter
+    //>> getter
     const Vector3& GetPosition(void) { return transform_.position; }
     Transform* GetTransformPtr(void) { return &transform_; }
     bool GetIsTaken(void) { return is_taken_; }
+    // is_taken == true && is_rePop == false の時、インスタンスごと消滅させる予定のため、その条件を満たしているか
+    bool IsElimination(void) { return is_taken_ && is_rePop_ == false; }
 };
 

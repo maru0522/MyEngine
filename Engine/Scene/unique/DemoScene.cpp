@@ -69,46 +69,48 @@ void DemoScene::Initialize(void)
     pipe2_->SetPartnerPtr(pipe1_.get());
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
 
-    for (auto& coin : coins_)
-    {
-        coin = std::make_unique<Coin>(CollisionManager::GetInstance());
-    }
+    coinList_ = std::make_unique<CoinList>();
+    coinList_->LoadCoinTxt("Resources/externalText/coinsLayout.txt");
+    //for (auto& coin : coins_)
+    //{
+    //    coin = std::make_unique<Coin>(CollisionManager::GetInstance());
+    //}
 
-    coins_[0]->SetPosition({ 20.f,55.f,0.f });
-    coins_[1]->SetPosition({ 25.f,52.f,0.f });
-    coins_[2]->SetPosition({ 30.f,49.f,0.f });
+    //coins_[0]->SetPosition({ 20.f,55.f,0.f });
+    //coins_[1]->SetPosition({ 25.f,52.f,0.f });
+    //coins_[2]->SetPosition({ 30.f,49.f,0.f });
 
-    coins_[3]->SetPosition({ 0.f,10.f,51.f });
-    coins_[4]->SetPosition({ 7.5f,7.5f,51.f });
-    coins_[5]->SetPosition({ 10.f,0.f,51.f });
-    coins_[6]->SetPosition({ 7.5f,-7.5f,51.f });
-    coins_[7]->SetPosition({ 0.f,-10.f,51.f });
-    coins_[8]->SetPosition({ -7.5f,-7.5f,51.f });
-    coins_[9]->SetPosition({ -10.f,0.f,51.f });
-    coins_[10]->SetPosition({ -7.5f,7.5f,51.f });
+    //coins_[3]->SetPosition({ 0.f,10.f,51.f });
+    //coins_[4]->SetPosition({ 7.5f,7.5f,51.f });
+    //coins_[5]->SetPosition({ 10.f,0.f,51.f });
+    //coins_[6]->SetPosition({ 7.5f,-7.5f,51.f });
+    //coins_[7]->SetPosition({ 0.f,-10.f,51.f });
+    //coins_[8]->SetPosition({ -7.5f,-7.5f,51.f });
+    //coins_[9]->SetPosition({ -10.f,0.f,51.f });
+    //coins_[10]->SetPosition({ -7.5f,7.5f,51.f });
 
-    coins_[11]->SetPosition({ 0.f,10.f,-51.f });
-    coins_[12]->SetPosition({ 7.5f,7.5f,-51.f });
-    coins_[13]->SetPosition({ 10.f,0.f,-51.f });
-    coins_[14]->SetPosition({ 7.5f,-7.5f,-51.f });
-    coins_[15]->SetPosition({ 0.f,-10.f,-51.f });
-    coins_[16]->SetPosition({ -7.5f,-7.5f,-51.f });
-    coins_[17]->SetPosition({ -10.f,0.f,-51.f });
-    coins_[18]->SetPosition({ -7.5f,7.5f,-51.f });
+    //coins_[11]->SetPosition({ 0.f,10.f,-51.f });
+    //coins_[12]->SetPosition({ 7.5f,7.5f,-51.f });
+    //coins_[13]->SetPosition({ 10.f,0.f,-51.f });
+    //coins_[14]->SetPosition({ 7.5f,-7.5f,-51.f });
+    //coins_[15]->SetPosition({ 0.f,-10.f,-51.f });
+    //coins_[16]->SetPosition({ -7.5f,-7.5f,-51.f });
+    //coins_[17]->SetPosition({ -10.f,0.f,-51.f });
+    //coins_[18]->SetPosition({ -7.5f,7.5f,-51.f });
 
-    for (size_t i = 0; i < coins_.size(); i++)
-    {
-        // コイン0~2
-        if (i < 3)
-        {
-            coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get());
-        }
-        // それ以降のコイン
-        else
-        {
-            coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get(), { 0.02f,0.1f,0.07f }, { 15.f,20.f });
-        }
-    }
+    //for (size_t i = 0; i < coins_.size(); i++)
+    //{
+    //    // コイン0~2
+    //    if (i < 3)
+    //    {
+    //        coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get());
+    //    }
+    //    // それ以降のコイン
+    //    else
+    //    {
+    //        coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get(), { 0.02f,0.1f,0.07f }, { 15.f,20.f });
+    //    }
+    //}
 
     for (auto& rabbit : rabbits_)
     {
@@ -263,15 +265,15 @@ void DemoScene::Update(void)
     pipe1_->Update();
     pipe2_->Update();
 
-    for (auto& coin : coins_)
-    {
-        // nullチェック
-        if (coin)
-        {
-            coin->Update();
-            if (coin->GetIsTaken()) { coin.reset(); }
-        }
-    }
+    //for (auto& coin : coins_)
+    //{
+    //    // nullチェック
+    //    if (coin)
+    //    {
+    //        coin->Update();
+    //        if (coin->GetIsTaken()) { coin.reset(); }
+    //    }
+    //}
 
     skydome_->Update();
 
@@ -313,14 +315,14 @@ void DemoScene::Draw3d(void)
     pipe1_->Draw();
     pipe2_->Draw();
 
-    for (auto& coin : coins_)
-    {
-        // nullチェック
-        if (coin)
-        {
-            coin->Draw();
-        }
-    }
+    //for (auto& coin : coins_)
+    //{
+    //    // nullチェック
+    //    if (coin)
+    //    {
+    //        coin->Draw();
+    //    }
+    //}
 
     //for (auto& object : objects_) {
     //    object.second->Draw();

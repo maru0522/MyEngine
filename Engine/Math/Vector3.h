@@ -16,6 +16,7 @@ public:
     // 関数
     Vector3(void) = default;
     constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
+    constexpr Vector3(float arr[3]) : x(arr[0]), y(arr[1]), z(arr[2]) {}
 
     Vector3 Normalize(void) const;            // 正規化する
     Vector3 Cross(const Vector3& v) const;    // 外積を求める
@@ -29,6 +30,7 @@ public:
 
     // 代入オバロ
     Vector3& operator=(const Vector3& v);
+    Vector3& operator=(float arr[3]);
     Vector3& operator+=(const Vector3& v);
     Vector3& operator-=(const Vector3& v);
     Vector3& operator*=(float s);

@@ -287,6 +287,7 @@
     <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
     <ClCompile Include="Application\OperateGuideUI.cpp" />
     <ClCompile Include="Application\ExclamationMark.cpp" />
+    <ClCompile Include="CoinList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -564,6 +565,7 @@
     <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
     <ClInclude Include="Application\OperateGuideUI.h" />
     <ClInclude Include="Application\ExclamationMark.h" />
+    <ClInclude Include="CoinList.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">
