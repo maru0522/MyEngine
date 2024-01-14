@@ -134,7 +134,7 @@ void CoinList::AddCoin(const std::string& arg_id, const Axis3& arg_posture, cons
 
 }
 
-void CoinList::LoadCoinTxt(const std::filesystem::path& arg_path)
+void CoinList::DeployCoin(const std::filesystem::path& arg_path)
 {
     // 指定されたファイルを開く
     std::ifstream ifs_file(arg_path);

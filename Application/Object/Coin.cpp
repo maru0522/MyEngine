@@ -38,6 +38,7 @@ Coin::~Coin(void)
 void Coin::SetUp(CollisionManager* arg_colMPtr, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop)
 {
     // コイン用コライダーの登録
+    colMPtr_ = arg_colMPtr;
     arg_colMPtr->Register(&collision_contact_);
     collision_contact_.SetID("coin_contact");
     collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);     // trigger
@@ -76,12 +77,15 @@ void Coin::Update(void)
     // 姿勢（axes_)の要素が全て0ではない
     const bool isNonZeroAll = axes_.forward.IsNonZero() && axes_.right.IsNonZero() && vec3_newUp_.IsNonZero();
 
-    // 姿勢の調整
-    axes_.up = vec3_newUp_; // 新規上ベクトルの設定。 vec3_newUpの更新は"Collision_onCollision()"内にて
-    if (isNonZeroAll)
+    if (is_adaptPosture_)
     {
-        axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 新規右ベクトルの設定。
-        axes_.forward = Math::Vec3::Cross(axes_.right, axes_.up).Normalize(); // 新規正面ベクトルの設定
+        // 姿勢の調整
+        axes_.up = vec3_newUp_; // 新規上ベクトルの設定。 vec3_newUpの更新は"Collision_onCollision()"内にて
+        if (isNonZeroAll)
+        {
+            axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 新規右ベクトルの設定。
+            axes_.forward = Math::Vec3::Cross(axes_.right, axes_.up).Normalize(); // 新規正面ベクトルの設定
+        }
     }
 
     // 上ベクトルを軸に"raddian_"だけ回転させた状態を表すクオータニオン

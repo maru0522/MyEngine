@@ -70,7 +70,8 @@ void DemoScene::Initialize(void)
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
 
     coinList_ = std::make_unique<CoinList>();
-    coinList_->LoadCoinTxt("Resources/externalText/coinsLayout.txt");
+    coinList_->Initialize(CollisionManager::GetInstance());
+    coinList_->DeployCoin("Resources/externalText/coinsLayout.txt");
     //for (auto& coin : coins_)
     //{
     //    coin = std::make_unique<Coin>(CollisionManager::GetInstance());
@@ -133,7 +134,7 @@ void DemoScene::Update(void)
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
 
-
+    if(KEYS::IsTrigger(DIK_P)) { coinList_->DeployCoin("Resources/externalText/coinsLayout.txt"); }
     //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
     //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
     //static Vector3 pl0Pos = { 0,100,0 };
@@ -265,6 +266,7 @@ void DemoScene::Update(void)
     pipe1_->Update();
     pipe2_->Update();
 
+    coinList_->Update();
     //for (auto& coin : coins_)
     //{
     //    // nullチェック
@@ -315,6 +317,7 @@ void DemoScene::Draw3d(void)
     pipe1_->Draw();
     pipe2_->Draw();
 
+    coinList_->Draw();
     //for (auto& coin : coins_)
     //{
     //    // nullチェック

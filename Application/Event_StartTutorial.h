@@ -27,9 +27,9 @@ private:
     const float kLeaveAddSpeed_ = 1.3f;
     const float kWait2Timer_ = 1.3f;
     const float kWait2AddSpeed_ = 1.f;
-    const float kInterpolate_posTimer_ = 4.f;
+    const float kInterpolate_posTimer_ = 2.6f;
     const float kInterpolate_posAddSpeed_ = 1.f;
-    const float kInterpolate_axesTimer_ = 8.f;
+    const float kInterpolate_axesTimer_ = 4.6f;
     const float kInterpolate_axesAddSpeed_ = 1.f;
 
 public:

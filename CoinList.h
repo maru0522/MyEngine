@@ -62,12 +62,13 @@ public:
     void AddCoin(const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false, const std::string& arg_groupId = kRecognizeNoArgName_);
 
     // コインの配置等が記された外部テキストを読み込む。
-    void LoadCoinTxt(const std::filesystem::path& arg_path);
+    void DeployCoin(const std::filesystem::path& arg_path);
+
 private:
     std::forward_list<CoinGroup>::iterator GetCoinGroupItr(const std::string& arg_groupId);
 
     //>> 変数
-    bool is_finalized_;           // 終了処理を呼んだ後か
+    bool is_finalized_{};           // 終了処理を呼んだ後か
     CollisionManager* colMPtr_{}; // 当たり判定マネージャー
     CoinFactory coinFactory_{};   // コインファクトリー
 
