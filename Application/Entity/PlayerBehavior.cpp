@@ -234,7 +234,7 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // 入力ベクトルの取得。
     Vector2 vec2_input{};
     // イベント中じゃなければ移動可！
-    if(commonInfo_->eventState_ == PlayerEventState::NONE) { vec2_input = Process_GetInput(); }
+    if (commonInfo_->eventState_ == PlayerEventState::NONE) { vec2_input = Process_GetInput(); }
 
 
     // モデル用のaxes計算
@@ -408,10 +408,17 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
     // 着地している && ジャンプキーが入力された
     if (isLanding && isJumpTrigger) // ここを通っている時点で、[左SHIFT] + [移動キー]は入力されている
     {
-        // PlayerState を JUMP_LONG(幅跳び)へ
-        nextState_ = PlayerBehavior::JUMP_LONG;
-        PostEffectManager::GetInstance()->RequestChangePostEffect(PostEffectType::RADIALBLUR, 0.4f);
-        return;
+        // コインが "kNeedCoin_"以上ある場合
+        if (commonInfo_->coinNum_ >= PlayerBehavior_JumpLong::kNeedCoin_)
+        {
+            // 規定枚数コインを消費する
+            commonInfo_->coinNum_ -= PlayerBehavior_JumpLong::kNeedCoin_;
+
+            // PlayerState を JUMP_LONG(幅跳び)へ
+            nextState_ = PlayerBehavior::JUMP_LONG;
+            PostEffectManager::GetInstance()->RequestChangePostEffect(PostEffectType::RADIALBLUR, 0.4f);
+            return;
+        }
     }
 }
 
@@ -575,13 +582,13 @@ void PlayerBehavior_JumpLong::Execute(void)
 
     // 1フレーム前の入力ベクトルを記録 ※ここだけ、記録するのはeffect_input
     commonInfo_->vec2_input_old_ = effect_input;
-    #ifdef _DEBUG
-        GUI::Begin("playerBehavior_JumpLong");
-        GUI::Text("vec2_entryInput_:   [%f,%f]", vec2_entryInput_.x, vec2_entryInput_.y);
-        GUI::Text("effect_input:       [%f,%f]", effect_input.x, effect_input.y);
-        GUI::Text("vec2_input:         [%f,%f]", vec2_input.x, vec2_input.y);
-        GUI::End();
-    #endif // _DEBUG
+#ifdef _DEBUG
+    GUI::Begin("playerBehavior_JumpLong");
+    GUI::Text("vec2_entryInput_:   [%f,%f]", vec2_entryInput_.x, vec2_entryInput_.y);
+    GUI::Text("effect_input:       [%f,%f]", effect_input.x, effect_input.y);
+    GUI::Text("vec2_input:         [%f,%f]", vec2_input.x, vec2_input.y);
+    GUI::End();
+#endif // _DEBUG
 }
 
 void PlayerBehavior_JumpLong::RequirementCheck(void)

@@ -10,7 +10,7 @@
  * @brief プレイヤーの挙動全般を管理
  */
 
-// 前方宣言
+ // 前方宣言
 class Player;
 
 // 振舞いを羅列するenumクラス
@@ -178,6 +178,9 @@ private:
 class PlayerBehavior_JumpLong final : public IPlayerBehavior
 {
 public:
+    //>> 定義
+    static const int32_t kNeedCoin_{ 3 }; // コイン何枚を消費して幅跳びが出来るか
+
     //>> 関数
     PlayerBehavior_JumpLong(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_JumpLong(void) override = default;
