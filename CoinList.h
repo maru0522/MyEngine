@@ -2,6 +2,8 @@
 #include "Coin.h"
 #include <filesystem>
 #include <forward_list>
+#include "Planet.h"
+#include "LightManager.h"
 
 /**
  * @file CoinList.h
@@ -16,7 +18,8 @@ public:
     ~CoinFactory(void) = default;
 
     // コインを生成
-    std::unique_ptr<Coin> Create(CollisionManager* arg_colMPtr_, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false);
+    std::unique_ptr<Coin> Create(void);
+    //std::unique_ptr<Coin> Create(CollisionManager* arg_colMPtr_, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false);
 };
 
 class CoinList final
@@ -56,15 +59,15 @@ public:
     // CoinListクラス自体の終了処理
     void Finalize(void);
 
+    // コインの配置等が記された外部テキストを読み込む。
+    void DeployCoin(const std::filesystem::path& arg_path,Planet* arg_planetPtr,LightManager* arg_lightMPtr);
+
+private:
     // 管理しているコイングループ配列に、新規のグループを追加する。
     void AddGroup(const std::string& arg_id);
     // 管理しているコイン配列に、新規のコインを追加する。
-    void AddCoin(const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false, const std::string& arg_groupId = kRecognizeNoArgName_);
-
-    // コインの配置等が記された外部テキストを読み込む。
-    void DeployCoin(const std::filesystem::path& arg_path);
-
-private:
+    Coin* AddCoin(const std::string& arg_groupId = kRecognizeNoArgName_);
+    //Coin* AddCoin(const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture = false, bool arg_rePop = false, const std::string& arg_groupId = kRecognizeNoArgName_);
     std::forward_list<CoinGroup>::iterator GetCoinGroupItr(const std::string& arg_groupId);
 
     //>> 変数

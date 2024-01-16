@@ -44,6 +44,8 @@ void Coin::SetUp(CollisionManager* arg_colMPtr, const std::string& arg_id, const
     collision_contact_.callback_onTrigger_ = std::bind(&Coin::Collision_onTrigger, this);     // trigger
     collision_contact_.callback_onCollision_ = std::bind(&Coin::Collision_onCollision, this); // collision
     collision_contact_.radius = kRadius_;
+    // 当たり判定の座標更新
+    collision_contact_.center = transform_.position;
 
     id_ = arg_id;
     axes_ = arg_posture;
@@ -93,15 +95,17 @@ void Coin::Update(void)
     // クオータニオンを用いて正面と右方向のベクトルを回転
     axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotateQ);
     axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotateQ);
-
+    // 行列を再生成して代入
     matTrans_.mat_world = Math::Function::AffinTrans(transform_, axes_, &matTrans_);
 
+    // 当たり判定の座標更新
+    collision_contact_.center = transform_.position;
     Object3D::Update();
 }
 
 void Coin::Draw(void)
 {
-    Object3D::Draw();
+    if(is_taken_ == false) { Object3D::Draw(); }
 }
 
 void Coin::Collision_onTrigger(void)
@@ -111,25 +115,28 @@ void Coin::Collision_onTrigger(void)
 
     if (collision_contact_.GetOther()->GetID() == "player")
     {
-        // 取得済みかどうかのフラグをtrue
-        is_taken_ = true;
-        // リポップフラグがtrueなら
-        if (is_rePop_)
+        if (is_taken_ == false)
         {
-            // リポップするまでのタイマーを初期化
-            timer_repop_.Finish(true);
-            // リポップするまでのタイマーを起動
-            timer_repop_.Start(kRePopTime_);
-        }
+            // 取得済みかどうかのフラグをtrue
+            is_taken_ = true;
+            // リポップフラグがtrueなら
+            if (is_rePop_)
+            {
+                // リポップするまでのタイマーを初期化
+                timer_repop_.Finish(true);
+                // リポップするまでのタイマーを起動
+                timer_repop_.Start(kRePopTime_);
+            }
 
-        // コイン取得のSEが再生中かどうか
-        if (se_getCoin_.GetPlaying())
-        {
-            // 再生を停止する。
-            se_getCoin_.Stop();
+            // コイン取得のSEが再生中かどうか
+            if (se_getCoin_.GetPlaying())
+            {
+                // 再生を停止する。
+                se_getCoin_.Stop();
+            }
+            // コイン取得のSEを鳴らす。
+            se_getCoin_.Play();
         }
-        // コイン取得のSEを鳴らす。
-        se_getCoin_.Play();
     }
 }
 

@@ -1,2 +1,7 @@
-#NAME:basic1#POSTURE:{}#TRANS:{25,52,0}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:
-#NAME:basic1#POSTURE:{}#TRANS:{30,49,0}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:
+// 0,1,2
+#NAME:basic1#POSTURE:{}#TRANS:{20,55,0}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:#ATTEN:{}#WIDE:{}#DIST:
+#NAME:basic2#POSTURE:{}#TRANS:{25,52,0}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:#ATTEN:{}#WIDE:{}#DIST:
+#NAME:basic3#POSTURE:{}#TRANS:{30,49,0}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:#ATTEN:{}#WIDE:{}#DIST:
+
+// 残り
+#NAME:circle1#POSTURE:{}#TRANS:{0,10,51}{0,0,0}{1,1,1}#ADAPT:false#REPOP:true#GNAME:group_circle#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:

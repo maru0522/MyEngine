@@ -22,7 +22,10 @@ void CoinList::Update(void)
             // 更新処理
             coin->Update();
             // インスタンスを消滅させる条件が、揃っている場合削除。->nullptr化
-            if (coin->IsElimination()) { coin.reset(); }
+            if (coin->IsElimination()) 
+            {
+                coin.reset(); 
+            }
         }
     }
     // 無所属コインの範囲for文。各要素は参照渡し。
@@ -31,7 +34,10 @@ void CoinList::Update(void)
         // 更新処理
         coin->Update();
         // インスタンスを消滅させる条件が、揃っている場合削除。->nullptr化
-        if (coin->IsElimination()) { coin.reset(); }
+        if (coin->IsElimination()) 
+        {
+            coin.reset();
+        }
     }
 
 
@@ -94,19 +100,17 @@ void CoinList::AddGroup(const std::string& arg_id)
     flist_coinGroupList_.emplace_front(arg_id);
 }
 
-void CoinList::AddCoin(const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop, const std::string& arg_groupId)
+Coin* CoinList::AddCoin(const std::string& arg_groupId)
 {
     // 終了処理の実行後ならスキップ
-    if (is_finalized_) { return; }
-    //null check
-    if (!colMPtr_) { return; }
+    if (is_finalized_) { return nullptr; }
 
 
     // グループ名が入力されているかどうか
     const bool is_groupName = arg_groupId != kRecognizeNoArgName_;
     // 生成したコインのインスタンス。
     // colMptrがnullptrの場合、Create()はnullPtrを返す。しかし、上のnullCheckで確認済みのため、coinのnullCheckは必要ない。
-    auto coin = coinFactory_.Create(colMPtr_, arg_id, arg_posture, arg_transform, arg_adaptPosture, arg_rePop);
+    auto coin = coinFactory_.Create();
 
 
     if (is_groupName)
@@ -117,6 +121,8 @@ void CoinList::AddCoin(const std::string& arg_id, const Axis3& arg_posture, cons
         {
             // そのグループに追加
             itr->flist_coinGroup_.emplace_front(std::move(coin));
+            // 追加したコインのptrを返す。（該当するコイングループのitr->コインのフォワードリスト配列.先頭の参照().ユニークポインタが保持するptr()
+            return itr->flist_coinGroup_.front().get();
         }
         else
         {
@@ -124,17 +130,71 @@ void CoinList::AddCoin(const std::string& arg_id, const Axis3& arg_posture, cons
             AddGroup(arg_groupId);
             // 生成後そのグループに追加。
             flist_coinGroupList_.front().flist_coinGroup_.emplace_front(std::move(coin));
+            // 追加したコインのptrを返す。（該当するコイングループのフォワードリスト配列.先頭の参照().コインのフォワードリスト配列.先頭の参照().ユニークポインタが保持するptr()
+            return flist_coinGroupList_.front().flist_coinGroup_.front().get();
         }
     }
     else
     {
         // グループ名が入力されてないなら、flist_coinList_の方へ直接追加する。
         flist_coinList_.emplace_front(std::move(coin));
+        // 追加したコインのptrを返す。（無所属コインのフォワードリスト配列.先頭の参照().ユニークポインタが保持するptr()
+        return flist_coinList_.front().get();
     }
 
+    // 保険
+    return nullptr;
 }
 
-void CoinList::DeployCoin(const std::filesystem::path& arg_path)
+//Coin* CoinList::AddCoin(const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop, const std::string& arg_groupId)
+//{
+//    // 終了処理の実行後ならスキップ
+//    if (is_finalized_) { return nullptr; }
+//    //null check
+//    if (!colMPtr_) { return nullptr; }
+//
+//
+//    // グループ名が入力されているかどうか
+//    const bool is_groupName = arg_groupId != kRecognizeNoArgName_;
+//    // 生成したコインのインスタンス。
+//    // colMptrがnullptrの場合、Create()はnullPtrを返す。しかし、上のnullCheckで確認済みのため、coinのnullCheckは必要ない。
+//    auto coin = coinFactory_.Create(colMPtr_, arg_id, arg_posture, arg_transform, arg_adaptPosture, arg_rePop);
+//
+//
+//    if (is_groupName)
+//    {
+//        // 該当するCoinGroupのitrを取得
+//        auto itr = GetCoinGroupItr(arg_groupId);
+//        if (itr != flist_coinGroupList_.end())
+//        {
+//            // そのグループに追加
+//            itr->flist_coinGroup_.emplace_front(std::move(coin));
+//            // 追加したコインのptrを返す。（該当するコイングループのitr->コインのフォワードリスト配列.先頭の参照().ユニークポインタが保持するptr()
+//            return itr->flist_coinGroup_.front().get();
+//        }
+//        else
+//        {
+//            // ないなら生成する。
+//            AddGroup(arg_groupId);
+//            // 生成後そのグループに追加。
+//            flist_coinGroupList_.front().flist_coinGroup_.emplace_front(std::move(coin));
+//            // 追加したコインのptrを返す。（該当するコイングループのフォワードリスト配列.先頭の参照().コインのフォワードリスト配列.先頭の参照().ユニークポインタが保持するptr()
+//            return flist_coinGroupList_.front().flist_coinGroup_.front().get();
+//        }
+//    }
+//    else
+//    {
+//        // グループ名が入力されてないなら、flist_coinList_の方へ直接追加する。
+//        flist_coinList_.emplace_front(std::move(coin));
+//        // 追加したコインのptrを返す。（無所属コインのフォワードリスト配列.先頭の参照().ユニークポインタが保持するptr()
+//        return flist_coinList_.front().get();
+//    }
+//
+//    // 保険
+//    return nullptr;
+//}
+
+void CoinList::DeployCoin(const std::filesystem::path& arg_path, Planet* arg_planetPtr, LightManager* arg_lightMPtr)
 {
     // 指定されたファイルを開く
     std::ifstream ifs_file(arg_path);
@@ -157,6 +217,10 @@ void CoinList::DeployCoin(const std::filesystem::path& arg_path)
         bool coin_adapt{};
         bool coin_repop{};
         std::string coin_gname;
+        // 丸影のための要素
+        Vector3 coin_atten{};
+        Vector2 coin_wide{};
+        float coin_dist{};
 
 
         std::istringstream iss_line(str_line);
@@ -288,12 +352,103 @@ void CoinList::DeployCoin(const std::filesystem::path& arg_path)
                 // "GNAME"を除いた残りを名前にする。
                 coin_gname = str_word.substr(6);
             }
+            else if (str_word.starts_with("ATTEN:"))
+            {
+                std::string str_subPrefix = str_word.substr(6);
+
+                // "ATTEN:"を除いた残りを使用する
+                if (str_subPrefix == "{}") // 初期化子のみの場合。
+                {
+                    // 初期化関数を呼んで終了。
+                    coin_atten = { 0.02f,0.06f,0.01f };
+                    continue;
+                }
+
+                // "{}"を除いた残りを使用する。
+                str_subPrefix.erase(0, 1);
+                str_subPrefix.erase(str_subPrefix.size() - 1, 1);
+                std::istringstream iss_inBracket(str_subPrefix);
+                std::string str_num;
+                float atten[3]{};
+                int count_xyz{}; // (x,y,z)
+                // ','区切りで文字列を読み込む（具体的な姿勢の数値）
+                while (std::getline(iss_inBracket, str_num, ','))
+                {
+                    // 4回以上回っていたらbreak
+                    if (count_xyz > 2) { break; }
+
+
+                    // 区切られた文字列を数値に変換
+                    atten[count_xyz] = std::stof(str_num);
+                    // ループ回数を+1
+                    count_xyz++;
+                }
+
+                // 取得した値をattenとして代入
+                coin_atten = atten;
+            }
+            else if (str_word.starts_with("WIDE:"))
+            {
+                std::string str_subPrefix = str_word.substr(5);
+
+                // "ATTEN:"を除いた残りを使用する
+                if (str_subPrefix == "{}") // 初期化子のみの場合。
+                {
+                    // 初期化関数を呼んで終了。
+                    coin_wide = { 6.f,8.f };
+                    continue;
+                }
+
+                // "{}"を除いた残りを使用する。
+                str_subPrefix.erase(0, 1);
+                str_subPrefix.erase(str_subPrefix.size() - 1, 1);
+                std::istringstream iss_inBracket(str_subPrefix);
+                std::string str_num;
+                float wide[2]{};
+                int count_xy{}; // (x,y)
+                // ','区切りで文字列を読み込む（具体的な姿勢の数値）
+                while (std::getline(iss_inBracket, str_num, ','))
+                {
+                    // 3回以上回っていたらbreak
+                    if (count_xy > 1) { break; }
+
+
+                    // 区切られた文字列を数値に変換
+                    wide[count_xy] = std::stof(str_num);
+                    // ループ回数を+1
+                    count_xy++;
+                }
+
+                // 取得した値をwideとして代入
+                coin_wide.x = wide[0];
+                coin_wide.y = wide[1];
+            }
+            else if (str_word.starts_with("DIST:"))
+            {
+                std::string str_subPrefix = str_word.substr(5);
+
+                // "ATTEN:"を除いた残りを使用する
+                if (str_subPrefix == "") // 初期化子のみの場合。
+                {
+                    // 初期化関数を呼んで終了。
+                    coin_dist = 1.f;
+                    continue;
+                }
+
+                // 取得した値をdistとして代入
+                coin_dist = std::stof(str_subPrefix);
+            }
         }
 
+        // 生成されたコインのptr
+        Coin* generated_coinPtr = nullptr;
         // コインの生成
         coin_gname == "" ? // グループ名が記述されているかによって、引数を変更
-            AddCoin(coin_name, coin_posture, coin_transform, coin_adapt, coin_repop) :
-            AddCoin(coin_name, coin_posture, coin_transform, coin_adapt, coin_repop, coin_gname);
+            generated_coinPtr = AddCoin() :
+            generated_coinPtr = AddCoin(coin_gname);
+
+        generated_coinPtr->SetUp(colMPtr_, coin_name, coin_posture, coin_transform, coin_adapt, coin_repop);
+        generated_coinPtr->SetupCircleShadows(arg_planetPtr, arg_lightMPtr, coin_atten, coin_wide, coin_dist);
     }
 }
 
@@ -314,15 +469,23 @@ std::forward_list<CoinList::CoinGroup>::iterator CoinList::GetCoinGroupItr(const
 }
 
 // ------------------------------------------------------------------------------------------------
-std::unique_ptr<Coin> CoinFactory::Create(CollisionManager* arg_colMPtr_, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop)
+std::unique_ptr<Coin> CoinFactory::Create(void)
 {
-    // null check
-    if (!arg_colMPtr_) { return nullptr; }
-
     // ユニークポインタで、コインを生成
     std::unique_ptr<Coin> coin = std::make_unique<Coin>();
-    // コインの設定を引数通りに行う
-    coin->SetUp(arg_colMPtr_, arg_id, arg_posture, arg_transform, arg_adaptPosture, arg_rePop);
     // 所有権を譲渡する形で返す。
     return std::move(coin);
 }
+
+//std::unique_ptr<Coin> CoinFactory::Create(CollisionManager* arg_colMPtr_, const std::string& arg_id, const Axis3& arg_posture, const Transform& arg_transform, bool arg_adaptPosture, bool arg_rePop)
+//{
+//    // null check
+//    //if (!arg_colMPtr_) { return nullptr; }
+//
+//    // ユニークポインタで、コインを生成
+//    std::unique_ptr<Coin> coin = std::make_unique<Coin>();
+//    // コインの設定を引数通りに行う
+//    //coin->SetUp(arg_colMPtr_, arg_id, arg_posture, arg_transform, arg_adaptPosture, arg_rePop);
+//    // 所有権を譲渡する形で返す。
+//    return std::move(coin);
+//}
