@@ -107,7 +107,7 @@ void Coin::Update(void)
 
 void Coin::Draw(void)
 {
-    if(is_taken_ == false) { Object3D::Draw(); }
+    if (is_taken_ == false) { Object3D::Draw(); }
 }
 
 void Coin::Collision_onTrigger(void)
