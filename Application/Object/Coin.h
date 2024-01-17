@@ -20,6 +20,8 @@ public:
     const float kRadius_{ 1.3f };           // コインの半径
     const float kRotationRadian_{ 0.04f };  // コインを回転させるときの角速度（ラジアン）
     const float kRePopTime_{ 20.f };        // コインが復活するまでの時間（秒)
+    const float kRePopScaleTime_{ 2.f };    // コインが何秒かけて元の大きさになるかの時間（秒)
+    const Vector3 kScale_{ 1.f,1.f,1.f };   // コインの大きさ
 
     //>> 関数
     Coin(void);
@@ -36,14 +38,18 @@ private:
     //>> 変数
     std::string id_;
     Axis3 axes_;
-    float radian_;           // どんくらい回転してるか
-    Vector3 vec3_newUp_;     // 新規上ベクトル
-    bool is_adaptPosture_;   // 姿勢を惑星から見た位置に自動で適応するか。
+    float radian_;                // どんくらい回転してるか
+    Vector3 vec3_newUp_;          // 新規上ベクトル
+    bool is_adaptPosture_;        // 姿勢を惑星から見た位置に自動で適応するか。
 
-    Transform transform_;    // 座標等
-    bool is_taken_{};        // 回収されたか
-    bool is_rePop_{};        // リポップするか
-    DeltaTimer timer_repop_; // リポップするときの時間計測
+    Transform transform_;         // 座標等
+    bool is_taken_{};             // 回収されたか
+    bool is_rePop_{};             // リポップするか
+    DeltaTimer timer_repop_;      // リポップするときの時間計測
+
+    Vector2 factorAngleDefault_;  // factorAngle初期入力値
+    bool is_startReScale_{};      // 再生成するときのフラグ
+    DeltaTimer timer_repopScale_; // リポップするときのサイズ変更にかける時間
 
     CollisionManager* colMPtr_{};
     CollisionPrimitive::SphereCollider collision_contact_; // 当たり判定
@@ -58,9 +64,11 @@ public:
     void SetPosition(const Vector3& arg_pos);
     void SetRotation(const Vector3& arg_rot) { transform_.rotation = arg_rot; }
     void SetRadius_Contact(float arg_radius) { collision_contact_.radius = arg_radius; }
+    void SetFactorAngleDefault(const Vector2& arg_factorAngleDefault) { factorAngleDefault_ = arg_factorAngleDefault; }
     void SetupCircleShadows(Planet* arg_planetPtr, LightManager* arg_lightManagerPtr, const Vector3& arg_atten = { 0.02f,0.06f,0.01f }, const Vector2& arg_factorAngle = { 6.f,8.f }, float arg_distAtCaster = 1.f);
     void SetCircleShadowActive(LightManager* arg_lightManagerPtr, bool arg_isActive) { arg_lightManagerPtr->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_isActive); }
     void SetCircleShadowDistAtCaster(LightManager* arg_lightManagerPtr, float arg_dist) { arg_lightManagerPtr->SetLightDistanceAtCaster(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_dist); }
+    void SetCircleShadowFactorAngle(LightManager* arg_lightManagerPtr, const Vector2& arg_factorAngle) { arg_lightManagerPtr->SetLightFactorAngle(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_factorAngle); }
 
     //>> getter
     const Vector3& GetPosition(void) { return transform_.position; }

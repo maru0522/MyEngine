@@ -441,6 +441,7 @@ void CoinList::DeployCoin(const std::filesystem::path& arg_path, Planet* arg_pla
             generated_coinPtr = AddCoin() :
             generated_coinPtr = AddCoin(coin_gname);
 
+        generated_coinPtr->SetFactorAngleDefault(coin_wide);
         generated_coinPtr->SetUp(colMPtr_, coin_name, coin_posture, coin_transform, coin_adapt, coin_repop);
         generated_coinPtr->SetupCircleShadows(arg_planetPtr, arg_lightMPtr, coin_atten, coin_wide, coin_dist);
     }

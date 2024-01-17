@@ -62,6 +62,29 @@ void Coin::Update(void)
     //GUI::SliderFloat3("transform_rot", transform_.rotation, 0.f, 6.28319f);
     //GUI::End();
 
+    // scale調整フラグが有効
+    if (is_startReScale_)
+    {
+        // リポップ時のサイズ調整タイマーを更新
+        timer_repopScale_.Update();
+
+        const float rate = timer_repopScale_.GetTimeRate();
+        if (rate >= 1.f)
+        {
+            // scale調整開始フラグfalse
+            is_startReScale_ = false;
+        }
+
+        // スケール調整
+        float scale = Math::Ease::EaseOutSine(rate);
+        transform_.scale = { scale,scale,scale };
+        // 丸影のスケール調整
+        Vector2 factorAngle{};
+        factorAngle.x = Math::Ease::EaseOutSine(rate, 0.f, factorAngleDefault_.x);
+        factorAngle.y = Math::Ease::EaseOutSine(rate, 0.f, factorAngleDefault_.y);
+        SetCircleShadowFactorAngle(lightManagerPtr_, factorAngle);
+    }
+
     // 取得済みフラグ && リポップフラグが有効かどうか
     if (is_taken_ && is_rePop_) // 変更が少ないフラグから、チェックすることで処理軽減
     {
@@ -71,9 +94,17 @@ void Coin::Update(void)
         const float rate = timer_repop_.GetTimeRate();
         if (rate >= 1.f)
         {
+            // 取得済みフラグをfalse
             is_taken_ = false;
+            // scale調整開始フラグtrue
+            is_startReScale_ = true;
+            // scale調整用タイマーの初期化と起動
+            timer_repopScale_.Finish(true);
+            timer_repopScale_.Start(kRePopScaleTime_);
+            transform_.scale = {}; // スケールを0.fから始める。
             // 丸影をオンにする。
             SetCircleShadowActive(lightManagerPtr_, true);
+            SetCircleShadowFactorAngle(lightManagerPtr_, { 0.f,0.f }); // 丸影のサイズを0.fから始める。
         }
     }
 
