@@ -4,4 +4,4 @@
 #NAME:basic3#POSTURE:{}#TRANS:{30,49,0}{0,0,0}{1,1,1}#ADAPT:true#REPOP:true#GNAME:#ATTEN:{}#WIDE:{}#DIST:
 
 // 残り
-#NAME:circle1#POSTURE:{}#TRANS:{0,10,51}{0,0,0}{1,1,1}#ADAPT:true#REPOP:true#GNAME:group_circle#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle1#POSTURE:{}#TRANS:{0,10,51}{0,0,0}{1,1,1}#ADAPT:true#REPOP:false#GNAME:group_circle#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:

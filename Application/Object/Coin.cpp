@@ -72,6 +72,8 @@ void Coin::Update(void)
         if (rate >= 1.f)
         {
             is_taken_ = false;
+            // 丸影をオンにする。
+            SetCircleShadowActive(lightManagerPtr_, true);
         }
     }
 
@@ -126,6 +128,9 @@ void Coin::Collision_onTrigger(void)
                 timer_repop_.Finish(true);
                 // リポップするまでのタイマーを起動
                 timer_repop_.Start(kRePopTime_);
+
+                // 丸影をオフにする。
+                SetCircleShadowActive(lightManagerPtr_, false);
             }
 
             // コイン取得のSEが再生中かどうか

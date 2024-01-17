@@ -56,14 +56,6 @@ Vector3& Vector3::operator=(const Vector3& v)
     return *this;
 }
 
-Vector3& Vector3::operator=(float arr[3])
-{
-    x = arr[0];
-    y = arr[1];
-    z = arr[2];
-    return *this;
-}
-
 // 代入演算子 +=
 Vector3& Vector3::operator+=(const Vector3& v)
 {
@@ -182,4 +174,13 @@ const Vector3 Math::Vec3::bezier3(const Vector3& start, const Vector3& controlPo
         lerp(lerp(start, controlPoint1, t), lerp(controlPoint1, controlPoint2, t), t),	// start
         lerp(lerp(controlPoint1, controlPoint2, t), lerp(controlPoint2, end, t), t),	// end	
         t);
+}
+
+const Vector3 Math::Vec3::ConvertArray3(float arr[3])
+{
+    Vector3 result;
+    result.x = arr[0];
+    result.y = arr[1];
+    result.z = arr[2];
+    return result;
 }

@@ -22,10 +22,7 @@ void CoinList::Update(void)
             // 更新処理
             coin->Update();
             // インスタンスを消滅させる条件が、揃っている場合削除。->nullptr化
-            if (coin->IsElimination()) 
-            {
-                coin.reset(); 
-            }
+            if (coin->IsElimination()) { coin.reset(); }
         }
     }
     // 無所属コインの範囲for文。各要素は参照渡し。
@@ -34,10 +31,7 @@ void CoinList::Update(void)
         // 更新処理
         coin->Update();
         // インスタンスを消滅させる条件が、揃っている場合削除。->nullptr化
-        if (coin->IsElimination()) 
-        {
-            coin.reset();
-        }
+        if (coin->IsElimination()) { coin.reset(); }
     }
 
 
@@ -281,9 +275,9 @@ void CoinList::DeployCoin(const std::filesystem::path& arg_path, Planet* arg_pla
                 }
 
                 // 取得した値を姿勢として代入
-                coin_posture.forward = dir[0];
-                coin_posture.right = dir[1];
-                coin_posture.up = dir[2];
+                coin_posture.forward = Math::Vec3::ConvertArray3(dir[0]);
+                coin_posture.right = Math::Vec3::ConvertArray3(dir[1]);
+                coin_posture.up = Math::Vec3::ConvertArray3(dir[2]);
             }
             else if (str_word.starts_with("TRANS:"))
             {
@@ -331,9 +325,9 @@ void CoinList::DeployCoin(const std::filesystem::path& arg_path, Planet* arg_pla
                 }
 
                 // 取得した値を姿勢として代入
-                coin_transform.position = trans[0];
-                coin_transform.rotation = trans[1];
-                coin_transform.scale = trans[2];
+                coin_transform.position = Math::Vec3::ConvertArray3(trans[0]);
+                coin_transform.rotation = Math::Vec3::ConvertArray3(trans[1]);
+                coin_transform.scale = Math::Vec3::ConvertArray3(trans[2]);
             }
             else if (str_word.starts_with("ADAPT:"))
             {
@@ -385,7 +379,7 @@ void CoinList::DeployCoin(const std::filesystem::path& arg_path, Planet* arg_pla
                 }
 
                 // 取得した値をattenとして代入
-                coin_atten = atten;
+                coin_atten = Math::Vec3::ConvertArray3(atten);
             }
             else if (str_word.starts_with("WIDE:"))
             {
