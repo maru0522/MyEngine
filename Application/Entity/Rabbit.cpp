@@ -253,6 +253,7 @@ void Rabbit::OnCollision(void)
     {
         // 捕獲されたフラグをtrue
         isCaptured_ = true;
+        SetCircleShadowsIsActive(false);
     }
 }
 

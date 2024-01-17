@@ -84,6 +84,7 @@ public:
         circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
         lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
     }
+    void SetCircleShadowsIsActive(bool arg_active) { lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_active); }
 
     //>> getter
     Transform* GetTransformPtr(void) { return &transform_; }
