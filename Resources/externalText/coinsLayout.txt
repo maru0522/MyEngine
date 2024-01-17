@@ -14,11 +14,11 @@
 #NAME:circle1_8#POSTURE:{0,-1,0}{1,0,0,}{0,0,1}#TRANS:{-7.5,7.5,51}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle1#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
 
 // 環状配置2
-#NAME:circle2_1#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{0,10,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_2#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{7.5,7.5,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_3#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{10,0,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_4#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{7.5,-7.5,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_5#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{0,-10,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_6#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{-7.5,-7.5,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_7#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{-10,0,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
-#NAME:circle2_8#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{-7.5,7.5,-52.6}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_1#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{0,10,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_2#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{7.5,7.5,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_3#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{10,0,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_4#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{7.5,-7.5,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_5#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{0,-10,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_6#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{-7.5,-7.5,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_7#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{-10,0,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:
+#NAME:circle2_8#POSTURE:{0,1,0}{1,0,0,}{0,0,-1}#TRANS:{-7.5,7.5,-53}{0,0,0}{1,1,1}#ADAPT:false#REPOP:false#GNAME:group_circle2#ATTEN:{0.02,0.1,0.07}#WIDE:{15,20}#DIST:

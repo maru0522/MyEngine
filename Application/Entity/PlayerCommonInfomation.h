@@ -20,7 +20,7 @@ struct Player_CommonInfomation
     ~Player_CommonInfomation(void) = default;
 
     //>> 定数
-    const float kRadius_{ 1.f };
+    const float kRadius_{ 1.5f };
     const float kJumpPower_{ 0.75f };
     const float kJumpLongPower_{ 0.85f };
     const float kMoveSpeed_{ 0.4f };
@@ -50,7 +50,7 @@ struct Player_CommonInfomation
     float jumpVecNorm_{};
     bool isLanding_{};
 
-    int32_t coinNum_;
+    int32_t coinNum_{};
 
     PlayerEventState eventState_{};
 
