@@ -19,6 +19,7 @@ Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr,
 
     // 初期位置
     transform_.position = { 0,60,20 };
+    transform_.scale = { 2.5f,2.5f,2.5f };
     // 初期姿勢
     axes_.forward = { 0,0,1 };
     axes_.right = { 1,0,0 };

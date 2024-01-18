@@ -66,7 +66,8 @@ private:
     CollisionPrimitive::SphereCollider sphere_collision_;
     CollisionPrimitive::SphereCollider sphere_detectPlayer_;
 
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/rabbit/rabbit.obj") };
+    //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/rabbit/rabbit.obj") };
+    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/snake/snake.obj") };
     std::unique_ptr<ExclamationMark> exclamationMark_;
     DeltaTimer timer_visibleExclamationMark_; //
     bool is_detect_; // プレイヤーを検知したか
