@@ -16,10 +16,10 @@ namespace Primitive
         virtual ~OBB(void) override = default;
 
         //>> 変数
-        Vector3 center{ 0, 0, 0 };
-        Vector3 orientations[3]{ {},{},{} };
-        Vector3 radius{ 0, 0, 0 };
-        Vector3 inter{ 0, 0, 0 }; // 交接点
+        Vector3 center{ 0, 0, 0 };           // 中心点
+        Vector3 orientations[3]{ {},{},{} }; // 各軸
+        Vector3 radius{ 0, 0, 0 };           // 半径
+        Vector3 inter{ 0, 0, 0 };            // 交接点
     };
 }
 

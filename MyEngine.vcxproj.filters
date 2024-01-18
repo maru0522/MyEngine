@@ -288,6 +288,7 @@
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp">
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
+    <ClCompile Include="StoneBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -566,6 +567,7 @@
     <ClInclude Include="Engine\Scene\unique\GameScene.h">
       <Filter>Engine\Scene\unique</Filter>
     </ClInclude>
+    <ClInclude Include="StoneBlock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">
