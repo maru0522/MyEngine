@@ -22,7 +22,7 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
 
     // 初期位置
     commonInfo_->transform_.position = { 0,60,-10 };
-    commonInfo_->transform_.scale = { 2.2f,2.2f,2.2f };
+    commonInfo_->transform_.scale = { 3.4f,3.4f,3.4f };
 
     // 初期姿勢
     commonInfo_->axes_.forward = { 0,0,1 };
