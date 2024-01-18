@@ -179,9 +179,6 @@
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp">
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Scene\unique\GameScene.cpp">
-      <Filter>Engine\Scene\unique</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Entity\Player.cpp">
       <Filter>Application\Entity</Filter>
     </ClCompile>
@@ -288,6 +285,9 @@
     <ClCompile Include="Application\OperateGuideUI.cpp" />
     <ClCompile Include="Application\ExclamationMark.cpp" />
     <ClCompile Include="CoinList.cpp" />
+    <ClCompile Include="Engine\Scene\unique\GameScene.cpp">
+      <Filter>Engine\Scene\unique</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -451,9 +451,6 @@
     <ClInclude Include="Engine\Scene\unique\ResultScene.h">
       <Filter>Engine\Scene\unique</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Scene\unique\GameScene.h">
-      <Filter>Engine\Scene\unique</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Entity\Rabbit.h">
       <Filter>Application\Entity</Filter>
     </ClInclude>
@@ -566,6 +563,9 @@
     <ClInclude Include="Application\OperateGuideUI.h" />
     <ClInclude Include="Application\ExclamationMark.h" />
     <ClInclude Include="CoinList.h" />
+    <ClInclude Include="Engine\Scene\unique\GameScene.h">
+      <Filter>Engine\Scene\unique</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">
