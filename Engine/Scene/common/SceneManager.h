@@ -37,6 +37,9 @@ private:
     SceneTransitionManager sceneTransitionManager_;
     bool is_lodingData_;
 
+    std::string currentSceneName_;
+    std::vector<std::string> debug_SceneNameList_ = { "TITLE","GAME","DEMO" };
+
     //>> singleton
     SceneManager(void);
     ~SceneManager(void);

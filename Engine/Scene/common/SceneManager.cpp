@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "SimplifyImGui.h"
 
 SceneManager::SceneManager(void)
 {
@@ -36,6 +37,19 @@ void SceneManager::Initialize(SceneName firstScene)
 
 void SceneManager::Update(void)
 {
+#ifdef _DEBUG
+    GUI::Begin("SceneManager");
+    GUI::DropDownTrg("SceneList",currentSceneName_, debug_SceneNameList_);
+    if (GUI::ButtonTrg("Transition"))
+    {
+        if (currentSceneName_ == "TITLE") { RequestChangeScene(SceneName::TITLE); }
+        if (currentSceneName_ == "GAME") { RequestChangeScene(SceneName::GAME); }
+        if (currentSceneName_ == "DEMO") { RequestChangeScene(SceneName::DEMO); }
+    }
+    GUI::End();
+#endif // _DEBUG
+
+
     // シーン遷移が再生中である
     if (sceneTransitionManager_.IsPlayingAnimation())
     {
