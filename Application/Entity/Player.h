@@ -22,6 +22,11 @@ public:
     //>> 定義
     friend IPlayerBehavior;
 
+    const float kTimer_stoop_cameraClose_ = 3.f; // しゃがみ状態の時に何秒かけてカメラが近づくか（秒）
+    const float kTimer_stoop_cameraLeave_ = 3.f; // しゃがみ状態じゃなくなった時に何秒かけてカメラが離れるか（秒）
+    const float kDist_stoop_cameraClose_ = 55.f; // しゃがみ状態の時のカメラとプレイヤーの距離
+    const float kDist_stoop_cameraLeave_ = 70.f; // しゃがみ状態じゃなくなった時のカメラとプレイヤーの距離
+
     //>> 関数
     Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
     ~Player(void);
@@ -55,6 +60,8 @@ private:
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/character/chr_sword.obj") };
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };
 
+    DeltaTimer timer_stoop_cameraClose_;
+    DeltaTimer timer_stoop_cameraLeave_;
     PlayerBehaviorMachine pbm_;
     PlayerUI playerUI_;
     OperateGuideUI operateGuideUI_;
