@@ -271,8 +271,8 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
 
-    // 1フレーム前の入力ベクトルを記録
-    commonInfo_->vec2_input_old_ = vec2_input;
+    // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録
+    if (vec2_input.IsNonZero()) { commonInfo_->vec2_input_old_ = vec2_input; }
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
@@ -364,8 +364,8 @@ void PlayerBehavior_MoveStoop::Execute(void)
     ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
 
-    // 1フレーム前の入力ベクトルを記録
-    commonInfo_->vec2_input_old_ = vec2_input;
+    // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録
+    if (vec2_input.IsNonZero()) { commonInfo_->vec2_input_old_ = vec2_input; }
 }
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)
@@ -447,13 +447,8 @@ void PlayerBehavior_Jump::Execute(void)
 
     // 入力ベクトルの取得。
     Vector2 vec2_input = Process_GetInput();
-    // 入力ベクトルが0かどうか
-    const bool isZeroInput = vec2_input.IsNonZero() == false;
-
     // モデル用のaxes計算
-    isZeroInput ?
-        Process_CalculateModelAxes(commonInfo_->vec2_input_old_) :
-        Process_CalculateModelAxes(vec2_input);
+    Process_CalculateModelAxes(vec2_input);
 
 
     // カメラ視点のプレイヤー移動ベクトル
@@ -486,10 +481,8 @@ void PlayerBehavior_Jump::Execute(void)
     ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
 
-    // 1フレーム前の入力ベクトルを記録
-    isZeroInput ?
-        commonInfo_->vec2_input_old_ = commonInfo_->vec2_input_old_ :
-        commonInfo_->vec2_input_old_ = vec2_input;
+    // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録
+    if (vec2_input.IsNonZero()) { commonInfo_->vec2_input_old_ = vec2_input; }
 #ifdef _DEBUG
     GUI::Begin("player");
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
@@ -593,8 +586,9 @@ void PlayerBehavior_JumpLong::Execute(void)
     RadialBlur* radialPtr = static_cast<RadialBlur*>(PostEffectManager::GetInstance()->GetPostEffectPtr());
     radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
 
-    // 1フレーム前の入力ベクトルを記録 ※ここだけ、記録するのはeffect_input
-    commonInfo_->vec2_input_old_ = effect_input;
+    // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録 ※ここだけ、記録するのはeffect_input
+    if(effect_input.IsNonZero()) { commonInfo_->vec2_input_old_ = effect_input; }
+
 #ifdef _DEBUG
     GUI::Begin("playerBehavior_JumpLong");
     GUI::Text("vec2_entryInput_:   [%f,%f]", vec2_entryInput_.x, vec2_entryInput_.y);
@@ -681,12 +675,15 @@ void IPlayerBehavior::Process_Transform(const Vector3& arg_velocity)
 
 void IPlayerBehavior::Process_CalculateModelAxes(const Vector2& arg_input)
 {
+    Vector2 input = arg_input;
+    if (input.IsNonZero() == false) { input = commonInfo_->vec2_input_old_; }
+
     // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
     // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
-    const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, arg_input));
+    const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, input));
     float radian_rotate{};
     radian_rotate = radian_rotate2;
-    if (arg_input.x < 0)
+    if (input.x < 0)
     {
         radian_rotate = 3.1415926535f + (3.1415926535f - radian_rotate2);
     }
