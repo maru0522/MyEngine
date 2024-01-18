@@ -152,6 +152,15 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     }
 }
 
+void PlayerBehavior_Stoop::Entry(void)
+{
+    // stoop状態時用のカメラ距離を適応するフラグをtrueに
+    commonInfo_->is_close_ = true;
+    // カメラを近づける用のイージングタイマーを初期化 && 起動
+    commonInfo_->timer_stoop_cameraClose_.Finish(true);
+    commonInfo_->timer_stoop_cameraClose_.Start(commonInfo_->kTimer_stoop_cameraClose_);
+}
+
 void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 {
     // 1フレーム前の3軸を記録
@@ -184,6 +193,15 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
     GUI::Text("velocity:             [%f,%f,%f]", velocity.x, velocity.y, velocity.z);
     GUI::End();
 #endif // _DEBUG
+}
+
+void PlayerBehavior_Stoop::Exit(void)
+{
+    // stoop状態時用のカメラ距離を適応するフラグをfalseに
+    commonInfo_->is_close_ = false;
+    // カメラが離れる用のイージングタイマーを初期化 && 起動
+    commonInfo_->timer_stoop_cameraLeave_.Finish(true);
+    commonInfo_->timer_stoop_cameraLeave_.Start(commonInfo_->kTimer_stoop_cameraLeave_);
 }
 
 void PlayerBehavior_Stoop::RequirementCheck(void)
@@ -323,6 +341,15 @@ void PlayerBehavior_Move::RequirementCheck(void)
     }
 }
 
+void PlayerBehavior_MoveStoop::Entry(void)
+{
+    // stoop状態時用のカメラ距離を適応するフラグをtrueに
+    commonInfo_->is_close_ = true;
+    // カメラを近づける用のイージングタイマーを初期化 && 起動
+    commonInfo_->timer_stoop_cameraClose_.Finish(true);
+    commonInfo_->timer_stoop_cameraClose_.Start(commonInfo_->kTimer_stoop_cameraClose_);
+}
+
 void PlayerBehavior_MoveStoop::Execute(void)
 {
     // 1フレーム前の3軸を記録
@@ -366,6 +393,15 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
     // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録
     if (vec2_input.IsNonZero()) { commonInfo_->vec2_input_old_ = vec2_input; }
+}
+
+void PlayerBehavior_MoveStoop::Exit(void)
+{
+    // stoop状態時用のカメラ距離を適応するフラグをfalseに
+    commonInfo_->is_close_ = false;
+    // カメラが離れる用のイージングタイマーを初期化 && 起動
+    commonInfo_->timer_stoop_cameraLeave_.Finish(true);
+    commonInfo_->timer_stoop_cameraLeave_.Start(commonInfo_->kTimer_stoop_cameraLeave_);
 }
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)

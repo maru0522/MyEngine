@@ -16,5 +16,13 @@ public:
     //>> 変数
     Vector3 pos_player_;
     Axis3 axes_player_;
+
+    float distance_fromPlayer_;
+
+    //>> setter
+    void SetDistance(float arg_distFromPlayer) { distance_fromPlayer_ = arg_distFromPlayer; }
+
+    //>> getter
+    float GetDistance(void) { return distance_fromPlayer_; }
 };
 

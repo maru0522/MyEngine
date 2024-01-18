@@ -11,12 +11,14 @@ BehindCamera::BehindCamera(const std::string& arg_id) : ICamera()
 
     // アフィン変換に姿勢を使うか。
     is_affinUseAxes_ = true;
+
+    distance_fromPlayer_ = 70.f; // PlayerCommonInformation::kDist_stoop_cameraLeave_;
 }
 
 void BehindCamera::Update(void)
 {
     // 座標 = プレイヤーの座標 + プレイヤーの上ベクトル * 10.f;
-    transform_.position = pos_player_ + (axes_player_.up * 70.f);
+    transform_.position = pos_player_ + (axes_player_.up * distance_fromPlayer_);
 
     // 姿勢ベクトル計算
     // 正面 = プレイヤーの座標 - カメラの座標（カメラ->プレイヤー）

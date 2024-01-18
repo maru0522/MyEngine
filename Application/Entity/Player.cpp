@@ -63,10 +63,31 @@ void Player::Update(void)
     //if (commonInfo_->eventState_ == PlayerEventState::NONE) { pbm_.ManagementBehavior(); }
     pbm_.ManagementBehavior();
 
-    // プレイヤーがしゃがみ状態の時 && 現在使用しているカメラが、"BehindCamera_follow_player0"である
-    if (pbm_.GetStatePtr()->GetCurState() == PlayerBehavior::STOOP && commonInfo_->camMPtr_->GetCurrentCamera()->GetId() == "BehindCamera_follow_player0")
+    // 現在使用しているカメラが、"BehindCamera_follow_player0"である
+    if (commonInfo_->camMPtr_->GetCurrentCamera()->GetId() == "BehindCamera_follow_player0")
     {
-        
+        // カメラのptrを取得
+        BehindCamera* behindCam = static_cast<BehindCamera*>(commonInfo_->camMPtr_->GetCurrentCamera());
+
+        float distance{};
+        if (commonInfo_->is_close_)
+        {
+            // カメラが近づく用タイマーの更新処理を実行
+            commonInfo_->timer_stoop_cameraClose_.Update();
+            const float rate = commonInfo_->timer_stoop_cameraClose_.GetTimeRate();
+            const float currentDist = behindCam->GetDistance();
+            distance = Math::Ease::EaseOutSine(rate, currentDist, commonInfo_->kDist_stoop_cameraClose_);
+            behindCam->SetDistance(distance);
+        }
+        else
+        {
+            // カメラが離れる用タイマーの更新処理を実行
+            commonInfo_->timer_stoop_cameraLeave_.Update();
+            const float rate = commonInfo_->timer_stoop_cameraLeave_.GetTimeRate();
+            const float currentDist = behindCam->GetDistance();
+            distance = Math::Ease::EaseOutSine(rate, currentDist, commonInfo_->kDist_stoop_cameraLeave_);
+            behindCam->SetDistance(distance);
+        }
     }
 
 #ifdef _DEBUG

@@ -114,9 +114,9 @@ public:
     PlayerBehavior_Stoop(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_Stoop(void) override = default;
 
-    void Entry(void) override {};
+    void Entry(void) override;
     void Execute(void) override;
-    void Exit(void) override {};
+    void Exit(void) override;
 
 private:
     void RequirementCheck(void) override;
@@ -146,9 +146,9 @@ public:
     PlayerBehavior_MoveStoop(Player* arg_playerPtr) : IPlayerBehavior(arg_playerPtr) {}
     virtual ~PlayerBehavior_MoveStoop(void) override = default;
 
-    void Entry(void) override {};
+    void Entry(void) override;
     void Execute(void) override;
-    void Exit(void) override {};
+    void Exit(void) override;
 
 private:
     void RequirementCheck(void) override;
