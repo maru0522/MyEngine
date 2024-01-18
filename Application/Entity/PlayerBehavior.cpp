@@ -111,6 +111,9 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
 
 void PlayerBehavior_Idle::RequirementCheck(void)
 {
+    //イベント中の場合、判定を行わない。
+    if (commonInfo_->eventState_ != PlayerEventState::NONE) { return; }
+
     const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
@@ -185,6 +188,9 @@ void PlayerBehavior_Stoop::Execute(void) // "STOOP"
 
 void PlayerBehavior_Stoop::RequirementCheck(void)
 {
+    //イベント中の場合、判定を行わない。
+    if (commonInfo_->eventState_ != PlayerEventState::NONE) { return; }
+
     const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
@@ -276,6 +282,9 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
 
 void PlayerBehavior_Move::RequirementCheck(void)
 {
+    //イベント中の場合、判定を行わない。
+    if (commonInfo_->eventState_ != PlayerEventState::NONE) { return; }
+
     const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
@@ -361,6 +370,9 @@ void PlayerBehavior_MoveStoop::Execute(void)
 
 void PlayerBehavior_MoveStoop::RequirementCheck(void)
 {
+    //イベント中の場合、判定を行わない。
+    if (commonInfo_->eventState_ != PlayerEventState::NONE) { return; }
+
     const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_AorB = XPAD::IsDown(XPAD::Button::A) || XPAD::IsDown(XPAD::Button::B);
@@ -487,6 +499,9 @@ void PlayerBehavior_Jump::Execute(void)
 
 void PlayerBehavior_Jump::RequirementCheck(void)
 {
+    //イベント中の場合、判定を行わない。
+    if (commonInfo_->eventState_ != PlayerEventState::NONE) { return; }
+
     const bool isDown_LT = XPAD::GetLT();
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
 
@@ -591,6 +606,9 @@ void PlayerBehavior_JumpLong::Execute(void)
 
 void PlayerBehavior_JumpLong::RequirementCheck(void)
 {
+    //イベント中の場合、判定を行わない。
+    if (commonInfo_->eventState_ != PlayerEventState::NONE) { return; }
+
     const bool isDown_LStick = (bool)(XPAD::GetLStick().Length());
     const bool isDown_anyWASD = (bool)(KEYS::IsDown(DIK_D) + KEYS::IsDown(DIK_A) + KEYS::IsDown(DIK_W) + KEYS::IsDown(DIK_S));
 
