@@ -324,10 +324,10 @@ void PlayerBehavior_Move::RequirementCheck(void)
         return;
     }
 
-    // 蟾ｦ繧ｷ繝輔ヨ縺悟・蜉帙＆繧後※縺・ｋ
-    if (isStoop) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
+    // しゃがみ入力がされている && 着地している
+    if (isStoop && isLanding) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
     {
-        // PlayerState 繧・MOVE_STOOP(縺励ｃ縺後∩遘ｻ蜍・縺ｸ
+        // PlayerState をMOVE_STOOPに変更する
         nextState_ = PlayerBehavior::MOVE_STOOP;
         return;
     }
@@ -561,7 +561,7 @@ void PlayerBehavior_Jump::RequirementCheck(void)
     }
 
     // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ && 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ
-    if (isMove && isStoop)
+    if (isMove && isStoop && isLanding)
     {
         nextState_ = PlayerBehavior::STOOP;
         return;
