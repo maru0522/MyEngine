@@ -127,6 +127,8 @@ void DemoScene::Initialize(void)
 
 void DemoScene::Update(void)
 {
+    stone_->Update();
+
     a_.Execute();
     b_.Execute();
     c_.Execute();
@@ -313,6 +315,7 @@ void DemoScene::Draw3d(void)
     rock4_->Draw();
     rock5_->Draw();
 
+    stone_->Draw();
     //sticky1_->Draw();
     pipe1_->Draw();
     pipe2_->Draw();
