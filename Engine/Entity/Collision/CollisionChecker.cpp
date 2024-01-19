@@ -75,7 +75,7 @@ const bool CollisionChecker::SphereToOBB(const Primitive::Sphere& s, const Primi
 
     if (intersection)
     {
-
+        intersection = intersection;
     }
 
     // SphereToPoint() と同じ

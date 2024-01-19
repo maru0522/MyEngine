@@ -8,12 +8,24 @@ CollisionPrimitive::OBBCollider::OBBCollider(const std::string& arg_id)
 }
 
 bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::SphereCollider* arg_Shpere)
-{
-    if (arg_Shpere)
-    {
+{// OBBと球
+    // 互いの前回の接触相手の情報を初期化
+    InitOther();
+    arg_Shpere->InitOther();
+    bool isHit = CollisionChecker::SphereToOBB(*arg_Shpere, *this, &this->inter);
 
+    if (isHit)
+    {
+        // 接触相手のptrを保存
+        SetOther(arg_Shpere);
+        arg_Shpere->SetOther(this);
+
+        // nullチェックと衝突処理の実行
+        if (callback_onCollision_) { callback_onCollision_(); }
+        if (arg_Shpere->callback_onCollision_) { arg_Shpere->callback_onCollision_(); }
     }
-    return false;
+
+    return isHit;
 }
 
 bool CollisionPrimitive::OBBCollider::Col(CollisionPrimitive::PlaneCollider* arg_Plane)

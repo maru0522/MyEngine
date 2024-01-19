@@ -100,9 +100,9 @@ public:
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
 
-    Event_StartTutorial a_{CameraManager::GetInstance(),player_.get() };
-    Event_EndTutorial b_;
-    Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),CameraManager::GetInstance(),player_.get()};
+    //Event_StartTutorial a_{CameraManager::GetInstance(),player_.get() };
+    //Event_EndTutorial b_;
+    //Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),CameraManager::GetInstance(),player_.get()};
 
     //std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };

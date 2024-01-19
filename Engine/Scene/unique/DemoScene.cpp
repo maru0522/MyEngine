@@ -9,13 +9,15 @@
 
 void DemoScene::Initialize(void)
 {
-    a_.SetIsExecute(true);
+    //a_.SetIsExecute(true);
 
     const auto func_bgt = std::bind(&DemoScene::DrawBackGround, this);
     BackGroundTexture::GetInstance()->Set(func_bgt);
 
     // カメラの設定
     CameraSetUp();
+    CameraManager::GetInstance()->SetCurrentCamera(camera_behind_.get());
+
 
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
@@ -129,9 +131,9 @@ void DemoScene::Update(void)
 {
     stone_->Update();
 
-    a_.Execute();
-    b_.Execute();
-    c_.Execute();
+    //a_.Execute();
+    //b_.Execute();
+    //c_.Execute();
 
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
@@ -205,7 +207,7 @@ void DemoScene::Update(void)
     }
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
-    if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
+    //if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
 
     planet_->Update();
 
@@ -335,7 +337,7 @@ void DemoScene::Draw3d(void)
     //}
     skydome_->Draw();
     //skyDivide_->Draw();
-    c_.Draw();
+    //c_.Draw();
 }
 
 
@@ -345,8 +347,8 @@ void DemoScene::Draw2dFore(void)
     //UI::GetInstance()->Draw("circle_green");
     player_->Draw2dFore();
 
-    a_.Draw();
-    b_.Draw();
+    //a_.Draw();
+    //b_.Draw();
 }
 
 void DemoScene::Draw2dBack(void)

@@ -32,6 +32,7 @@ private:
     CollisionPrimitive::OBBCollider collision_obb_;
     CollisionManager* colMPtr_;
 
+    bool is_col_{};
 public:
     // getter
     Transform* TransformPtr(void) { return &transform_; }
