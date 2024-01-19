@@ -289,6 +289,7 @@
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
     <ClCompile Include="StoneBlock.cpp" />
+    <ClCompile Include="ChickenEgg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -568,6 +569,7 @@
       <Filter>Engine\Scene\unique</Filter>
     </ClInclude>
     <ClInclude Include="StoneBlock.h" />
+    <ClInclude Include="ChickenEgg.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

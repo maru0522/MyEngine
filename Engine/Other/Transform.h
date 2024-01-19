@@ -4,7 +4,8 @@
 
 struct Transform final
 {
-    Transform(void) { Initialize(); }
+    //>> 関数
+    Transform(void) { *this = Initialize(); }
     Transform(const Vector3& position, const Vector3& rotation, const Vector3& scale)
     {
         this->position = position;
@@ -12,15 +13,15 @@ struct Transform final
         this->scale = scale;
     }
 
+    //>> 変数
     Vector3 position;
     Vector3 rotation;
     Vector3 scale;
 
-    void Initialize(void)
+    //>> 静的関数
+    static const Transform Initialize(void)
     {
-        position = { 0,0,0 };
-        rotation = { 0,0,0 };
-        scale = { 1,1,1 };
+        return Transform{ {0.f,0.f,0.f}, {0.f,0.f,0.f},{1.f,1.f,1.f} };
     }
 };
 
