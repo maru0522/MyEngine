@@ -43,9 +43,12 @@ public:
     static void PreDraw(BlendMode blendmode = BlendMode::ALPHA);
     static void SetDrawBlendMode(BlendMode blendmode);
 
-    Object3D(const fsPath& path/*,Type type*/);
+    Object3D(void) = default;
+    Object3D(const fsPath& arg_path);
     virtual ~Object3D(void) = default;
 
+    // モデルを読み込む。1回のみ使う事を想定している。 TODO: ConstBufferのリソース解放する術を調べる
+    void Load(const fsPath& arg_path);
     virtual void Update(void);
     virtual void Draw(void);
     void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
@@ -54,6 +57,7 @@ public:
 protected:
     // 変数
     Object3D* parent_;
+    bool is_loaded_;    // モデル読み込みを2回以上させないための苦肉策
 
     TransformMatrix matTrans_;
     ConstBuffer<CBData3d_t> cb_;

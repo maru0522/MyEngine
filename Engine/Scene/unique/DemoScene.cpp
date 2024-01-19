@@ -145,6 +145,8 @@ void DemoScene::Initialize(void)
     rabbits_[1]->GetTransformPtr()->position = { 10,60, 20 };
     rabbits_[2]->GetTransformPtr()->position = { -10,60, 20 };
 
+    chikenegg_.Initialize(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
+
     UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
     UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
 }
@@ -152,6 +154,7 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     stone_->Update();
+    chikenegg_.Update();
 
     //a_.Execute();
     //b_.Execute();
@@ -323,6 +326,7 @@ void DemoScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw3d();
+    chikenegg_.Draw();
     for (auto& rabbit : rabbits_)
     {
         if (rabbit) { rabbit->Draw(); }

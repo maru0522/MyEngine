@@ -54,11 +54,20 @@ void Object3D::SetDrawBlendMode(BlendMode blendmode)
     iDXPtr->GetCommandList()->SetGraphicsRootSignature(PSOManager::GetInstance()->GetPSOPtr("PSO_OBJECT3D", blendmode)->rootSignature.Get());
 }
 
-Object3D::Object3D(const fsPath& path) :
+Object3D::Object3D(const fsPath& arg_path) :
     parent_(nullptr)
 {
+    // コンストラクタで読み込み
+    Load(arg_path);
+}
+
+void Object3D::Load(const fsPath& arg_path)
+{
+    // 読み込み済みなら終了
+    if (is_loaded_) { return; }
+
     // モデル読み込み
-    model_ = sModelMPtr_->GetModel(path);
+    model_ = sModelMPtr_->GetModel(arg_path);
     // モデルのマテリアル用定数バッファを生成
     model_.cbMaterial_.Create();
     // マテリアルを定数バッファへ転送
@@ -66,6 +75,8 @@ Object3D::Object3D(const fsPath& path) :
 
     // 定数バッファ生成
     cb_.Create();
+    // 読み込み済みにする。
+    is_loaded_ = true;
 }
 
 void Object3D::Update(void)

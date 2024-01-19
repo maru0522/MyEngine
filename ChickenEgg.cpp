@@ -7,6 +7,13 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     lightMPtr_ = arg_lightManagerPtr_;
     planetPtr_ = arg_planetPtr_;
 
+    // モデル読み込み
+    model_[0].Load("Resources/model/sphere/sphere.obj");
+    model_[1].Load("Resources/model/sphere/sphere.obj");
+    model_[2].Load("Resources/model/sphere/sphere.obj");
+    model_[3].Load("Resources/model/sphere/sphere.obj");
+    model_[4].Load("Resources/model/sphere/sphere.obj");
+
     // 影の適用
     circleShadows_num_ = lightMPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);      // 使用可能な丸影の番号を取得
     lightMPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true); // 丸影を使用する
@@ -51,6 +58,10 @@ void ChickenEgg::Finalize(void)
 
 void ChickenEgg::Update(void)
 {
+
+    transform_.position = { 0,55,0 };
+    transform_.scale = { 4,4,4 };
+
     // 姿勢を惑星のための向きに修正
     AdaptPosture();
     // ワールド行列を生成
@@ -58,12 +69,21 @@ void ChickenEgg::Update(void)
     // コライダーの座標更新
     sphere_collision_.center = transform_.position;
     sphere_detectSnake_.center = transform_.position;
+
+    // 卵の数を要素数として使うので、0以下なら終了
+    if (eggNum_ <= 0) { return; }
+    // モデルのワールド行列
+    *model_[eggNum_ - 1].GetCoordinatePtr() = transformMatrix_; // 要素数の為に -1
     // モデルの更新処理
+    model_[eggNum_ - 1].Update(); // 要素数の為に -1
 }
 
 void ChickenEgg::Draw(void)
 {
-
+    // 卵の数を要素数として使うので、0以下なら終了
+    if (eggNum_ <= 0) { return; }
+    // モデルの描画処理
+    model_[eggNum_ - 1].Draw(); // 要素数の為に -1
 }
 
 void ChickenEgg::AdaptPosture(void)

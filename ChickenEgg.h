@@ -10,6 +10,7 @@ public:
     //>> 定義
     const float kRadius_col_ = 3.f;         // 卵の当たり判定の半径
     const float kRadius_detectSnake_ = 3.f; // 卵の蛇検知半径
+    static const int32_t skMaxCount = 5;            // 卵の数
 
     //>> 関数
     ChickenEgg(void) = default;
@@ -28,6 +29,9 @@ private:
     void OnCollision_DetectSnake(void);
 
     //>> 変数
+    std::array<Object3D, skMaxCount> model_; // 卵のモデル。要素数に応じて数が変化。
+    int32_t eggNum_ = skMaxCount;            // 卵の数 ≒ HP
+
     CollisionManager* colMPtr_;                             // 当たり判定マネージャー
     CollisionPrimitive::SphereCollider sphere_collision_;   // 当たり判定コライダー
     CollisionPrimitive::SphereCollider sphere_detectSnake_; // 蛇検知コライダー

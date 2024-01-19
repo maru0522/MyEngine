@@ -23,6 +23,7 @@
 #include "BehindCamera.h"
 #include "CoinList.h"
 #include "StoneBlock.h"
+#include "ChickenEgg.h"
 
 class DemoScene final :
     public IScene
@@ -99,6 +100,8 @@ public:
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
+
+    ChickenEgg chikenegg_;
 
     //Event_StartTutorial a_{CameraManager::GetInstance(),player_.get() };
     //Event_EndTutorial b_;
