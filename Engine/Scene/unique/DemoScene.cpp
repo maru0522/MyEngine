@@ -11,6 +11,28 @@ void DemoScene::Initialize(void)
 {
     //a_.SetIsExecute(true);
 
+    Primitive::OBB obb;
+    obb.center = { 0,0,0 };
+    obb.orientations[0] = { 0,0,1 };
+    obb.orientations[1] = { 0,1,0 };
+    obb.orientations[2] = { 1,0,0 };
+    obb.radius = { 10,1,1 };
+
+    Primitive::Sphere sphere;
+    sphere.center = { 10,0,0 };
+    sphere.radius = 5;
+
+    bool a1 = CollisionChecker::SphereToOBB(sphere, obb);
+
+    sphere.center = { 0,0,0 };
+    bool a2 = CollisionChecker::SphereToOBB(sphere, obb);
+
+    if (a1 || a2)
+    {
+
+    }
+
+
     const auto func_bgt = std::bind(&DemoScene::DrawBackGround, this);
     BackGroundTexture::GetInstance()->Set(func_bgt);
 

@@ -73,6 +73,8 @@ const bool CollisionChecker::SphereToOBB(const Primitive::Sphere& s, const Primi
     nearest.z = (std::max)(obbLocal_aabb.center.z - obbLocal_aabb.radius.z, (std::min)(s.center.z, obbLocal_aabb.center.z + obbLocal_aabb.radius.z));
     // nearest == sphere.center の場合、球はAABB内にあるため true
 
+    //SphereToAABB(obbLocal_sphere,obbLocal_aabb,intersection)
+
     if (intersection)
     {
         intersection = intersection;
