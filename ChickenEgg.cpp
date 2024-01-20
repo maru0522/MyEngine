@@ -35,6 +35,9 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     transform_ = Transform::Initialize();
     // 初期姿勢
     posture_ = Axis3::Initialize();
+
+    transform_.position = { 0,90,0 };
+    transform_.scale = { 3,3,3 };
 }
 
 void ChickenEgg::Finalize(void)
@@ -59,29 +62,55 @@ void ChickenEgg::Finalize(void)
 void ChickenEgg::Update(void)
 {
 
-    transform_.position = { 0,55,0 };
-    transform_.scale = { 4,4,4 };
 
-    // 姿勢を惑星のための向きに修正
+
+    // 処理順
+    /*
+     * 姿勢を惑星の表面に合わせる。
+     * モデルの行列計算と更新処理
+     * 移動処理（chickenEggは重力のみ）
+     * コライダーの座標更新
+     */
+
+
+     // *姿勢を惑星の表面に合わせる
     AdaptPosture();
-    // ワールド行列を生成
-    transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, posture_, &transformMatrix_);
-    // コライダーの座標更新
+    
+
+    // *モデルの行列計算と更新処理
+    // 鶏の卵が1つ以上残っているか？ ※卵の数を要素数として使うため
+    const bool isEggsLeft = IsChikenEgg();
+    if (isEggsLeft) // 残っているなら更新処理
+    {
+        // 1Frame遅い描画座標等更新 ※座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
+        // モデルの行列のptrを受け取る。
+        TransformMatrix* TMPtr = model_[eggNum_ - 1].GetCoordinatePtr();
+        // モデルのワールド行列 ※要素数の為に -1
+        TMPtr->mat_world = Math::Function::AffinTrans(transform_, posture_, TMPtr); // ワールド行列を生成
+        // モデルの更新処理
+        model_[eggNum_ - 1].Update(); // 要素数の為に -1
+    }
+
+
+    // *移動処理（chickenEggは重力のみ）
+    // 重力
+    velocity_vertical_ -= kGravity_;
+    // 垂直方向の移動量
+    const Vector3 velocity_vertical = posture_.up * velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
+    const Vector3 pos = transform_.position + velocity_vertical;
+    transform_.position = pos;
+
+
+    // *コライダーの座標更新
     sphere_collision_.center = transform_.position;
     sphere_detectSnake_.center = transform_.position;
-
-    // 卵の数を要素数として使うので、0以下なら終了
-    if (eggNum_ <= 0) { return; }
-    // モデルのワールド行列
-    *model_[eggNum_ - 1].GetCoordinatePtr() = transformMatrix_; // 要素数の為に -1
-    // モデルの更新処理
-    model_[eggNum_ - 1].Update(); // 要素数の為に -1
 }
 
 void ChickenEgg::Draw(void)
 {
-    // 卵の数を要素数として使うので、0以下なら終了
-    if (eggNum_ <= 0) { return; }
+    // 鶏の卵が1つ以上残っているか？ ※卵の数を要素数として使うため
+    const bool isEggsLeft = IsChikenEgg();
+    if (isEggsLeft == false) { return; } // 残っていないなら終了
     // モデルの描画処理
     model_[eggNum_ - 1].Draw(); // 要素数の為に -1
 }
@@ -101,6 +130,33 @@ void ChickenEgg::AdaptPosture(void)
 
 void ChickenEgg::OnCollision_Col(void)
 {
+    if (sphere_collision_.GetOther()->GetID() == "gravityArea")
+    {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
+
+        // 球状重力エリア内に入ってる場合に行う処理。
+        Vector3 vec3_center2egg = sphere_collision_.center - other->center; // 星の中心から自分（鶏の卵）までのベクトル
+        // 新しい上ベクトル用に保存。
+        vec3_newUp_ = vec3_center2egg.Normalize();
+    }
+    if (sphere_collision_.GetOther()->GetID() == "terrainSurface")
+    {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
+
+        // 現在のプレイヤーの座標
+        Vector3 currentPos = transform_.position;
+        // 垂直方向の移動量を初期化。
+        velocity_vertical_ = 0.f;
+
+        // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+        float diff = Vector3(sphere_collision_.center - other->center).Length() - (other->radius + sphere_collision_.radius);
+        // 正規化された星の中心から自分までベクトル * めり込み距離
+        currentPos += posture_.up.Normalize() * -diff; // ここをマイナス符号で値反転
+        // 計算された座標を適用
+        transform_.position = currentPos;
+        sphere_collision_.center = currentPos;
+        sphere_detectSnake_.center = currentPos;
+    }
 }
 
 void ChickenEgg::OnCollision_DetectSnake(void)

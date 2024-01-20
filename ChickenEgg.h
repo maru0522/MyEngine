@@ -8,9 +8,10 @@ class ChickenEgg
 {
 public:
     //>> 定義
+    const float kGravity_ = 0.1f;           // 重力
     const float kRadius_col_ = 3.f;         // 卵の当たり判定の半径
     const float kRadius_detectSnake_ = 3.f; // 卵の蛇検知半径
-    static const int32_t skMaxCount = 5;            // 卵の数
+    static const int32_t skMaxCount_ = 5;   // 卵の数
 
     //>> 関数
     ChickenEgg(void) = default;
@@ -22,6 +23,8 @@ public:
     void Draw(void);
 
 private:
+    // 鶏の卵が1つ以上残っているか
+    bool IsChikenEgg(void) { return eggNum_ >= 1; }
     void Finalize(void);
     void AdaptPosture(void);
 
@@ -29,8 +32,8 @@ private:
     void OnCollision_DetectSnake(void);
 
     //>> 変数
-    std::array<Object3D, skMaxCount> model_; // 卵のモデル。要素数に応じて数が変化。
-    int32_t eggNum_ = skMaxCount;            // 卵の数 ≒ HP
+    std::array<Object3D, skMaxCount_> model_; // 卵のモデル。要素数に応じて数が変化。
+    int32_t eggNum_ = skMaxCount_;            // 卵の数 ≒ HP
 
     CollisionManager* colMPtr_;                             // 当たり判定マネージャー
     CollisionPrimitive::SphereCollider sphere_collision_;   // 当たり判定コライダー
@@ -41,6 +44,7 @@ private:
     Planet* planetPtr_;               // 影をつける星
 
     TransformMatrix transformMatrix_; // ワールド行列など
+    float velocity_vertical_;         // 垂直方向の移動量 ※重力によって引き寄せられる力の大きさ
     Transform transform_;             // 座標など
     Vector3 vec3_newUp_;              // 新規上ベクトル
     Axis3 posture_;                   // 姿勢
