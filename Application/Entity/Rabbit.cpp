@@ -1,7 +1,7 @@
 #include "Rabbit.h"
 #include "SimplifyImGui.h"
 
-Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
+Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
     : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
     arg_colMPtr->Register(&sphere_collision_);
@@ -10,8 +10,8 @@ Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr,
     sphere_collision_.SetID("rabbit");
     sphere_detectPlayer_.SetID("rabbit_detectPlayer");
 
-    sphere_collision_.callback_onCollision_ = std::bind(&Rabbit::OnCollision, this);
-    sphere_detectPlayer_.callback_onCollision_ = std::bind(&Rabbit::OnDetectPlayer, this);
+    sphere_collision_.callback_onCollision_ = std::bind(&Snake::OnCollision, this);
+    sphere_detectPlayer_.callback_onCollision_ = std::bind(&Snake::OnDetectPlayer, this);
 
     sphere_collision_.radius = kRadius_;
     sphere_collision_.center = { 0,60,20 };
@@ -28,7 +28,7 @@ Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr,
     exclamationMark_ = std::make_unique<ExclamationMark>();
 }
 
-Rabbit::~Rabbit(void)
+Snake::~Snake(void)
 {
     colMPtr_->UnRegister(&sphere_collision_);
     colMPtr_->UnRegister(&sphere_detectPlayer_);
@@ -49,7 +49,7 @@ Rabbit::~Rabbit(void)
     }
 }
 
-void Rabbit::Update(void)
+void Snake::Update(void)
 {
     // プレイヤーに触れられた後なら処理をスキップ
     if (isCaptured_) { return; }
@@ -110,7 +110,7 @@ void Rabbit::Update(void)
     is_landing_ = false;
 }
 
-void Rabbit::Draw(void)
+void Snake::Draw(void)
 {
     // 赤色のテクスチャを適用。（クソ見辛い）
     if (isCaptured_ == false) { appearance_->Draw(); }
@@ -119,7 +119,7 @@ void Rabbit::Draw(void)
     if (is_detect_) { exclamationMark_->Draw(); }
 }
 
-void Rabbit::Move(void)
+void Snake::Move(void)
 {
     // 移動ベクトル
     //moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
@@ -189,7 +189,7 @@ void Rabbit::Move(void)
     moveDist_ = (std::max)(moveDist_, 0.f);
 }
 
-void Rabbit::Process_CircleShadow(void)
+void Snake::Process_CircleShadow(void)
 {
     // 丸影が使用可能なら
     if (circleShadows_num_ >= 0)
@@ -219,7 +219,7 @@ void Rabbit::Process_CircleShadow(void)
     }
 }
 
-void Rabbit::OnCollision(void)
+void Snake::OnCollision(void)
 {
     if (sphere_collision_.GetOther()->GetID() == "gravityArea")
     {
@@ -258,7 +258,7 @@ void Rabbit::OnCollision(void)
     }
 }
 
-void Rabbit::OnDetectPlayer(void)
+void Snake::OnDetectPlayer(void)
 {
     if (sphere_detectPlayer_.GetOther()->GetID() == "player")
     {

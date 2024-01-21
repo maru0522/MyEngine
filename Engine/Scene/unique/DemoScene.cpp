@@ -139,7 +139,7 @@ void DemoScene::Initialize(void)
 
     for (auto& rabbit : rabbits_)
     {
-        rabbit = std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
+        rabbit = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
         rabbit->SetupLightCircleShadows();
     }
     rabbits_[1]->GetTransformPtr()->position = { 10,60, 20 };
