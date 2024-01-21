@@ -37,7 +37,7 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     posture_ = Axis3::Initialize();
 
     transform_.position = { 0,90,0 };
-    transform_.scale = { 3,3,3 };
+    transform_.scale = { kRadius_detectSnake_,kRadius_detectSnake_,kRadius_detectSnake_ };
 }
 
 void ChickenEgg::Finalize(void)
@@ -161,4 +161,22 @@ void ChickenEgg::OnCollision_Col(void)
 
 void ChickenEgg::OnCollision_DetectSnake(void)
 {
+    if (sphere_collision_.GetOther()->GetID() == "snake_col")
+    {
+        //CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
+
+        //// 現在のプレイヤーの座標
+        //Vector3 currentPos = transform_.position;
+        //// 垂直方向の移動量を初期化。
+        //velocity_vertical_ = 0.f;
+
+        //// めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
+        //float diff = Vector3(sphere_collision_.center - other->center).Length() - (other->radius + sphere_collision_.radius);
+        //// 正規化された星の中心から自分までベクトル * めり込み距離
+        //currentPos += posture_.up.Normalize() * -diff; // ここをマイナス符号で値反転
+        //// 計算された座標を適用
+        //transform_.position = currentPos;
+        //sphere_collision_.center = currentPos;
+        //sphere_detectSnake_.center = currentPos;
+    }
 }

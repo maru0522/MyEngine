@@ -9,8 +9,8 @@ class ChickenEgg
 public:
     //>> 定義
     const float kGravity_ = 0.1f;           // 重力
-    const float kRadius_col_ = 3.f;         // 卵の当たり判定の半径
-    const float kRadius_detectSnake_ = 3.f; // 卵の蛇検知半径
+    const float kRadius_col_ = 1.f;         // 卵の当たり判定の半径
+    const float kRadius_detectSnake_ = 5.f; // 卵の蛇検知半径
     static const int32_t skMaxCount_ = 5;   // 卵の数
 
     //>> 関数
