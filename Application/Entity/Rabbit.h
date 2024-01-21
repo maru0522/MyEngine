@@ -9,11 +9,11 @@
 #include "ExclamationMark.h"
 #include "Timer.h"
 /**
- * @file Snake.h
- * @brief 蛇クラス
+ * @file Rabbit.h
+ * @brief 兎クラス
  */
 
-class Snake
+class Rabbit
 {
 private:
     //>> 定義
@@ -33,8 +33,8 @@ public:
     const float kMoveDist_{ 30.f };             // プレイヤーを検知した地点からどのくらいの距離移動するのか。
 
     // 関数
-    Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
-    ~Snake(void);
+    Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
+    ~Rabbit(void);
 
     void Update(void);
     void Draw(void);

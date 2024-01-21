@@ -59,9 +59,9 @@ public:
 
     std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
     std::unique_ptr<Player> player_{ std::make_unique<Player>(CameraManager::GetInstance(), CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    std::unique_ptr<Snake> rabbit1_{ std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    std::unique_ptr<Snake> rabbit2_{ std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    std::unique_ptr<Snake> rabbit3_{ std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     //std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     std::unique_ptr<Sprite> png_backGround_{ std::make_unique<Sprite>("Resources/BackGround.png") };
     bool isBG_;
@@ -91,7 +91,7 @@ public:
 
     //std::array<std::unique_ptr<Coin>, 19> coins_;
     std::unique_ptr<CoinList> coinList_;
-    std::array<std::unique_ptr<Snake>, 3> rabbits_;
+    std::array<std::unique_ptr<Rabbit>, 3> rabbits_;
 
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
