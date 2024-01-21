@@ -9,7 +9,6 @@
 #include "Player.h"
 #include "Planet.h"
 #include "SphericalCamera.h"
-#include "Rabbit.h"
 #include "Rock.h"
 #include "CollisionManager.h"
 #include "IventArea_Tantative.h"
@@ -22,6 +21,7 @@
 #include "BackGroundTexture.h"
 #include "BehindCamera.h"
 #include "CoinList.h"
+#include "Snake.h"
 
 class GameScene final :
     public IScene
@@ -91,7 +91,7 @@ public:
 
     //std::array<std::unique_ptr<Coin>, 19> coins_;
     std::unique_ptr<CoinList> coinList_;
-    std::array<std::unique_ptr<Rabbit>, 3> rabbits_;
+    std::array<std::unique_ptr<Snake>, 3> snakes_;
 
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;

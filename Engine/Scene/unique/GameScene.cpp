@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "UI.h"
 #include "BackGroundTexture.h"
+#include "Snake.h"
 
 void GameScene::Initialize(void)
 {
@@ -113,13 +114,13 @@ void GameScene::Initialize(void)
     //    }
     //}
 
-    for (auto& rabbit : rabbits_)
+    for (auto& rabbit : snakes_)
     {
         rabbit = std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
         rabbit->SetupLightCircleShadows();
     }
-    rabbits_[1]->GetTransformPtr()->position = { 10,60, 20 };
-    rabbits_[2]->GetTransformPtr()->position = { -10,60, 20 };
+    snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
+    snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
 
     UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
     UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
@@ -189,7 +190,7 @@ void GameScene::Update(void)
     player_->Update();
 
     uint32_t capturedRabbitCount = 0;
-    for (auto& rabbit : rabbits_)
+    for (auto& rabbit : snakes_)
     {
         if(rabbit) 
         { 
@@ -297,7 +298,7 @@ void GameScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw3d();
-    for (auto& rabbit : rabbits_)
+    for (auto& rabbit : snakes_)
     {
         if (rabbit) { rabbit->Draw(); }
     }

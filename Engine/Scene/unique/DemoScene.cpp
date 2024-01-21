@@ -137,13 +137,13 @@ void DemoScene::Initialize(void)
     //    }
     //}
 
-    for (auto& rabbit : rabbits_)
+    for (auto& rabbit : snakes_)
     {
         rabbit = std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
         rabbit->SetupLightCircleShadows();
     }
-    rabbits_[1]->GetTransformPtr()->position = { 10,60, 20 };
-    rabbits_[2]->GetTransformPtr()->position = { -10,60, 20 };
+    snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
+    snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
 
     chikenegg_.Initialize(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
 
@@ -218,7 +218,7 @@ void DemoScene::Update(void)
     player_->Update();
 
     uint32_t capturedRabbitCount = 0;
-    for (auto& rabbit : rabbits_)
+    for (auto& rabbit : snakes_)
     {
         if(rabbit) 
         { 
@@ -327,7 +327,7 @@ void DemoScene::Draw3d(void)
 
     player_->Draw3d();
     chikenegg_.Draw();
-    for (auto& rabbit : rabbits_)
+    for (auto& rabbit : snakes_)
     {
         if (rabbit) { rabbit->Draw(); }
     }

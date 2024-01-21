@@ -94,6 +94,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Entity\Snake.cpp" />
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp" />
     <ClCompile Include="ChickenEgg.cpp" />
     <ClCompile Include="CoinList.cpp" />
@@ -294,6 +295,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Entity\Snake.h" />
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h" />
     <ClInclude Include="ChickenEgg.h" />
     <ClInclude Include="CoinList.h" />

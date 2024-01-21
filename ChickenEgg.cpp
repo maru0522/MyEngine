@@ -61,15 +61,13 @@ void ChickenEgg::Finalize(void)
 
 void ChickenEgg::Update(void)
 {
-
-
-
     // 処理順
     /*
      * 姿勢を惑星の表面に合わせる。
      * モデルの行列計算と更新処理
      * 移動処理（chickenEggは重力のみ）
      * コライダーの座標更新
+     * 蛇のカウント初期化
      */
 
 
@@ -104,6 +102,10 @@ void ChickenEgg::Update(void)
     // *コライダーの座標更新
     sphere_collision_.center = transform_.position;
     sphere_detectSnake_.center = transform_.position;
+
+
+    // *蛇のカウント初期化 ※蛇が範囲内に何体いるのかを毎F更新するため
+    snakeCount_ = 0;
 }
 
 void ChickenEgg::Draw(void)
@@ -163,20 +165,7 @@ void ChickenEgg::OnCollision_DetectSnake(void)
 {
     if (sphere_collision_.GetOther()->GetID() == "snake_col")
     {
-        //CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
-
-        //// 現在のプレイヤーの座標
-        //Vector3 currentPos = transform_.position;
-        //// 垂直方向の移動量を初期化。
-        //velocity_vertical_ = 0.f;
-
-        //// めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
-        //float diff = Vector3(sphere_collision_.center - other->center).Length() - (other->radius + sphere_collision_.radius);
-        //// 正規化された星の中心から自分までベクトル * めり込み距離
-        //currentPos += posture_.up.Normalize() * -diff; // ここをマイナス符号で値反転
-        //// 計算された座標を適用
-        //transform_.position = currentPos;
-        //sphere_collision_.center = currentPos;
-        //sphere_detectSnake_.center = currentPos;
+        // 蛇を感知するたびカウントを +1
+        snakeCount_++;
     }
 }

@@ -34,6 +34,7 @@ private:
     //>> 変数
     std::array<Object3D, skMaxCount_> model_; // 卵のモデル。要素数に応じて数が変化。
     int32_t eggNum_ = skMaxCount_;            // 卵の数 ≒ HP
+    int32_t snakeCount_{};                    // 卵付近にいる蛇の数。
 
     CollisionManager* colMPtr_;                             // 当たり判定マネージャー
     CollisionPrimitive::SphereCollider sphere_collision_;   // 当たり判定コライダー

@@ -290,6 +290,7 @@
     </ClCompile>
     <ClCompile Include="StoneBlock.cpp" />
     <ClCompile Include="ChickenEgg.cpp" />
+    <ClCompile Include="Application\Entity\Snake.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -570,6 +571,7 @@
     </ClInclude>
     <ClInclude Include="StoneBlock.h" />
     <ClInclude Include="ChickenEgg.h" />
+    <ClInclude Include="Application\Entity\Snake.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">
