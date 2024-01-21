@@ -386,7 +386,7 @@ void Player::OnTrigger(void)
     {
         commonInfo_->coinNum_++;
     }
-    if (sphereCollider_.GetOther()->GetID() == "rabbit")
+    if (sphereCollider_.GetOther()->GetID() == "snake_col")
     {
         captureCount_rabbit++;
     }

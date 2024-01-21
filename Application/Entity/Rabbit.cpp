@@ -7,8 +7,8 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
     arg_colMPtr->Register(&sphere_collision_);
     arg_colMPtr->Register(&sphere_detectPlayer_);
 
-    sphere_collision_.SetID("rabbit");
-    sphere_detectPlayer_.SetID("rabbit_detectPlayer");
+    sphere_collision_.SetID("snake_col");
+    sphere_detectPlayer_.SetID("snake_detectPlayer");
 
     sphere_collision_.callback_onCollision_ = std::bind(&Snake::OnCollision, this);
     sphere_detectPlayer_.callback_onCollision_ = std::bind(&Snake::OnDetectPlayer, this);
