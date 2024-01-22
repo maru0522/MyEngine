@@ -15,7 +15,7 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
 
     sphere_collision_.radius = kRadius_;
     sphere_collision_.center = { 0,60,20 };
-    sphere_detectPlayer_.radius = kDetectRadius_;
+    sphere_detectPlayer_.radius = 20;
 
     // 初期位置
     transform_.position = { 0,60,20 };
@@ -307,7 +307,7 @@ void Snake::OnDetect(void)
         // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detectPlayer_.GetOther());
         // 蛇から卵への方向ベクトル (蛇の座標 - 卵の座標）
-        const Vector3& vec3_egg2Snake = Vector3(transform_.position - other->center).Normalize();
+        const Vector3& vec3_egg2Snake = Vector3(other->center - transform_.position).Normalize();
 
         // 移動方向を設定。
         vec3_moveDirection_ = vec3_egg2Snake;
