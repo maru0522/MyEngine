@@ -13,7 +13,7 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
     sphere_collision_.callback_onCollision_ = std::bind(&Snake::OnCollision, this);
     sphere_detectPlayer_.callback_onCollision_ = std::bind(&Snake::OnDetect, this);
 
-    sphere_collision_.radius = kRadius_;
+    sphere_collision_.radius = kRadius_col_;
     sphere_collision_.center = { 0,60,20 };
     sphere_detectPlayer_.radius = 20;
 
