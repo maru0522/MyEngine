@@ -11,7 +11,7 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
     sphere_detectPlayer_.SetID("snake_detectPlayer");
 
     sphere_collision_.callback_onCollision_ = std::bind(&Snake::OnCollision, this);
-    sphere_detectPlayer_.callback_onCollision_ = std::bind(&Snake::OnDetectPlayer, this);
+    sphere_detectPlayer_.callback_onCollision_ = std::bind(&Snake::OnDetect, this);
 
     sphere_collision_.radius = kRadius_;
     sphere_collision_.center = { 0,60,20 };
@@ -127,34 +127,34 @@ void Snake::Move(void)
 
     // [メモ]プレイヤーの向きと兎の向きを内積でとって、直角に近いほど速度をある程度減速させれば、ターンしたときでも捕まえやすくなるのでは？
 
-    // 移動可能距離が、移動速度よりも大きいか
-    const bool isBiggerDist = moveDist_ > kMoveSpeed_;
-    // 移動可能 && 着地している場合、ジャンプする
-    if (isBiggerDist && is_landing_)
-    {
-        // 縦方向の移動量にじゃんぷぱわーを代入
-        velocity_vertical_ = kJumpPower_;
+    //// 移動可能距離が、移動速度よりも大きいか
+    //const bool isBiggerDist = moveDist_ > kMoveSpeed_;
+    //// 移動可能 && 着地している場合、ジャンプする
+    //if (isBiggerDist && is_landing_)
+    //{
+    //    // 縦方向の移動量にじゃんぷぱわーを代入
+    //    velocity_vertical_ = kJumpPower_;
 
-        // ジャンプ時のぶれを加算する。
-        if (shakeDirection_ == CorrectionDirection::RIGHT) // ぶれる方向が右
-        {
-            // 姿勢の上方向を軸に16°くらい回転する
-            Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, 0.279253f);
-            axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
-            axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
-            // 次のぶれる方向を左にする
-            shakeDirection_ = CorrectionDirection::LEFT;
-        }
-        else // ぶれる方向がそれ以外（左）
-        {
-            // 姿勢の上方向を軸に16°くらい回転する
-            Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, -0.279253f);
-            axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
-            axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
-            // 次のぶれる方向を右にする
-            shakeDirection_ = CorrectionDirection::RIGHT;
-        }
-    }
+    //    // ジャンプ時のぶれを加算する。
+    //    if (shakeDirection_ == CorrectionDirection::RIGHT) // ぶれる方向が右
+    //    {
+    //        // 姿勢の上方向を軸に16°くらい回転する
+    //        Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, 0.279253f);
+    //        axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
+    //        axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
+    //        // 次のぶれる方向を左にする
+    //        shakeDirection_ = CorrectionDirection::LEFT;
+    //    }
+    //    else // ぶれる方向がそれ以外（左）
+    //    {
+    //        // 姿勢の上方向を軸に16°くらい回転する
+    //        Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, -0.279253f);
+    //        axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
+    //        axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
+    //        // 次のぶれる方向を右にする
+    //        shakeDirection_ = CorrectionDirection::RIGHT;
+    //    }
+    //}
 
     // 重力
     velocity_vertical_ -= kGravity_;
@@ -163,19 +163,20 @@ void Snake::Move(void)
     const Vector3 velocity_vertical = axes_.up * velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
     // 水平方向の移動量
     Vector3 velocity_horizontal{};
-    // 着地している場合
-    if (is_landing_)
-    {
-        isBiggerDist ?
-            velocity_horizontal = axes_.forward * kMoveSpeed_ : // 移動可能距離が、移動速度より小さいなら
-            velocity_horizontal = axes_.forward * moveDist_;    // 移動可能距離を超えて移動することは出来ない。
-    }
-    // 空中にいるのなら
-    else
-    {
-        //移動可能距離を超えて移動する。※空中で停止するのは不自然なため。
-        velocity_horizontal = axes_.forward * kMoveSpeed_;
-    }
+    velocity_horizontal = axes_.forward * kMoveSpeed_;
+    //// 着地している場合
+    //if (is_landing_)
+    //{
+    //    isBiggerDist ?
+    //        velocity_horizontal = axes_.forward * kMoveSpeed_ : // 移動可能距離が、移動速度より小さいなら
+    //        velocity_horizontal = axes_.forward * moveDist_;    // 移動可能距離を超えて移動することは出来ない。
+    //}
+    //// 空中にいるのなら
+    //else
+    //{
+    //    //移動可能距離を超えて移動する。※空中で停止するのは不自然なため。
+    //    velocity_horizontal = axes_.forward * kMoveSpeed_;
+    //}
 
     // 合計の移動量
     const Vector3 velocity_total = velocity_vertical + velocity_horizontal;
@@ -184,9 +185,9 @@ void Snake::Move(void)
     transform_.position = pos;
 
     // 移動可能距離を減らす（既に移動する処理は済ませたので）
-    moveDist_ -= kMoveSpeed_;
+    //moveDist_ -= kMoveSpeed_;
     // 移動可能距離（変数: moveDist_の値は0未満にならない）
-    moveDist_ = (std::max)(moveDist_, 0.f);
+    //moveDist_ = (std::max)(moveDist_, 0.f);
 }
 
 void Snake::Process_CircleShadow(void)
@@ -232,12 +233,12 @@ void Snake::OnCollision(void)
     }
     if (sphere_collision_.GetOther()->GetID() == "terrainSurface")
     {
+        // ジャンプ量
+        velocity_vertical_ = 0.f;
         is_landing_ = true;
 
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
 
-        // ジャンプ量
-        velocity_vertical_ = 0.f;
 
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphere_collision_.center - other->center).Length() - (other->radius + sphere_collision_.radius);
@@ -258,7 +259,7 @@ void Snake::OnCollision(void)
     }
 }
 
-void Snake::OnDetectPlayer(void)
+void Snake::OnDetect(void)
 {
     if (sphere_detectPlayer_.GetOther()->GetID() == "player")
     {
@@ -299,5 +300,16 @@ void Snake::OnDetectPlayer(void)
             // 検知した地点を原点としてどの程度移動するかを設定
             moveDist_ = kMoveDist_;
         }
+    }
+
+    if (sphere_detectPlayer_.GetOther()->GetID() == "chickenEgg_col")
+    {
+        // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detectPlayer_.GetOther());
+        // 蛇から卵への方向ベクトル (蛇の座標 - 卵の座標）
+        const Vector3& vec3_egg2Snake = Vector3(transform_.position - other->center).Normalize();
+
+        // 移動方向を設定。
+        vec3_moveDirection_ = vec3_egg2Snake;
     }
 }

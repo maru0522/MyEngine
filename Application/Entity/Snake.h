@@ -45,7 +45,7 @@ private:
     void Process_CircleShadow(void);
 
     void OnCollision(void); // callback
-    void OnDetectPlayer(void); // callback
+    void OnDetect(void); // callback
 
     //>> 変数
     bool isCaptured_{};
@@ -72,9 +72,9 @@ private:
     bool is_detect_; // プレイヤーを検知したか
 
     float velocity_vertical_{};
+    LightManager* lightManagerPtr_;
     int32_t circleShadows_num_;
     Planet* planetPtr_;
-    LightManager* lightManagerPtr_;
 
 public:
     //>> setter

@@ -114,10 +114,10 @@ void GameScene::Initialize(void)
     //    }
     //}
 
-    for (auto& rabbit : snakes_)
+    for (auto& snake : snakes_)
     {
-        rabbit = std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
-        rabbit->SetupLightCircleShadows();
+        snake = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
+        snake->SetupLightCircleShadows();
     }
     snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
     snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
@@ -190,12 +190,12 @@ void GameScene::Update(void)
     player_->Update();
 
     uint32_t capturedRabbitCount = 0;
-    for (auto& rabbit : snakes_)
+    for (auto& snake : snakes_)
     {
-        if(rabbit) 
+        if(snake)
         { 
-            rabbit->Update();
-            if (rabbit->GetIsCaptured()) { rabbit.reset(); }
+            snake->Update();
+            if (snake->GetIsCaptured()) { snake.reset(); }
         }
         else
         {
