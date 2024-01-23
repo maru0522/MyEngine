@@ -8,6 +8,9 @@
 #include "LightManager.h"
 #include "ExclamationMark.h"
 #include "Timer.h"
+#include "SnakeBehavior.h"
+#include "SnakeCommonInfomation.h"
+
 /**
  * @file Snake.h
  * @brief 蛇クラス
@@ -17,6 +20,8 @@ class Snake
 {
 private:
     //>> 定義
+    friend ISnakeBehavior;
+
     enum class CorrectionDirection // ジャンプする際に左右どちらにぶれるのか表す列挙型
     {
         RIGHT,
@@ -24,15 +29,6 @@ private:
     };
 
 public:
-    const float kRadius_col_{ 1.f };                // 当たり判定の半径
-    const float kRadius_detectEgg_{ 40.f };         // 卵検知の半径
-    const float kRadius_detectPlayer_{ 40.f };      // プレイヤー検知の半径
-    const float kDetectRadius_escape_{ 10.f };  // さらにこの半径内に入ったら、遠ざかる挙動
-    const float kJumpPower_{ 0.4f };             // ジャンプ力
-    const float kMoveSpeed_{ 0.38f };            // 移動速度
-    const float kGravity_{ 0.025f };             // かかる重力値
-    const float kMoveDist_{ 30.f };             // プレイヤーを検知した地点からどのくらいの距離移動するのか。
-
     // 関数
     Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
     ~Snake(void);
@@ -42,6 +38,10 @@ public:
 
 private:
     //void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
+    // プレイヤーの進行方向をランダムに変更する処理を纏めたもの
+    void RandomChangeDirection(void);
+    // プレイヤーを上ベクトルを軸に回転させる。※上ベクトルは変化しない
+    void RotateDirection(float arg_radian);
     void Move(void);
     void Process_CircleShadow(void);
 
@@ -51,31 +51,23 @@ private:
     //>> 変数
     bool isCaptured_{};
 
-
-    TransformMatrix transformMatrix_; // 各ワールド行列
-    Transform transform_;             // 座標等
-    Axis3 axes_;                      // 姿勢
-    Axis3 axes_old_;                  // 1F前の姿勢
-    Vector3 vec3_newUp_;              // 新規姿勢の上ベクトル
-
-    bool is_landing_;
     CorrectionDirection shakeDirection_; // 移動する際に、左右どちらにぶれるか
-    Vector3 vec3_moveDirection_; // 移動する方向。
-    float moveDist_; // 移動する距離。
+
 
     CollisionManager* colMPtr_;
     CollisionPrimitive::SphereCollider sphere_collision_;
-    CollisionPrimitive::SphereCollider sphere_detectPlayer_;
+    CollisionPrimitive::SphereCollider sphere_detect_;
 
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/snake/snake.obj") };
     std::unique_ptr<ExclamationMark> exclamationMark_;
     DeltaTimer timer_visibleExclamationMark_; //
-    bool is_detect_; // プレイヤーを検知したか
 
-    float velocity_vertical_{};
     LightManager* lightManagerPtr_;
     int32_t circleShadows_num_;
     Planet* planetPtr_;
+
+    std::shared_ptr<SnakeCommonInfomation> commonInfo_;
+    SnakeBehaviorMachine snakeBehaviorMachine_;
 
 public:
     //>> setter
@@ -88,7 +80,7 @@ public:
     void SetCircleShadowsIsActive(bool arg_active) { lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_active); }
 
     //>> getter
-    Transform* GetTransformPtr(void) { return &transform_; }
+    Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
     bool GetIsCaptured(void) { return isCaptured_; }
 };
 

@@ -189,6 +189,8 @@
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
     <ClCompile Include="Application\OperateGuideUI.cpp" />
+    <ClCompile Include="SnakeBehavior.cpp" />
+    <ClCompile Include="SnakeCommonInfomation.cpp" />
     <ClCompile Include="StoneBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +403,8 @@
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Application\ExclamationMark.h" />
     <ClInclude Include="Application\OperateGuideUI.h" />
+    <ClInclude Include="SnakeBehavior.h" />
+    <ClInclude Include="SnakeCommonInfomation.h" />
     <ClInclude Include="StoneBlock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

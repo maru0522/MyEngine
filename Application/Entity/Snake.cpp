@@ -1,37 +1,52 @@
 #include "Snake.h"
 #include "SimplifyImGui.h"
+#include "MathUtil.h"
 
 Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
     : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
+    // 共通情報のインスタンス生成
+    commonInfo_ = std::make_shared<SnakeCommonInfomation>();
+
+    //##コライダーの登録
+    // "snake_col"
     arg_colMPtr->Register(&sphere_collision_);
-    arg_colMPtr->Register(&sphere_detectPlayer_);
-
     sphere_collision_.SetID("snake_col");
-    sphere_detectPlayer_.SetID("snake_detectPlayer");
-
     sphere_collision_.callback_onCollision_ = std::bind(&Snake::OnCollision, this);
-    sphere_detectPlayer_.callback_onCollision_ = std::bind(&Snake::OnDetect, this);
-
-    sphere_collision_.radius = kRadius_col_;
+    sphere_collision_.radius = SnakeCommonInfomation::kRadius_col_;
     sphere_collision_.center = { 0,60,20 };
-    sphere_detectPlayer_.radius = 20;
+
+    // "snake_detect"
+    arg_colMPtr->Register(&sphere_detect_);
+    sphere_detect_.SetID("snake_detect");
+    sphere_detect_.callback_onCollision_ = std::bind(&Snake::OnDetect, this);
+    // 検知用コライダーの半径を、複数ある検知半径の中で最も大きいものを適用
+    const float radius_detect = (std::max)(SnakeCommonInfomation::kRadius_detectPlayer_, SnakeCommonInfomation::kRadius_detectEgg_);
+    sphere_detect_.radius = radius_detect;
+
+
 
     // 初期位置
-    transform_.position = { 0,60,20 };
-    transform_.scale = { 2.5f,2.5f,2.5f };
+    commonInfo_->transform_.position = { 0,60,20 };
+    commonInfo_->transform_.scale = { 2.5f,2.5f,2.5f };
     // 初期姿勢
-    axes_.forward = { 0,0,1 };
-    axes_.right = { 1,0,0 };
-    axes_.up = { 0,1,0 };
+    commonInfo_->axes_.forward = { 0,0,1 };
+    commonInfo_->axes_.right = { 1,0,0 };
+    commonInfo_->axes_.up = { 0,1,0 };
 
     exclamationMark_ = std::make_unique<ExclamationMark>();
+
+    // 移動方向を変換するまでを計測するタイマーを起動
+    commonInfo_->timer_changeDirInterval_.Start(SnakeCommonInfomation::kTimer_changeDir_default_);
+
+    // behaviorMachine経由で、behavior生成
+    snakeBehaviorMachine_.Initialize(this, SnakeBehavior::IDLE);
 }
 
 Snake::~Snake(void)
 {
     colMPtr_->UnRegister(&sphere_collision_);
-    colMPtr_->UnRegister(&sphere_detectPlayer_);
+    colMPtr_->UnRegister(&sphere_detect_);
 
     // 丸影を使用している
     if (circleShadows_num_ >= 0)
@@ -58,136 +73,100 @@ void Snake::Update(void)
     Process_CircleShadow();
 
     // 1Frame遅い描画座標等更新 ** 座標が確定した後に、当たり判定処理で座標を補正するため、1Frame遅らせないとガクつく可能性がある。
-    appearance_->GetCoordinatePtr()->mat_world = transformMatrix_.mat_world;
+    appearance_->GetCoordinatePtr()->mat_world = commonInfo_->transformMatrix_.mat_world;
     appearance_->Update();
 
-    // 1F前の姿勢として記録
-    axes_old_ = axes_;
-    if (is_landing_) // 飛び跳ねて移動するようになったので、着地しているときだけ向きを変えられる
-    {
-        // 新規上ベクトルの設定
-        axes_.up = vec3_newUp_;
-        // 移動する方向を正面ベクトルとして設定
-        axes_.forward = vec3_moveDirection_;
-        // 新規の上 x 正面のベクトルで右ベクトルを計算
-        axes_.right = Math::Vec3::Cross(axes_.up, axes_.forward).Normalize(); // 姿勢を正常に保つため && あとで、正面ベクトルを再定義するため。
-    }
 
-    exclamationMark_->SetNewUp(vec3_newUp_);
+    // ビックリマークに関する処理
+    exclamationMark_->SetNewUp(commonInfo_->vec3_newUp_);
     Transform exclamationTransform = exclamationMark_->GetTransform();
-    exclamationTransform.position = transform_.position + axes_.up * 2.2f;
+    exclamationTransform.position = commonInfo_->transform_.position + commonInfo_->axes_.up * 2.2f;
     exclamationMark_->SetTransform(exclamationTransform);
     exclamationMark_->Update();
-    if (is_detect_)
+    if (commonInfo_->is_detect_)
     {
         timer_visibleExclamationMark_.Update();
         const float rate = timer_visibleExclamationMark_.GetTimeRate();
 
         if (rate >= 1.f)
         {
-            is_detect_ = false;
+            commonInfo_->is_detect_ = false;
         }
     }
 
-    // 移動
-    Move();
+    // 蛇の"振舞い"による行動全般の管理
+    snakeBehaviorMachine_.ManagementBehavior();
 
     // コライダー更新
-    sphere_collision_.center = transform_.position;
-    sphere_detectPlayer_.center = transform_.position;
+    sphere_collision_.center = commonInfo_->transform_.position;
+    sphere_detect_.center = commonInfo_->transform_.position;
 
-    // 現在の上ベクトルと右ベクトルから正面ベクトルを再定義
-    // 正面ベクトルが、プレイヤーを検知した瞬間のままだと、移動するにつれ兎がつぶれる（姿勢が正常ではないため）
-    const Vector3 forward = Math::Vec3::Cross(axes_.right, axes_.up);
-    // 再定義したベクトルを正面ベクトルに設定
-    axes_.forward = forward;
-    // 再定義したベクトルを移動方向ベクトルに設定。
-    vec3_moveDirection_ = forward;
-
-    transformMatrix_.mat_world = Math::Function::AffinTrans(transform_, axes_);
+    // 行列更新
+    commonInfo_->transformMatrix_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
 
     // 毎フレーム着地フラグをfalseにする。けど着地していたら、ここの処理を通るまではtrueになってる。
-    is_landing_ = false;
+    commonInfo_->is_landing_ = false;
+    commonInfo_->is_detectEgg_ = false;
 }
 
 void Snake::Draw(void)
 {
-    // 赤色のテクスチャを適用。（クソ見辛い）
     if (isCaptured_ == false) { appearance_->Draw(); }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
-    if (is_detect_) { exclamationMark_->Draw(); }
+    if (commonInfo_->is_detect_) { exclamationMark_->Draw(); }
+}
+
+void Snake::RandomChangeDirection(void)
+{
+    // 移動方向の転換タイミング用タイマーの更新
+    commonInfo_->timer_changeDirInterval_.Update();
+
+    // タイマーの進行割合が100%なら
+    const float rate = commonInfo_->timer_changeDirInterval_.GetTimeRate();
+    if (rate >= 1.f)
+    {
+        // 方向転換する角度をランダムに決定する
+        const float degree = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_changeDir_min_, SnakeCommonInfomation::kDegree_changeDir_max_);
+        // 角度をラジアンに変換しつつ、プレイヤーの向きを変更する関数に渡す
+        RotateDirection(Math::Function::ToRadian(degree));
+
+        // タイマーを終了
+        commonInfo_->timer_changeDirInterval_.Finish(true);
+        // 次の方向転換するまでの間隔を、規定値"kTimer_changeDir_min_" ~ "kTimer_changeDir_max_"の間でランダムに決定
+        const float nextMaxSec = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_changeDir_min_, SnakeCommonInfomation::kTimer_changeDir_max_);
+        // タイマーを再起動
+        commonInfo_->timer_changeDirInterval_.Start(nextMaxSec);
+    }
+}
+
+void Snake::RotateDirection(float arg_radian)
+{
+    //##姿勢の上方向を軸に "arg_radian" 回転する
+    // 回転用クオータニオン
+    Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(commonInfo_->axes_.up, arg_radian);
+    // クオータニオンを使用して、正面ベクトルを回転
+    commonInfo_->axes_.forward = Math::QuaternionF::RotateVector(commonInfo_->axes_.forward, rotQ);
+    // クオータニオンを使用して、右ベクトルを回転
+    commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
 }
 
 void Snake::Move(void)
 {
-    // 移動ベクトル
-    //moveVec += pForwardFromCamera * inputVec.y; // 入力ベクトルに応じて加算
-    //moveVec += redefinitionPRightFromCamera * inputVec.x;
-
-    // [メモ]プレイヤーの向きと兎の向きを内積でとって、直角に近いほど速度をある程度減速させれば、ターンしたときでも捕まえやすくなるのでは？
-
-    //// 移動可能距離が、移動速度よりも大きいか
-    //const bool isBiggerDist = moveDist_ > kMoveSpeed_;
-    //// 移動可能 && 着地している場合、ジャンプする
-    //if (isBiggerDist && is_landing_)
-    //{
-    //    // 縦方向の移動量にじゃんぷぱわーを代入
-    //    velocity_vertical_ = kJumpPower_;
-
-    //    // ジャンプ時のぶれを加算する。
-    //    if (shakeDirection_ == CorrectionDirection::RIGHT) // ぶれる方向が右
-    //    {
-    //        // 姿勢の上方向を軸に16°くらい回転する
-    //        Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, 0.279253f);
-    //        axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
-    //        axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
-    //        // 次のぶれる方向を左にする
-    //        shakeDirection_ = CorrectionDirection::LEFT;
-    //    }
-    //    else // ぶれる方向がそれ以外（左）
-    //    {
-    //        // 姿勢の上方向を軸に16°くらい回転する
-    //        Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(axes_.up, -0.279253f);
-    //        axes_.forward = Math::QuaternionF::RotateVector(axes_.forward, rotQ);
-    //        axes_.right = Math::QuaternionF::RotateVector(axes_.right, rotQ);
-    //        // 次のぶれる方向を右にする
-    //        shakeDirection_ = CorrectionDirection::RIGHT;
-    //    }
-    //}
-
     // 重力
-    velocity_vertical_ -= kGravity_;
+    commonInfo_->velocity_vertical_ -= SnakeCommonInfomation::kGravity_;
 
     // 垂直方向の移動量
-    const Vector3 velocity_vertical = axes_.up * velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
+    const Vector3 velocity_vertical = commonInfo_->axes_.up * commonInfo_->velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
     // 水平方向の移動量
     Vector3 velocity_horizontal{};
-    velocity_horizontal = axes_.forward * kMoveSpeed_;
-    //// 着地している場合
-    //if (is_landing_)
-    //{
-    //    isBiggerDist ?
-    //        velocity_horizontal = axes_.forward * kMoveSpeed_ : // 移動可能距離が、移動速度より小さいなら
-    //        velocity_horizontal = axes_.forward * moveDist_;    // 移動可能距離を超えて移動することは出来ない。
-    //}
-    //// 空中にいるのなら
-    //else
-    //{
-    //    //移動可能距離を超えて移動する。※空中で停止するのは不自然なため。
-    //    velocity_horizontal = axes_.forward * kMoveSpeed_;
-    //}
+    if(commonInfo_->is_detectEgg_ == false) velocity_horizontal = commonInfo_->axes_.forward * SnakeCommonInfomation::kMoveSpd_escape_;
 
     // 合計の移動量
     const Vector3 velocity_total = velocity_vertical + velocity_horizontal;
     // 座標更新
-    const Vector3 pos = transform_.position + velocity_total;
-    transform_.position = pos;
-
-    // 移動可能距離を減らす（既に移動する処理は済ませたので）
-    //moveDist_ -= kMoveSpeed_;
-    // 移動可能距離（変数: moveDist_の値は0未満にならない）
-    //moveDist_ = (std::max)(moveDist_, 0.f);
+    const Vector3 pos = commonInfo_->transform_.position + velocity_total;
+    commonInfo_->transform_.position = pos;
 }
 
 void Snake::Process_CircleShadow(void)
@@ -199,7 +178,7 @@ void Snake::Process_CircleShadow(void)
         LightType type = LightType::CIRCLE_SHADOW;
 
         // 自分自身の座標
-        const Vector3& pos_myself = transform_.position;
+        const Vector3& pos_myself = commonInfo_->transform_.position;
         // 兎から星までのベクトル
         const Vector3& vec_rabbitTpPlanet = (planetPtr_->GetPosition() - pos_myself).Normalize();
 
@@ -229,13 +208,13 @@ void Snake::OnCollision(void)
         // 球状重力エリア内に入ってる場合に行う処理。
         Vector3 center2PlayerVec = sphere_collision_.center - other->center; // 星の中心からプレイヤーまでのベクトル
         // 新しい上ベクトル用に保存。
-        vec3_newUp_ = center2PlayerVec.Normalize();
+        commonInfo_->vec3_newUp_ = center2PlayerVec.Normalize();
     }
     if (sphere_collision_.GetOther()->GetID() == "terrainSurface")
     {
         // ジャンプ量
-        velocity_vertical_ = 0.f;
-        is_landing_ = true;
+        commonInfo_->velocity_vertical_ = 0.f;
+        commonInfo_->is_landing_ = true;
 
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
 
@@ -243,73 +222,77 @@ void Snake::OnCollision(void)
         // めり込み距離を出す (めり込んでいる想定 - 距離）なので結果はマイナス想定？？
         float diff = Vector3(sphere_collision_.center - other->center).Length() - (other->radius + sphere_collision_.radius);
 
-        Vector3 currentPos = transform_.position;
+        Vector3 currentPos = commonInfo_->transform_.position;
         //currentPos += player->body_->coordinate_.GetUpVec().ExtractVector3();
 
         // 正規化された球からプレイヤーまでのベクトル * めり込み距離
-        currentPos += axes_.up.Normalize() * -diff; // ここをマイナス符号で値反転
+        currentPos += commonInfo_->axes_.up.Normalize() * -diff; // ここをマイナス符号で値反転
 
-        transform_.position = currentPos;
+        commonInfo_->transform_.position = currentPos;
     }
-    if (sphere_collision_.GetOther()->GetID() == "player")
-    {
-        // 捕獲されたフラグをtrue
-        isCaptured_ = true;
-        SetCircleShadowsIsActive(false);
-    }
+    //if (sphere_collision_.GetOther()->GetID() == "player")
+    //{
+    //    // 捕獲されたフラグをtrue
+    //    isCaptured_ = true;
+    //    SetCircleShadowsIsActive(false);
+    //}
 }
 
 void Snake::OnDetect(void)
 {
-    if (sphere_detectPlayer_.GetOther()->GetID() == "player")
+    //if (sphere_detect_.GetOther()->GetID() == "player")
+    //{
+
+    //    // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
+    //    CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detect_.GetOther());
+    //    // (兎の座標 - プレイヤーの座標）
+    //    const Vector3 player2Rabbit = transform_.position - other->center;
+
+    //    // 移動可能距離が0以下
+    //    const bool isZeroMoveDist = moveDist_ <= 0.f;
+    //    if (isZeroMoveDist)
+    //    {
+    //        // 検知したプレイヤーの方を向く。（↓マイナスで、"プレイヤーから兎"のベクトルを反転している）
+    //        vec3_moveDirection_ = -player2Rabbit.Normalize(); // ※検知している段階ではプレイヤーの方を向いているが、さらに近づいてきたら逃げる。
+    //    }
+
+    //    // プレイヤーから兎までの距離が、"kDetectRadius_escape_"以下である
+    //    if (player2Rabbit.Length() <= kDetectRadius_escape_)
+    //    {
+    //        is_detect_ = true;
+    //        timer_visibleExclamationMark_.Finish(true);
+    //        timer_visibleExclamationMark_.Start(3.f);
+    //        //if (timer_visibleExclamationMark_.GetIsExecute())
+    //        //{
+    //        //    const float timerMaxFrame = timer_visibleExclamationMark_.GetFrameMax();
+    //        //    // さらに上乗せ
+    //        //    timer_visibleExclamationMark_.SetMaxFrame(timerMaxFrame + 0.03f);
+    //        //}
+    //        //else
+    //        //{
+    //        //    timer_visibleExclamationMark_.Finish(true);
+    //        //    timer_visibleExclamationMark_.Start(3.f);
+    //        //}
+
+    //        // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
+    //        vec3_moveDirection_ = player2Rabbit.Normalize();
+    //        // 検知した地点を原点としてどの程度移動するかを設定
+    //        moveDist_ = kMoveDist_;
+    //    }
+    //}
+
+    if (sphere_detect_.GetOther()->GetID() == "chickenEgg_col")
     {
-
         // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
-        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detectPlayer_.GetOther());
-        // (兎の座標 - プレイヤーの座標）
-        const Vector3 player2Rabbit = transform_.position - other->center;
-
-        // 移動可能距離が0以下
-        const bool isZeroMoveDist = moveDist_ <= 0.f;
-        if (isZeroMoveDist)
-        {
-            // 検知したプレイヤーの方を向く。（↓マイナスで、"プレイヤーから兎"のベクトルを反転している）
-            vec3_moveDirection_ = -player2Rabbit.Normalize(); // ※検知している段階ではプレイヤーの方を向いているが、さらに近づいてきたら逃げる。
-        }
-
-        // プレイヤーから兎までの距離が、"kDetectRadius_escape_"以下である
-        if (player2Rabbit.Length() <= kDetectRadius_escape_)
-        {
-            is_detect_ = true;
-            timer_visibleExclamationMark_.Finish(true);
-            timer_visibleExclamationMark_.Start(3.f);
-            //if (timer_visibleExclamationMark_.GetIsExecute())
-            //{
-            //    const float timerMaxFrame = timer_visibleExclamationMark_.GetFrameMax();
-            //    // さらに上乗せ
-            //    timer_visibleExclamationMark_.SetMaxFrame(timerMaxFrame + 0.03f);
-            //}
-            //else
-            //{
-            //    timer_visibleExclamationMark_.Finish(true);
-            //    timer_visibleExclamationMark_.Start(3.f);
-            //}
-
-            // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
-            vec3_moveDirection_ = player2Rabbit.Normalize();
-            // 検知した地点を原点としてどの程度移動するかを設定
-            moveDist_ = kMoveDist_;
-        }
-    }
-
-    if (sphere_detectPlayer_.GetOther()->GetID() == "chickenEgg_col")
-    {
-        // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
-        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detectPlayer_.GetOther());
-        // 蛇から卵への方向ベクトル (蛇の座標 - 卵の座標）
-        const Vector3& vec3_egg2Snake = Vector3(other->center - transform_.position).Normalize();
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detect_.GetOther());
+        // 蛇から卵への方向ベクトル (蛇の座標 - 卵の座標） ※正規化されていない。
+        const Vector3& vec3_egg2Snake = Vector3(other->center - commonInfo_->transform_.position);
+        // 蛇から卵までの距離が、規定値"kRadius_detectEgg_"より大きいなら（範囲内にないのなら）終了。
+        const float distance = vec3_egg2Snake.Length();
+        if (distance > SnakeCommonInfomation::kRadius_detectEgg_) { return; }
 
         // 移動方向を設定。
-        vec3_moveDirection_ = vec3_egg2Snake;
+        commonInfo_->vec3_moveDirection_ = vec3_egg2Snake;
+        commonInfo_->is_detectEgg_ = true;
     }
 }
