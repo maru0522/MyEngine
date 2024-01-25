@@ -25,7 +25,6 @@ public:
     static const float kTimer_rest_max_;           // 休憩時間の最大値
 
     // SnakeBhevior::MOVE
-    static const float kTimer_randomWalk_default_; // ランダムに移動し続ける時間の初期値
     static const float kTimer_randomWalk_min_;     // ランダムに移動し続ける時間の最小値
     static const float kTimer_randomWalk_max_;     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
     static const float kDegree_randomWalk_min_;    // ランダムに移動し続ける際の角速度の最小値

@@ -17,7 +17,6 @@ const float SnakeCommonInfomation::kMoveDist_{ 30.f };                 // プレ
 const float SnakeCommonInfomation::kTimer_rest_min_{2.f};              // 休憩時間の最小値
 const float SnakeCommonInfomation::kTimer_rest_max_{5.f};              // 休憩時間の最大値
 
-const float SnakeCommonInfomation::kTimer_randomWalk_default_{ 15.f }; // ランダムに移動し続ける時間の初期値
 const float SnakeCommonInfomation::kTimer_randomWalk_min_{ 6.f };      // ランダムに移動し続ける時間の最小値
 const float SnakeCommonInfomation::kTimer_randomWalk_max_{ 12.f };     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
 const float SnakeCommonInfomation::kDegree_randomWalk_min_{ 0.1f };    // 方向転換時の角度の最小値
