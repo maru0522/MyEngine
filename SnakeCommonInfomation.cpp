@@ -21,3 +21,5 @@ const float SnakeCommonInfomation::kTimer_randomWalk_min_{ 6.f };      // ラン
 const float SnakeCommonInfomation::kTimer_randomWalk_max_{ 12.f };     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
 const float SnakeCommonInfomation::kDegree_randomWalk_min_{ 0.1f };    // 方向転換時の角度の最小値
 const float SnakeCommonInfomation::kDegree_randomWalk_max_{ 1.f };     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。
+
+const float SnakeCommonInfomation::kTimer_rotateDirection_basic_{1.f};        // 卵発見時にそちらの方を向くのにかかる時間

@@ -30,8 +30,12 @@ public:
     static const float kDegree_randomWalk_min_;    // ランダムに移動し続ける際の角速度の最小値
     static const float kDegree_randomWalk_max_;    // ランダムに移動し続ける際の角速度の最大値 ※最小~最大の間でランダムに決定される。
 
+    // SnakeBhevior::Sneak
+    static const float kTimer_rotateDirection_basic_;    // 卵発見時にそちらの方を向くのにかかる時間
+
     //>> 変数
-    bool is_detectEgg_{};
+    Vector3 vec3_toEgg_;    // 卵への方向
+    bool is_detectEgg_{};   // 卵を検知したか
 
     TransformMatrix transformMatrix_; // 各ワールド行列
     Transform transform_;             // 座標等

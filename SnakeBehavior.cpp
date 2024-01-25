@@ -17,6 +17,17 @@ void ISnakeBehavior::Initialize(Snake* arg_snakePtr)
     commonInfo_ = arg_snakePtr->commonInfo_;
 }
 
+void ISnakeBehavior::RotateDirection(float arg_radian)
+{
+    //##姿勢の上方向を軸に "arg_radian" 回転する
+    // 回転用クオータニオン
+    Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(commonInfo_->axes_.up, arg_radian);
+    // クオータニオンを使用して、正面ベクトルを回転
+    commonInfo_->axes_.forward = Math::QuaternionF::RotateVector(commonInfo_->axes_.forward, rotQ);
+    // クオータニオンを使用して、右ベクトルを回転
+    commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
+}
+
 void ISnakeBehavior::Process_Gravity(void)
 {
     // 重力
@@ -92,10 +103,19 @@ void SnakeBehavior_Idle::Execute(void)
 
 void SnakeBehavior_Idle::RequirementCheck(void)
 {
+    // 休憩時間が満了した
     if (is_active_)
     {
         // 蛇の振る舞いをMOVEへ変更
         nextBehavior_ = SnakeBehavior::MOVE;
+        return;
+    }
+
+    // 卵の存在を検知した。
+    if (commonInfo_->is_detectEgg_)
+    {
+        // 蛇の振る舞いをSNEAKへ変更
+        nextBehavior_ = SnakeBehavior::SNEAK;
         return;
     }
 }
@@ -137,17 +157,6 @@ void SnakeBehavior_Move::Execute(void)
 
     // 姿勢再計算
     Process_ReCulculatePosture();
-}
-
-void SnakeBehavior_Move::RotateDirection(float arg_radian)
-{
-    //##姿勢の上方向を軸に "arg_radian" 回転する
-    // 回転用クオータニオン
-    Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(commonInfo_->axes_.up, arg_radian);
-    // クオータニオンを使用して、正面ベクトルを回転
-    commonInfo_->axes_.forward = Math::QuaternionF::RotateVector(commonInfo_->axes_.forward, rotQ);
-    // クオータニオンを使用して、右ベクトルを回転
-    commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
 }
 
 void SnakeBehavior_Move::Move(void)
@@ -193,9 +202,85 @@ void SnakeBehavior_Move::RamdomWalk(void)
 
 void SnakeBehavior_Move::RequirementCheck(void)
 {
+    // 決められた時間活動した。
     if (is_needRest_)
     {
         // 蛇の振る舞いをIDLEへ変更
+        nextBehavior_ = SnakeBehavior::IDLE;
+        return;
+    }
+
+    // 卵の存在を検知した。
+    if (commonInfo_->is_detectEgg_)
+    {
+        // 蛇の振る舞いをSNEAKへ変更
+        nextBehavior_ = SnakeBehavior::SNEAK;
+        return;
+    }
+}
+
+void SnakeBehavior_Sneak::Initialize(Snake* arg_snakePtr)
+{
+    ISnakeBehavior::Initialize(arg_snakePtr);
+
+    nextBehavior_ = SnakeBehavior::NONE;
+    currentBehavior_ = SnakeBehavior::SNEAK;
+}
+
+void SnakeBehavior_Sneak::Entry(void)
+{
+    // 遷移時の正面ベクトルを記録
+    vec3_entryForward_ = commonInfo_->axes_.forward;
+    commonInfo_->axes_.forward = commonInfo_->vec3_toEgg_;
+
+    // タイマー起動
+    timer_rotateDirection_.Start(SnakeCommonInfomation::kTimer_rotateDirection_basic_);
+}
+
+void SnakeBehavior_Sneak::Execute(void)
+{
+    // 姿勢の更新 + 右vec再計算
+    Process_UpdatePosture();
+
+    // 卵に接近する。。
+    ApproachEgg();
+
+    // 姿勢再計算
+    Process_ReCulculatePosture();
+}
+
+void SnakeBehavior_Sneak::Move(void)
+{
+    // 重力処理（垂直方向の移動量）
+    Process_Gravity();
+    // 正面への移動（平行方向への移動）
+    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_default_;
+
+    // 移動総量計算
+    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
+    // 座標更新
+    commonInfo_->transform_.position += velocity_total;
+}
+
+void SnakeBehavior_Sneak::ApproachEgg(void)
+{
+    // タイマーの更新
+    timer_rotateDirection_.Update();
+
+    // 正面ベクトルをイージングで捻じ曲げる
+    //const float rate = timer_rotateDirection_.GetTimeRate();
+    //commonInfo_->axes_.forward = Math::Ease3::EaseInSin(rate, vec3_entryForward_, commonInfo_->vec3_toEgg_); // EaseInOutSine
+    commonInfo_->axes_.forward = commonInfo_->vec3_toEgg_;
+
+    Move();
+}
+
+void SnakeBehavior_Sneak::RequirementCheck(void)
+{
+    // 卵を見失った。
+    if (commonInfo_->is_detectEgg_ == false)
+    {
+        // 蛇の振る舞いをSNEAKへ変更
         nextBehavior_ = SnakeBehavior::IDLE;
         return;
     }
@@ -210,6 +295,7 @@ std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_b
     // 生成
     if (arg_behavior == SnakeBehavior::IDLE) { behavior = std::make_unique<SnakeBehavior_Idle>(); }
     else if (arg_behavior == SnakeBehavior::MOVE) { behavior = std::make_unique<SnakeBehavior_Move>(); }
+    else if (arg_behavior == SnakeBehavior::SNEAK) { behavior = std::make_unique<SnakeBehavior_Sneak>(); }
 
     // 初期化関数の実行
     behavior->Initialize(arg_snakePtr);

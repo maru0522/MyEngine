@@ -267,6 +267,7 @@ void Snake::OnDetect(void)
 
         // 移動方向を設定。
         //commonInfo_->vec3_moveDirection_ = vec3_egg2Snake.Normalize();
+        commonInfo_->vec3_toEgg_ = vec3_egg2Snake.Normalize();
         commonInfo_->is_detectEgg_ = true;
     }
 }

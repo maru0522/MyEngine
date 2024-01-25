@@ -36,7 +36,7 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     // 初期姿勢
     posture_ = Axis3::Initialize();
 
-    transform_.position = { 0,90,-10 };
+    transform_.position = { 0,90,-30 };
     transform_.scale = { kRadius_detectSnake_,kRadius_detectSnake_,kRadius_detectSnake_ };
 }
 
