@@ -13,8 +13,8 @@ const float SnakeCommonInfomation::kMoveSpd_escape_{ 0.38f };          // プレ
 const float SnakeCommonInfomation::kGravity_{ 0.025f };                // かかる重力値
 const float SnakeCommonInfomation::kMoveDist_{ 30.f };                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
 
-const float SnakeCommonInfomation::kTimer_changeDir_default_{ 15.f };  // 方向転換する間隔の初期値
-const float SnakeCommonInfomation::kTimer_changeDir_min_{ 8.f };       // 方向転換する間隔の最小値
-const float SnakeCommonInfomation::kTimer_changeDir_max_{ 25.f };      // 方向転換する間隔の最大値 ※最小~最大の間でランダムに決定される。
+const float SnakeCommonInfomation::kTimer_randomWalk_default_{ 15.f };  // ランダムに移動し続ける時間の初期値
+const float SnakeCommonInfomation::kTimer_randomWalk_min_{ 8.f };       // ランダムに移動し続ける時間の最小値
+const float SnakeCommonInfomation::kTimer_randomWalk_max_{ 25.f };      // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
 const float SnakeCommonInfomation::kDegree_changeDir_min_{ 10.f };     // 方向転換時の角度の最小値
 const float SnakeCommonInfomation::kDegree_changeDir_max_{ 60.f };     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。

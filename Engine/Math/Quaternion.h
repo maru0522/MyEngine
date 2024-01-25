@@ -51,6 +51,7 @@ namespace Math {
         inline Quaternion Identity(void) { return Quaternion(0, 0, 0, 1); }
 
         // 任意軸回転を表すクォータニオン
+        // 渡した値分回転させるクォーテーションを返す。
         Quaternion MakeAxisAngle(const Vector3& axis, float radian);
         // オイラー角からクォータニオン
         Quaternion EulerToQuaternion(const Vector3& eular);

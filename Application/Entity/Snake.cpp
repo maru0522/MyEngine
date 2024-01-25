@@ -37,10 +37,10 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
     exclamationMark_ = std::make_unique<ExclamationMark>();
 
     // 移動方向を変換するまでを計測するタイマーを起動
-    commonInfo_->timer_changeDirInterval_.Start(SnakeCommonInfomation::kTimer_changeDir_default_);
+    commonInfo_->timer_changeDirInterval_.Start(SnakeCommonInfomation::kTimer_randomWalk_default_);
 
     // behaviorMachine経由で、behavior生成
-    snakeBehaviorMachine_.Initialize(this, SnakeBehavior::IDLE);
+    snakeBehaviorMachine_.Initialize(this, SnakeBehavior::MOVE);
 }
 
 Snake::~Snake(void)
@@ -133,8 +133,8 @@ void Snake::RandomChangeDirection(void)
 
         // タイマーを終了
         commonInfo_->timer_changeDirInterval_.Finish(true);
-        // 次の方向転換するまでの間隔を、規定値"kTimer_changeDir_min_" ~ "kTimer_changeDir_max_"の間でランダムに決定
-        const float nextMaxSec = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_changeDir_min_, SnakeCommonInfomation::kTimer_changeDir_max_);
+        // 次の方向転換するまでの間隔を、規定値"kTimer_randomWalk_min_" ~ "kTimer_randomWalk_max_"の間でランダムに決定
+        const float nextMaxSec = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_randomWalk_min_, SnakeCommonInfomation::kTimer_randomWalk_max_);
         // タイマーを再起動
         commonInfo_->timer_changeDirInterval_.Start(nextMaxSec);
     }
@@ -292,7 +292,7 @@ void Snake::OnDetect(void)
         if (distance > SnakeCommonInfomation::kRadius_detectEgg_) { return; }
 
         // 移動方向を設定。
-        commonInfo_->vec3_moveDirection_ = vec3_egg2Snake;
+        commonInfo_->vec3_moveDirection_ = vec3_egg2Snake.Normalize();
         commonInfo_->is_detectEgg_ = true;
     }
 }

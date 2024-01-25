@@ -19,9 +19,9 @@ public:
     static const float kGravity_;                  // かかる重力値
     static const float kMoveDist_;                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
 
-    static const float kTimer_changeDir_default_;  // 方向転換する間隔の初期値
-    static const float kTimer_changeDir_min_;      // 方向転換する間隔の最小値
-    static const float kTimer_changeDir_max_;      // 方向転換する間隔の最大値 ※最小~最大の間でランダムに決定される。
+    static const float kTimer_randomWalk_default_; // ランダムに移動し続ける時間の初期値
+    static const float kTimer_randomWalk_min_;     // ランダムに移動し続ける時間の最小値
+    static const float kTimer_randomWalk_max_;     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
     static const float kDegree_changeDir_min_;     // 方向転換時の角度の最小値
     static const float kDegree_changeDir_max_;     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。
 

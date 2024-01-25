@@ -2,6 +2,11 @@
 #include <memory>
 #include "SnakeCommonInfomation.h"
 
+/**
+ * @file SnakeBehavior.h
+ * @brief 蛇の挙動全般を管理
+ */
+
 // 前方宣言
 class Snake;
 
@@ -10,7 +15,7 @@ enum class SnakeBehavior
     NONE = -1, // 指定なし
 
     IDLE,   // idle
-    MOVE,   // 通常移動
+    MOVE,   // 通常移動（ランダムに歩き回る）
     SNEAK,  // こっそり卵に近づく。 or プレイヤーから遠ざかる等
     ESCAPE, // プレイヤーから逃げる
     DIGEST, // 襲った卵を消化中。
@@ -64,7 +69,7 @@ public:
     SnakeBehavior_Idle(void) : ISnakeBehavior() {};
     virtual ~SnakeBehavior_Idle(void) override = default;
 
-    //
+    // 初期化
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
@@ -75,6 +80,34 @@ public:
     virtual void Exit(void) {};
 
 private:
+    // 他状態への遷移要件確認
+    virtual void RequirementCheck(void) {}
+};
+
+class SnakeBehavior_Move final : public ISnakeBehavior
+{
+public:
+    //>> 関数
+    SnakeBehavior_Move(void) : ISnakeBehavior() {};
+    virtual ~SnakeBehavior_Move(void) override = default;
+
+    //　初期化
+    virtual void Initialize(Snake* arg_snakePtr);
+
+    // 状態遷移時の初期化処理
+    virtual void Entry(void);
+    // 当該状態時の様子
+    virtual void Execute(void);
+    // 状態遷移遷移前の終了処理
+    virtual void Exit(void) {};
+
+private:
+    void RamdomWalk(void);
+
+    //>> 変数
+    DeltaTimer timer_randomWalk_;
+    DeltaTimer timer_rest_;
+
     // 他状態への遷移要件確認
     virtual void RequirementCheck(void) {}
 };
