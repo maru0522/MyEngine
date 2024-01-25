@@ -142,7 +142,7 @@ void SnakeBehavior_Move::RamdomWalk(void)
     //if (rate >= 1.f)
     //{
     //    // 方向転換する角度をランダムに決定する
-    //    const float degree = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_changeDir_min_, SnakeCommonInfomation::kDegree_changeDir_max_);
+    //    const float degree = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_randomWalk_min_, SnakeCommonInfomation::kDegree_randomWalk_max_);
     //    // 角度をラジアンに変換しつつ、プレイヤーの向きを変更する関数に渡す
     //    //RotateDirection(Math::Function::ToRadian(degree));
 

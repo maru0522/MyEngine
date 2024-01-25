@@ -22,8 +22,8 @@ public:
     static const float kTimer_randomWalk_default_; // ランダムに移動し続ける時間の初期値
     static const float kTimer_randomWalk_min_;     // ランダムに移動し続ける時間の最小値
     static const float kTimer_randomWalk_max_;     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
-    static const float kDegree_changeDir_min_;     // 方向転換時の角度の最小値
-    static const float kDegree_changeDir_max_;     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。
+    static const float kDegree_randomWalk_min_;    // ランダムに移動し続ける際の角速度の最小値
+    static const float kDegree_randomWalk_max_;    // ランダムに移動し続ける際の角速度の最大値 ※最小~最大の間でランダムに決定される。
 
     //>> 変数
     DeltaTimer timer_changeDirInterval_;
