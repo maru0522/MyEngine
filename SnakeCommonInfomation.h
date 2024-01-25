@@ -19,6 +19,12 @@ public:
     static const float kGravity_;                  // かかる重力値
     static const float kMoveDist_;                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
 
+
+    // SnakeBehavior::IDLE
+    static const float kTimer_rest_min_;           // 休憩時間の最小値
+    static const float kTimer_rest_max_;           // 休憩時間の最大値
+
+    // SnakeBhevior::MOVE
     static const float kTimer_randomWalk_default_; // ランダムに移動し続ける時間の初期値
     static const float kTimer_randomWalk_min_;     // ランダムに移動し続ける時間の最小値
     static const float kTimer_randomWalk_max_;     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
@@ -26,7 +32,6 @@ public:
     static const float kDegree_randomWalk_max_;    // ランダムに移動し続ける際の角速度の最大値 ※最小~最大の間でランダムに決定される。
 
     //>> 変数
-    DeltaTimer timer_changeDirInterval_;
     bool is_detectEgg_{};
 
     TransformMatrix transformMatrix_; // 各ワールド行列

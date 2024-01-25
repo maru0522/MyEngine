@@ -33,11 +33,11 @@ Vector3 ISnakeBehavior::Process_CalculateVelocity(const Vector3& arg_velocity_ho
 
 void ISnakeBehavior::Process_UpdatePosture(void)
 {
-    // 姿勢を正常に保つため 
-    commonInfo_->axes_.up = commonInfo_->vec3_newUp_;                                               // 新規上ベクトルの設定
-    commonInfo_->axes_.forward = commonInfo_->vec3_moveDirection_;                                  // 移動する方向を正面ベクトルとして設定
+    // 姿勢を正常に保つため ※代入は、各ベクトルが0ではない時に限る
+    if (commonInfo_->vec3_newUp_.IsNonZero()) { commonInfo_->axes_.up = commonInfo_->vec3_newUp_; }                      // 新規上ベクトルの設定
+    if (commonInfo_->vec3_moveDirection_.IsNonZero()) { commonInfo_->axes_.forward = commonInfo_->vec3_moveDirection_; } // 移動する方向を正面ベクトルとして設定
     // あとで、正面ベクトルを再定義するために、右vecも更新しておく。
-    commonInfo_->axes_.right = Math::Vec3::Cross(commonInfo_->axes_.up, commonInfo_->axes_.forward).Normalize(); // 右ベクトルを計算し、設定（新規の上vec x 正面vec）
+    commonInfo_->axes_.right = Math::Vec3::Cross(commonInfo_->axes_.up, commonInfo_->axes_.forward).Normalize();         // 右ベクトルを計算し、設定（新規の上vec x 正面vec）
 }
 
 void ISnakeBehavior::Process_ReCulculatePosture(void)
@@ -61,6 +61,15 @@ void SnakeBehavior_Idle::Initialize(Snake* arg_snakePtr)
     currentBehavior_ = SnakeBehavior::IDLE;
 }
 
+void SnakeBehavior_Idle::Entry(void)
+{
+    is_active_ = false;
+
+    // どのくらいの時間休憩するのか、"kTimer_rest_min_" ~ "kTiImer_rest_max_"の間からランダムに決定
+    const float restTime = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_rest_min_, SnakeCommonInfomation::kTimer_rest_max_);
+    timer_rest_.Start(restTime);
+}
+
 void SnakeBehavior_Idle::Execute(void)
 {
     // 姿勢の更新 + 右vec再計算
@@ -75,6 +84,20 @@ void SnakeBehavior_Idle::Execute(void)
 
     // 姿勢再計算
     Process_ReCulculatePosture();
+
+    // タイマの更新
+    timer_rest_.Update();
+    if (timer_rest_.GetTimeRate() >= 1.f) { is_active_ = true; }
+}
+
+void SnakeBehavior_Idle::RequirementCheck(void)
+{
+    if (is_active_)
+    {
+        // 蛇の振る舞いをMOVEへ変更
+        nextBehavior_ = SnakeBehavior::MOVE;
+        return;
+    }
 }
 
 void SnakeBehavior_Move::Initialize(Snake* arg_snakePtr)
@@ -87,8 +110,21 @@ void SnakeBehavior_Move::Initialize(Snake* arg_snakePtr)
 
 void SnakeBehavior_Move::Entry(void)
 {
-    // どのくらいの時間ランダムに移動し続けるのか、規定値"kTimer_randomWalk_default_"を設定
-    timer_randomWalk_.Start(SnakeCommonInfomation::kTimer_randomWalk_default_);
+    // フラグ初期化
+    is_needRest_ = false;
+
+    // 回転角度決定
+    rotateDegree_ = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_randomWalk_min_, SnakeCommonInfomation::kDegree_randomWalk_max_);
+    // 回転方向
+    const int32_t threshold = Math::Function::Random<int32_t>(-9, 9);
+    const int32_t randomNum = Math::Function::Random<int32_t>(-10, 10);
+    const bool is_rotateLeft = randomNum > threshold;
+    // 回転方向を考慮する
+    if (is_rotateLeft) { rotateDegree_ *= -1; }
+
+    // どのくらいの時間ランダムに移動し続けるのか、"kTimer_randomWalk_min_" ~ "kTiImer_randomWalk_max_"の間からランダムに決定
+    const float activeTime = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_randomWalk_min_, SnakeCommonInfomation::kTimer_randomWalk_max_);
+    timer_randomWalk_.Start(activeTime);
 }
 
 void SnakeBehavior_Move::Execute(void)
@@ -96,29 +132,42 @@ void SnakeBehavior_Move::Execute(void)
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
-    // 重力処理
-    Process_Gravity();
+    // ランダムに動き回る。
     RamdomWalk();
-
-    // 移動総量計算
-    const Vector3& velocity_total = Process_CalculateVelocity();
-    // 座標更新
-    commonInfo_->transform_.position += velocity_total;
 
     // 姿勢再計算
     Process_ReCulculatePosture();
 }
 
+void SnakeBehavior_Move::RotateDirection(float arg_radian)
+{
+    //##姿勢の上方向を軸に "arg_radian" 回転する
+    // 回転用クオータニオン
+    Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(commonInfo_->axes_.up, arg_radian);
+    // クオータニオンを使用して、正面ベクトルを回転
+    commonInfo_->axes_.forward = Math::QuaternionF::RotateVector(commonInfo_->axes_.forward, rotQ);
+    // クオータニオンを使用して、右ベクトルを回転
+    commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
+}
+
+void SnakeBehavior_Move::Move(void)
+{
+    // 重力処理（垂直方向の移動量）
+    Process_Gravity();
+    // 正面への移動（平行方向への移動）
+    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_default_;
+
+    // 移動総量計算
+    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
+    // 座標更新
+    commonInfo_->transform_.position += velocity_total;
+}
+
 void SnakeBehavior_Move::RamdomWalk(void)
 {
-    // 移動方向の転換タイミング用タイマーの更新
-    timer_randomWalk_.Update();
-
-    static float degree = 0.f;
-
 #ifdef _DEBUG
     GUI::Begin("SnakeBehavior_Move");
-    GUI::SliderFloat("deg", &degree, 0.f, 360.f);
+    GUI::SliderFloat("deg", &rotateDegree_, 0.f, 360.f);
     GUI::End();
 
     if (KEYS::IsDown(DIK_9))
@@ -127,32 +176,29 @@ void SnakeBehavior_Move::RamdomWalk(void)
     }
 #endif // _DEBUG
 
+    // タイマーの更新
+    timer_randomWalk_.Update();
 
-    float rad = Math::Function::ToRadian(degree);
-    //##姿勢の上方向を軸に "arg_radian" 回転する
-    // 回転用クオータニオン
-    Quaternion rotQ = Math::QuaternionF::MakeAxisAngle(commonInfo_->axes_.up, rad);
-    // クオータニオンを使用して、正面ベクトルを回転
-    commonInfo_->axes_.forward = Math::QuaternionF::RotateVector(commonInfo_->axes_.forward, rotQ);
-    // クオータニオンを使用して、右ベクトルを回転
-    commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
+    // 回転移動処理
+    float rad = Math::Function::ToRadian(rotateDegree_);
+    RotateDirection(rad);
+
+    Move();
 
     // タイマーの進行割合が100%なら
-    //const float rate = commonInfo_->timer_changeDirInterval_.GetTimeRate();
-    //if (rate >= 1.f)
-    //{
-    //    // 方向転換する角度をランダムに決定する
-    //    const float degree = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_randomWalk_min_, SnakeCommonInfomation::kDegree_randomWalk_max_);
-    //    // 角度をラジアンに変換しつつ、プレイヤーの向きを変更する関数に渡す
-    //    //RotateDirection(Math::Function::ToRadian(degree));
+    const float rate = timer_randomWalk_.GetTimeRate();
+    // 休憩フラグを立てる。
+    if (rate >= 1.f) { is_needRest_ = true; }
+}
 
-    //    // タイマーを終了
-    //    commonInfo_->timer_changeDirInterval_.Finish(true);
-    //    // 次の方向転換するまでの間隔を、規定値"kTimer_randomWalk_min_" ~ "kTimer_randomWalk_max_"の間でランダムに決定
-    //    const float nextMaxSec = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_randomWalk_min_, SnakeCommonInfomation::kTimer_randomWalk_max_);
-    //    // タイマーを再起動
-    //    commonInfo_->timer_changeDirInterval_.Start(nextMaxSec);
-    //}
+void SnakeBehavior_Move::RequirementCheck(void)
+{
+    if (is_needRest_)
+    {
+        // 蛇の振る舞いをIDLEへ変更
+        nextBehavior_ = SnakeBehavior::IDLE;
+        return;
+    }
 }
 
 // -------------------------------------------------------------------------------------
@@ -176,8 +222,13 @@ std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_b
 // -------------------------------------------------------------------------------------
 void SnakeBehaviorMachine::Initialize(Snake* arg_snakePtr, SnakeBehavior arg_behavior)
 {
+    // ptrを受け取る
+    snakePtr_ = arg_snakePtr;
+
     // 一番最初の振る舞いを生成。
-    behaviorPtr_ = behaviorFactory_.Create(arg_behavior, arg_snakePtr);
+    behaviorPtr_ = behaviorFactory_.Create(arg_behavior, snakePtr_);
+    // マシンの初期化では遷移時初期化関数も呼び出す。
+    behaviorPtr_->Entry();
 }
 
 void SnakeBehaviorMachine::ManagementBehavior(void)

@@ -38,8 +38,6 @@ public:
 
 private:
     //void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
-    // プレイヤーの進行方向をランダムに変更する処理を纏めたもの
-    void RandomChangeDirection(void);
     // プレイヤーを上ベクトルを軸に回転させる。※上ベクトルは変化しない
     void RotateDirection(float arg_radian);
     void Move(void);

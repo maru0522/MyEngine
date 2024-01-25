@@ -73,7 +73,7 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void) {};
+    virtual void Entry(void);
     // 当該状態時の様子
     virtual void Execute(void);
     // 状態遷移遷移前の終了処理
@@ -81,7 +81,11 @@ public:
 
 private:
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void) {}
+    virtual void RequirementCheck(void);
+
+    //>> 変数
+    bool is_active_{};
+    DeltaTimer timer_rest_;
 };
 
 class SnakeBehavior_Move final : public ISnakeBehavior
@@ -102,14 +106,21 @@ public:
     virtual void Exit(void) {};
 
 private:
+    // 入力されたラジアンだけ、プレイヤーの向きを回転させる（yaw角）
+    void RotateDirection(float arg_radian);
+    // 移動する
+    void Move(void);
+    // ランダムな向きを向きながら歩き回る
     void RamdomWalk(void);
 
-    //>> 変数
-    DeltaTimer timer_randomWalk_;
-    DeltaTimer timer_rest_;
-
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void) {}
+    virtual void RequirementCheck(void);
+
+    //>> 変数
+    bool is_needRest_{};
+    float rotateDegree_{};
+    DeltaTimer timer_randomWalk_;
+
 };
 
 class SnakeBehaviorFactory final
@@ -140,7 +151,7 @@ private:
     //>> 変数
     std::unique_ptr<ISnakeBehavior> behaviorPtr_;
     SnakeBehaviorFactory behaviorFactory_;
-    Snake* snakePtr_;
+    Snake* snakePtr_{};
 
 public:
     //>> getter

@@ -36,11 +36,8 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
 
     exclamationMark_ = std::make_unique<ExclamationMark>();
 
-    // 移動方向を変換するまでを計測するタイマーを起動
-    commonInfo_->timer_changeDirInterval_.Start(SnakeCommonInfomation::kTimer_randomWalk_default_);
-
     // behaviorMachine経由で、behavior生成
-    snakeBehaviorMachine_.Initialize(this, SnakeBehavior::MOVE);
+    snakeBehaviorMachine_.Initialize(this, SnakeBehavior::IDLE);
 }
 
 Snake::~Snake(void)
@@ -115,29 +112,6 @@ void Snake::Draw(void)
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
     if (commonInfo_->is_detect_) { exclamationMark_->Draw(); }
-}
-
-void Snake::RandomChangeDirection(void)
-{
-    // 移動方向の転換タイミング用タイマーの更新
-    commonInfo_->timer_changeDirInterval_.Update();
-
-    // タイマーの進行割合が100%なら
-    const float rate = commonInfo_->timer_changeDirInterval_.GetTimeRate();
-    if (rate >= 1.f)
-    {
-        // 方向転換する角度をランダムに決定する
-        const float degree = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_randomWalk_min_, SnakeCommonInfomation::kDegree_randomWalk_max_);
-        // 角度をラジアンに変換しつつ、プレイヤーの向きを変更する関数に渡す
-        RotateDirection(Math::Function::ToRadian(degree));
-
-        // タイマーを終了
-        commonInfo_->timer_changeDirInterval_.Finish(true);
-        // 次の方向転換するまでの間隔を、規定値"kTimer_randomWalk_min_" ~ "kTimer_randomWalk_max_"の間でランダムに決定
-        const float nextMaxSec = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_randomWalk_min_, SnakeCommonInfomation::kTimer_randomWalk_max_);
-        // タイマーを再起動
-        commonInfo_->timer_changeDirInterval_.Start(nextMaxSec);
-    }
 }
 
 void Snake::RotateDirection(float arg_radian)
@@ -292,7 +266,7 @@ void Snake::OnDetect(void)
         if (distance > SnakeCommonInfomation::kRadius_detectEgg_) { return; }
 
         // 移動方向を設定。
-        commonInfo_->vec3_moveDirection_ = vec3_egg2Snake.Normalize();
+        //commonInfo_->vec3_moveDirection_ = vec3_egg2Snake.Normalize();
         commonInfo_->is_detectEgg_ = true;
     }
 }

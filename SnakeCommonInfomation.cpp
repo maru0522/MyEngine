@@ -13,8 +13,12 @@ const float SnakeCommonInfomation::kMoveSpd_escape_{ 0.38f };          // プレ
 const float SnakeCommonInfomation::kGravity_{ 0.025f };                // かかる重力値
 const float SnakeCommonInfomation::kMoveDist_{ 30.f };                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
 
+
+const float SnakeCommonInfomation::kTimer_rest_min_{2.f};              // 休憩時間の最小値
+const float SnakeCommonInfomation::kTimer_rest_max_{5.f};              // 休憩時間の最大値
+
 const float SnakeCommonInfomation::kTimer_randomWalk_default_{ 15.f }; // ランダムに移動し続ける時間の初期値
-const float SnakeCommonInfomation::kTimer_randomWalk_min_{ 8.f };      // ランダムに移動し続ける時間の最小値
-const float SnakeCommonInfomation::kTimer_randomWalk_max_{ 25.f };     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
-const float SnakeCommonInfomation::kDegree_randomWalk_min_{ 2.f };     // 方向転換時の角度の最小値
-const float SnakeCommonInfomation::kDegree_randomWalk_max_{ 5.f };     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。
+const float SnakeCommonInfomation::kTimer_randomWalk_min_{ 6.f };      // ランダムに移動し続ける時間の最小値
+const float SnakeCommonInfomation::kTimer_randomWalk_max_{ 12.f };     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
+const float SnakeCommonInfomation::kDegree_randomWalk_min_{ 0.1f };    // 方向転換時の角度の最小値
+const float SnakeCommonInfomation::kDegree_randomWalk_max_{ 1.f };     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。
