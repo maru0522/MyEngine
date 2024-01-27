@@ -16,9 +16,11 @@ enum class SnakeBehavior
 
     IDLE,   // idle
     MOVE,   // 通常移動（ランダムに歩き回る）
+    MOVE_STOMACH,
     SNEAK,  // こっそり卵に近づく。 or プレイヤーから遠ざかる等
     ESCAPE, // プレイヤーから逃げる
-    DIGEST, // 襲った卵を消化中。
+    ESCAPE_STOMACH,
+    LEAVE_EGG // 巣から離れる
 };
 
 class ISnakeBehavior
@@ -93,7 +95,7 @@ private:
     DeltaTimer timer_rest_;
 };
 
-class SnakeBehavior_Move final : public ISnakeBehavior
+class SnakeBehavior_Move : public ISnakeBehavior
 {
 public:
     //>> 関数
@@ -110,7 +112,7 @@ public:
     // 状態遷移遷移前の終了処理
     virtual void Exit(void) {};
 
-private:
+protected:
     // 移動する
     void Move(void);
     // ランダムな向きを向きながら歩き回る
@@ -123,6 +125,33 @@ private:
     bool is_needRest_{};
     float rotateDegree_{};
     DeltaTimer timer_randomWalk_;
+};
+
+class SnakeBehavior_MoveStomach final : public SnakeBehavior_Move
+{
+public:
+    //>> 関数
+    SnakeBehavior_MoveStomach(void) : SnakeBehavior_Move() {};
+    virtual ~SnakeBehavior_MoveStomach(void) override = default;
+
+    //　初期化
+    virtual void Initialize(Snake* arg_snakePtr);
+
+    // 状態遷移時の初期化処理
+    virtual void Entry(void);
+    // 当該状態時の様子
+    virtual void Execute(void);
+    // 状態遷移遷移前の終了処理
+    virtual void Exit(void) {};
+
+private:
+    // 移動する
+    void Move(void);
+    // ランダムな向きを向きながら歩き回る
+    void LeaveChikenEgg(void);
+
+    // 他状態への遷移要件確認
+    virtual void RequirementCheck(void);
 };
 
 class SnakeBehavior_Sneak final : public ISnakeBehavior
@@ -186,6 +215,36 @@ private:
     //DeltaTimer timer_rotateDirection_; // 卵の方を向くのにかける時間
 };
 
+class SnakeBehavior_LeaveEgg final : public ISnakeBehavior
+{
+public:
+    //>> 関数
+    SnakeBehavior_LeaveEgg(void) : ISnakeBehavior() {};
+    virtual ~SnakeBehavior_LeaveEgg(void) override = default;
+
+    //　初期化
+    virtual void Initialize(Snake* arg_snakePtr);
+
+    // 状態遷移時の初期化処理
+    virtual void Entry(void);
+    // 当該状態時の様子
+    virtual void Execute(void);
+    // 状態遷移遷移前の終了処理
+    virtual void Exit(void) {};
+
+private:
+    // 移動する
+    void Move(void);
+    // 鶏の巣から遠ざかる
+    void LeaveChikenEgg(void);
+
+    // 他状態への遷移要件確認
+    virtual void RequirementCheck(void);
+
+    //>> 変数
+    Vector3 pos_chikenEgg_;         // 鶏の巣の座標
+    bool is_enoughLeave_{};           // 十分に離れたかどうか
+};
 
 class SnakeBehaviorFactory final
 {

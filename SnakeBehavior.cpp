@@ -71,7 +71,7 @@ void ISnakeBehavior::Process_RecalculatePosture(void)
     commonInfo_->axes_.forward = forward;
     commonInfo_->axes_.right = right;
 }
-// --------------------------------------------------------------------------------------
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 void SnakeBehavior_Idle::Initialize(Snake* arg_snakePtr)
@@ -138,6 +138,7 @@ void SnakeBehavior_Idle::RequirementCheck(void)
     }
 }
 
+// ---------------------------------------------------------------------------------------------
 void SnakeBehavior_Move::Initialize(Snake* arg_snakePtr)
 {
     ISnakeBehavior::Initialize(arg_snakePtr);
@@ -245,6 +246,32 @@ void SnakeBehavior_Move::RequirementCheck(void)
     }
 }
 
+// ---------------------------------------------------------------------------------------------
+void SnakeBehavior_MoveStomach::Initialize(Snake* arg_snakePtr)
+{
+    SnakeBehavior_Move::Initialize(arg_snakePtr);
+
+    nextBehavior_ = SnakeBehavior::NONE;
+    currentBehavior_ = SnakeBehavior::MOVE_STOMACH;
+}
+
+void SnakeBehavior_MoveStomach::Entry(void)
+{
+}
+
+void SnakeBehavior_MoveStomach::Execute(void)
+{
+}
+
+void SnakeBehavior_MoveStomach::Move(void)
+{
+}
+
+void SnakeBehavior_MoveStomach::RequirementCheck(void)
+{
+}
+
+// ---------------------------------------------------------------------------------------------
 void SnakeBehavior_Sneak::Initialize(Snake* arg_snakePtr)
 {
     ISnakeBehavior::Initialize(arg_snakePtr);
@@ -318,8 +345,16 @@ void SnakeBehavior_Sneak::RequirementCheck(void)
         nextBehavior_ = SnakeBehavior::ESCAPE;
         return;
     }
+
+    if (commonInfo_->is_eatChickenEgg_)
+    {
+        // 蛇の振る舞いをLEAVE_EGGへ変更
+        nextBehavior_ = SnakeBehavior::LEAVE_EGG;
+        return;
+    }
 }
 
+// ---------------------------------------------------------------------------------------------
 void SnakeBehavior_Escape::Initialize(Snake* arg_snakePtr)
 {
     ISnakeBehavior::Initialize(arg_snakePtr);
@@ -381,7 +416,77 @@ void SnakeBehavior_Escape::RequirementCheck(void)
     }
 }
 
-// -------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+void SnakeBehavior_LeaveEgg::Initialize(Snake* arg_snakePtr)
+{
+    ISnakeBehavior::Initialize(arg_snakePtr);
+
+    nextBehavior_ = SnakeBehavior::NONE;
+    currentBehavior_ = SnakeBehavior::LEAVE_EGG;
+}
+
+void SnakeBehavior_LeaveEgg::Entry(void)
+{
+    pos_chikenEgg_ = commonInfo_->pos_chickenEgg_;
+}
+
+void SnakeBehavior_LeaveEgg::Execute(void)
+{
+    // 姿勢の更新 + 右vec再計算
+    Process_UpdatePosture();
+
+    // 卵から遠ざかる
+    LeaveChikenEgg();
+
+    // 姿勢再計算
+    Process_RecalculatePosture();
+}
+
+void SnakeBehavior_LeaveEgg::Move(void)
+{
+    // 重力処理（垂直方向の移動量）
+    Process_Gravity();
+    // 正面への移動（平行方向への移動）
+    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_leaveEgg_;
+
+    // 移動総量計算
+    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
+    // 座標更新
+    commonInfo_->transform_.position += velocity_total;
+}
+
+void SnakeBehavior_LeaveEgg::LeaveChikenEgg(void)
+{
+    // 卵から遠ざかる方向のベクトル
+    const Vector3& vec3_egg2Snake = Vector3(commonInfo_->transform_.position - pos_chikenEgg_);
+    // 卵から蛇までの距離
+    const float distance = vec3_egg2Snake.Length();
+    // 距離が、規定値"SnakeCommonInfomation::kDistance_leaveEgg_"より大きかったら
+    if (distance > SnakeCommonInfomation::kDistance_leaveEgg_)
+    {
+        // 十分な距離があるかのフラグをtrue
+        is_enoughLeave_ = true;
+        // 終了
+        return;
+    }
+
+    // 遠ざかる方向を正面ベクトルとして設定
+    commonInfo_->axes_.forward = vec3_egg2Snake.Normalize();
+    // 移動関数呼び出し
+    Move();
+}
+
+void SnakeBehavior_LeaveEgg::RequirementCheck(void)
+{
+    if (is_enoughLeave_)
+    {
+        // 蛇の振る舞いをMOVE_STOMACHへ変更
+        nextBehavior_ = SnakeBehavior::MOVE_STOMACH;
+        return;
+    }
+}
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_behavior, Snake* arg_snakePtr)
 {
     // 生成されたbehaviorを収納する変数
@@ -390,8 +495,10 @@ std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_b
     // 生成
     if (arg_behavior == SnakeBehavior::IDLE) { behavior = std::make_unique<SnakeBehavior_Idle>(); }
     else if (arg_behavior == SnakeBehavior::MOVE) { behavior = std::make_unique<SnakeBehavior_Move>(); }
+    else if (arg_behavior == SnakeBehavior::MOVE_STOMACH) { behavior = std::make_unique<SnakeBehavior_MoveStomach>(); }
     else if (arg_behavior == SnakeBehavior::SNEAK) { behavior = std::make_unique<SnakeBehavior_Sneak>(); }
     else if (arg_behavior == SnakeBehavior::ESCAPE) { behavior = std::make_unique<SnakeBehavior_Escape>(); }
+    else if (arg_behavior == SnakeBehavior::LEAVE_EGG) { behavior = std::make_unique<SnakeBehavior_LeaveEgg>(); }
 
     // 初期化関数の実行
     behavior->Initialize(arg_snakePtr);
@@ -401,7 +508,7 @@ std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_b
 }
 
 
-// -------------------------------------------------------------------------------------
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void SnakeBehaviorMachine::Initialize(Snake* arg_snakePtr, SnakeBehavior arg_behavior)
 {
     // ptrを受け取る
@@ -445,3 +552,5 @@ void SnakeBehaviorMachine::NextStateCheck(void)
         // それぞれの、"振舞い"に必要な情報をあてがう
     }
 }
+
+

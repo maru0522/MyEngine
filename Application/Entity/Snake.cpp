@@ -211,6 +211,12 @@ void Snake::OnCollision(void)
     //    isCaptured_ = true;
     //    SetCircleShadowsIsActive(false);
     //}
+
+    if (sphere_detect_.GetOther()->GetID() == "chickenEgg_col")
+    {
+        // 卵を食べたかどうかのフラグをtrue
+        commonInfo_->is_eatChickenEgg_ = true;
+    }
 }
 
 void Snake::OnDetect(void)
@@ -234,14 +240,16 @@ void Snake::OnDetect(void)
     {
         // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detect_.GetOther());
+        // 鶏の巣（卵）の座標を記録 #SnakeBehavior::LEAVE_EGGの為
+        commonInfo_->pos_chickenEgg_ = other->center;
+
         // 蛇から卵への方向ベクトル (蛇の座標 - 卵の座標） ※正規化されていない。
         const Vector3& vec3_egg2Snake = Vector3(other->center - commonInfo_->transform_.position);
         // 蛇から卵までの距離が、規定値"kRadius_detectEgg_"より大きいなら（範囲内にないのなら）終了。
         const float distance = vec3_egg2Snake.Length();
         if (distance > SnakeCommonInfomation::kRadius_detectEgg_) { return; }
 
-        // 移動方向を設定。
-        //commonInfo_->vec3_moveDirection_ = vec3_egg2Snake.Normalize();
+        // 移動方向を設定。#SnakeBehavior::SNEAKの為
         commonInfo_->vec3_toEgg_ = vec3_egg2Snake.Normalize();
         commonInfo_->is_detectEgg_ = true;
     }
