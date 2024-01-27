@@ -299,7 +299,7 @@ void SnakeBehavior_Sneak::Execute(void)
     ApproachEgg();
 
     // 姿勢再計算
-    Process_RedefineForwardVec();
+    Process_RecalculatePosture();
 }
 
 void SnakeBehavior_Sneak::Move(void)
