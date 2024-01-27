@@ -51,8 +51,10 @@ protected:
     Vector3 Process_CalculateVelocity(const Vector3& arg_velocity_horizontal = {0.f,0.f,0.f});
     // 姿勢の更新 + 一部再計算
     void Process_UpdatePosture(void);
+    // 正面ベクトルの再定義
+    void Process_RedefineForwardVec(void);
     // 姿勢の再計算
-    void Process_ReCulculatePosture(void);
+    void Process_RecalculatePosture(void);
 
     //>> 変数
     SnakeBehavior nextBehavior_{};
@@ -152,6 +154,36 @@ private:
     //>> 変数
     Vector3 vec3_entryForward_;        // 遷移時の正面ベクトル
     DeltaTimer timer_rotateDirection_; // 卵の方を向くのにかける時間
+};
+
+class SnakeBehavior_Escape final : public ISnakeBehavior
+{
+public:
+    //>> 関数
+    SnakeBehavior_Escape(void) : ISnakeBehavior() {};
+    virtual ~SnakeBehavior_Escape(void) override = default;
+
+    //　初期化
+    virtual void Initialize(Snake* arg_snakePtr);
+
+    // 状態遷移時の初期化処理
+    virtual void Entry(void);
+    // 当該状態時の様子
+    virtual void Execute(void);
+    // 状態遷移遷移前の終了処理
+    virtual void Exit(void) {};
+
+private:
+    // 移動する
+    void Move(void);
+    // プレイヤーから遠ざかる
+    void EscapePlayer(void);
+
+    // 他状態への遷移要件確認
+    virtual void RequirementCheck(void);
+
+    //>> 変数
+    //DeltaTimer timer_rotateDirection_; // 卵の方を向くのにかける時間
 };
 
 

@@ -80,14 +80,14 @@ void Snake::Update(void)
     exclamationTransform.position = commonInfo_->transform_.position + commonInfo_->axes_.up * 2.2f;
     exclamationMark_->SetTransform(exclamationTransform);
     exclamationMark_->Update();
-    if (commonInfo_->is_detect_)
+    if (commonInfo_->is_detectPlayer_)
     {
         timer_visibleExclamationMark_.Update();
         const float rate = timer_visibleExclamationMark_.GetTimeRate();
 
         if (rate >= 1.f)
         {
-            commonInfo_->is_detect_ = false;
+            commonInfo_->is_detectPlayer_ = false;
         }
     }
 
@@ -104,6 +104,7 @@ void Snake::Update(void)
     // 毎フレーム着地フラグをfalseにする。けど着地していたら、ここの処理を通るまではtrueになってる。
     commonInfo_->is_landing_ = false;
     commonInfo_->is_detectEgg_ = false;
+    commonInfo_->is_detectPlayer_ = false;
 }
 
 void Snake::Draw(void)
@@ -111,7 +112,7 @@ void Snake::Draw(void)
     if (isCaptured_ == false) { appearance_->Draw(); }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
-    if (commonInfo_->is_detect_) { exclamationMark_->Draw(); }
+    if (commonInfo_->is_detectPlayer_) { exclamationMark_->Draw(); }
 }
 
 void Snake::RotateDirection(float arg_radian)
@@ -214,46 +215,20 @@ void Snake::OnCollision(void)
 
 void Snake::OnDetect(void)
 {
-    //if (sphere_detect_.GetOther()->GetID() == "player")
-    //{
+    if (sphere_detect_.GetOther()->GetID() == "player")
+    {
+        // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detect_.GetOther());
+        // 蛇からプレイヤーへの方向ベクトル（プレイヤーの座標 - 蛇の座標）
+        const Vector3& vec3_player2Snake = Vector3(other->center - commonInfo_->transform_.position);
+        // 蛇からプレイヤーまでの距離が、規定値"kRadius_detectPlayer_"より大きいなら（範囲内にないのなら）終了。
+        const float distance = vec3_player2Snake.Length();
+        if (distance > SnakeCommonInfomation::kRadius_detectPlayer_) { return; }
 
-    //    // 接触相手のコライダー(プレイヤー）を基底クラスから復元。
-    //    CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detect_.GetOther());
-    //    // (兎の座標 - プレイヤーの座標）
-    //    const Vector3 player2Rabbit = transform_.position - other->center;
-
-    //    // 移動可能距離が0以下
-    //    const bool isZeroMoveDist = moveDist_ <= 0.f;
-    //    if (isZeroMoveDist)
-    //    {
-    //        // 検知したプレイヤーの方を向く。（↓マイナスで、"プレイヤーから兎"のベクトルを反転している）
-    //        vec3_moveDirection_ = -player2Rabbit.Normalize(); // ※検知している段階ではプレイヤーの方を向いているが、さらに近づいてきたら逃げる。
-    //    }
-
-    //    // プレイヤーから兎までの距離が、"kDetectRadius_escape_"以下である
-    //    if (player2Rabbit.Length() <= kDetectRadius_escape_)
-    //    {
-    //        is_detect_ = true;
-    //        timer_visibleExclamationMark_.Finish(true);
-    //        timer_visibleExclamationMark_.Start(3.f);
-    //        //if (timer_visibleExclamationMark_.GetIsExecute())
-    //        //{
-    //        //    const float timerMaxFrame = timer_visibleExclamationMark_.GetFrameMax();
-    //        //    // さらに上乗せ
-    //        //    timer_visibleExclamationMark_.SetMaxFrame(timerMaxFrame + 0.03f);
-    //        //}
-    //        //else
-    //        //{
-    //        //    timer_visibleExclamationMark_.Finish(true);
-    //        //    timer_visibleExclamationMark_.Start(3.f);
-    //        //}
-
-    //        // 検知したプレイヤーから遠ざかるように、移動方向を記録する。
-    //        vec3_moveDirection_ = player2Rabbit.Normalize();
-    //        // 検知した地点を原点としてどの程度移動するかを設定
-    //        moveDist_ = kMoveDist_;
-    //    }
-    //}
+        // 移動方向を決定。
+        commonInfo_->vec3_toPlayer_ = vec3_player2Snake.Normalize();
+        commonInfo_->is_detectPlayer_ = true;
+    }
 
     if (sphere_detect_.GetOther()->GetID() == "chickenEgg_col")
     {

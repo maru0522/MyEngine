@@ -6,7 +6,6 @@ const float SnakeCommonInfomation::kRadius_detectPlayer_{ 30.f };      // プレ
 const float SnakeCommonInfomation::kDetectRadius_escape_{ 10.f };      // さらにこの半径内に入ったら、遠ざかる挙動
 const float SnakeCommonInfomation::kJumpPower_{ 0.4f };                // ジャンプ力
 
-const float SnakeCommonInfomation::kMoveSpd_escape_{ 0.38f };          // プレイヤーから逃げる時の移動速度
 
 const float SnakeCommonInfomation::kGravity_{ 0.025f };                // かかる重力値
 const float SnakeCommonInfomation::kMoveDist_{ 30.f };                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
@@ -23,3 +22,5 @@ const float SnakeCommonInfomation::kDegree_randomWalk_max_{ 1.f };     // 方向
 
 const float SnakeCommonInfomation::kMoveSpd_sneak_{ 0.08f };                  // 卵にこっそり近づくときの移動速度
 const float SnakeCommonInfomation::kTimer_rotateDirection_basic_{1.f};        // 卵発見時にそちらの方を向くのにかかる時間
+
+const float SnakeCommonInfomation::kMoveSpd_escape_{ 0.32f };          // プレイヤーから逃げる時の移動速度

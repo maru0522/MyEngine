@@ -12,7 +12,6 @@ public:
     static const float kDetectRadius_escape_;      // さらにこの半径内に入ったら、遠ざかる挙動
     static const float kJumpPower_;                // ジャンプ力
 
-    static const float kMoveSpd_escape_;           // プレイヤーから逃げる時の移動速度
 
     static const float kGravity_;                  // かかる重力値
     static const float kMoveDist_;                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
@@ -33,9 +32,18 @@ public:
     static const float kMoveSpd_sneak_;                  // 卵にこっそり近づくときの移動速度
     static const float kTimer_rotateDirection_basic_;    // 卵発見時にそちらの方を向くのにかかる時間
 
+    // SnakeBhevior::Escape
+    static const float kMoveSpd_escape_;                 // プレイヤーから逃げる時の移動速度
+
+
     //>> 変数
-    Vector3 vec3_toEgg_;    // 卵への方向
-    bool is_detectEgg_{};   // 卵を検知したか
+    Vector3 vec3_toEgg_;     // 卵への方向
+    bool is_detectEgg_{};    // 卵を検知したか
+
+    Vector3 vec3_toPlayer_;  // プレイヤーへの方向
+    bool is_detectPlayer_{}; // プレイヤーを検知したか
+    bool is_landing_;
+
 
     TransformMatrix transformMatrix_; // 各ワールド行列
     Transform transform_;             // 座標等
@@ -48,9 +56,5 @@ public:
 
     float moveDist_; // 移動する距離。
     float velocity_vertical_{};
-
-
-    bool is_landing_;
-    bool is_detect_; // プレイヤーを検知したか
 };
 

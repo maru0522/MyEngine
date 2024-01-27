@@ -51,7 +51,7 @@ void ISnakeBehavior::Process_UpdatePosture(void)
     commonInfo_->axes_.right = Math::Vec3::Cross(commonInfo_->axes_.up, commonInfo_->axes_.forward).Normalize();         // 右ベクトルを計算し、設定（新規の上vec x 正面vec）
 }
 
-void ISnakeBehavior::Process_ReCulculatePosture(void)
+void ISnakeBehavior::Process_RedefineForwardVec(void)
 {
     // 現在の上ベクトルと右ベクトルから正面ベクトルを再定義
     // 正面ベクトルが、プレイヤーを検知した瞬間のままだと、移動するにつれ兎がつぶれる（姿勢が正常ではないため）
@@ -60,6 +60,16 @@ void ISnakeBehavior::Process_ReCulculatePosture(void)
     commonInfo_->axes_.forward = forward;
     // 再定義したベクトルを移動方向ベクトルに設定。
     commonInfo_->vec3_moveDirection_ = forward;
+}
+
+void ISnakeBehavior::Process_RecalculatePosture(void)
+{
+    const Vector3& right = Math::Vec3::Cross(commonInfo_->axes_.up, commonInfo_->axes_.forward);
+    const Vector3& forward = Math::Vec3::Cross(right, commonInfo_->axes_.up);
+
+    commonInfo_->vec3_moveDirection_ = forward;
+    commonInfo_->axes_.forward = forward;
+    commonInfo_->axes_.right = right;
 }
 // --------------------------------------------------------------------------------------
 
@@ -94,7 +104,7 @@ void SnakeBehavior_Idle::Execute(void)
     commonInfo_->transform_.position += velocity_total;
 
     // 姿勢再計算
-    Process_ReCulculatePosture();
+    Process_RedefineForwardVec();
 
     // タイマの更新
     timer_rest_.Update();
@@ -116,6 +126,14 @@ void SnakeBehavior_Idle::RequirementCheck(void)
     {
         // 蛇の振る舞いをSNEAKへ変更
         nextBehavior_ = SnakeBehavior::SNEAK;
+        return;
+    }
+
+    // プレイヤーの存在を検知した
+    if (commonInfo_->is_detectPlayer_)
+    {
+        // 蛇の振る舞いをESCAPEへ変更
+        nextBehavior_ = SnakeBehavior::ESCAPE;
         return;
     }
 }
@@ -156,7 +174,7 @@ void SnakeBehavior_Move::Execute(void)
     RamdomWalk();
 
     // 姿勢再計算
-    Process_ReCulculatePosture();
+    Process_RedefineForwardVec();
 }
 
 void SnakeBehavior_Move::Move(void)
@@ -217,6 +235,14 @@ void SnakeBehavior_Move::RequirementCheck(void)
         nextBehavior_ = SnakeBehavior::SNEAK;
         return;
     }
+
+    // プレイヤーの存在を検知した
+    if (commonInfo_->is_detectPlayer_)
+    {
+        // 蛇の振る舞いをESCAPEへ変更
+        nextBehavior_ = SnakeBehavior::ESCAPE;
+        return;
+    }
 }
 
 void SnakeBehavior_Sneak::Initialize(Snake* arg_snakePtr)
@@ -246,7 +272,7 @@ void SnakeBehavior_Sneak::Execute(void)
     ApproachEgg();
 
     // 姿勢再計算
-    Process_ReCulculatePosture();
+    Process_RedefineForwardVec();
 }
 
 void SnakeBehavior_Sneak::Move(void)
@@ -280,8 +306,77 @@ void SnakeBehavior_Sneak::RequirementCheck(void)
     // 卵を見失った。
     if (commonInfo_->is_detectEgg_ == false)
     {
-        // 蛇の振る舞いをSNEAKへ変更
+        // 蛇の振る舞いをIDLEへ変更
         nextBehavior_ = SnakeBehavior::IDLE;
+        return;
+    }
+
+    // プレイヤーの存在を検知した
+    if (commonInfo_->is_detectPlayer_)
+    {
+        // 蛇の振る舞いをESCAPEへ変更
+        nextBehavior_ = SnakeBehavior::ESCAPE;
+        return;
+    }
+}
+
+void SnakeBehavior_Escape::Initialize(Snake* arg_snakePtr)
+{
+    ISnakeBehavior::Initialize(arg_snakePtr);
+
+    nextBehavior_ = SnakeBehavior::NONE;
+    currentBehavior_ = SnakeBehavior::ESCAPE;
+}
+
+void SnakeBehavior_Escape::Entry(void)
+{
+    // 遷移時の正面ベクトルを記録
+    //vec3_entryForward_ = commonInfo_->axes_.forward;
+    Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
+    commonInfo_->axes_.forward = vec3_escapePlayer;
+
+    // タイマー起動
+    //timer_rotateDirection_.Start(SnakeCommonInfomation::kTimer_rotateDirection_basic_);
+}
+
+void SnakeBehavior_Escape::Execute(void)
+{
+    // 姿勢の更新 + 右vec再計算
+    Process_UpdatePosture();
+
+    // 卵に接近する。。
+    EscapePlayer();
+
+    // 姿勢再計算
+    Process_RecalculatePosture();
+}
+
+void SnakeBehavior_Escape::Move(void)
+{
+    // 重力処理（垂直方向の移動量）
+    Process_Gravity();
+    // 正面への移動（平行方向への移動）
+    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_escape_;
+
+    // 移動総量計算
+    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
+    // 座標更新
+    commonInfo_->transform_.position += velocity_total;
+}
+
+void SnakeBehavior_Escape::EscapePlayer(void)
+{
+    Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
+    commonInfo_->axes_.forward = vec3_escapePlayer;
+    Move();
+}
+
+void SnakeBehavior_Escape::RequirementCheck(void)
+{
+    if (commonInfo_->is_detectPlayer_ == false)
+    {
+        // 蛇の振る舞いをMOVEへ変更
+        nextBehavior_ = SnakeBehavior::MOVE;
         return;
     }
 }
@@ -296,6 +391,7 @@ std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_b
     if (arg_behavior == SnakeBehavior::IDLE) { behavior = std::make_unique<SnakeBehavior_Idle>(); }
     else if (arg_behavior == SnakeBehavior::MOVE) { behavior = std::make_unique<SnakeBehavior_Move>(); }
     else if (arg_behavior == SnakeBehavior::SNEAK) { behavior = std::make_unique<SnakeBehavior_Sneak>(); }
+    else if (arg_behavior == SnakeBehavior::ESCAPE) { behavior = std::make_unique<SnakeBehavior_Escape>(); }
 
     // 初期化関数の実行
     behavior->Initialize(arg_snakePtr);
