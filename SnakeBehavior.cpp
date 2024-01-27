@@ -254,7 +254,7 @@ void SnakeBehavior_Sneak::Move(void)
     // 重力処理（垂直方向の移動量）
     Process_Gravity();
     // 正面への移動（平行方向への移動）
-    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_default_;
+    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_sneak_;
 
     // 移動総量計算
     const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);

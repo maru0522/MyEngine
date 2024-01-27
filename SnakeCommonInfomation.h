@@ -12,8 +12,6 @@ public:
     static const float kDetectRadius_escape_;      // さらにこの半径内に入ったら、遠ざかる挙動
     static const float kJumpPower_;                // ジャンプ力
 
-    static const float kMoveSpd_sneak_;            // 卵にこっそり近づくときの移動速度
-    static const float kMoveSpd_default_;          // 普段の移動速度
     static const float kMoveSpd_escape_;           // プレイヤーから逃げる時の移動速度
 
     static const float kGravity_;                  // かかる重力値
@@ -25,12 +23,14 @@ public:
     static const float kTimer_rest_max_;           // 休憩時間の最大値
 
     // SnakeBhevior::MOVE
+    static const float kMoveSpd_default_;          // 普段の移動速度
     static const float kTimer_randomWalk_min_;     // ランダムに移動し続ける時間の最小値
     static const float kTimer_randomWalk_max_;     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
     static const float kDegree_randomWalk_min_;    // ランダムに移動し続ける際の角速度の最小値
     static const float kDegree_randomWalk_max_;    // ランダムに移動し続ける際の角速度の最大値 ※最小~最大の間でランダムに決定される。
 
     // SnakeBhevior::Sneak
+    static const float kMoveSpd_sneak_;                  // 卵にこっそり近づくときの移動速度
     static const float kTimer_rotateDirection_basic_;    // 卵発見時にそちらの方を向くのにかかる時間
 
     //>> 変数
