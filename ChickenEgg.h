@@ -8,10 +8,10 @@ class ChickenEgg
 {
 public:
     //>> 定義
-    const float kGravity_ = 0.1f;           // 重力
-    const float kRadius_col_ = 1.f;         // 卵の当たり判定の半径
-    const float kRadius_detectSnake_ = 5.f; // 卵の蛇検知半径
-    static const int32_t skMaxCount_ = 5;   // 卵の数
+    const float kGravity_ = 0.1f;            // 重力
+    const float kRadius_col_ = 1.f;          // 卵の当たり判定の半径
+    const float kRadius_detectSnake_ = 30.f; // 卵の蛇検知半径
+    static const int32_t skMaxCount_ = 5;    // 卵の数
 
     //>> 関数
     ChickenEgg(void) = default;
@@ -49,5 +49,9 @@ private:
     Transform transform_;             // 座標など
     Vector3 vec3_newUp_;              // 新規上ベクトル
     Axis3 posture_;                   // 姿勢
+
+public:
+    //>> getter
+    int32_t GetApproachingEggSnakes(void) { return snakeCount_; }
 };
 

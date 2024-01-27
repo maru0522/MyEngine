@@ -37,7 +37,7 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     posture_ = Axis3::Initialize();
 
     transform_.position = { 0,90,-30 };
-    transform_.scale = { kRadius_detectSnake_,kRadius_detectSnake_,kRadius_detectSnake_ };
+    transform_.scale = { kRadius_col_,kRadius_col_,kRadius_col_ };
 }
 
 void ChickenEgg::Finalize(void)
@@ -163,7 +163,7 @@ void ChickenEgg::OnCollision_Col(void)
 
 void ChickenEgg::OnCollision_DetectSnake(void)
 {
-    if (sphere_collision_.GetOther()->GetID() == "snake_col")
+    if (sphere_detectSnake_.GetOther()->GetID() == "snake_col")
     {
         // 蛇を感知するたびカウントを +1
         snakeCount_++;

@@ -56,6 +56,8 @@ private:
     std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/chicken/chicken.obj") };
     //std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/player/Casual_Male.obj") };
 
+    int32_t num_approachingEggSnakes_;  // 卵に近づく蛇の数。
+
     PlayerBehaviorMachine pbm_;
     PlayerUI playerUI_;
     OperateGuideUI operateGuideUI_;
@@ -74,6 +76,7 @@ public:
     void SetAxes(const Axis3& arg_axes) { commonInfo_->axes_ = arg_axes; }
     void SetPosition(const Vector3& arg_pos) { commonInfo_->transform_.position = arg_pos; }
     void SetEventState(PlayerEventState arg_eventState) { commonInfo_->eventState_ = arg_eventState; }
+    void SetApproachingEggSnakes(int32_t arg_snakes) { num_approachingEggSnakes_ = arg_snakes; }
 
     //>> getter
     TransformMatrix* GetTransMatPtr(void) { return &commonInfo_->matTrans_; }

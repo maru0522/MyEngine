@@ -154,6 +154,9 @@ void DemoScene::Initialize(void)
 void DemoScene::Update(void)
 {
     stone_->Update();
+
+    int32_t snakeCount = chikenegg_.GetApproachingEggSnakes();
+    player_->SetApproachingEggSnakes(snakeCount);
     chikenegg_.Update();
 
     //a_.Execute();

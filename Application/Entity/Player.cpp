@@ -116,6 +116,11 @@ void Player::Update(void)
     static Vector3 dg;
     if (pbm_.GetStatePtr()->debug_ggggg_.IsNonZero()) dg = pbm_.GetStatePtr()->debug_ggggg_;
     GUI::Text("vec_pr:          %f,%f,%f", dg.x, dg.y, dg.z);
+
+    if (num_approachingEggSnakes_)
+    {
+        GUI::Text("near eggs snakes: %d", num_approachingEggSnakes_);
+    }
     GUI::End();
 #endif // _DEBUG
 
