@@ -219,7 +219,7 @@ void Snake::OnCollision(void)
         // 現在座標の取得
         Vector3 currentPos = commonInfo_->transform_.position;
         // 蛇から他の蛇への反対方向のベクトル * めり込み距離 ////
-        currentPos += -snake2OtherSnake.Normalize() * diff;
+        currentPos += -snake2OtherSnake.Normalize() * diff * 1.5f;
         // 座標反映
         commonInfo_->transform_.position = currentPos;
         sphere_collision_.center = commonInfo_->transform_.position;
