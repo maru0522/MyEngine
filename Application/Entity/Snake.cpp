@@ -185,6 +185,7 @@ void Snake::OnCollision(void)
         // 新しい上ベクトル用に保存。
         commonInfo_->vec3_newUp_ = center2PlayerVec.Normalize();
     }
+
     if (sphere_collision_.GetOther()->GetID() == "terrainSurface")
     {
         // ジャンプ量
@@ -205,6 +206,26 @@ void Snake::OnCollision(void)
 
         commonInfo_->transform_.position = currentPos;
     }
+
+    if (sphere_collision_.GetOther()->GetID() == "snake_col")
+    {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
+
+        // 蛇から他の蛇へのベクトル
+        const Vector3& snake2OtherSnake = Vector3(other->center - sphere_collision_.center);
+        // めり込み距離を出す (二つの半径の和 - 二つの中心点の距離 ）
+        float diff = (other->radius + sphere_collision_.radius) - snake2OtherSnake.Length();
+
+        // 現在座標の取得
+        Vector3 currentPos = commonInfo_->transform_.position;
+        // 蛇から他の蛇への反対方向のベクトル * めり込み距離 ////
+        currentPos += -snake2OtherSnake.Normalize() * diff;
+        // 座標反映
+        commonInfo_->transform_.position = currentPos;
+        sphere_collision_.center = commonInfo_->transform_.position;
+        sphere_detect_.center = commonInfo_->transform_.position;
+    }
+
     //if (sphere_collision_.GetOther()->GetID() == "player")
     //{
     //    // 捕獲されたフラグをtrue
