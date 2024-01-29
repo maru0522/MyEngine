@@ -423,6 +423,19 @@ void SnakeBehavior_Escape::RequirementCheck(void)
 }
 
 // ---------------------------------------------------------------------------------------------
+void SnakeBehavior_EscapeStomach::Initialize(Snake* arg_snakePtr)
+{
+    SnakeBehavior_Escape::Initialize(arg_snakePtr);
+
+    nextBehavior_ = SnakeBehavior::NONE;
+    currentBehavior_ = SnakeBehavior::ESCAPE_STOMACH;
+}
+
+void SnakeBehavior_EscapeStomach::Entry(void)
+{
+}
+
+// ---------------------------------------------------------------------------------------------
 void SnakeBehavior_LeaveEgg::Initialize(Snake* arg_snakePtr)
 {
     ISnakeBehavior::Initialize(arg_snakePtr);
@@ -558,5 +571,3 @@ void SnakeBehaviorMachine::NextStateCheck(void)
         // それぞれの、"振舞い"に必要な情報をあてがう
     }
 }
-
-

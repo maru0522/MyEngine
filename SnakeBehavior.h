@@ -185,12 +185,43 @@ private:
     DeltaTimer timer_rotateDirection_; // 卵の方を向くのにかける時間
 };
 
-class SnakeBehavior_Escape final : public ISnakeBehavior
+class SnakeBehavior_Escape : public ISnakeBehavior
 {
 public:
     //>> 関数
     SnakeBehavior_Escape(void) : ISnakeBehavior() {};
     virtual ~SnakeBehavior_Escape(void) override = default;
+
+    //　初期化
+    virtual void Initialize(Snake* arg_snakePtr);
+
+    // 状態遷移時の初期化処理
+    virtual void Entry(void);
+    // 当該状態時の様子
+    virtual void Execute(void);
+    // 状態遷移遷移前の終了処理
+    virtual void Exit(void) {};
+
+private:
+    // 移動する
+    void Move(void);
+    // プレイヤーから遠ざかる
+    void EscapePlayer(void);
+
+    // 他状態への遷移要件確認
+    virtual void RequirementCheck(void);
+
+    //>> 変数
+    bool is_enoughEscape_{};          // 十分にプレイヤーから逃げたか
+    float distance_escapePlayer_{};   // プレイヤーから逃げた距離
+};
+
+class SnakeBehavior_EscapeStomach final : public SnakeBehavior_Escape
+{
+public:
+    //>> 関数
+    SnakeBehavior_EscapeStomach(void) : SnakeBehavior_Escape() {};
+    virtual ~SnakeBehavior_EscapeStomach(void) override = default;
 
     //　初期化
     virtual void Initialize(Snake* arg_snakePtr);
