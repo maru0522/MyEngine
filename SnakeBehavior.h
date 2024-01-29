@@ -46,6 +46,7 @@ public:
 protected:
     // 入力されたラジアンだけ、プレイヤーの向きを回転させる（yaw角）
     void RotateDirection(float arg_radian);
+    void Move(float arg_speed);
 
     // 縦方向の移動量に、重力分を加算する。
     void Process_Gravity(void);
@@ -113,8 +114,6 @@ public:
     virtual void Exit(void) {};
 
 protected:
-    // 移動する
-    void Move(void);
     // ランダムな向きを向きながら歩き回る
     void RamdomWalk(void);
 
@@ -145,8 +144,6 @@ public:
     virtual void Exit(void) {};
 
 private:
-    // 移動する
-    void Move(void);
     // ランダムな向きを向きながら歩き回る
     void LeaveChikenEgg(void);
 
@@ -172,8 +169,6 @@ public:
     virtual void Exit(void) {};
 
 private:
-    // 移動する
-    void Move(void);
     // 卵に近づく
     void ApproachEgg(void);
 
@@ -203,8 +198,6 @@ public:
     virtual void Exit(void) {};
 
 private:
-    // 移動する
-    void Move(void);
     // プレイヤーから遠ざかる
     void EscapePlayer(void);
 
@@ -234,8 +227,6 @@ public:
     virtual void Exit(void) {};
 
 private:
-    // 移動する
-    void Move(void);
     // プレイヤーから遠ざかる
     void EscapePlayer(void);
 
@@ -265,8 +256,6 @@ public:
     virtual void Exit(void) {};
 
 private:
-    // 移動する
-    void Move(void);
     // 鶏の巣から遠ざかる
     void LeaveChikenEgg(void);
 

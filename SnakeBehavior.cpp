@@ -28,6 +28,19 @@ void ISnakeBehavior::RotateDirection(float arg_radian)
     commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
 }
 
+void ISnakeBehavior::Move(float arg_speed)
+{
+    // 重力処理（垂直方向の移動量）
+    Process_Gravity();
+    // 正面への移動（平行方向への移動）
+    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * arg_speed;
+
+    // 移動総量計算
+    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
+    // 座標更新
+    commonInfo_->transform_.position += velocity_total;
+}
+
 void ISnakeBehavior::Process_Gravity(void)
 {
     // 重力
@@ -178,19 +191,6 @@ void SnakeBehavior_Move::Execute(void)
     Process_RedefineForwardVec();
 }
 
-void SnakeBehavior_Move::Move(void)
-{
-    // 重力処理（垂直方向の移動量）
-    Process_Gravity();
-    // 正面への移動（平行方向への移動）
-    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_default_;
-
-    // 移動総量計算
-    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
-    // 座標更新
-    commonInfo_->transform_.position += velocity_total;
-}
-
 void SnakeBehavior_Move::RamdomWalk(void)
 {
 #ifdef _DEBUG
@@ -211,7 +211,7 @@ void SnakeBehavior_Move::RamdomWalk(void)
     float rad = Math::Function::ToRadian(rotateDegree_);
     RotateDirection(rad);
 
-    Move();
+    ISnakeBehavior::Move(commonInfo_->kMoveSpd_default_);
 
     // タイマーの進行割合が100%なら
     const float rate = timer_randomWalk_.GetTimeRate();
@@ -263,10 +263,6 @@ void SnakeBehavior_MoveStomach::Execute(void)
 {
 }
 
-void SnakeBehavior_MoveStomach::Move(void)
-{
-}
-
 void SnakeBehavior_MoveStomach::RequirementCheck(void)
 {
 }
@@ -302,19 +298,6 @@ void SnakeBehavior_Sneak::Execute(void)
     Process_RecalculatePosture();
 }
 
-void SnakeBehavior_Sneak::Move(void)
-{
-    // 重力処理（垂直方向の移動量）
-    Process_Gravity();
-    // 正面への移動（平行方向への移動）
-    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_sneak_;
-
-    // 移動総量計算
-    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
-    // 座標更新
-    commonInfo_->transform_.position += velocity_total;
-}
-
 void SnakeBehavior_Sneak::ApproachEgg(void)
 {
     // タイマーの更新
@@ -325,7 +308,7 @@ void SnakeBehavior_Sneak::ApproachEgg(void)
     //commonInfo_->axes_.forward = Math::Ease3::EaseInSin(rate, vec3_entryForward_, commonInfo_->vec3_toEgg_); // EaseInOutSine
     commonInfo_->axes_.forward = commonInfo_->vec3_toEgg_;
 
-    Move();
+    ISnakeBehavior::Move(commonInfo_->kMoveSpd_sneak_);
 }
 
 void SnakeBehavior_Sneak::RequirementCheck(void)
@@ -383,27 +366,18 @@ void SnakeBehavior_Escape::Execute(void)
     Process_RecalculatePosture();
 }
 
-void SnakeBehavior_Escape::Move(void)
-{
-    // 重力処理（垂直方向の移動量）
-    Process_Gravity();
-    // 正面への移動（平行方向への移動）
-    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_escape_;
-
-    // 移動総量計算
-    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
-    // 座標更新
-    commonInfo_->transform_.position += velocity_total;
-}
-
 void SnakeBehavior_Escape::EscapePlayer(void)
 {
-    // 逃走方向を算出し、正面ベクトルに適用
-    Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
-    commonInfo_->axes_.forward = vec3_escapePlayer;
+    // ESCAPE中にプレイヤーを再検知した際は正面ベクトルを更新
+    if (commonInfo_->is_detectPlayer_)
+    {
+        // 逃走方向を算出し、正面ベクトルに適用
+        Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
+        commonInfo_->axes_.forward = vec3_escapePlayer;
+    }
 
     // 移動処理
-    Move();
+    ISnakeBehavior::Move(commonInfo_->kMoveSpd_escape_);
 
     // 逃走距離の合計に加算
     distance_escapePlayer_ += commonInfo_->kMoveSpd_escape_;
@@ -461,19 +435,6 @@ void SnakeBehavior_LeaveEgg::Execute(void)
     Process_RecalculatePosture();
 }
 
-void SnakeBehavior_LeaveEgg::Move(void)
-{
-    // 重力処理（垂直方向の移動量）
-    Process_Gravity();
-    // 正面への移動（平行方向への移動）
-    const Vector3 velocity_horizontal = commonInfo_->axes_.forward * commonInfo_->kMoveSpd_leaveEgg_;
-
-    // 移動総量計算
-    const Vector3& velocity_total = Process_CalculateVelocity(velocity_horizontal);
-    // 座標更新
-    commonInfo_->transform_.position += velocity_total;
-}
-
 void SnakeBehavior_LeaveEgg::LeaveChikenEgg(void)
 {
     // 卵から遠ざかる方向のベクトル
@@ -492,7 +453,7 @@ void SnakeBehavior_LeaveEgg::LeaveChikenEgg(void)
     // 遠ざかる方向を正面ベクトルとして設定
     commonInfo_->axes_.forward = vec3_egg2Snake.Normalize();
     // 移動関数呼び出し
-    Move();
+    ISnakeBehavior::Move(commonInfo_->kMoveSpd_leaveEgg_);
 }
 
 void SnakeBehavior_LeaveEgg::RequirementCheck(void)
