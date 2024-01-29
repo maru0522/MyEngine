@@ -37,6 +37,7 @@ public:
 
     // SnakeBhevior::ESCAPE
     static const float kMoveSpd_escape_;                 // プレイヤーから逃げる時の移動速度
+    static const float kDistance_escapePlayer_;          // どの程度の距離プレイヤーから逃げるか
 
     // SnakeBhevior::LEAVE_EGG
     static const float kMoveSpd_leaveEgg_;               // 鶏の巣から遠ざかる時の移動速度

@@ -26,6 +26,7 @@ const float SnakeCommonInfomation::kMoveSpd_sneak_{ 0.08f };                  //
 const float SnakeCommonInfomation::kTimer_rotateDirection_basic_{1.f};        // 卵発見時にそちらの方を向くのにかかる時間
 
 const float SnakeCommonInfomation::kMoveSpd_escape_{ 0.32f };          // プレイヤーから逃げる時の移動速度
+const float SnakeCommonInfomation::kDistance_escapePlayer_{ 20.f };   // プレイヤーから逃げる時の移動速度
 
 const float SnakeCommonInfomation::kMoveSpd_leaveEgg_{ 0.04f };        // 鶏の巣から遠ざかる時の移動速度
 const float SnakeCommonInfomation::kDistance_leaveEgg_{ 40.f };        // どの程度の距離卵から離れるか

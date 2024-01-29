@@ -212,7 +212,8 @@ private:
     virtual void RequirementCheck(void);
 
     //>> 変数
-    //DeltaTimer timer_rotateDirection_; // 卵の方を向くのにかける時間
+    bool is_enoughEscape_{};          // 十分にプレイヤーから逃げたか
+    float distance_escapePlayer_{};   // プレイヤーから逃げた距離
 };
 
 class SnakeBehavior_LeaveEgg final : public ISnakeBehavior
@@ -243,7 +244,7 @@ private:
 
     //>> 変数
     Vector3 pos_chikenEgg_;         // 鶏の巣の座標
-    bool is_enoughLeave_{};           // 十分に離れたかどうか
+    bool is_enoughLeave_{};         // 十分に離れたかどうか
 };
 
 class SnakeBehaviorFactory final

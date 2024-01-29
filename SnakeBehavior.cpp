@@ -369,9 +369,6 @@ void SnakeBehavior_Escape::Entry(void)
     //vec3_entryForward_ = commonInfo_->axes_.forward;
     Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
     commonInfo_->axes_.forward = vec3_escapePlayer;
-
-    // タイマー起動
-    //timer_rotateDirection_.Start(SnakeCommonInfomation::kTimer_rotateDirection_basic_);
 }
 
 void SnakeBehavior_Escape::Execute(void)
@@ -401,14 +398,23 @@ void SnakeBehavior_Escape::Move(void)
 
 void SnakeBehavior_Escape::EscapePlayer(void)
 {
+    // 逃走方向を算出し、正面ベクトルに適用
     Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
     commonInfo_->axes_.forward = vec3_escapePlayer;
+
+    // 移動処理
     Move();
+
+    // 逃走距離の合計に加算
+    distance_escapePlayer_ += commonInfo_->kMoveSpd_escape_;
+    // 逃走距離の合計が、規定値"kDistance_escapePlayer_"以上なら、is_enoughEscape をtrueにする
+    if (distance_escapePlayer_ >= commonInfo_->kDistance_escapePlayer_) { is_enoughEscape_ = true; }
 }
 
 void SnakeBehavior_Escape::RequirementCheck(void)
 {
-    if (commonInfo_->is_detectPlayer_ == false)
+    // プレイヤーを検知していない　&& 十分に逃げた
+    if (commonInfo_->is_detectPlayer_ == false && is_enoughEscape_)
     {
         // 蛇の振る舞いをMOVEへ変更
         nextBehavior_ = SnakeBehavior::MOVE;
