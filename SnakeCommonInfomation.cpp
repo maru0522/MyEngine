@@ -20,7 +20,8 @@ const float SnakeCommonInfomation::kTimer_randomWalk_max_{ 12.f };     // ラン
 const float SnakeCommonInfomation::kDegree_randomWalk_min_{ 0.1f };    // 方向転換時の角度の最小値
 const float SnakeCommonInfomation::kDegree_randomWalk_max_{ 1.f };     // 方向転換時の角度の最大値 ※最小~最大の間でランダムに決定される。
 
-const float SnakeCommonInfomation::kMoveSpd_stomach_{ 0.12f };         // 卵消化中の移動速度
+const float SnakeCommonInfomation::kMoveSpd_stomach_{ 0.1f };          // 卵消化中の移動速度
+const float SnakeCommonInfomation::kTimer_completeEateEgg_{ 15.f };    // 卵消化完了にかかる時間
 
 const float SnakeCommonInfomation::kMoveSpd_sneak_{ 0.08f };                  // 卵にこっそり近づくときの移動速度
 const float SnakeCommonInfomation::kTimer_rotateDirection_basic_{1.f};        // 卵発見時にそちらの方を向くのにかかる時間

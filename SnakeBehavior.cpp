@@ -84,6 +84,76 @@ void ISnakeBehavior::Process_RecalculatePosture(void)
     commonInfo_->axes_.forward = forward;
     commonInfo_->axes_.right = right;
 }
+void ISnakeBehavior::Process_DebugGUI(void)
+{
+#ifdef _DEBUG
+    GUI::Begin("snake_behavior");
+
+    switch (nextBehavior_)
+    {
+    case SnakeBehavior::NONE:
+        GUI::Text("next: NONE");
+        break;
+    case SnakeBehavior::IDLE:
+        GUI::Text("next: IDLE");
+        break;
+    case SnakeBehavior::MOVE:
+        GUI::Text("next: MOVE");
+        break;
+    case SnakeBehavior::MOVE_STOMACH:
+        GUI::Text("next: MOVE_STOMACH");
+        break;
+    case SnakeBehavior::SNEAK:
+        GUI::Text("next: SNEAK");
+        break;
+    case SnakeBehavior::ESCAPE:
+        GUI::Text("next: ESCAPE");
+        break;
+    case SnakeBehavior::ESCAPE_STOMACH:
+        GUI::Text("next: ESCAPE_STOMACH");
+        break;
+    case SnakeBehavior::LEAVE_EGG:
+        GUI::Text("next: LEAVE_EGG");
+        break;
+    default:
+        GUI::Text("next: unknown");
+        break;
+    }
+
+    switch (currentBehavior_)
+    {
+    case SnakeBehavior::NONE:
+        GUI::Text("current: NONE");
+        break;
+    case SnakeBehavior::IDLE:
+        GUI::Text("current: IDLE");
+        break;
+    case SnakeBehavior::MOVE:
+        GUI::Text("current: MOVE");
+        break;
+    case SnakeBehavior::MOVE_STOMACH:
+        GUI::Text("current: MOVE_STOMACH");
+        break;
+    case SnakeBehavior::SNEAK:
+        GUI::Text("current: SNEAK");
+        break;
+    case SnakeBehavior::ESCAPE:
+        GUI::Text("current: ESCAPE");
+        break;
+    case SnakeBehavior::ESCAPE_STOMACH:
+        GUI::Text("current: ESCAPE_STOMACH");
+        break;
+    case SnakeBehavior::LEAVE_EGG:
+        GUI::Text("current: LEAVE_EGG");
+        break;
+    default:
+        GUI::Text("current: unknown");
+        break;
+    }
+
+    GUI::End();
+#endif // _DEBUG
+}
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -106,6 +176,8 @@ void SnakeBehavior_Idle::Entry(void)
 
 void SnakeBehavior_Idle::Execute(void)
 {
+    Process_DebugGUI();
+
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
@@ -181,6 +253,8 @@ void SnakeBehavior_Move::Entry(void)
 
 void SnakeBehavior_Move::Execute(void)
 {
+    Process_DebugGUI();
+
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
@@ -288,6 +362,8 @@ void SnakeBehavior_Sneak::Entry(void)
 
 void SnakeBehavior_Sneak::Execute(void)
 {
+    Process_DebugGUI();
+
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
@@ -356,17 +432,19 @@ void SnakeBehavior_Escape::Entry(void)
 
 void SnakeBehavior_Escape::Execute(void)
 {
+    Process_DebugGUI();
+
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
     // 卵に接近する。。
-    EscapePlayer();
+    EscapePlayer(commonInfo_->kMoveSpd_escape_);
 
     // 姿勢再計算
     Process_RecalculatePosture();
 }
 
-void SnakeBehavior_Escape::EscapePlayer(void)
+void SnakeBehavior_Escape::EscapePlayer(float arg_moveSpd)
 {
     // ESCAPE中にプレイヤーを再検知した際は正面ベクトルを更新
     if (commonInfo_->is_detectPlayer_)
@@ -377,10 +455,10 @@ void SnakeBehavior_Escape::EscapePlayer(void)
     }
 
     // 移動処理
-    ISnakeBehavior::Move(commonInfo_->kMoveSpd_escape_);
+    ISnakeBehavior::Move(arg_moveSpd);
 
     // 逃走距離の合計に加算
-    distance_escapePlayer_ += commonInfo_->kMoveSpd_escape_;
+    distance_escapePlayer_ += arg_moveSpd;
     // 逃走距離の合計が、規定値"kDistance_escapePlayer_"以上なら、is_enoughEscape をtrueにする
     if (distance_escapePlayer_ >= commonInfo_->kDistance_escapePlayer_) { is_enoughEscape_ = true; }
 }
@@ -407,6 +485,47 @@ void SnakeBehavior_EscapeStomach::Initialize(Snake* arg_snakePtr)
 
 void SnakeBehavior_EscapeStomach::Entry(void)
 {
+    // 遷移時の正面ベクトルを記録
+    //vec3_entryForward_ = commonInfo_->axes_.forward;
+    Vector3 vec3_escapePlayer = commonInfo_->vec3_toPlayer_ * -1;
+    commonInfo_->axes_.forward = vec3_escapePlayer;
+}
+
+void SnakeBehavior_EscapeStomach::Execute(void)
+{
+    Process_DebugGUI();
+
+    // 姿勢の更新 + 右vec再計算
+    Process_UpdatePosture();
+
+    // 卵に接近する。。
+    EscapePlayer(commonInfo_->kMoveSpd_stomach_);
+
+    // 姿勢再計算
+    Process_RecalculatePosture();
+}
+
+void SnakeBehavior_EscapeStomach::EscapePlayer(float arg_moveSpd)
+{
+    SnakeBehavior_Escape::EscapePlayer(arg_moveSpd);
+
+    // 消化時間のタイマー更新
+    commonInfo_->timer_completeEatEgg_.Update();
+    // タイマーの進行割合
+    const float rate = commonInfo_->timer_completeEatEgg_.GetTimeRate();
+    // 進行割合が100%なら卵を食べているフラグをfalse
+    if (rate >= 1.f) { commonInfo_->is_eatChickenEgg_ = false; }
+}
+
+void SnakeBehavior_EscapeStomach::RequirementCheck(void)
+{
+    // 卵を食べていない
+    if (commonInfo_->is_eatChickenEgg_ == false)
+    {
+        // 蛇の振る舞いをMOVEへ変更
+        nextBehavior_ = SnakeBehavior::MOVE;
+        return;
+    }
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -421,10 +540,16 @@ void SnakeBehavior_LeaveEgg::Initialize(Snake* arg_snakePtr)
 void SnakeBehavior_LeaveEgg::Entry(void)
 {
     pos_chikenEgg_ = commonInfo_->pos_chickenEgg_;
+
+    // タイマーの初期化と起動
+    commonInfo_->timer_completeEatEgg_.Finish(true);
+    commonInfo_->timer_completeEatEgg_.Start(commonInfo_->kTimer_completeEateEgg_);
 }
 
 void SnakeBehavior_LeaveEgg::Execute(void)
 {
+    Process_DebugGUI();
+
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
@@ -464,6 +589,14 @@ void SnakeBehavior_LeaveEgg::RequirementCheck(void)
         nextBehavior_ = SnakeBehavior::MOVE_STOMACH;
         return;
     }
+
+    // プレイヤーを検知
+    if (commonInfo_->is_detectPlayer_)
+    {
+        // 蛇の振る舞いをESCAPE_STOMACHへ変更
+        nextBehavior_ = SnakeBehavior::ESCAPE_STOMACH;
+        return;
+    }
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -478,6 +611,7 @@ std::unique_ptr<ISnakeBehavior> SnakeBehaviorFactory::Create(SnakeBehavior arg_b
     else if (arg_behavior == SnakeBehavior::MOVE_STOMACH) { behavior = std::make_unique<SnakeBehavior_MoveStomach>(); }
     else if (arg_behavior == SnakeBehavior::SNEAK) { behavior = std::make_unique<SnakeBehavior_Sneak>(); }
     else if (arg_behavior == SnakeBehavior::ESCAPE) { behavior = std::make_unique<SnakeBehavior_Escape>(); }
+    else if (arg_behavior == SnakeBehavior::ESCAPE_STOMACH) { behavior = std::make_unique<SnakeBehavior_EscapeStomach>(); }
     else if (arg_behavior == SnakeBehavior::LEAVE_EGG) { behavior = std::make_unique<SnakeBehavior_LeaveEgg>(); }
 
     // 初期化関数の実行

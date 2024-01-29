@@ -28,8 +28,9 @@ public:
     static const float kDegree_randomWalk_min_;    // ランダムに移動し続ける際の角速度の最小値
     static const float kDegree_randomWalk_max_;    // ランダムに移動し続ける際の角速度の最大値 ※最小~最大の間でランダムに決定される。
 
-    // SnakeBhevior::MOVE_STOMACH
-    static const float kMoveSpd_stomach_;          // 卵消化中の移動速度（& ESCAPE_STOMACH）
+    // SnakeBhevior::MOVE_STOMACH && ESCAPE_STOMACH
+    static const float kMoveSpd_stomach_;          // 卵消化中の移動速度
+    static const float kTimer_completeEateEgg_;    // 卵消化完了にかかる時間
 
     // SnakeBhevior::SNEAK
     static const float kMoveSpd_sneak_;                  // 卵にこっそり近づくときの移動速度
@@ -45,15 +46,17 @@ public:
 
 
     //>> 変数
-    Vector3 vec3_toEgg_;     // 卵への方向
-    bool is_detectEgg_{};    // 卵を検知したか
+    Vector3 vec3_toEgg_;                // 卵への方向
+    bool is_detectEgg_{};               // 卵を検知したか
 
-    Vector3 vec3_toPlayer_;  // プレイヤーへの方向
-    bool is_detectPlayer_{}; // プレイヤーを検知したか
+    Vector3 vec3_toPlayer_;             // プレイヤーへの方向
+    bool is_detectPlayer_{};            // プレイヤーを検知したか
 
-    Vector3 pos_chickenEgg_; // 鶏の巣の座標
+    Vector3 pos_chickenEgg_;            // 鶏の巣の座標
 
-    bool is_eatChickenEgg_;  // 卵を食べたか
+    bool is_eatChickenEgg_;             // 卵を食べたか
+    DeltaTimer timer_completeEatEgg_;   // 卵を消化しきるまでの時間
+
     bool is_landing_;
 
 

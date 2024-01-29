@@ -59,6 +59,9 @@ protected:
     // 姿勢の再計算
     void Process_RecalculatePosture(void);
 
+    // imgui
+    void Process_DebugGUI(void);
+
     //>> 変数
     SnakeBehavior nextBehavior_{};
     SnakeBehavior currentBehavior_{};
@@ -81,15 +84,15 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
 
 private:
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
+    virtual void RequirementCheck(void) override;
 
     //>> 変数
     bool is_active_{};
@@ -107,18 +110,18 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
 
 protected:
     // ランダムな向きを向きながら歩き回る
     void RamdomWalk(void);
 
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
+    virtual void RequirementCheck(void) override;
 
     //>> 変数
     bool is_needRest_{};
@@ -137,18 +140,18 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
 
 private:
     // ランダムな向きを向きながら歩き回る
     void LeaveChikenEgg(void);
 
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
+    virtual void RequirementCheck(void) override;
 };
 
 class SnakeBehavior_Sneak final : public ISnakeBehavior
@@ -162,18 +165,18 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
 
 private:
     // 卵に近づく
     void ApproachEgg(void);
 
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
+    virtual void RequirementCheck(void) override;
 
     //>> 変数
     Vector3 vec3_entryForward_;        // 遷移時の正面ベクトル
@@ -191,19 +194,21 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
+
+protected:
+    // プレイヤーから遠ざかる
+    virtual void EscapePlayer(float arg_moveSpd);
 
 private:
-    // プレイヤーから遠ざかる
-    void EscapePlayer(void);
-
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
+    virtual void RequirementCheck(void) override;
 
+protected:
     //>> 変数
     bool is_enoughEscape_{};          // 十分にプレイヤーから逃げたか
     float distance_escapePlayer_{};   // プレイヤーから逃げた距離
@@ -220,22 +225,17 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
 
 private:
-    // プレイヤーから遠ざかる
-    void EscapePlayer(void);
+    virtual void EscapePlayer(float arg_moveSpd) override;
 
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
-
-    //>> 変数
-    bool is_enoughEscape_{};          // 十分にプレイヤーから逃げたか
-    float distance_escapePlayer_{};   // プレイヤーから逃げた距離
+    virtual void RequirementCheck(void) override;
 };
 
 class SnakeBehavior_LeaveEgg final : public ISnakeBehavior
@@ -249,18 +249,18 @@ public:
     virtual void Initialize(Snake* arg_snakePtr);
 
     // 状態遷移時の初期化処理
-    virtual void Entry(void);
+    virtual void Entry(void) override;
     // 当該状態時の様子
-    virtual void Execute(void);
+    virtual void Execute(void) override;
     // 状態遷移遷移前の終了処理
-    virtual void Exit(void) {};
+    virtual void Exit(void) override {};
 
 private:
     // 鶏の巣から遠ざかる
     void LeaveChikenEgg(void);
 
     // 他状態への遷移要件確認
-    virtual void RequirementCheck(void);
+    virtual void RequirementCheck(void) override;
 
     //>> 変数
     Vector3 pos_chikenEgg_;         // 鶏の巣の座標

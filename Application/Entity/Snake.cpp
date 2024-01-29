@@ -236,7 +236,7 @@ void Snake::OnCollision(void)
     if (sphere_detect_.GetOther()->GetID() == "chickenEgg_col")
     {
         // 卵を食べたかどうかのフラグをtrue
-        commonInfo_->is_eatChickenEgg_ = true;
+        commonInfo_->is_eatChickenEgg_ = true; // snakeBehavior内でfalseにする処理を行う
     }
 }
 
