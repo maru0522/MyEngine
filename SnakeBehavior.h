@@ -102,6 +102,15 @@ private:
 class SnakeBehavior_Move : public ISnakeBehavior
 {
 public:
+    //>> 定義
+    enum class WalkType
+    {
+        CURVE,
+        LINEAR,
+
+        MAX,
+    };
+
     //>> 関数
     SnakeBehavior_Move(void) : ISnakeBehavior() {};
     virtual ~SnakeBehavior_Move(void) override = default;
@@ -118,15 +127,20 @@ public:
 
 protected:
     // ランダムな向きを向きながら歩き回る
-    void RamdomWalk(void);
+    void RamdomWalk(float arg_spd);
+    void Linear(float arg_spd);
 
+private:
     // 他状態への遷移要件確認
     virtual void RequirementCheck(void) override;
 
+protected:
     //>> 変数
     bool is_needRest_{};
-    float rotateDegree_{};
     DeltaTimer timer_randomWalk_;
+    WalkType pattern_{};
+
+    float rotateDegree_{};
 };
 
 class SnakeBehavior_MoveStomach final : public SnakeBehavior_Move

@@ -237,6 +237,11 @@ void SnakeBehavior_Move::Entry(void)
     // フラグ初期化
     is_needRest_ = false;
 
+    // 歩き方をランダムに決定
+    int32_t min = (int32_t)WalkType::CURVE;         // 最小値
+    int32_t max = ((int32_t)WalkType::MAX) - 1;     // 最大値
+    pattern_ = (WalkType)Math::Function::Random<int32_t>(min, max);
+
     // 回転角度決定
     rotateDegree_ = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_randomWalk_min_, SnakeCommonInfomation::kDegree_randomWalk_max_);
     // 回転方向
@@ -245,6 +250,13 @@ void SnakeBehavior_Move::Entry(void)
     const bool is_rotateLeft = randomNum > threshold;
     // 回転方向を考慮する
     if (is_rotateLeft) { rotateDegree_ *= -1; }
+
+    if (pattern_ == WalkType::LINEAR)
+    {
+        // 回転移動処理
+        float rad = Math::Function::ToRadian(rotateDegree_);
+        RotateDirection(rad * 2.f);
+    }
 
     // どのくらいの時間ランダムに移動し続けるのか、"kTimer_randomWalk_min_" ~ "kTiImer_randomWalk_max_"の間からランダムに決定
     const float activeTime = Math::Function::Random<float>(SnakeCommonInfomation::kTimer_randomWalk_min_, SnakeCommonInfomation::kTimer_randomWalk_max_);
@@ -258,14 +270,19 @@ void SnakeBehavior_Move::Execute(void)
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
-    // ランダムに動き回る。
-    RamdomWalk();
+    // 歩き方別の関数ポインタテーブル
+    void(SnakeBehavior_Move:: * func[]) (float arg_spd) = {
+        &SnakeBehavior_Move::RamdomWalk,
+        &SnakeBehavior_Move::Linear,
+    };
+    // 上記テーブルに要素数と引数を渡して実行
+    (this->*func[(int32_t)pattern_])(commonInfo_->kMoveSpd_default_);
 
     // 姿勢再計算
     Process_RedefineForwardVec();
 }
 
-void SnakeBehavior_Move::RamdomWalk(void)
+void SnakeBehavior_Move::RamdomWalk(float arg_spd)
 {
 #ifdef _DEBUG
     GUI::Begin("SnakeBehavior_Move");
@@ -285,7 +302,31 @@ void SnakeBehavior_Move::RamdomWalk(void)
     float rad = Math::Function::ToRadian(rotateDegree_);
     RotateDirection(rad);
 
-    ISnakeBehavior::Move(commonInfo_->kMoveSpd_default_);
+    ISnakeBehavior::Move(arg_spd);
+
+    // タイマーの進行割合が100%なら
+    const float rate = timer_randomWalk_.GetTimeRate();
+    // 休憩フラグを立てる。
+    if (rate >= 1.f) { is_needRest_ = true; }
+}
+
+void SnakeBehavior_Move::Linear(float arg_spd)
+{
+#ifdef _DEBUG
+    GUI::Begin("SnakeBehavior_Move");
+    GUI::SliderFloat("deg", &rotateDegree_, 0.f, 360.f);
+    GUI::End();
+
+    if (KEYS::IsDown(DIK_9))
+    {
+        commonInfo_->axes_ = Axis3::Initialize();
+    }
+#endif // _DEBUG
+
+    // タイマーの更新
+    timer_randomWalk_.Update();
+
+    ISnakeBehavior::Move(arg_spd);
 
     // タイマーの進行割合が100%なら
     const float rate = timer_randomWalk_.GetTimeRate();
@@ -331,10 +372,12 @@ void SnakeBehavior_MoveStomach::Initialize(Snake* arg_snakePtr)
 
 void SnakeBehavior_MoveStomach::Entry(void)
 {
+    SnakeBehavior_Move::Entry();
 }
 
 void SnakeBehavior_MoveStomach::Execute(void)
 {
+
 }
 
 void SnakeBehavior_MoveStomach::RequirementCheck(void)
