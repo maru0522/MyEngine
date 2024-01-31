@@ -240,7 +240,7 @@ void SnakeBehavior_Move::Entry(void)
     // 歩き方をランダムに決定
     int32_t min = (int32_t)WalkType::CURVE;         // 最小値
     int32_t max = ((int32_t)WalkType::MAX) - 1;     // 最大値
-    pattern_ = (WalkType)Math::Function::Random<int32_t>(min, max);
+    pattern_ = (WalkType)Math::Function::Random<int32_t>(min, max, true);
 
     // 回転角度決定
     rotateDegree_ = Math::Function::Random<float>(SnakeCommonInfomation::kDegree_randomWalk_min_, SnakeCommonInfomation::kDegree_randomWalk_max_);

@@ -45,10 +45,11 @@ namespace Math {
         }
 
         template<typename T> // 指定した型のランダムな値を返却
-        inline T Random(double min, double max) {
-
+        inline T Random(double min, double max, bool is_round = false) {
             std::uniform_real_distribution<> dist1(min, max);
+            auto result = dist1(sEngine);
 
+            if (is_round) { return static_cast<T>(std::round(result)); }
             return static_cast<T>(dist1(sEngine));
         }
 
