@@ -30,9 +30,9 @@ std::unique_ptr<IPlayerBehavior> PlayerBehaviorFactory::Create(Player* arg_playe
 }
 
 //----------------------------------------------------------------------------------------
-PlayerBehaviorMachine::PlayerBehaviorMachine(Player* arg_playerPtr, PlayerBehavior arg_state)
-    : playerPtr_(arg_playerPtr)
+void PlayerBehaviorMachine::Initialize(Player* arg_playerPtr, PlayerBehavior arg_state)
 {
+    playerPtr_ = arg_playerPtr;
     statePtr_ = stateFactory_.Create(arg_playerPtr, arg_state);
 }
 

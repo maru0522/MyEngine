@@ -17,14 +17,17 @@ public:
     const float kRepelCameraArea_{ 100.f };
 
     // 関数
-    Planet(void);
-    ~Planet(void);
+    Planet(void) = default;
+    ~Planet(void) = default;
 
+    void Initialize(CollisionManager* arg_colMPtr);
     void Update(void);
     void Draw(void);
+    void Finalize(void);
 
     Transform transform_;
 
+    CollisionManager* colMPtr_{};
     CollisionPrimitive::SphereCollider surface_;
     CollisionPrimitive::SphereCollider gravityArea_;
     CollisionPrimitive::SphereCollider repelCameraArea_;

@@ -23,6 +23,7 @@
 #include "CoinList.h"
 #include "Snake.h"
 #include "ChickenEgg.h"
+#include "GameManager.h"
 
 class GameScene final :
     public IScene
@@ -57,9 +58,8 @@ public:
 
     // 変数
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
+    GameManager gameManager_;
 
-    std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
-    std::unique_ptr<Player> player_{ std::make_unique<Player>(CameraManager::GetInstance(), CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };

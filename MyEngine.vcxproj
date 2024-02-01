@@ -147,6 +147,7 @@
     <ClCompile Include="Application\Event_StartTutorial.cpp" />
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="Application\ExclamationMark.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -403,6 +404,7 @@
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Application\ExclamationMark.h" />
     <ClInclude Include="Application\OperateGuideUI.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="SnakeBehavior.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
     <ClInclude Include="StoneBlock.h" />

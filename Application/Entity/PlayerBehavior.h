@@ -213,9 +213,10 @@ class PlayerBehaviorMachine final
 {
 public:
     //>> 関数
-    PlayerBehaviorMachine(Player* arg_playerPtr, PlayerBehavior arg_state);
+    PlayerBehaviorMachine(void) = default;
     ~PlayerBehaviorMachine(void) = default;
 
+    void Initialize(Player* arg_playerPtr, PlayerBehavior arg_state);
     void ManagementBehavior(void);
 
 private:

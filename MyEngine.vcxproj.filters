@@ -293,6 +293,7 @@
     <ClCompile Include="Application\Entity\Snake.cpp" />
     <ClCompile Include="SnakeBehavior.cpp" />
     <ClCompile Include="SnakeCommonInfomation.cpp" />
+    <ClCompile Include="GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -576,6 +577,7 @@
     <ClInclude Include="Application\Entity\Snake.h" />
     <ClInclude Include="SnakeBehavior.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
+    <ClInclude Include="GameManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

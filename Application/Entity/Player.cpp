@@ -5,9 +5,13 @@
 #include "CollisionChecker.h"
 #include "BehindCamera.h"
 
-Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
-    : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr), pbm_(this, PlayerBehavior::IDLE)
+void Player::Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
 {
+    colMPtr_ = arg_colMPtr;
+    lightManagerPtr_ = arg_lightManagerPtr;
+    planetPtr_ = arg_planetPtr;
+    pbm_.Initialize(this, PlayerBehavior::IDLE);
+
     // 共通の情報を生成
     commonInfo_ = std::make_shared<Player_CommonInfomation>();
     commonInfo_->camMPtr_ = arg_camMPtr;
@@ -36,11 +40,6 @@ Player::Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightM
     operateGuideUI_.SetUIPtr(UI::GetInstance());
     operateGuideUI_.SetCamMPtr(commonInfo_->camMPtr_);
     operateGuideUI_.Initialize();
-}
-
-Player::~Player(void)
-{
-    colMPtr_->UnRegister(&sphereCollider_);
 }
 
 void Player::Update(void)
@@ -242,6 +241,11 @@ void Player::Draw2dFore(void)
 {
     playerUI_.Draw();
     operateGuideUI_.Draw();
+}
+
+void Player::Finalize(void)
+{
+    colMPtr_->UnRegister(&sphereCollider_);
 }
 
 void Player::HandOverToBehindCamera(const std::string& arg_camId)

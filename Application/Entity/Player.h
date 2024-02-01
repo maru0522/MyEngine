@@ -23,12 +23,14 @@ public:
     friend IPlayerBehavior;
 
     //>> 関数
-    Player(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
-    ~Player(void);
+    Player(void) = default;
+    ~Player(void) = default;
 
+    void Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
     void Update(void);
     void Draw3d(void);
     void Draw2dFore(void);
+    void Finalize(void);
 
     Vector3 pos_backDiagonalAbove_; // プレイヤーの背後斜め上の点
     Vector3 pos_withinRangeAtBGAPoint_; // プレイヤーの斜め上の点から、カメラが離れられる最大範囲のpos

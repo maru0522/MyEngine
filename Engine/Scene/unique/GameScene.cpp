@@ -48,8 +48,6 @@ void GameScene::Initialize(void)
     //colCameraPtr->theta_ = 0.f;
     //colCameraPtr->phi_ = 0.f;
 
-    player_->SetupLightCircleShadows();
-
     //hole1_->transform_.position = { 0,0,-48 };
     //hole2_->transform_.position = { 0,0,48 };
 

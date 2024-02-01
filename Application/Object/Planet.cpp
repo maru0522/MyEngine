@@ -2,12 +2,14 @@
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
-Planet::Planet(void)
+void Planet::Initialize(CollisionManager* arg_colMPtr)
 {
+    colMPtr_ = arg_colMPtr;
+
     // マネージャーに登録
-    CollisionManager::GetInstance()->Register(&surface_);
-    CollisionManager::GetInstance()->Register(&gravityArea_);
-    CollisionManager::GetInstance()->Register(&repelCameraArea_);
+    colMPtr_->Register(&surface_);
+    colMPtr_->Register(&gravityArea_);
+    colMPtr_->Register(&repelCameraArea_);
 
     // 各コライダーの名前を設定
     surface_.SetID("terrainSurface");
@@ -39,13 +41,6 @@ Planet::Planet(void)
     addCols_[2] = std::make_unique<TerrainSurfaceCollider>(CollisionManager::GetInstance(), pos2, 18.f);
 }
 
-Planet::~Planet(void)
-{
-    CollisionManager::GetInstance()->UnRegister(&surface_);
-    CollisionManager::GetInstance()->UnRegister(&gravityArea_);
-    CollisionManager::GetInstance()->UnRegister(&repelCameraArea_);
-}
-
 void Planet::Update(void)
 {
     appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_);
@@ -73,4 +68,11 @@ void Planet::Draw(void)
     //addCols_[0]->Draw();
     //addCols_[1]->Draw();
     //addCols_[2]->Draw();
+}
+
+void Planet::Finalize(void)
+{
+    colMPtr_->UnRegister(&surface_);
+    colMPtr_->UnRegister(&gravityArea_);
+    colMPtr_->UnRegister(&repelCameraArea_);
 }
