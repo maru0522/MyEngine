@@ -4,9 +4,12 @@
 #include "SimplifyImGui.h"
 #include "MathUtil.h"
 
-Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr, CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
-    : colMPtr_(arg_colMPtr), cameraMPtr_(arg_cameraMPtr), playerPtr_(arg_playerPtr)
+void Event_TutorialPlanetHole::Initialize(CollisionManager* arg_colMPtr, CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
 {
+    colMPtr_ = arg_colMPtr;
+    cameraMPtr_ = arg_cameraMPtr;
+    playerPtr_ = arg_playerPtr;
+
     camera_leave_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_leave");
     camera_wait_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_wait");
     camera_approach_ = std::make_unique<NormalCamera>("event_tutorialPlanetHole_approach");
@@ -41,16 +44,6 @@ Event_TutorialPlanetHole::Event_TutorialPlanetHole(CollisionManager* arg_colMPtr
 #ifdef _DEBUG
     //is_showHoleCollision_ = true;
 #endif // _DEBUG
-}
-
-Event_TutorialPlanetHole::~Event_TutorialPlanetHole(void)
-{
-    cameraMPtr_->UnRegister(camera_leave_.get());
-    cameraMPtr_->UnRegister(camera_wait_.get());
-    cameraMPtr_->UnRegister(camera_approach_.get());
-    cameraMPtr_->UnRegister(camera_interpolation_.get());
-    colMPtr_->UnRegister(&entrances_[0]);
-    colMPtr_->UnRegister(&entrances_[1]);
 }
 
 void Event_TutorialPlanetHole::Execute(void)
@@ -143,7 +136,17 @@ void Event_TutorialPlanetHole::Draw(void)
     }
 }
 
-void Event_TutorialPlanetHole::Initialize(bool arg_isHole0)
+void Event_TutorialPlanetHole::Finalize(void)
+{
+    cameraMPtr_->UnRegister(camera_leave_.get());
+    cameraMPtr_->UnRegister(camera_wait_.get());
+    cameraMPtr_->UnRegister(camera_approach_.get());
+    cameraMPtr_->UnRegister(camera_interpolation_.get());
+    colMPtr_->UnRegister(&entrances_[0]);
+    colMPtr_->UnRegister(&entrances_[1]);
+}
+
+void Event_TutorialPlanetHole::Start(bool arg_isHole0)
 {
     // カメラの初期化
     const Axis3 axesInit = Axis3::Initialize();
@@ -447,7 +450,7 @@ void Event_TutorialPlanetHole::OnTrigger_Hole0(void)
     {
         // triggerがHole0用か
         const bool isHole0 = true;
-        Initialize(isHole0);
+        Start(isHole0);
     }
 }
 
@@ -462,6 +465,6 @@ void Event_TutorialPlanetHole::OnTrigger_Hole1(void)
     {
         // triggerがHole0用か
         const bool isHole0 = false;
-        Initialize(isHole0);
+        Start(isHole0);
     }
 }

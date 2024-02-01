@@ -41,14 +41,16 @@ private:
 
 public:
     //>> 関数
-    Event_TutorialPlanetHole(CollisionManager* arg_colMPtr,CameraManager* arg_cameraMPtr, Player* arg_playerPtr);
-    ~Event_TutorialPlanetHole(void);
+    Event_TutorialPlanetHole(void) = default;
+    ~Event_TutorialPlanetHole(void) = default;
 
+    void Initialize(CollisionManager* arg_colMPtr, CameraManager* arg_cameraMPtr, Player* arg_playerPtr);
     void Execute(void);
     void Draw(void);
+    void Finalize(void);
 
 private:
-    void Initialize(bool arg_isHole0);
+    void Start(bool arg_isHole0);
     void Update_LeaveCam(void);
     void Update_WaitCam(void);
     void Update_ApproachCam(void);

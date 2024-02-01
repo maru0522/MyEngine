@@ -20,7 +20,7 @@ void GameManager::Initialize()
 #pragma region イベント
     event_startTutorial_.Initialize(camMPtr_, &player_);
     event_endTutorial_.Initialize(camMPtr_);
-    event_tutorialPlanetHole_.SetIsExecute(true);
+    event_tutorialPlanetHole_.Initialize(colMPtr_, camMPtr_, &player_);
 
     // startTutorialから起動する。 endTutorialは終了時,tutorialPlanetHoleは、実行途中で起動する
     event_startTutorial_.SetIsExecute(true);
@@ -41,7 +41,7 @@ void GameManager::Finalize(void)
 #pragma region イベント
     event_startTutorial_.Finalize();
     event_endTutorial_.Finalize();
-    event_tutorialPlanetHole_.SetIsExecute(true);
+    event_tutorialPlanetHole_.Finalize();
 
     // startTutorialから起動する。 endTutorialは終了時,tutorialPlanetHoleは、実行途中で起動する
     event_startTutorial_.SetIsExecute(true);
