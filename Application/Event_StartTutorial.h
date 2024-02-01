@@ -34,14 +34,16 @@ private:
 
 public:
     //>> 関数
-    Event_StartTutorial(CameraManager* arg_cameraMPtr, Player* arg_playerPtr);
-    ~Event_StartTutorial(void);
+    Event_StartTutorial(void) = default;
+    ~Event_StartTutorial(void) = default;
 
+    void Initialize(CameraManager* arg_cameraMPtr, Player* arg_playerPtr);
     void Execute(void);
     void Draw(void);
+    void Finalize(void);
 
 private:
-    void Initialize(void);
+    void Start(void);
     void Update_CloseCam(void);
     void Update_WaitCam(void);
     void Update_LeaveCam(void);

@@ -2,10 +2,19 @@
 #include "MathUtil.h"
 #include "SimplifyImGui.h"
 
-
-Event_StartTutorial::Event_StartTutorial(CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
-    : cameraMPtr_(arg_cameraMPtr), playerPtr_(arg_playerPtr)
+void Event_StartTutorial::Start(void)
 {
+    cameraMPtr_->SetCurrentCamera(camera_.get());
+
+    timer_closeCam_.Start(kCloseTimer_);
+    timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
+}
+
+void Event_StartTutorial::Initialize(CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
+{
+    cameraMPtr_ = arg_cameraMPtr;
+    playerPtr_ = arg_playerPtr;
+
     // 画像サイズ
     const Vector2 size{ 1280.f,80.f };
     // 画像の色
@@ -53,19 +62,6 @@ Event_StartTutorial::Event_StartTutorial(CameraManager* arg_cameraMPtr, Player* 
     camera_->SetTransform(transform);
 
     cameraState_ = CameraState::CLOSE;
-}
-
-Event_StartTutorial::~Event_StartTutorial(void)
-{
-    cameraMPtr_->UnRegister(camera_.get());
-}
-
-void Event_StartTutorial::Initialize(void)
-{
-    cameraMPtr_->SetCurrentCamera(camera_.get());
-
-    timer_closeCam_.Start(kCloseTimer_);
-    timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
 }
 
 void Event_StartTutorial::Execute(void)
@@ -135,6 +131,11 @@ void Event_StartTutorial::Draw(void)
         }
         string_->Draw();
     }
+}
+
+void Event_StartTutorial::Finalize(void)
+{
+    cameraMPtr_->UnRegister(camera_.get());
 }
 
 void Event_StartTutorial::Update_CloseCam(void)
@@ -339,6 +340,6 @@ void Event_StartTutorial::SetIsExecute(bool arg_isExecute)
 {
     is_execute_ = arg_isExecute;
     if (is_execute_ == false) { return; }
-    Initialize();
+    Start();
     playerPtr_->SetEventState(PlayerEventState::TUTORIAL_EVENT_ORDER);
 }

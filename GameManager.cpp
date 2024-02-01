@@ -18,8 +18,11 @@ void GameManager::Initialize()
 #pragma endregion
 
 #pragma region イベント
-    event_startTutorial_.SetIsExecute(true);
+    event_startTutorial_.Initialize(camMPtr_, &player_);
     event_endTutorial_.SetIsExecute(true);
+    event_startTutorial_.SetIsExecute(true);
+
+    // startTutorialから起動する。 endTutorialは終了時,tutorialPlanetHoleは、実行途中で起動する
     event_startTutorial_.SetIsExecute(true);
 #pragma endregion
 }
