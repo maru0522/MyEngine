@@ -114,13 +114,15 @@ void GameScene::Initialize(void)
     //    }
     //}
 
-    //for (auto& snake : snakes_)
-    //{
-    //    snake = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
-    //    snake->SetupLightCircleShadows();
-    //}
+    for (auto& snake : snakes_)
+    {
+        snake = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get(), &chikenegg_);
+        snake->SetupLightCircleShadows();
+    }
     snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
     snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
+
+    chikenegg_.Initialize(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
 
     UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
     UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
@@ -131,6 +133,10 @@ void GameScene::Update(void)
     a_.Execute();
     b_.Execute();
     c_.Execute();
+
+    int32_t snakeCount = chikenegg_.GetApproachingEggSnakes();
+    player_->SetApproachingEggSnakes(snakeCount);
+    chikenegg_.Update();
 
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
@@ -298,6 +304,8 @@ void GameScene::Draw3d(void)
     lightGroup_->Draw();
 
     player_->Draw3d();
+    chikenegg_.Draw();
+
     for (auto& rabbit : snakes_)
     {
         if (rabbit) { rabbit->Draw(); }
