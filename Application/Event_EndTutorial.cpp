@@ -3,8 +3,17 @@
 #include "MathUtil.h"
 #include "SceneManager.h"
 
-Event_EndTutorial::Event_EndTutorial(void)
+void Event_EndTutorial::Start(void)
 {
+    cameraMPtr_->SetCurrentCamera(camera_.get());
+    timer_closeCam_.Start(kCloseTimer_);
+    timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
+}
+
+void Event_EndTutorial::Initialize(CameraManager* arg_cameraMPtr)
+{
+    cameraMPtr_ = arg_cameraMPtr;
+
     // 画像サイズ
     const Vector2 size{ 1280.f,80.f };
     // 画像の色
@@ -46,23 +55,11 @@ Event_EndTutorial::Event_EndTutorial(void)
     string_->SetAlpha(0.f);
 
     camera_ = std::make_unique<NormalCamera>("event_endTutorial");
-    CameraManager::GetInstance()->Register(camera_.get());
+    cameraMPtr_->Register(camera_.get());
     Transform transform(Vector3{ 0.f,53.f,-50.f }, Vector3{ 0.f,0.f,0.f }, Vector3{ 1.f,1.f,1.f });
     camera_->SetTransform(transform);
 
     cameraState_ = CameraState::CLOSE;
-}
-
-Event_EndTutorial::~Event_EndTutorial(void)
-{
-    CameraManager::GetInstance()->UnRegister(camera_.get());
-}
-
-void Event_EndTutorial::Initialize(void)
-{
-    CameraManager::GetInstance()->SetCurrentCamera(camera_.get());
-    timer_closeCam_.Start(kCloseTimer_);
-    timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
 }
 
 void Event_EndTutorial::Execute(void)
@@ -120,6 +117,11 @@ void Event_EndTutorial::Draw(void)
         }
         string_->Draw();
     }
+}
+
+void Event_EndTutorial::Finalize(void)
+{
+    cameraMPtr_->UnRegister(camera_.get());
 }
 
 void Event_EndTutorial::Update_CloseCam(void)
@@ -189,7 +191,7 @@ void Event_EndTutorial::Update_WaitCam(void)
         timer_waitCam_.Finish(true);
 
         cameraState_ = CameraState::FINISH;
-        CameraManager::GetInstance()->SetCurrentCamera("SphericalCamera_follow_player0");
+        cameraMPtr_->SetCurrentCamera("SphericalCamera_follow_player0");
 
         // 関数を抜ける
         return;
@@ -199,5 +201,5 @@ void Event_EndTutorial::Update_WaitCam(void)
 void Event_EndTutorial::SetIsExecute(bool arg_isExecute)
 {
     is_execute_ = arg_isExecute;
-    if (is_execute_) { Initialize(); }
+    if (is_execute_) { Start(); }
 }

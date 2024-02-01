@@ -21,14 +21,16 @@ private:
 
 public:
     //>> 関数
-    Event_EndTutorial(void);
-    ~Event_EndTutorial(void);
+    Event_EndTutorial(void) = default;
+    ~Event_EndTutorial(void) = default;
 
+    void Initialize(CameraManager* arg_cameraMPtr);
     void Execute(void);
     void Draw(void);
+    void Finalize(void);
 
 private:
-    void Initialize(void);
+    void Start(void);
     void Update_CloseCam(void);
     void Update_WaitCam(void);
 
@@ -36,6 +38,8 @@ private:
     std::array<std::unique_ptr<Sprite>, 2> cinemas_;
     std::array<std::unique_ptr<Sprite>, 2> stringBackGrounds_;
     std::unique_ptr<Sprite> string_;
+
+    CameraManager* cameraMPtr_;
     std::unique_ptr<NormalCamera> camera_;
     CameraState cameraState_;
 
