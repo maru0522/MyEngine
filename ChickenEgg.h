@@ -3,6 +3,7 @@
 #include "CollisionManager.h"
 #include "Transform.h"
 #include "Planet.h"
+#include "Snake.h"
 
 class ChickenEgg
 {
@@ -22,7 +23,10 @@ public:
     void Update(void);
     void Draw(void);
 
+    // 蛇側が、鶏卵に接触した際に卵の数を減らすための関数 ※同F接触時に、1回分しかカウントされないバグ回避のため向こう側で使用する
+    friend void Snake::SnakeRobChickenEgg(void);
 private:
+
     // 鶏の卵が1つ以上残っているか
     bool IsChikenEgg(void) { return eggNum_ >= 1; }
     void Finalize(void);
@@ -54,4 +58,3 @@ public:
     //>> getter
     int32_t GetApproachingEggSnakes(void) { return snakeCount_; }
 };
-

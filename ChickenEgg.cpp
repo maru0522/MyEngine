@@ -70,8 +70,14 @@ void ChickenEgg::Update(void)
      * 蛇のカウント初期化
      */
 
+    // 鶏卵の数が0以下かどうか
+    if (eggNum_ <= 0)
+    {
 
-     // *姿勢を惑星の表面に合わせる
+    }
+
+
+    // *姿勢を惑星の表面に合わせる
     AdaptPosture();
     
 
@@ -145,7 +151,7 @@ void ChickenEgg::OnCollision_Col(void)
     {
         CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
 
-        // 現在のプレイヤーの座標
+        // 現在の鶏卵の座標
         Vector3 currentPos = transform_.position;
         // 垂直方向の移動量を初期化。
         velocity_vertical_ = 0.f;

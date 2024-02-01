@@ -1,9 +1,10 @@
 #include "Snake.h"
 #include "SimplifyImGui.h"
 #include "MathUtil.h"
+#include "ChickenEgg.h"
 
-Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
-    : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
+Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr)
+    : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr),chickenEggPtr_(arg_chickenEggPtr)
 {
     // 共通情報のインスタンス生成
     commonInfo_ = std::make_shared<SnakeCommonInfomation>();
@@ -113,6 +114,12 @@ void Snake::Draw(void)
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
     if (commonInfo_->is_detectPlayer_) { exclamationMark_->Draw(); }
+}
+
+void Snake::SnakeRobChickenEgg(void)
+{
+    int32_t eggNum = chickenEggPtr_->eggNum_;
+    chickenEggPtr_->eggNum_ = eggNum - 1;
 }
 
 void Snake::RotateDirection(float arg_radian)
@@ -237,6 +244,8 @@ void Snake::OnCollision(void)
     {
         // 卵を食べたかどうかのフラグをtrue
         commonInfo_->is_eatChickenEgg_ = true; // snakeBehavior内でfalseにする処理を行う
+        // 鶏卵の数を1減らす関数を実行 ※friend関数
+        SnakeRobChickenEgg();
     }
 }
 

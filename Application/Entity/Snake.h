@@ -16,6 +16,9 @@
  * @brief 蛇クラス
  */
 
+// 前方宣言
+class ChickenEgg;
+
 class Snake
 {
 private:
@@ -30,13 +33,15 @@ private:
 
 public:
     // 関数
-    Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
+    Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr);
     ~Snake(void);
 
     void Update(void);
     void Draw(void);
 
+    void SnakeRobChickenEgg(void);
 private:
+
     //void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
     // プレイヤーを上ベクトルを軸に回転させる。※上ベクトルは変化しない
     void RotateDirection(float arg_radian);
@@ -50,7 +55,7 @@ private:
     bool isCaptured_{};
 
     CorrectionDirection shakeDirection_; // 移動する際に、左右どちらにぶれるか
-
+    ChickenEgg* chickenEggPtr_;
 
     CollisionManager* colMPtr_;
     CollisionPrimitive::SphereCollider sphere_collision_;

@@ -114,11 +114,11 @@ void GameScene::Initialize(void)
     //    }
     //}
 
-    for (auto& snake : snakes_)
-    {
-        snake = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
-        snake->SetupLightCircleShadows();
-    }
+    //for (auto& snake : snakes_)
+    //{
+    //    snake = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
+    //    snake->SetupLightCircleShadows();
+    //}
     snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
     snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
 
