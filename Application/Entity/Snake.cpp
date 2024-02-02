@@ -3,9 +3,14 @@
 #include "MathUtil.h"
 #include "ChickenEgg.h"
 
-Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr)
-    : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr),chickenEggPtr_(arg_chickenEggPtr)
+void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr)
 {
+    colMPtr_ = arg_colMPtr;
+    lightManagerPtr_ = arg_lightManagerPtr; 
+    planetPtr_ = arg_planetPtr;
+    chickenEggPtr_ = arg_chickenEggPtr;
+
+
     // 共通情報のインスタンス生成
     commonInfo_ = std::make_shared<SnakeCommonInfomation>();
 
@@ -39,27 +44,6 @@ Snake::Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, P
 
     // behaviorMachine経由で、behavior生成
     snakeBehaviorMachine_.Initialize(this, SnakeBehavior::IDLE);
-}
-
-Snake::~Snake(void)
-{
-    colMPtr_->UnRegister(&sphere_collision_);
-    colMPtr_->UnRegister(&sphere_detect_);
-
-    // 丸影を使用している
-    if (circleShadows_num_ >= 0)
-    {
-        // LightManagerに渡す用のライトタイプ
-        LightType type = LightType::CIRCLE_SHADOW;
-
-        // 使用していた丸影を初期化
-        lightManagerPtr_->SetLightActive(type, circleShadows_num_, false);
-        lightManagerPtr_->SetLightDir(type, circleShadows_num_, { 0,0,0 });
-        lightManagerPtr_->SetLightPos(type, circleShadows_num_, { 0,0,0 });
-        lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, 0.f);
-        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, { 0.f,0.f,0.f });
-        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, { 0.f,0.f });
-    }
 }
 
 void Snake::Update(void)
@@ -114,6 +98,27 @@ void Snake::Draw(void)
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
     if (commonInfo_->is_detectPlayer_) { exclamationMark_->Draw(); }
+}
+
+void Snake::Finalize(void)
+{
+    colMPtr_->UnRegister(&sphere_collision_);
+    colMPtr_->UnRegister(&sphere_detect_);
+
+    // 丸影を使用している
+    if (circleShadows_num_ >= 0)
+    {
+        // LightManagerに渡す用のライトタイプ
+        LightType type = LightType::CIRCLE_SHADOW;
+
+        // 使用していた丸影を初期化
+        lightManagerPtr_->SetLightActive(type, circleShadows_num_, false);
+        lightManagerPtr_->SetLightDir(type, circleShadows_num_, { 0,0,0 });
+        lightManagerPtr_->SetLightPos(type, circleShadows_num_, { 0,0,0 });
+        lightManagerPtr_->SetLightDistanceAtCaster(type, circleShadows_num_, 0.f);
+        lightManagerPtr_->SetLightAtten(type, circleShadows_num_, { 0.f,0.f,0.f });
+        lightManagerPtr_->SetLightFactorAngle(type, circleShadows_num_, { 0.f,0.f });
+    }
 }
 
 void Snake::SnakeRobChickenEgg(void)

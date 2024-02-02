@@ -2,8 +2,15 @@
 #include "CollisionManager.h"
 #include "CameraManager.h"
 #include "LightManager.h"
+
 #include "Planet.h"
 #include "Player.h"
+#include "ChickenEgg.h"
+
+#include "CoinList.h"
+
+#include "BehindCamera.h"
+#include "SphericalCamera.h"
 
 #include "Event_StartTutorial.h"
 #include "Event_EndTutorial.h"
@@ -24,14 +31,27 @@ public:
     void Finalize(void);
 
 private:
+    //
+    void CamerasSetting(void);
+
     //>> 変数
     CollisionManager* colMPtr_;
     CameraManager* camMPtr_;
     LightManager* lightMPtr_;
 
+    // カメラ
+    std::unique_ptr<ICamera> camera_debugPtr_{ std::make_unique<ICamera>() };
+    std::unique_ptr<SphericalCamera> camera_colPtr_{ std::make_unique<SphericalCamera>("follow_player") };
+    std::unique_ptr<BehindCamera> camera_behind_{ std::make_unique<BehindCamera>("follow_player") };
+    std::unique_ptr<SphericalCamera> camera_4Hole_{ std::make_unique<SphericalCamera>("hole_planet") };
+
     // オブジェクト
     Planet tutorialPlanet_;
     Player player_;
+    ChickenEgg chickenEgg_;
+    std::array<Snake, 3> snakes_;
+
+    CoinList coinList_;
 
     // イベント
     Event_StartTutorial event_startTutorial_;

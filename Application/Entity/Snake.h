@@ -33,11 +33,13 @@ private:
 
 public:
     // 関数
-    Snake(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr);
-    ~Snake(void);
+    Snake(void) = default;
+    ~Snake(void) = default;
 
+    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr);
     void Update(void);
     void Draw(void);
+    void Finalize(void);
 
     void SnakeRobChickenEgg(void);
 private:

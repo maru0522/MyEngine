@@ -60,9 +60,9 @@ public:
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
     GameManager gameManager_;
 
-    std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    //std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    //std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
+    //std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     //std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     std::unique_ptr<Sprite> png_backGround_{ std::make_unique<Sprite>("Resources/BackGround.png") };
     bool isBG_;
