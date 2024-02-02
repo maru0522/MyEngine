@@ -46,19 +46,23 @@ void GameManager::Update(void)
 
 void GameManager::Finalize(void)
 {
+    //>> オブジェクト
     // 惑星の終了処理
     tutorialPlanet_.Finalize();
     // プレイヤーの終了処理
     player_.Finalize();
 
-#pragma region イベント
+    // カメラ
+    camMPtr_->UnRegister(camera_debugPtr_.get());
+    camMPtr_->UnRegister(camera_colPtr_.get());
+    camMPtr_->UnRegister(camera_behind_.get());
+    camMPtr_->UnRegister(camera_4Hole_.get());
+
+    //>> イベント
     event_startTutorial_.Finalize();
     event_endTutorial_.Finalize();
     event_tutorialPlanetHole_.Finalize();
 
-    // startTutorialから起動する。 endTutorialは終了時,tutorialPlanetHoleは、実行途中で起動する
-    event_startTutorial_.SetIsExecute(true);
-#pragma endregion
 }
 
 void GameManager::CamerasSetting(void)

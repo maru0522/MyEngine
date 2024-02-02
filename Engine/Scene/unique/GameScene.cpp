@@ -113,9 +113,7 @@ void GameScene::Initialize(void)
 
 void GameScene::Update(void)
 {
-    a_.Execute();
-    b_.Execute();
-    c_.Execute();
+    gameManager_.Update();
 
     int32_t snakeCount = chikenegg_.GetApproachingEggSnakes();
     player_->SetApproachingEggSnakes(snakeCount);
@@ -179,23 +177,23 @@ void GameScene::Update(void)
     player_->Update();
 
     uint32_t capturedRabbitCount = 0;
-    for (auto& snake : snakes_)
-    {
-        if(snake)
-        { 
-            snake->Update();
-            if (snake->GetIsCaptured()) { snake.reset(); }
-        }
-        else
-        {
-            capturedRabbitCount++;
-        }
-    }
+    //for (auto& snake : snakes_)
+    //{
+    //    if(snake)
+    //    { 
+    //        snake->Update();
+    //        if (snake->GetIsCaptured()) { snake.reset(); }
+    //    }
+    //    else
+    //    {
+    //        capturedRabbitCount++;
+    //    }
+    //}
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
     if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
 
-    planet_->Update();
+    //planet_->Update();
 
     //for (auto& object : objects_) {
     //    object.second->Update();
@@ -217,21 +215,21 @@ void GameScene::Update(void)
     //ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
     //ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
 
-    GUI::BlankLine();
-    ImGui::Text("followCamera matrix");
-    Matrix4 c = camera_colPtr_->GetTransformMatrix().mat_world;
-    ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
-    ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
-    ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);
-    ImGui::Text("%f, %f, %f, %f", c.m[3][0], c.m[3][1], c.m[3][2], c.m[3][3]);
+    //GUI::BlankLine();
+    //ImGui::Text("followCamera matrix");
+    //Matrix4 c = camera_colPtr_->GetTransformMatrix().mat_world;
+    //ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
+    //ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
+    //ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);
+    //ImGui::Text("%f, %f, %f, %f", c.m[3][0], c.m[3][1], c.m[3][2], c.m[3][3]);
 
-    GUI::BlankLine();
-    ImGui::Text("holeCamera matrix");
-    Matrix4 c2 = camera_4Hole_->GetTransformMatrix().mat_world;
-    ImGui::Text("%f, %f, %f, %f", c2.m[0][0], c2.m[0][1], c2.m[0][2], c2.m[0][3]);
-    ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
-    ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);
-    ImGui::Text("%f, %f, %f, %f", c2.m[3][0], c2.m[3][1], c2.m[3][2], c2.m[3][3]);
+    //GUI::BlankLine();
+    //ImGui::Text("holeCamera matrix");
+    //Matrix4 c2 = camera_4Hole_->GetTransformMatrix().mat_world;
+    //ImGui::Text("%f, %f, %f, %f", c2.m[0][0], c2.m[0][1], c2.m[0][2], c2.m[0][3]);
+    //ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
+    //ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);
+    //ImGui::Text("%f, %f, %f, %f", c2.m[3][0], c2.m[3][1], c2.m[3][2], c2.m[3][3]);
 
     GUI::End();
 #endif // _DEBUG
@@ -256,7 +254,7 @@ void GameScene::Update(void)
     pipe1_->Update();
     pipe2_->Update();
 
-    coinList_->Update();
+    //coinList_->Update();
     //for (auto& coin : coins_)
     //{
     //    // nullチェック
@@ -286,14 +284,14 @@ void GameScene::Draw3d(void)
 {
     lightGroup_->Draw();
 
-    player_->Draw3d();
-    chikenegg_.Draw();
+    //player_->Draw3d();
+    //chikenegg_.Draw();
 
-    for (auto& rabbit : snakes_)
-    {
-        if (rabbit) { rabbit->Draw(); }
-    }
-    if (debugPlanetDraw_) planet_->Draw();
+    //for (auto& rabbit : snakes_)
+    //{
+    //    if (rabbit) { rabbit->Draw(); }
+    //}
+    //if (debugPlanetDraw_) planet_->Draw();
     //testP_->Draw();
 
     //hole1_->Draw();
@@ -309,7 +307,7 @@ void GameScene::Draw3d(void)
     pipe1_->Draw();
     pipe2_->Draw();
 
-    coinList_->Draw();
+    //coinList_->Draw();
     //for (auto& coin : coins_)
     //{
     //    // nullチェック
@@ -324,7 +322,7 @@ void GameScene::Draw3d(void)
     //}
     skydome_->Draw();
     //skyDivide_->Draw();
-    c_.Draw();
+    //c_.Draw();
 }
 
 
@@ -332,10 +330,10 @@ void GameScene::Draw2dFore(void)
 {
     //UI::GetInstance()->Draw("circle_red");
     //UI::GetInstance()->Draw("circle_green");
-    player_->Draw2dFore();
+    //player_->Draw2dFore();
 
-    a_.Draw();
-    b_.Draw();
+    //a_.Draw();
+    //b_.Draw();
 }
 
 void GameScene::Draw2dBack(void)
@@ -345,11 +343,7 @@ void GameScene::Draw2dBack(void)
 
 void GameScene::Finalize(void)
 {
-    //>> カメラの登録抹消
-    CameraManager::GetInstance()->UnRegister(camera_debugPtr_.get());
-    CameraManager::GetInstance()->UnRegister(camera_colPtr_.get());
-    CameraManager::GetInstance()->UnRegister(camera_behind_.get());
-    CameraManager::GetInstance()->UnRegister(camera_4Hole_.get());
+    gameManager_.Finalize();
 }
 
 void GameScene::DrawBackGround(void)
