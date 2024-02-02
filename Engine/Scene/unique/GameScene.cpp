@@ -10,13 +10,8 @@
 
 void GameScene::Initialize(void)
 {
-    a_.SetIsExecute(true);
-
     const auto func_bgt = std::bind(&GameScene::DrawBackGround, this);
     BackGroundTexture::GetInstance()->Set(func_bgt);
-
-    // カメラの設定
-    CameraSetUp();
 
     //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
@@ -25,6 +20,9 @@ void GameScene::Initialize(void)
     lightGroup_->SetLightActive(LightType::DIRECTIONAL, 0, true);
     lightGroup_->SetLightColor(LightType::DIRECTIONAL, 0, { 1,1,1 });
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, { 0,-1,0 });
+
+    gameManager_.SetAllPtrs(CollisionManager::GetInstance(), CameraManager::GetInstance(), lightGroup_.get());
+    gameManager_.Initialize();
 
     // 点光源
     //lightGroup_->SetPointLightActive(0, true);
@@ -68,9 +66,6 @@ void GameScene::Initialize(void)
     pipe2_->SetPartnerPtr(pipe1_.get());
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
 
-    coinList_ = std::make_unique<CoinList>();
-    coinList_->Initialize(CollisionManager::GetInstance());
-    coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get());
     //for (auto& coin : coins_)
     //{
     //    coin = std::make_unique<Coin>(CollisionManager::GetInstance());
@@ -112,16 +107,6 @@ void GameScene::Initialize(void)
     //    }
     //}
 
-    for (auto& snake : snakes_)
-    {
-        snake = std::make_unique<Snake>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get(), &chikenegg_);
-        snake->SetupLightCircleShadows();
-    }
-    snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
-    snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
-
-    chikenegg_.Initialize(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
-
     UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
     UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
 }
@@ -139,7 +124,7 @@ void GameScene::Update(void)
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
 
-    if(KEYS::IsTrigger(DIK_P)) { coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get()); }
+    //if(KEYS::IsTrigger(DIK_P)) { coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get()); }
     //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
     //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
     //static Vector3 pl0Pos = { 0,100,0 };
@@ -370,22 +355,6 @@ void GameScene::Finalize(void)
 void GameScene::DrawBackGround(void)
 {
     skydome_->Draw();
-}
-
-void GameScene::CameraSetUp(void)
-{
-    //>> カメラの座標設定
-    CameraManager::GetInstance()->Register(camera_debugPtr_.get());
-    camera_debugPtr_->SetTransform(Transform{ { 0,0,-70 }, camera_debugPtr_->GetTransform().rotation, camera_debugPtr_->GetTransform().scale });   // デバッグカメラの座標
-    CameraManager::GetInstance()->Register(camera_colPtr_.get());
-    camera_colPtr_->SetTransform(Transform{ { 3,172,-3 }, camera_colPtr_->GetTransform().rotation, camera_colPtr_->GetTransform().scale });        // プレイヤー用カメラの座標
-    CameraManager::GetInstance()->Register(camera_behind_.get());
-    camera_colPtr_->SetTransform(Transform{ { 3,172,-3 }, camera_colPtr_->GetTransform().rotation, camera_colPtr_->GetTransform().scale });        // プレイヤー用カメラ2の座標
-    CameraManager::GetInstance()->Register(camera_4Hole_.get());
-    camera_4Hole_->SetTransform(Transform{ { 0, 190, 0 }, { 1.5725f,-1.2175f,0} , camera_4Hole_->GetTransform().scale });                          // 穴に落ちたとき用カメラの座標と回転
-    //camera_4Hole_->SetIsOldUpdateMethod(true);                           // 穴に落ちたとき用カメラの計算方法を設定
-
-    //CameraManager::GetInstance()->SetCurrentCamera(camera_colPtr_.get());
 }
 
 //void DemoScene::DeployObj(LevelData* lvdPtr)

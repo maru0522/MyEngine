@@ -36,7 +36,6 @@ void GameManager::Initialize()
     event_startTutorial_.Initialize(camMPtr_, &player_);
     event_endTutorial_.Initialize(camMPtr_);
     event_tutorialPlanetHole_.Initialize(colMPtr_, camMPtr_, &player_);
-
     // startTutorialから起動する。 endTutorialは終了時,tutorialPlanetHoleは、更新処理内で起動する
     event_startTutorial_.SetIsExecute(true);
 }

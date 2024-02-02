@@ -48,8 +48,6 @@ public:
     void DeployObj(LevelData* lvdPtr);
     void HotReload(LevelData* lvdPtr);
 
-    void CameraSetUp(void);
-
     //bool debugCamFuncFollow_{ false }; // Follow
     //bool debugCamFollow_{ false }; // カメラとプレイヤーの距離が常に一定になるようにする
     //bool debugCamFollow2_{ }; // 軸をプレイヤーと同じにする。
@@ -69,10 +67,6 @@ public:
 
     std::unique_ptr<Object3D> skydome_{ std::make_unique<Object3D>("Resources/model/skydome/skydome.obj") };
 
-    std::unique_ptr<ICamera> camera_debugPtr_{ std::make_unique<ICamera>() };
-    std::unique_ptr<SphericalCamera> camera_colPtr_{ std::make_unique<SphericalCamera>("follow_player") };
-    std::unique_ptr<BehindCamera> camera_behind_{ std::make_unique<BehindCamera>("follow_player") };
-    std::unique_ptr<SphericalCamera> camera_4Hole_{ std::make_unique<SphericalCamera>("hole_planet") };
     //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
 
     //
@@ -91,18 +85,10 @@ public:
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
 
     //std::array<std::unique_ptr<Coin>, 19> coins_;
-    std::unique_ptr<CoinList> coinList_;
-    std::array<std::unique_ptr<Snake>, 3> snakes_;
 
     // json読み込み&配置用
     std::map<std::string, std::unique_ptr<Object3D>> objects_;
     std::unique_ptr<LevelData> lvdPtr_;
-
-    Event_StartTutorial a_{CameraManager::GetInstance(),player_.get() };
-    Event_EndTutorial b_;
-    Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),CameraManager::GetInstance(),player_.get()};
-
-    ChickenEgg chikenegg_;
 
     //std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };
