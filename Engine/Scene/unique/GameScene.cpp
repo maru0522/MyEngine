@@ -13,7 +13,6 @@ void GameScene::Initialize(void)
     const auto func_bgt = std::bind(&GameScene::DrawBackGround, this);
     BackGroundTexture::GetInstance()->Set(func_bgt);
 
-    //sprite_->SetSize({500,500});
     Object3D::SetLightGroup(lightGroup_.get());
 
     // 平行光源
@@ -24,38 +23,11 @@ void GameScene::Initialize(void)
     gameManager_.SetAllPtrs(CollisionManager::GetInstance(), CameraManager::GetInstance(), lightGroup_.get());
     gameManager_.Initialize();
 
-    // 点光源
-    //lightGroup_->SetPointLightActive(0, true);
-    //lightGroup_->SetPointLightColor(0, { 1,1,1 });
-    //lightGroup_->SetPointLightAtten(0, { 0.3f,0.1f,0.1f });
-    //lightGroup_->SetPointLightPos(0, { 0,70,0 });
-
-    // スポットライト
-    //lightGroup_->SetSpotLightActive(0, true);
-    //lightGroup_->SetSpotLightColor(0, { 1,1,1 });
-    //lightGroup_->SetSpotLightDir(0, { 0,-1,0 });
-    //lightGroup_->SetSpotLightFactorAngle(0, { 20.f,30.f });
-    //lightGroup_->SetSpotLightAtten(0, { 0,0,0 });
-    //lightGroup_->SetSpotLightPos(0, { 0,100,0 });
-
-    // json読み込み&配置
-    //lvdPtr_ = LevelData::Load("Resources/untitled.json");
-    //DeployObj(lvdPtr_.get());
-
-    //colCameraPtr->radius_ = 50.f;
-    //colCameraPtr->theta_ = 0.f;
-    //colCameraPtr->phi_ = 0.f;
-
-    //hole1_->transform_.position = { 0,0,-48 };
-    //hole2_->transform_.position = { 0,0,48 };
-
     rock1_->TransformPtr()->position = { 48,18,9 };
     rock2_->TransformPtr()->position = { 49,-23,6 };
     rock3_->TransformPtr()->position = { 48,-6,24 };
     rock4_->TransformPtr()->position = { 49,10,-20 };
     rock5_->TransformPtr()->position = { 48,-12,-15 };
-
-    //sticky1_->SetRoot({ 0,50.f,0 });
 
     pipe1_->SetPosition({ 16,42.5f,20.f });
     pipe1_->SetRotation({ 0.497f,0.f,5.962f });
@@ -65,47 +37,6 @@ void GameScene::Initialize(void)
     pipe2_->SetRotation({ 3.465f,0.f,0.621f });
     pipe2_->SetPartnerPtr(pipe1_.get());
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
-
-    //for (auto& coin : coins_)
-    //{
-    //    coin = std::make_unique<Coin>(CollisionManager::GetInstance());
-    //}
-
-    //coins_[0]->SetPosition({ 20.f,55.f,0.f });
-    //coins_[1]->SetPosition({ 25.f,52.f,0.f });
-    //coins_[2]->SetPosition({ 30.f,49.f,0.f });
-
-    //coins_[3]->SetPosition({ 0.f,10.f,51.f });
-    //coins_[4]->SetPosition({ 7.5f,7.5f,51.f });
-    //coins_[5]->SetPosition({ 10.f,0.f,51.f });
-    //coins_[6]->SetPosition({ 7.5f,-7.5f,51.f });
-    //coins_[7]->SetPosition({ 0.f,-10.f,51.f });
-    //coins_[8]->SetPosition({ -7.5f,-7.5f,51.f });
-    //coins_[9]->SetPosition({ -10.f,0.f,51.f });
-    //coins_[10]->SetPosition({ -7.5f,7.5f,51.f });
-
-    //coins_[11]->SetPosition({ 0.f,10.f,-51.f });
-    //coins_[12]->SetPosition({ 7.5f,7.5f,-51.f });
-    //coins_[13]->SetPosition({ 10.f,0.f,-51.f });
-    //coins_[14]->SetPosition({ 7.5f,-7.5f,-51.f });
-    //coins_[15]->SetPosition({ 0.f,-10.f,-51.f });
-    //coins_[16]->SetPosition({ -7.5f,-7.5f,-51.f });
-    //coins_[17]->SetPosition({ -10.f,0.f,-51.f });
-    //coins_[18]->SetPosition({ -7.5f,7.5f,-51.f });
-
-    //for (size_t i = 0; i < coins_.size(); i++)
-    //{
-    //    // コイン0~2
-    //    if (i < 3)
-    //    {
-    //        coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get());
-    //    }
-    //    // それ以降のコイン
-    //    else
-    //    {
-    //        coins_[i]->SetupCircleShadows(planet_.get(), lightGroup_.get(), { 0.02f,0.1f,0.07f }, { 15.f,20.f });
-    //    }
-    //}
 
     UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
     UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
@@ -118,117 +49,12 @@ void GameScene::Update(void)
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
 
-    //if(KEYS::IsTrigger(DIK_P)) { coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get()); }
-    //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
-    //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
-    //static Vector3 pl0Pos = { 0,100,0 };
-    //GUI::Begin("pointLight0");
-    //GUI::SliderFloat3(std::string{"pointLight0Attan"}, pl0Attan, 0.f, 1.f);
-    //GUI::SliderFloat3(std::string{"pointLight0Pos  "}, pl0Pos, -100.f, 100.f);
-    //GUI::End();
-    //lightGroup_->SetPointLightAtten(0, pl0Attan);
-    //lightGroup_->SetPointLightPos(0, pl0Pos);
-
-    //static Vector2 sl0FA = { 20.f,30.f };
-    //static Vector3 sl0Attan = { 0.f,0.f,0.f };
-    //static Vector3 sl0Pos = { 0,100,0 };
-    //GUI::Begin("spotLight0");
-    //GUI::SliderFloat3(std::string{"spotLight0Attan"}, sl0Attan, 0.f, 1.f);
-    //GUI::SliderFloat3(std::string{"spotLight0Pos  "}, sl0Pos, -100.f, 100.f);
-    //GUI::SliderFloat2(std::string{"spotLight0FactorAngle  "}, sl0FA, 0.f, 180.f);
-    //GUI::End();
-    //lightGroup_->SetSpotLightAtten(0, sl0Attan);
-    //lightGroup_->SetSpotLightPos(0, sl0Pos);
-    //lightGroup_->SetSpotLightFactorAngle(0, sl0FA);
-
-    //Vector3 p2p = (planet_->GetPosition() - player_->GetTransformPtr()->position).Normalize();
-    //lightGroup_->SetCircleShadowDir(0, p2p);
-    //lightGroup_->SetCircleShadowCasterPos(0, player_->GetTransformPtr()->position + p2p * 20.f);
-    //lightGroup_->SetCircleShadowAtten(0, { 0.5f,0.6f,0 });
-    //lightGroup_->SetCircleShadowFactorAngle(0, { 0.2f,0.5f });
-    //lightGroup_->SetCircleShadowDistanceCasterLight(0, 100.f);
-
     png_backGround_->Update();
 
     lightGroup_->Update();
-    //testP_->Update();
-
-    //static float sRadius4Cam{};
-    //ImGui::SliderFloat("sRadius4Cam", &sRadius4Cam, 0.f, 200.f);
-    //static float sTheta4Cam{};
-    ////ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 3.14159f);
-    //ImGui::SliderFloat("sTheta4Cam", &sTheta4Cam, 0.f, 6.28319f);
-    //static float sPhi4Cam{ 0.f };
-    //ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
-
-
-    //uint32_t capturedRabbitCount = 0;
-    //for (auto& snake : snakes_)
-    //{
-    //    if(snake)
-    //    { 
-    //        snake->Update();
-    //        if (snake->GetIsCaptured()) { snake.reset(); }
-    //    }
-    //    else
-    //    {
-    //        capturedRabbitCount++;
-    //    }
-    //}
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
     //if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
-
-    //planet_->Update();
-
-    //for (auto& object : objects_) {
-    //    object.second->Update();
-    //}
-    //if(KEYS::IsTrigger(DIK_R)) {
-    //    lvdPtr_ = LevelData::Load("Resources/untitled.json");
-    //    HotReload(lvdPtr_.get());
-    //}
-
-#ifdef _DEBUG
-    GUI::Begin("debug tab maruyama");
-    //ImGui::SliderFloat("camDist", &sCamdist, 0.f, 100.f);
-    //ImGui::InputFloat("sCamFollowSpeed", &sCamFollowSpeed);
-    GUI::BlankLine();
-    //ImGui::Text("dummyp matrix");
-    //Matrix4 p = testP_->GetCoordinatePtr()->mat_world;
-    //ImGui::Text("%f, %f, %f, %f", p.m[0][0], p.m[0][1], p.m[0][2], p.m[0][3]);
-    //ImGui::Text("%f, %f, %f, %f", p.m[1][0], p.m[1][1], p.m[1][2], p.m[1][3]);
-    //ImGui::Text("%f, %f, %f, %f", p.m[2][0], p.m[2][1], p.m[2][2], p.m[2][3]);
-    //ImGui::Text("%f, %f, %f, %f", p.m[3][0], p.m[3][1], p.m[3][2], p.m[3][3]);
-
-    //GUI::BlankLine();
-    //ImGui::Text("followCamera matrix");
-    //Matrix4 c = camera_colPtr_->GetTransformMatrix().mat_world;
-    //ImGui::Text("%f, %f, %f, %f", c.m[0][0], c.m[0][1], c.m[0][2], c.m[0][3]);
-    //ImGui::Text("%f, %f, %f, %f", c.m[1][0], c.m[1][1], c.m[1][2], c.m[1][3]);
-    //ImGui::Text("%f, %f, %f, %f", c.m[2][0], c.m[2][1], c.m[2][2], c.m[2][3]);
-    //ImGui::Text("%f, %f, %f, %f", c.m[3][0], c.m[3][1], c.m[3][2], c.m[3][3]);
-
-    //GUI::BlankLine();
-    //ImGui::Text("holeCamera matrix");
-    //Matrix4 c2 = camera_4Hole_->GetTransformMatrix().mat_world;
-    //ImGui::Text("%f, %f, %f, %f", c2.m[0][0], c2.m[0][1], c2.m[0][2], c2.m[0][3]);
-    //ImGui::Text("%f, %f, %f, %f", c2.m[1][0], c2.m[1][1], c2.m[1][2], c2.m[1][3]);
-    //ImGui::Text("%f, %f, %f, %f", c2.m[2][0], c2.m[2][1], c2.m[2][2], c2.m[2][3]);
-    //ImGui::Text("%f, %f, %f, %f", c2.m[3][0], c2.m[3][1], c2.m[3][2], c2.m[3][3]);
-
-    GUI::End();
-#endif // _DEBUG
-
-    //hole_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0,0,0),Vector3(5,52,5),Vector3(1.5708f,0,0));
-    //hole1_->Update();
-    //hole2_->Update();
-    //house_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(-15, 50, 15), Vector3(5, 5, 5), Vector3(0.31f, 0.f, 0.23f));
-    //house_->Update();
-
-    // z にちょっと、xにすこし
-    //skyDivide_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(Vector3(0, 80, 1000), Vector3(1000, 1, 1000), Vector3(0.1f, 0, -0.3f));
-    //skyDivide_->Update();
 
     rock1_->Update();
     rock2_->Update();
@@ -240,27 +66,7 @@ void GameScene::Update(void)
     pipe1_->Update();
     pipe2_->Update();
 
-    //coinList_->Update();
-    //for (auto& coin : coins_)
-    //{
-    //    // nullチェック
-    //    if (coin)
-    //    {
-    //        coin->Update();
-    //        if (coin->GetIsTaken()) { coin.reset(); }
-    //    }
-    //}
-
     skydome_->Update();
-
-    //GUI::Begin("backGround");
-    //if (GUI::ButtonTrg("bg_switch"))
-    //{
-    //    isBG_ ? isBG_ = false :
-    //        isBG_ = true;
-    //}
-
-    //GUI::End();
 
     UI::GetInstance()->Update("circle_red");
     UI::GetInstance()->Update("circle_green");
@@ -271,56 +77,20 @@ void GameScene::Draw3d(void)
     lightGroup_->Draw();
     gameManager_.Draw3d();
 
-    //player_->Draw3d();
-    //chikenegg_.Draw();
-
-    //for (auto& rabbit : snakes_)
-    //{
-    //    if (rabbit) { rabbit->Draw(); }
-    //}
-    //if (debugPlanetDraw_) planet_->Draw();
-    //testP_->Draw();
-
-    //hole1_->Draw();
-    //hole2_->Draw();
-    //house_->Draw();
     rock1_->Draw();
     rock2_->Draw();
     rock3_->Draw();
     rock4_->Draw();
     rock5_->Draw();
 
-    //sticky1_->Draw();
     pipe1_->Draw();
     pipe2_->Draw();
-
-    //coinList_->Draw();
-    //for (auto& coin : coins_)
-    //{
-    //    // nullチェック
-    //    if (coin)
-    //    {
-    //        coin->Draw();
-    //    }
-    //}
-
-    //for (auto& object : objects_) {
-    //    object.second->Draw();
-    //}
     skydome_->Draw();
-    //skyDivide_->Draw();
-    //c_.Draw();
 }
 
 
 void GameScene::Draw2dFore(void)
 {
-    //UI::GetInstance()->Draw("circle_red");
-    //UI::GetInstance()->Draw("circle_green");
-    //player_->Draw2dFore();
-
-    //a_.Draw();
-    //b_.Draw();
     gameManager_.Draw2d();
 }
 
