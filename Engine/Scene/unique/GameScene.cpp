@@ -115,10 +115,6 @@ void GameScene::Update(void)
 {
     gameManager_.Update();
 
-    int32_t snakeCount = chikenegg_.GetApproachingEggSnakes();
-    player_->SetApproachingEggSnakes(snakeCount);
-    chikenegg_.Update();
-
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
 
@@ -165,18 +161,8 @@ void GameScene::Update(void)
     //static float sPhi4Cam{ 0.f };
     //ImGui::SliderFloat("sPhi4Cam", &sPhi4Cam, 0.f, 6.28319f);
 
-    // カメラを球面座標系で管理する
-    Vector3 ppos = player_->GetTransformPtr()->position;
 
-    // 遠目から惑星を見るカメラに切り替える処理
-    const Vector3 kPos_watch_planet = { 0,190,0 };  // 惑星を見るためのカメラの座標（固定）
-    static Vector3 pos_playerAtSwitching;           // カメラを切り替えたときの惑星を見るためのカメラの初期座標として切替時のプレイヤーの座標を入れておくもの
-    static uint32_t phase_easingHoleCam;            // カメラのイージングの段階
-
-
-    player_->Update();
-
-    uint32_t capturedRabbitCount = 0;
+    //uint32_t capturedRabbitCount = 0;
     //for (auto& snake : snakes_)
     //{
     //    if(snake)
@@ -191,7 +177,7 @@ void GameScene::Update(void)
     //}
 
     if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
-    if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
+    //if (capturedRabbitCount == 3 && b_.GetIsExecite() == false) { b_.SetIsExecute(true); }
 
     //planet_->Update();
 
@@ -283,6 +269,7 @@ void GameScene::Update(void)
 void GameScene::Draw3d(void)
 {
     lightGroup_->Draw();
+    gameManager_.Draw3d();
 
     //player_->Draw3d();
     //chikenegg_.Draw();
@@ -334,6 +321,7 @@ void GameScene::Draw2dFore(void)
 
     //a_.Draw();
     //b_.Draw();
+    gameManager_.Draw2d();
 }
 
 void GameScene::Draw2dBack(void)

@@ -42,6 +42,50 @@ void GameManager::Initialize()
 
 void GameManager::Update(void)
 {
+    //>> オブジェクト
+    // 鶏卵付近の蛇数をプレイヤーへ渡す
+    HandoverSnakeCount();
+    // 鶏卵更新
+    chickenEgg_.Update();
+
+    // プレイヤー更新
+    player_.Update();
+    // 惑星の更新
+    tutorialPlanet_.Update();
+    // 蛇の更新
+    for (auto& snake : snakes_) { snake.Update(); }
+    // コインリストの更新
+    coinList_.Update();
+
+    //>> イベント
+    event_startTutorial_.Execute();
+    event_endTutorial_.Execute();
+    event_tutorialPlanetHole_.Execute();
+}
+
+void GameManager::Draw3d(void)
+{
+    //>> オブジェクト
+    // 鶏卵描画
+    chickenEgg_.Draw();
+    // プレイヤー描画
+    player_.Draw3d();
+    // 惑星の描画
+    tutorialPlanet_.Draw();
+    // 蛇の描画
+    for (auto& snake : snakes_) { snake.Draw(); }
+    // コインリストの描画
+    coinList_.Draw();
+
+    event_tutorialPlanetHole_.Draw();
+}
+
+void GameManager::Draw2d(void)
+{
+    player_.Draw2dFore();
+
+    event_startTutorial_.Draw();
+    event_endTutorial_.Draw();
 }
 
 void GameManager::Finalize(void)
@@ -76,4 +120,12 @@ void GameManager::CamerasSetting(void)
     camera_colPtr_->SetTransform(Transform{ { 3,172,-3 }, camera_colPtr_->GetTransform().rotation, camera_colPtr_->GetTransform().scale });        // プレイヤー用カメラ2の座標
     camMPtr_->Register(camera_4Hole_.get());
     camera_4Hole_->SetTransform(Transform{ { 0, 190, 0 }, { 1.5725f,-1.2175f,0} , camera_4Hole_->GetTransform().scale });                          // 穴に落ちたとき用カメラの座標と回転
+}
+
+void GameManager::HandoverSnakeCount(void)
+{
+    // 蛇の数を取得
+    int32_t snakeCount = chickenEgg_.GetApproachingEggSnakes();
+    // プレイヤーへ設定
+    player_.SetApproachingEggSnakes(snakeCount);
 }

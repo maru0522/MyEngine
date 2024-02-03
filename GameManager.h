@@ -28,11 +28,15 @@ public:
     // 初期化関数
     void Initialize(void);
     void Update(void);
+    void Draw3d(void);
+    void Draw2d(void);
     void Finalize(void);
 
 private:
-    //
+    // カメラの設定
     void CamerasSetting(void);
+    //
+    void HandoverSnakeCount(void);
 
     //>> 変数
     CollisionManager* colMPtr_;
