@@ -49,6 +49,11 @@ void FrameWork::Initialize()
     modelM_->LoadOBJ("Resources/model/exclamationMark/exclamationMark.obj", false);
     modelM_->LoadOBJ("Resources/model/chicken/chicken.obj", false);
     modelM_->LoadOBJ("Resources/model/snake/snake.obj", false);
+    modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain1.obj", false);
+    modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain2.obj", false);
+    modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain3.obj", false);
+    modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain4.obj", false);
+    modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain5.obj", false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化

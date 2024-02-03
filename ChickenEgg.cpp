@@ -8,11 +8,11 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     planetPtr_ = arg_planetPtr_;
 
     // モデル読み込み
-    model_[0].Load("Resources/model/sphere/sphere.obj");
-    model_[1].Load("Resources/model/sphere/sphere.obj");
-    model_[2].Load("Resources/model/sphere/sphere.obj");
-    model_[3].Load("Resources/model/sphere/sphere.obj");
-    model_[4].Load("Resources/model/sphere/sphere.obj");
+    model_[0].Load("Resources/model/chickenEgg/egg_remain1.obj");
+    model_[1].Load("Resources/model/chickenEgg/egg_remain2.obj");
+    model_[2].Load("Resources/model/chickenEgg/egg_remain3.obj");
+    model_[3].Load("Resources/model/chickenEgg/egg_remain4.obj");
+    model_[4].Load("Resources/model/chickenEgg/egg_remain5.obj");
 
     // 影の適用
     circleShadows_num_ = lightMPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);      // 使用可能な丸影の番号を取得

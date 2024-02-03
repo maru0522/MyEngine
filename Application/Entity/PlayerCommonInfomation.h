@@ -21,7 +21,7 @@ struct Player_CommonInfomation
     ~Player_CommonInfomation(void) = default;
 
     //>> 定数
-    const float kRadius_{ 2.f };
+    const float kRadius_{ 3.3f };
     const float kJumpPower_{ 0.75f };
     const float kJumpLongPower_{ 0.85f };
     const float kMoveSpeed_{ 0.4f };
