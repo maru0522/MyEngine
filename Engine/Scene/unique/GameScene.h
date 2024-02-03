@@ -45,9 +45,6 @@ public:
 
     void DrawBackGround(void);
 
-    //bool debugCamFuncFollow_{ false }; // Follow
-    //bool debugCamFollow_{ false }; // カメラとプレイヤーの距離が常に一定になるようにする
-    //bool debugCamFollow2_{ }; // 軸をプレイヤーと同じにする。
     bool debugPlanetDraw_{ true }; // 星を描画する。
     bool debugSpherical_{ true }; // 球面座標系でカメラを管理する
 
@@ -55,34 +52,18 @@ public:
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
     GameManager gameManager_;
 
-    //std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    //std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    //std::unique_ptr<Rabbit> rabbit3_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
-    //std::unique_ptr<Object3D> testP_{ std::make_unique<Object3D>("Resources/model/lolP/lolP.obj") };
     std::unique_ptr<Sprite> png_backGround_{ std::make_unique<Sprite>("Resources/BackGround.png") };
     bool isBG_;
 
     std::unique_ptr<Object3D> skydome_{ std::make_unique<Object3D>("Resources/model/skydome/skydome.obj") };
 
-    //std::unique_ptr<Object3D> planet_{ std::make_unique<Object3D>("Resources/model/ICOSphere/ICOSphere.obj") };
-
-    //
-    //std::unique_ptr<Object3D> hole_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
-    //std::unique_ptr<IventArea_Tantative> hole1_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel1") };
-    //std::unique_ptr<IventArea_Tantative> hole2_{ std::make_unique<IventArea_Tantative>(CollisionManager::GetInstance(), "tunnel2") };
-    //std::unique_ptr<Object3D> house_{ std::make_unique<Object3D>("Resources/model/cube/cube.obj") };
     std::unique_ptr<Rock> rock1_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock2_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock3_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock4_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
     std::unique_ptr<Rock> rock5_{ std::make_unique<Rock>(CollisionManager::GetInstance()) };
-    //std::unique_ptr<StickyBall> sticky1_{std::make_unique<StickyBall>(CollisionManager::GetInstance()) };
 
     std::unique_ptr<Pipe> pipe1_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
-
-    //std::array<std::unique_ptr<Coin>, 19> coins_;
-
-    //std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };
 
