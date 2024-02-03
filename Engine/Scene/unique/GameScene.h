@@ -45,9 +45,6 @@ public:
 
     void DrawBackGround(void);
 
-    void DeployObj(LevelData* lvdPtr);
-    void HotReload(LevelData* lvdPtr);
-
     //bool debugCamFuncFollow_{ false }; // Follow
     //bool debugCamFollow_{ false }; // カメラとプレイヤーの距離が常に一定になるようにする
     //bool debugCamFollow2_{ }; // 軸をプレイヤーと同じにする。
@@ -85,10 +82,6 @@ public:
     std::unique_ptr<Pipe> pipe2_{std::make_unique<Pipe>(CollisionManager::GetInstance()) };
 
     //std::array<std::unique_ptr<Coin>, 19> coins_;
-
-    // json読み込み&配置用
-    std::map<std::string, std::unique_ptr<Object3D>> objects_;
-    std::unique_ptr<LevelData> lvdPtr_;
 
     //std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };
 };
