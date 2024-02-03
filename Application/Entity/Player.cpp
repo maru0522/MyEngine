@@ -22,12 +22,12 @@ void Player::Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPt
     sphereCollider_.callback_onCollision_ = std::bind(&Player::OnCollision, this);
     sphereCollider_.callback_onTrigger_ = std::bind(&Player::OnTrigger, this);
 
-    sphereCollider_.radius = commonInfo_->kRadius_;
+    sphereCollider_.radius = commonInfo_->kCollisionRadius_;
 
     // 初期位置
     commonInfo_->transform_.position = { 0,60,-10 };
     commonInfo_->transform_.scale = { 3.4f,3.4f,3.4f };
-    commonInfo_->transform_.scale = { commonInfo_->kRadius_,commonInfo_->kRadius_,commonInfo_->kRadius_ };
+    commonInfo_->transform_.scale = { commonInfo_->kModelScale_,commonInfo_->kModelScale_,commonInfo_->kModelScale_ };
 
     // 初期姿勢
     commonInfo_->axes_.forward = { 0,0,1 };

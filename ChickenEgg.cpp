@@ -37,7 +37,7 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     posture_ = Axis3::Initialize();
 
     transform_.position = { 0,90,-30 };
-    transform_.scale = { kRadius_col_,kRadius_col_,kRadius_col_ };
+    transform_.scale = { kModelScale_, kModelScale_, kModelScale_ };
 }
 
 void ChickenEgg::Finalize(void)

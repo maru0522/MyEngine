@@ -7,6 +7,7 @@ struct SnakeCommonInfomation final
 public:
     //>> 定義
     static const float kRadius_col_;               // 当たり判定の半径
+    static const float kModelScale_;               // モデルの拡縮倍率
     static const float kRadius_detectEgg_;         // 卵検知の半径
     static const float kRadius_detectPlayer_;      // プレイヤー検知の半径
     static const float kDetectRadius_escape_;      // さらにこの半径内に入ったら、遠ざかる挙動

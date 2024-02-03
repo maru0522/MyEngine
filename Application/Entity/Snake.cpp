@@ -34,7 +34,7 @@ void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightMan
 
     // 初期位置
     commonInfo_->transform_.position = { 0,60,20 };
-    commonInfo_->transform_.scale = { 2.5f,2.5f,2.5f };
+    commonInfo_->transform_.scale = { SnakeCommonInfomation::kModelScale_,SnakeCommonInfomation::kModelScale_,SnakeCommonInfomation::kModelScale_ };
     // 初期姿勢
     commonInfo_->axes_.forward = { 0,0,1 };
     commonInfo_->axes_.right = { 1,0,0 };

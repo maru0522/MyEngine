@@ -1,6 +1,7 @@
 #include "SnakeCommonInfomation.h"
 
 const float SnakeCommonInfomation::kRadius_col_{ 1.f };                // 当たり判定の半径
+const float SnakeCommonInfomation::kModelScale_{ 2.5f };                // モデルの拡縮倍率
 const float SnakeCommonInfomation::kRadius_detectEgg_{ 25.f };         // 卵検知の半径
 const float SnakeCommonInfomation::kRadius_detectPlayer_{ 25.f };      // プレイヤー検知の半径
 const float SnakeCommonInfomation::kDetectRadius_escape_{ 10.f };      // さらにこの半径内に入ったら、遠ざかる挙動
