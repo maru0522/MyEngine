@@ -49,6 +49,11 @@ public:
     const Image* GetImagePtrByNickname(const std::string& nickname);
 
 private:
+    void LoadImg(Image& arg_img);
+    void LoadDds(Image& arg_img);
+
+    void Process_LoadingImage();
+
     // 出来上がった情報体[Image]をmapコンテナに登録する
     void RegisterImg(const Image& img);
     void RegisterNickname(const fsPath& path, const std::string& nickname);

@@ -11,8 +11,6 @@ void TextureManager::Initialize(void)
 
 void TextureManager::Load(const fsPath& path)
 {
-    InitDirectX* p_idx{ InitDirectX::GetInstance() };
-
     Image tempImg{}; // てんぽらりん
 
     tempImg.path = path;
@@ -20,13 +18,81 @@ void TextureManager::Load(const fsPath& path)
     // Image重複確認
     if (CheckDuplicateTexture(tempImg)) return;
 
+    if (tempImg.path.extension() == ".dds") 
+    {
+        LoadDds(tempImg);
+    }
+    else { LoadImg(tempImg); }
+
+    // 登録
+    RegisterImg(tempImg);
+}
+
+void TextureManager::Load(const fsPath& path, const std::string& nickname)
+{
+    // nicknameの重複確認
+    if (CheckDuplicateNickname(nickname)) return;
+
+    Load(path);
+
+    //nickname登録
+    RegisterNickname(path, nickname);
+}
+
+void TextureManager::LoadFolder(const fsPath& path)
+{
+    for (const std::filesystem::directory_entry& file : std::filesystem::directory_iterator(path)) {
+        std::filesystem::path fileName{ file.path().filename().string() };
+
+        if (file.path().extension() == ".png" || file.path().extension() == ".jpg" || file.path().extension() == ".jpeg" || file.path().extension() == ".dds") {
+            Load(path / fileName);
+        }
+    }
+}
+
+const TextureManager::Image* TextureManager::GetImagePtr(const fsPath& path) const
+{
+    try
+    {
+        return &textures_.at(path);
+    }
+    catch (const std::out_of_range&)
+    {
+        // エラーログ出力
+        Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a texture corresponding to the argument path(" + path.string() + "), so replaced it with \"Missing Texture\". ");
+        return &textures_.at("MISSING");
+    }
+}
+
+const TextureManager::Image* TextureManager::GetImagePtrByNickname(const std::string& nickname)
+{
+    fsPath path{};
+
+    try
+    {
+        path = paths_.at(nickname);
+    }
+    catch (const std::exception&)
+    {
+        // エラーログ出力
+        Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a path corresponding to the argument nickname(" + nickname + "), so replaced it with \"MISSING\". ");
+        path = "MISSING";
+    }
+
+    return GetImagePtr(path);
+}
+
+void TextureManager::LoadImg(Image& arg_img)
+{
+    InitDirectX* p_idx{ InitDirectX::GetInstance() };
+
 #pragma region テクスチャ読み込み
     //画像イメージデータ配列
     DirectX::TexMetadata metadata{};
     DirectX::ScratchImage scratchImg{};
 
     // WICテクスチャのロードに使う pathを文字列変換
-    std::string strPath{ tempImg.path.string() };
+    std::string strPath{ arg_img.path.string() };
     std::wstring wStrPath{ strPath.begin(), strPath.end() };
     const wchar_t* szFile{ wStrPath.c_str() };
 
@@ -70,7 +136,7 @@ void TextureManager::Load(const fsPath& path)
 
 #pragma region テクスチャバッファ
     // テクスチャバッファの生成
-    hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tempImg.buff));
+    hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&arg_img.buff));
     assert(SUCCEEDED(hr));
 #pragma endregion
 
@@ -81,7 +147,7 @@ void TextureManager::Load(const fsPath& path)
         const DirectX::Image* img = scratchImg.GetImage(i, 0, 0);
 
         // テクスチャバッファにデータ転送
-        hr = tempImg.buff->WriteToSubresource(
+        hr = arg_img.buff->WriteToSubresource(
             static_cast<UINT>(i),
             nullptr,		// 全領域へコピー
             img->pixels,	// 元データアドレス
@@ -92,66 +158,92 @@ void TextureManager::Load(const fsPath& path)
     }
 #pragma endregion
 
+
     // InitDirectX内のDescriptorHeapに生成。
     // 返り値でgpuのアドレスを取得。
-    tempImg.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, tempImg.buff.Get());
-
-    // 登録
-    RegisterImg(tempImg);
+    arg_img.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, arg_img.buff.Get());
 }
 
-void TextureManager::Load(const fsPath& path, const std::string& nickname)
+void TextureManager::LoadDds(Image& arg_img)
 {
-    // nicknameの重複確認
-    if (CheckDuplicateNickname(nickname)) return;
+    InitDirectX* p_idx{ InitDirectX::GetInstance() };
 
-    Load(path);
+#pragma region テクスチャ読み込み
+    //画像イメージデータ配列
+    DirectX::TexMetadata metadata{};
+    DirectX::ScratchImage scratchImg{};
 
-    //nickname登録
-    RegisterNickname(path, nickname);
-}
+    // WICテクスチャのロードに使う pathを文字列変換
+    std::string strPath{ arg_img.path.string() };
+    std::wstring wStrPath{ strPath.begin(), strPath.end() };
+    const wchar_t* szFile{ wStrPath.c_str() };
 
-void TextureManager::LoadFolder(const fsPath& path)
-{
-    for (const std::filesystem::directory_entry& file : std::filesystem::directory_iterator(path)) {
-        std::filesystem::path fileName{ file.path().filename().string() };
+    // DDSテクスチャのロード
+    HRESULT hr = LoadFromDDSFile(szFile, DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
+    if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) return;
+    assert(SUCCEEDED(hr));
+#pragma endregion
 
-        if (file.path().extension() == ".png" || file.path().extension() == ".jpg" || file.path().extension() == ".jpeg") {
-            Load(path / fileName);
-        }
+#pragma region ミップマップ
+    DirectX::ScratchImage mipChain{};
+
+    // ミップマップ生成
+    hr = GenerateMipMaps(scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipChain);
+    if (SUCCEEDED(hr)) {
+        scratchImg = std::move(mipChain);
+        metadata = scratchImg.GetMetadata();
     }
-}
+#pragma endregion
 
-const TextureManager::Image* TextureManager::GetImagePtr(const fsPath& path) const
-{
-    try
-    {
-        return &textures_.at(path);
-    }
-    catch (const std::out_of_range&)
-    {
-        // エラーログ出力
-        Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a texture corresponding to the argument path(" + path.string() + "), so replaced it with \"Missing Texture\". ");
-        return &textures_.at("MISSING");
-    }
-}
+    // 読み込んだディフューズテクスチャをSRGBとして扱う
+    metadata.format = DirectX::MakeSRGB(metadata.format);
 
-const TextureManager::Image* TextureManager::GetImagePtrByNickname(const std::string& nickname)
-{
-    fsPath path{};
+#pragma region ヒープ設定とデスクリプタ設定
+    // ヒープ設定
+    D3D12_HEAP_PROPERTIES texHeapProp{};
+    texHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
+    texHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+    texHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
-    try
-    {
-        path = paths_.at(nickname);
-    }
-    catch (const std::exception&)
-    {
-        // エラーログ出力
-        Util::Log::PrintOutputWindow("[TextureManager] : Couldn't find a path corresponding to the argument nickname(" + nickname + "), so replaced it with \"MISSING\". ");
-        path = "MISSING";
-    }
+    // リソース設定
+    D3D12_RESOURCE_DESC textureResourceDesc{};
+    textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+    textureResourceDesc.Format = metadata.format;
+    textureResourceDesc.Width = metadata.width;
+    textureResourceDesc.Height = static_cast<UINT>(metadata.height);
+    textureResourceDesc.DepthOrArraySize = static_cast<UINT16>(metadata.arraySize);
+    textureResourceDesc.MipLevels = static_cast<UINT16>(metadata.mipLevels);
+    textureResourceDesc.SampleDesc.Count = 1;
+#pragma endregion
 
-    return GetImagePtr(path);
+#pragma region テクスチャバッファ
+    // テクスチャバッファの生成
+    hr = p_idx->GetDevice()->CreateCommittedResource(&texHeapProp, D3D12_HEAP_FLAG_NONE, &textureResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&arg_img.buff));
+    assert(SUCCEEDED(hr));
+#pragma endregion
+
+#pragma region バッファへのデータ転送
+    // 全ミップマップについて
+    for (size_t i = 0; i < metadata.mipLevels; i++) {
+        // ミップマップレベルを指定してイメージを取得
+        const DirectX::Image* img = scratchImg.GetImage(i, 0, 0);
+
+        // テクスチャバッファにデータ転送
+        hr = arg_img.buff->WriteToSubresource(
+            static_cast<UINT>(i),
+            nullptr,		// 全領域へコピー
+            img->pixels,	// 元データアドレス
+            static_cast<UINT>(img->rowPitch),	// 1ラインサイズ
+            static_cast<UINT>(img->slicePitch)	// 全サイズ
+        );
+        assert(SUCCEEDED(hr));
+    }
+#pragma endregion
+
+
+    // InitDirectX内のDescriptorHeapに生成。
+    // 返り値でgpuのアドレスを取得。
+    arg_img.srvGpuHandle.ptr = p_idx->GetDescHeap_t()->CreateSRV(textureResourceDesc, arg_img.buff.Get());
 }
 
 void TextureManager::RegisterImg(const Image& img)
