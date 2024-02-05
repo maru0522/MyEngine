@@ -38,10 +38,14 @@ void TitleScene::Initialize(void)
     dTimer_ease_logoUpScale_.SetAddSpeed(2.f);
     dTimer_ease_pressAStrAlpha_.Start(4.f);
     dTimer_ease_pressAStrAlpha_.SetAddSpeed(2.f);
+
+    sprite.SetPosition({ 200, 200 });
 }
 
 void TitleScene::Update(void)
 {
+    sprite.Update();
+
     if (KEYS::IsTrigger(DIK_SPACE) || XPAD::IsTrigger(XPAD::Button::A))
     {
         SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
@@ -101,6 +105,8 @@ void TitleScene::Draw2dFore(void)
     UI::GetInstance()->Draw("png_titleLogo");
     UI::GetInstance()->Draw("png_titleLogo-White");
     UI::GetInstance()->Draw("png_titlePressA");
+
+    sprite.Draw();
 }
 
 void TitleScene::Draw2dBack(void)

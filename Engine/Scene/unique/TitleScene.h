@@ -23,5 +23,7 @@ private:
     DeltaTimer dTimer_ease_logoUpScale_;
     DeltaTimer dTimer_ease_WhitelogoDownScale_;
     DeltaTimer dTimer_ease_pressAStrAlpha_;
+
+    Sprite sprite{ "Resources/mario.dds" };
 };
 
