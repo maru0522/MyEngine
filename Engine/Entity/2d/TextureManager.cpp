@@ -184,17 +184,6 @@ void TextureManager::LoadDds(Image& arg_img)
     assert(SUCCEEDED(hr));
 #pragma endregion
 
-#pragma region ミップマップ
-    DirectX::ScratchImage mipChain{};
-
-    // ミップマップ生成
-    hr = GenerateMipMaps(scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipChain);
-    if (SUCCEEDED(hr)) {
-        scratchImg = std::move(mipChain);
-        metadata = scratchImg.GetMetadata();
-    }
-#pragma endregion
-
     // 読み込んだディフューズテクスチャをSRGBとして扱う
     metadata.format = DirectX::MakeSRGB(metadata.format);
 
