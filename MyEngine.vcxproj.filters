@@ -294,6 +294,9 @@
     <ClCompile Include="SnakeBehavior.cpp" />
     <ClCompile Include="SnakeCommonInfomation.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="SnakeCage.cpp">
+      <Filter>Application\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -578,6 +581,9 @@
     <ClInclude Include="SnakeBehavior.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="SnakeCage.h">
+      <Filter>Application\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

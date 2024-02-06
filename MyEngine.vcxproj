@@ -191,6 +191,7 @@
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
     <ClCompile Include="Application\OperateGuideUI.cpp" />
     <ClCompile Include="SnakeBehavior.cpp" />
+    <ClCompile Include="SnakeCage.cpp" />
     <ClCompile Include="SnakeCommonInfomation.cpp" />
     <ClCompile Include="StoneBlock.cpp" />
   </ItemGroup>
@@ -406,6 +407,7 @@
     <ClInclude Include="Application\OperateGuideUI.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="SnakeBehavior.h" />
+    <ClInclude Include="SnakeCage.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
     <ClInclude Include="StoneBlock.h" />
   </ItemGroup>
