@@ -179,9 +179,6 @@
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp">
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\Player.cpp">
-      <Filter>Application\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Entity\Rabbit.cpp">
       <Filter>Application\Entity</Filter>
     </ClCompile>
@@ -193,9 +190,6 @@
     </ClCompile>
     <ClCompile Include="Application\Object\StickyBall.cpp">
       <Filter>Application\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Entity\PlayerBehavior.cpp">
-      <Filter>Application\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Application\Object\Pipe.cpp">
       <Filter>Application\Object</Filter>
@@ -257,7 +251,6 @@
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp">
       <Filter>Engine\Entity\Collision\CollisionPrimitive</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\PlayerUI.cpp" />
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
@@ -281,20 +274,41 @@
     <ClCompile Include="Application\Event_EndTutorial.cpp" />
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
-    <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
     <ClCompile Include="Application\OperateGuideUI.cpp" />
     <ClCompile Include="Application\ExclamationMark.cpp" />
-    <ClCompile Include="CoinList.cpp" />
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp">
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
     <ClCompile Include="StoneBlock.cpp" />
-    <ClCompile Include="ChickenEgg.cpp" />
-    <ClCompile Include="Application\Entity\Snake.cpp" />
-    <ClCompile Include="SnakeBehavior.cpp" />
-    <ClCompile Include="SnakeCommonInfomation.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="SnakeCage.cpp">
+      <Filter>Application\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Entity\Player.cpp">
+      <Filter>Application\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Entity\PlayerBehavior.cpp">
+      <Filter>Application\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp">
+      <Filter>Application\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Entity\PlayerUI.cpp">
+      <Filter>Application\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Entity\Snake.cpp">
+      <Filter>Application\Entity\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakeBehavior.cpp">
+      <Filter>Application\Entity\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakeCommonInfomation.cpp">
+      <Filter>Application\Entity\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="ChickenEgg.cpp">
+      <Filter>Application\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinList.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -463,9 +477,6 @@
     <ClInclude Include="Application\Entity\Rabbit.h">
       <Filter>Application\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\Player.h">
-      <Filter>Application\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Object\StickyBall.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
@@ -474,9 +485,6 @@
     </ClInclude>
     <ClInclude Include="Application\Object\Rock.h">
       <Filter>Application\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Entity\PlayerBehavior.h">
-      <Filter>Application\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Application\Object\Pipe.h">
       <Filter>Application\Object</Filter>
@@ -544,7 +552,6 @@
     <ClInclude Include="Engine\Entity\Collision\Primitive.h">
       <Filter>Engine\Entity\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\PlayerUI.h" />
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
@@ -568,20 +575,41 @@
     <ClInclude Include="Application\Event_EndTutorial.h" />
     <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
-    <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
     <ClInclude Include="Application\OperateGuideUI.h" />
     <ClInclude Include="Application\ExclamationMark.h" />
-    <ClInclude Include="CoinList.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h">
       <Filter>Engine\Scene\unique</Filter>
     </ClInclude>
     <ClInclude Include="StoneBlock.h" />
-    <ClInclude Include="ChickenEgg.h" />
-    <ClInclude Include="Application\Entity\Snake.h" />
-    <ClInclude Include="SnakeBehavior.h" />
-    <ClInclude Include="SnakeCommonInfomation.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="SnakeCage.h">
+      <Filter>Application\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Entity\Player.h">
+      <Filter>Application\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Entity\PlayerBehavior.h">
+      <Filter>Application\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Entity\PlayerUI.h">
+      <Filter>Application\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Entity\PlayerCommonInfomation.h">
+      <Filter>Application\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SnakeCommonInfomation.h">
+      <Filter>Application\Entity\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Entity\Snake.h">
+      <Filter>Application\Entity\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="SnakeBehavior.h">
+      <Filter>Application\Entity\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="ChickenEgg.h">
+      <Filter>Application\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CoinList.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
   </ItemGroup>
@@ -680,6 +708,12 @@
     </Filter>
     <Filter Include="Engine\Scene\Transition">
       <UniqueIdentifier>{e6cead2d-5d78-4cd9-92b5-016dd231d308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Entity\Player">
+      <UniqueIdentifier>{b7bc5fdf-8f93-4e7f-ab66-16822ccf0af2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Entity\Snake">
+      <UniqueIdentifier>{43647758-6add-4880-b08d-a6fcce70426f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
