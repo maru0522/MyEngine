@@ -48,7 +48,7 @@ public:
     virtual ~Object3D(void) = default;
 
     // モデルを読み込む。1回のみ使う事を想定している。 TODO: ConstBufferのリソース解放する術を調べる
-    void Load(const fsPath& arg_path);
+    virtual void Load(const fsPath& arg_path);
     virtual void Update(void);
     virtual void Draw(void);
     void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
