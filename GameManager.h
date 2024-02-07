@@ -6,6 +6,8 @@
 #include "Planet.h"
 #include "Player.h"
 #include "ChickenEgg.h"
+#include "Snake.h"
+#include "SnakeCage.h"
 
 #include "CoinList.h"
 
@@ -37,6 +39,8 @@ private:
     void CamerasSetting(void);
     //
     void HandoverSnakeCount(void);
+    // 蛇をケージに閉じ込めるかの条件判定と、収監の実行
+    void SnakeIntoCustody(void);
 
     //>> 変数
     CollisionManager* colMPtr_;
@@ -54,6 +58,7 @@ private:
     Player player_;
     ChickenEgg chickenEgg_;
     std::array<Snake, 3> snakes_;
+    std::array<SnakeCage, 3> snakeCages_;
 
     CoinList coinList_;
 

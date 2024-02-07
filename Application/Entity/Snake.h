@@ -42,6 +42,8 @@ public:
     void Finalize(void);
 
     void SnakeRobChickenEgg(void);
+    // ケージに囚われた状態にする関数
+    void Caged(Vector3* arg_cagePosPtr);
 private:
 
     //void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
@@ -51,11 +53,16 @@ private:
     void Process_CircleShadow(void);
 
     void OnCollision(void); // callback
-    void OnDetect(void); // callback
+    void OnTrigger(void);   // callback
+    void OnDetect(void);    // callback
+
+    void SetupLightCircleShadows(void) {
+        // 使用可能な丸影の番号を取得
+        circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
+        lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
+    }
 
     //>> 変数
-    bool isCaptured_{};
-
     CorrectionDirection shakeDirection_; // 移動する際に、左右どちらにぶれるか
     ChickenEgg* chickenEggPtr_;
 
@@ -76,16 +83,10 @@ private:
 
 public:
     //>> setter
-    void SetIsCaptured(bool arg_isCaptured) { isCaptured_ = arg_isCaptured; }
-    void SetupLightCircleShadows(void) {
-        // 使用可能な丸影の番号を取得
-        circleShadows_num_ = lightManagerPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);
-        lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, true);
-    }
     void SetCircleShadowsIsActive(bool arg_active) { lightManagerPtr_->SetLightActive(LightType::CIRCLE_SHADOW, circleShadows_num_, arg_active); }
 
     //>> getter
     Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
-    bool GetIsCaptured(void) { return isCaptured_; }
+    bool GetIsCaged(void) { return commonInfo_->is_Caged_; }
 };
 

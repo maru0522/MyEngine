@@ -31,9 +31,9 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     sphere_detectSnake_.callback_onCollision_ = std::bind(&ChickenEgg::OnCollision_DetectSnake, this);
     sphere_detectSnake_.radius = kRadius_detectSnake_;
 
-    // 初期位置
+    // 位置初期化
     transform_ = Transform::Initialize();
-    // 初期姿勢
+    // 姿勢初期化
     posture_ = Axis3::Initialize();
 
     transform_.position = { 0,90,-30 };

@@ -19,6 +19,7 @@ void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightMan
     arg_colMPtr->Register(&sphere_collision_);
     sphere_collision_.SetID("snake_col");
     sphere_collision_.callback_onCollision_ = std::bind(&Snake::OnCollision, this);
+    sphere_collision_.callback_onTrigger_ = std::bind(&Snake::OnTrigger, this);
     sphere_collision_.radius = SnakeCommonInfomation::kRadius_col_;
     sphere_collision_.center = { 0,60,20 };
 
@@ -44,12 +45,14 @@ void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightMan
 
     // behaviorMachine経由で、behavior生成
     snakeBehaviorMachine_.Initialize(this, SnakeBehavior::IDLE);
+
+    SetupLightCircleShadows();
 }
 
 void Snake::Update(void)
 {
     // プレイヤーに触れられた後なら処理をスキップ
-    if (isCaptured_) { return; }
+    if (commonInfo_->is_Caged_) { return; }
 
     // 丸影処理
     Process_CircleShadow();
@@ -94,7 +97,7 @@ void Snake::Update(void)
 
 void Snake::Draw(void)
 {
-    if (isCaptured_ == false) { appearance_->Draw(); }
+    if (commonInfo_->is_Caged_ == false) { appearance_->Draw(); }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
     if (commonInfo_->is_detectPlayer_) { exclamationMark_->Draw(); }
@@ -125,6 +128,14 @@ void Snake::SnakeRobChickenEgg(void)
 {
     int32_t eggNum = chickenEggPtr_->eggNum_;
     chickenEggPtr_->eggNum_ = eggNum - 1;
+}
+
+void Snake::Caged(Vector3* arg_cagePosPtr)
+{
+    // 捕まえられたかのフラグをtrue
+    commonInfo_->is_Caged_ = true;
+    // 蛇の座標をケージ内に固定するための座標ptr
+    commonInfo_->pos_cage_ = arg_cagePosPtr;
 }
 
 void Snake::RotateDirection(float arg_radian)
@@ -251,6 +262,15 @@ void Snake::OnCollision(void)
         commonInfo_->is_eatChickenEgg_ = true; // snakeBehavior内でfalseにする処理を行う
         // 鶏卵の数を1減らす関数を実行 ※friend関数
         SnakeRobChickenEgg();
+    }
+}
+
+void Snake::OnTrigger(void)
+{
+    if (sphere_collision_.GetOther()->GetID() == "snakeCage_col")
+    {
+        // ケージに捕まったかどうかのフラグをtrue
+        commonInfo_->is_Caged_ = true;
     }
 }
 

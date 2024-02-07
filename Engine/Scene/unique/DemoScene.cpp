@@ -226,7 +226,7 @@ void DemoScene::Update(void)
         if(rabbit) 
         { 
             rabbit->Update();
-            if (rabbit->GetIsCaptured()) { rabbit.reset(); }
+            if (rabbit->GetIsCaged()) { rabbit.reset(); }
         }
         else
         {
