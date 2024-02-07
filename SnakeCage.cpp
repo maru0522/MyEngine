@@ -6,7 +6,7 @@ void SnakeCage::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_ligh
     lightMPtr_ = arg_lightManagerPtr;
     planetPtr_ = arg_planetPtr;
 
-    Object3D::Load("Resources/model/sphere/sphere.obj"); //TODO: cage load
+    Object3D::Load("Resources/model/cage/cage.obj"); //TODO: cage load
 
     // 影の適用
     circleShadows_num_ = lightMPtr_->UsableRightNum(LightType::CIRCLE_SHADOW);      // 使用可能な丸影の番号を取得
