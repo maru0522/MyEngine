@@ -161,9 +161,6 @@ public:
     void Exit(void) override {};
 
 private:
-    // ランダムな向きを向きながら歩き回る
-    void LeaveChikenEgg(void);
-
     // 他状態への遷移要件確認
     void RequirementCheck(void) override;
 };
@@ -246,8 +243,6 @@ public:
     void Exit(void) override {};
 
 private:
-    void EscapePlayer(float arg_moveSpd) override;
-
     // 他状態への遷移要件確認
     void RequirementCheck(void) override;
 };

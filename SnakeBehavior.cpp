@@ -372,16 +372,53 @@ void SnakeBehavior_MoveStomach::Initialize(Snake* arg_snakePtr)
 
 void SnakeBehavior_MoveStomach::Entry(void)
 {
+    // 通常移動のEntry()を呼ぶ
     SnakeBehavior_Move::Entry();
 }
 
 void SnakeBehavior_MoveStomach::Execute(void)
 {
+    Process_DebugGUI();
 
+    // 姿勢の更新 + 右vec再計算
+    Process_UpdatePosture();
+
+    // 歩き方別の関数ポインタテーブル
+    void(SnakeBehavior_MoveStomach:: * func[]) (float arg_spd) = {
+        &SnakeBehavior_MoveStomach::RamdomWalk,
+        &SnakeBehavior_MoveStomach::Linear,
+    };
+    // 上記テーブルに要素数と引数を渡して実行
+    (this->*func[(int32_t)pattern_])(commonInfo_->kMoveSpd_moveStomach_);
+
+    // 姿勢再計算
+    Process_RedefineForwardVec();
+
+    // 消化時間のタイマー更新
+    commonInfo_->timer_completeEatEgg_.Update();
+    // タイマーの進行割合
+    const float rate = commonInfo_->timer_completeEatEgg_.GetTimeRate();
+    // 進行割合が100%なら卵を食べているフラグをfalse
+    if (rate >= 1.f) { commonInfo_->is_eatChickenEgg_ = false; }
 }
 
 void SnakeBehavior_MoveStomach::RequirementCheck(void)
 {
+    // プレイヤーの存在を検知した
+    if (commonInfo_->is_detectPlayer_)
+    {
+        // 蛇の振る舞いをESCAPEへ変更
+        nextBehavior_ = SnakeBehavior::ESCAPE_STOMACH;
+        return;
+    }
+
+    // 卵を食べていない
+    if (commonInfo_->is_eatChickenEgg_ == false)
+    {
+        // 蛇の振る舞いをMOVEへ変更
+        nextBehavior_ = SnakeBehavior::MOVE;
+        return;
+    }
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -480,7 +517,7 @@ void SnakeBehavior_Escape::Execute(void)
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
-    // 卵に接近する。。
+    // プレイヤーから逃げる
     EscapePlayer(commonInfo_->kMoveSpd_escape_);
 
     // 姿勢再計算
@@ -541,16 +578,11 @@ void SnakeBehavior_EscapeStomach::Execute(void)
     // 姿勢の更新 + 右vec再計算
     Process_UpdatePosture();
 
-    // 卵に接近する。。
-    EscapePlayer(commonInfo_->kMoveSpd_stomach_);
+    // プレイヤーから逃げる
+    SnakeBehavior_Escape::EscapePlayer(commonInfo_->kMoveSpd_escapeStomach_);
 
     // 姿勢再計算
     Process_RecalculatePosture();
-}
-
-void SnakeBehavior_EscapeStomach::EscapePlayer(float arg_moveSpd)
-{
-    SnakeBehavior_Escape::EscapePlayer(arg_moveSpd);
 
     // 消化時間のタイマー更新
     commonInfo_->timer_completeEatEgg_.Update();
@@ -562,6 +594,14 @@ void SnakeBehavior_EscapeStomach::EscapePlayer(float arg_moveSpd)
 
 void SnakeBehavior_EscapeStomach::RequirementCheck(void)
 {
+    // プレイヤーを検知していない　&& 十分に逃げた
+    if (commonInfo_->is_detectPlayer_ == false && is_enoughEscape_)
+    {
+        // 蛇の振る舞いをMOVEへ変更
+        nextBehavior_ = SnakeBehavior::MOVE_STOMACH;
+        return;
+    }
+
     // 卵を食べていない
     if (commonInfo_->is_eatChickenEgg_ == false)
     {

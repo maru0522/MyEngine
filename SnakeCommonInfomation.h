@@ -22,26 +22,29 @@ public:
     static const float kTimer_rest_min_;           // 休憩時間の最小値
     static const float kTimer_rest_max_;           // 休憩時間の最大値
 
-    // SnakeBhevior::MOVE
+    // SnakeBehavior::MOVE
     static const float kMoveSpd_default_;          // 普段の移動速度
     static const float kTimer_randomWalk_min_;     // ランダムに移動し続ける時間の最小値
     static const float kTimer_randomWalk_max_;     // ランダムに移動し続ける時間の最大値 ※最小~最大の間でランダムに決定される。
     static const float kDegree_randomWalk_min_;    // ランダムに移動し続ける際の角速度の最小値
     static const float kDegree_randomWalk_max_;    // ランダムに移動し続ける際の角速度の最大値 ※最小~最大の間でランダムに決定される。
 
-    // SnakeBhevior::MOVE_STOMACH && ESCAPE_STOMACH
-    static const float kMoveSpd_stomach_;          // 卵消化中の移動速度
+    // SnakeBehavior::MOVE_STOMACH
+    static const float kMoveSpd_moveStomach_;          // 卵消化中の移動速度
     static const float kTimer_completeEateEgg_;    // 卵消化完了にかかる時間
 
-    // SnakeBhevior::SNEAK
+    // SnakeBehavior::SNEAK
     static const float kMoveSpd_sneak_;                  // 卵にこっそり近づくときの移動速度
     static const float kTimer_rotateDirection_basic_;    // 卵発見時にそちらの方を向くのにかかる時間
 
-    // SnakeBhevior::ESCAPE
+    // SnakeBehavior::ESCAPE
     static const float kMoveSpd_escape_;                 // プレイヤーから逃げる時の移動速度
     static const float kDistance_escapePlayer_;          // どの程度の距離プレイヤーから逃げるか
 
-    // SnakeBhevior::LEAVE_EGG
+    // SnakeBehavior::ESCAPE_STOMACH
+    static const float kMoveSpd_escapeStomach_;          // 卵消化中の移動速度
+
+    // SnakeBehavior::LEAVE_EGG
     static const float kMoveSpd_leaveEgg_;               // 鶏の巣から遠ざかる時の移動速度
     static const float kDistance_leaveEgg_;              // どの程度の距離卵から離れるか
 
