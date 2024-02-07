@@ -54,6 +54,7 @@ void FrameWork::Initialize()
     modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain3.obj", false);
     modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain4.obj", false);
     modelM_->LoadOBJ("Resources/model/chickenEgg/egg_remain5.obj", false);
+    modelM_->LoadOBJ("Resources/model/cage/cage.obj", false);
     // AudioManager - 音楽&SE読み込み
     audioM_->LoadFolder("Resources/sound");
     // GraphicsPipeline初期化
