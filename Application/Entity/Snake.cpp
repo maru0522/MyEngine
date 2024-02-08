@@ -51,9 +51,6 @@ void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightMan
 
 void Snake::Update(void)
 {
-    // プレイヤーに触れられた後なら処理をスキップ
-    if (commonInfo_->is_Caged_) { return; }
-
     // 丸影処理
     Process_CircleShadow();
 
@@ -61,6 +58,16 @@ void Snake::Update(void)
     appearance_->GetCoordinatePtr()->mat_world = commonInfo_->transformMatrix_.mat_world;
     appearance_->Update();
 
+    // ケージの中に入っているなら、
+    if (commonInfo_->is_Caged_) 
+    {
+        // 座標はケージと同一にする。
+        commonInfo_->transform_.position = *commonInfo_->pos_cage_;
+        // 行列を更新
+        commonInfo_->transformMatrix_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
+        // 更新処理終了
+        return;
+    }
 
     // ビックリマークに関する処理
     exclamationMark_->SetNewUp(commonInfo_->vec3_newUp_);
@@ -97,7 +104,10 @@ void Snake::Update(void)
 
 void Snake::Draw(void)
 {
-    if (commonInfo_->is_Caged_ == false) { appearance_->Draw(); }
+    // 描画処理
+    appearance_->Draw();
+    // もし捕まっているなら、!マークは出さないように、ここで終了。
+    if (commonInfo_->is_Caged_) { return; }
     // デフォルト表示（対応するテクスチャがそもそもないので、MissingTextureに置き換わる。めっちゃlog出る。）
     //appearance_->Draw(/*"Resources/red1x1.png"*/);
     if (commonInfo_->is_detectPlayer_) { exclamationMark_->Draw(); }
@@ -147,24 +157,6 @@ void Snake::RotateDirection(float arg_radian)
     commonInfo_->axes_.forward = Math::QuaternionF::RotateVector(commonInfo_->axes_.forward, rotQ);
     // クオータニオンを使用して、右ベクトルを回転
     commonInfo_->axes_.right = Math::QuaternionF::RotateVector(commonInfo_->axes_.right, rotQ);
-}
-
-void Snake::Move(void)
-{
-    // 重力
-    commonInfo_->velocity_vertical_ -= SnakeCommonInfomation::kGravity_;
-
-    // 垂直方向の移動量
-    const Vector3 velocity_vertical = commonInfo_->axes_.up * commonInfo_->velocity_vertical_; // ※ローカル変数は3次元ベクトル。メンバ変数はfloat型
-    // 水平方向の移動量
-    Vector3 velocity_horizontal{};
-    if(commonInfo_->is_detectEgg_ == false) velocity_horizontal = commonInfo_->axes_.forward * SnakeCommonInfomation::kMoveSpd_escape_;
-
-    // 合計の移動量
-    const Vector3 velocity_total = velocity_vertical + velocity_horizontal;
-    // 座標更新
-    const Vector3 pos = commonInfo_->transform_.position + velocity_total;
-    commonInfo_->transform_.position = pos;
 }
 
 void Snake::Process_CircleShadow(void)

@@ -63,6 +63,7 @@ public:
 
     bool is_Caged_;                     // 収容されたか
     Vector3* pos_cage_;                 // ケージの座標
+
     bool is_landing_;
 
 
