@@ -9,6 +9,7 @@ PlayerUI::~PlayerUI(void)
 
     uiPtr_->UnRegister("playerUI_starCount");
     uiPtr_->UnRegister("playerUI_coinCount");
+    uiPtr_->UnRegister("playerUI_coinFigures");
     uiPtr_->UnRegister("playerUI_starDustCount");
     uiPtr_->UnRegister("playerUI_remain");
     uiPtr_->UnRegister("playerUI_life");
@@ -41,6 +42,16 @@ void PlayerUI::Initialize(void)
     uiPtr_->GetUISpritePtr("playerUI_coinCount")->SetScale(Vector2{ 0.4f,0.4f });
     uiPtr_->GetUISpritePtr("playerUI_coinCount")->SetPosition(Vector2{ kDefPos_left_, 580.f });
     uiPtr_->GetUISpritePtr("playerUI_coinCount")->SetAlpha(0.f);
+
+    // コイン枚数の数字
+    uiPtr_->Register("playerUI_coinFigures", "Resources/figures.png");
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetScale(Vector2{ 1.f,1.f });
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetSize(Vector2{ 32.f,32.f });
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetPosition(Vector2{ kDefPos_left_, 580.f });
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetAlpha(0.f);
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetCutStartPoint(Vector2{ 0.f,0.f });
+    uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetCutLength(Vector2{ 32.f,32.f });
 
     // 星屑の数の画像
     uiPtr_->Register("playerUI_starDustCount", "Resources/starDustCount.png");
@@ -97,9 +108,25 @@ void PlayerUI::Update(void)
     //GUI::Text("frame: %f", easeTimer_.GetFrameCurrent());
     //GUI::End();
 
-    const float rabbitNum = (float)*rabbitCount_;
-    const Vector2 point = { 32.f * rabbitNum, 0.f};
-    uiPtr_->GetUISpritePtr("playerUI_figures")->SetCutStartPoint(point);
+    const float snakeNum = (float)*rabbitCount_;
+    const Vector2 point_snake = { 32.f * snakeNum, 0.f };
+    uiPtr_->GetUISpritePtr("playerUI_figures")->SetCutStartPoint(point_snake);
+
+    if (*coinCount_ < 10)
+    {
+        if (*coinCount_ < 5)
+        {
+            const float coinNum = (float)*coinCount_;
+            const Vector2 point_coin = { 32.f * coinNum, 0.f };
+            uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetCutStartPoint(point_coin);
+        }
+        else
+        {
+            const float coinNum = (float)(*coinCount_ - 5);
+            const Vector2 point_coin = { 32.f * coinNum, 32.f };
+            uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetCutStartPoint(point_coin);
+        }
+    }
 
 
     EaseUI();
@@ -109,6 +136,7 @@ void PlayerUI::Update(void)
 
     uiPtr_->Update("playerUI_starCount");
     uiPtr_->Update("playerUI_coinCount");
+    uiPtr_->Update("playerUI_coinFigures");
     uiPtr_->Update("playerUI_starDustCount");
     uiPtr_->Update("playerUI_remain");
     uiPtr_->Update("playerUI_life");
@@ -127,6 +155,7 @@ void PlayerUI::Draw(void)
 
     uiPtr_->Draw("playerUI_starCount");
     uiPtr_->Draw("playerUI_coinCount");
+    uiPtr_->Draw("playerUI_coinFigures");
     uiPtr_->Draw("playerUI_starDustCount");
     //uiPtr_->Draw("playerUI_remain");
     uiPtr_->Draw("playerUI_life");
@@ -162,6 +191,13 @@ void PlayerUI::EaseUI(void)
         const float coinCount_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate());
         uiPtr_->GetUISpritePtr("playerUI_coinCount")->SetAlpha(coinCount_alpha);
 
+        // コインの数の数字
+        const Vector2& coinFigures_defPos = { kDefPos_right_ + 100.f, 610.f }; // 右 -> 左
+        const float coinFigures_posX = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), coinFigures_defPos.x, coinFigures_defPos.x - kMoveDist_);
+        uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetPosition(Vector2{ coinFigures_posX,coinFigures_defPos.y });
+        const float coinFigures_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate());
+        uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetAlpha(coinFigures_alpha);
+
         // 残機の数の画像
         const Vector2& remain_defPos = { kDefPos_left_ ,640.f }; // 左 -> 右
         const float remain_posX = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), remain_defPos.x, remain_defPos.x + kMoveDist_);
@@ -193,6 +229,12 @@ void PlayerUI::EaseUI(void)
         uiPtr_->GetUISpritePtr("playerUI_coinCount")->SetPosition(Vector2{ coinCount_posX,coinCount_defPos.y });
         const float coinCount_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), 1.f, 0.f);
         uiPtr_->GetUISpritePtr("playerUI_coinCount")->SetAlpha(coinCount_alpha);
+        // コインの数の数字
+        const Vector2& coinFigures_defPos = { kDefPos_right_ + 100.f, 610.f }; // 左 -> 右
+        const float coinFigures_posX = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), coinFigures_defPos.x, coinFigures_defPos.x + kMoveDist_);
+        uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetPosition(Vector2{ coinFigures_posX,coinFigures_defPos.y });
+        const float coinFigures_alpha = Math::Ease::EaseOutSine(easeTimer_.GetTimeRate(), 1.f, 0.f);
+        uiPtr_->GetUISpritePtr("playerUI_coinFigures")->SetAlpha(coinFigures_alpha);
 
         // 残機の数の画像
         const Vector2& remain_defPos = { kDefPos_left_ + kMoveDist_ ,640.f }; // 右 -> 左

@@ -36,6 +36,7 @@ void Player::Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPt
 
     playerUI_.SetUIPtr(UI::GetInstance());
     playerUI_.SetRabbitCountPtr(&captureCount_rabbit);
+    playerUI_.SetCoinCountPtr(&commonInfo_->coinNum_);
     playerUI_.Initialize();
     operateGuideUI_.SetUIPtr(UI::GetInstance());
     operateGuideUI_.SetCamMPtr(commonInfo_->camMPtr_);
