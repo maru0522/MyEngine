@@ -32,14 +32,20 @@ void SnakeCage::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_ligh
 void SnakeCage::Update(void)
 {
     // 処理順
-/*
- * 姿勢を惑星の表面に合わせる。
- * モデルの行列計算と更新処理
- * 移動処理（chickenEggは重力のみ）
- * コライダーの座標更新
- */
+   /*
+    * 施錠後なら捕獲済みのため、捕獲可能フラグをfalse
+    * 姿勢を惑星の表面に合わせる。
+    * モデルの行列計算と更新処理
+    * 移動処理（chickenEggは重力のみ）
+    * コライダーの座標更新
+    */
 
- // *姿勢を惑星の表面に合わせる
+
+    // *施錠後なら捕獲済みのため、捕獲可能フラグをfalse
+    if (is_lock_) { is_capture_ = false; }
+
+
+    // *姿勢を惑星の表面に合わせる
     AdaptPosture();
 
 
@@ -133,7 +139,10 @@ void SnakeCage::OnTrigger(void)
 {
     if (sphere_collision_.GetOther()->GetID() == "snake_col")
     {
-        // 蛇が中にいるフラグをtrueに
-        is_inCage_ = true;
+        // 施錠後なら終了
+        if (is_lock_) { return; }
+
+        // 捕獲フラグをtrue
+        is_capture_ = true;
     }
 }

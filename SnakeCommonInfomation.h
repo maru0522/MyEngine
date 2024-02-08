@@ -61,6 +61,7 @@ public:
     bool is_eatChickenEgg_;             // 卵を食べたか
     DeltaTimer timer_completeEatEgg_;   // 卵を消化しきるまでの時間
 
+    bool is_touchCage_;                 // ケージに触れたか
     bool is_Caged_;                     // 収容されたか
     Vector3* pos_cage_;                 // ケージの座標
 

@@ -261,8 +261,10 @@ void Snake::OnTrigger(void)
 {
     if (sphere_collision_.GetOther()->GetID() == "snakeCage_col")
     {
-        // ケージに捕まったかどうかのフラグをtrue
-        commonInfo_->is_Caged_ = true;
+        // 既に捕獲済みなら終了
+        if (commonInfo_->is_Caged_) { return; }
+        // ケージに触れたかどうかのフラグをtrue
+        commonInfo_->is_touchCage_ = true;
     }
 }
 

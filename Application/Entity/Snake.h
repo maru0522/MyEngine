@@ -49,7 +49,6 @@ private:
     //void Move(Vector3& moveVec, Vector3& velocity); // get velocity & moveVec
     // プレイヤーを上ベクトルを軸に回転させる。※上ベクトルは変化しない
     void RotateDirection(float arg_radian);
-    void Move(void);
     void Process_CircleShadow(void);
 
     void OnCollision(void); // callback
@@ -87,6 +86,5 @@ public:
 
     //>> getter
     Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
-    bool GetIsCaged(void) { return commonInfo_->is_Caged_; }
+    bool GetIsTouchCage(void) { return commonInfo_->is_touchCage_; }
 };
-

@@ -44,14 +44,16 @@ private:
     Vector3 vec3_newUp_;              // 新規上ベクトル
     Axis3 posture_;                   // 姿勢
 
-    bool is_inCage_;                  // 蛇が中にいる
+    bool is_capture_;                 // 蛇を捕まえられる状況か？
+    bool is_lock_;                    // 収監し、捕まえる機能を終了する。
 
 public:
     //>> setter
     void SetPosition(const Vector3& arg_pos) { transform_.position = arg_pos; }
+    void SetIsLock(bool arg_isLock) { is_lock_ = arg_isLock; }
 
     //>> getter
-    bool GetIsInCage(void) { return is_inCage_; }
+    bool GetIsCapture(void) { return is_capture_; }
     Vector3* GetPosPtr(void) { return &transform_.position; }
 };
 

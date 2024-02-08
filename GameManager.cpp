@@ -26,9 +26,9 @@ void GameManager::Initialize()
     // 蛇用ケージ
     for (auto& cage : snakeCages_) { cage.Initialize(colMPtr_, lightMPtr_, &tutorialPlanet_); }
     snakeCages_[0].SetPosition(Vector3{ 20,-60, 30 });
-    snakeCages_[1].SetPosition(Vector3{ 40,60, 0 });
+    snakeCages_[1].SetPosition(Vector3{ -40,20, 25 });
     snakeCages_[2].SetPosition(Vector3{ -40,50, -70 });
-    
+
 
     // コインリストの初期化とコインの配置
     coinList_.Initialize(colMPtr_);
@@ -141,43 +141,46 @@ void GameManager::HandoverSnakeCount(void)
 
 void GameManager::SnakeIntoCustody(void)
 {
-    // 蛇が捕まえられている状態にあるか
-    bool is_inCage{};
+    // 蛇が捕獲可能な状況にあるケージがあるか
+    bool is_capture{};
     // ケージの座標ptr（蛇が捕まっている時用）
     Vector3* cagePosPtr{};
     // 全てのケージにおいて確認
-    for (auto& cage : snakeCages_) 
+    for (auto& cage : snakeCages_)
     {
         // getter呼び出し
-        is_inCage = cage.GetIsInCage();
-        // trueの場合
-        if (is_inCage) 
-        {
-            // ケージの座標ptrを受け取る。
-            cagePosPtr = cage.GetPosPtr();
-            // for文を抜ける
-            break;
-        }
+        is_capture = cage.GetIsCapture();
+        // falseの場合スキップ
+        if (is_capture == false) { continue; }
+
+        // trueの場合↓
+        // この檻は捕獲したため、以降使用不可
+        cage.SetIsLock(true);
+        // ケージの座標ptrを受け取る。
+        cagePosPtr = cage.GetPosPtr();
+        // for文を抜ける
+        break;
     }
-    // 確認後、falseなら終了
-    if (is_inCage == false) { return; }
+    // 確認後、全てfalseなら終了
+    if (is_capture == false) { return; }
 
     // どの蛇が捕まったのかを確認。
-    for (auto& snake : snakes_) 
-    { 
+    for (auto& snake : snakes_)
+    {
         // getter呼び出して確認
-        bool is_caged = snake.GetIsCaged();
-        // trueの場合
-        if (is_caged)
-        {
-            // 蛇にケージの座標ptrを渡す。
-            snake.Caged(cagePosPtr);
-            // 関数終了
-            return;
-        }
+        bool is_touchCaged = snake.GetIsTouchCage();
+        // falseの場合、スキップ
+        if (is_touchCaged == false) { continue; }
+
+        // trueの場合↓
+        // 蛇にケージの座標ptrを渡す。
+        snake.Caged(cagePosPtr);
+        // 関数終了
+        return;
     }
 
     // この関数は、ケージに触れる蛇が同Fに1体のみであるという前提がある。
     // 同Fに2箇所のケージに同時に触れると、該当ケージに触れた方ではない蛇が収監される可能性がある。
     // 解決策としては、それぞれに番号を振るか、蛇自体のcallbackに収監処理を含めること（結合度高い）
+    // もしくは、ワンタイム文字列をもたせるか。
 }
