@@ -25,7 +25,9 @@ void GameManager::Initialize()
     snakes_[2].GetTransformPtr()->position = { -10,60, 20 };
     // 蛇用ケージ
     for (auto& cage : snakeCages_) { cage.Initialize(colMPtr_, lightMPtr_, &tutorialPlanet_); }
-    snakeCages_[1].SetPosition(Vector3{ 0,60, 0 });
+    snakeCages_[0].SetPosition(Vector3{ 20,-60, 30 });
+    snakeCages_[1].SetPosition(Vector3{ 40,60, 0 });
+    snakeCages_[2].SetPosition(Vector3{ -40,50, -70 });
     
 
     // コインリストの初期化とコインの配置

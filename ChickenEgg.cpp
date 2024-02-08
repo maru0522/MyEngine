@@ -36,7 +36,7 @@ void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lig
     // 姿勢初期化
     posture_ = Axis3::Initialize();
 
-    transform_.position = { 0,90,-30 };
+    transform_.position = { 0,70,-30 };
     transform_.scale = { kModelScale_, kModelScale_, kModelScale_ };
 }
 
