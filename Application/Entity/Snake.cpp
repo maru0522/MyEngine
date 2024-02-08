@@ -241,6 +241,25 @@ void Snake::OnCollision(void)
         sphere_detect_.center = commonInfo_->transform_.position;
     }
 
+    if (sphere_collision_.GetOther()->GetID() == "snakeCage_col")
+    {
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_collision_.GetOther());
+
+        // ケージから蛇へのベクトル
+        const Vector3& snakeCageToSnake = Vector3(sphere_collision_.center - other->center);
+        // めり込み距離を出す (二つの半径の和 - 二つの中心点の距離 ）
+        float diff = (other->radius + sphere_collision_.radius) - snakeCageToSnake.Length();
+
+        // 現在座標の取得
+        Vector3 currentPos = commonInfo_->transform_.position;
+        // ケージから蛇への反対方向のベクトル * めり込み距離 ////
+        currentPos += snakeCageToSnake.Normalize() * diff;
+        // 座標反映
+        commonInfo_->transform_.position = currentPos;
+        sphere_collision_.center = commonInfo_->transform_.position;
+        sphere_detect_.center = commonInfo_->transform_.position;
+    }
+
     //if (sphere_collision_.GetOther()->GetID() == "player")
     //{
     //    // 捕獲されたフラグをtrue
