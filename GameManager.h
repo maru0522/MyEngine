@@ -21,6 +21,9 @@
 class GameManager
 {
 public:
+    //>> 定義
+    const int32_t kCount_lockedCage_ = 3;    // 何体分の檻が収容完了していたらゲームが終了するか。
+
     //>> 関数
     GameManager(void) = default;
     ~GameManager(void) = default;
@@ -41,6 +44,8 @@ private:
     void HandoverSnakeCount(void);
     // 蛇をケージに閉じ込めるかの条件判定と、収監の実行
     void SnakeIntoCustody(void);
+    //
+    bool CheckLockedCage(void);
 
     //>> 変数
     CollisionManager* colMPtr_;

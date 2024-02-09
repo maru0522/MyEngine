@@ -54,6 +54,7 @@ public:
 
     //>> getter
     bool GetIsCapture(void) { return is_capture_; }
+    bool GetIsLock(void) { return is_lock_; }
     Vector3* GetPosPtr(void) { return &transform_.position; }
 };
 

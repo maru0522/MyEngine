@@ -64,6 +64,9 @@ void GameManager::Update(void)
     // コインリストの更新
     coinList_.Update();
 
+    // ゲームを終了するか確認
+    CheckLockedCage();
+
     //>> イベント
     event_startTutorial_.Execute();
     event_endTutorial_.Execute();
@@ -104,6 +107,12 @@ void GameManager::Finalize(void)
     tutorialPlanet_.Finalize();
     // プレイヤーの終了処理
     player_.Finalize();
+    // 蛇の終了処理
+    for (auto& snake : snakes_) { snake.Finalize(); }
+    // 蛇檻の終了処理
+    for (auto& cage : snakeCages_) { cage.Finalize(); }
+    // コインリストの終了処理
+    coinList_.Finalize();
 
     // カメラ
     camMPtr_->UnRegister(camera_debugPtr_.get());
@@ -183,4 +192,20 @@ void GameManager::SnakeIntoCustody(void)
     // 同Fに2箇所のケージに同時に触れると、該当ケージに触れた方ではない蛇が収監される可能性がある。
     // 解決策としては、それぞれに番号を振るか、蛇自体のcallbackに収監処理を含めること（結合度高い）
     // もしくは、ワンタイム文字列をもたせるか。
+}
+
+bool GameManager::CheckLockedCage(void)
+{
+    int32_t lockedCageNum = 0;
+
+    // 全てのケージにおいて確認
+    for (auto& cage : snakeCages_) { if (cage.GetIsLock()) { lockedCageNum++; } }
+    // 収容完了しているケージに数が、"kCount_lockedCage_"以上なら、event_endTutorial_を起動
+    if (lockedCageNum >= kCount_lockedCage_) 
+    {
+        event_endTutorial_.SetIsExecute(true);
+        return true;
+    }
+
+    return false;
 }
