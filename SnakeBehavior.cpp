@@ -32,6 +32,14 @@ void ISnakeBehavior::Move(float arg_speed)
 {
     // 重力処理（垂直方向の移動量）
     Process_Gravity();
+
+    // 星の穴のトリガー球への方向が0ベクトルではない
+    if (commonInfo_->vec3_toHoleTriggerCollider_.IsNonZero())
+    {
+        // トリガー球への方向と正面ベクトルを足した間の方向ベクトルを、新しい正面ベクトルとする。
+        Vector3 vec3_newForward = commonInfo_->axes_.forward.Normalize() + commonInfo_->vec3_toHoleTriggerCollider_.Normalize();
+        commonInfo_->axes_.forward = vec3_newForward.Normalize();
+    }
     // 正面への移動（平行方向への移動）
     const Vector3 velocity_horizontal = commonInfo_->axes_.forward * arg_speed;
 

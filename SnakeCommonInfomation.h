@@ -6,16 +6,17 @@ struct SnakeCommonInfomation final
 {
 public:
     //>> 定義
-    static const float kRadius_col_;               // 当たり判定の半径
-    static const float kModelScale_;               // モデルの拡縮倍率
-    static const float kRadius_detectEgg_;         // 卵検知の半径
-    static const float kRadius_detectPlayer_;      // プレイヤー検知の半径
-    static const float kDetectRadius_escape_;      // さらにこの半径内に入ったら、遠ざかる挙動
-    static const float kJumpPower_;                // ジャンプ力
+    static const float kRadius_col_;                        // 当たり判定の半径
+    static const float kModelScale_;                        // モデルの拡縮倍率
+    static const float kRadius_detectEgg_;                  // 卵検知の半径
+    static const float kRadius_detectHoleTriggerCollider_;  // 穴の起動用コライダー検知の半径
+    static const float kRadius_detectPlayer_;               // プレイヤー検知の半径
+    static const float kDetectRadius_escape_;               // さらにこの半径内に入ったら、遠ざかる挙動
+    static const float kJumpPower_;                         // ジャンプ力
 
 
-    static const float kGravity_;                  // かかる重力値
-    static const float kMoveDist_;                 // プレイヤーを検知した地点からどのくらいの距離移動するのか
+    static const float kGravity_;                           // かかる重力値
+    static const float kMoveDist_;                          // プレイヤーを検知した地点からどのくらいの距離移動するのか
 
 
     // SnakeBehavior::IDLE
@@ -50,20 +51,22 @@ public:
 
 
     //>> 変数
-    Vector3 vec3_toEgg_;                // 卵への方向
-    bool is_detectEgg_{};               // 卵を検知したか
+    Vector3 vec3_toEgg_;                 // 卵への方向
+    bool is_detectEgg_{};                // 卵を検知したか
 
-    Vector3 vec3_toPlayer_;             // プレイヤーへの方向
-    bool is_detectPlayer_{};            // プレイヤーを検知したか
+    Vector3 vec3_toHoleTriggerCollider_; // 星の穴のイベント起動コライダーへの方向。
 
-    Vector3 pos_chickenEgg_;            // 鶏の巣の座標
+    Vector3 vec3_toPlayer_;              // プレイヤーへの方向
+    bool is_detectPlayer_{};             // プレイヤーを検知したか
 
-    bool is_eatChickenEgg_;             // 卵を食べたか
-    DeltaTimer timer_completeEatEgg_;   // 卵を消化しきるまでの時間
+    Vector3 pos_chickenEgg_;             // 鶏の巣の座標
 
-    bool is_touchCage_;                 // ケージに触れたか
-    bool is_Caged_;                     // 収容されたか
-    Vector3* pos_cage_;                 // ケージの座標
+    bool is_eatChickenEgg_;              // 卵を食べたか
+    DeltaTimer timer_completeEatEgg_;    // 卵を消化しきるまでの時間
+
+    bool is_touchCage_;                  // ケージに触れたか
+    bool is_Caged_;                      // 収容されたか
+    Vector3* pos_cage_;                  // ケージの座標
 
     bool is_landing_;
 

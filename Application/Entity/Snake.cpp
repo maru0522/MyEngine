@@ -28,7 +28,12 @@ void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightMan
     sphere_detect_.SetID("snake_detect");
     sphere_detect_.callback_onCollision_ = std::bind(&Snake::OnDetect, this);
     // 検知用コライダーの半径を、複数ある検知半径の中で最も大きいものを適用
-    const float radius_detect = (std::max)(SnakeCommonInfomation::kRadius_detectPlayer_, SnakeCommonInfomation::kRadius_detectEgg_);
+    auto tuple = {
+        SnakeCommonInfomation::kRadius_detectPlayer_,
+        SnakeCommonInfomation::kRadius_detectEgg_,
+        SnakeCommonInfomation::kRadius_detectHoleTriggerCollider_,
+    };
+    const float radius_detect = (std::max)(tuple);
     sphere_detect_.radius = radius_detect;
 
 
@@ -302,6 +307,25 @@ void Snake::OnDetect(void)
         // 移動方向を決定。
         commonInfo_->vec3_toPlayer_ = vec3_player2Snake.Normalize();
         commonInfo_->is_detectPlayer_ = true;
+    }
+
+    if (sphere_detect_.GetOther()->GetID() == "tutorialPlanet_hole0_" || sphere_detect_.GetOther()->GetID() == "tutorialPlanet_hole1_")
+    {
+        // 接触相手のコライダー(星の穴のトリガー球）を基底クラスから復元。
+        CollisionPrimitive::SphereCollider* other = static_cast<CollisionPrimitive::SphereCollider*>(sphere_detect_.GetOther());
+        // 球から蛇への方向ベクトル（蛇の座標 - 球の座標）
+        const Vector3& vec3_triggerSphere2Snake = Vector3(commonInfo_->transform_.position - other->center);
+        // 蛇からプレイヤーまでの距離が、規定値"kRadius_detectHoleTriggerCollider_"より大きいなら（範囲内にないのなら）
+        const float distance = vec3_triggerSphere2Snake.Length();
+        if (distance > SnakeCommonInfomation::kRadius_detectHoleTriggerCollider_) 
+        {
+            // 方向ベクトルを初期化
+            commonInfo_->vec3_toHoleTriggerCollider_ = { 0,0,0 };
+            return;
+        }
+
+        // 移動方向を決定。
+        commonInfo_->vec3_toHoleTriggerCollider_ = vec3_triggerSphere2Snake.Normalize();
     }
 
     if (sphere_detect_.GetOther()->GetID() == "chickenEgg_col")
