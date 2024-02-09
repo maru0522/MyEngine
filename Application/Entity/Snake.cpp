@@ -274,6 +274,9 @@ void Snake::OnCollision(void)
 
     if (sphere_collision_.GetOther()->GetID() == "chickenEgg_col")
     {
+        // 蛇がSNEAK以外（ESCAPE状態など）なら終了。※逃げてる時に、卵なんか食うわけない
+        if (snakeBehaviorMachine_.GetStatePtr()->GetCurrentBehavior() != SnakeBehavior::SNEAK) { return; }
+
         // 卵を食べたかどうかのフラグをtrue
         commonInfo_->is_eatChickenEgg_ = true; // snakeBehavior内でfalseにする処理を行う
         // 鶏卵の数を1減らす関数を実行 ※friend関数
