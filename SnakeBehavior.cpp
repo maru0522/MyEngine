@@ -37,7 +37,8 @@ void ISnakeBehavior::Move(float arg_speed)
     if (commonInfo_->vec3_toHoleTriggerCollider_.IsNonZero())
     {
         // トリガー球への方向と正面ベクトルを足した間の方向ベクトルを、新しい正面ベクトルとする。
-        Vector3 vec3_newForward = commonInfo_->axes_.forward.Normalize() + commonInfo_->vec3_toHoleTriggerCollider_.Normalize();
+        //Vector3 vec3_newForward = commonInfo_->axes_.forward.Normalize() + commonInfo_->vec3_toHoleTriggerCollider_.Normalize();
+        Vector3 vec3_newForward = commonInfo_->vec3_toHoleTriggerCollider_.Normalize();
         commonInfo_->axes_.forward = vec3_newForward.Normalize();
     }
     // 正面への移動（平行方向への移動）
