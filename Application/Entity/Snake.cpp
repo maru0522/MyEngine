@@ -105,6 +105,7 @@ void Snake::Update(void)
     commonInfo_->is_landing_ = false;
     commonInfo_->is_detectEgg_ = false;
     commonInfo_->is_detectPlayer_ = false;
+    commonInfo_->is_touchPlayer_ = false;
 }
 
 void Snake::Draw(void)
@@ -265,12 +266,11 @@ void Snake::OnCollision(void)
         sphere_detect_.center = commonInfo_->transform_.position;
     }
 
-    //if (sphere_collision_.GetOther()->GetID() == "player")
-    //{
-    //    // 捕獲されたフラグをtrue
-    //    isCaptured_ = true;
-    //    SetCircleShadowsIsActive(false);
-    //}
+    if (sphere_collision_.GetOther()->GetID() == "player")
+    {
+        // 触れたかフラグをtrue
+        commonInfo_->is_touchPlayer_ = true;
+    }
 
     if (sphere_collision_.GetOther()->GetID() == "chickenEgg_col")
     {

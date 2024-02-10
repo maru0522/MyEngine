@@ -87,4 +87,5 @@ public:
     //>> getter
     Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
     bool GetIsTouchCage(void) { return commonInfo_->is_touchCage_; }
+    bool GetIsTouchPlayer(void) { return commonInfo_->is_touchPlayer_; }
 };

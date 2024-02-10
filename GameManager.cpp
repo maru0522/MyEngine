@@ -50,6 +50,8 @@ void GameManager::Update(void)
     // 鶏卵更新
     chickenEgg_.Update();
 
+
+    PlayerCarryableSnake();
     // プレイヤー更新
     player_.Update();
     // 惑星の更新
@@ -208,4 +210,31 @@ bool GameManager::CheckLockedCage(void)
     }
 
     return false;
+}
+
+void GameManager::PlayerCarryableSnake(void)
+{
+    static bool is_carrySnakePre{};
+    bool is_carrySnake = player_.GetIsCarrySnake();
+    if (is_carrySnake && is_carrySnakePre ) { return; }
+
+    if (is_carrySnake == false)
+    {
+        player_.SetSnakePtr(nullptr);
+        is_carrySnakePre = is_carrySnake;
+        return;
+    }
+
+    for (size_t i = 0; i < snakes_.size(); i++)
+    {
+        bool is_touchPlayer = snakes_[i].GetIsTouchPlayer();
+
+        if (is_touchPlayer)
+        {
+            player_.SetSnakePtr(&snakes_[i]);
+            break;
+        }
+    }
+
+    is_carrySnakePre = is_carrySnake;
 }

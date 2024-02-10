@@ -2,6 +2,8 @@
 #include "Transform.h"
 #include "CameraManager.h"
 #include "Timer.h"
+#include "Snake.h"
+
 /**
  * @file Player_CommonInfomation.h
  * @brief Player.hとPlayerBehaviorが共通して管理したい情報を保持する構造体が宣言されたファイル
@@ -28,6 +30,8 @@ struct Player_CommonInfomation
     const float kMoveSpeed_{ 0.4f };
     const float kMoveJumpLongSpeed_{ 0.75f };
     const float kGravity_{ 0.03f };
+
+    const float kTimer_carryable_ = 10.f; // 蛇を運べる時間
 
     // 背後カメラに関する定義
     const float kTimer_stoop_cameraClose_ = 3.f; // しゃがみ状態の時に何秒かけてカメラが近づくか（秒）
@@ -62,6 +66,13 @@ struct Player_CommonInfomation
     // 
     float jumpVecNorm_{};
     bool isLanding_{};
+
+    // 蛇を捕まえられるか（持ち運ぶために）
+    bool is_caughtable_;    
+    // 蛇を持ち運んでいるか。
+    bool is_carrySnake_;
+    DeltaTimer timer_carrySnake_;
+    Snake* snakePtr_;
 
     int32_t coinNum_{};
 

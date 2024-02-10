@@ -80,6 +80,8 @@ public:
     void SetEventState(PlayerEventState arg_eventState) { commonInfo_->eventState_ = arg_eventState; }
     void SetApproachingEggSnakes(int32_t arg_snakes) { num_approachingEggSnakes_ = arg_snakes; }
 
+    void SetSnakePtr(Snake* arg_snakePtr) { commonInfo_->snakePtr_ = arg_snakePtr; }
+
     //>> getter
     TransformMatrix* GetTransMatPtr(void) { return &commonInfo_->matTrans_; }
     Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
@@ -89,5 +91,9 @@ public:
     const std::string& GetPartnerId(void) { return sphereCollider_.GetOther()->GetID(); }
 
     PlayerBehaviorMachine* GetPBM(void) { return &pbm_; }
+    
+    // ここがtrueなら、蛇のptrが必要
+    bool GetIsCarrySnake(void) { return commonInfo_->is_carrySnake_; }
+    DeltaTimer& GetCarryTimer(void) { return commonInfo_->timer_carrySnake_; }
 };
 

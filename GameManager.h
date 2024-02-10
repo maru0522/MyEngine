@@ -46,6 +46,8 @@ private:
     void SnakeIntoCustody(void);
     //
     bool CheckLockedCage(void);
+    // playerが蛇に触れているかと、その蛇のptrの取得
+    void PlayerCarryableSnake(void);
 
     //>> 変数
     CollisionManager* colMPtr_;

@@ -128,7 +128,7 @@ void PlayerBehavior_Idle::RequirementCheck(void)
     bool isLanding = commonInfo_->isLanding_;
 
     // 左シフトが入力されている
-    if (isStoop)
+    if (isStoop && commonInfo_->is_carrySnake_ == false)
     {
         // PlayerState を STOOP(しゃがみ)へ
         nextState_ = PlayerBehavior::STOOP;
@@ -233,9 +233,19 @@ void PlayerBehavior_Stoop::RequirementCheck(void)
     // 左SHIFTが入力されている && 移動キーが入力されている
     if (isMove) // ここを通っている時点で、実質左SHIFTが入力されている
     {
-        // PlayerState を MOVE_STOOP(しゃがみ移動)へ
-        nextState_ = PlayerBehavior::MOVE_STOOP;
-        return;
+        // 蛇を運んでいる場合は、STOOPにはならない
+        if (commonInfo_->is_carrySnake_)
+        {
+            // PlayerState を MOVEへ
+            nextState_ = PlayerBehavior::MOVE;
+            return;
+        }
+        else
+        {
+            // PlayerState を MOVE_STOOP(しゃがみ移動)へ
+            nextState_ = PlayerBehavior::MOVE_STOOP;
+            return;
+        }
     }
 
     // SPACEが入力されている && 地面に足がついている
@@ -275,8 +285,11 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Process_Gravity();
     // 移動vec = (前後vec * 入力vec.y) + (水平vec * 入力vec.y)
     Vector3 moveVec = (commonInfo_->axes_.forward * vec2_input.y) + (commonInfo_->axes_.right * vec2_input.x);
+
+    float spd = commonInfo_->kMoveSpeed_;
+    if (commonInfo_->is_carrySnake_) { spd = commonInfo_->kMoveSpeed_ / 3.f; }
     // 移動量 = 移動vec * 移動速度 + 上方向 * ジャンプ量
-    Vector3 velocity = (moveVec.Normalize() * (commonInfo_->kMoveSpeed_ + commonInfo_->coinNum_ * 0.01f * commonInfo_->kMoveSpeed_)) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
+    Vector3 velocity = (moveVec.Normalize() * (spd + commonInfo_->coinNum_ * 0.01f * commonInfo_->kMoveSpeed_)) + (commonInfo_->axes_.up * commonInfo_->jumpVecNorm_);
     // 座標更新
     Process_Transform(velocity);
 
@@ -316,26 +329,26 @@ void PlayerBehavior_Move::RequirementCheck(void)
     const bool isJump = isDown_AorB + isDown_SPACE;
     bool isLanding = commonInfo_->isLanding_;
 
-    // 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・↑縺・&& 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・↑縺・&& SPACE縺悟・蜉帙＆繧後※縺・ｋ
+    // しゃがみ入力がされていない && 移動入力をしていない && ジャンプ入力をしていない
     if (isStoop == false && isMove == false && isJump == false)
     {
-        // PlayerState 繧・IDLE縺ｸ
+        // PlayerState をIDLEに変更する
         nextState_ = PlayerBehavior::IDLE;
         return;
     }
 
-    // しゃがみ入力がされている && 着地している
-    if (isStoop && isLanding) // 縺薙％繧帝壹▲縺ｦ縺・ｋ譎らせ縺ｧ縲∝ｮ溯ｳｪ遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ
+    // しゃがみ入力がされている && 着地している && 蛇を運んでいない。
+    if (isStoop && isLanding && commonInfo_->is_carrySnake_ == false)
     {
         // PlayerState をMOVE_STOOPに変更する
         nextState_ = PlayerBehavior::MOVE_STOOP;
         return;
     }
 
-    // SPACE縺悟・蜉帙＆繧後※縺・ｋ && 蝨ｰ髱｢縺ｫ雜ｳ縺後▽縺・※縺・ｋ
+    // ジャンプ入力をしている && 着地している
     if (isJump && isLanding)
     {
-        // PlayerState 繧・JUMP(繧ｸ繝｣繝ｳ繝・縺ｸ
+        // PlayerState をJUMPに変更する
         nextState_ = PlayerBehavior::JUMP;
         return;
     }
@@ -440,6 +453,13 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
         nextState_ = PlayerBehavior::MOVE;
         return;
     }
+    // 蛇を運んでいる
+    if (commonInfo_->is_carrySnake_)
+    {
+        // PlayerState を MOVE(移動)へ
+        nextState_ = PlayerBehavior::MOVE;
+        return;
+    }
 
     // 移動キーが入力されていない
     if (isMove == false)
@@ -448,7 +468,6 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
         nextState_ = PlayerBehavior::STOOP;
         return;
     }
-
 
 
     // 着地している && ジャンプキーが入力された
@@ -467,6 +486,7 @@ void PlayerBehavior_MoveStoop::RequirementCheck(void)
         }
     }
 }
+
 
 void PlayerBehavior_Jump::Entry(void) // JUMP
 {
@@ -560,7 +580,7 @@ void PlayerBehavior_Jump::RequirementCheck(void)
         }
     }
 
-    // 遘ｻ蜍輔く繝ｼ縺悟・蜉帙＆繧後※縺・ｋ && 蟾ｦSHIFT縺悟・蜉帙＆繧後※縺・ｋ
+    // 移動入力をしている && しゃがみ入力をしている && 着地している
     if (isMove && isStoop && isLanding)
     {
         nextState_ = PlayerBehavior::STOOP;
@@ -572,6 +592,8 @@ void PlayerBehavior_JumpLong::Entry(void)
 {
     commonInfo_->jumpVecNorm_ = commonInfo_->kJumpLongPower_;
     vec2_entryInput_ = Process_GetInput();
+    // 運んだまま幅跳びは出来ない。
+    commonInfo_->is_carrySnake_ = false;
 }
 
 void PlayerBehavior_JumpLong::Execute(void)
@@ -623,7 +645,7 @@ void PlayerBehavior_JumpLong::Execute(void)
     radialPtr->SetBlurValue((std::max)(0.1f, radialPtr->GetBlurValue() - 0.02f));
 
     // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録 ※ここだけ、記録するのはeffect_input
-    if(effect_input.IsNonZero()) { commonInfo_->vec2_input_old_ = effect_input; }
+    if (effect_input.IsNonZero()) { commonInfo_->vec2_input_old_ = effect_input; }
 
 #ifdef _DEBUG
     GUI::Begin("playerBehavior_JumpLong");

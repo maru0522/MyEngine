@@ -58,6 +58,7 @@ public:
 
     Vector3 vec3_toPlayer_;              // プレイヤーへの方向
     bool is_detectPlayer_{};             // プレイヤーを検知したか
+    bool is_touchPlayer_{};              // プレイヤーへ触れたか
 
     Vector3 pos_chickenEgg_;             // 鶏の巣の座標
 

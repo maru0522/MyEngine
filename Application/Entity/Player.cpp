@@ -48,6 +48,36 @@ void Player::Update(void)
     UI::GetInstance()->GetUISpritePtr("circle_red")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
     UI::GetInstance()->GetUISpritePtr("circle_green")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
 
+    // #CARRY
+    commonInfo_->timer_carrySnake_.Update();
+    float carryrate = commonInfo_->timer_carrySnake_.GetTimeRate();
+    if (carryrate >= 1.f) {
+        commonInfo_->is_carrySnake_ = false;
+        commonInfo_->timer_carrySnake_.Finish(true);
+    }
+    if (commonInfo_->is_caughtable_)
+    {
+        if (KEYS::IsTrigger(DIK_F) || XPAD::IsTrigger(XPAD::Button::X))
+        {
+            commonInfo_->is_carrySnake_ = true;
+            commonInfo_->timer_carrySnake_.Finish(true);
+            commonInfo_->timer_carrySnake_.Start(commonInfo_->kTimer_carryable_);
+        }
+    }
+    else if(commonInfo_->is_carrySnake_)
+    {
+        if (KEYS::IsTrigger(DIK_F) || XPAD::IsTrigger(XPAD::Button::X))
+        {
+            commonInfo_->is_carrySnake_ = false;
+            commonInfo_->timer_carrySnake_.Finish(true);
+        }
+    }
+
+    if (commonInfo_->snakePtr_)
+    {
+        commonInfo_->snakePtr_->GetTransformPtr()->position = commonInfo_->transform_.position;
+    }
+    // #CARRY
 
     ControlUI();
     playerUI_.Update();
@@ -227,6 +257,9 @@ void Player::Update(void)
     GUI::Text("up(current):          [%f,%f,%f]", commonInfo_->axes_.up.x, commonInfo_->axes_.up.y, commonInfo_->axes_.up.z);
     GUI::End();
 #endif // _DEBUG
+
+    // 捕まえられるか同化のフラグを毎Fリセットする
+    commonInfo_->is_caughtable_ = false;
 }
 
 void Player::Draw3d(void)
@@ -388,6 +421,14 @@ void Player::OnCollision(void)
         // 補正された値で行列を生成
         commonInfo_->matTrans_.mat_world = Math::Function::AffinTrans(commonInfo_->transform_, commonInfo_->axes_);
     }
+
+    if (sphereCollider_.GetOther()->GetID() == "snake_col")
+    {
+        if(commonInfo_->is_carrySnake_ == false) 
+        {
+            commonInfo_->is_caughtable_ = true;
+        }
+    }
 }
 
 void Player::OnTrigger(void)
@@ -395,9 +436,5 @@ void Player::OnTrigger(void)
     if (sphereCollider_.GetOther()->GetID() == "coin_contact")
     {
         commonInfo_->coinNum_++;
-    }
-    if (sphereCollider_.GetOther()->GetID() == "snake_col")
-    {
-        captureCount_rabbit++;
     }
 }
