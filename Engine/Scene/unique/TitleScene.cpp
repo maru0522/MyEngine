@@ -43,6 +43,12 @@ void TitleScene::Initialize(void)
     FigureUI::GetInstance()->Register("figureUI_test");
     FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->pos = { 200,200 };
     FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->num = 1.5;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->scope = FigureUI::Scope::MAX;
+
+
+    FigureUI::GetInstance()->Register("figureUI_test_second");
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->pos = { 200,500 };
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->num = 1.5;
 }
 
 void TitleScene::Update(void)
@@ -91,6 +97,7 @@ void TitleScene::Update(void)
     GUI::Text("scale: %f", scale);
 
     GUI::SliderFloat("num", &FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->num, 0, 3000);
+    GUI::SliderFloat("num2", &FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->num, 0, 3000);
     GUI::End();
 #endif
 

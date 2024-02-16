@@ -137,6 +137,8 @@ const Vector2 Math::Function::Min(const Vector2& v1, const Vector2& v2)
 
 int32_t Math::Function::DigitNum(uint32_t arg_num)
 {
+    // 0の場合は計算できないので手動
+    if (arg_num <= 0) { return 0; }
     return (int32_t)(std::log10(arg_num) + 1);
 }
 

@@ -42,6 +42,8 @@ void FigureUI::Update(void)
 
         // それぞれのspriteの座標や、切り抜き位置などを値に合わせ変更
         float num = figure.second.num;
+        // 今の値が何桁なのかを確認する
+        int32_t digitNum = Math::Function::DigitNum((uint32_t)num);
         // 整数部分
         for (int32_t i = 0; i < kDefault_intDigit_; i++)
         {
@@ -55,6 +57,28 @@ void FigureUI::Update(void)
             const Vector2 cutStartPoint = { kDefault_pictureLength_ * digitValue, 0.f };
             // 設定
             spPtr->SetCutStartPoint(cutStartPoint);
+
+            // 表示範囲が"MAX"である
+            if (figure.second.scope == Scope::MAX)
+            {
+                // 今の値が0より大きいなら ※num <= 0の場合、digitNum == 0となる。0番目は小数点以下表示のため残す。
+                // 桁数が5桁未満である
+                if (digitNum < 5) 
+                {
+                    // iが0以外である && for分のiの値が"digitNum"以上である
+                    if (i != 0 && i >= digitNum) // 小数点以下の値の時の為、1桁目の値は0でも消さない。
+                    {
+                        // 今の値より大きい桁部分の0表記のスプライトの透明度を0を非表示にして描画しない。
+                        spPtr->SetAlpha(0.f);
+                    }
+                }
+                else
+                {
+                    // 今の値より大きい桁部分は存在しないので、スプライトのの透明度を設定されている値に戻す。
+                    spPtr->SetAlpha(figure.second.alpha);
+                }
+            }
+
             uiPtr_->Update(key);
         }
         // 小数点以下部分
