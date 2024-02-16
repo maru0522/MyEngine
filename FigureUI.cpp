@@ -2,6 +2,7 @@
 #include "MathUtil.h"
 
 const float FigureUI::kDefault_pictureLength_ = 32.f; // デフォルトの数字1つ分の長さ（正方形前提）
+const float FigureUI::kDefault_symbolLength_ = 12.f;  // デフォルトの記号1つ分の幅
 
 FigureUI* FigureUI::GetInstance(void)
 {
@@ -26,10 +27,14 @@ void FigureUI::Update(void)
         // 数字UIの設定が変更されていたら
         if (figure.second.isDirty)
         {
-            //#kDefault_intDigit_の分登録。
-            for (int32_t i = 0; i < kDefault_intDigit_; i++) { AdaptSettings(figure.first, i, figure.second); }
-            //#kDefault_floatDigit_の分登録
-            for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { AdaptSettings(figure.first, i - 1, figure.second); }
+            //#kDefault_intDigit_の分変更
+            for (int32_t i = 0; i < kDefault_intDigit_; i++) { AdaptSettings_Number(figure.first, i, figure.second); }
+            //#kDefault_floatDigit_の分変更
+            for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { AdaptSettings_Number(figure.first, i - 1, figure.second); }
+            //#小数点の分変更
+            FigureSpriteSettings decimalSettings = figure.second;
+            decimalSettings.cutStartPoint = { 320.f,0.f };
+            AdaptSettings_Symbol(figure.first, "DecimalPoint", kDefault_symbolLength_, decimalSettings);
 
             // 変更フラグをfalse
             figure.second.isDirty = false;
@@ -67,6 +72,8 @@ void FigureUI::Update(void)
             spPtr->SetCutStartPoint(cutStartPoint);
             uiPtr_->Update(key);
         }
+        // 小数点部分
+        uiPtr_->Update(figure.first + "DecimalPoint");
     }
 }
 
@@ -90,6 +97,8 @@ void FigureUI::Draw(void)
             const std::string& key = SynthesisName(figure.first, i - 1);
             uiPtr_->Draw(key);
         }
+        // 小数点部分
+        uiPtr_->Draw(figure.first + "DecimalPoint");
     }
 }
 
@@ -102,6 +111,8 @@ void FigureUI::Finalize(void)
         for (int32_t i = 0; i < kDefault_intDigit_; i++) { uiPtr_->UnRegister(SynthesisName(figure.first, i)); }
         //#kDefault_floatDigit_の分抹消
         for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { uiPtr_->UnRegister(SynthesisName(figure.first, i - 1)); }
+        //#小数点の分抹消
+        uiPtr_->UnRegister(figure.first + "DecimalPoint");
     }
     // umap配列の中身を初期化
     umap_figures_.clear();
@@ -126,10 +137,15 @@ void FigureUI::Register(const std::string& arg_key, const FigureSpriteSettings& 
     if (isContained) { return; }
 
     // UI側に同名鍵で[桁数の数]だけ登録 ※[桁数の数] = kDefault_intDigit_ + kDefault_floatDigit_
-    //#kDefault_intDigit_の分登録。
-    for (int32_t i = 0; i < kDefault_intDigit_; i++) { AdaptSettings(arg_key, i, arg_settings); }
+    //#kDefault_intDigit_の分登録
+    for (int32_t i = 0; i < kDefault_intDigit_; i++) { AdaptSettings_Number(arg_key, i, arg_settings); }
     //#kDefault_floatDigit_の分登録
-    for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { AdaptSettings(arg_key, i - 1, arg_settings); }
+    for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { AdaptSettings_Number(arg_key, i - 1, arg_settings); }
+    //#小数点の分登録
+    FigureSpriteSettings decimalSettings = arg_settings;
+    decimalSettings.cutStartPoint = { 320.f,0.f };
+    AdaptSettings_Symbol(arg_key, "DecimalPoint", kDefault_symbolLength_, decimalSettings);
+    
     // umap配列に登録
     umap_figures_.emplace(arg_key, arg_settings);
 }
@@ -150,7 +166,7 @@ void FigureUI::UnRegister(const std::string& arg_key)
     uiPtr_->UnRegister(arg_key);
 }
 
-void FigureUI::AdaptSettings(const std::string& arg_key, int32_t arg_num, const FigureSpriteSettings& arg_settings)
+void FigureUI::AdaptSettings_Number(const std::string& arg_key, int32_t arg_num, const FigureSpriteSettings& arg_settings)
 {
     const std::string& key = SynthesisName(arg_key, arg_num);
 
@@ -165,7 +181,28 @@ void FigureUI::AdaptSettings(const std::string& arg_key, int32_t arg_num, const 
     spPtr->SetCutLength(arg_settings.cutLength);
 
     // 座標（基点.x - 数字の切り抜き幅 * 数字の桁数, 基点.y）※小数点以下の桁の場合、[数字の桁数]がマイナス
-    const Vector2 pos = { arg_settings.pos.x - kDefault_pictureLength_ * arg_num, arg_settings.pos.y };
+    Vector2 pos = { arg_settings.pos.x - kDefault_pictureLength_ * arg_num, arg_settings.pos.y };
+    // [数字の桁数]がマイナスの場合、さらに小数点のスプライトの分だけ、座標をずらす
+    if (arg_num < 0) { pos.x += kDefault_symbolLength_ / 3; }
+    spPtr->SetPosition(pos);
+}
+
+void FigureUI::AdaptSettings_Symbol(const std::string& arg_key, const std::string& arg_symbolName, float arg_posX, const FigureSpriteSettings& arg_settings)
+{
+    const std::string& key = arg_key + arg_symbolName;
+
+    uiPtr_->Register(key, kDefault_figurePath_);
+    // ここで例外スローしたら、同名で登録している
+    auto spPtr = uiPtr_->GetUISpritePtr(key);
+    spPtr->SetAlpha(arg_settings.alpha);
+    spPtr->SetSize(arg_settings.size);
+    spPtr->SetScale(arg_settings.scale);
+    spPtr->SetAnchorPoint(arg_settings.anchorPoint);
+    spPtr->SetCutStartPoint(arg_settings.cutStartPoint);
+    spPtr->SetCutLength(arg_settings.cutLength);
+
+    // 座標（基点.x + 引数で設定した値, 基点.y）
+    const Vector2 pos = { arg_settings.pos.x + arg_posX , arg_settings.pos.y };
     spPtr->SetPosition(pos);
 }
 

@@ -51,6 +51,7 @@ public:
     const int32_t kDefault_intDigit_ = 5;       // デフォルトの整数部の表示桁数
     const int32_t kDefault_floatDigit_ = 3;     // デフォルトの整数部の表示桁数
     const static float kDefault_pictureLength_; // デフォルトの数字1つ分の長さ（正方形前提）
+    const static float kDefault_symbolLength_;  // デフォルトの記号1つ分の幅
 
     //>> 関数
     static FigureUI* GetInstance(void);
@@ -66,7 +67,8 @@ public:
     void UnRegister(const std::string& arg_key);
 
 private:
-    void AdaptSettings(const std::string& arg_key, int32_t arg_num, const FigureSpriteSettings& arg_settings);
+    void AdaptSettings_Number(const std::string& arg_key, int32_t arg_num, const FigureSpriteSettings& arg_settings);
+    void AdaptSettings_Symbol(const std::string& arg_key, const std::string& arg_symbolName, float arg_posX, const FigureSpriteSettings& arg_settings);
     std::string SynthesisName(const std::string& arg_key, int32_t arg_num) { return arg_key + std::to_string(arg_num); }
 
     //>> 変数
