@@ -89,6 +89,8 @@ void TitleScene::Update(void)
     GUI::Begin("Title_logo");
     GUI::Text("rate:  %f", rate);
     GUI::Text("scale: %f", scale);
+
+    GUI::SliderFloat("num", &FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->num, 0, 3000);
     GUI::End();
 #endif
 
