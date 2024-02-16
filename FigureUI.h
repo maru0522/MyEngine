@@ -48,10 +48,13 @@ public:
     };
 
     const std::string kDefault_figurePath_ = "Resources/figures2.png";
-    const int32_t kDefault_intDigit_ = 5;       // デフォルトの整数部の表示桁数
-    const int32_t kDefault_floatDigit_ = 3;     // デフォルトの整数部の表示桁数
-    const static float kDefault_pictureLength_; // デフォルトの数字1つ分の長さ（正方形前提）
-    const static float kDefault_symbolLength_;  // デフォルトの記号1つ分の幅
+    const int32_t kDefault_intDigit_ = 5;               // デフォルトの整数部の表示桁数
+    const int32_t kDefault_floatDigit_ = 3;             // デフォルトの整数部の表示桁数
+    const static float kDefault_pictureLength_;         // デフォルトの数字1つ分の長さ（正方形前提）
+    const static float kDistance_symbolDecimal_;        // 小数点の座標が基準からどの程度離れているかの距離
+    const static float kDefaultSpace_symbolDecimal_;    // 小数点の為に必要な空間の長さ
+    const static float kDistance_symbolColon_;          // コロンの座標が基準からどの程度離れているかの距離
+    const static float kDefaultSpace_symbolColon_;      // コロンの為に必要な空間の長さ
 
     //>> 関数
     static FigureUI* GetInstance(void);

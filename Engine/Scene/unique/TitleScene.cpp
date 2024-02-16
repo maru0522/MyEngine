@@ -47,8 +47,13 @@ void TitleScene::Initialize(void)
 
 
     FigureUI::GetInstance()->Register("figureUI_test_second");
-    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->pos = { 200,500 };
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->pos = { 200,300 };
     FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->num = 1.5;
+
+    FigureUI::GetInstance()->Register("figureUI_test_timer");
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->pos = { 200,400 };
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num = 1.5;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE;
 }
 
 void TitleScene::Update(void)
@@ -98,6 +103,14 @@ void TitleScene::Update(void)
 
     GUI::SliderFloat("num", &FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->num, 0, 3000);
     GUI::SliderFloat("num2", &FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_second")->num, 0, 3000);
+    GUI::SliderFloat("num3", &FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num, 0, 3000);
+    ImGui::SameLine();
+    if (GUI::ButtonTrg("SwitchFormat"))
+    {
+        FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format == FigureUI::Format::TIMER ?
+            FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE :
+            FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::TIMER;
+    }
     GUI::End();
 #endif
 
