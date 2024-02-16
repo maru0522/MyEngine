@@ -1,8 +1,11 @@
 #pragma once
+// シングルトン
 #include "CollisionManager.h"
 #include "CameraManager.h"
 #include "LightManager.h"
+#include "FigureUI.h"
 
+// オブジェクト
 #include "Planet.h"
 #include "Player.h"
 #include "ChickenEgg.h"
@@ -11,9 +14,11 @@
 
 #include "CoinList.h"
 
+// カメラ
 #include "BehindCamera.h"
 #include "SphericalCamera.h"
 
+// イベント
 #include "Event_StartTutorial.h"
 #include "Event_EndTutorial.h"
 #include "Event_TutorialPlanetHole.h"
@@ -29,7 +34,7 @@ public:
     ~GameManager(void) = default;
 
     // 必要なptrを設定
-    void SetAllPtrs(CollisionManager* arg_colMPtr, CameraManager* arg_camMPtr, LightManager* arg_lightMPtr);
+    void SetAllPtrs(CollisionManager* arg_colMPtr, CameraManager* arg_camMPtr, LightManager* arg_lightMPtr, FigureUI* arg_figureUIPtr, UI* arg_uiPtr);
     // 初期化関数
     void Initialize(void);
     void Update(void);
@@ -53,6 +58,8 @@ private:
     CollisionManager* colMPtr_;
     CameraManager* camMPtr_;
     LightManager* lightMPtr_;
+    FigureUI* figureUIPtr_;
+    UI* uiPtr_;
 
     // カメラ
     std::unique_ptr<ICamera> camera_debugPtr_{ std::make_unique<ICamera>() };

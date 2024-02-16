@@ -311,6 +311,7 @@
     <ClCompile Include="CoinList.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
+    <ClCompile Include="FigureUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -612,6 +613,7 @@
     <ClInclude Include="CoinList.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
+    <ClInclude Include="FigureUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

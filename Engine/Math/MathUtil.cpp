@@ -135,6 +135,33 @@ const Vector2 Math::Function::Min(const Vector2& v1, const Vector2& v2)
     return Vector2(x, y);
 }
 
+int32_t Math::Function::DigitNum(uint32_t arg_num)
+{
+    return (int32_t)(std::log10(arg_num) + 1);
+}
+
+int32_t Math::Function::DigitValue(float number, int32_t digitPos)
+{
+    // 小数点以下の桁を取得するために、与えられた数値を整数部と小数部に分ける
+    int32_t integerPart = (int32_t)number;
+    float fractionalPart = number - integerPart;
+
+    // 指定された桁が整数部にあるかどうかをチェック
+    if (digitPos >= 0) {
+        // 指定された桁の数値を取得
+        int32_t divisor = (int32_t)std::powf(10.f, (float)digitPos);
+        int32_t digitValue = (integerPart / divisor) % 10;
+        return digitValue;
+    }
+    else {
+        // 指定された桁が小数部にあるかどうかをチェック
+        // 指定された桁の数値を取得
+        int32_t divisor = (int32_t)std::powf(10.f, (float)-digitPos);
+        int32_t digitValue = static_cast<int32_t>(fractionalPart * divisor) % 10;
+        return digitValue;
+    }
+}
+
 Vector3 Math::Function::ToCartesian(float r, float theta, float phi)
 {
     // r:動径r, theta:緯度θ, phi:経度φ

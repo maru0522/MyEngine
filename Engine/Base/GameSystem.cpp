@@ -54,6 +54,7 @@ void GameSystem::Draw(void)
         // --前景2DUIの描画-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dFore();
+        figureUIPtr_->Draw();
         // --前景2DUIの描画-- //
 
         imguiController_->Draw();
@@ -78,6 +79,7 @@ void GameSystem::Draw(void)
         // --前景2DUIの描画-- //
         Sprite::PreDraw();
         SceneManager::GetInstance()->Draw2dFore();
+        figureUIPtr_->Draw();
         // --前景2DUIの描画-- //
 
         imguiController_->Draw();

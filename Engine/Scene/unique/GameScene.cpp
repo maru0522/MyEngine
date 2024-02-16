@@ -20,7 +20,7 @@ void GameScene::Initialize(void)
     lightGroup_->SetLightColor(LightType::DIRECTIONAL, 0, { 1,1,1 });
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, { 0,-1,0 });
 
-    gameManager_.SetAllPtrs(CollisionManager::GetInstance(), CameraManager::GetInstance(), lightGroup_.get());
+    gameManager_.SetAllPtrs(CollisionManager::GetInstance(), CameraManager::GetInstance(), lightGroup_.get(),FigureUI::GetInstance(),UI::GetInstance());
     gameManager_.Initialize();
 
     rock1_->TransformPtr()->position = { 48,18,9 };

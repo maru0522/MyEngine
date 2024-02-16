@@ -11,6 +11,7 @@
 #include "AudioManager.h"
 #include "PostEffectManager.h"
 #include "UI.h"
+#include "FigureUI.h"
 /**
  * @file FrameWork.h
  * @brief 各マネージャークラスの更新処理等を実行する、エンジンの核となるクラス。
@@ -41,6 +42,7 @@ protected:
     PSOManager* psoMPtr_{ PSOManager::GetInstance() };                                          // ptr_GraphicsPipeline
     CameraManager* camMPtr_{ CameraManager::GetInstance() };                                    // ptr_CameraManager
     UI* uiPtr_{ UI::GetInstance() };
+    FigureUI* figureUIPtr_{ FigureUI::GetInstance() };
 
     std::unique_ptr<WndAPI> wnd_{ std::make_unique<WndAPI>() };                                 // WndAPI
     std::unique_ptr<TextureManager> texM_{ std::make_unique<TextureManager>() };                // textureManager

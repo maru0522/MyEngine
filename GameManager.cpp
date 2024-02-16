@@ -1,10 +1,12 @@
 #include "GameManager.h"
 
-void GameManager::SetAllPtrs(CollisionManager* arg_colMPtr, CameraManager* arg_camMPtr, LightManager* arg_lightMPtr)
+void GameManager::SetAllPtrs(CollisionManager* arg_colMPtr, CameraManager* arg_camMPtr, LightManager* arg_lightMPtr, FigureUI* arg_figureUIPtr, UI* arg_uiPtr)
 {
     colMPtr_ = arg_colMPtr;
     camMPtr_ = arg_camMPtr;
     lightMPtr_ = arg_lightMPtr;
+    figureUIPtr_ = arg_figureUIPtr;
+    uiPtr_ = arg_uiPtr;
 }
 
 void GameManager::Initialize()

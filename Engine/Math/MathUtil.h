@@ -96,6 +96,11 @@ namespace Math {
             return 1 / std::tan(arg_v);
         }
 
+        // 渡した値が何桁か返す。負の値は受け取れない。
+        int32_t DigitNum(uint32_t arg_num);
+        // 渡した数値の、指定した桁数の値を返す関数。1桁目が0。桁数が増えるなら+。小数点方向なら-。
+        int32_t DigitValue(float arg_number, int32_t arg_digitPos);
+
         // 球面座標系をデカルト座標系に変換する   r:動径r, theta:緯度θ, phi:経度φ
         Vector3 ToCartesian(float r, float theta, float phi);
         //Vector3 ToSphericalCoordinate(const Vector3& rectAngularCoordiante);

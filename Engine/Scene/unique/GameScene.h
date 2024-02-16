@@ -24,6 +24,7 @@
 #include "Snake.h"
 #include "ChickenEgg.h"
 #include "GameManager.h"
+#include "FigureUI.h"
 
 class GameScene final :
     public IScene

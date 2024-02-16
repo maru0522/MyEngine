@@ -4,6 +4,7 @@
 #include "SimplifyImGui.h"
 #include "UI.h"
 #include "CameraManager.h"
+#include "FigureUI.h"
 
 void TitleScene::Initialize(void)
 {
@@ -38,6 +39,10 @@ void TitleScene::Initialize(void)
     dTimer_ease_logoUpScale_.SetAddSpeed(2.f);
     dTimer_ease_pressAStrAlpha_.Start(4.f);
     dTimer_ease_pressAStrAlpha_.SetAddSpeed(2.f);
+
+    FigureUI::GetInstance()->Register("figureUI_test");
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->pos = { 200,200 };
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test")->num = 1.5;
 }
 
 void TitleScene::Update(void)

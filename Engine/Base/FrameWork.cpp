@@ -69,6 +69,7 @@ void FrameWork::Initialize()
 
     // UI初期化（Spriteより後で行わなければならない）
     uiPtr_->Initialize();
+    figureUIPtr_->Initialize();
 
     // SceneManager初期化
     SceneManager::GetInstance()->Initialize(SceneName::TITLE);
@@ -87,6 +88,7 @@ void FrameWork::Update(void)
     // SceneManager更新
     SceneManager::GetInstance()->Update();
     DebugGui();
+    figureUIPtr_->Update();
 
     // CameraManager更新
     camMPtr_->Update();
@@ -102,6 +104,7 @@ void FrameWork::Finalize(void)
 {
     // UI終了
     uiPtr_->Finalize();
+    figureUIPtr_->Finalize();
 
     // ウィンドウクラスを登録解除
     wnd_->Delete();
