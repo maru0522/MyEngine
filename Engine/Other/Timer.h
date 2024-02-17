@@ -195,6 +195,7 @@ public:
     bool GetIsPause(void) { return is_pause_; }
     float GetTimeRate(bool is_clamp0To1 = true);
     float GetFrameCurrent(void) { return sec_current_; }
+    float* GetFrameCurrentPtr(void) { return &sec_current_; }
     float GetFrameMax(void) { return sec_max_; }
     float GetAddSpeed(void) { return addSpeed_; }
 };

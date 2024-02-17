@@ -56,7 +56,7 @@ void FigureUI::Update(void)
         }
 
         // それぞれのspriteの座標や、切り抜き位置などを値に合わせ変更
-        float num = figure.second.num;
+        float num = *figure.second.num;
         // 今の値が何桁なのかを確認する
         int32_t digitNum = Math::Function::DigitNum((uint32_t)num);
         // 整数部分

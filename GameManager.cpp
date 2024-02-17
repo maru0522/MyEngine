@@ -42,6 +42,14 @@ void GameManager::Initialize()
     event_tutorialPlanetHole_.Initialize(colMPtr_, camMPtr_, &player_);
     // startTutorialから起動する。 endTutorialは終了時,tutorialPlanetHoleは、更新処理内で起動する
     event_startTutorial_.SetIsExecute(true);
+
+    // タイマーをUIに登録
+    numForInvaseTime_ = kTimer_limit_;
+    figureUIPtr_->Register("FigureUI_GameManager_GameTimer");
+    figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->pos = { 132,25};
+    //figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->num = gameTimer_.GetFrameCurrentPtr();
+    figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->num = &numForInvaseTime_;
+    figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->format = FigureUI::Format::TIMER;
 }
 
 void GameManager::Update(void)
@@ -75,6 +83,9 @@ void GameManager::Update(void)
     event_startTutorial_.Execute();
     event_endTutorial_.Execute();
     event_tutorialPlanetHole_.Execute();
+
+    //>> タイマー
+    UseGameTimer();
 }
 
 void GameManager::Draw3d(void)
@@ -128,7 +139,6 @@ void GameManager::Finalize(void)
     event_startTutorial_.Finalize();
     event_endTutorial_.Finalize();
     event_tutorialPlanetHole_.Finalize();
-
 }
 
 void GameManager::CamerasSetting(void)
@@ -239,4 +249,18 @@ void GameManager::PlayerCarryableSnake(void)
     }
 
     is_carrySnakePre = is_carrySnake;
+}
+
+void GameManager::UseGameTimer(void)
+{
+    // タイマーの更新
+    numForInvaseTime_ = (std::max)(kTimer_limit_ - gameTimer_.GetFrameCurrent(), 0.f);
+    //numForInvaseTime_ = gameTimer_.GetFrameCurrent();
+    gameTimer_.Update();
+
+    // "event_startTutorial_"の実行フラグが[true]->[false]に切り替わった瞬間内部タイマーを実行する
+    if (is_preStartEventExecute_ && event_startTutorial_.GetIsExecite() == false) { gameTimer_.Start(kTimer_limit_); }
+
+    // 1フレーム前の"event_startTutorial_"の実行フラグとして、代入し続ける。
+    is_preStartEventExecute_ = event_startTutorial_.GetIsExecite();
 }

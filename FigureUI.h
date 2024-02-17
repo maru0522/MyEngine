@@ -31,7 +31,7 @@ public:
         FigureSpriteSettings(void) = default;
         ~FigureSpriteSettings(void) = default;
 
-        float num{};
+        float* num{};
         float alpha{ 1 };
 
         Vector2 pos{};
@@ -81,7 +81,7 @@ private:
 
 public:
     //>> setter
-    void SetNumber(const std::string& arg_key, float arg_num) { umap_figures_[arg_key].num = arg_num; }
+    //void SetNumber(const std::string& arg_key, float arg_num) { umap_figures_[arg_key].num = arg_num; }
 
     //>> getter
     FigureSpriteSettings* GetFigureUISettingsPtr(const std::string& arg_key);

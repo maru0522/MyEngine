@@ -28,6 +28,7 @@ class GameManager
 public:
     //>> 定義
     const int32_t kCount_lockedCage_ = 3;    // 何体分の檻が収容完了していたらゲームが終了するか。
+    const float kTimer_limit_ = 120;         // ゲームの制限時間
 
     //>> 関数
     GameManager(void) = default;
@@ -53,6 +54,8 @@ private:
     bool CheckLockedCage(void);
     // playerが蛇に触れているかと、その蛇のptrの取得
     void PlayerCarryableSnake(void);
+    //
+    void UseGameTimer(void);
 
     //>> 変数
     CollisionManager* colMPtr_;
@@ -80,4 +83,9 @@ private:
     Event_StartTutorial event_startTutorial_;
     Event_EndTutorial event_endTutorial_;
     Event_TutorialPlanetHole event_tutorialPlanetHole_;
+
+    // タイマー
+    bool is_preStartEventExecute_{};
+    float numForInvaseTime_;
+    DeltaTimer gameTimer_;
 };
