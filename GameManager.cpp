@@ -85,7 +85,7 @@ void GameManager::Update(void)
     event_tutorialPlanetHole_.Execute();
 
     //>> タイマー
-    UseGameTimer();
+    ManageGameTimer();
 }
 
 void GameManager::Draw3d(void)
@@ -217,7 +217,7 @@ bool GameManager::CheckLockedCage(void)
     // 収容完了しているケージに数が、"kCount_lockedCage_"以上なら、event_endTutorial_を起動
     if (lockedCageNum >= kCount_lockedCage_) 
     {
-        event_endTutorial_.SetIsExecute(true);
+        event_endTutorial_.SetIsExecute(true,Event_EndTutorial::DisplayString::CLEAR);
         return true;
     }
 
@@ -251,8 +251,11 @@ void GameManager::PlayerCarryableSnake(void)
     is_carrySnakePre = is_carrySnake;
 }
 
-void GameManager::UseGameTimer(void)
+void GameManager::ManageGameTimer(void)
 {
+    float rate = gameTimer_.GetTimeRate();
+    if(rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndTutorial::DisplayString::TIMEOVER); }
+
     // タイマーの更新
     numForInvaseTime_ = (std::max)(kTimer_limit_ - gameTimer_.GetFrameCurrent(), 0.f);
     //numForInvaseTime_ = gameTimer_.GetFrameCurrent();

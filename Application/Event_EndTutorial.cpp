@@ -49,10 +49,18 @@ void Event_EndTutorial::Initialize(CameraManager* arg_cameraMPtr)
     }
 
     // 文字の生成と設定
-    string_ = std::make_unique<Sprite>("Resources/string_clear!.png");
-    string_->SetAnchorPoint(Vector2{ 0.5,0.5 });
-    string_->SetPosition(Vector2{ 640,360 });
-    string_->SetAlpha(0.f);
+    string1_ = std::make_unique<Sprite>("Resources/string_clear!.png");
+    string1_->SetAnchorPoint(Vector2{ 0.5,0.5 });
+    string1_->SetPosition(Vector2{ 640,360 });
+    string1_->SetAlpha(0.f);
+    string2_ = std::make_unique<Sprite>("Resources/string_gameOver!.png");
+    string2_->SetAnchorPoint(Vector2{ 0.5,0.5 });
+    string2_->SetPosition(Vector2{ 640,360 });
+    string2_->SetAlpha(0.f);
+    string3_ = std::make_unique<Sprite>("Resources/string_timeOver!.png");
+    string3_->SetAnchorPoint(Vector2{ 0.5,0.5 });
+    string3_->SetPosition(Vector2{ 640,360 });
+    string3_->SetAlpha(0.f);
 
     camera_ = std::make_unique<NormalCamera>("event_endTutorial");
     cameraMPtr_->Register(camera_.get());
@@ -72,7 +80,20 @@ void Event_EndTutorial::Execute(void)
         cinemas_[i]->Update();
         stringBackGrounds_[i]->Update();
     }
-    string_->Update();
+    switch (displayString_)
+    {
+    case Event_EndTutorial::DisplayString::CLEAR:
+        string1_->Update();
+        break;
+    case Event_EndTutorial::DisplayString::GAMEOVER:
+        string2_->Update();
+        break;
+    case Event_EndTutorial::DisplayString::TIMEOVER:
+        string3_->Update();
+        break;
+    default:
+        break;
+    }
 
     //GUI::Begin("event_endTutorial");
 
@@ -115,7 +136,20 @@ void Event_EndTutorial::Draw(void)
         {
             sbg->Draw();
         }
-        string_->Draw();
+        switch (displayString_)
+        {
+        case Event_EndTutorial::DisplayString::CLEAR:
+            string1_->Draw();
+            break;
+        case Event_EndTutorial::DisplayString::GAMEOVER:
+            string2_->Draw();
+            break;
+        case Event_EndTutorial::DisplayString::TIMEOVER:
+            string3_->Draw();
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -181,7 +215,21 @@ void Event_EndTutorial::Update_WaitCam(void)
     }
     // 文字
     float rate_forStr = std::clamp(rate_forSbg / 0.4f, 0.f, 1.f);
-    string_->SetAlpha(rate_forStr);
+
+    switch (displayString_)
+    {
+    case Event_EndTutorial::DisplayString::CLEAR:
+        string1_->SetAlpha(rate_forStr);
+        break;
+    case Event_EndTutorial::DisplayString::GAMEOVER:
+        string2_->SetAlpha(rate_forStr);
+        break;
+    case Event_EndTutorial::DisplayString::TIMEOVER:
+        string3_->SetAlpha(rate_forStr);
+        break;
+    default:
+        break;
+    }
 
 
     // タイマーが完了しているか
@@ -198,8 +246,9 @@ void Event_EndTutorial::Update_WaitCam(void)
     }
 }
 
-void Event_EndTutorial::SetIsExecute(bool arg_isExecute)
+void Event_EndTutorial::SetIsExecute(bool arg_isExecute, DisplayString arg_displayString)
 {
     is_execute_ = arg_isExecute;
     if (is_execute_) { Start(); }
+    displayString_ = arg_displayString;
 }

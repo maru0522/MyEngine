@@ -54,8 +54,8 @@ private:
     bool CheckLockedCage(void);
     // playerが蛇に触れているかと、その蛇のptrの取得
     void PlayerCarryableSnake(void);
-    //
-    void UseGameTimer(void);
+    // ゲーム用タイマーの管理
+    void ManageGameTimer(void);
 
     //>> 変数
     CollisionManager* colMPtr_;

@@ -20,6 +20,13 @@ private:
     const float kWaitAddSpeed_ = 1.f;
 
 public:
+    enum class DisplayString
+    {
+        CLEAR,
+        GAMEOVER,
+        TIMEOVER,
+    };
+
     //>> 関数
     Event_EndTutorial(void) = default;
     ~Event_EndTutorial(void) = default;
@@ -37,7 +44,9 @@ private:
     //>> 変数
     std::array<std::unique_ptr<Sprite>, 2> cinemas_;
     std::array<std::unique_ptr<Sprite>, 2> stringBackGrounds_;
-    std::unique_ptr<Sprite> string_;
+    std::unique_ptr<Sprite> string1_;
+    std::unique_ptr<Sprite> string2_;
+    std::unique_ptr<Sprite> string3_;
 
     CameraManager* cameraMPtr_;
     std::unique_ptr<NormalCamera> camera_;
@@ -47,10 +56,11 @@ private:
     DeltaTimer timer_waitCam_;
 
     bool is_execute_;
+    DisplayString displayString_;
 
 public:
     //>> setter
-    void SetIsExecute(bool arg_isExecute);
+    void SetIsExecute(bool arg_isExecute, DisplayString arg_displayString);
 
     //>> getter
     bool GetIsExecite(void) { return is_execute_; }
