@@ -40,10 +40,13 @@ void TitleScene::Initialize(void)
     dTimer_ease_pressAStrAlpha_.Start(4.f);
     dTimer_ease_pressAStrAlpha_.SetAddSpeed(2.f);
 
-    //FigureUI::GetInstance()->Register("figureUI_test_timer");
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->pos = { 200,400 };
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num = 1.5;
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE;
+    FigureUI::GetInstance()->Register("figureUI_test_timer");
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->pos = { 200,400 };
+    static float num;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num = &num;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_intDigit = 1;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_floatDigit = 0;
 }
 
 void TitleScene::Update(void)
@@ -90,6 +93,27 @@ void TitleScene::Update(void)
     GUI::Begin("Title_logo");
     GUI::Text("rate:  %f", rate);
     GUI::Text("scale: %f", scale);
+
+    static float intDigit;
+    GUI::SliderFloat("intDigit", &intDigit, 0, 10);
+    static float floatDigit;
+    GUI::SliderFloat("floatDigit", &floatDigit, 0, 10);
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_intDigit = (int32_t)intDigit;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_floatDigit = (int32_t)floatDigit;
+
+    GUI::SliderFloat("num", FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num, 0, 5000);
+    if (GUI::ButtonTrg("switchFormat"))
+    {
+        FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format == FigureUI::Format::SCORE ?
+            FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::TIMER :
+            FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE;
+    }
+    if (GUI::ButtonTrg("switchScope"))
+    {
+        FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->scope == FigureUI::Scope::ALL ?
+            FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->scope = FigureUI::Scope::MAX :
+            FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->scope = FigureUI::Scope::ALL;
+    }
     GUI::End();
 #endif
 

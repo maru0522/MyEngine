@@ -41,6 +41,9 @@ public:
         Vector2 cutStartPoint{ 0,0 };
         Vector2 cutLength{ kDefault_pictureLength_,kDefault_pictureLength_ };
 
+        int32_t num_intDigit = kDefault_intDigit_;
+        int32_t num_floatDigit = kDefault_floatDigit_;
+
         bool isDirty{};
 
         Scope scope{};
@@ -48,8 +51,8 @@ public:
     };
 
     const std::string kDefault_figurePath_ = "Resources/figures2.png";
-    const int32_t kDefault_intDigit_ = 5;               // デフォルトの整数部の表示桁数
-    const int32_t kDefault_floatDigit_ = 3;             // デフォルトの整数部の表示桁数
+    const static int32_t kDefault_intDigit_ = 5;        // デフォルトの整数部の表示桁数
+    const static int32_t kDefault_floatDigit_ = 3;      // デフォルトの整数部の表示桁数
     const static float kDefault_pictureLength_;         // デフォルトの数字1つ分の長さ（正方形前提）
     const static float kDistance_symbolDecimal_;        // 小数点の座標が基準からどの程度離れているかの距離
     const static float kDefaultSpace_symbolDecimal_;    // 小数点の為に必要な空間の長さ

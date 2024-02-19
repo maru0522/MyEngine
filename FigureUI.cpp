@@ -31,25 +31,35 @@ void FigureUI::Update(void)
         if (figure.second.isDirty)
         {
             // 表示形式が"TIMER"である。
-            if (figure.second.format == Format::TIMER) 
+            if (figure.second.format == Format::TIMER)
             {
                 // 強制的に表示範囲をALLにする。※"Format::TIMER"なら"Scope::MAX"は使用不可
                 figure.second.scope = Scope::ALL;
             }
 
             //#kDefault_intDigit_の分変更
-            for (int32_t i = 0; i < kDefault_intDigit_; i++) { AdaptSettings_Number(figure.first, i, figure.second); }
+            for (int32_t i = 0; i < figure.second.num_intDigit; i++) { AdaptSettings_Number(figure.first, i, figure.second); }
             //#kDefault_floatDigit_の分変更
-            for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { AdaptSettings_Number(figure.first, i - 1, figure.second); }
+            for (int32_t i = 0; i > -figure.second.num_floatDigit; i--) 
+            {
+                AdaptSettings_Number(figure.first, i - 1, figure.second); }
             //#小数点の分変更
-            FigureSpriteSettings decimalSettings = figure.second;
-            decimalSettings.cutStartPoint = { 320.f,0.f };
-            AdaptSettings_Symbol(figure.first, "DecimalPoint", kDistance_symbolDecimal_, decimalSettings);
+            //  小数点以下の桁数が0より大きく指定されている場合、更新を行う。
+            if (figure.second.num_floatDigit > 0)
+            {
+                FigureSpriteSettings decimalSettings = figure.second;
+                decimalSettings.cutStartPoint = { 320.f,0.f };
+                AdaptSettings_Symbol(figure.first, "DecimalPoint", kDistance_symbolDecimal_, decimalSettings);
+            }
             //#時計用のコロンの分登録
-            FigureSpriteSettings colonSettings = figure.second;
-            colonSettings.cutStartPoint = { 352.f,0.f };
-            float colonPosDiff = kDistance_symbolColon_;
-            AdaptSettings_Symbol(figure.first, "Colon", -colonPosDiff, colonSettings);
+            //  整数部の桁数が2以上の値が指定されている場合、更新を行う。※2の場合百の位->時間に直すとhoursの部分
+            if (figure.second.num_intDigit >= 2)
+            {
+                FigureSpriteSettings colonSettings = figure.second;
+                colonSettings.cutStartPoint = { 352.f,0.f };
+                float colonPosDiff = kDistance_symbolColon_;
+                AdaptSettings_Symbol(figure.first, "Colon", -colonPosDiff, colonSettings);
+            }
 
             // 変更フラグをfalse
             figure.second.isDirty = false;
@@ -60,7 +70,7 @@ void FigureUI::Update(void)
         // 今の値が何桁なのかを確認する
         int32_t digitNum = Math::Function::DigitNum((uint32_t)num);
         // 整数部分
-        for (int32_t i = 0; i < kDefault_intDigit_; i++)
+        for (int32_t i = 0; i < figure.second.num_intDigit; i++)
         {
             const std::string& key = SynthesisName(figure.first, i);
             // UIクラスから、FigureUIで管理している分の数字UIのspriteのptrを取得する
@@ -110,8 +120,8 @@ void FigureUI::Update(void)
             // 表示範囲が"MAX"である
             if (figure.second.scope == Scope::MAX)
             {
-                // 桁数が5桁未満である
-                if (digitNum < 5) 
+                // 桁数が"figure.second.num_intDigit"桁未満である
+                if (digitNum < figure.second.num_intDigit)
                 {
                     // iが0以外である && for分のiの値が"digitNum"以上である
                     if (i != 0 && i >= digitNum) // 小数点以下の値の時の為、1桁目の値は0でも消さない。
@@ -131,7 +141,7 @@ void FigureUI::Update(void)
         }
 
         // 小数点以下部分
-        for (int32_t i = 0; i > -kDefault_floatDigit_; i--)
+        for (int32_t i = 0; i > -figure.second.num_floatDigit; i--)
         {
             const std::string& key = SynthesisName(figure.first, i - 1);
             // UIクラスから、FigureUIで管理している分の数字UIのspriteのptrを取得する
@@ -161,21 +171,32 @@ void FigureUI::Draw(void)
     for (const auto& figure : umap_figures_)
     {
         // 整数部分
-        for (int32_t i = 0; i < kDefault_intDigit_; i++)
+        for (int32_t i = 0; i < figure.second.num_intDigit; i++)
         {
             const std::string& key = SynthesisName(figure.first, i);
             uiPtr_->Draw(key);
         }
         // 小数点以下部分
-        for (int32_t i = 0; i > -kDefault_floatDigit_; i--)
+        for (int32_t i = 0; i > -figure.second.num_floatDigit; i--)
         {
             const std::string& key = SynthesisName(figure.first, i - 1);
             uiPtr_->Draw(key);
         }
         // 小数点部分
-        uiPtr_->Draw(figure.first + "DecimalPoint");
+        // 小数点以下の桁数が0より大きく指定されている場合、更新を行う。
+        if (figure.second.num_floatDigit > 0)
+        {
+            uiPtr_->Draw(figure.first + "DecimalPoint");
+        }
         // 時計用のコロン部分
-        if (figure.second.format == Format::TIMER) { uiPtr_->Draw(figure.first + "Colon"); }
+        if (figure.second.format == Format::TIMER)
+        {
+            //  整数部の桁数が2以上の値が指定されている場合、更新を行う。※2の場合百の位->時間に直すとhoursの部分
+            if (figure.second.num_intDigit >= 2)
+            {
+                uiPtr_->Draw(figure.first + "Colon");
+            }
+        }
     }
 }
 
@@ -184,10 +205,10 @@ void FigureUI::Finalize(void)
     // 残ってるkey分全て、uiから抹消
     for (const auto& figure : umap_figures_) {
         // Registerと同じく、[桁数の数]と同じだけ消す
-        //#kDefault_intDigit_の分抹消
-        for (int32_t i = 0; i < kDefault_intDigit_; i++) { uiPtr_->UnRegister(SynthesisName(figure.first, i)); }
-        //#kDefault_floatDigit_の分抹消
-        for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { uiPtr_->UnRegister(SynthesisName(figure.first, i - 1)); }
+        //#figure.second.num_intDigitの分抹消
+        for (int32_t i = 0; i < figure.second.num_intDigit; i++) { uiPtr_->UnRegister(SynthesisName(figure.first, i)); }
+        //#figure.second.num_floatDigitの分抹消
+        for (int32_t i = 0; i > -figure.second.num_floatDigit; i--) { uiPtr_->UnRegister(SynthesisName(figure.first, i - 1)); }
         //#小数点の分抹消
         uiPtr_->UnRegister(figure.first + "DecimalPoint");
         //#時計用のコロンの分抹消
@@ -216,10 +237,10 @@ void FigureUI::Register(const std::string& arg_key, const FigureSpriteSettings& 
     if (isContained) { return; }
 
     // UI側に同名鍵で[桁数の数]だけ登録 ※[桁数の数] = kDefault_intDigit_ + kDefault_floatDigit_
-    //#kDefault_intDigit_の分登録
-    for (int32_t i = 0; i < kDefault_intDigit_; i++) { AdaptSettings_Number(arg_key, i, arg_settings); }
-    //#kDefault_floatDigit_の分登録
-    for (int32_t i = 0; i > -kDefault_floatDigit_; i--) { AdaptSettings_Number(arg_key, i - 1, arg_settings); }
+    //#arg_settings.num_intDigitの分登録
+    for (int32_t i = 0; i < arg_settings.num_intDigit; i++) { AdaptSettings_Number(arg_key, i, arg_settings); }
+    //#arg_settings.num_floatDigitの分登録
+    for (int32_t i = 0; i > -arg_settings.num_floatDigit; i--) { AdaptSettings_Number(arg_key, i - 1, arg_settings); }
     //#小数点の分登録
     FigureSpriteSettings decimalSettings = arg_settings;
     decimalSettings.cutStartPoint = { 320.f,0.f };
