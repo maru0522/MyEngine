@@ -27,6 +27,20 @@ class GameManager
 {
 public:
     //>> 定義
+    enum class MenuItem
+    {
+        RESUME,
+        RESTART,
+        OPTION,
+        QUIT,
+    };
+
+    struct GameMenu
+    {
+        bool is_pause{};
+        MenuItem item{};
+    };
+
     const int32_t kCount_lockedCage_ = 3;    // 何体分の檻が収容完了していたらゲームが終了するか。
     const float kTimer_limit_ = 120;         // ゲームの制限時間
 
@@ -56,6 +70,9 @@ private:
     void PlayerCarryableSnake(void);
     // ゲーム用タイマーの管理
     void ManageGameTimer(void);
+    // ゲームメニューの管理
+    void ControllGameMenu(void);
+    bool GetIsOpenMenu(void) { return menu_.is_pause; }
 
     //>> 変数
     CollisionManager* colMPtr_;
@@ -88,4 +105,7 @@ private:
     bool is_preStartEventExecute_{};
     float numForInvaseTime_;
     DeltaTimer gameTimer_;
+
+    // メニュー
+    GameMenu menu_;
 };

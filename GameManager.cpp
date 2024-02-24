@@ -1,4 +1,6 @@
 #include "GameManager.h"
+#include "SceneManager.h"
+#include "Input.h"
 
 void GameManager::SetAllPtrs(CollisionManager* arg_colMPtr, CameraManager* arg_camMPtr, LightManager* arg_lightMPtr, FigureUI* arg_figureUIPtr, UI* arg_uiPtr)
 {
@@ -54,6 +56,11 @@ void GameManager::Initialize()
 
 void GameManager::Update(void)
 {
+    // メニュー
+    ControllGameMenu();
+    // メニューを開いていたら、スキップ
+    if (GetIsOpenMenu()) { return; }
+
     //>> オブジェクト
     // 鶏卵付近の蛇数をプレイヤーへ渡す
     HandoverSnakeCount();
@@ -266,4 +273,50 @@ void GameManager::ManageGameTimer(void)
 
     // 1フレーム前の"event_startTutorial_"の実行フラグとして、代入し続ける。
     is_preStartEventExecute_ = event_startTutorial_.GetIsExecite();
+}
+
+void GameManager::ControllGameMenu(void)
+{
+    // ボタンを押した場合、is_pauseの状態を反転する
+    if (KEYS::IsTrigger(DIK_P) || XPAD::IsTrigger(XPAD::Button::START)) { menu_.is_pause = !menu_.is_pause; }
+    // メニューを開いていない場合
+    if (GetIsOpenMenu() == false) 
+    {
+        // タイマー再開
+        gameTimer_.Resume();
+        // 終了
+        return;
+    }
+
+    // タイマーを一時停止
+    gameTimer_.Pause();
+
+    // 上下の押したボタン（十字キー）によって、選択項目を変更
+    menu_.item = (MenuItem)((int32_t)menu_.item + (int32_t)XPAD::IsTrigger(XPAD::Button::TOP));
+    menu_.item = (MenuItem)((int32_t)menu_.item - (int32_t)XPAD::IsTrigger(XPAD::Button::BOTTOM));
+    // 選択項目がループするように
+    Math::Function::Loop<MenuItem>(menu_.item, MenuItem::RESUME, MenuItem::QUIT);
+
+    // Aボタンを押していない場合、終了
+    if (XPAD::IsTrigger(XPAD::Button::A) == false) { return; }
+    switch (menu_.item)
+    {
+    case GameManager::MenuItem::RESUME:
+        // メニューを閉じる
+        menu_.is_pause = false;
+        return;
+    case GameManager::MenuItem::RESTART:
+        SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+        break;
+    case GameManager::MenuItem::OPTION:
+        // メニューを閉じる 一旦
+        menu_.is_pause = false;
+        break;
+    case GameManager::MenuItem::QUIT:
+        // タイトルに戻る
+        SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+        break;
+    default:
+        break;
+    }
 }
