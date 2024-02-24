@@ -71,7 +71,8 @@ private:
     // ゲーム用タイマーの管理
     void ManageGameTimer(void);
     // ゲームメニューの管理
-    void ControllGameMenu(void);
+    void ControllGameMenu_Update(void);
+    void ControllGameMenu_Draw(void);
     bool GetIsOpenMenu(void) { return menu_.is_pause; }
 
     //>> 変数
@@ -108,4 +109,9 @@ private:
 
     // メニュー
     GameMenu menu_;
+    //Sprite png_menu_frame_;
+    //Sprite png_menu_resume_;
+    //Sprite png_menu_restart_;
+    //Sprite png_menu_option_;
+    //Sprite png_menu_quit_;
 };

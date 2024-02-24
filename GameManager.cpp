@@ -48,16 +48,34 @@ void GameManager::Initialize()
     // タイマーをUIに登録
     numForInvaseTime_ = kTimer_limit_;
     figureUIPtr_->Register("FigureUI_GameManager_GameTimer");
-    figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->pos = { 132,25};
+    figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->pos = { 132,25 };
     //figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->num = gameTimer_.GetFrameCurrentPtr();
     figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->num = &numForInvaseTime_;
     figureUIPtr_->GetFigureUISettingsPtr("FigureUI_GameManager_GameTimer")->format = FigureUI::Format::TIMER;
+
+    // メニュー
+    uiPtr_->Register("menu_frame", "Resources/png_gameMenu_frame.png");
+    uiPtr_->GetUISpritePtr("menu_frame")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("menu_frame")->SetPosition(Vector2{ 640.f,360.f });
+
+    uiPtr_->Register("menu_resume", "Resources/png_gameMenu_resume.png");
+    uiPtr_->GetUISpritePtr("menu_resume")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("menu_resume")->SetPosition(Vector2{ 630.f,300.f });
+    uiPtr_->Register("menu_restart", "Resources/png_gameMenu_restart.png");
+    uiPtr_->GetUISpritePtr("menu_restart")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("menu_restart")->SetPosition(Vector2{ 625.f,360.f });
+    uiPtr_->Register("menu_option", "Resources/png_gameMenu_option.png");
+    uiPtr_->GetUISpritePtr("menu_option")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("menu_option")->SetPosition(Vector2{ 635.f,420.f });
+    uiPtr_->Register("menu_quit", "Resources/png_gameMenu_quit.png");
+    uiPtr_->GetUISpritePtr("menu_quit")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    uiPtr_->GetUISpritePtr("menu_quit")->SetPosition(Vector2{ 660.f,480.f });
 }
 
 void GameManager::Update(void)
 {
     // メニュー
-    ControllGameMenu();
+    ControllGameMenu_Update();
     // メニューを開いていたら、スキップ
     if (GetIsOpenMenu()) { return; }
 
@@ -120,6 +138,8 @@ void GameManager::Draw2d(void)
 
     event_startTutorial_.Draw();
     event_endTutorial_.Draw();
+
+    ControllGameMenu_Draw();
 }
 
 void GameManager::Finalize(void)
@@ -222,9 +242,9 @@ bool GameManager::CheckLockedCage(void)
     // 全てのケージにおいて確認
     for (auto& cage : snakeCages_) { if (cage.GetIsLock()) { lockedCageNum++; } }
     // 収容完了しているケージに数が、"kCount_lockedCage_"以上なら、event_endTutorial_を起動
-    if (lockedCageNum >= kCount_lockedCage_) 
+    if (lockedCageNum >= kCount_lockedCage_)
     {
-        event_endTutorial_.SetIsExecute(true,Event_EndTutorial::DisplayString::CLEAR);
+        event_endTutorial_.SetIsExecute(true, Event_EndTutorial::DisplayString::CLEAR);
         return true;
     }
 
@@ -235,7 +255,7 @@ void GameManager::PlayerCarryableSnake(void)
 {
     static bool is_carrySnakePre{};
     bool is_carrySnake = player_.GetIsCarrySnake();
-    if (is_carrySnake && is_carrySnakePre ) { return; }
+    if (is_carrySnake && is_carrySnakePre) { return; }
 
     if (is_carrySnake == false)
     {
@@ -261,7 +281,7 @@ void GameManager::PlayerCarryableSnake(void)
 void GameManager::ManageGameTimer(void)
 {
     float rate = gameTimer_.GetTimeRate();
-    if(rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndTutorial::DisplayString::TIMEOVER); }
+    if (rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndTutorial::DisplayString::TIMEOVER); }
 
     // タイマーの更新
     numForInvaseTime_ = (std::max)(kTimer_limit_ - gameTimer_.GetFrameCurrent(), 0.f);
@@ -275,12 +295,12 @@ void GameManager::ManageGameTimer(void)
     is_preStartEventExecute_ = event_startTutorial_.GetIsExecite();
 }
 
-void GameManager::ControllGameMenu(void)
+void GameManager::ControllGameMenu_Update(void)
 {
     // ボタンを押した場合、is_pauseの状態を反転する
     if (KEYS::IsTrigger(DIK_P) || XPAD::IsTrigger(XPAD::Button::START)) { menu_.is_pause = !menu_.is_pause; }
     // メニューを開いていない場合
-    if (GetIsOpenMenu() == false) 
+    if (GetIsOpenMenu() == false)
     {
         // タイマー再開
         gameTimer_.Resume();
@@ -292,31 +312,102 @@ void GameManager::ControllGameMenu(void)
     gameTimer_.Pause();
 
     // 上下の押したボタン（十字キー）によって、選択項目を変更
-    menu_.item = (MenuItem)((int32_t)menu_.item + (int32_t)XPAD::IsTrigger(XPAD::Button::TOP));
-    menu_.item = (MenuItem)((int32_t)menu_.item - (int32_t)XPAD::IsTrigger(XPAD::Button::BOTTOM));
+    menu_.item = (MenuItem)((int32_t)menu_.item - (int32_t)XPAD::IsTrigger(XPAD::Button::TOP));
+    menu_.item = (MenuItem)((int32_t)menu_.item + (int32_t)XPAD::IsTrigger(XPAD::Button::BOTTOM));
     // 選択項目がループするように
     Math::Function::Loop<MenuItem>(menu_.item, MenuItem::RESUME, MenuItem::QUIT);
 
-    // Aボタンを押していない場合、終了
-    if (XPAD::IsTrigger(XPAD::Button::A) == false) { return; }
+    // 選択項目の強調表示
     switch (menu_.item)
     {
     case GameManager::MenuItem::RESUME:
-        // メニューを閉じる
-        menu_.is_pause = false;
-        return;
+        uiPtr_->GetUISpritePtr("menu_resume")->SetScale(Vector2{ 1.2f,1.2f });
+        uiPtr_->GetUISpritePtr("menu_resume")->SetColor255(Vector4{ 200.f,200.f,20.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        break;
     case GameManager::MenuItem::RESTART:
-        SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+        uiPtr_->GetUISpritePtr("menu_resume")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_resume")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetScale(Vector2{ 1.2f,1.2f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetColor255(Vector4{ 200.f,200.f,20.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
         break;
     case GameManager::MenuItem::OPTION:
-        // メニューを閉じる 一旦
-        menu_.is_pause = false;
+        uiPtr_->GetUISpritePtr("menu_resume")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_resume")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetScale(Vector2{ 1.2f,1.2f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetColor255(Vector4{ 200.f,200.f,20.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
         break;
     case GameManager::MenuItem::QUIT:
-        // タイトルに戻る
-        SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+        uiPtr_->GetUISpritePtr("menu_resume")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_resume")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_restart")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetScale(Vector2{ 1.f,1.f });
+        uiPtr_->GetUISpritePtr("menu_option")->SetColor255(Vector4{ 255.f,255.f,255.f,255.f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetScale(Vector2{ 1.2f,1.2f });
+        uiPtr_->GetUISpritePtr("menu_quit")->SetColor255(Vector4{ 200.f,200.f,20.f,255.f });
         break;
     default:
         break;
     }
+
+    // Aボタンを押していない場合、終了
+    if (XPAD::IsTrigger(XPAD::Button::A))
+    {
+        switch (menu_.item)
+        {
+        case GameManager::MenuItem::RESUME:
+            // メニューを閉じる
+            menu_.is_pause = false;
+            break;
+        case GameManager::MenuItem::RESTART:
+            SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+            break;
+        case GameManager::MenuItem::OPTION:
+            // メニューを閉じる 一旦
+            menu_.is_pause = false;
+            break;
+        case GameManager::MenuItem::QUIT:
+            // タイトルに戻る
+            SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+            break;
+        default:
+            break;
+        }
+    }
+
+    uiPtr_->Update("menu_frame");
+    uiPtr_->Update("menu_resume");
+    uiPtr_->Update("menu_restart");
+    uiPtr_->Update("menu_option");
+    uiPtr_->Update("menu_quit");
+}
+
+void GameManager::ControllGameMenu_Draw(void)
+{
+    // メニューを開いていない場合
+    if (GetIsOpenMenu() == false)
+    {
+        // 終了
+        return;
+    }
+
+    uiPtr_->Draw("menu_frame");
+    uiPtr_->Draw("menu_resume");
+    uiPtr_->Draw("menu_restart");
+    uiPtr_->Draw("menu_option");
+    uiPtr_->Draw("menu_quit");
 }
