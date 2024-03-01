@@ -28,6 +28,10 @@ void TutorialScene::Initialize(void)
 
 void TutorialScene::Update(void)
 {
+    // ライト
+    // 平行光源の向きをカメラの正面ベクトル方向に。
+    const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
+    lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
     lightGroup_->Update();
 
     // オブジェクト
