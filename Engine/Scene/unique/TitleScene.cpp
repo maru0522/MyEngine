@@ -40,13 +40,15 @@ void TitleScene::Initialize(void)
     dTimer_ease_pressAStrAlpha_.Start(4.f);
     dTimer_ease_pressAStrAlpha_.SetAddSpeed(2.f);
 
-    //FigureUI::GetInstance()->Register("figureUI_test_timer");
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->pos = { 200,400 };
-    //static float num;
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num = &num;
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE;
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_intDigit = 1;
-    //FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_floatDigit = 0;
+#ifdef _DEBUG
+    FigureUI::GetInstance()->Register("figureUI_test_timer");
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->pos = { 200,400 };
+    static float num;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num = &num;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->format = FigureUI::Format::SCORE;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_intDigit = 1;
+    FigureUI::GetInstance()->GetFigureUISettingsPtr("figureUI_test_timer")->num_floatDigit = 0;
+#endif // _DEBUG
 }
 
 void TitleScene::Update(void)
