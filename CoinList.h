@@ -2,7 +2,7 @@
 #include "Coin.h"
 #include <filesystem>
 #include <forward_list>
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "LightManager.h"
 
 /**

@@ -5,7 +5,7 @@
 #include <memory>
 #include "Player.h"
 #include "LightManager.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 
 class TutorialScene final : public IScene
 {

@@ -132,7 +132,7 @@
     <ClCompile Include="Engine\Entity\PostEffect\HighLumi.cpp" />
     <ClCompile Include="Engine\Entity\Collision\ICollider.cpp" />
     <ClCompile Include="Application\LevelData.cpp" />
-    <ClCompile Include="Application\Object\Planet.cpp" />
+    <ClCompile Include="Application\Object\GamePlanet.cpp" />
     <ClCompile Include="Application\Entity\Player.cpp" />
     <ClCompile Include="Engine\Base\PSOManager.cpp" />
     <ClCompile Include="Engine\Base\ImguiController.cpp" />
@@ -369,7 +369,7 @@
     <ClInclude Include="Engine\Entity\Collision\ICollider.h" />
     <ClInclude Include="Engine\Other\json.hpp" />
     <ClInclude Include="Application\LevelData.h" />
-    <ClInclude Include="Application\Object\Planet.h" />
+    <ClInclude Include="Application\Object\GamePlanet.h" />
     <ClInclude Include="Application\Entity\Player.h" />
     <ClInclude Include="Engine\Base\PSOManager.h" />
     <ClInclude Include="Engine\Base\ImguiController.h" />

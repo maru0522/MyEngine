@@ -7,7 +7,7 @@
 #include "LightManager.h"
 #include "LevelData.h"
 #include "Player.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "SphericalCamera.h"
 #include "Rabbit.h"
 #include "Rock.h"

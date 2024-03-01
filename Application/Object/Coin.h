@@ -1,6 +1,6 @@
 #pragma once
 #include "Sound.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "Object3D.h"
 #include "LightManager.h"
 #include "CollisionManager.h"

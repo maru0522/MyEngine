@@ -6,7 +6,7 @@
 #include "FigureUI.h"
 
 // オブジェクト
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "Player.h"
 #include "ChickenEgg.h"
 #include "Snake.h"

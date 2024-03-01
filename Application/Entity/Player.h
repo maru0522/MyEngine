@@ -4,7 +4,7 @@
 #include "CameraManager.h"
 #include "CollisionPrimitive.h"
 #include "CollisionManager.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "LightManager.h"
 #include "PlayerBehavior.h"
 #include "PlayerUI.h"

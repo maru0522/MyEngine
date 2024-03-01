@@ -2,7 +2,7 @@
 #include "Object3D.h"
 #include "CollisionManager.h"
 #include "Transform.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "Snake.h"
 
 class ChickenEgg

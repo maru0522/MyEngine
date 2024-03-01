@@ -3,7 +3,7 @@
 #include "Vector3.h"
 #include "CameraManager.h"
 #include "Timer.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "PlayerCommonInfomation.h"
 /**
  * @file PlayerBehavior.h

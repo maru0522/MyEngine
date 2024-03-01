@@ -182,7 +182,7 @@
     <ClCompile Include="Application\Entity\Rabbit.cpp">
       <Filter>Application\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Object\Planet.cpp">
+    <ClCompile Include="Application\Object\GamePlanet.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
     <ClCompile Include="Application\Object\Rock.cpp">
@@ -482,7 +482,7 @@
     <ClInclude Include="Application\Object\StickyBall.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Object\Planet.h">
+    <ClInclude Include="Application\Object\GamePlanet.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
     <ClInclude Include="Application\Object\Rock.h">

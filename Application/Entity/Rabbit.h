@@ -4,7 +4,7 @@
 #include "CollisionManager.h"
 #include <memory>
 #include "Object3D.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 #include "LightManager.h"
 #include "ExclamationMark.h"
 #include "Timer.h"

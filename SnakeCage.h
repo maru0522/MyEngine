@@ -2,7 +2,7 @@
 #include "Object3D.h"
 #include "CollisionManager.h"
 #include "CollisionPrimitive.h"
-#include "Planet.h"
+#include "GamePlanet.h"
 
 class SnakeCage final : public Object3D
 {
