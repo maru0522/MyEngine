@@ -38,8 +38,8 @@ void GameScene::Initialize(void)
     pipe2_->SetPartnerPtr(pipe1_.get());
     pipe2_->GetColPushbackPtr()->SetID("pipe_enterInside2");
 
-    UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
-    UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
+    //UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
+    //UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
 }
 
 void GameScene::Update(void)
@@ -68,8 +68,8 @@ void GameScene::Update(void)
 
     skydome_->Update();
 
-    UI::GetInstance()->Update("circle_red");
-    UI::GetInstance()->Update("circle_green");
+    //UI::GetInstance()->Update("circle_red");
+    //UI::GetInstance()->Update("circle_green");
 }
 
 void GameScene::Draw3d(void)

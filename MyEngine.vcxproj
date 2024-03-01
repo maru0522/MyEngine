@@ -195,6 +195,7 @@
     <ClCompile Include="SnakeCage.cpp" />
     <ClCompile Include="SnakeCommonInfomation.cpp" />
     <ClCompile Include="StoneBlock.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\BloomPS.hlsl">
@@ -412,6 +413,7 @@
     <ClInclude Include="SnakeCage.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
     <ClInclude Include="StoneBlock.h" />
+    <ClInclude Include="TutorialScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

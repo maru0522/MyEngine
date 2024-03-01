@@ -312,6 +312,7 @@
       <Filter>Application\Object</Filter>
     </ClCompile>
     <ClCompile Include="FigureUI.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -614,6 +615,7 @@
       <Filter>Application\Object</Filter>
     </ClInclude>
     <ClInclude Include="FigureUI.h" />
+    <ClInclude Include="TutorialScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

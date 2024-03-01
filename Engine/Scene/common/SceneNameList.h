@@ -12,4 +12,5 @@ enum class SceneName
     TITLE,
     GAME,
     RESULT,
+    TUTORIAL,
 };

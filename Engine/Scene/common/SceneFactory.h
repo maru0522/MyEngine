@@ -6,6 +6,8 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "ResultScene.h"
+#include "TutorialScene.h"
+
 /**
  * @file SceneFactory.h
  * @brief シーンを生成するクラスが宣言されたファイル

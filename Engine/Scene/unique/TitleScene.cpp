@@ -55,7 +55,8 @@ void TitleScene::Update(void)
 {
     if (KEYS::IsTrigger(DIK_SPACE) || XPAD::IsTrigger(XPAD::Button::A))
     {
-        SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+        SceneManager::GetInstance()->RequestChangeScene(SceneName::TUTORIAL);
+        //SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
         return;
     }
 

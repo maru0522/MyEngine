@@ -10,6 +10,8 @@ std::unique_ptr<IScene> SceneFactory::CreateScene(SceneName scene)
     if (scene == SceneName::GAME) { return std::make_unique<GameScene>(); }
     // シーンがRESULTなら
     if (scene == SceneName::RESULT) { return std::make_unique<ResultScene>(); }
+    // シーンがTUTORIALなら
+    if (scene == SceneName::TUTORIAL) { return std::make_unique<TutorialScene>(); }
 
     // 何も指定がない場合DEMOシーンを返す
     return std::make_unique<DemoScene>();

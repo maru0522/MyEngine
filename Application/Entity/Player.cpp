@@ -45,8 +45,8 @@ void Player::Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPt
 
 void Player::Update(void)
 {
-    UI::GetInstance()->GetUISpritePtr("circle_red")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
-    UI::GetInstance()->GetUISpritePtr("circle_green")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    //UI::GetInstance()->GetUISpritePtr("circle_red")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    //UI::GetInstance()->GetUISpritePtr("circle_green")->SetAnchorPoint(Vector2{ 0.5f,0.5f });
 
     // #CARRY
     commonInfo_->timer_carrySnake_.Update();
