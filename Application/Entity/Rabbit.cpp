@@ -1,7 +1,7 @@
 #include "Rabbit.h"
 #include "SimplifyImGui.h"
 
-Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
+Rabbit::Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, GamePlanet* arg_planetPtr)
     : colMPtr_(arg_colMPtr), lightManagerPtr_(arg_lightManagerPtr), planetPtr_(arg_planetPtr)
 {
     arg_colMPtr->Register(&sphere_collision_);

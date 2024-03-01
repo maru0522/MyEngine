@@ -4,11 +4,11 @@
 #include "CollisionPrimitive.h"
 #include "TerrainSurfaceCollider.h"
 /**
- * @file Planet.h
+ * @file GamePlanet.h
  * @brief チュートリアル用の島クラス
  */
 
-class Planet
+class GamePlanet
 {
 public:
     // 定数
@@ -17,8 +17,8 @@ public:
     const float kRepelCameraArea_{ 100.f };
 
     // 関数
-    Planet(void) = default;
-    ~Planet(void) = default;
+    GamePlanet(void) = default;
+    ~GamePlanet(void) = default;
 
     void Initialize(CollisionManager* arg_colMPtr);
     void Update(void);

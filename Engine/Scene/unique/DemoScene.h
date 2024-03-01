@@ -60,7 +60,7 @@ public:
     // 変数
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
 
-    std::unique_ptr<Planet> planet_{ std::make_unique<Planet>() };
+    std::unique_ptr<GamePlanet> planet_{ std::make_unique<GamePlanet>() };
     std::unique_ptr<Player> player_{ std::make_unique<Player>() };
     std::unique_ptr<Rabbit> rabbit1_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };
     std::unique_ptr<Rabbit> rabbit2_{ std::make_unique<Rabbit>(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get()) };

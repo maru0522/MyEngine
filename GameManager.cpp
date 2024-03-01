@@ -17,18 +17,18 @@ void GameManager::Initialize()
     // カメラの設定
     CamerasSetting();
     // 惑星の初期化
-    tutorialPlanet_.Initialize(colMPtr_);
+    gamePlanet_.Initialize(colMPtr_);
     // プレイヤーの初期化
-    player_.Initialize(camMPtr_, colMPtr_, lightMPtr_, &tutorialPlanet_);
+    player_.Initialize(camMPtr_, colMPtr_, lightMPtr_, &gamePlanet_);
     player_.SetupLightCircleShadows();
     // 鶏卵の初期化
-    chickenEgg_.Initialize(colMPtr_, lightMPtr_, &tutorialPlanet_);
+    chickenEgg_.Initialize(colMPtr_, lightMPtr_, &gamePlanet_);
     // 蛇
-    for (auto& snake : snakes_) { snake.Initialize(colMPtr_, lightMPtr_, &tutorialPlanet_, &chickenEgg_); }
+    for (auto& snake : snakes_) { snake.Initialize(colMPtr_, lightMPtr_, &gamePlanet_, &chickenEgg_); }
     snakes_[1].GetTransformPtr()->position = { 10,60, 20 };
     snakes_[2].GetTransformPtr()->position = { -10,60, 20 };
     // 蛇用ケージ
-    for (auto& cage : snakeCages_) { cage.Initialize(colMPtr_, lightMPtr_, &tutorialPlanet_); }
+    for (auto& cage : snakeCages_) { cage.Initialize(colMPtr_, lightMPtr_, &gamePlanet_); }
     snakeCages_[0].SetPosition(Vector3{ 20,-60, 30 });
     snakeCages_[1].SetPosition(Vector3{ -40,20, 25 });
     snakeCages_[2].SetPosition(Vector3{ -40,50, -70 });
@@ -36,7 +36,7 @@ void GameManager::Initialize()
 
     // コインリストの初期化とコインの配置
     coinList_.Initialize(colMPtr_);
-    coinList_.DeployCoin("Resources/externalText/coinsLayout.txt", &tutorialPlanet_, lightMPtr_);
+    coinList_.DeployCoin("Resources/externalText/coinsLayout.txt", &gamePlanet_, lightMPtr_);
 
     //>> イベント
     event_startTutorial_.Initialize(camMPtr_, &player_);
@@ -90,7 +90,7 @@ void GameManager::Update(void)
     // プレイヤー更新
     player_.Update();
     // 惑星の更新
-    tutorialPlanet_.Update();
+    gamePlanet_.Update();
 
     // 蛇がケージにに触れているかの判定と収監の処理
     SnakeIntoCustody();
@@ -121,7 +121,7 @@ void GameManager::Draw3d(void)
     // プレイヤー描画
     player_.Draw3d();
     // 惑星の描画
-    tutorialPlanet_.Draw();
+    gamePlanet_.Draw();
     // 蛇の描画
     for (auto& snake : snakes_) { snake.Draw(); }
     // ケージの描画
@@ -146,7 +146,7 @@ void GameManager::Finalize(void)
 {
     //>> オブジェクト
     // 惑星の終了処理
-    tutorialPlanet_.Finalize();
+    gamePlanet_.Finalize();
     // プレイヤーの終了処理
     player_.Finalize();
     // 蛇の終了処理

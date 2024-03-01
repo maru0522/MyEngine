@@ -2,7 +2,7 @@
 #include "CollisionManager.h"
 #include "SimplifyImGui.h"
 
-void Planet::Initialize(CollisionManager* arg_colMPtr)
+void GamePlanet::Initialize(CollisionManager* arg_colMPtr)
 {
     colMPtr_ = arg_colMPtr;
 
@@ -17,9 +17,9 @@ void Planet::Initialize(CollisionManager* arg_colMPtr)
     repelCameraArea_.SetID("repelCameraArea");
 
     // OnCollisionの設定
-    surface_.callback_onCollision_ = std::bind(&Planet::OnCollision, this);
-    gravityArea_.callback_onCollision_ = std::bind(&Planet::OnCollision, this);
-    repelCameraArea_.callback_onCollision_ = std::bind(&Planet::OnCollision, this);
+    surface_.callback_onCollision_ = std::bind(&GamePlanet::OnCollision, this);
+    gravityArea_.callback_onCollision_ = std::bind(&GamePlanet::OnCollision, this);
+    repelCameraArea_.callback_onCollision_ = std::bind(&GamePlanet::OnCollision, this);
 
     // 星自体の座標とスケールの設定
     transform_.position = { 0,0,0 };
@@ -41,7 +41,7 @@ void Planet::Initialize(CollisionManager* arg_colMPtr)
     addCols_[2] = std::make_unique<TerrainSurfaceCollider>(CollisionManager::GetInstance(), pos2, 18.f);
 }
 
-void Planet::Update(void)
+void GamePlanet::Update(void)
 {
     appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_);
     appearance_->Update();
@@ -59,7 +59,7 @@ void Planet::Update(void)
 #endif // _DEBUG
 }
 
-void Planet::Draw(void)
+void GamePlanet::Draw(void)
 {
     isUV_ ?
         appearance_->Draw("Resources/uvchecker.jpg") :
@@ -70,7 +70,7 @@ void Planet::Draw(void)
     //addCols_[2]->Draw();
 }
 
-void Planet::Finalize(void)
+void GamePlanet::Finalize(void)
 {
     colMPtr_->UnRegister(&surface_);
     colMPtr_->UnRegister(&gravityArea_);

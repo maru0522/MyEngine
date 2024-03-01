@@ -26,7 +26,7 @@ private:
     std::unique_ptr<BehindCamera> camera_tutorial_{ std::make_unique<BehindCamera>("for_tutorial") };
 
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
-    Planet tutorialPlanet_;
+    GamePlanet tutorialPlanet_;
     Player player_;
 };
 

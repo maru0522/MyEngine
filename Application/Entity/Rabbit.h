@@ -33,7 +33,7 @@ public:
     const float kMoveDist_{ 30.f };             // プレイヤーを検知した地点からどのくらいの距離移動するのか。
 
     // 関数
-    Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
+    Rabbit(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, GamePlanet* arg_planetPtr);
     ~Rabbit(void);
 
     void Update(void);
@@ -74,7 +74,7 @@ private:
 
     float velocity_vertical_{};
     int32_t circleShadows_num_;
-    Planet* planetPtr_;
+    GamePlanet* planetPtr_;
     LightManager* lightManagerPtr_;
 
 public:

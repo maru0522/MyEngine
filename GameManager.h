@@ -89,7 +89,7 @@ private:
     std::unique_ptr<SphericalCamera> camera_4Hole_{ std::make_unique<SphericalCamera>("hole_planet") };
 
     // オブジェクト
-    Planet tutorialPlanet_;
+    GamePlanet gamePlanet_;
     Player player_;
     ChickenEgg chickenEgg_;
     std::array<Snake, 3> snakes_;
