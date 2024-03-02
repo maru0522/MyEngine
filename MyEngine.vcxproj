@@ -192,6 +192,7 @@
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
     <ClCompile Include="Application\OperateGuideUI.cpp" />
+    <ClCompile Include="Platform.cpp" />
     <ClCompile Include="SnakeBehavior.cpp" />
     <ClCompile Include="SnakeCage.cpp" />
     <ClCompile Include="SnakeCommonInfomation.cpp" />
@@ -411,6 +412,7 @@
     <ClInclude Include="FigureUI.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="IPlanet.h" />
+    <ClInclude Include="Platform.h" />
     <ClInclude Include="SnakeBehavior.h" />
     <ClInclude Include="SnakeCage.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
