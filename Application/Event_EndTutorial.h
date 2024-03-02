@@ -3,7 +3,7 @@
 #include "NormalCamera.h"
 #include "Timer.h"
 
-class Event_EndTutorial
+class Event_EndGame
 {
 private:
     //>> 定義
@@ -28,8 +28,8 @@ public:
     };
 
     //>> 関数
-    Event_EndTutorial(void) = default;
-    ~Event_EndTutorial(void) = default;
+    Event_EndGame(void) = default;
+    ~Event_EndGame(void) = default;
 
     void Initialize(CameraManager* arg_cameraMPtr);
     void Execute(void);

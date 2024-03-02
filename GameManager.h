@@ -98,8 +98,8 @@ private:
     CoinList coinList_;
 
     // イベント
-    Event_StartTutorial event_startTutorial_;
-    Event_EndTutorial event_endTutorial_;
+    Event_StartGame event_startTutorial_;
+    Event_EndGame event_endTutorial_;
     Event_TutorialPlanetHole event_tutorialPlanetHole_;
 
     // タイマー

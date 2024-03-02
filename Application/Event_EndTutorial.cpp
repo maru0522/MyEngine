@@ -3,14 +3,14 @@
 #include "MathUtil.h"
 #include "SceneManager.h"
 
-void Event_EndTutorial::Start(void)
+void Event_EndGame::Start(void)
 {
     cameraMPtr_->SetCurrentCamera(camera_.get());
     timer_closeCam_.Start(kCloseTimer_);
     timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
 }
 
-void Event_EndTutorial::Initialize(CameraManager* arg_cameraMPtr)
+void Event_EndGame::Initialize(CameraManager* arg_cameraMPtr)
 {
     cameraMPtr_ = arg_cameraMPtr;
 
@@ -70,7 +70,7 @@ void Event_EndTutorial::Initialize(CameraManager* arg_cameraMPtr)
     cameraState_ = CameraState::CLOSE;
 }
 
-void Event_EndTutorial::Execute(void)
+void Event_EndGame::Execute(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
@@ -82,13 +82,13 @@ void Event_EndTutorial::Execute(void)
     }
     switch (displayString_)
     {
-    case Event_EndTutorial::DisplayString::CLEAR:
+    case Event_EndGame::DisplayString::CLEAR:
         string1_->Update();
         break;
-    case Event_EndTutorial::DisplayString::GAMEOVER:
+    case Event_EndGame::DisplayString::GAMEOVER:
         string2_->Update();
         break;
-    case Event_EndTutorial::DisplayString::TIMEOVER:
+    case Event_EndGame::DisplayString::TIMEOVER:
         string3_->Update();
         break;
     default:
@@ -99,15 +99,15 @@ void Event_EndTutorial::Execute(void)
 
     switch (cameraState_)
     {
-    case Event_EndTutorial::CameraState::CLOSE:
+    case Event_EndGame::CameraState::CLOSE:
         Update_CloseCam();
         break;
 
-    case Event_EndTutorial::CameraState::WAIT1:
+    case Event_EndGame::CameraState::WAIT1:
         Update_WaitCam();
         break;
 
-    case Event_EndTutorial::CameraState::FINISH:
+    case Event_EndGame::CameraState::FINISH:
         is_execute_ = false;
         SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE);
         break;
@@ -120,7 +120,7 @@ void Event_EndTutorial::Execute(void)
     //GUI::End();
 }
 
-void Event_EndTutorial::Draw(void)
+void Event_EndGame::Draw(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
@@ -138,13 +138,13 @@ void Event_EndTutorial::Draw(void)
         }
         switch (displayString_)
         {
-        case Event_EndTutorial::DisplayString::CLEAR:
+        case Event_EndGame::DisplayString::CLEAR:
             string1_->Draw();
             break;
-        case Event_EndTutorial::DisplayString::GAMEOVER:
+        case Event_EndGame::DisplayString::GAMEOVER:
             string2_->Draw();
             break;
-        case Event_EndTutorial::DisplayString::TIMEOVER:
+        case Event_EndGame::DisplayString::TIMEOVER:
             string3_->Draw();
             break;
         default:
@@ -153,12 +153,12 @@ void Event_EndTutorial::Draw(void)
     }
 }
 
-void Event_EndTutorial::Finalize(void)
+void Event_EndGame::Finalize(void)
 {
     cameraMPtr_->UnRegister(camera_.get());
 }
 
-void Event_EndTutorial::Update_CloseCam(void)
+void Event_EndGame::Update_CloseCam(void)
 {
     timer_closeCam_.Update();
     const float rate = timer_closeCam_.GetTimeRate(true);
@@ -196,7 +196,7 @@ void Event_EndTutorial::Update_CloseCam(void)
     camera_->SetTransform(transform);
 }
 
-void Event_EndTutorial::Update_WaitCam(void)
+void Event_EndGame::Update_WaitCam(void)
 {
     timer_waitCam_.Update();
     const float rate = timer_waitCam_.GetTimeRate(true);
@@ -218,13 +218,13 @@ void Event_EndTutorial::Update_WaitCam(void)
 
     switch (displayString_)
     {
-    case Event_EndTutorial::DisplayString::CLEAR:
+    case Event_EndGame::DisplayString::CLEAR:
         string1_->SetAlpha(rate_forStr);
         break;
-    case Event_EndTutorial::DisplayString::GAMEOVER:
+    case Event_EndGame::DisplayString::GAMEOVER:
         string2_->SetAlpha(rate_forStr);
         break;
-    case Event_EndTutorial::DisplayString::TIMEOVER:
+    case Event_EndGame::DisplayString::TIMEOVER:
         string3_->SetAlpha(rate_forStr);
         break;
     default:
@@ -246,7 +246,7 @@ void Event_EndTutorial::Update_WaitCam(void)
     }
 }
 
-void Event_EndTutorial::SetIsExecute(bool arg_isExecute, DisplayString arg_displayString)
+void Event_EndGame::SetIsExecute(bool arg_isExecute, DisplayString arg_displayString)
 {
     is_execute_ = arg_isExecute;
     if (is_execute_) { Start(); }

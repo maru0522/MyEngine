@@ -104,8 +104,8 @@ public:
 
     ChickenEgg chikenegg_;
 
-    //Event_StartTutorial a_{CameraManager::GetInstance(),player_.get() };
-    //Event_EndTutorial b_;
+    //Event_StartGame a_{CameraManager::GetInstance(),player_.get() };
+    //Event_EndGame b_;
     //Event_TutorialPlanetHole c_{ CollisionManager::GetInstance(),CameraManager::GetInstance(),player_.get()};
 
     //std::unique_ptr<Object3D> skyDivide_{ std::make_unique<Object3D>("Resources/model/plane/plane.obj") };

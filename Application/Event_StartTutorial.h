@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "CameraManager.h"
 
-class Event_StartTutorial
+class Event_StartGame
 {
 private:
     //>> 定義
@@ -34,8 +34,8 @@ private:
 
 public:
     //>> 関数
-    Event_StartTutorial(void) = default;
-    ~Event_StartTutorial(void) = default;
+    Event_StartGame(void) = default;
+    ~Event_StartGame(void) = default;
 
     void Initialize(CameraManager* arg_cameraMPtr, Player* arg_playerPtr);
     void Execute(void);

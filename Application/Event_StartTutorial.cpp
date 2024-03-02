@@ -2,7 +2,7 @@
 #include "MathUtil.h"
 #include "SimplifyImGui.h"
 
-void Event_StartTutorial::Start(void)
+void Event_StartGame::Start(void)
 {
     cameraMPtr_->SetCurrentCamera(camera_.get());
 
@@ -10,7 +10,7 @@ void Event_StartTutorial::Start(void)
     timer_closeCam_.SetAddSpeed(kColseAddSpeed_);
 }
 
-void Event_StartTutorial::Initialize(CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
+void Event_StartGame::Initialize(CameraManager* arg_cameraMPtr, Player* arg_playerPtr)
 {
     cameraMPtr_ = arg_cameraMPtr;
     playerPtr_ = arg_playerPtr;
@@ -64,7 +64,7 @@ void Event_StartTutorial::Initialize(CameraManager* arg_cameraMPtr, Player* arg_
     cameraState_ = CameraState::CLOSE;
 }
 
-void Event_StartTutorial::Execute(void)
+void Event_StartGame::Execute(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
@@ -80,27 +80,27 @@ void Event_StartTutorial::Execute(void)
 
     switch (cameraState_)
     {
-    case Event_StartTutorial::CameraState::CLOSE:
+    case Event_StartGame::CameraState::CLOSE:
         Update_CloseCam();
         break;
 
-    case Event_StartTutorial::CameraState::WAIT1:
+    case Event_StartGame::CameraState::WAIT1:
         Update_WaitCam();
         break;
 
-    case Event_StartTutorial::CameraState::LEAVE:
+    case Event_StartGame::CameraState::LEAVE:
         Update_LeaveCam();
         break;
 
-    case Event_StartTutorial::CameraState::WAIT2:
+    case Event_StartGame::CameraState::WAIT2:
         Update_WaitCam2();
         break;
 
-    case Event_StartTutorial::CameraState::INTERPOLATE:
+    case Event_StartGame::CameraState::INTERPOLATE:
         Update_Interpolate();
         break;
 
-    case Event_StartTutorial::CameraState::FINISH:
+    case Event_StartGame::CameraState::FINISH:
         is_execute_ = false;
         playerPtr_->SetEventState(PlayerEventState::NONE);
         break;
@@ -113,7 +113,7 @@ void Event_StartTutorial::Execute(void)
     //GUI::End();
 }
 
-void Event_StartTutorial::Draw(void)
+void Event_StartGame::Draw(void)
 {
     // 起動していないならスキップ
     if (is_execute_ == false) { return; }
@@ -133,12 +133,12 @@ void Event_StartTutorial::Draw(void)
     }
 }
 
-void Event_StartTutorial::Finalize(void)
+void Event_StartGame::Finalize(void)
 {
     cameraMPtr_->UnRegister(camera_.get());
 }
 
-void Event_StartTutorial::Update_CloseCam(void)
+void Event_StartGame::Update_CloseCam(void)
 {
     timer_closeCam_.Update();
     const float rate = timer_closeCam_.GetTimeRate(true);
@@ -173,7 +173,7 @@ void Event_StartTutorial::Update_CloseCam(void)
     camera_->SetTransform(transform);
 }
 
-void Event_StartTutorial::Update_WaitCam(void)
+void Event_StartGame::Update_WaitCam(void)
 {
     timer_waitCam_.Update();
     const float rate = timer_waitCam_.GetTimeRate(true);
@@ -210,7 +210,7 @@ void Event_StartTutorial::Update_WaitCam(void)
     }
 }
 
-void Event_StartTutorial::Update_LeaveCam(void)
+void Event_StartGame::Update_LeaveCam(void)
 {
     timer_leaveCam_.Update();
     const float rate = timer_leaveCam_.GetTimeRate();
@@ -243,7 +243,7 @@ void Event_StartTutorial::Update_LeaveCam(void)
     }
 }
 
-void Event_StartTutorial::Update_WaitCam2(void)
+void Event_StartGame::Update_WaitCam2(void)
 {
     timer_waitCam2_.Update();
     const float rate = timer_waitCam2_.GetTimeRate(true);
@@ -288,7 +288,7 @@ void Event_StartTutorial::Update_WaitCam2(void)
     }
 }
 
-void Event_StartTutorial::Update_Interpolate(void)
+void Event_StartGame::Update_Interpolate(void)
 {
     timer_interpolate_pos_.Update();
     timer_interpolate_axes_.Update();
@@ -336,7 +336,7 @@ void Event_StartTutorial::Update_Interpolate(void)
 #endif // _DEBUG
 }
 
-void Event_StartTutorial::SetIsExecute(bool arg_isExecute)
+void Event_StartGame::SetIsExecute(bool arg_isExecute)
 {
     is_execute_ = arg_isExecute;
     if (is_execute_ == false) { return; }

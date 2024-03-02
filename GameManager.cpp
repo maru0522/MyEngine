@@ -244,7 +244,7 @@ bool GameManager::CheckLockedCage(void)
     // 収容完了しているケージに数が、"kCount_lockedCage_"以上なら、event_endTutorial_を起動
     if (lockedCageNum >= kCount_lockedCage_)
     {
-        event_endTutorial_.SetIsExecute(true, Event_EndTutorial::DisplayString::CLEAR);
+        event_endTutorial_.SetIsExecute(true, Event_EndGame::DisplayString::CLEAR);
         return true;
     }
 
@@ -281,7 +281,7 @@ void GameManager::PlayerCarryableSnake(void)
 void GameManager::ManageGameTimer(void)
 {
     float rate = gameTimer_.GetTimeRate();
-    if (rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndTutorial::DisplayString::TIMEOVER); }
+    if (rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndGame::DisplayString::TIMEOVER); }
 
     // タイマーの更新
     numForInvaseTime_ = (std::max)(kTimer_limit_ - gameTimer_.GetFrameCurrent(), 0.f);
