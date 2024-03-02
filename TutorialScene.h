@@ -6,6 +6,9 @@
 #include "Player.h"
 #include "LightManager.h"
 #include "GamePlanet.h"
+#include "ChickenEgg.h"
+#include "Snake.h"
+#include "SnakeCage.h"
 
 class TutorialScene final : public IScene
 {
@@ -27,6 +30,10 @@ private:
 
     std::unique_ptr<LightManager> lightGroup_{ std::make_unique<LightManager>() };
     IPlanet tutorialPlanet_;
+
     Player player_;
+    ChickenEgg chickenEgg_;
+    Snake snake_;
+    SnakeCage snakeCage_;
 };
 
