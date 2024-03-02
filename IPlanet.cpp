@@ -2,6 +2,8 @@
 
 void IPlanet::Initialize(CollisionManager* arg_colMPtr)
 {
+    appearance_ = std::make_unique<Object3D>(modelPath_);
+
     colMPtr_ = arg_colMPtr;
 
     // マネージャーに登録

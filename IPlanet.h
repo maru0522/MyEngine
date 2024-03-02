@@ -29,10 +29,11 @@ public:
     bool isUV_;
 
 protected:
+    std::filesystem::path modelPath_ = "Resources/model/sphere/sphere.obj";
     virtual void OnCollision(void) {}
 
     // 変数
-    std::unique_ptr<Object3D> appearance_{ std::make_unique<Object3D>("Resources/model/sphere/sphere.obj") };
+    std::unique_ptr<Object3D> appearance_;
 
 public:
     // getter

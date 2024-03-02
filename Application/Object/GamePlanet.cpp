@@ -4,6 +4,7 @@
 
 void GamePlanet::Initialize(CollisionManager* arg_colMPtr)
 {
+    modelPath_ = "Resources/model/planet/planet2.obj";
     IPlanet::Initialize(arg_colMPtr);
 
     // マネージャーに登録
