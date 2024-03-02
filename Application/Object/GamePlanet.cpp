@@ -4,34 +4,16 @@
 
 void GamePlanet::Initialize(CollisionManager* arg_colMPtr)
 {
-    colMPtr_ = arg_colMPtr;
+    IPlanet::Initialize(arg_colMPtr);
 
     // マネージャーに登録
-    colMPtr_->Register(&surface_);
-    colMPtr_->Register(&gravityArea_);
     colMPtr_->Register(&repelCameraArea_);
-
     // 各コライダーの名前を設定
-    surface_.SetID("terrainSurface");
-    gravityArea_.SetID("gravityArea");
     repelCameraArea_.SetID("repelCameraArea");
-
     // OnCollisionの設定
-    surface_.callback_onCollision_ = std::bind(&GamePlanet::OnCollision, this);
-    gravityArea_.callback_onCollision_ = std::bind(&GamePlanet::OnCollision, this);
     repelCameraArea_.callback_onCollision_ = std::bind(&GamePlanet::OnCollision, this);
-
-    // 星自体の座標とスケールの設定
-    transform_.position = { 0,0,0 };
-    transform_.scale = { kScale_,kScale_,kScale_ };
-
     // 各コライダーの半径を設定
-    surface_.radius = 1.f * kScale_;
-    gravityArea_.radius = 1.f * kGravityArea_;
     repelCameraArea_.radius = 1.f * kRepelCameraArea_;
-
-    // 丸影が投影される
-    appearance_->SetIsShadowFlash(true);
 
     Vector3 pos0 = transform_.position + Vector3{0.f, -39.f, 0.f};
     addCols_[0] = std::make_unique<TerrainSurfaceCollider>(CollisionManager::GetInstance(), pos0, 16.f);
@@ -43,10 +25,7 @@ void GamePlanet::Initialize(CollisionManager* arg_colMPtr)
 
 void GamePlanet::Update(void)
 {
-    appearance_->GetCoordinatePtr()->mat_world = Math::Function::AffinTrans(transform_);
-    appearance_->Update();
-
-    surface_.center = transform_.position;
+    IPlanet::Update();
 
     addCols_[0]->Update();
     addCols_[1]->Update();
@@ -61,9 +40,7 @@ void GamePlanet::Update(void)
 
 void GamePlanet::Draw(void)
 {
-    isUV_ ?
-        appearance_->Draw("Resources/uvchecker.jpg") :
-        appearance_->Draw("Resources/planet4.png");
+    IPlanet::Draw();
 
     //addCols_[0]->Draw();
     //addCols_[1]->Draw();
@@ -72,7 +49,6 @@ void GamePlanet::Draw(void)
 
 void GamePlanet::Finalize(void)
 {
-    colMPtr_->UnRegister(&surface_);
-    colMPtr_->UnRegister(&gravityArea_);
+    IPlanet::Finalize();
     colMPtr_->UnRegister(&repelCameraArea_);
 }

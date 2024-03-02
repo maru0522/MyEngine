@@ -313,6 +313,7 @@
     </ClCompile>
     <ClCompile Include="FigureUI.cpp" />
     <ClCompile Include="TutorialScene.cpp" />
+    <ClCompile Include="IPlanet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -616,6 +617,7 @@
     </ClInclude>
     <ClInclude Include="FigureUI.h" />
     <ClInclude Include="TutorialScene.h" />
+    <ClInclude Include="IPlanet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

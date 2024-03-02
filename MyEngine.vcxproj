@@ -149,6 +149,7 @@
     <ClCompile Include="Application\ExclamationMark.cpp" />
     <ClCompile Include="FigureUI.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="IPlanet.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -409,6 +410,7 @@
     <ClInclude Include="Application\OperateGuideUI.h" />
     <ClInclude Include="FigureUI.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="IPlanet.h" />
     <ClInclude Include="SnakeBehavior.h" />
     <ClInclude Include="SnakeCage.h" />
     <ClInclude Include="SnakeCommonInfomation.h" />
