@@ -40,7 +40,9 @@ void GamePlanet::Update(void)
 
 void GamePlanet::Draw(void)
 {
-    IPlanet::Draw();
+    isUV_ ?
+        appearance_->Draw("Resources/uvchecker.jpg") :
+        appearance_->Draw("Resources/planet4.png");
 
     //addCols_[0]->Draw();
     //addCols_[1]->Draw();
