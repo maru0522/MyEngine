@@ -9,6 +9,7 @@
 #include "ChickenEgg.h"
 #include "Snake.h"
 #include "SnakeCage.h"
+#include "Event_Tutorial_StartCamera.h"
 
 class TutorialScene final : public IScene
 {
@@ -25,6 +26,8 @@ public:
     void Finalize(void) override;
 
 private:
+    void SnakeIntoCustody(void);
+
     //>> 変数
     std::unique_ptr<BehindCamera> camera_tutorial_{ std::make_unique<BehindCamera>("for_tutorial") };
 
@@ -34,6 +37,9 @@ private:
     Player player_;
     ChickenEgg chickenEgg_;
     Snake snake_;
+    bool isSnakeUpdate_;
     SnakeCage snakeCage_;
+
+    Event_Tutorial_StartCamera event_tutorial_startCamera_;
 };
 

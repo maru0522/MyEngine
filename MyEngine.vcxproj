@@ -147,6 +147,7 @@
     <ClCompile Include="Application\Event_StartTutorial.cpp" />
     <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="Application\ExclamationMark.cpp" />
+    <ClCompile Include="Event_Tutorial_StartCamera.cpp" />
     <ClCompile Include="FigureUI.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="IPlanet.cpp" />
@@ -409,6 +410,7 @@
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Application\ExclamationMark.h" />
     <ClInclude Include="Application\OperateGuideUI.h" />
+    <ClInclude Include="Event_Tutorial_StartCamera.h" />
     <ClInclude Include="FigureUI.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="IPlanet.h" />

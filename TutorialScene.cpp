@@ -2,6 +2,8 @@
 #include "CameraManager.h"
 #include "CollisionManager.h"
 #include "Object3D.h"
+#include "Input.h"
+#include "SceneManager.h"
 
 void TutorialScene::Initialize(void)
 {
@@ -28,7 +30,7 @@ void TutorialScene::Initialize(void)
     // 鶏卵の初期化
     chickenEgg_.Initialize(colMPtr, lightGroup_.get(), &tutorialPlanet_);
     chickenEgg_.SetPosition(Vector3{ 0,25,45 });
-    chickenEgg_.SetEggNum(1);
+    chickenEgg_.SetEggNum(4);
 
     // 蛇
     snake_.Initialize(colMPtr, lightGroup_.get(), &tutorialPlanet_, &chickenEgg_);
@@ -36,10 +38,16 @@ void TutorialScene::Initialize(void)
     // 蛇用ケージ
     snakeCage_.Initialize(colMPtr, lightGroup_.get(), &tutorialPlanet_);
     snakeCage_.SetPosition(Vector3{ 50,8,10 });
+
+    event_tutorial_startCamera_.Initialize(camMPtr, &player_, &snake_.GetTransformPtr()->position, snake_.GetPosturePtr(), &isSnakeUpdate_);
+    event_tutorial_startCamera_.SetIsExecute(true);
 }
 
 void TutorialScene::Update(void)
 {
+    if (KEYS::IsTrigger(DIK_R)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::TITLE); }
+    if (KEYS::IsTrigger(DIK_P)) { SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME); }
+
     // ライト
     // 平行光源の向きをカメラの正面ベクトル方向に。
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
@@ -50,8 +58,12 @@ void TutorialScene::Update(void)
     player_.Update();
     tutorialPlanet_.Update();
     chickenEgg_.Update();
-    snake_.Update();
+    if (isSnakeUpdate_) { snake_.Update(); }
     snakeCage_.Update();
+
+    SnakeIntoCustody();
+
+    event_tutorial_startCamera_.Execute();
 }
 
 void TutorialScene::Draw3d(void)
@@ -63,10 +75,12 @@ void TutorialScene::Draw3d(void)
     chickenEgg_.Draw();
     snake_.Draw();
     snakeCage_.Draw();
+
 }
 
 void TutorialScene::Draw2dFore(void)
 {
+    event_tutorial_startCamera_.Draw();
 }
 
 void TutorialScene::Draw2dBack(void)
@@ -84,4 +98,34 @@ void TutorialScene::Finalize(void)
     tutorialPlanet_.Finalize();
     snake_.Finalize();
     snakeCage_.Finalize();
+
+    event_tutorial_startCamera_.Finalize();
+}
+
+void TutorialScene::SnakeIntoCustody(void)
+{
+    // 蛇が捕獲可能な状況にあるケージがあるか
+    bool is_capture{};
+    // ケージの座標ptr（蛇が捕まっている時用）
+    Vector3* cagePosPtr{};
+    // getter呼び出し
+    is_capture = snakeCage_.GetIsCapture();
+    // falseの場合スキップ
+    if (is_capture == false) { return; }
+
+    // trueの場合↓
+    // この檻は捕獲したため、以降使用不可
+    snakeCage_.SetIsLock(true);
+    // ケージの座標ptrを受け取る。
+    cagePosPtr = snakeCage_.GetPosPtr();
+
+    // 蛇が捕獲されたかを確認
+        // getter呼び出して確認
+    bool is_touchCaged = snake_.GetIsTouchCage();
+    // falseの場合、スキップ
+    if (is_touchCaged == false) { return; }
+
+    // trueの場合↓
+    // 蛇にケージの座標ptrを渡す。
+    snake_.Caged(cagePosPtr);
 }

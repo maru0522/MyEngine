@@ -12,8 +12,9 @@
 enum class PlayerEventState
 {
     NONE,
-    TUTORIAL_EVENT_ORDER, // 兎を捕まえろ！のやつ
-    PLANET_HOLE,          // チュートリアル島の穴くぐってるやつ
+    TUTORIAL_EVENT_ORDER,   // 蛇用のカメラで動けないように
+    GAME_EVENT_ORDER,       // 兎を捕まえろ！のやつ
+    PLANET_HOLE,            // チュートリアル島の穴くぐってるやつ
 };
 
 struct Player_CommonInfomation

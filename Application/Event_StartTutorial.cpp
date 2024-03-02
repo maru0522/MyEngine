@@ -341,5 +341,5 @@ void Event_StartGame::SetIsExecute(bool arg_isExecute)
     is_execute_ = arg_isExecute;
     if (is_execute_ == false) { return; }
     Start();
-    playerPtr_->SetEventState(PlayerEventState::TUTORIAL_EVENT_ORDER);
+    playerPtr_->SetEventState(PlayerEventState::GAME_EVENT_ORDER);
 }

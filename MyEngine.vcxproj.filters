@@ -315,6 +315,7 @@
     <ClCompile Include="TutorialScene.cpp" />
     <ClCompile Include="IPlanet.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Event_Tutorial_StartCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -620,6 +621,7 @@
     <ClInclude Include="TutorialScene.h" />
     <ClInclude Include="IPlanet.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="Event_Tutorial_StartCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">

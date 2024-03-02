@@ -143,9 +143,16 @@ namespace Math {
     }
 
     namespace Ease3 { // Vector3用
+        // 等速
+        Vector3 Uniform(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
+
         // In
         Vector3 EaseInSin(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
         Vector3 EaseInCubic(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
+
+        // Out
+        Vector3 EaseOutSine(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
+        Vector3 EaseOutCubic(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });
 
         // InOut
         Vector3 EaseInOutCubic(float t, const Vector3& start = { 0,0,0 }, const Vector3& end = { 1,1,1 });

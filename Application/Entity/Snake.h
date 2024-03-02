@@ -88,4 +88,5 @@ public:
     Transform* GetTransformPtr(void) { return &commonInfo_->transform_; }
     bool GetIsTouchCage(void) { return commonInfo_->is_touchCage_; }
     bool GetIsTouchPlayer(void) { return commonInfo_->is_touchPlayer_; }
+    Axis3* GetPosturePtr(void) { return &commonInfo_->axes_; }
 };
