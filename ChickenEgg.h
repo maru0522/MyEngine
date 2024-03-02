@@ -58,4 +58,8 @@ private:
 public:
     //>> getter
     int32_t GetApproachingEggSnakes(void) { return snakeCount_; }
+
+    //>> setter
+    void SetPosition(const Vector3& arg_pos) { transform_.position = arg_pos; }
+    void SetEggNum(int32_t arg_num) { eggNum_ = arg_num; }
 };

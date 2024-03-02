@@ -27,10 +27,15 @@ void TutorialScene::Initialize(void)
 
     // 鶏卵の初期化
     chickenEgg_.Initialize(colMPtr, lightGroup_.get(), &tutorialPlanet_);
+    chickenEgg_.SetPosition(Vector3{ 0,25,45 });
+    chickenEgg_.SetEggNum(1);
+
     // 蛇
     snake_.Initialize(colMPtr, lightGroup_.get(), &tutorialPlanet_, &chickenEgg_);
+    snake_.GetTransformPtr()->position = Vector3{ 0,50,15 };
     // 蛇用ケージ
     snakeCage_.Initialize(colMPtr, lightGroup_.get(), &tutorialPlanet_);
+    snakeCage_.SetPosition(Vector3{ 50,8,10 });
 }
 
 void TutorialScene::Update(void)
