@@ -5,7 +5,7 @@
 #include "CollisionChecker.h"
 #include "BehindCamera.h"
 
-void Player::Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
+void Player::Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, IPlanet* arg_planetPtr)
 {
     colMPtr_ = arg_colMPtr;
     lightManagerPtr_ = arg_lightManagerPtr;

@@ -20,7 +20,7 @@ public:
     ~ChickenEgg(void) { Finalize(); }
 
     // 初期化処理や、ptrの受け取り
-    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr_, Planet* arg_planetPtr_);
+    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr_, IPlanet* arg_planetPtr_);
     void Update(void);
     void Draw(void);
 
@@ -47,7 +47,7 @@ private:
 
     int32_t circleShadows_num_;       // 丸影の仕様番号
     LightManager* lightMPtr_;         // ライトマネージャー
-    Planet* planetPtr_;               // 影をつける星
+    IPlanet* planetPtr_;               // 影をつける星
 
     TransformMatrix transformMatrix_; // ワールド行列など
     float velocity_vertical_;         // 垂直方向の移動量 ※重力によって引き寄せられる力の大きさ

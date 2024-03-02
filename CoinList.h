@@ -60,7 +60,7 @@ public:
     void Finalize(void);
 
     // コインの配置等が記された外部テキストを読み込む。
-    void DeployCoin(const std::filesystem::path& arg_path,Planet* arg_planetPtr,LightManager* arg_lightMPtr);
+    void DeployCoin(const std::filesystem::path& arg_path, IPlanet* arg_planetPtr,LightManager* arg_lightMPtr);
 
 private:
     // 管理しているコイングループ配列に、新規のグループを追加する。

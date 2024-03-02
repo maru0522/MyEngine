@@ -1,6 +1,6 @@
 #include "ChickenEgg.h"
 
-void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr_, Planet* arg_planetPtr_)
+void ChickenEgg::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr_, IPlanet* arg_planetPtr_)
 {
     // 各ptrの受け取り
     colMPtr_ = arg_colMPtr;

@@ -1,6 +1,6 @@
 #include "SnakeCage.h"
 
-void SnakeCage::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr)
+void SnakeCage::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, IPlanet* arg_planetPtr)
 {
     colMPtr_ = arg_colMPtr;
     lightMPtr_ = arg_lightManagerPtr;

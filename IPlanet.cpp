@@ -40,7 +40,7 @@ void IPlanet::Draw(void)
 {
     isUV_ ?
         appearance_->Draw("Resources/uvchecker.jpg") :
-        appearance_->Draw("Resources/planet4.png");
+        appearance_->Draw("Resources/planet.png");
 }
 
 void IPlanet::Finalize(void)

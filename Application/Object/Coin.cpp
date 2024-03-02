@@ -198,7 +198,7 @@ void Coin::SetPosition(const Vector3& arg_pos)
     collision_contact_.center = arg_pos;
 }
 
-void Coin::SetupCircleShadows(Planet* arg_planetPtr, LightManager* arg_lightManagerPtr, const Vector3& arg_atten, const Vector2& arg_factorAngle, float arg_distAtCaster)
+void Coin::SetupCircleShadows(IPlanet* arg_planetPtr, LightManager* arg_lightManagerPtr, const Vector3& arg_atten, const Vector2& arg_factorAngle, float arg_distAtCaster)
 {
     // ライトマネージャーのポインタを保存
     lightManagerPtr_ = arg_lightManagerPtr;

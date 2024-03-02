@@ -3,7 +3,7 @@
 #include "MathUtil.h"
 #include "ChickenEgg.h"
 
-void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr)
+void Snake::Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, IPlanet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr)
 {
     colMPtr_ = arg_colMPtr;
     lightManagerPtr_ = arg_lightManagerPtr; 

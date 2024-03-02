@@ -26,7 +26,7 @@ public:
     Player(void) = default;
     ~Player(void) = default;
 
-    void Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
+    void Initialize(CameraManager* arg_camMPtr, CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, IPlanet* arg_planetPtr);
     void Update(void);
     void Draw3d(void);
     void Draw2dFore(void);
@@ -65,7 +65,7 @@ private:
     OperateGuideUI operateGuideUI_;
 
     int32_t circleShadows_num_;
-    Planet* planetPtr_;
+    IPlanet* planetPtr_;
     LightManager* lightManagerPtr_;
 
 public:

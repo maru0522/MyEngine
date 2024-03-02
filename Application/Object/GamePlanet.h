@@ -8,7 +8,7 @@
  * @brief チュートリアル用の島クラス
  */
 
-class GamePlanet final : IPlanet
+class GamePlanet final : public IPlanet
 {
 public:
     // 関数
@@ -23,7 +23,7 @@ public:
     CollisionPrimitive::SphereCollider repelCameraArea_;
 
 private:
-    void OnCollision(void) override;
+    void OnCollision(void) override {};
 
     // 変数
     std::array<std::unique_ptr<TerrainSurfaceCollider>,3> addCols_;

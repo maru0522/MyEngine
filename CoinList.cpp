@@ -188,7 +188,7 @@ Coin* CoinList::AddCoin(const std::string& arg_groupId)
 //    return nullptr;
 //}
 
-void CoinList::DeployCoin(const std::filesystem::path& arg_path, Planet* arg_planetPtr, LightManager* arg_lightMPtr)
+void CoinList::DeployCoin(const std::filesystem::path& arg_path, IPlanet* arg_planetPtr, LightManager* arg_lightMPtr)
 {
     // 指定されたファイルを開く
     std::ifstream ifs_file(arg_path);

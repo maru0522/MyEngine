@@ -36,7 +36,7 @@ public:
     Snake(void) = default;
     ~Snake(void) = default;
 
-    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr);
+    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, IPlanet* arg_planetPtr, ChickenEgg* arg_chickenEggPtr);
     void Update(void);
     void Draw(void);
     void Finalize(void);
@@ -75,7 +75,7 @@ private:
 
     LightManager* lightManagerPtr_;
     int32_t circleShadows_num_;
-    Planet* planetPtr_;
+    IPlanet* planetPtr_;
 
     std::shared_ptr<SnakeCommonInfomation> commonInfo_;
     SnakeBehaviorMachine snakeBehaviorMachine_;

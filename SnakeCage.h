@@ -17,7 +17,7 @@ public:
     ~SnakeCage(void) override = default;
 
     // 初期化
-    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, Planet* arg_planetPtr);
+    void Initialize(CollisionManager* arg_colMPtr, LightManager* arg_lightManagerPtr, IPlanet* arg_planetPtr);
     // 更新
     void Update(void) override;
     // 描画
@@ -37,7 +37,7 @@ private:
 
     int32_t circleShadows_num_;       // 丸影の仕様番号
     LightManager* lightMPtr_;         // ライトマネージャー
-    Planet* planetPtr_;               // 影をつける星
+    IPlanet* planetPtr_;               // 影をつける星
 
     float velocity_vertical_;         // 垂直方向の移動量 ※重力によって引き寄せられる力の大きさ
     Transform transform_;             // 座標など

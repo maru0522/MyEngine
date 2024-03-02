@@ -95,7 +95,7 @@ void DemoScene::Initialize(void)
 
     coinList_ = std::make_unique<CoinList>();
     coinList_->Initialize(CollisionManager::GetInstance());
-    coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get());
+    //coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get());
     //for (auto& coin : coins_)
     //{
     //    coin = std::make_unique<Coin>(CollisionManager::GetInstance());
@@ -145,7 +145,7 @@ void DemoScene::Initialize(void)
     snakes_[1]->GetTransformPtr()->position = { 10,60, 20 };
     snakes_[2]->GetTransformPtr()->position = { -10,60, 20 };
 
-    chikenegg_.Initialize(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
+    //chikenegg_.Initialize(CollisionManager::GetInstance(), lightGroup_.get(), planet_.get());
 
     UI::GetInstance()->Register("circle_red", "Resources/circle_red.png");
     UI::GetInstance()->Register("circle_green", "Resources/circle_green.png");
@@ -166,7 +166,7 @@ void DemoScene::Update(void)
     const Vector3& dir = CameraManager::GetInstance()->GetCurrentCamera()->GetAxis3().forward;
     lightGroup_->SetLightDir(LightType::DIRECTIONAL, 0, dir);
 
-    if(KEYS::IsTrigger(DIK_P)) { coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get()); }
+    //if(KEYS::IsTrigger(DIK_P)) { coinList_->DeployCoin("Resources/externalText/coinsLayout.txt",planet_.get(),lightGroup_.get()); }
     //static Vector3 pl0Attan = { 0.4f,0.1f,0.05f };
     //static Vector3 pl0Attan = { 0.4f,0.f,0.f };
     //static Vector3 pl0Pos = { 0,100,0 };
