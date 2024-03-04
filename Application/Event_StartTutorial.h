@@ -21,7 +21,7 @@ private:
 
     const float kCloseTimer_ = 3.f;
     const float kColseAddSpeed_ = 1.5f;
-    const float kWaitTimer_ = 2.f;
+    const float kWaitTimer_ = 0.5f;
     const float kWaitAddSpeed_ = 1.f;
     const float kLeaveTimer_ = 4.f;
     const float kLeaveAddSpeed_ = 1.3f;
@@ -52,7 +52,7 @@ private:
 
     //>> 変数
     std::array<std::unique_ptr<Sprite>,2> cinemas_;
-    std::array<std::unique_ptr<Sprite>,2> stringBackGrounds_;
+    //std::array<std::unique_ptr<Sprite>,2> stringBackGrounds_;
     std::unique_ptr<Sprite> string_;
     std::unique_ptr<NormalCamera> camera_;
     CameraState cameraState_;

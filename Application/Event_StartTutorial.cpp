@@ -37,17 +37,17 @@ void Event_StartGame::Initialize(CameraManager* arg_cameraMPtr, Player* arg_play
     const Vector2 sbgSize{ 530.f,70.f };
     const Vector4 sbgColor = { 0.f,0.f,0.f,0.f };
     // 文字用背景の生成と設定
-    for (size_t i = 0; i < stringBackGrounds_.size(); i++)
-    {
-        stringBackGrounds_[i] = std::make_unique<Sprite>("Resources/white1x1.png");
+    //for (size_t i = 0; i < stringBackGrounds_.size(); i++)
+    //{
+    //    stringBackGrounds_[i] = std::make_unique<Sprite>("Resources/white1x1.png");
 
-        const Vector2 addSize = { 10.f * i,10.f * i };
-        const Vector4 addColor = { 1.f * i, 1.f * i, 1.f * i, 0.f };
-        stringBackGrounds_[i]->SetSize(sbgSize + addSize);
-        stringBackGrounds_[i]->SetColor(sbgColor + addColor);
-        stringBackGrounds_[i]->SetAnchorPoint(Vector2{ 0.5f,0.5f });
-        stringBackGrounds_[i]->SetPosition(Vector2{ 640.f,360.f });
-    }
+    //    const Vector2 addSize = { 10.f * i,10.f * i };
+    //    const Vector4 addColor = { 1.f * i, 1.f * i, 1.f * i, 0.f };
+    //    stringBackGrounds_[i]->SetSize(sbgSize + addSize);
+    //    stringBackGrounds_[i]->SetColor(sbgColor + addColor);
+    //    stringBackGrounds_[i]->SetAnchorPoint(Vector2{ 0.5f,0.5f });
+    //    stringBackGrounds_[i]->SetPosition(Vector2{ 640.f,360.f });
+    //}
 
     // 文字の生成と設定
     string_ = std::make_unique<Sprite>("Resources/string_takeRabbit.png");
@@ -72,7 +72,7 @@ void Event_StartGame::Execute(void)
     for (size_t i = 0; i < 2; i++)
     {
         cinemas_[i]->Update();
-        stringBackGrounds_[i]->Update();
+        //stringBackGrounds_[i]->Update();
     }
     string_->Update();
 
@@ -123,14 +123,14 @@ void Event_StartGame::Draw(void)
         sprite->Draw();
     }
 
-    if (cameraState_ == CameraState::WAIT1)
-    {
-        for (auto& sbg : stringBackGrounds_)
-        {
-            sbg->Draw();
-        }
-        string_->Draw();
-    }
+    //if (cameraState_ == CameraState::WAIT1)
+    //{
+    //    for (auto& sbg : stringBackGrounds_)
+    //    {
+    //        sbg->Draw();
+    //    }
+    //    string_->Draw();
+    //}
 }
 
 void Event_StartGame::Finalize(void)
@@ -185,10 +185,10 @@ void Event_StartGame::Update_WaitCam(void)
     {
         rate_forSbg = 2.f - rate * 2;
     }
-    for (auto& sbg : stringBackGrounds_)
-    {
-        sbg->SetAlpha(rate_forSbg);
-    }
+    //for (auto& sbg : stringBackGrounds_)
+    //{
+    //    sbg->SetAlpha(rate_forSbg);
+    //}
     // 文字
     float rate_forStr = std::clamp(rate_forSbg / 0.4f, 0.f, 1.f);
     string_->SetAlpha(rate_forStr);
