@@ -59,7 +59,7 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Object\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\CollisionPrimitive\;$(ProjectDir)Engine\Entity\Collision\Primitive\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Entity\Snake\;$(ProjectDir)Application\Entity\Player\;$(ProjectDir)Application\UI\;$(ProjectDir)Application\Object\;$(ProjectDir)Application\Event\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\CollisionPrimitive\;$(ProjectDir)Engine\Entity\Collision\Primitive\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -81,7 +81,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableSpecificWarnings>4189;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Object\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\CollisionPrimitive\;$(ProjectDir)Engine\Entity\Collision\Primitive\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Application\Entity\Snake\;$(ProjectDir)Application\Entity\Player\;$(ProjectDir)Application\UI\;$(ProjectDir)Application\Object\;$(ProjectDir)Application\Event\;$(ProjectDir)Application\Entity\;$(ProjectDir)Application\;$(ProjectDir)Engine\Audio\;$(ProjectDir)Engine\Base\;$(ProjectDir)Engine\Entity\3d\;$(ProjectDir)Engine\Entity\2d\;$(ProjectDir)Engine\Entity\Collision\CollisionPrimitive\;$(ProjectDir)Engine\Entity\Collision\Primitive\;$(ProjectDir)Engine\Entity\Collision\;$(ProjectDir)Engine\Entity\Light\;$(ProjectDir)Engine\Entity\Camera\;$(ProjectDir)Engine\Entity\PostEffect\;$(ProjectDir)Engine\Input\;$(ProjectDir)Engine\Math\;$(ProjectDir)Engine\Other\;$(ProjectDir)Engine\Scene\common\;$(ProjectDir)Engine\Scene\unique\;$(ProjectDir)Engine\Shader\;$(ProjectDir)Engine\TemplateBuffer\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -94,23 +94,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application\Entity\Snake.cpp" />
+    <ClCompile Include="Application\Entity\Snake\Snake.cpp" />
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp" />
-    <ClCompile Include="ChickenEgg.cpp" />
-    <ClCompile Include="CoinList.cpp" />
+    <ClCompile Include="Application\Object\ChickenEgg.cpp" />
+    <ClCompile Include="Application\Object\CoinList.cpp" />
     <ClCompile Include="Engine\Entity\2d\BackGroundTexture.cpp" />
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
     <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\AABB.cpp" />
-    <ClCompile Include="Application\IIvent.cpp" />
-    <ClCompile Include="Application\IventArea_Tantative.cpp" />
-    <ClCompile Include="Application\Entity\PlayerBehavior.cpp" />
+    <ClCompile Include="Application\Event\IIvent.cpp" />
+    <ClCompile Include="Application\Event\IventArea_Tantative.cpp" />
+    <ClCompile Include="Application\Entity\Player\PlayerBehavior.cpp" />
     <ClCompile Include="Application\Object\Coin.cpp" />
     <ClCompile Include="Application\Object\Pipe.cpp" />
     <ClCompile Include="Application\Object\Rock.cpp" />
     <ClCompile Include="Application\Object\StickyBall.cpp" />
-    <ClCompile Include="Application\UI.cpp" />
+    <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Engine\Entity\Camera\DebugCamera.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
     <ClCompile Include="Engine\Entity\3d\BillBoard.cpp" />
@@ -133,7 +133,7 @@
     <ClCompile Include="Engine\Entity\Collision\ICollider.cpp" />
     <ClCompile Include="Application\LevelData.cpp" />
     <ClCompile Include="Application\Object\GamePlanet.cpp" />
-    <ClCompile Include="Application\Entity\Player.cpp" />
+    <ClCompile Include="Application\Entity\Player\Player.cpp" />
     <ClCompile Include="Engine\Base\PSOManager.cpp" />
     <ClCompile Include="Engine\Base\ImguiController.cpp" />
     <ClCompile Include="Engine\Base\InitDirectX.cpp" />
@@ -143,14 +143,14 @@
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp" />
     <ClCompile Include="Engine\Scene\unique\ResultScene.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\IPrimitive.cpp" />
-    <ClCompile Include="Application\Event_EndTutorial.cpp" />
-    <ClCompile Include="Application\Event_StartTutorial.cpp" />
-    <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
-    <ClCompile Include="Application\ExclamationMark.cpp" />
-    <ClCompile Include="Event_Tutorial_StartCamera.cpp" />
-    <ClCompile Include="FigureUI.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="IPlanet.cpp" />
+    <ClCompile Include="Application\Event\Event_EndTutorial.cpp" />
+    <ClCompile Include="Application\Event\Event_StartTutorial.cpp" />
+    <ClCompile Include="Application\Event\Event_TutorialPlanetHole.cpp" />
+    <ClCompile Include="Application\Object\ExclamationMark.cpp" />
+    <ClCompile Include="Application\Event\Event_Tutorial_StartCamera.cpp" />
+    <ClCompile Include="Application\UI\FigureUI.cpp" />
+    <ClCompile Include="Application\GameManager.cpp" />
+    <ClCompile Include="Application\Object\IPlanet.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Math\MathUtil.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
@@ -187,18 +187,18 @@
     <ClCompile Include="Engine\Entity\Camera\Screen.cpp" />
     <ClCompile Include="Engine\Entity\Collision\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.cpp" />
-    <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp" />
-    <ClCompile Include="Application\Entity\PlayerUI.cpp" />
+    <ClCompile Include="Application\Entity\Player\PlayerCommonInfomation.cpp" />
+    <ClCompile Include="Application\Entity\Player\PlayerUI.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeIn.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
-    <ClCompile Include="Application\OperateGuideUI.cpp" />
-    <ClCompile Include="Platform.cpp" />
-    <ClCompile Include="SnakeBehavior.cpp" />
-    <ClCompile Include="SnakeCage.cpp" />
-    <ClCompile Include="SnakeCommonInfomation.cpp" />
-    <ClCompile Include="StoneBlock.cpp" />
-    <ClCompile Include="TutorialScene.cpp" />
+    <ClCompile Include="Application\UI\OperateGuideUI.cpp" />
+    <ClCompile Include="Application\Object\Platform.cpp" />
+    <ClCompile Include="Application\Entity\Snake\SnakeBehavior.cpp" />
+    <ClCompile Include="Application\Object\SnakeCage.cpp" />
+    <ClCompile Include="Application\Entity\Snake\SnakeCommonInfomation.cpp" />
+    <ClCompile Include="Application\Object\StoneBlock.cpp" />
+    <ClCompile Include="Engine\Scene\unique\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\BloomPS.hlsl">
@@ -304,23 +304,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application\Entity\Snake.h" />
+    <ClInclude Include="Application\Entity\Snake\Snake.h" />
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h" />
-    <ClInclude Include="ChickenEgg.h" />
-    <ClInclude Include="CoinList.h" />
+    <ClInclude Include="Application\Object\ChickenEgg.h" />
+    <ClInclude Include="Application\Object\CoinList.h" />
     <ClInclude Include="Engine\Entity\2d\BackGroundTexture.h" />
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
     <ClInclude Include="Engine\Entity\Camera\NormalCamera.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\AABBCollider.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\AABB.h" />
-    <ClInclude Include="Application\IIvent.h" />
-    <ClInclude Include="Application\IventArea_Tantative.h" />
-    <ClInclude Include="Application\Entity\PlayerBehavior.h" />
+    <ClInclude Include="Application\Event\IIvent.h" />
+    <ClInclude Include="Application\Event\IventArea_Tantative.h" />
+    <ClInclude Include="Application\Entity\Player\PlayerBehavior.h" />
     <ClInclude Include="Application\Object\Coin.h" />
     <ClInclude Include="Application\Object\Pipe.h" />
     <ClInclude Include="Application\Object\Rock.h" />
     <ClInclude Include="Application\Object\StickyBall.h" />
-    <ClInclude Include="Application\UI.h" />
+    <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Engine\Entity\Camera\DebugCamera.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
@@ -345,11 +345,11 @@
     <ClInclude Include="Engine\Entity\Camera\Screen.h" />
     <ClInclude Include="Engine\Entity\Collision\Primitive\Sphere.h" />
     <ClInclude Include="Engine\Entity\Collision\CollisionPrimitive\SphereCollider.h" />
-    <ClInclude Include="Application\Event_EndTutorial.h" />
-    <ClInclude Include="Application\Event_StartTutorial.h" />
-    <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
-    <ClInclude Include="Application\Entity\PlayerCommonInfomation.h" />
-    <ClInclude Include="Application\Entity\PlayerUI.h" />
+    <ClInclude Include="Application\Event\Event_EndTutorial.h" />
+    <ClInclude Include="Application\Event\Event_StartTutorial.h" />
+    <ClInclude Include="Application\Event\Event_TutorialPlanetHole.h" />
+    <ClInclude Include="Application\Entity\Player\PlayerCommonInfomation.h" />
+    <ClInclude Include="Application\Entity\Player\PlayerUI.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition_FadeIn.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition_FadeOut.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition_Middle.h" />
@@ -373,7 +373,7 @@
     <ClInclude Include="Engine\Other\json.hpp" />
     <ClInclude Include="Application\LevelData.h" />
     <ClInclude Include="Application\Object\GamePlanet.h" />
-    <ClInclude Include="Application\Entity\Player.h" />
+    <ClInclude Include="Application\Entity\Player\Player.h" />
     <ClInclude Include="Engine\Base\PSOManager.h" />
     <ClInclude Include="Engine\Base\ImguiController.h" />
     <ClInclude Include="Engine\TemplateBuffer\IndexBuffer.h" />
@@ -408,18 +408,18 @@
     <ClInclude Include="Engine\Math\Vector4.h" />
     <ClInclude Include="Engine\Base\WndAPI.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
-    <ClInclude Include="Application\ExclamationMark.h" />
-    <ClInclude Include="Application\OperateGuideUI.h" />
-    <ClInclude Include="Event_Tutorial_StartCamera.h" />
-    <ClInclude Include="FigureUI.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="IPlanet.h" />
-    <ClInclude Include="Platform.h" />
-    <ClInclude Include="SnakeBehavior.h" />
-    <ClInclude Include="SnakeCage.h" />
-    <ClInclude Include="SnakeCommonInfomation.h" />
-    <ClInclude Include="StoneBlock.h" />
-    <ClInclude Include="TutorialScene.h" />
+    <ClInclude Include="Application\Object\ExclamationMark.h" />
+    <ClInclude Include="Application\UI\OperateGuideUI.h" />
+    <ClInclude Include="Application\Event\Event_Tutorial_StartCamera.h" />
+    <ClInclude Include="Application\UI\FigureUI.h" />
+    <ClInclude Include="Application\GameManager.h" />
+    <ClInclude Include="Application\Object\IPlanet.h" />
+    <ClInclude Include="Application\Object\Platform.h" />
+    <ClInclude Include="Application\Entity\Snake\SnakeBehavior.h" />
+    <ClInclude Include="Application\Object\SnakeCage.h" />
+    <ClInclude Include="Application\Entity\Snake\SnakeCommonInfomation.h" />
+    <ClInclude Include="Application\Object\StoneBlock.h" />
+    <ClInclude Include="Engine\Scene\unique\TutorialScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

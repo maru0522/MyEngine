@@ -169,10 +169,10 @@
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Application\IIvent.cpp">
+    <ClCompile Include="Application\Event\IIvent.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="Application\IventArea_Tantative.cpp" />
+    <ClCompile Include="Application\Event\IventArea_Tantative.cpp" />
     <ClCompile Include="Engine\Other\Timer.cpp">
       <Filter>Engine\Other</Filter>
     </ClCompile>
@@ -199,7 +199,7 @@
     </ClCompile>
     <ClCompile Include="Engine\Entity\Collision\CollisionObserver.cpp" />
     <ClCompile Include="Engine\Base\PostEffectManager.cpp" />
-    <ClCompile Include="Application\UI.cpp" />
+    <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Engine\Entity\Camera\ICamera.cpp">
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
@@ -254,7 +254,7 @@
     <ClCompile Include="Application\Object\TerrainSurfaceCollider.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Event_StartTutorial.cpp" />
+    <ClCompile Include="Application\Event\Event_StartTutorial.cpp" />
     <ClCompile Include="Engine\Entity\Camera\NormalCamera.cpp">
       <Filter>Engine\Entity\Camera</Filter>
     </ClCompile>
@@ -271,51 +271,51 @@
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeIn.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_Middle.cpp" />
     <ClCompile Include="Engine\Scene\common\SceneTransition_FadeOut.cpp" />
-    <ClCompile Include="Application\Event_EndTutorial.cpp" />
-    <ClCompile Include="Application\Event_TutorialPlanetHole.cpp" />
+    <ClCompile Include="Application\Event\Event_EndTutorial.cpp" />
+    <ClCompile Include="Application\Event\Event_TutorialPlanetHole.cpp" />
     <ClCompile Include="Engine\Entity\Camera\BehindCamera.cpp" />
-    <ClCompile Include="Application\OperateGuideUI.cpp" />
-    <ClCompile Include="Application\ExclamationMark.cpp" />
+    <ClCompile Include="Application\UI\OperateGuideUI.cpp" />
+    <ClCompile Include="Application\Object\ExclamationMark.cpp" />
     <ClCompile Include="Engine\Scene\unique\GameScene.cpp">
       <Filter>Engine\Scene\unique</Filter>
     </ClCompile>
-    <ClCompile Include="StoneBlock.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="SnakeCage.cpp">
+    <ClCompile Include="Application\Object\StoneBlock.cpp" />
+    <ClCompile Include="Application\GameManager.cpp" />
+    <ClCompile Include="Application\Object\SnakeCage.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\Player.cpp">
+    <ClCompile Include="Application\Entity\Player\Player.cpp">
       <Filter>Application\Entity\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\PlayerBehavior.cpp">
+    <ClCompile Include="Application\Entity\Player\PlayerBehavior.cpp">
       <Filter>Application\Entity\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\PlayerCommonInfomation.cpp">
+    <ClCompile Include="Application\Entity\Player\PlayerCommonInfomation.cpp">
       <Filter>Application\Entity\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\PlayerUI.cpp">
+    <ClCompile Include="Application\Entity\Player\PlayerUI.cpp">
       <Filter>Application\Entity\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entity\Snake.cpp">
+    <ClCompile Include="Application\Entity\Snake\Snake.cpp">
       <Filter>Application\Entity\Snake</Filter>
     </ClCompile>
-    <ClCompile Include="SnakeBehavior.cpp">
+    <ClCompile Include="Application\Entity\Snake\SnakeBehavior.cpp">
       <Filter>Application\Entity\Snake</Filter>
     </ClCompile>
-    <ClCompile Include="SnakeCommonInfomation.cpp">
+    <ClCompile Include="Application\Entity\Snake\SnakeCommonInfomation.cpp">
       <Filter>Application\Entity\Snake</Filter>
     </ClCompile>
-    <ClCompile Include="ChickenEgg.cpp">
+    <ClCompile Include="Application\Object\ChickenEgg.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="CoinList.cpp">
+    <ClCompile Include="Application\Object\CoinList.cpp">
       <Filter>Application\Object</Filter>
     </ClCompile>
-    <ClCompile Include="FigureUI.cpp" />
-    <ClCompile Include="TutorialScene.cpp" />
-    <ClCompile Include="IPlanet.cpp" />
-    <ClCompile Include="Platform.cpp" />
-    <ClCompile Include="Event_Tutorial_StartCamera.cpp" />
+    <ClCompile Include="Application\UI\FigureUI.cpp" />
+    <ClCompile Include="Engine\Scene\unique\TutorialScene.cpp" />
+    <ClCompile Include="Application\Object\IPlanet.cpp" />
+    <ClCompile Include="Application\Object\Platform.cpp" />
+    <ClCompile Include="Application\Event\Event_Tutorial_StartCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -469,10 +469,10 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Other\Transform.h" />
-    <ClInclude Include="Application\IIvent.h">
+    <ClInclude Include="Application\Event\IIvent.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="Application\IventArea_Tantative.h" />
+    <ClInclude Include="Application\Event\IventArea_Tantative.h" />
     <ClInclude Include="Engine\Other\Timer.h">
       <Filter>Engine\Other</Filter>
     </ClInclude>
@@ -499,7 +499,7 @@
     </ClInclude>
     <ClInclude Include="Engine\Entity\Collision\CollisionObserver.h" />
     <ClInclude Include="Engine\Base\PostEffectManager.h" />
-    <ClInclude Include="Application\UI.h" />
+    <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Engine\Entity\Camera\ICamera.h">
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
@@ -560,7 +560,7 @@
     <ClInclude Include="Application\Object\TerrainSurfaceCollider.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Event_StartTutorial.h" />
+    <ClInclude Include="Application\Event\Event_StartTutorial.h" />
     <ClInclude Include="Engine\Entity\Camera\NormalCamera.h">
       <Filter>Engine\Entity\Camera</Filter>
     </ClInclude>
@@ -577,51 +577,51 @@
     <ClInclude Include="Engine\Scene\common\SceneTransition_FadeIn.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition_Middle.h" />
     <ClInclude Include="Engine\Scene\common\SceneTransition_FadeOut.h" />
-    <ClInclude Include="Application\Event_EndTutorial.h" />
-    <ClInclude Include="Application\Event_TutorialPlanetHole.h" />
+    <ClInclude Include="Application\Event\Event_EndTutorial.h" />
+    <ClInclude Include="Application\Event\Event_TutorialPlanetHole.h" />
     <ClInclude Include="Engine\Entity\Camera\BehindCamera.h" />
-    <ClInclude Include="Application\OperateGuideUI.h" />
-    <ClInclude Include="Application\ExclamationMark.h" />
+    <ClInclude Include="Application\UI\OperateGuideUI.h" />
+    <ClInclude Include="Application\Object\ExclamationMark.h" />
     <ClInclude Include="Engine\Scene\unique\GameScene.h">
       <Filter>Engine\Scene\unique</Filter>
     </ClInclude>
-    <ClInclude Include="StoneBlock.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="SnakeCage.h">
+    <ClInclude Include="Application\Object\StoneBlock.h" />
+    <ClInclude Include="Application\GameManager.h" />
+    <ClInclude Include="Application\Object\SnakeCage.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\Player.h">
+    <ClInclude Include="Application\Entity\Player\Player.h">
       <Filter>Application\Entity\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\PlayerBehavior.h">
+    <ClInclude Include="Application\Entity\Player\PlayerBehavior.h">
       <Filter>Application\Entity\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\PlayerUI.h">
+    <ClInclude Include="Application\Entity\Player\PlayerUI.h">
       <Filter>Application\Entity\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\PlayerCommonInfomation.h">
+    <ClInclude Include="Application\Entity\Player\PlayerCommonInfomation.h">
       <Filter>Application\Entity\Player</Filter>
     </ClInclude>
-    <ClInclude Include="SnakeCommonInfomation.h">
+    <ClInclude Include="Application\Entity\Snake\SnakeCommonInfomation.h">
       <Filter>Application\Entity\Snake</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entity\Snake.h">
+    <ClInclude Include="Application\Entity\Snake\Snake.h">
       <Filter>Application\Entity\Snake</Filter>
     </ClInclude>
-    <ClInclude Include="SnakeBehavior.h">
+    <ClInclude Include="Application\Entity\Snake\SnakeBehavior.h">
       <Filter>Application\Entity\Snake</Filter>
     </ClInclude>
-    <ClInclude Include="ChickenEgg.h">
+    <ClInclude Include="Application\Object\ChickenEgg.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="CoinList.h">
+    <ClInclude Include="Application\Object\CoinList.h">
       <Filter>Application\Object</Filter>
     </ClInclude>
-    <ClInclude Include="FigureUI.h" />
-    <ClInclude Include="TutorialScene.h" />
-    <ClInclude Include="IPlanet.h" />
-    <ClInclude Include="Platform.h" />
-    <ClInclude Include="Event_Tutorial_StartCamera.h" />
+    <ClInclude Include="Application\UI\FigureUI.h" />
+    <ClInclude Include="Engine\Scene\unique\TutorialScene.h" />
+    <ClInclude Include="Application\Object\IPlanet.h" />
+    <ClInclude Include="Application\Object\Platform.h" />
+    <ClInclude Include="Application\Event\Event_Tutorial_StartCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Model.hlsli">
