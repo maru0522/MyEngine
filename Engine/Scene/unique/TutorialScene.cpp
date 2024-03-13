@@ -105,13 +105,13 @@ void TutorialScene::Finalize(void)
 void TutorialScene::SnakeIntoCustody(void)
 {
     // 蛇が捕獲可能な状況にあるケージがあるか
-    bool is_capture{};
+    bool is_capturableCage{};
     // ケージの座標ptr（蛇が捕まっている時用）
     Vector3* cagePosPtr{};
     // getter呼び出し
-    is_capture = snakeCage_.GetIsCapture();
+    is_capturableCage = snakeCage_.GetIsCapture();
     // falseの場合スキップ
-    if (is_capture == false) { return; }
+    if (is_capturableCage == false) { return; }
 
     // trueの場合↓
     // この檻は捕獲したため、以降使用不可
@@ -128,4 +128,5 @@ void TutorialScene::SnakeIntoCustody(void)
     // trueの場合↓
     // 蛇にケージの座標ptrを渡す。
     snake_.Caged(cagePosPtr);
+    SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
 }
