@@ -282,6 +282,7 @@ void Event_StartGame::Update_WaitCam2(void)
         // 姿勢
         axes_interpolate_start_ = cameraMPtr_->GetCamera(camera_->GetId())->GetAxis3();
         axes_interpolate_end_ = cameraMPtr_->GetCamera("BehindCamera_follow_player0")->GetAxis3();
+        //axes_interpolate_end_ = { Vector3(0.f,-0.586262f,0.810121f),Vector3(1.f,0.f,0.f),Vector3(0.f,0.98697f,-0.16196f) };
 
         // 関数を抜ける
         return;
@@ -309,9 +310,9 @@ void Event_StartGame::Update_Interpolate(void)
     camera_->SetTransform(transform);
 
     Axis3 axes;
-    axes.forward = Math::Ease3::EaseInCubic(rate_axes, axes_interpolate_start_.forward, axes_interpolate_end_.forward);
-    axes.right = Math::Ease3::EaseInCubic(rate_axes, axes_interpolate_start_.right, axes_interpolate_end_.right);
-    axes.up = Math::Ease3::EaseInCubic(rate_axes, axes_interpolate_start_.up, axes_interpolate_end_.up);
+    axes.forward = Math::Ease3::EaseInOutCubic(rate_axes, axes_interpolate_start_.forward, axes_interpolate_end_.forward);
+    axes.right = Math::Ease3::EaseInOutCubic(rate_axes, axes_interpolate_start_.right, axes_interpolate_end_.right);
+    axes.up = Math::Ease3::EaseInOutCubic(rate_axes, axes_interpolate_start_.up, axes_interpolate_end_.up);
     camera_->SetAxis3(axes);
 
     // タイマーが完了しているか

@@ -20,6 +20,7 @@ void BehindCamera::Update(void)
     // 座標 = プレイヤーの座標 + プレイヤーの上ベクトル * 10.f;
     //transform_.position = pos_player_ + (axes_player_.up * distance_fromPlayer_);
     transform_.position = pos_player_ + (axes_player_.up * distance_fromPlayer_) + (-axes_player_.forward * distance_fromPlayer_);
+    //transform_.position = pos_player_ + (axes_player_.up * distance_fromPlayer_) + (axes_player_.right * distance_fromPlayer_);
 
     // 姿勢ベクトル計算
     //// 正面 = プレイヤーの座標 - カメラの座標（カメラ->プレイヤー）

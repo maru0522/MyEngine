@@ -96,6 +96,14 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
     const Vector3 velocity = commonInfo_->axes_.up * commonInfo_->jumpVecNorm_; // Idle状態は重力以外の移動量は発生しない想定
     Process_Transform(velocity);
 
+    // カメラ視点のプレイヤー移動ベクトル
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right.Normalize(), commonInfo_->axes_.up.Normalize()); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up.Normalize(), pForwardFromCamera.Normalize()); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    // 定義した値等を現在の姿勢として記録
+    commonInfo_->axes_.forward = pForwardFromCamera.Normalize();
+    commonInfo_->axes_.right = redefinitionPRightFromCamera.Normalize();
+    commonInfo_->axes_.up = commonInfo_->axes_.up.Normalize();
+
     // カメラのptrをカメラマネージャーから取得
     ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
     // カメラIDの接頭辞が、"BehindCamera_"以外なら、スキップ
@@ -273,12 +281,12 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Process_CalculateModelAxes(vec2_input);
 
     // カメラ視点のプレイヤー移動ベクトル
-    Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right, commonInfo_->axes_.up).Normalize(); // 正面Vec: cross(camera.rightVec, p.upVec)
-    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up, pForwardFromCamera).Normalize(); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right.Normalize(), commonInfo_->axes_.up.Normalize()); // 正面Vec: cross(camera.rightVec, p.upVec)
+    Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up.Normalize(), pForwardFromCamera.Normalize()); // 右Vec: cross(p.upVec, pForwardFromCamera)
     // 定義した値等を現在の姿勢として記録
-    commonInfo_->axes_.forward = pForwardFromCamera;
-    commonInfo_->axes_.right = redefinitionPRightFromCamera;
-    commonInfo_->axes_.up = commonInfo_->axes_.up;
+    commonInfo_->axes_.forward = pForwardFromCamera.Normalize();
+    commonInfo_->axes_.right = redefinitionPRightFromCamera.Normalize();
+    commonInfo_->axes_.up = commonInfo_->axes_.up.Normalize();
 
 
     // 重力 ※ジャンプ量に加算してる

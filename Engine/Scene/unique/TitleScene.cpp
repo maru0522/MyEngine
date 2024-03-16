@@ -60,6 +60,12 @@ void TitleScene::Update(void)
         return;
     }
 
+    if (KEYS::IsTrigger(DIK_P) && KEYS::IsDown(DIK_LSHIFT) && KEYS::IsDown(DIK_LCONTROL))
+    {
+        SceneManager::GetInstance()->RequestChangeScene(SceneName::GAME);
+        return;
+    }
+
     UI::GetInstance()->Update("png_titleLogo-White");
     UI::GetInstance()->Update("png_titleLogo");
     UI::GetInstance()->Update("png_titleKana");
