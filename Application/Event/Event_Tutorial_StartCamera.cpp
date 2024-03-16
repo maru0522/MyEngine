@@ -126,11 +126,13 @@ void Event_Tutorial_StartCamera::Execute(void)
     if (rate_fist >= 1.f) { is_execute_ = false; }
 
 
+#ifdef _DEBUG
     GUI::Begin("event");
     GUI::Text("timer_fadein: %f", timer_fadein_.GetFrameCurrent());
     GUI::Text("timer_count: %f", timer_count_.GetFrameCurrent());
     GUI::Text("timer_c1t2: %f", timer_camera1to2_.GetFrameCurrent());
     GUI::End();
+#endif // _DEBUG
 
     switch (cameraState_)
     {
@@ -233,7 +235,7 @@ void Event_Tutorial_StartCamera::Update_Close(void)
     pos.y = Math::Ease::EaseInOutSine(rate_c1t2, kPos_camera1.y, kPos_camera2.y);
     pos.z = Math::Ease::EaseInOutSine(rate_c1t2, kPos_camera1.z, kPos_camera2.z);
     camera_->SetPosition(pos);
-    if (rate_c1t2 >= 1.f) 
+    if (rate_c1t2 >= 1.f)
     {
         *isSnakeUpdate_ = true;
         cameraState_ = CameraState::LOOK;
