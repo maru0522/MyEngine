@@ -306,7 +306,8 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
     if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
     BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
-    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    //ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_4model_;
     ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
 
 
