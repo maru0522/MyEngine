@@ -280,8 +280,8 @@ void GameManager::PlayerCarryableSnake(void)
 
 void GameManager::ManageGameTimer(void)
 {
-    float rate = gameTimer_.GetTimeRate();
-    if (rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndGame::DisplayString::TIMEOVER); }
+    //float rate = gameTimer_.GetTimeRate();
+    //if (rate >= 1.f) { event_endTutorial_.SetIsExecute(true, Event_EndGame::DisplayString::TIMEOVER); }
 
     // タイマーの更新
     numForInvaseTime_ = (std::max)(kTimer_limit_ - gameTimer_.GetFrameCurrent(), 0.f);

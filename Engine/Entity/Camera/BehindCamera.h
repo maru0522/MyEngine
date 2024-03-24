@@ -16,8 +16,18 @@ public:
     //>> 変数
     Vector3 pos_player_;
     Axis3 axes_player_;
+    Axis3 axes_playerModel_;
+    Axis3 axes_CameraInSphirical_;
+    Matrix4 matWorld_player_;
 
     float distance_fromPlayer_;
+    int numAlgorithm_ = 0;
+    bool isAlreadyD_ = false;
+
+    void WFunction(void);
+    void SFunction(void);
+    void DFunction(void);
+    void SphiricalFunction(void);
 
     //>> setter
     void SetDistance(float arg_distFromPlayer) { distance_fromPlayer_ = arg_distFromPlayer; }

@@ -96,21 +96,34 @@ void PlayerBehavior_Idle::Execute(void) // "IDLE"
     const Vector3 velocity = commonInfo_->axes_.up * commonInfo_->jumpVecNorm_; // Idle状態は重力以外の移動量は発生しない想定
     Process_Transform(velocity);
 
-    // カメラ視点のプレイヤー移動ベクトル
+    // カメラのptrをカメラマネージャーから取得
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    // カメラIDの接頭辞が、"BehindCamera_"以外なら、スキップ
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+    // カメラのptrを基底クラスのptr[ICamera]から、[BehindCamera]にキャスト
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+
+    // カメラ視点のプレイヤー移動ベクトル // 後ろにカメラがいることを前提としている？
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right.Normalize(), commonInfo_->axes_.up.Normalize()); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up.Normalize(), pForwardFromCamera.Normalize()); // 右Vec: cross(p.upVec, pForwardFromCamera)
+    if (ptr_cam_behind->numAlgorithm_ == 3 && ptr_cam_behind->isAlreadyD_)
+    {
+        // プレイヤーの3つの軸をコピー
+        const Axis3& pAxes = commonInfo_->axes_;
+        // プレイヤーの上ベクトルを軸として、-90度だけ、回転させるクオータニオンを生成
+        Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, -1.5708f);
+        const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(ptr_cam_behind->GetAxis3().right, rot_quaternion);
+
+        pForwardFromCamera = Math::Vec3::Cross(vec_rotatedRight, commonInfo_->axes_.up.Normalize());
+        redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up.Normalize(), pForwardFromCamera.Normalize());
+    }
+
     // 定義した値等を現在の姿勢として記録
     commonInfo_->axes_.forward = pForwardFromCamera.Normalize();
     commonInfo_->axes_.right = redefinitionPRightFromCamera.Normalize();
     commonInfo_->axes_.up = commonInfo_->axes_.up.Normalize();
 
-    // カメラのptrをカメラマネージャーから取得
-    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-    // カメラIDの接頭辞が、"BehindCamera_"以外なら、スキップ
-    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
 
-    // カメラのptrを基底クラスのptr[ICamera]から、[BehindCamera]にキャスト
-    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
     // カメラの姿勢を、プレイヤーの姿勢を利用して設定。
     ptr_cam_behind->axes_player_ = commonInfo_->axes_;
     // カメラの中心点を、プレイヤーの座標として入力。
@@ -283,6 +296,23 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     // カメラ視点のプレイヤー移動ベクトル
     Vector3 pForwardFromCamera = Math::Vec3::Cross(commonInfo_->camMPtr_->GetCurrentCamera()->GetAxis3().right.Normalize(), commonInfo_->axes_.up.Normalize()); // 正面Vec: cross(camera.rightVec, p.upVec)
     Vector3 redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up.Normalize(), pForwardFromCamera.Normalize()); // 右Vec: cross(p.upVec, pForwardFromCamera)
+
+    // カメラ座標用の値を補正
+    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
+    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
+    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
+    if (ptr_cam_behind->numAlgorithm_ == 3 && ptr_cam_behind->isAlreadyD_)
+    {
+        // プレイヤーの3つの軸をコピー
+        const Axis3& pAxes = commonInfo_->axes_;
+        // プレイヤーの上ベクトルを軸として、-90度だけ、回転させるクオータニオンを生成
+        Quaternion rot_quaternion = Math::QuaternionF::MakeAxisAngle(pAxes.up, -1.5708f);
+        const Vector3 vec_rotatedRight = Math::QuaternionF::RotateVector(ptr_cam_behind->GetAxis3().right, rot_quaternion);
+
+        pForwardFromCamera = Math::Vec3::Cross(vec_rotatedRight, commonInfo_->axes_.up.Normalize());
+        redefinitionPRightFromCamera = Math::Vec3::Cross(commonInfo_->axes_.up.Normalize(), pForwardFromCamera.Normalize());
+    }
+
     // 定義した値等を現在の姿勢として記録
     commonInfo_->axes_.forward = pForwardFromCamera.Normalize();
     commonInfo_->axes_.right = redefinitionPRightFromCamera.Normalize();
@@ -302,13 +332,11 @@ void PlayerBehavior_Move::Execute(void) // "MOVE"
     Process_Transform(velocity);
 
 
-    // カメラ座標用の値を補正
-    ICamera* ptr_cam = commonInfo_->camMPtr_->GetCurrentCamera();
-    if (ptr_cam->GetId().starts_with("BehindCamera_") == false) { return; }
-    BehindCamera* ptr_cam_behind = static_cast<BehindCamera*>(ptr_cam);
-    //ptr_cam_behind->axes_player_ = commonInfo_->axes_;
-    ptr_cam_behind->axes_player_ = commonInfo_->axes_4model_;
+
+    ptr_cam_behind->axes_player_ = commonInfo_->axes_;
+    ptr_cam_behind->axes_playerModel_ = commonInfo_->axes_4model_;
     ptr_cam_behind->pos_player_ = commonInfo_->transform_.position;
+    ptr_cam_behind->matWorld_player_ = commonInfo_->matTrans_.mat_world;
 
 
     // 入力ベクトルが0でないなら、1フレーム前の入力ベクトルを記録
@@ -745,6 +773,7 @@ void IPlayerBehavior::Process_CalculateModelAxes(const Vector2& arg_input)
     Vector2 input = arg_input;
     if (input.IsNonZero() == false) { input = commonInfo_->vec2_input_old_; }
 
+    // pForwardFromCameraをplayerの上ベクトルとカメラの右ベクトルで計算しているため、カメラがプレイヤーの背後にいる間は必ず正面ベクトルが上向きになる。
     // なぜか、プレイヤーのモデルは常に画面に対して上に向いてるので、そこに仮想の上ベクトルと角度を取って、
     // モデルを上ベクトルを軸に回転させる。モデルは、入力ベクトルの方向を向くようになっているが、ここの処理は移動入力をしたときのみ通る（ステートパターン）
     const float radian_rotate2 = std::acosf(Math::Vec2::Dot({ 0,1 }, input));
